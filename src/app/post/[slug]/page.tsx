@@ -1,10 +1,15 @@
-import { getBlogPostBySlug, getBlogPosts } from "@/sanity/queries"
+﻿import { getBlogPostBySlug, getBlogPosts } from "@/sanity/queries"
 import { urlFor } from "@/sanity/image"
 import { PortableText } from "@portabletext/react"
 import { portableTextComponents } from "@/components/PortableTextComponents"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+
+interface BlogCategory {
+  slug: string
+  title: string
+}
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -14,8 +19,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   return (
     <article className="max-w-3xl mx-auto px-4 py-16">
       <div className="flex gap-2 mb-4 flex-wrap">
-        {post.categories?.map((cat: { slug: { current: string }, title: string }) => (
-          <Link key={cat.slug.current} href={`/consulting-blog/categories/${cat.slug.current}`}
+        {post.categories?.map((cat: BlogCategory) => (
+          <Link key={cat.slug} href={`/consulting-blog/categories/${cat.slug}`}
             className="text-sm text-blue-700 bg-blue-50 px-3 py-1 rounded-full hover:bg-blue-100">
             {cat.title}
           </Link>
@@ -47,8 +52,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 }
 
 export async function generateStaticParams() {
-  const posts = await getBlogPosts(200, 0)
-  return posts.map((p: { slug: string }) => ({ slug: p.slug }))
+  const posts = await getBlogPosts(300, 0)
+  return posts
+    .filter((p: { slug?: string }) => typeof p.slug === 'string' && p.slug.length > 0)
+    .map((p: { slug: string }) => ({ slug: p.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

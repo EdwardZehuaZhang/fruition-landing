@@ -1,6 +1,11 @@
-import { getBlogPosts, getBlogCategories } from "@/sanity/queries"
+﻿import { getBlogPosts, getBlogCategories } from "@/sanity/queries"
 import BlogCard from "@/components/BlogCard"
 import Link from "next/link"
+
+interface BlogCategory {
+  slug: string
+  title: string
+}
 
 export const metadata = {
   title: "monday.com Blog | Fruition Services",
@@ -17,8 +22,8 @@ export default async function BlogPage() {
 
       <div className="flex flex-wrap gap-2 mb-10">
         <Link href="/consulting-blog" className="px-3 py-1 bg-blue-700 text-white rounded-full text-sm">All Posts</Link>
-        {categories.map((cat: { slug: { current: string }, title: string }) => (
-          <Link key={cat.slug.current} href={`/consulting-blog/categories/${cat.slug.current}`}
+        {categories.map((cat: BlogCategory) => (
+          <Link key={cat.slug} href={`/consulting-blog/categories/${cat.slug}`}
             className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-blue-50">
             {cat.title}
           </Link>

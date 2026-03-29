@@ -1,11 +1,13 @@
-import { getBlogPosts, getBlogCategories } from "@/sanity/queries"
+﻿import { getBlogPosts, getBlogCategories } from "@/sanity/queries"
 import BlogCard from "@/components/BlogCard"
+
+interface BlogCategoryRef { slug: string }
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const posts = await getBlogPosts(24, 0)
-  const filtered = posts.filter((p: { categories?: Array<{ slug: { current: string } }> }) =>
-    p.categories?.some((c) => c.slug?.current === slug)
+  const posts = await getBlogPosts(300, 0)
+  const filtered = posts.filter((p: { categories?: BlogCategoryRef[] }) =>
+    p.categories?.some((c) => c.slug === slug)
   )
 
   return (
@@ -22,5 +24,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
 export async function generateStaticParams() {
   const categories = await getBlogCategories()
-  return categories.map((c: { slug: { current: string } }) => ({ slug: c.slug.current }))
+  return categories
+    .filter((c: { slug?: string }) => typeof c.slug === 'string' && c.slug.length > 0)
+    .map((c: { slug: string }) => ({ slug: c.slug }))
 }

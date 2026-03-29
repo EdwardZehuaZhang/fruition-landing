@@ -1,33 +1,41 @@
 {
-  "name": "fruition-landing",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "@portabletext/react": "^6.0.3",
-    "@sanity/client": "^7.20.0",
-    "@sanity/image-url": "^2.0.3",
-    "@sanity/vision": "^5.18.0",
-    "next": "16.2.1",
-    "next-sanity": "^12.1.6",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "sanity": "^5.18.0",
-    "styled-components": "^6.3.12"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.1",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+    "name": "fruition-landing",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "eslint",
+        "migrate": "tsx scripts/migrate.ts",
+        "migrate:settings": "tsx scripts/import-site-settings.ts",
+        "migrate:pages": "tsx scripts/import-pages.ts",
+        "migrate:blog": "tsx scripts/import-blog.ts"
+    },
+    "dependencies": {
+        "@portabletext/react": "^6.0.3",
+        "@sanity/client": "^7.20.0",
+        "@sanity/image-url": "^2.0.3",
+        "@sanity/vision": "^5.18.0",
+        "dotenv": "^17.3.1",
+        "next": "16.2.1",
+        "next-sanity": "^12.1.6",
+        "node-html-parser": "^7.1.0",
+        "playwright": "^1.58.2",
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "sanity": "^5.18.0",
+        "styled-components": "^6.3.12",
+        "tsx": "^4.21.0"
+    },
+    "devDependencies": {
+        "@tailwindcss/postcss": "^4",
+        "@types/node": "^20",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "eslint": "^9",
+        "eslint-config-next": "16.2.1",
+        "tailwindcss": "^4",
+        "typescript": "^5"
+    }
 }

@@ -1,10 +1,16 @@
-import { client } from './client'
+﻿import { client } from './client'
 
 export async function getBlogPosts(limit = 12, offset = 0) {
   return client.fetch(
     `*[_type == "blogPost"] | order(publishedAt desc) [$offset...$end] {
-      _id, title, slug, publishedAt, author, excerpt, coverImage,
-      categories[]->{ _id, title, slug }
+      _id,
+      title,
+      "slug": slug.current,
+      publishedAt,
+      author,
+      excerpt,
+      coverImage,
+      categories[]->{ _id, title, "slug": slug.current }
     }`,
     { offset, end: offset + limit }
   )
@@ -13,8 +19,17 @@ export async function getBlogPosts(limit = 12, offset = 0) {
 export async function getBlogPostBySlug(slug: string) {
   return client.fetch(
     `*[_type == "blogPost" && slug.current == $slug][0] {
-      _id, title, slug, publishedAt, author, excerpt, coverImage, body,
-      seoTitle, seoDescription, categories[]->{ _id, title, slug }
+      _id,
+      title,
+      "slug": slug.current,
+      publishedAt,
+      author,
+      excerpt,
+      coverImage,
+      body,
+      seoTitle,
+      seoDescription,
+      categories[]->{ _id, title, "slug": slug.current }
     }`,
     { slug }
   )
@@ -22,7 +37,7 @@ export async function getBlogPostBySlug(slug: string) {
 
 export async function getBlogCategories() {
   return client.fetch(
-    `*[_type == "blogCategory"] | order(title asc) { _id, title, slug, description }`
+    `*[_type == "blogCategory"] | order(title asc) { _id, title, "slug": slug.current, description }`
   )
 }
 
