@@ -12,6 +12,7 @@ export default async function Page() {
       <HeroSection
         heading={page?.heroHeading || "monday.com for Retail"}
         subheading={page?.heroSubheading || "monday.com solutions for retail operations."}
+        heroImage={page?.heroImage}
         primaryCta={{ label: "Book a Consultation", url: "https://calendly.com/global-calendar-fruitionservices" }}
       />
       {page?.body && (

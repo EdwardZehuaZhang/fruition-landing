@@ -1,16 +1,26 @@
-import Link from 'next/link'
+﻿import Link from "next/link"
+import Image from "next/image"
+import { urlFor } from "@/sanity/image"
 
 interface HeroSectionProps {
   heading: string
   subheading?: string
   primaryCta: { label: string; url: string }
   secondaryCta?: { label: string; url: string }
+  heroImage?: { asset: { _ref: string } }
 }
 
-export default function HeroSection({ heading, subheading, primaryCta, secondaryCta }: HeroSectionProps) {
+export default function HeroSection({ heading, subheading, primaryCta, secondaryCta, heroImage }: HeroSectionProps) {
+  const imageUrl = heroImage?.asset ? urlFor(heroImage).width(1400).height(500).fit("crop").url() : null
+
   return (
-    <section className="bg-gradient-to-br from-blue-700 to-blue-900 text-white py-20 px-4">
-      <div className="max-w-4xl mx-auto text-center">
+    <section className="relative bg-gradient-to-br from-blue-700 to-blue-900 text-white py-20 px-4 overflow-hidden">
+      {imageUrl && (
+        <div className="absolute inset-0">
+          <Image src={imageUrl} alt="" fill className="object-cover opacity-20" priority />
+        </div>
+      )}
+      <div className="relative max-w-4xl mx-auto text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">{heading}</h1>
         {subheading && (
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">{subheading}</p>

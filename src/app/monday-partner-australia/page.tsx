@@ -12,6 +12,7 @@ export default async function Page() {
       <HeroSection
         heading={page?.heroHeading || "monday.com Consultants Australia"}
         subheading={page?.heroSubheading || "Expert monday.com Platinum Partner across Sydney, Melbourne, Brisbane, Adelaide and Perth."}
+        heroImage={page?.heroImage}
         primaryCta={{ label: "Book a Consultation", url: "https://calendly.com/global-calendar-fruitionservices" }}
       />
       {page?.body && (

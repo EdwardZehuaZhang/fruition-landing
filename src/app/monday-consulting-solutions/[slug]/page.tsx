@@ -18,6 +18,7 @@ export default async function SolutionPage({ params }: { params: Promise<{ slug:
       <HeroSection
         heading={page?.heroHeading || page?.title || slug.replace(/-/g, " ")}
         subheading={page?.heroSubheading || "Expert monday.com consulting and implementation."}
+        heroImage={page?.heroImage}
         primaryCta={{ label: page?.primaryCtaLabel || "Book a Consultation", url: page?.primaryCtaUrl || "https://calendly.com/global-calendar-fruitionservices" }}
         secondaryCta={page?.secondaryCtaLabel ? { label: page.secondaryCtaLabel, url: page.secondaryCtaUrl || "#" } : undefined}
       />

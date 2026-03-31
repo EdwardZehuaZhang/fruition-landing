@@ -18,6 +18,7 @@ export default async function PartnershipPage({ params }: { params: Promise<{ sl
       <HeroSection
         heading={page?.heroHeading || page?.title || slug.replace(/-/g, " ")}
         subheading={page?.heroSubheading || "Certified partner services by Fruition."}
+        heroImage={page?.heroImage}
         primaryCta={{ label: page?.primaryCtaLabel || "Book a Consultation", url: page?.primaryCtaUrl || "https://calendly.com/global-calendar-fruitionservices" }}
       />
       {page?.body && (
