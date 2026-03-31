@@ -1,4 +1,4 @@
-﻿import { getBlogPostBySlug, getBlogPosts } from "@/sanity/queries"
+import { getBlogPostBySlug, getBlogPosts } from "@/sanity/queries"
 import { urlFor } from "@/sanity/image"
 import { PortableText } from "@portabletext/react"
 import { portableTextComponents } from "@/components/PortableTextComponents"
@@ -10,6 +10,14 @@ interface BlogCategory {
   slug: string
   title: string
 }
+
+function getYouTubeEmbedUrl(url: string): string | null {
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
+  return match ? `https://www.youtube.com/embed/${match[1]}` : null
+}
+
+export const revalidate = 3600
+export const dynamicParams = true
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -39,6 +47,27 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <div className="prose prose-lg max-w-none">
         {post.body && <PortableText value={post.body} components={portableTextComponents} />}
       </div>
+
+      {post.videoUrls && post.videoUrls.length > 0 && (
+        <div className="mt-10 space-y-6">
+          {post.videoUrls.map((url: string, i: number) => {
+            const embedUrl = getYouTubeEmbedUrl(url)
+            if (!embedUrl) return null
+            return (
+              <div key={i} className="aspect-video w-full rounded-xl overflow-hidden shadow-md">
+                <iframe
+                  src={embedUrl}
+                  title={`Video ${i + 1}`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full"
+                />
+              </div>
+            )
+          })}
+        </div>
+      )}
+
       <div className="mt-16 p-8 bg-blue-50 rounded-xl text-center">
         <h3 className="text-2xl font-bold text-gray-900 mb-3">Ready to transform your workflows?</h3>
         <p className="text-gray-600 mb-6">Talk to a Fruition monday.com expert today.</p>
@@ -52,9 +81,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 }
 
 export async function generateStaticParams() {
-  const posts = await getBlogPosts(300, 0)
+  const posts = await getBlogPosts(50, 0)
   return posts
-    .filter((p: { slug?: string }) => typeof p.slug === 'string' && p.slug.length > 0)
+    .filter((p: { slug?: string }) => typeof p.slug === "string" && p.slug.length > 0)
     .map((p: { slug: string }) => ({ slug: p.slug }))
 }
 

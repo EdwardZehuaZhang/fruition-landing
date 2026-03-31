@@ -1,4 +1,4 @@
-﻿import { client } from './client'
+import { client } from './client'
 
 export async function getBlogPosts(limit = 12, offset = 0) {
   return client.fetch(
@@ -29,7 +29,8 @@ export async function getBlogPostBySlug(slug: string) {
       body,
       seoTitle,
       seoDescription,
-      categories[]->{ _id, title, "slug": slug.current }
+      videoUrls,
+            categories[]->{ _id, title, "slug": slug.current }
     }`,
     { slug }
   )
