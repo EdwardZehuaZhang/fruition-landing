@@ -13,7 +13,10 @@ const partners = [
   { slug: "certified-atlassian-partner", title: "Certified Atlassian Partner" },
 ]
 
-export const metadata = { title: "Partnerships | Fruition Services" }
+export const metadata = {
+  title: "Partnerships | Fruition Services",
+  description: "Fruition is a certified partner for monday.com, Make, n8n, ClickUp, HubSpot, Atlassian and more.",
+}
 
 export default function PartnershipsPage() {
   return (

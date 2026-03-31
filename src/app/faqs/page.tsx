@@ -2,7 +2,10 @@ import { getFaqItems } from "@/sanity/queries"
 import { PortableText } from "@portabletext/react"
 import { portableTextComponents } from "@/components/PortableTextComponents"
 
-export const metadata = { title: "FAQs | Fruition Services" }
+export const metadata = {
+  title: "FAQs | Fruition Services",
+  description: "Frequently asked questions about monday.com implementation, consulting, training and Fruition services.",
+}
 
 export default async function FaqsPage() {
   const faqs = await getFaqItems()

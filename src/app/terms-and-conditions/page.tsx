@@ -2,7 +2,13 @@ import { getPageBySlug } from "@/sanity/queries"
 import { PortableText } from "@portabletext/react"
 import { portableTextComponents } from "@/components/PortableTextComponents"
 
-export const metadata = { title: "Terms and Conditions | Fruition Services" }
+export async function generateMetadata() {
+  const page = await getPageBySlug("terms-and-conditions")
+  return {
+    title: page?.seoTitle || "Terms and Conditions | Fruition Services",
+    description: page?.seoDescription || "Fruition Services terms and conditions governing use of our services and website.",
+  }
+}
 
 export default async function TermsPage() {
   const page = await getPageBySlug("terms-and-conditions")

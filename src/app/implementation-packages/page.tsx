@@ -3,7 +3,13 @@ import HeroSection from "@/components/HeroSection"
 import { PortableText } from "@portabletext/react"
 import { portableTextComponents } from "@/components/PortableTextComponents"
 
-export const metadata = { title: "Implementation Packages | Fruition Services" }
+export async function generateMetadata() {
+  const page = await getServicePageBySlug("implementation-packages")
+  return {
+    title: page?.seoTitle || "Implementation Packages | Fruition Services",
+    description: page?.seoDescription || "Structured monday.com implementation packages to get your team running fast. Certified Fruition consultants.",
+  }
+}
 
 export default async function Page() {
   const page = await getServicePageBySlug("implementation-packages")

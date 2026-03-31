@@ -3,7 +3,13 @@ import HeroSection from "@/components/HeroSection"
 import { PortableText } from "@portabletext/react"
 import { portableTextComponents } from "@/components/PortableTextComponents"
 
-export const metadata = { title: "monday CRM Consulting | Fruition Services" }
+export async function generateMetadata() {
+  const page = await getServicePageBySlug("monday-crm-consulting")
+  return {
+    title: page?.seoTitle || "monday CRM Consulting | Fruition Services",
+    description: page?.seoDescription || "Expert monday CRM consulting and implementation. Build a CRM tailored to your business in 2-3 weeks.",
+  }
+}
 
 export default async function Page() {
   const page = await getServicePageBySlug("monday-crm-consulting")

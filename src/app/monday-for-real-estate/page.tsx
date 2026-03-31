@@ -3,7 +3,13 @@ import HeroSection from "@/components/HeroSection"
 import { PortableText } from "@portabletext/react"
 import { portableTextComponents } from "@/components/PortableTextComponents"
 
-export const metadata = { title: "monday.com for Real Estate | Fruition Services" }
+export async function generateMetadata() {
+  const page = await getIndustryPageBySlug("monday-for-real-estate")
+  return {
+    title: page?.seoTitle || "monday.com for Real Estate | Fruition Services",
+    description: page?.seoDescription || "monday.com solutions for real estate companies. Manage listings, deals and client relationships.",
+  }
+}
 
 export default async function Page() {
   const page = await getIndustryPageBySlug("monday-for-real-estate")

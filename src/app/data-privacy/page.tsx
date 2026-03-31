@@ -2,7 +2,13 @@ import { getPageBySlug } from "@/sanity/queries"
 import { PortableText } from "@portabletext/react"
 import { portableTextComponents } from "@/components/PortableTextComponents"
 
-export const metadata = { title: "Data Privacy | Fruition Services" }
+export async function generateMetadata() {
+  const page = await getPageBySlug("data-privacy")
+  return {
+    title: page?.seoTitle || "Data Privacy Policy | Fruition Services",
+    description: page?.seoDescription || "Fruition Services data privacy policy. How we collect, use and protect your personal information.",
+  }
+}
 
 export default async function PrivacyPage() {
   const page = await getPageBySlug("data-privacy")

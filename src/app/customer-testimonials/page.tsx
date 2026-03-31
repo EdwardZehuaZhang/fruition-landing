@@ -1,7 +1,10 @@
 import { getCaseStudies } from "@/sanity/queries"
 import HeroSection from "@/components/HeroSection"
 
-export const metadata = { title: "Case Studies | Fruition Services" }
+export const metadata = {
+  title: "Case Studies | Fruition Services",
+  description: "Real results from 500+ businesses. See how Fruition transformed operations with monday.com.",
+}
 
 export default async function TestimonialsPage() {
   const cases = await getCaseStudies()

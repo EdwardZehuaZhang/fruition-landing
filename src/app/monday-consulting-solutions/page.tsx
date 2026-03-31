@@ -11,7 +11,10 @@ const solutions = [
   { slug: "monday-for-cabinetry-renovation", title: "Installation & Renovation", desc: "Job management for trades and renovation." },
 ]
 
-export const metadata = { title: "monday.com Solutions | Fruition Services" }
+export const metadata = {
+  title: "monday.com Solutions | Fruition Services",
+  description: "Purpose-built monday.com solutions for every team. Project management, CRM, HR, Finance and more.",
+}
 
 export default function SolutionsPage() {
   return (

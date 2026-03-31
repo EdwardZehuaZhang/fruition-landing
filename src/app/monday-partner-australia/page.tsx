@@ -3,7 +3,13 @@ import HeroSection from "@/components/HeroSection"
 import { PortableText } from "@portabletext/react"
 import { portableTextComponents } from "@/components/PortableTextComponents"
 
-export const metadata = { title: "monday.com Partner Australia | Fruition Services" }
+export async function generateMetadata() {
+  const page = await getLocationPageBySlug("monday-partner-australia")
+  return {
+    title: page?.seoTitle || "monday.com Partner Australia | Fruition Services",
+    description: page?.seoDescription || "Fruition is a Platinum monday.com partner in Australia. Expert consultants across Sydney, Melbourne, Brisbane, Adelaide and Perth.",
+  }
+}
 
 export default async function Page() {
   const page = await getLocationPageBySlug("monday-partner-australia")

@@ -9,7 +9,7 @@ interface BlogCategory {
 
 export const metadata = {
   title: "monday.com Blog | Fruition Services",
-  description: "Expert insights on monday.com implementation, CRM, automation, and more.",
+  description: "Expert insights on monday.com implementation, CRM, automation and integrations from certified Fruition consultants.",
 }
 
 export default async function BlogPage() {
