@@ -32,5 +32,21 @@ export default defineType({
       title: 'Primary CTA URL',
       type: 'string',
     }),
+    defineField({
+      name: 'secondaryCtaLabel',
+      title: 'Secondary CTA Label',
+      type: 'string',
+    }),
+    defineField({
+      name: 'secondaryCtaUrl',
+      title: 'Secondary CTA URL',
+      type: 'string',
+    }),
+    defineField({
+      name: 'image',
+      title: 'Hero Image',
+      type: 'image',
+      options: { hotspot: true },
+    }),
   ],
 })

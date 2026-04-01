@@ -20,6 +20,9 @@ import testimonialBlock from './objects/testimonialBlock'
 import logoCloudBlock from './objects/logoCloudBlock'
 import postListBlock from './objects/postListBlock'
 import faqBlock from './objects/faqBlock'
+import statsBlock from './objects/statsBlock'
+import calendlyBlock from './objects/calendlyBlock'
+import tabSectionBlock from './objects/tabSectionBlock'
 
 // Documents
 import homePage from './documents/homePage'
@@ -48,6 +51,9 @@ export const schemaTypes = [
   logoCloudBlock,
   postListBlock,
   faqBlock,
+  statsBlock,
+  calendlyBlock,
+  tabSectionBlock,
 
   // Document types
   homePage,

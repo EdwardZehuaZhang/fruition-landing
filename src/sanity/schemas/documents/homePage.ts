@@ -5,7 +5,7 @@ export default defineType({
   title: 'Home Page',
   type: 'document',
   // Singleton: only allow update and publish (no create/delete)
-  // @ts-expect-error — Sanity experimental API
+  // @ts-expect-error Sanity experimental API
   __experimental_actions: ['update', 'publish'],
   fields: [
     defineField({
@@ -36,6 +36,9 @@ export default defineType({
         defineArrayMember({ type: 'logoCloudBlock' }),
         defineArrayMember({ type: 'postListBlock' }),
         defineArrayMember({ type: 'faqBlock' }),
+        defineArrayMember({ type: 'statsBlock' }),
+        defineArrayMember({ type: 'calendlyBlock' }),
+        defineArrayMember({ type: 'tabSectionBlock' }),
       ],
     }),
   ],

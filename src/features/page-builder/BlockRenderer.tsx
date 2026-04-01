@@ -6,6 +6,9 @@ import TestimonialBlockView from './blocks/TestimonialBlockView'
 import LogoCloudBlockView from './blocks/LogoCloudBlockView'
 import PostListBlockView from './blocks/PostListBlockView'
 import FaqBlockView from './blocks/FaqBlockView'
+import StatsBlockView from './blocks/StatsBlockView'
+import CalendlyBlockView from './blocks/CalendlyBlockView'
+import TabSectionBlockView from './blocks/TabSectionBlockView'
 
 interface ContentBlock {
   _key: string
@@ -36,6 +39,12 @@ export default function BlockRenderer({ blocks }: { blocks: ContentBlock[] }) {
             return <PostListBlockView key={block._key} {...block} />
           case 'faqBlock':
             return <FaqBlockView key={block._key} {...block} />
+          case 'statsBlock':
+            return <StatsBlockView key={block._key} {...block} />
+          case 'calendlyBlock':
+            return <CalendlyBlockView key={block._key} {...block} />
+          case 'tabSectionBlock':
+            return <TabSectionBlockView key={block._key} {...block} />
           default:
             return (
               <div key={block._key}>

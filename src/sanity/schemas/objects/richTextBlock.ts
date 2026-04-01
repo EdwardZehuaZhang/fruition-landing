@@ -13,10 +13,25 @@ export default defineType({
       initialValue: 'richTextBlock',
     }),
     defineField({
+      name: 'heading',
+      title: 'Heading',
+      type: 'string',
+    }),
+    defineField({
       name: 'content',
       title: 'Content',
       type: 'array',
       of: [{ type: 'block' }],
+    }),
+    defineField({
+      name: 'ctaLabel',
+      title: 'CTA Label',
+      type: 'string',
+    }),
+    defineField({
+      name: 'ctaUrl',
+      title: 'CTA URL',
+      type: 'string',
     }),
   ],
 })
