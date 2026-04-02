@@ -16,12 +16,50 @@ interface ContentBlock {
   [key: string]: unknown
 }
 
+function groupConsecutiveTestimonials(blocks: ContentBlock[]): Array<ContentBlock | ContentBlock[]> {
+  const result: Array<ContentBlock | ContentBlock[]> = []
+  let i = 0
+  while (i < blocks.length) {
+    if (blocks[i]._type === 'testimonialBlock') {
+      const group: ContentBlock[] = []
+      while (i < blocks.length && blocks[i]._type === 'testimonialBlock') {
+        group.push(blocks[i])
+        i++
+      }
+      result.push(group)
+    } else {
+      result.push(blocks[i])
+      i++
+    }
+  }
+  return result
+}
+
 export default function BlockRenderer({ blocks }: { blocks: ContentBlock[] }) {
   if (!blocks || blocks.length === 0) return null
 
+  const grouped = groupConsecutiveTestimonials(blocks)
+
   return (
     <>
-      {blocks.map((block) => {
+      {grouped.map((item, idx) => {
+        // Testimonial grid section
+        if (Array.isArray(item)) {
+          return (
+            <section key={`testimonials-${idx}`} className="bg-gray-50 py-16 px-4">
+              <div className="mx-auto max-w-6xl">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {item.map((block) => (
+                    <TestimonialBlockView key={block._key} {...block} />
+                  ))}
+                </div>
+              </div>
+            </section>
+          )
+        }
+
+        const block = item
+
         switch (block._type) {
           case 'heroBlock':
             return <HeroBlockView key={block._key} {...block} />
@@ -32,7 +70,13 @@ export default function BlockRenderer({ blocks }: { blocks: ContentBlock[] }) {
           case 'featureListBlock':
             return <FeatureListBlockView key={block._key} {...block} />
           case 'testimonialBlock':
-            return <TestimonialBlockView key={block._key} {...block} />
+            return (
+              <section key={block._key} className="bg-gray-50 py-4 px-4">
+                <div className="mx-auto max-w-6xl">
+                  <TestimonialBlockView {...block} />
+                </div>
+              </section>
+            )
           case 'logoCloudBlock':
             return <LogoCloudBlockView key={block._key} {...block} />
           case 'postListBlock':
