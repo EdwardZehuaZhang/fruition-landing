@@ -32,5 +32,15 @@ export default defineType({
       title: 'CTA URL',
       type: 'string',
     }),
+    defineField({
+      name: 'secondaryCtaLabel',
+      title: 'Secondary CTA Label',
+      type: 'string',
+    }),
+    defineField({
+      name: 'secondaryCtaUrl',
+      title: 'Secondary CTA URL',
+      type: 'string',
+    }),
   ],
 })

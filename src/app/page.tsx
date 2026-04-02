@@ -1,5 +1,14 @@
+import type { Metadata } from 'next'
 import BlockRenderer from '@/features/page-builder/BlockRenderer'
 import { getHomePage, getSiteSettings } from '@/features/content/loaders'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const homePage = await getHomePage()
+  return {
+    title: homePage?.seoTitle ?? 'Fruition | monday.com Platinum Partners | monday CRM Experts',
+    description: homePage?.seoDescription ?? 'Fruition is a Platinum monday.com consulting partner with over 500+ implementations completed within the Private & Public sectors across Australia, US and the UK.',
+  }
+}
 
 export default async function Home() {
   const homePage = await getHomePage()
