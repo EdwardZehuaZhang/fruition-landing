@@ -1,5 +1,5 @@
 import { getServicePageBySlug } from "@/sanity/queries"
-import ServicePageTemplate from "@/components/ServicePageTemplate"
+import MondayTrainingContent from "./MondayTrainingContent"
 
 export async function generateMetadata() {
   const page = await getServicePageBySlug("monday-training")
@@ -12,12 +12,11 @@ export async function generateMetadata() {
 export default async function Page() {
   const page = await getServicePageBySlug("monday-training")
   return (
-    <ServicePageTemplate
-      heroHeading={page?.heroHeading || "Get your team official monday.com workflow training"}
-      heroSubheading={page?.heroSubheading || "Expert Workflow Training delivered by a certified monday partner.\nOur training and adoption programs helps you onboard and adopt monday.com up to 10x faster."}
-      heroPurpleAccent="workflow training"
-      primaryCtaLabel={page?.primaryCtaLabel || "🚀 Book a Consultation"}
-      primaryCtaUrl={page?.primaryCtaUrl || "https://calendly.com/global-calendar-fruitionservices"}
+    <MondayTrainingContent
+      heroHeading={page?.heroHeading}
+      heroSubheading={page?.heroSubheading}
+      primaryCtaLabel={page?.primaryCtaLabel}
+      primaryCtaUrl={page?.primaryCtaUrl}
       secondaryCtaLabel={page?.secondaryCtaLabel}
       secondaryCtaUrl={page?.secondaryCtaUrl}
     />

@@ -117,7 +117,7 @@ export default function Navbar() {
       <div className="max-w-[1348px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-[85px]">
           {/* Logo */}
-          <Link href="/" className="shrink-0">
+          <Link href="/" className="shrink-0 -ml-10">
             <Image
               src="/images/logo-fruition.png"
               alt="Fruition Services"
@@ -166,7 +166,7 @@ export default function Navbar() {
             ))}
 
             {/* Partner badges + phone icon + CTA */}
-            <div className="flex items-center gap-[12px] border-l border-gray-200 pl-4">
+            <div className="flex items-center gap-[12px] border-l border-gray-200 pl-4 -mr-10">
               <div className="flex items-center gap-3">
                 <Image src="/images/partner-platinum.png" alt="monday.com Platinum Partner" width={80} height={32} className="h-7 w-auto" />
                 <Image src="/images/partner-advanced-delivery.png" alt="Advanced Delivery Partner" width={80} height={32} className="h-7 w-auto" />
