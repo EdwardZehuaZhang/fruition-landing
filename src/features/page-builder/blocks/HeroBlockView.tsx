@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { urlFor } from '@/sanity/image'
 
 interface HeroBlockProps {
@@ -11,6 +12,69 @@ interface HeroBlockProps {
   image?: { asset: { _ref: string } }
 }
 
+// Render heading with "Consulting" and "Integration Services" in purple
+function renderHeading(heading: string) {
+  const purpleWords = ['Consulting', 'Integration Services']
+  const parts: { text: string; purple: boolean }[] = []
+  let remaining = heading
+
+  while (remaining.length > 0) {
+    let earliest = -1
+    let earliestWord = ''
+    for (const word of purpleWords) {
+      const idx = remaining.indexOf(word)
+      if (idx >= 0 && (earliest < 0 || idx < earliest)) {
+        earliest = idx
+        earliestWord = word
+      }
+    }
+    if (earliest >= 0) {
+      if (earliest > 0) parts.push({ text: remaining.slice(0, earliest), purple: false })
+      parts.push({ text: earliestWord, purple: true })
+      remaining = remaining.slice(earliest + earliestWord.length)
+    } else {
+      parts.push({ text: remaining, purple: false })
+      break
+    }
+  }
+
+  return (
+    <>
+      {parts.map((p, i) =>
+        p.purple ? <span key={i} className="text-[#8015e8]">{p.text}</span> : <span key={i}>{p.text}</span>
+      )}
+    </>
+  )
+}
+
+// Split subheading into paragraphs at natural break points
+function renderSubheading(text: string) {
+  // Split on patterns that suggest paragraph breaks
+  // The Figma shows two separate paragraphs separated by line break
+  const breakPoints = [
+    'Australia, US and the UK.',
+    'Australia, US and UK.',
+  ]
+
+  for (const bp of breakPoints) {
+    const idx = text.indexOf(bp)
+    if (idx >= 0) {
+      const p1 = text.slice(0, idx + bp.length).trim()
+      const p2 = text.slice(idx + bp.length).trim()
+      if (p2) {
+        return (
+          <div className="flex flex-col gap-[12px] w-full max-w-[859px]">
+            <p className="text-[18px] text-black leading-[25.2px]">{p1}</p>
+            <p className="text-[18px] text-black leading-[25.2px]">{p2}</p>
+          </div>
+        )
+      }
+    }
+  }
+
+  return <p className="text-[18px] text-black leading-[25.2px] max-w-[859px]">{text}</p>
+}
+
 export default function HeroBlockView({
   heading,
   subheading,
@@ -21,20 +85,37 @@ export default function HeroBlockView({
   image,
 }: HeroBlockProps) {
   return (
-    <section className="relative bg-[#1a1a2e] py-20 px-4 text-white">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-10 md:flex-row">
-        <div className="flex-1 text-center md:text-left">
-          {heading && (
-            <h1 className="mb-4 text-4xl font-bold md:text-5xl">{heading}</h1>
-          )}
-          {subheading && (
-            <p className="mb-8 text-lg text-gray-300">{subheading}</p>
-          )}
-          <div className="flex flex-wrap justify-center gap-4 md:justify-start">
+    <section className="bg-white w-full">
+      <div className="mx-auto max-w-[1348px] flex items-start gap-[10px] py-[80px] px-4 xl:px-0">
+        {/* Left column */}
+        <div className="flex flex-col gap-[109px] w-full max-w-[924px]">
+          <div className="flex flex-col gap-[31px] w-full">
+            {/* Partner badges */}
+            <div className="flex flex-col gap-[42px]">
+              <div className="flex items-center gap-[22px]">
+                <Image src="/images/partner-platinum.png" alt="monday.com Platinum Partner" width={146} height={44} className="h-[44px] w-auto rounded-[5px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.5)]" />
+                <Image src="/images/partner-advanced-delivery.png" alt="Advanced Delivery Partner" width={157} height={44} className="h-[44px] w-auto rounded-[5px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.5)]" />
+                <Image src="/images/partner-make.png" alt="Make Partners" width={178} height={44} className="h-[44px] w-auto rounded-[5px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.5)]" />
+              </div>
+
+              {/* Heading */}
+              {heading && (
+                <h1 className="text-[48px] font-bold text-black leading-[67.2px]">
+                  {renderHeading(heading)}
+                </h1>
+              )}
+            </div>
+
+            {/* Subheading */}
+            {subheading && renderSubheading(subheading)}
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-[20px] items-start w-full max-w-[680px]">
             {primaryCtaLabel && primaryCtaUrl && (
               <Link
                 href={primaryCtaUrl}
-                className="inline-block rounded-full bg-purple-600 px-8 py-3 font-semibold text-white transition hover:bg-purple-700"
+                className="flex items-center justify-center h-[53px] w-[330px] rounded-[100px] border border-[#8015e8] bg-white text-[#8015e8] text-[16px] font-bold tracking-[0.32px] hover:bg-[#8015e8] hover:text-white transition"
               >
                 {primaryCtaLabel}
               </Link>
@@ -42,24 +123,27 @@ export default function HeroBlockView({
             {secondaryCtaLabel && secondaryCtaUrl && (
               <Link
                 href={secondaryCtaUrl}
-                className="inline-block rounded-full border border-white/30 px-8 py-3 font-semibold text-white transition hover:bg-white/10"
+                className="flex items-center justify-center h-[53px] w-[330px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
               >
                 {secondaryCtaLabel}
               </Link>
             )}
           </div>
         </div>
-        {image?.asset && (
-          <div className="flex-1">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+
+        {/* Right column — image or placeholder */}
+        <div className="flex-1 min-w-0 hidden md:block">
+          {image?.asset ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={urlFor(image).width(600).url()}
               alt={heading ?? ''}
-              className="rounded-lg"
-              width={600}
+              className="w-full h-[550px] object-cover rounded-lg"
             />
-          </div>
-        )}
+          ) : (
+            <div className="w-full h-[550px] bg-[#d9d9d9]" />
+          )}
+        </div>
       </div>
     </section>
   )

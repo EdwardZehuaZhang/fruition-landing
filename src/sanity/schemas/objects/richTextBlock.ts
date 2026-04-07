@@ -18,6 +18,11 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'subheading',
+      title: 'Subheading',
+      type: 'text',
+    }),
+    defineField({
       name: 'content',
       title: 'Content',
       type: 'array',
@@ -32,6 +37,24 @@ export default defineType({
       name: 'ctaUrl',
       title: 'CTA URL',
       type: 'string',
+    }),
+    defineField({
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: 'imagePosition',
+      title: 'Image Position',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Right', value: 'right' },
+          { title: 'Left', value: 'left' },
+        ],
+      },
+      initialValue: 'right',
     }),
   ],
 })

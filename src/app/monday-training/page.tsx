@@ -1,7 +1,5 @@
 import { getServicePageBySlug } from "@/sanity/queries"
-import HeroSection from "@/components/HeroSection"
-import { PortableText } from "@portabletext/react"
-import { portableTextComponents } from "@/components/PortableTextComponents"
+import ServicePageTemplate from "@/components/ServicePageTemplate"
 
 export async function generateMetadata() {
   const page = await getServicePageBySlug("monday-training")
@@ -14,18 +12,14 @@ export async function generateMetadata() {
 export default async function Page() {
   const page = await getServicePageBySlug("monday-training")
   return (
-    <div>
-      <HeroSection
-        heading={page?.heroHeading || "monday.com Training"}
-        subheading={page?.heroSubheading || "Certified training for your entire team."}
-        heroImage={page?.heroImage}
-        primaryCta={{ label: "Book a Consultation", url: "https://calendly.com/global-calendar-fruitionservices" }}
-      />
-      {page?.body && (
-        <div className="max-w-4xl mx-auto px-4 py-16 prose prose-lg">
-          <PortableText value={page.body} components={portableTextComponents} />
-        </div>
-      )}
-    </div>
+    <ServicePageTemplate
+      heroHeading={page?.heroHeading || "Get your team official monday.com workflow training"}
+      heroSubheading={page?.heroSubheading || "Expert Workflow Training delivered by a certified monday partner.\nOur training and adoption programs helps you onboard and adopt monday.com up to 10x faster."}
+      heroPurpleAccent="workflow training"
+      primaryCtaLabel={page?.primaryCtaLabel || "🚀 Book a Consultation"}
+      primaryCtaUrl={page?.primaryCtaUrl || "https://calendly.com/global-calendar-fruitionservices"}
+      secondaryCtaLabel={page?.secondaryCtaLabel}
+      secondaryCtaUrl={page?.secondaryCtaUrl}
+    />
   )
 }

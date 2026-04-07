@@ -1,11 +1,14 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
+import { urlFor } from '@/sanity/image'
 
 interface Stat {
   _key?: string
   value?: string
   label?: string
+  icon?: { asset: { _ref: string } }
 }
 
 interface StatsBlockProps {
@@ -17,6 +20,29 @@ interface StatsBlockProps {
   footnote?: string
 }
 
+// Fallback icon images when Sanity doesn't have them
+const fallbackIcons = [
+  '/images/icon-roi-1.png',
+  '/images/icon-roi-2.png',
+  '/images/icon-roi-3.png',
+  '/images/icon-roi-4.png',
+]
+
+function renderHeadingWithAccent(heading: string) {
+  const accent = '500+ businesses'
+  const idx = heading.indexOf(accent)
+  if (idx >= 0) {
+    return (
+      <>
+        <span className="text-black">{heading.slice(0, idx)}</span>
+        <span className="text-[#8015e8]">{accent}</span>
+        <span className="text-black">{heading.slice(idx + accent.length)}</span>
+      </>
+    )
+  }
+  return <span className="text-black">{heading}</span>
+}
+
 export default function StatsBlockView({
   heading,
   subheading,
@@ -26,35 +52,84 @@ export default function StatsBlockView({
   footnote,
 }: StatsBlockProps) {
   return (
-    <section className="bg-[#1a1a2e] py-16 px-4 text-white">
-      <div className="mx-auto max-w-6xl text-center">
+    <section className="bg-white py-[80px] px-4">
+      <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[24px]">
+        {/* Heading */}
         {heading && (
-          <h2 className="mb-4 text-3xl font-bold md:text-4xl">{heading}</h2>
+          <h2 className="text-center text-[28px] font-medium leading-[39.2px]">
+            {renderHeadingWithAccent(heading)}
+          </h2>
         )}
+
+        {/* Subheading with monday.com partners badge */}
         {subheading && (
-          <p className="mx-auto mb-12 max-w-2xl text-gray-300">{subheading}</p>
+          <div className="flex items-start gap-[5px] text-[14px] text-[#242323]">
+            <span>{subheading}</span>
+            <Image src="/images/badge-monday-partners.png" alt="monday.com partners" width={148} height={23} className="h-[23px] w-auto" />
+          </div>
         )}
+
+        {/* Stats row — with real icon images */}
         {stats && stats.length > 0 && (
-          <div className="mb-12 grid grid-cols-2 gap-8 md:grid-cols-4">
+          <div className="flex flex-wrap justify-center gap-[40px]">
             {stats.map((stat, i) => (
-              <div key={stat._key ?? i} className="flex flex-col items-center">
-                <span className="text-4xl font-bold text-purple-400 md:text-5xl">
+              <div key={stat._key ?? i} className="flex flex-col items-center gap-[2px]">
+                {stat.icon?.asset ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={urlFor(stat.icon).width(64).height(64).url()}
+                    alt=""
+                    className="w-[64px] h-[64px] mb-2"
+                  />
+                ) : (
+                  <Image
+                    src={fallbackIcons[i] || fallbackIcons[0]}
+                    alt=""
+                    width={64}
+                    height={64}
+                    className="w-[64px] h-[64px] mb-2"
+                  />
+                )}
+                <span className="text-[20px] font-semibold text-[#550e9b] leading-[28px] whitespace-nowrap">
                   {stat.value}
                 </span>
-                <span className="mt-2 text-sm text-gray-300">{stat.label}</span>
+                <span className="text-[14px] text-black leading-[28px] text-center">{stat.label}</span>
               </div>
             ))}
           </div>
         )}
-        {footnote && <p className="mb-6 text-sm text-gray-400">{footnote}</p>}
-        {ctaLabel && ctaUrl && (
+
+        {/* Footnote with Forrester */}
+        {footnote ? (
+          <div className="flex items-center gap-[3px] text-[12px] text-[#242323]">
+            <span>{footnote}</span>
+            <Image src="/images/badge-forrester.png" alt="Forrester" width={60} height={24} className="h-5 w-auto" />
+          </div>
+        ) : (
+          <div className="flex items-center gap-[3px] text-[12px] text-[#242323]">
+            <span>Data by</span>
+            <Image src="/images/badge-forrester.png" alt="Forrester" width={64} height={14} className="h-[14px] w-auto" />
+          </div>
+        )}
+
+        {/* CTA */}
+        {ctaLabel && ctaUrl ? (
           <Link
             href={ctaUrl}
-            className="inline-block rounded-full bg-purple-600 px-8 py-3 font-semibold text-white transition hover:bg-purple-700"
+            className="flex items-center justify-center h-[53px] w-[275px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
           >
             {ctaLabel}
           </Link>
+        ) : (
+          <Link
+            href="https://calendly.com/global-calendar-fruitionservices"
+            className="flex items-center justify-center h-[53px] w-[275px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
+          >
+            🚀 Book a Time
+          </Link>
         )}
+
+        {/* Security bar moved to after blog section in BlockRenderer */}
       </div>
     </section>
   )

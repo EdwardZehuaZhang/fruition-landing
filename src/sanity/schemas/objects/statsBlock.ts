@@ -24,6 +24,11 @@ export default defineType({
           fields: [
             defineField({ name: 'value', title: 'Value', type: 'string' }),
             defineField({ name: 'label', title: 'Label', type: 'string' }),
+            defineField({
+              name: 'icon',
+              title: 'Icon',
+              type: 'image',
+            }),
           ],
         },
       ],

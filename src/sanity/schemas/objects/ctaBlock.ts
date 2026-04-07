@@ -42,5 +42,22 @@ export default defineType({
       title: 'Secondary CTA URL',
       type: 'string',
     }),
+    defineField({
+      name: 'variant',
+      title: 'Variant',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Default', value: 'default' },
+          { title: 'Gradient', value: 'gradient' },
+        ],
+      },
+      initialValue: 'default',
+    }),
+    defineField({
+      name: 'badgeImage',
+      title: 'Badge Image',
+      type: 'image',
+    }),
   ],
 })

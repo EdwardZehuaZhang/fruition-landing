@@ -14,11 +14,7 @@ export default async function Home() {
   const homePage = await getHomePage()
 
   if (homePage?.contentBlocks?.length) {
-    return (
-      <main>
-        <BlockRenderer blocks={homePage.contentBlocks} />
-      </main>
-    )
+    return <BlockRenderer blocks={homePage.contentBlocks} />
   }
 
   // Fallback: no homePage document in Sanity yet
