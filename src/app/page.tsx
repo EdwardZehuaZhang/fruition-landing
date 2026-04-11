@@ -11,14 +11,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const homePage = await getHomePage()
+  const [homePage, settings] = await Promise.all([getHomePage(), getSiteSettings()])
 
   if (homePage?.contentBlocks?.length) {
-    return <BlockRenderer blocks={homePage.contentBlocks} />
+    return <BlockRenderer blocks={homePage.contentBlocks} siteSettings={settings} />
   }
 
   // Fallback: no homePage document in Sanity yet
-  const settings = await getSiteSettings()
 
   return (
     <main className="max-w-2xl mx-auto py-16 px-4">

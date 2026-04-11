@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { urlFor } from '@/sanity/image'
+import type { SiteSettings } from '../types'
 
 interface CtaBlockProps {
   heading?: string
@@ -11,6 +11,7 @@ interface CtaBlockProps {
   secondaryCtaUrl?: string
   variant?: string
   badgeImage?: { asset: { _ref: string } }
+  siteSettings?: SiteSettings
 }
 
 export default function CtaBlockView({
@@ -22,9 +23,14 @@ export default function CtaBlockView({
   secondaryCtaUrl,
   variant,
   badgeImage,
+  siteSettings,
 }: CtaBlockProps) {
   // Use gradient as default style to match Figma design
   const isGradient = variant !== 'default'
+  // Prefer Sanity badge: per-block badgeImage, then siteSettings.badgeCertifications, then hardcoded fallback
+  const certificationsBadgeSrc = siteSettings?.badgeCertifications?.asset
+    ? urlFor(siteSettings.badgeCertifications).height(146).url()
+    : '/images/badge-certifications.png'
 
   return (
     <section
@@ -46,7 +52,8 @@ export default function CtaBlockView({
         </div>
       ) : isGradient ? (
         <div className="mb-6">
-          <Image src="/images/badge-certifications.png" alt="monday.com Certifications" width={325} height={73} className="h-[73px] w-auto" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={certificationsBadgeSrc} alt="monday.com Certifications" width={325} height={73} className="h-[73px] w-auto" />
         </div>
       ) : null}
 

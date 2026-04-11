@@ -1,6 +1,6 @@
 import { writeClient } from './sanity-client.js'
-import { fetchPage, extractSeoDescription, extractOgImage, extractBodyText, sleep } from './scrape.js'
-import { textToPortableText } from './helpers.js'
+import { fetchPage, extractSeoDescription, extractOgImage, sleep } from './scrape.js'
+import { htmlElementToPortableText, findPostBodyContainer } from './html-to-portable-text.js'
 
 const BASE_URL = 'https://www.fruitionservices.io'
 
@@ -133,7 +133,8 @@ async function importBlogPost(entry: SitemapEntry): Promise<boolean> {
     const publishedAt = extractPublishedDate(root, entry.lastmod)
     const coverImageUrl = extractOgImage(root)
     const excerpt = extractSeoDescription(root)
-    const bodyTexts = extractBodyText(root)
+    const bodyContainer = findPostBodyContainer(root)
+    const bodyBlocks = bodyContainer ? htmlElementToPortableText(bodyContainer) : []
     const categorySlags = extractCategoriesFromPage(root)
 
     // Build category references
@@ -153,7 +154,7 @@ async function importBlogPost(entry: SitemapEntry): Promise<boolean> {
       publishedAt: publishedAt || entry.lastmod || new Date().toISOString(),
       author,
       excerpt,
-      body: textToPortableText(bodyTexts),
+      body: bodyBlocks,
       seoTitle: title,
       seoDescription: excerpt,
     }

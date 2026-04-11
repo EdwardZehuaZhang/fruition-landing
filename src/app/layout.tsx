@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
-import { Poppins } from "next/font/google"
+import { Poppins, Montserrat } from "next/font/google"
 import "./globals.css"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
+import { getSiteSettings } from "@/sanity/queries"
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -10,22 +11,30 @@ const poppins = Poppins({
   weight: ["200", "300", "400", "500", "600", "700"],
 })
 
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+})
+
 export const metadata: Metadata = {
   title: "Fruition Services | monday.com Platinum Partners",
   description: "Expert monday.com implementation, consulting, and training. Fruition is your trusted monday.com Platinum Partner.",
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const siteSettings = await getSiteSettings()
+
   return (
     <html lang="en">
-      <body className={`${poppins.variable} antialiased`}>
-        <Navbar />
+      <body className={`${poppins.variable} ${montserrat.variable} antialiased`}>
+        <Navbar siteSettings={siteSettings} />
         <main>{children}</main>
-        <Footer />
+        <Footer siteSettings={siteSettings} />
       </body>
     </html>
   )

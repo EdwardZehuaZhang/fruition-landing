@@ -3,28 +3,73 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { urlFor } from "@/sanity/image"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
 /* ------------------------------------------------------------------ */
 
+// Loose Sanity image ref (accept any shape; urlFor handles resolution)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SanityImageRef = any
+
+interface CarouselLogoEntry {
+  alt?: string
+  image?: SanityImageRef
+}
+
+interface PartnerBadgeEntry {
+  name?: string
+  image?: SanityImageRef
+  width?: number
+  height?: number
+}
+
+interface SiteSettingsShape {
+  carouselLogos?: CarouselLogoEntry[]
+  navbarPartnerBadges?: PartnerBadgeEntry[]
+  badgeCertifications?: SanityImageRef
+  badgeSecurity?: SanityImageRef
+  calendlyLink?: string
+}
+
+interface CaseStudyShape {
+  _id?: string
+  clientName?: string
+  clientRole?: string
+  clientCompany?: string
+  quote?: string
+  logo?: SanityImageRef
+  linkedinUrl?: string
+}
+
+interface FaqItemShape {
+  question: string
+  answer: string
+}
+
 interface ServicePageTemplateProps {
   heroHeading: string
   heroSubheading?: string
   heroPurpleAccent?: string
-  heroImage?: string
+  // Accept either a string URL (legacy) or a Sanity image ref object
+  heroImage?: string | SanityImageRef
   certificationBanner?: boolean
   primaryCtaLabel?: string
   primaryCtaUrl?: string
   secondaryCtaLabel?: string
   secondaryCtaUrl?: string
+  // New data-driven props
+  siteSettings?: SiteSettingsShape | null
+  caseStudies?: CaseStudyShape[] | null
+  faqItems?: Record<string, FaqItemShape[]>
 }
 
 /* ------------------------------------------------------------------ */
-/*  Data                                                               */
+/*  Fallback data (used when Sanity data isn't available)              */
 /* ------------------------------------------------------------------ */
 
-const CAROUSEL_LOGOS = [
+const FALLBACK_LOGOS = [
   { src: "/images/carousel-logo-1.png", alt: "Client 1" },
   { src: "/images/carousel-logo-2.png", alt: "Client 2" },
   { src: "/images/carousel-logo-3.png", alt: "Client 3" },
@@ -38,7 +83,13 @@ const CAROUSEL_LOGOS = [
   { src: "/images/carousel-logo-11.png", alt: "Client 11" },
 ]
 
-const TESTIMONIALS = [
+const FALLBACK_BADGES = [
+  { src: "/images/partner-platinum.png", alt: "monday.com Platinum Partner" },
+  { src: "/images/partner-advanced-delivery.png", alt: "Advanced Delivery Partner" },
+  { src: "/images/partner-make.png", alt: "Make Partner" },
+]
+
+const FALLBACK_TESTIMONIALS = [
   {
     name: "Jade Wood",
     role: "Managing Director, Popology",
@@ -81,7 +132,7 @@ const FAQ_TABS = [
 
 type FaqTab = typeof FAQ_TABS[number]
 
-const FAQ_ITEMS: Record<FaqTab, { question: string; answer: string }[]> = {
+const FALLBACK_FAQ_ITEMS: Record<FaqTab, { question: string; answer: string }[]> = {
   'Professional Services': [
     {
       question: 'Does monday com have a CRM?',
@@ -127,7 +178,7 @@ const FAQ_ITEMS: Record<FaqTab, { question: string; answer: string }[]> = {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Helper: split heading around the purple accent                     */
+/*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
 function renderHeading(heading: string, accent?: string) {
@@ -152,6 +203,25 @@ function renderHeading(heading: string, accent?: string) {
   )
 }
 
+// Resolve a value that may be a string URL or a Sanity image ref to a URL
+function resolveImageUrl(
+  source: string | SanityImageRef | undefined | null,
+  width?: number,
+  height?: number,
+): string | null {
+  if (!source) return null
+  if (typeof source === "string") return source
+  try {
+    let builder = urlFor(source)
+    if (width) builder = builder.width(width)
+    if (height) builder = builder.height(height)
+    if (width && height) builder = builder.fit("crop")
+    return builder.url()
+  } catch {
+    return null
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /*  Component                                                          */
 /* ------------------------------------------------------------------ */
@@ -166,12 +236,87 @@ export default function ServicePageTemplate({
   primaryCtaUrl,
   secondaryCtaLabel,
   secondaryCtaUrl,
+  siteSettings,
+  caseStudies,
+  faqItems,
 }: ServicePageTemplateProps) {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0)
   const [activeFaqTab, setActiveFaqTab] = useState<FaqTab>('Professional Services')
 
+  /* -------------------- Derived data -------------------- */
+
+  // Carousel logos: Sanity first, fallback to static PNGs
+  const carouselLogos: { src: string; alt: string }[] =
+    siteSettings?.carouselLogos && siteSettings.carouselLogos.length > 0
+      ? siteSettings.carouselLogos
+          .map((logo, i) => {
+            const src = resolveImageUrl(logo.image)
+            return src ? { src, alt: logo.alt || `Client ${i + 1}` } : null
+          })
+          .filter((l): l is { src: string; alt: string } => l !== null)
+      : FALLBACK_LOGOS
+
   // Duplicate logos for seamless marquee loop
-  const duplicatedLogos = [...CAROUSEL_LOGOS, ...CAROUSEL_LOGOS]
+  const duplicatedLogos = [...carouselLogos, ...carouselLogos]
+
+  // Partner badges
+  const partnerBadges: { src: string; alt: string; width: number; height: number }[] =
+    siteSettings?.navbarPartnerBadges && siteSettings.navbarPartnerBadges.length > 0
+      ? siteSettings.navbarPartnerBadges
+          .map((badge) => {
+            const src = resolveImageUrl(badge.image)
+            return src
+              ? {
+                  src,
+                  alt: badge.name || "Partner badge",
+                  width: badge.width || 120,
+                  height: badge.height || 44,
+                }
+              : null
+          })
+          .filter(
+            (b): b is { src: string; alt: string; width: number; height: number } =>
+              b !== null,
+          )
+      : FALLBACK_BADGES.map((b) => ({ ...b, width: 120, height: 44 }))
+
+  // Certification banner: Sanity first, fallback to static
+  const certificationBannerUrl =
+    resolveImageUrl(siteSettings?.badgeCertifications) || "/images/badge-certifications.png"
+
+  // Security badge: Sanity first, fallback to static
+  const securityBadgeUrl =
+    resolveImageUrl(siteSettings?.badgeSecurity) || "/images/badge-security.png"
+
+  // Calendly link
+  const calendlyLink =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+
+  // Testimonials from Sanity caseStudies, or fall back
+  const testimonials: { name: string; role: string; quote: string }[] =
+    caseStudies && caseStudies.length > 0
+      ? caseStudies
+          .map((cs) => {
+            const name = cs.clientName || ""
+            const rolePart = cs.clientRole || ""
+            const companyPart = cs.clientCompany || ""
+            const role = [rolePart, companyPart].filter(Boolean).join(", ")
+            const quote = cs.quote || ""
+            if (!name && !quote) return null
+            return { name, role, quote }
+          })
+          .filter((t): t is { name: string; role: string; quote: string } => t !== null)
+      : FALLBACK_TESTIMONIALS
+
+  // Hero image URL (accept both string and sanity ref)
+  const heroImageUrl = resolveImageUrl(heroImage, 1042, 312)
+
+  // FAQ items — accept prop override, otherwise fall back to hardcoded
+  const effectiveFaqItems: Record<string, FaqItemShape[]> = faqItems || FALLBACK_FAQ_ITEMS
+  const faqTabs: string[] =
+    faqItems && Object.keys(faqItems).length > 0 ? Object.keys(faqItems) : (FAQ_TABS as readonly string[]).slice()
+  const currentFaqList: FaqItemShape[] =
+    effectiveFaqItems[activeFaqTab] || effectiveFaqItems[faqTabs[0]] || []
 
   return (
     <div>
@@ -185,17 +330,13 @@ export default function ServicePageTemplate({
         >
           {/* Partner badges */}
           <div className="flex items-center" style={{ gap: 22 }}>
-            {[
-              { src: "/images/partner-platinum.png", alt: "monday.com Platinum Partner" },
-              { src: "/images/partner-advanced-delivery.png", alt: "Advanced Delivery Partner" },
-              { src: "/images/partner-make.png", alt: "Make Partner" },
-            ].map((badge) => (
+            {partnerBadges.map((badge) => (
               <Image
                 key={badge.src}
                 src={badge.src}
                 alt={badge.alt}
-                width={120}
-                height={44}
+                width={badge.width}
+                height={badge.height}
                 className="h-[44px] w-auto rounded-[5px]"
                 style={{ boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.5)" }}
               />
@@ -226,11 +367,12 @@ export default function ServicePageTemplate({
           {certificationBanner && (
             <div style={{ marginTop: 40 }}>
               <Image
-                src="/images/badge-certifications.png"
+                src={certificationBannerUrl}
                 alt="Certifications"
                 width={534}
                 height={133}
                 className="h-[133px] w-[534px] object-contain"
+                unoptimized={certificationBannerUrl.startsWith("http")}
               />
             </div>
           )}
@@ -241,7 +383,7 @@ export default function ServicePageTemplate({
             style={{ gap: 20, marginTop: 40, width: 680 }}
           >
             <Link
-              href={primaryCtaUrl || "https://calendly.com/global-calendar-fruitionservices"}
+              href={primaryCtaUrl || calendlyLink}
               className="flex items-center justify-center font-bold"
               style={{
                 width: 330,
@@ -256,7 +398,7 @@ export default function ServicePageTemplate({
               {primaryCtaLabel || "\ud83d\ude80 Book a Consultation"}
             </Link>
             <Link
-              href={secondaryCtaUrl || "https://calendly.com/global-calendar-fruitionservices"}
+              href={secondaryCtaUrl || calendlyLink}
               className="flex items-center justify-center font-bold text-white"
               style={{
                 width: 330,
@@ -271,14 +413,15 @@ export default function ServicePageTemplate({
           </div>
 
           {/* Hero image */}
-          {heroImage ? (
+          {heroImageUrl ? (
             <Image
-              src={heroImage}
+              src={heroImageUrl}
               alt={heroHeading}
               width={1042}
               height={312}
               className="rounded-[24px] object-cover"
               style={{ width: 1042, height: 312, marginTop: 40 }}
+              unoptimized={heroImageUrl.startsWith("http")}
             />
           ) : (
             <div
@@ -358,7 +501,7 @@ export default function ServicePageTemplate({
               What our customers say about us {"\ud83d\ude4c"}
             </h2>
             <Link
-              href="https://calendly.com/global-calendar-fruitionservices"
+              href={calendlyLink}
               className="shrink-0 flex items-center justify-center h-[53px] w-[330px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
             >
               {"\ud83d\ude80"} Start Your Transformation
@@ -392,9 +535,9 @@ export default function ServicePageTemplate({
             </div>
 
             {/* Testimonial cards */}
-            {TESTIMONIALS.map((t) => (
+            {testimonials.map((t, idx) => (
               <div
-                key={t.name}
+                key={`${t.name}-${idx}`}
                 className="relative flex flex-col bg-white rounded-[24px] border border-[#e8e6e6] w-full max-w-[437px] min-h-[300px]"
               >
                 {/* Top: Name + Title */}
@@ -467,7 +610,7 @@ export default function ServicePageTemplate({
             }}
           >
             <iframe
-              src="https://calendly.com/global-calendar-fruitionservices"
+              src={calendlyLink}
               width="100%"
               height="100%"
               frameBorder="0"
@@ -489,10 +632,10 @@ export default function ServicePageTemplate({
 
           {/* Tab navigation bar */}
           <div className="flex items-start overflow-auto" style={{ width: 916, height: 52 }}>
-            {FAQ_TABS.map((tab) => (
+            {faqTabs.map((tab) => (
               <button
                 key={tab}
-                onClick={() => { setActiveFaqTab(tab); setOpenFaqIndex(0) }}
+                onClick={() => { setActiveFaqTab(tab as FaqTab); setOpenFaqIndex(0) }}
                 className="h-full shrink-0 relative"
                 style={{
                   paddingTop: 14,
@@ -511,7 +654,7 @@ export default function ServicePageTemplate({
 
           {/* FAQ items for active tab */}
           <div className="flex flex-col" style={{ gap: 12 }}>
-            {FAQ_ITEMS[activeFaqTab].map((item, i) => (
+            {currentFaqList.map((item, i) => (
               <div key={i} style={{ paddingTop: i === 0 ? 20 : 24 }}>
                 {/* Question row */}
                 <button
@@ -556,11 +699,12 @@ export default function ServicePageTemplate({
         <div className="mx-auto flex flex-col items-center">
           {/* Certifications badge */}
           <Image
-            src="/images/badge-certifications.png"
+            src={certificationBannerUrl}
             alt="Certifications"
             width={325}
             height={73}
             className="h-[73px] w-[325px] object-contain"
+            unoptimized={certificationBannerUrl.startsWith("http")}
           />
 
           {/* Heading */}
@@ -583,7 +727,7 @@ export default function ServicePageTemplate({
             style={{ gap: 24, marginTop: 32, width: 694 }}
           >
             <Link
-              href="https://calendly.com/global-calendar-fruitionservices"
+              href={calendlyLink}
               className="flex flex-1 items-center justify-center font-bold"
               style={{
                 height: 63,
@@ -596,7 +740,7 @@ export default function ServicePageTemplate({
               {"\ud83d\ude80"} Schedule a Consultation
             </Link>
             <Link
-              href="https://calendly.com/global-calendar-fruitionservices"
+              href={calendlyLink}
               className="flex flex-1 items-center justify-center font-bold text-white"
               style={{
                 height: 63,
@@ -617,11 +761,12 @@ export default function ServicePageTemplate({
       <section className="bg-white" style={{ paddingBottom: 80 }}>
         <div className="mx-auto max-w-[976px]">
           <Image
-            src="/images/badge-security.png"
+            src={securityBadgeUrl}
             alt="Security certifications"
             width={976}
             height={94}
             className="w-full h-auto"
+            unoptimized={securityBadgeUrl.startsWith("http")}
           />
         </div>
       </section>

@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { urlFor } from '@/sanity/image'
+import type { SiteSettings } from '../types'
 
 interface Feature {
   _key?: string
@@ -16,9 +16,13 @@ interface FeatureListBlockProps {
   subheading?: string
   variant?: string
   features?: Feature[]
+  siteSettings?: SiteSettings
 }
 
-// Fallback images for industry cards when Sanity doesn't have them
+// Static industry navigation icons — kept hardcoded because these are a fixed
+// set of design-time decorative thumbnails that rarely change and would be
+// unwieldy to manage per-industry in Sanity. Sanity feature.image still wins
+// when populated per-feature.
 const INDUSTRY_IMAGES: Record<string, string> = {
   'Construction': '/images/industry-construction.png',
   'Customer Service': '/images/industry-customer-service.png',
@@ -30,7 +34,12 @@ const INDUSTRY_IMAGES: Record<string, string> = {
   'Real Estate': '/images/industry-real-estate.png',
 }
 
-export default function FeatureListBlockView({ _key, heading, subheading, variant, features }: FeatureListBlockProps) {
+export default function FeatureListBlockView({ _key, heading, subheading, variant, features, siteSettings }: FeatureListBlockProps) {
+  // Platinum partner badge for the industries variant — prefer Sanity navbarPartnerBadges[0], fall back to hardcoded image
+  const platinumBadgeImage = siteSettings?.navbarPartnerBadges?.[0]?.image
+  const platinumBadgeSrc = platinumBadgeImage?.asset
+    ? urlFor(platinumBadgeImage).height(90).url()
+    : '/images/partner-platinum-lg.png'
   const isIndustryGrid = variant === 'industries' || features?.some(f => f.description?.startsWith('/'))
 
   // "Teams Transformed" = challenges variant: white bg, vertical numbered list in bordered card
@@ -114,7 +123,8 @@ export default function FeatureListBlockView({ _key, heading, subheading, varian
 
           {/* Partner badge */}
           <div className="h-[53px] w-[176px] bg-white rounded-lg flex items-center justify-center shadow-sm">
-            <Image src="/images/partner-platinum-lg.png" alt="monday.com Platinum Partner" width={160} height={45} className="h-10 w-auto" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={platinumBadgeSrc} alt="monday.com Platinum Partner" width={160} height={45} className="h-10 w-auto" />
           </div>
 
           {/* Industry cards grid */}

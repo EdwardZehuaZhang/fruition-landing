@@ -1,4 +1,4 @@
-import { getServicePageBySlug } from "@/sanity/queries"
+import { getServicePageBySlug, getSiteSettings, getCaseStudies } from "@/sanity/queries"
 import ServicePageTemplate from "@/components/ServicePageTemplate"
 
 export async function generateMetadata() {
@@ -10,16 +10,23 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const page = await getServicePageBySlug("monday-crm-consulting")
+  const [page, siteSettings, caseStudies] = await Promise.all([
+    getServicePageBySlug("monday-crm-consulting"),
+    getSiteSettings(),
+    getCaseStudies(),
+  ])
   return (
     <ServicePageTemplate
       heroHeading={page?.heroHeading || "monday.com CRM Consulting & monday.com CRM Implementation"}
       heroSubheading={page?.heroSubheading}
       heroPurpleAccent="CRM Consulting"
+      heroImage={page?.heroImage}
       primaryCtaLabel={page?.primaryCtaLabel || "🚀 Book a Consultation"}
       primaryCtaUrl={page?.primaryCtaUrl || "https://calendly.com/global-calendar-fruitionservices"}
       secondaryCtaLabel={page?.secondaryCtaLabel}
       secondaryCtaUrl={page?.secondaryCtaUrl}
+      siteSettings={siteSettings}
+      caseStudies={caseStudies}
     />
   )
 }

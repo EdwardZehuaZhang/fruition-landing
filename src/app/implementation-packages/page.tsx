@@ -1,16 +1,31 @@
-import { getServicePageBySlug } from "@/sanity/queries"
+import {
+  getImplementationPackagesPage,
+  getSiteSettings,
+  getCaseStudies,
+} from "@/sanity/queries"
 import ImplementationPackagesContent from "./ImplementationPackagesContent"
 
 export async function generateMetadata() {
-  const page = await getServicePageBySlug("implementation-packages")
+  const data = await getImplementationPackagesPage()
   return {
-    title: page?.seoTitle || "Implementation Packages | Fruition Services",
+    title: data?.seoTitle || "Implementation Packages | Fruition Services",
     description:
-      page?.seoDescription ||
+      data?.seoDescription ||
       "Structured monday.com implementation packages to get your team running fast. Certified Fruition consultants.",
   }
 }
 
-export default function Page() {
-  return <ImplementationPackagesContent />
+export default async function Page() {
+  const [data, settings, caseStudies] = await Promise.all([
+    getImplementationPackagesPage(),
+    getSiteSettings(),
+    getCaseStudies(),
+  ])
+  return (
+    <ImplementationPackagesContent
+      data={data}
+      carouselLogos={settings?.carouselLogos || []}
+      caseStudies={caseStudies || []}
+    />
+  )
 }

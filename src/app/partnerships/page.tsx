@@ -1,24 +1,14 @@
 import Link from "next/link"
 import HeroSection from "@/components/HeroSection"
-
-const partners = [
-  { slug: "monday-consulting-partner", title: "monday.com Expert Consultants" },
-  { slug: "make-partners", title: "Certified Make Partner" },
-  { slug: "n8n-integration-partner", title: "Certified n8n Partner" },
-  { slug: "certified-clickup-partner", title: "Certified ClickUp Partner" },
-  { slug: "certified-guidde-partner", title: "Certified Guidde Partner" },
-  { slug: "certified-hubspot-partner", title: "Certified HubSpot Partner" },
-  { slug: "hootsuite-delivery-partner", title: "Hootsuite Delivery Partner" },
-  { slug: "aircall-partner", title: "Certified Aircall Partner" },
-  { slug: "certified-atlassian-partner", title: "Certified Atlassian Partner" },
-]
+import { getAllPartnershipPages } from "@/sanity/queries"
 
 export const metadata = {
   title: "Partnerships | Fruition Services",
   description: "Fruition is a certified partner for monday.com, Make, n8n, ClickUp, HubSpot, Atlassian and more.",
 }
 
-export default function PartnershipsPage() {
+export default async function PartnershipsPage() {
+  const partners = await getAllPartnershipPages()
   return (
     <div>
       <HeroSection
@@ -27,10 +17,14 @@ export default function PartnershipsPage() {
         primaryCta={{ label: "Book a Consultation", url: "https://calendly.com/global-calendar-fruitionservices" }}
       />
       <div className="max-w-6xl mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {partners.map((p) => (
-          <Link key={p.slug} href={`/partnerships/${p.slug}`}
-            className="p-6 border border-gray-200 rounded-xl hover:border-blue-400 hover:shadow-md transition-all">
-            <h3 className="text-xl font-semibold text-gray-900">{p.title}</h3>
+        {partners.map((p: { slug: string; title: string; heroSubheading?: string }) => (
+          <Link
+            key={p.slug}
+            href={`/partnerships/${p.slug}`}
+            className="p-6 border border-gray-200 rounded-xl hover:border-blue-400 hover:shadow-md transition-all"
+          >
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">{p.title}</h3>
+            {p.heroSubheading && <p className="text-gray-600 text-sm">{p.heroSubheading}</p>}
           </Link>
         ))}
       </div>

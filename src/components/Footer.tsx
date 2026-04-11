@@ -1,9 +1,52 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { urlFor } from '@/sanity/image'
 
-const CALENDLY_URL = 'https://calendly.com/global-calendar-fruitionservices'
+const FALLBACK_CALENDLY_URL = 'https://calendly.com/global-calendar-fruitionservices'
 
-const locations = [
+interface FooterLink {
+  label?: string
+  href?: string
+}
+
+interface Office {
+  flag?: string
+  city?: string
+  label?: string
+  href?: string
+  address?: string
+  addressUrl?: string
+  phone?: string
+  phoneTel?: string
+}
+
+interface SocialLink {
+  label?: string
+  href?: string
+  icon?: unknown
+}
+
+interface FooterPartnerLogo {
+  name?: string
+  image?: unknown
+  width?: number
+  height?: number
+}
+
+interface SiteSettingsProp {
+  phone?: string
+  calendlyLink?: string
+  logo?: unknown
+  logoWhite?: unknown
+  offices?: Office[]
+  socialLinks?: SocialLink[]
+  footerPartnerLogos?: FooterPartnerLogo[]
+  footerServicesLinks?: FooterLink[]
+  footerDepartmentLinks?: FooterLink[]
+  footerIndustryLinks?: FooterLink[]
+}
+
+const FALLBACK_OFFICES: Office[] = [
   {
     flag: '\u{1F1E6}\u{1F1FA}',
     city: 'Sydney, Australia',
@@ -14,73 +57,6 @@ const locations = [
     phone: '+61 483 955 931',
     phoneTel: '+61483955931',
   },
-  {
-    flag: '\u{1F1FA}\u{1F1F8}',
-    city: 'New York, US Office',
-    label: 'North America Office',
-    href: '/monday-partner-us',
-    address: '205 W 37th St, New York, NY 10018, United States',
-    addressUrl: 'https://maps.app.goo.gl/4u1KjFHfUgiXGGta9',
-    phone: '+1 302 330 2496',
-    phoneTel: '+13023302496',
-  },
-  {
-    flag: '\u{1F1EC}\u{1F1E7}',
-    city: 'London, UK',
-    label: 'EMEA Office',
-    href: '/monday-partner-uk',
-    address: 'Medius House, 2 Sheraton St, London W1F 8BH, United Kingdom',
-    addressUrl: 'https://g.co/kgs/wmakkDU',
-    phone: '+44 7822 019548',
-    phoneTel: '+447822019548',
-  },
-]
-
-const socials = [
-  { label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=100092289551680', icon: '/images/social-facebook.png' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/fruition-services', icon: '/images/social-linkedin.png' },
-  { label: 'WhatsApp', href: 'https://wa.me/61483955931', icon: '/images/social-whatsapp.png' },
-  { label: 'YouTube', href: 'https://www.youtube.com/channel/UCF8mr3qiFVwiX0xrcAaKxgA', icon: '/images/social-youtube.png' },
-]
-
-const partnerLogos: { name: string; src: string; w: number; h: number }[] = [
-  { name: 'monday.com Platinum Partner', src: '/images/partner-platinum-sm.png', w: 110, h: 38 },
-  { name: 'Gold Solution Partner', src: '/images/partner-gold-solution.png', w: 120, h: 41 },
-  { name: 'Advanced Delivery Partner', src: '/images/partner-advanced-delivery-sm.png', w: 110, h: 38 },
-  { name: 'n8n Partner', src: '/images/partner-n8n.png', w: 104, h: 29 },
-  { name: 'Make Partners', src: '/images/partner-make-sm.png', w: 110, h: 26 },
-  { name: 'Aircall Partners', src: '/images/partner-aircall.png', w: 89, h: 38 },
-  { name: 'Hootsuite Partners', src: '/images/partner-hootsuite.png', w: 126, h: 28 },
-  { name: 'Guidde Partner', src: '/images/partner-guidde.png', w: 79, h: 28 },
-]
-
-const servicesLinks = [
-  { label: 'Implementation Packages', href: '/implementation-packages' },
-  { label: 'monday.com Training', href: '/monday-training' },
-  { label: 'monday.com Implementation Consultants', href: '/monday-implementation-consultants' },
-  { label: 'monday CRM Consulting', href: '/monday-crm-consulting' },
-]
-
-const departmentLinks = [
-  { label: 'monday.com Project Management', href: '/monday-consulting-solutions/monday-project-management' },
-  { label: 'monday.com Service', href: '/monday-consulting-solutions/monday-service' },
-  { label: 'monday.com HR Solutions', href: '/monday-consulting-solutions/monday-for-hr' },
-  { label: 'monday.com for Marketing & Creative', href: '/monday-for-marketing' },
-  { label: 'monday.com Finance', href: '/monday-consulting-solutions/monday-for-finance' },
-  { label: 'monday.com for Product Management', href: '/monday-consulting-solutions/monday-product-management' },
-  { label: 'Solar CRM & Work Management Solution', href: '/monday-consulting-solutions/solar-crm-solution' },
-  { label: 'AI Strategy & Execution', href: '/ai-strategy-and-execution' },
-  { label: 'Case Studies', href: '/customer-testimonials' },
-]
-
-const industryLinks = [
-  { label: 'monday.com for Construction', href: '/monday-for-construction' },
-  { label: 'monday.com for Manufacturing', href: '/monday-for-manufacturing' },
-  { label: 'monday.com for Retail', href: '/monday-for-retail' },
-  { label: 'monday.com for Professional Services', href: '/monday-for-professional-services' },
-  { label: 'monday.com for Government', href: '/monday-for-government' },
-  { label: 'monday.com for Marketing & Creative', href: '/monday-for-marketing' },
-  { label: 'monday.com for Real Estate', href: '/monday-for-real-estate' },
 ]
 
 /* ------------------------------------------------------------------ */
@@ -104,7 +80,19 @@ function PhoneIcon() {
   )
 }
 
-export default function Footer() {
+export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsProp | null }) {
+  const calendlyUrl = siteSettings?.calendlyLink || FALLBACK_CALENDLY_URL
+  const offices = siteSettings?.offices && siteSettings.offices.length > 0 ? siteSettings.offices : FALLBACK_OFFICES
+  const socials = siteSettings?.socialLinks ?? []
+  const partnerLogos = siteSettings?.footerPartnerLogos ?? []
+  const servicesLinks = siteSettings?.footerServicesLinks ?? []
+  const departmentLinks = siteSettings?.footerDepartmentLinks ?? []
+  const industryLinks = siteSettings?.footerIndustryLinks ?? []
+
+  const logoSrc = siteSettings?.logo
+    ? urlFor(siteSettings.logo).width(294).height(56).url()
+    : '/images/logo-fruition.png'
+
   return (
     <footer className="flex flex-col lg:flex-row w-full">
       {/* ============================================================ */}
@@ -120,15 +108,16 @@ export default function Footer() {
         <div className="flex items-center gap-[15px] flex-wrap">
           <Link href="/">
             <Image
-              src="/images/logo-fruition.png"
+              src={logoSrc}
               alt="Fruition Services"
               width={147}
               height={28}
               className="h-[28px] w-auto brightness-0 invert"
+              unoptimized
             />
           </Link>
           <a
-            href={CALENDLY_URL}
+            href={calendlyUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white px-6 py-2 rounded-full text-[13px] font-semibold hover:opacity-90 transition-opacity whitespace-nowrap"
@@ -148,13 +137,19 @@ export default function Footer() {
             <span className="text-[13px] leading-[20px]">contact@fruitionservices.io</span>
           </a>
 
-          {/* Phone numbers */}
+          {/* Phone numbers (one per office) */}
           <div className="flex items-start gap-2">
             <PhoneIcon />
             <div className="flex flex-col text-[13px] leading-[20px] text-white">
-              <a href="tel:+61483955931" className="hover:opacity-80 transition-opacity">+61 483 955 931</a>
-              <a href="tel:+13023302496" className="hover:opacity-80 transition-opacity">+1 302 330 2496</a>
-              <a href="tel:+447822019548" className="hover:opacity-80 transition-opacity">+44 7822 019548</a>
+              {offices.map((o) => (
+                <a
+                  key={o.phoneTel || o.phone}
+                  href={`tel:${o.phoneTel || (o.phone || '').replace(/\s/g, '')}`}
+                  className="hover:opacity-80 transition-opacity"
+                >
+                  {o.phone}
+                </a>
+              ))}
             </div>
           </div>
         </div>
@@ -163,34 +158,45 @@ export default function Footer() {
         <div>
           <h4 className="text-white font-semibold text-[16px] mb-3">Partner Expertise</h4>
           <div className="grid grid-cols-2 gap-x-[40px] gap-y-[7px]">
-            {partnerLogos.map((p) => (
-              <div key={p.name} className="flex items-center">
-                <Image
-                  src={p.src}
-                  alt={p.name}
-                  width={p.w}
-                  height={p.h}
-                  className="object-contain"
-                  style={{ width: p.w, height: p.h }}
-                />
-              </div>
-            ))}
+            {partnerLogos.map((p, i) => {
+              const w = p.width ?? 110
+              const h = p.height ?? 38
+              const src = p.image ? urlFor(p.image).width(w * 2).height(h * 2).url() : null
+              if (!src) return null
+              return (
+                <div key={`${p.name}-${i}`} className="flex items-center">
+                  <Image
+                    src={src}
+                    alt={p.name || 'Partner logo'}
+                    width={w}
+                    height={h}
+                    className="object-contain"
+                    style={{ width: w, height: h }}
+                    unoptimized
+                  />
+                </div>
+              )
+            })}
           </div>
         </div>
 
         {/* Social icons */}
         <div className="flex items-center gap-[9px]">
-          {socials.map((s) => (
-            <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:opacity-80 transition-opacity"
-            >
-              <Image src={s.icon} alt={s.label} width={26} height={26} className="w-[26px] h-[26px]" />
-            </a>
-          ))}
+          {socials.map((s, i) => {
+            const src = s.icon ? urlFor(s.icon).width(52).height(52).url() : null
+            if (!src) return null
+            return (
+              <a
+                key={`${s.label}-${i}`}
+                href={s.href || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:opacity-80 transition-opacity"
+              >
+                <Image src={src} alt={s.label || 'Social'} width={26} height={26} className="w-[26px] h-[26px]" unoptimized />
+              </a>
+            )
+          })}
         </div>
 
         {/* Privacy links */}
@@ -219,10 +225,10 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold text-[16px] mb-4">Services</h4>
             <div className="flex flex-col">
-              {servicesLinks.map((link) => (
+              {servicesLinks.map((link, i) => (
                 <Link
-                  key={link.href}
-                  href={link.href}
+                  key={`${link.href}-${i}`}
+                  href={link.href || '#'}
                   className="text-white text-[12px] leading-[28px] hover:opacity-80 transition-opacity"
                 >
                   {link.label}
@@ -235,10 +241,10 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold text-[16px] mb-4">Department Solutions</h4>
             <div className="flex flex-col">
-              {departmentLinks.map((link) => (
+              {departmentLinks.map((link, i) => (
                 <Link
-                  key={link.href}
-                  href={link.href}
+                  key={`${link.href}-${i}`}
+                  href={link.href || '#'}
                   className="text-white text-[12px] leading-[28px] hover:opacity-80 transition-opacity"
                 >
                   {link.label}
@@ -251,10 +257,10 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold text-[16px] mb-4">Industry Solutions</h4>
             <div className="flex flex-col">
-              {industryLinks.map((link) => (
+              {industryLinks.map((link, i) => (
                 <Link
-                  key={link.href}
-                  href={link.href}
+                  key={`${link.href}-${i}`}
+                  href={link.href || '#'}
                   className="text-white text-[12px] leading-[28px] hover:opacity-80 transition-opacity"
                 >
                   {link.label}
@@ -268,28 +274,32 @@ export default function Footer() {
         <div className="mt-12">
           <h4 className="text-white font-semibold text-[16px] mb-5">Our Locations</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {locations.map((loc) => (
-              <div key={loc.phoneTel}>
+            {offices.map((loc, i) => (
+              <div key={`${loc.phoneTel}-${i}`}>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-[18px] leading-none">{loc.flag}</span>
                   <Link
-                    href={loc.href}
+                    href={loc.href || '#'}
                     className="text-[#d2acf7] text-[12px] font-medium hover:opacity-80 transition-opacity"
                   >
                     {loc.city}
                   </Link>
                 </div>
                 <p className="text-white/70 text-[11px] mb-0.5">({loc.label})</p>
+                {loc.addressUrl ? (
+                  <a
+                    href={loc.addressUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white text-[12px] leading-[18px] hover:opacity-80 transition-opacity block mb-1"
+                  >
+                    {loc.address}
+                  </a>
+                ) : (
+                  <p className="text-white text-[12px] leading-[18px] mb-1">{loc.address}</p>
+                )}
                 <a
-                  href={loc.addressUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white text-[12px] leading-[18px] hover:opacity-80 transition-opacity block mb-1"
-                >
-                  {loc.address}
-                </a>
-                <a
-                  href={`tel:${loc.phoneTel}`}
+                  href={`tel:${loc.phoneTel || (loc.phone || '').replace(/\s/g, '')}`}
                   className="text-white text-[12px] hover:opacity-80 transition-opacity"
                 >
                   {loc.phone}

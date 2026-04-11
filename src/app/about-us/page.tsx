@@ -15,9 +15,20 @@ export default async function AboutPage() {
   const page = await getPageBySlug("about-us")
   return (
     <div>
-      <HeroSection heading="About Fruition" subheading="500+ clients globally trust Fruition for monday.com implementation, consulting, and training."
-        primaryCta={{ label: "Book a Consultation", url: "https://calendly.com/global-calendar-fruitionservices" }} />
-      {page?.body && <div className="max-w-4xl mx-auto px-4 py-16 prose prose-lg"><PortableText value={page.body} components={portableTextComponents} /></div>}
+      <HeroSection
+        heading={page?.heroHeading || "About Fruition"}
+        subheading={page?.heroSubheading || "500+ clients globally trust Fruition for monday.com implementation, consulting, and training."}
+        heroImage={page?.heroImage}
+        primaryCta={{
+          label: page?.primaryCtaLabel || "Book a Consultation",
+          url: page?.primaryCtaUrl || "https://calendly.com/global-calendar-fruitionservices",
+        }}
+      />
+      {page?.body && (
+        <div className="max-w-4xl mx-auto px-4 py-16 prose prose-lg">
+          <PortableText value={page.body} components={portableTextComponents} />
+        </div>
+      )}
     </div>
   )
 }

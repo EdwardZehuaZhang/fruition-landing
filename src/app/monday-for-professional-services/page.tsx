@@ -16,10 +16,18 @@ export default async function Page() {
   return (
     <div>
       <HeroSection
-        heading={page?.heroHeading || "monday.com for Professional Services"}
-        subheading={page?.heroSubheading || "monday.com for professional services firms."}
+        heading={page?.heroHeading || ""}
+        subheading={page?.heroSubheading}
         heroImage={page?.heroImage}
-        primaryCta={{ label: "Book a Consultation", url: "https://calendly.com/global-calendar-fruitionservices" }}
+        primaryCta={{
+          label: page?.primaryCtaLabel || "Book a Consultation",
+          url: page?.primaryCtaUrl || "https://calendly.com/global-calendar-fruitionservices",
+        }}
+        secondaryCta={
+          page?.secondaryCtaLabel && page?.secondaryCtaUrl
+            ? { label: page.secondaryCtaLabel, url: page.secondaryCtaUrl }
+            : undefined
+        }
       />
       {page?.body && (
         <div className="max-w-4xl mx-auto px-4 py-16 prose prose-lg">

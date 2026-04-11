@@ -26,6 +26,8 @@ import tabSectionBlock from './objects/tabSectionBlock'
 
 // Documents
 import homePage from './documents/homePage'
+import implementationPackagesPage from './documents/implementationPackagesPage'
+import mondayTrainingPage from './documents/mondayTrainingPage'
 
 export const schemaTypes = [
   // Existing
@@ -57,4 +59,6 @@ export const schemaTypes = [
 
   // Document types
   homePage,
+  implementationPackagesPage,
+  mondayTrainingPage,
 ]

@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import HeroBlockView from './blocks/HeroBlockView'
 import RichTextBlockView from './blocks/RichTextBlockView'
 import CtaBlockView from './blocks/CtaBlockView'
@@ -12,6 +11,8 @@ import StatsBlockView from './blocks/StatsBlockView'
 import CalendlyBlockView from './blocks/CalendlyBlockView'
 import TabSectionBlockView from './blocks/TabSectionBlockView'
 import TeamsTransformedSection from './blocks/TeamsTransformedSection'
+import { urlFor } from '@/sanity/image'
+import type { SiteSettings } from './types'
 
 interface Logo {
   _key?: string
@@ -68,8 +69,19 @@ function VideoSection() {
   )
 }
 
-export default function BlockRenderer({ blocks }: { blocks: ContentBlock[] }) {
+export default function BlockRenderer({
+  blocks,
+  siteSettings,
+}: {
+  blocks: ContentBlock[]
+  siteSettings?: SiteSettings
+}) {
   if (!blocks || blocks.length === 0) return null
+
+  // Security badge — Sanity first, hardcoded fallback
+  const securityBadgeSrc = siteSettings?.badgeSecurity?.asset
+    ? urlFor(siteSettings.badgeSecurity).width(976).height(94).url()
+    : '/images/badge-security.png'
 
   // Filter out blocks that don't exist in the Figma design
   const filtered = blocks.filter((b) => {
@@ -149,13 +161,13 @@ export default function BlockRenderer({ blocks }: { blocks: ContentBlock[] }) {
 
         switch (block._type) {
           case 'heroBlock':
-            return <HeroBlockView key={block._key} {...block} />
+            return <HeroBlockView key={block._key} {...block} siteSettings={siteSettings} />
           case 'richTextBlock':
             return <RichTextBlockView key={block._key} {...block} />
           case 'ctaBlock':
-            return <CtaBlockView key={block._key} {...block} />
+            return <CtaBlockView key={block._key} {...block} siteSettings={siteSettings} />
           case 'featureListBlock':
-            return <FeatureListBlockView key={block._key} {...block} />
+            return <FeatureListBlockView key={block._key} {...block} siteSettings={siteSettings} />
           case 'testimonialBlock':
             return (
               <section key={block._key} className="bg-white py-4 px-4">
@@ -193,7 +205,8 @@ export default function BlockRenderer({ blocks }: { blocks: ContentBlock[] }) {
                 />
                 <section className="bg-white pb-[80px] px-4">
                   <div className="mx-auto max-w-[976px]">
-                    <Image src="/images/badge-security.png" alt="Security Partners" width={976} height={94} className="w-full h-auto" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={securityBadgeSrc} alt="Security Partners" width={976} height={94} className="w-full h-auto" />
                   </div>
                 </section>
               </div>
@@ -201,7 +214,7 @@ export default function BlockRenderer({ blocks }: { blocks: ContentBlock[] }) {
           case 'faqBlock':
             return <FaqBlockView key={block._key} {...block} />
           case 'statsBlock':
-            return <StatsBlockView key={block._key} {...block} />
+            return <StatsBlockView key={block._key} {...block} siteSettings={siteSettings} />
           case 'calendlyBlock':
             return <CalendlyBlockView key={block._key} {...block} />
           case 'tabSectionBlock':

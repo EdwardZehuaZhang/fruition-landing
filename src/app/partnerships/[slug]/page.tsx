@@ -1,13 +1,7 @@
-import { getPartnershipPageBySlug } from "@/sanity/queries"
+import { getAllPartnershipPages, getPartnershipPageBySlug } from "@/sanity/queries"
 import HeroSection from "@/components/HeroSection"
 import { PortableText } from "@portabletext/react"
 import { portableTextComponents } from "@/components/PortableTextComponents"
-
-const PARTNERSHIP_SLUGS = [
-  "monday-consulting-partner","make-partners","n8n-integration-partner","certified-clickup-partner",
-  "certified-guidde-partner","certified-hubspot-partner","hootsuite-delivery-partner",
-  "aircall-partner","certified-atlassian-partner","consultants",
-]
 
 export default async function PartnershipPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -17,9 +11,17 @@ export default async function PartnershipPage({ params }: { params: Promise<{ sl
     <div>
       <HeroSection
         heading={page?.heroHeading || page?.title || slug.replace(/-/g, " ")}
-        subheading={page?.heroSubheading || "Certified partner services by Fruition."}
+        subheading={page?.heroSubheading}
         heroImage={page?.heroImage}
-        primaryCta={{ label: page?.primaryCtaLabel || "Book a Consultation", url: page?.primaryCtaUrl || "https://calendly.com/global-calendar-fruitionservices" }}
+        primaryCta={{
+          label: page?.primaryCtaLabel || "Book a Consultation",
+          url: page?.primaryCtaUrl || "https://calendly.com/global-calendar-fruitionservices",
+        }}
+        secondaryCta={
+          page?.secondaryCtaLabel && page?.secondaryCtaUrl
+            ? { label: page.secondaryCtaLabel, url: page.secondaryCtaUrl }
+            : undefined
+        }
       />
       {page?.body && (
         <div className="max-w-4xl mx-auto px-4 py-16 prose prose-lg">
@@ -31,7 +33,8 @@ export default async function PartnershipPage({ params }: { params: Promise<{ sl
 }
 
 export async function generateStaticParams() {
-  return PARTNERSHIP_SLUGS.map((slug) => ({ slug }))
+  const pages = await getAllPartnershipPages()
+  return pages.map((p: { slug: string }) => ({ slug: p.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

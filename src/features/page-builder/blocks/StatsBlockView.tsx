@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/image'
+import type { SiteSettings } from '../types'
 
 interface Stat {
   _key?: string
@@ -18,9 +19,11 @@ interface StatsBlockProps {
   ctaLabel?: string
   ctaUrl?: string
   footnote?: string
+  siteSettings?: SiteSettings
 }
 
-// Fallback icon images when Sanity doesn't have them
+// ROI icons — kept hardcoded because they're decorative/design icons (not content).
+// Sanity stat.icon still wins when populated per-stat.
 const fallbackIcons = [
   '/images/icon-roi-1.png',
   '/images/icon-roi-2.png',
@@ -50,7 +53,15 @@ export default function StatsBlockView({
   ctaLabel,
   ctaUrl,
   footnote,
+  siteSettings,
 }: StatsBlockProps) {
+  const mondayPartnersBadgeSrc = siteSettings?.badgeMondayPartners?.asset
+    ? urlFor(siteSettings.badgeMondayPartners).width(148).height(23).url()
+    : '/images/badge-monday-partners.png'
+  const forresterBadgeSrc = siteSettings?.badgeForrester?.asset
+    ? urlFor(siteSettings.badgeForrester).width(64).height(24).url()
+    : '/images/badge-forrester.png'
+
   return (
     <section className="bg-white py-[80px] px-4">
       <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[24px]">
@@ -65,7 +76,8 @@ export default function StatsBlockView({
         {subheading && (
           <div className="flex items-start gap-[5px] text-[14px] text-[#242323]">
             <span>{subheading}</span>
-            <Image src="/images/badge-monday-partners.png" alt="monday.com partners" width={148} height={23} className="h-[23px] w-auto" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={mondayPartnersBadgeSrc} alt="monday.com partners" width={148} height={23} className="h-[23px] w-auto" />
           </div>
         )}
 
@@ -103,12 +115,14 @@ export default function StatsBlockView({
         {footnote ? (
           <div className="flex items-center gap-[3px] text-[12px] text-[#242323]">
             <span>{footnote}</span>
-            <Image src="/images/badge-forrester.png" alt="Forrester" width={60} height={24} className="h-5 w-auto" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={forresterBadgeSrc} alt="Forrester" width={60} height={24} className="h-5 w-auto" />
           </div>
         ) : (
           <div className="flex items-center gap-[3px] text-[12px] text-[#242323]">
             <span>Data by</span>
-            <Image src="/images/badge-forrester.png" alt="Forrester" width={64} height={14} className="h-[14px] w-auto" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={forresterBadgeSrc} alt="Forrester" width={64} height={14} className="h-[14px] w-auto" />
           </div>
         )}
 

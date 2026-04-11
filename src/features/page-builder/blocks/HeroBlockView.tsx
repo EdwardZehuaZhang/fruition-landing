@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { urlFor } from '@/sanity/image'
+import type { SiteSettings } from '../types'
 
 interface HeroBlockProps {
   heading?: string
@@ -10,7 +10,15 @@ interface HeroBlockProps {
   secondaryCtaLabel?: string
   secondaryCtaUrl?: string
   image?: { asset: { _ref: string } }
+  siteSettings?: SiteSettings
 }
+
+// Fallback partner badges used when siteSettings doesn't yet have navbarPartnerBadges
+const FALLBACK_PARTNER_BADGES = [
+  { src: '/images/partner-platinum.png', alt: 'monday.com Platinum Partner', width: 146, height: 44 },
+  { src: '/images/partner-advanced-delivery.png', alt: 'Advanced Delivery Partner', width: 157, height: 44 },
+  { src: '/images/partner-make.png', alt: 'Make Partners', width: 178, height: 44 },
+]
 
 // Render heading with "Consulting" and "Integration Services" in purple
 function renderHeading(heading: string) {
@@ -83,7 +91,22 @@ export default function HeroBlockView({
   secondaryCtaLabel,
   secondaryCtaUrl,
   image,
+  siteSettings,
 }: HeroBlockProps) {
+  // Use Sanity navbar partner badges (first 3) when available, else hardcoded fallbacks
+  const sanityBadges = siteSettings?.navbarPartnerBadges?.slice(0, 3) ?? []
+  const partnerBadges = sanityBadges.length >= 3
+    ? sanityBadges.map((b, i) => {
+        const fallback = FALLBACK_PARTNER_BADGES[i]
+        return {
+          src: b.image?.asset ? urlFor(b.image).height(88).url() : fallback.src,
+          alt: b.name ?? fallback.alt,
+          width: b.width ?? fallback.width,
+          height: b.height ?? fallback.height,
+        }
+      })
+    : FALLBACK_PARTNER_BADGES
+
   return (
     <section className="bg-white w-full">
       <div className="mx-auto max-w-[1348px] flex items-start gap-[10px] py-[80px] px-4 xl:px-0">
@@ -93,9 +116,17 @@ export default function HeroBlockView({
             {/* Partner badges */}
             <div className="flex flex-col gap-[42px]">
               <div className="flex items-center gap-[22px]">
-                <Image src="/images/partner-platinum.png" alt="monday.com Platinum Partner" width={146} height={44} className="h-[44px] w-auto rounded-[5px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.5)]" />
-                <Image src="/images/partner-advanced-delivery.png" alt="Advanced Delivery Partner" width={157} height={44} className="h-[44px] w-auto rounded-[5px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.5)]" />
-                <Image src="/images/partner-make.png" alt="Make Partners" width={178} height={44} className="h-[44px] w-auto rounded-[5px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.5)]" />
+                {partnerBadges.map((badge, i) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={i}
+                    src={badge.src}
+                    alt={badge.alt}
+                    width={badge.width}
+                    height={badge.height}
+                    className="h-[44px] w-auto rounded-[5px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.5)]"
+                  />
+                ))}
               </div>
 
               {/* Heading */}

@@ -10,7 +10,18 @@
         "migrate": "tsx scripts/migrate.ts",
         "migrate:settings": "tsx scripts/import-site-settings.ts",
         "migrate:pages": "tsx scripts/import-pages.ts",
-        "migrate:blog": "tsx scripts/import-blog.ts"
+        "migrate:blog": "tsx scripts/import-blog.ts",
+        "migrate:site-settings": "tsx scripts/sanity-migrate/site-settings.ts",
+        "migrate:implementation-packages": "tsx scripts/sanity-migrate/implementation-packages.ts",
+        "migrate:monday-training": "tsx scripts/sanity-migrate/monday-training.ts",
+        "migrate:industry-pages": "tsx scripts/sanity-migrate/industry-pages.ts",
+        "migrate:location-pages": "tsx scripts/sanity-migrate/location-pages.ts",
+        "migrate:partnership-pages": "tsx scripts/sanity-migrate/partnership-pages.ts",
+        "migrate:solution-pages": "tsx scripts/sanity-migrate/solution-pages.ts",
+        "migrate:service-pages": "tsx scripts/sanity-migrate/service-pages.ts",
+        "migrate:homepage": "tsx scripts/sanity-migrate/homepage.ts",
+        "migrate:case-studies": "tsx scripts/sanity-migrate/case-studies.ts",
+        "migrate:all": "tsx scripts/sanity-migrate/run-all.ts"
     },
     "dependencies": {
         "@portabletext/react": "^6.0.3",
