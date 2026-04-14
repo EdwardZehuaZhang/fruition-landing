@@ -1,6 +1,7 @@
 import { writeClient } from './sanity-client.js'
 import { fetchPage, extractSeoDescription, extractOgImage, sleep } from './scrape.js'
 import { htmlElementToPortableText, findPostBodyContainer } from './html-to-portable-text.js'
+import type { PTNode, PTImage } from './html-to-portable-text.js'
 
 const BASE_URL = 'https://www.fruitionservices.io'
 
@@ -114,6 +115,66 @@ function extractCategoriesFromPage(root: any): string[] {
   return [...new Set(cats)]
 }
 
+/** Download an image URL and upload it to Sanity, returning the asset document. */
+async function uploadImageToSanity(
+  imageUrl: string,
+  filename: string,
+): Promise<{ _id: string } | null> {
+  try {
+    // Resolve relative URLs
+    const fullUrl = imageUrl.startsWith('http') ? imageUrl : `${BASE_URL}${imageUrl}`
+    const res = await fetch(fullUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0 Chrome/120' },
+      signal: AbortSignal.timeout(30000),
+      redirect: 'follow',
+    })
+    if (!res.ok) {
+      console.log(`    Image fetch failed (${res.status}): ${fullUrl.substring(0, 80)}`)
+      return null
+    }
+    const buffer = Buffer.from(await res.arrayBuffer())
+    if (buffer.length < 200) {
+      // Too small — likely a tracking pixel or placeholder
+      return null
+    }
+
+    const contentType = res.headers.get('content-type') || 'image/jpeg'
+    const asset = await writeClient.assets.upload('image', buffer, {
+      filename: filename.substring(0, 100),
+      contentType,
+    })
+    await sleep(300)
+    return asset
+  } catch (err) {
+    console.log(`    Image upload error: ${(err as Error).message}`)
+    return null
+  }
+}
+
+/** Process body nodes — upload image placeholders and return final portable text array. */
+async function processBodyNodes(nodes: PTNode[], slug: string): Promise<any[]> {
+  const result: any[] = []
+  let imgIndex = 0
+  for (const node of nodes) {
+    if (node._type === 'imagePlaceholder') {
+      const img = node as PTImage
+      console.log(`    Uploading body image ${++imgIndex}: ${img.src.substring(0, 70)}`)
+      const asset = await uploadImageToSanity(img.src, `${slug}-body-${imgIndex}`)
+      if (asset) {
+        result.push({
+          _type: 'image',
+          _key: node._key,
+          alt: img.alt || '',
+          asset: { _type: 'reference', _ref: asset._id },
+        })
+      }
+    } else {
+      result.push(node)
+    }
+  }
+  return result
+}
+
 async function importBlogPost(entry: SitemapEntry): Promise<boolean> {
   try {
     const urlPath = new URL(entry.url).pathname
@@ -134,8 +195,11 @@ async function importBlogPost(entry: SitemapEntry): Promise<boolean> {
     const coverImageUrl = extractOgImage(root)
     const excerpt = extractSeoDescription(root)
     const bodyContainer = findPostBodyContainer(root)
-    const bodyBlocks = bodyContainer ? htmlElementToPortableText(bodyContainer) : []
+    const bodyNodes = bodyContainer ? htmlElementToPortableText(bodyContainer) : []
     const categorySlags = extractCategoriesFromPage(root)
+
+    // Upload and process body images
+    const body = await processBodyNodes(bodyNodes, slug)
 
     // Build category references
     const categories = categorySlags
@@ -154,14 +218,21 @@ async function importBlogPost(entry: SitemapEntry): Promise<boolean> {
       publishedAt: publishedAt || entry.lastmod || new Date().toISOString(),
       author,
       excerpt,
-      body: bodyBlocks,
+      body,
       seoTitle: title,
       seoDescription: excerpt,
     }
 
+    // Upload cover image to Sanity as a proper image asset
     if (coverImageUrl) {
-      // Store as external URL field - not uploading to avoid rate limits
-      doc.coverImageUrl = coverImageUrl
+      console.log(`    Uploading cover image: ${coverImageUrl.substring(0, 70)}`)
+      const asset = await uploadImageToSanity(coverImageUrl, `${slug}-cover`)
+      if (asset) {
+        doc.coverImage = {
+          _type: 'image',
+          asset: { _type: 'reference', _ref: asset._id },
+        }
+      }
     }
 
     if (categories.length > 0) {

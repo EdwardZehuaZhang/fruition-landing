@@ -27,6 +27,7 @@ export default async function Page() {
       data={data}
       carouselLogos={settings?.carouselLogos || []}
       caseStudies={caseStudies || []}
+      siteSettings={settings}
     />
   )
 }

@@ -1,8 +1,8 @@
 import { defineType, defineField, defineArrayMember } from 'sanity'
 
 export default defineType({
-  name: 'mondayTrainingPage',
-  title: 'Monday Training Page',
+  name: 'mondayImplementationConsultantsPage',
+  title: 'Monday Implementation Consultants Page',
   type: 'document',
   // @ts-expect-error Sanity experimental API (singleton)
   __experimental_actions: ['update', 'publish'],
@@ -12,34 +12,36 @@ export default defineType({
     defineField({ name: 'seoDescription', title: 'SEO Description', type: 'text' }),
 
     // Hero
+    defineField({ name: 'heroEyebrow', title: 'Hero Eyebrow (small label above heading)', type: 'string' }),
     defineField({ name: 'heroHeadingPart1', title: 'Hero Heading (prefix)', type: 'string' }),
-    defineField({ name: 'heroHeadingAccent', title: 'Hero Heading (accent)', type: 'string' }),
+    defineField({ name: 'heroHeadingAccent', title: 'Hero Heading (accent / purple)', type: 'string' }),
+    defineField({ name: 'heroHeadingPart2', title: 'Hero Heading (suffix)', type: 'string' }),
     defineField({ name: 'heroSubheading', title: 'Hero Subheading', type: 'text' }),
     defineField({ name: 'heroCertificationBadge', title: 'Hero Certification Banner', type: 'image' }),
-    defineField({ name: 'heroImage', title: 'Hero Image (optional — leave empty to hide)', type: 'image', options: { hotspot: true } }),
+    defineField({ name: 'heroImage', title: 'Hero Image (optional)', type: 'image', options: { hotspot: true } }),
     defineField({ name: 'heroPrimaryCtaLabel', title: 'Hero Primary CTA Label', type: 'string' }),
     defineField({ name: 'heroPrimaryCtaUrl', title: 'Hero Primary CTA URL', type: 'string' }),
-    defineField({ name: 'heroSecondaryCtaLabel', title: 'Hero Secondary CTA Label (optional)', type: 'string' }),
-    defineField({ name: 'heroSecondaryCtaUrl', title: 'Hero Secondary CTA URL (optional)', type: 'string' }),
+    defineField({ name: 'heroSecondaryCtaLabel', title: 'Hero Secondary CTA Label', type: 'string' }),
+    defineField({ name: 'heroSecondaryCtaUrl', title: 'Hero Secondary CTA URL', type: 'string' }),
 
     // Logo Cloud
     defineField({ name: 'logoCloudHeadingPart1', title: 'Logo Cloud Heading (prefix)', type: 'string' }),
     defineField({ name: 'logoCloudHeadingAccent', title: 'Logo Cloud Heading (accent)', type: 'string' }),
 
-    // Training section intro
-    defineField({ name: 'trainingIntroHeading', title: 'Training Intro Heading', type: 'string' }),
-    defineField({ name: 'trainingIntroSubheading', title: 'Training Intro Subheading', type: 'text' }),
+    // "Teams Transformed with Proven Efficiency Gains" banner
+    defineField({ name: 'teamsTransformedHeading', title: 'Teams Transformed Heading', type: 'string' }),
+    defineField({ name: 'teamsTransformedBody', title: 'Teams Transformed Body (portable text)', type: 'array', of: [defineArrayMember({ type: 'block' })] }),
 
-    // Training Tabs
-    defineField({ name: 'trainingSectionHeading', title: 'Training Section Heading', type: 'string' }),
+    // 3-tab DIY vs Using Consultants section
+    defineField({ name: 'comparisonSectionHeading', title: 'Comparison Section Heading', type: 'string' }),
     defineField({
-      name: 'trainingTabs',
-      title: 'Training Tabs',
+      name: 'comparisonTabs',
+      title: 'Comparison Tabs',
       type: 'array',
       of: [
         defineArrayMember({
           type: 'object',
-          name: 'trainingTab',
+          name: 'comparisonTab',
           fields: [
             { name: 'label', title: 'Tab Label', type: 'string' },
             {
@@ -49,12 +51,26 @@ export default defineType({
               of: [
                 {
                   type: 'object',
-                  name: 'trainingItem',
+                  name: 'comparisonItem',
                   fields: [
                     { name: 'number', title: 'Number', type: 'string' },
                     { name: 'title', title: 'Title', type: 'string' },
-                    { name: 'description', title: 'Description (paragraph)', type: 'text' },
-                    { name: 'bullets', title: 'Bullets (optional, used when no description)', type: 'array', of: [{ type: 'string' }] },
+                    { name: 'description', title: 'Description', type: 'text' },
+                    {
+                      name: 'bullets',
+                      title: 'Bullet list (emoji + text)',
+                      type: 'array',
+                      of: [
+                        {
+                          type: 'object',
+                          name: 'bullet',
+                          fields: [
+                            { name: 'emoji', title: 'Emoji', type: 'string' },
+                            { name: 'text', title: 'Text', type: 'text' },
+                          ],
+                        },
+                      ],
+                    },
                   ],
                 },
               ],
@@ -64,29 +80,45 @@ export default defineType({
       ],
     }),
 
-    // Empower / intro copy ABOVE training services section
-    defineField({ name: 'empowerEyebrow', title: 'Empower Section Eyebrow', type: 'string' }),
-    defineField({ name: 'empowerHeading', title: 'Empower Section Heading', type: 'string' }),
-    defineField({ name: 'empowerBody', title: 'Empower Section Body', type: 'text' }),
-
-    // Training Services
-    defineField({ name: 'servicesHeading', title: 'Services Heading', type: 'string' }),
+    // "Our expert consultants empower you to adopt workflow automation..." 5-step section
+    defineField({ name: 'methodologyHeading', title: 'Methodology Heading', type: 'string' }),
     defineField({
-      name: 'trainingServices',
-      title: 'Training Services',
+      name: 'methodologySteps',
+      title: 'Methodology Steps',
       type: 'array',
       of: [
         defineArrayMember({
           type: 'object',
-          name: 'trainingService',
+          name: 'methodologyStep',
           fields: [
-            { name: 'emoji', title: 'Emoji', type: 'string' },
+            { name: 'number', title: 'Number', type: 'string' },
             { name: 'title', title: 'Title', type: 'string' },
-            { name: 'subtitle', title: 'Subtitle', type: 'string' },
             { name: 'description', title: 'Description', type: 'text' },
-            { name: 'image', title: 'Card Image', type: 'image', options: { hotspot: true } },
+          ],
+        }),
+      ],
+    }),
+
+    // "Create a CRM or project management tool that fits you" — multi-solution section
+    defineField({ name: 'solutionsHeadingPart1', title: 'Solutions Heading (prefix)', type: 'string' }),
+    defineField({ name: 'solutionsHeadingAccent', title: 'Solutions Heading (accent)', type: 'string' }),
+    defineField({ name: 'solutionsHeadingPart2', title: 'Solutions Heading (suffix)', type: 'string' }),
+    defineField({ name: 'solutionsIntro', title: 'Solutions Intro', type: 'text' }),
+    defineField({
+      name: 'solutionCards',
+      title: 'Solution Cards',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'solutionCard',
+          fields: [
+            { name: 'eyebrow', title: 'Eyebrow (e.g. "Training & managed services")', type: 'string' },
+            { name: 'heading', title: 'Heading', type: 'string' },
+            { name: 'body', title: 'Body', type: 'text' },
             { name: 'ctaLabel', title: 'CTA Label', type: 'string' },
             { name: 'ctaUrl', title: 'CTA URL', type: 'string' },
+            { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
           ],
         }),
       ],
@@ -146,11 +178,11 @@ export default defineType({
     defineField({ name: 'discoverSecondaryCtaLabel', title: 'Discover Secondary CTA Label', type: 'string' }),
     defineField({ name: 'discoverSecondaryCtaUrl', title: 'Discover Secondary CTA URL', type: 'string' }),
 
-    // Join 500+ stats section (Forrester data)
+    // Join 500+ stats section
     defineField({ name: 'joinSectionHeadingPart1', title: 'Join Section — "Join" prefix', type: 'string' }),
     defineField({ name: 'joinSectionHeadingAccent', title: 'Join Section — "500+ businesses" accent', type: 'string' }),
     defineField({ name: 'joinSectionHeadingPart2', title: 'Join Section — suffix', type: 'string' }),
-    defineField({ name: 'joinSectionSubheading', title: 'Join Section Subheading (e.g. "The economic impact of")', type: 'string' }),
+    defineField({ name: 'joinSectionSubheading', title: 'Join Section Subheading', type: 'string' }),
     defineField({
       name: 'joinSectionStats',
       title: 'Stats',
@@ -166,8 +198,8 @@ export default defineType({
         }),
       ],
     }),
-    defineField({ name: 'joinSectionFootnote', title: 'Join Section Footnote ("Data by ...")', type: 'string' }),
-    defineField({ name: 'joinSectionBadge', title: 'Forrester / Data Source Badge', type: 'image' }),
+    defineField({ name: 'joinSectionFootnote', title: 'Footnote ("Data by ...")', type: 'string' }),
+    defineField({ name: 'joinSectionBadge', title: 'Data Source Badge', type: 'image' }),
 
     // Security badge
     defineField({ name: 'securityBadge', title: 'Security Badge Image', type: 'image' }),

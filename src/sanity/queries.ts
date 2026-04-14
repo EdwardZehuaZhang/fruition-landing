@@ -76,7 +76,23 @@ const PAGE_FIELDS = `
   primaryCtaUrl,
   secondaryCtaLabel,
   secondaryCtaUrl,
-  body
+  body,
+  comparisonHeading,
+  comparisonSubheading,
+  comparisonTabs,
+  methodologyHeading,
+  methodologySteps,
+  calendlyHeading,
+  calendlySubheading,
+  faqTabs,
+  joinHeadingPart1,
+  joinHeadingAccent,
+  joinHeadingPart2,
+  joinSubheading,
+  joinStats,
+  joinFootnote,
+  logoCloudHeadingPart1,
+  logoCloudHeadingAccent
 `
 
 export async function getSolutionPageBySlug(slug: string) {
@@ -211,7 +227,14 @@ export async function getPageBySlug(slug: string) {
       _id, title, "slug": slug.current, seoTitle, seoDescription,
       heroHeading, heroSubheading, heroImage,
       primaryCtaLabel, primaryCtaUrl,
-      body, pageType
+      body, pageType,
+      comparisonHeading, comparisonSubheading, comparisonTabs,
+      methodologyHeading, methodologySteps,
+      calendlyHeading, calendlySubheading,
+      faqTabs,
+      joinHeadingPart1, joinHeadingAccent, joinHeadingPart2,
+      joinSubheading, joinStats, joinFootnote,
+      logoCloudHeadingPart1, logoCloudHeadingAccent
     }`,
     { slug }
   )
@@ -255,16 +278,45 @@ export async function getMondayTrainingPage() {
     heroPrimaryCtaLabel, heroPrimaryCtaUrl,
     heroSecondaryCtaLabel, heroSecondaryCtaUrl,
     logoCloudHeadingPart1, logoCloudHeadingAccent,
-    videoEmbedUrl, videoTitle,
+    trainingIntroHeading, trainingIntroSubheading,
     trainingSectionHeading, trainingTabs,
+    empowerEyebrow, empowerHeading, empowerBody,
     servicesHeading, trainingServices,
     testimonialsHeading, testimonialsCtaLabel, testimonialsCtaUrl,
     statCardValue, statCardSubtitle, statCardCtaLabel, statCardCtaUrl,
-    calendlyHeading, calendlyUrl,
+    calendlyHeading, calendlySubheading, calendlyUrl,
     faqHeading, faqTabs,
     discoverBadge, discoverHeading,
     discoverPrimaryCtaLabel, discoverPrimaryCtaUrl,
     discoverSecondaryCtaLabel, discoverSecondaryCtaUrl,
+    joinSectionHeadingPart1, joinSectionHeadingAccent, joinSectionHeadingPart2,
+    joinSectionSubheading, joinSectionStats, joinSectionFootnote, joinSectionBadge,
+    securityBadge
+  }`)
+}
+
+export async function getMondayImplementationConsultantsPage() {
+  return client.fetch(`*[_type == "mondayImplementationConsultantsPage"][0]{
+    title, seoTitle, seoDescription,
+    heroEyebrow, heroHeadingPart1, heroHeadingAccent, heroHeadingPart2,
+    heroSubheading, heroCertificationBadge, heroImage,
+    heroPrimaryCtaLabel, heroPrimaryCtaUrl,
+    heroSecondaryCtaLabel, heroSecondaryCtaUrl,
+    logoCloudHeadingPart1, logoCloudHeadingAccent,
+    teamsTransformedHeading, teamsTransformedBody,
+    comparisonSectionHeading, comparisonTabs,
+    methodologyHeading, methodologySteps,
+    solutionsHeadingPart1, solutionsHeadingAccent, solutionsHeadingPart2,
+    solutionsIntro, solutionCards,
+    testimonialsHeading, testimonialsCtaLabel, testimonialsCtaUrl,
+    statCardValue, statCardSubtitle, statCardCtaLabel, statCardCtaUrl,
+    calendlyHeading, calendlySubheading, calendlyUrl,
+    faqHeading, faqTabs,
+    discoverBadge, discoverHeading,
+    discoverPrimaryCtaLabel, discoverPrimaryCtaUrl,
+    discoverSecondaryCtaLabel, discoverSecondaryCtaUrl,
+    joinSectionHeadingPart1, joinSectionHeadingAccent, joinSectionHeadingPart2,
+    joinSectionSubheading, joinSectionStats, joinSectionFootnote, joinSectionBadge,
     securityBadge
   }`)
 }

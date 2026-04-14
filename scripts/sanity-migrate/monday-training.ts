@@ -1,24 +1,67 @@
 /**
- * Migrate the hardcoded /monday-training page to the `mondayTrainingPage`
- * Sanity singleton.
+ * Migrate the /monday-training page to the `mondayTrainingPage` Sanity
+ * singleton — using the REAL live-site content scraped from
+ * https://www.fruitionservices.io/monday-training.
  *
  * Run with:
  *   npx tsx scripts/sanity-migrate/monday-training.ts
  */
-import { writeClient, uploadLocalImage, withKeys } from './lib'
+import { writeClient, uploadLocalImage, uploadImageFromUrl, withKeys } from './lib'
 
 const CALENDLY_URL = 'https://calendly.com/global-calendar-fruitionservices'
+
+/* ------------------------------------------------------------------ */
+/*  Live-site training service card images                            */
+/*                                                                     */
+/*  Verified by position-scanning /tmp/mt-live.html:                   */
+/*    - a280a5_6a9c1ee…  → "Customization"          (~pos 1467k)      */
+/*    - a280a5_65b39cb…  → "Bird's-Eye View"        (~pos 1523k)      */
+/*    - a280a5_bb02811…  → "IT Support"             (~pos 1528k)      */
+/*    - a280a5_a8a55c8…  → "Handover Documentation" (~pos 1529k)      */
+/*                                                                     */
+/*  Use the higher-res 2x variants for better display quality.         */
+/* ------------------------------------------------------------------ */
+const SERVICE_IMAGE_URLS = {
+  customization:
+    'https://static.wixstatic.com/media/a280a5_6a9c1eefc2ed4edfaad09c694e4d2f32~mv2.png/v1/fill/w_719,h_515,al_c,lg_1,q_90,enc_avif,quality_auto/a280a5_6a9c1eefc2ed4edfaad09c694e4d2f32~mv2.png',
+  birdsEyeView:
+    'https://static.wixstatic.com/media/a280a5_65b39cb99e8c4321b2ae0d30227908bb~mv2.png/v1/fill/w_720,h_470,al_c,lg_1,q_85,enc_avif,quality_auto/a280a5_65b39cb99e8c4321b2ae0d30227908bb~mv2.png',
+  itSupport:
+    'https://static.wixstatic.com/media/a280a5_bb028114bd854804a2c09202dd27a289~mv2.png/v1/fill/w_719,h_544,al_c,lg_1,q_90,enc_avif,quality_auto/a280a5_bb028114bd854804a2c09202dd27a289~mv2.png',
+  handover:
+    'https://static.wixstatic.com/media/a280a5_a8a55c82b1014616a8ab624d92b2bc50~mv2.png/v1/fill/w_560,h_716,al_c,lg_1,q_90,enc_avif,quality_auto/a280a5_a8a55c82b1014616a8ab624d92b2bc50~mv2.png',
+} as const
 
 async function main() {
   console.log('— Uploading monday-training images…')
 
-  // No dedicated monday-training hero image exists in /public/images,
-  // so fall back to the implementation-packages hero as a placeholder.
-  const heroImage = await uploadLocalImage('/images/implementation-packages-hero.png')
+  // Hero image intentionally omitted — live page has no hero picture.
   const heroCertificationBadge = await uploadLocalImage('/images/badge-certifications.png')
   const securityBadge = await uploadLocalImage('/images/badge-security.png')
   const discoverBadge = heroCertificationBadge
+  const joinSectionBadge = await uploadLocalImage('/images/badge-forrester.png')
 
+  console.log('— Downloading training service card images from live site…')
+  const customizationImage = await uploadImageFromUrl(
+    SERVICE_IMAGE_URLS.customization,
+    'training-service-customization.png'
+  )
+  const birdsEyeViewImage = await uploadImageFromUrl(
+    SERVICE_IMAGE_URLS.birdsEyeView,
+    'training-service-birds-eye-view.png'
+  )
+  const itSupportImage = await uploadImageFromUrl(
+    SERVICE_IMAGE_URLS.itSupport,
+    'training-service-it-support.png'
+  )
+  const handoverImage = await uploadImageFromUrl(
+    SERVICE_IMAGE_URLS.handover,
+    'training-service-handover-documentation.png'
+  )
+
+  /* ---------------------------------------------------------------- */
+  /*  Training tabs — with the correct tab content from the live site */
+  /* ---------------------------------------------------------------- */
   const trainingTabs = withKeys([
     {
       _type: 'trainingTab',
@@ -65,32 +108,23 @@ async function main() {
         {
           _type: 'trainingItem',
           number: '01',
-          title: 'Boards & Views',
-          bullets: [
-            'Kanban, Gantt, Timeline, Calendar, and Chart views',
-            'Custom columns for any data type',
-            'Grouping and filtering for clarity',
-          ],
+          title: 'Connect goals with the work being done',
+          description:
+            '- improve cross-functional collaboration with one workspace that brings teams and departments together to achieve shared goals. Set and track company-level goals and objectives and ensure that the projects being done around them contribute to their success.',
         },
         {
           _type: 'trainingItem',
           number: '02',
-          title: 'Automations & Integrations',
-          bullets: [
-            'No-code automation recipes',
-            'Connect with 200+ tools like Slack, Gmail, and Jira',
-            'Custom API integrations for advanced workflows',
-          ],
+          title: 'Execute with speed and precision',
+          description:
+            '- standardise and automate workflows, while assigning clear ownership for efficient execution and faster delivery. Free your team from the repetitive manual tasks and endless email threads, so they can focus on goals and create real impact.',
         },
         {
           _type: 'trainingItem',
           number: '03',
-          title: 'Dashboards & Reporting',
-          bullets: [
-            'Real-time dashboards across multiple boards',
-            'Custom widgets for KPIs and metrics',
-            'Export and share reports with stakeholders',
-          ],
+          title: 'Take the guesswork out of decision-making',
+          description:
+            '- with all business units and data connected in one workspace, get real-time insights, from potential risks to work progress, to make accurate decisions. Identify risks before they happen. Understand your project health with Gantt and key milestones to mitigate risks and bottlenecks, and take action to increase project efficiency.',
         },
       ]),
     },
@@ -101,53 +135,63 @@ async function main() {
         {
           _type: 'trainingItem',
           number: '01',
-          title: 'Customised Training Programs',
-          bullets: [
-            'Role-specific training tailored to your team',
-            'Hands-on workshops with real board configurations',
-            'Train-the-trainer programs for internal champions',
-          ],
+          title: 'Process Discovery \u2192 Business Process Audit',
+          description:
+            'We meticulously map your existing workflows against industry benchmarks, analysing bottlenecks and efficiency gaps that hold your team back from scaling.',
         },
         {
           _type: 'trainingItem',
           number: '02',
-          title: 'Ongoing Support & Coaching',
-          bullets: [
-            'Post-training support to reinforce learning',
-            'Regular check-ins to track adoption progress',
-            'Advanced training sessions as your team grows',
-          ],
+          title: 'Technical Architecture \u2192 System Integration Scope',
+          description:
+            'Our technical assessment reveals the hidden potential in your current tech stack, identifying precise automated solution design to visualise where monday.com can transform fragmented processes into seamless workflows.',
         },
         {
           _type: 'trainingItem',
           number: '03',
-          title: 'Documentation & Resources',
-          bullets: [
-            'Guidde video documentation of your workflows',
-            'Custom training materials and quick-reference guides',
-            'Access to our knowledge base and best practices',
-          ],
+          title: 'Solution Design \u2192 Implementation',
+          description:
+            'Through in-depth process analysis, we build your system with perfect balance between automated sophistication and user adoption, ensuring you see faster set up and team usage.',
+        },
+        {
+          _type: 'trainingItem',
+          number: '04',
+          title: 'Efficiency Impact \u2192 ROI Opportunity Analysis',
+          description:
+            'By quantifying potential efficiency gains across your operations, we pinpoint exactly where automation and optimisation will deliver the highest return on your investment.',
+        },
+        {
+          _type: 'trainingItem',
+          number: '05',
+          title: 'Change Readiness \u2192 Adoption & Training Strategies',
+          description:
+            'Our proven change impact framework measures organisational readiness and crafts a tailored adoption and training strategy, turning potential resistance into enthusiastic system adoption.',
         },
       ]),
     },
   ])
 
+  /* ---------------------------------------------------------------- */
+  /*  Training services — 4 cards with images                         */
+  /* ---------------------------------------------------------------- */
   const trainingServices = withKeys([
     {
       _type: 'trainingService',
       emoji: '\u2699\ufe0f',
       title: 'Customization',
-      subtitle: 'See how to adapt your boards to your team\u2019s needs',
+      subtitle: "See how to adapt your boards to your team's needs",
       description:
-        'Get the monday.com training you need to set up your CRM or project management tool exactly how you want it. Or get help tidying it up if you\u2019ve already built out your boards.\n\nAfter all, the platform should support the way you want your business to run.',
+        "Get the monday.com training you need to set up your CRM or project management tool exactly how you want it. Or get help tidying it up if you've already built out your boards.\n\nAfter all, the platform should support the way you want your business to run.",
+      image: customizationImage,
     },
     {
       _type: 'trainingService',
       emoji: '\ud83d\udc41\ufe0f',
-      title: 'Bird\u2019s-Eye View',
+      title: "Bird's-Eye View",
       subtitle: 'Build a high-level roll-up of all your boards',
       description:
-        'Get help connecting all of your individual boards into one high-level board. So, you can give senior management a general overview of the entire team\u2019s progress.\n\nThey can check the project health, see what each team member is working on, and check on roadblocks\u2014all in a few clicks.',
+        "Get help connecting all of your individual boards into one high-level board. So, you can give senior management a general overview of the entire team's progress.\n\nThey can check the project health, see what each team member is working on, and check on roadblocks\u2013all in a few clicks.",
+      image: birdsEyeViewImage,
     },
     {
       _type: 'trainingService',
@@ -155,7 +199,8 @@ async function main() {
       title: 'IT Support',
       subtitle: 'Integrate your email and all external tools',
       description:
-        'With our monday.com training, you\u2019ll get help integrating Gmail, Outlook, Sharepoint, Teams, accounting software, ChatGPT, and dozens of other tools with our open API, so you truly have a single source of truth.',
+        "With our monday.com training, you'll get help integrating Gmail, Outlook, Sharepoint, Teams, accounting software, ChatGPT, and dozens of other tools with our open API, so you truly have a single source of truth.",
+      image: itSupportImage,
     },
     {
       _type: 'trainingService',
@@ -163,11 +208,39 @@ async function main() {
       title: 'Handover Documentation',
       subtitle: 'Guidde Documentation',
       description:
-        'As Guidde certified partners, we leverage Guidde to create monday.com video documentation and training material.\n\nPost training, you\u2019ll get access to personalized video tutorials and written guides for handover documentation.',
+        "As Guidde certified partners, we leverage Guidde to create monday.com video documentation and training material.\n\nPost training, you'll get access to personalized video tutorials and written guides for handover documentation.",
+      image: handoverImage,
       ctaLabel: '\ud83d\udcc4 Learn More About Guidde',
-      ctaUrl: '/certified-guidde-partner',
+      ctaUrl: '/partnerships/certified-guidde-partner',
     },
   ])
+
+  /* ---------------------------------------------------------------- */
+  /*  FAQ — real live-site content for the Training tab               */
+  /* ---------------------------------------------------------------- */
+  const trainingFaqAnswer = [
+    'Yes \u2014 monday.com does have training programs, and they\u2019re offered in a few different formats depending on your needs:',
+    '',
+    'Monday Academy (Free)',
+    'Online learning platform with self-paced video courses and certifications.',
+    'Covers everything from beginner basics to advanced automations and integrations.',
+    'Includes role-specific paths (e.g., project managers, admins).',
+    '',
+    'Live Webinars (Free & Paid Options)',
+    'Monday.com regularly hosts webinars with live Q&A.',
+    'Topics include \u201cGetting Started,\u201d \u201cAutomations Deep Dive,\u201d and best practices for workflows.',
+    '',
+    'Customer Success Programs (For Teams & Enterprises)',
+    'Dedicated onboarding and tailored training sessions provided for paying customers, especially on Pro and Enterprise plans.',
+    'These are personalized to your company\u2019s workflows and often led by a Monday.com consultant.',
+    '',
+    'Monday.com Partners & Consultants (Paid)',
+    'Certified partners around the world offer private training, implementation support, and advanced setup.',
+    'Useful if you need deep customization, third-party integrations, or in-person training.',
+    '',
+    'Help Center & Community (Free)',
+    'Step-by-step guides, templates, video tutorials, and an active user forum for ongoing learning.',
+  ].join('\n')
 
   const faqTabs = withKeys([
     {
@@ -177,26 +250,36 @@ async function main() {
         {
           _type: 'faqPair',
           question: 'Does monday.com have a training program?',
-          answer:
-            'Yes \u2014 monday.com does have training programs, and they\u2019re offered in a few different formats depending on your needs:\n\nMonday Academy (Free) \u2014 Online learning platform with self-paced video courses and certifications. Covers everything from beginner basics to advanced automations and integrations. Includes role-specific paths (e.g., project managers, admins).\n\nLive Webinars (Free & Paid Options) \u2014 Monday.com regularly hosts webinars with live Q&A. Topics include \u201cGetting Started,\u201d \u201cAutomations Deep Dive,\u201d and best practices for workflows.\n\nCustomer Success Programs (For Teams & Enterprises) \u2014 Dedicated onboarding and tailored training sessions provided for paying customers, especially on Pro and Enterprise plans. These are personalized to your company\u2019s workflows and often led by a Monday.com consultant.\n\nMonday.com Partners & Consultants (Paid) \u2014 Certified partners around the world offer private training, implementation support, and advanced setup. Useful if you need deep customization, third-party integrations, or in-person training.\n\nHelp Center & Community (Free) \u2014 Step-by-step guides, templates, video tutorials, and an active user forum for ongoing learning.',
+          answer: trainingFaqAnswer,
         },
         {
           _type: 'faqPair',
           question: 'Is monday.com Academy free?',
-          answer:
-            'Yes, monday.com Academy is completely free. It offers self-paced online courses, certifications, and learning paths for users at every level \u2014 from beginners to advanced administrators. You can earn official monday.com certifications to demonstrate your expertise.',
+          answer: 'Yes, monday Academy is completely free to all monday.com users.',
         },
         {
           _type: 'faqPair',
-          question: 'How long does monday.com training take?',
+          question: 'How long does it take to get trained on Monday.com?',
           answer:
-            'Training duration depends on the scope and complexity. A basic onboarding session typically takes 2\u20134 hours. Our comprehensive training programs run over 1\u20132 weeks, covering everything from board setup to advanced automations and integrations, tailored to your team\u2019s specific workflows.',
+            'Basic training can take a few hours. Becoming fully proficient with advanced automations and integrations may take a few weeks, depending on your use case.',
         },
         {
           _type: 'faqPair',
-          question: 'Can training be customised for our team?',
+          question: 'Is training available for individuals as well as teams?',
           answer:
-            'Absolutely. Our training programs are fully customised to your organisation\u2019s workflows, industry, and team structure. We work with you to identify key use cases and build training around the specific boards, automations, and integrations your team will use every day.',
+            'Yes. Training can be tailored for individuals, small teams, or company-wide onboarding.',
+        },
+        {
+          _type: 'faqPair',
+          question: 'Does monday.com integrate with other tools we already use?',
+          answer:
+            'Yes. It integrates with tools like Slack, Microsoft Teams, Gmail, Google Drive, Zoom, HubSpot, and more.',
+        },
+        {
+          _type: 'faqPair',
+          question: 'Is the training hands-on?',
+          answer:
+            'Most training sessions are interactive, with live demos and exercises so participants can practice in real time.',
         },
       ]),
     },
@@ -256,6 +339,19 @@ async function main() {
     },
   ])
 
+  /* ---------------------------------------------------------------- */
+  /*  Join 500+ stats section                                         */
+  /* ---------------------------------------------------------------- */
+  const joinSectionStats = withKeys([
+    { _type: 'stat', value: '288%', label: 'ROI' },
+    { _type: 'stat', value: '15,600', label: 'Hours Saved' },
+    { _type: 'stat', value: '50%', label: 'Meeting reduction' },
+    { _type: 'stat', value: '489,794', label: 'Net Value' },
+  ])
+
+  /* ---------------------------------------------------------------- */
+  /*  Final document                                                  */
+  /* ---------------------------------------------------------------- */
   const doc = {
     _type: 'mondayTrainingPage',
     title: 'Monday Training',
@@ -263,33 +359,42 @@ async function main() {
     seoDescription:
       'Official monday.com training for your entire team. Get certified and confident on the platform.',
 
-    // Hero
+    // Hero — SINGLE CTA, no hero image
     heroHeadingPart1: 'Get your team official monday.com ',
     heroHeadingAccent: 'workflow training',
     heroSubheading:
-      'Expert Workflow Training delivered by a certified monday partner.\nOur training and adoption programs helps you onboard and adopt monday.com up to 10x faster.',
-    heroImage,
+      'Expert Workflow Training delivered by a certified monday partner.\nOur training and adoption programs helps you onboard and and adopt monday.com up to 10x faster.',
+    heroImage: undefined,
     heroCertificationBadge,
-    heroPrimaryCtaLabel: '\ud83d\ude80 Book a Consultation',
+    heroPrimaryCtaLabel: '\ud83d\ude80 Book a monday.com training consultation',
     heroPrimaryCtaUrl: CALENDLY_URL,
-    heroSecondaryCtaLabel: '\u25b6\ufe0f Get Started with monday.com',
-    heroSecondaryCtaUrl: CALENDLY_URL,
+    heroSecondaryCtaLabel: undefined,
+    heroSecondaryCtaUrl: undefined,
 
-    // Logo cloud
+    // Logo cloud — corrected accent text
     logoCloudHeadingPart1: 'Clients who have used our ',
-    logoCloudHeadingAccent: 'monday.com expert consulting services',
+    logoCloudHeadingAccent: 'monday.com consulting services',
 
-    // Video
-    videoEmbedUrl: 'https://www.youtube.com/embed/7vtrtlfC1Zg',
-    videoTitle: 'monday CRM Success Story - Star Aviation | Powered by Fruition',
+    // Training section intro (new fields)
+    trainingIntroHeading:
+      'Our consultants help drive adoption and ensure long term success with monday.com',
+    trainingIntroSubheading:
+      'We transform fragmented business processes into cohesive, automated systems that enhance team collaboration and deliver measurable ROI across your entire organisation.',
 
     // Training tabs
     trainingSectionHeading:
-      'Our consultants help drive adoption and ensure long term success with monday.com',
+      'Our expert consultants empower you to adopt workflow automation & AI systems',
     trainingTabs,
 
+    // Empower section (new fields)
+    empowerEyebrow: 'monday.com Training Australia',
+    empowerHeading: 'Empower with monday.com training',
+    empowerBody:
+      'Make sure all key stakeholders get the onboarding they need to feel comfortable using and building on the platform day in and day out.\n\nSo no one is so overwhelmed they decide not to touch it\u2013or worse, revert to a combination of spreadsheets.',
+
     // Training services
-    servicesHeading: '\ud83d\udc69\ud83c\udffd\u200d\ud83d\udcbc\ud83d\udc68\ud83c\udffb\u200d\ud83d\udcbc Our Training Services',
+    servicesHeading:
+      '\ud83d\udc69\ud83c\udffd\u200d\ud83d\udcbc\ud83d\udc68\ud83c\udffb\u200d\ud83d\udcbc Our Training Services',
     trainingServices,
 
     // Testimonials section
@@ -303,8 +408,9 @@ async function main() {
     statCardCtaUrl: '/customer-testimonials',
 
     // Calendly
-    calendlyHeading:
-      'Schedule A 30-Min Consultation With One of Our monday.com Consultants',
+    calendlyHeading: 'Book a 30-minute monday.com training consultation',
+    calendlySubheading:
+      'Our certified monday.com consultants offer complimentary consultations to help you assess your team\u2019s current challenges, design custom workflow training sessions, build a step-by-step learning roadmap, and highlight best practices to maximise adoption and efficiency.',
     calendlyUrl: CALENDLY_URL,
 
     // FAQ
@@ -318,6 +424,16 @@ async function main() {
     discoverPrimaryCtaUrl: CALENDLY_URL,
     discoverSecondaryCtaLabel: '\u25b6\ufe0f Get Started with monday.com',
     discoverSecondaryCtaUrl: CALENDLY_URL,
+
+    // Join 500+ businesses (new section)
+    joinSectionHeadingPart1: 'Join ',
+    joinSectionHeadingAccent: '500+ businesses',
+    joinSectionHeadingPart2:
+      ' that have leveraged our monday.com expert consultants.',
+    joinSectionSubheading: 'The economic impact of',
+    joinSectionStats,
+    joinSectionFootnote: 'Data by',
+    joinSectionBadge,
 
     // Security badge
     securityBadge,

@@ -4,6 +4,8 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
+import StatsBlockView from "@/features/page-builder/blocks/StatsBlockView"
+import type { SiteSettings } from "@/features/page-builder/types"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -14,6 +16,7 @@ type SanityImageRef = { asset?: { _ref?: string } } | null | undefined
 interface TrainingItem {
   number?: string
   title?: string
+  description?: string
   bullets?: string[]
 }
 
@@ -29,8 +32,15 @@ interface TrainingService {
   title?: string
   subtitle?: string
   description?: string
+  image?: SanityImageRef
   ctaLabel?: string
   ctaUrl?: string
+}
+
+interface JoinSectionStat {
+  _key?: string
+  value?: string
+  label?: string
 }
 
 interface FaqPair {
@@ -81,8 +91,15 @@ interface MondayTrainingData {
   videoEmbedUrl?: string
   videoTitle?: string
 
+  trainingIntroHeading?: string
+  trainingIntroSubheading?: string
+
   trainingSectionHeading?: string
   trainingTabs?: TrainingTab[]
+
+  empowerEyebrow?: string
+  empowerHeading?: string
+  empowerBody?: string
 
   servicesHeading?: string
   trainingServices?: TrainingService[]
@@ -96,6 +113,7 @@ interface MondayTrainingData {
   statCardCtaUrl?: string
 
   calendlyHeading?: string
+  calendlySubheading?: string
   calendlyUrl?: string
 
   faqHeading?: string
@@ -108,6 +126,14 @@ interface MondayTrainingData {
   discoverSecondaryCtaLabel?: string
   discoverSecondaryCtaUrl?: string
 
+  joinSectionHeadingPart1?: string
+  joinSectionHeadingAccent?: string
+  joinSectionHeadingPart2?: string
+  joinSectionSubheading?: string
+  joinSectionStats?: JoinSectionStat[]
+  joinSectionFootnote?: string
+  joinSectionBadge?: SanityImageRef
+
   securityBadge?: SanityImageRef
 }
 
@@ -115,6 +141,7 @@ interface MondayTrainingContentProps {
   data?: MondayTrainingData | null
   carouselLogos?: CarouselLogo[]
   caseStudies?: CaseStudy[]
+  siteSettings?: SiteSettings | null
 }
 
 /* ------------------------------------------------------------------ */
@@ -140,6 +167,7 @@ export default function MondayTrainingContent({
   data,
   carouselLogos = [],
   caseStudies = [],
+  siteSettings = null,
 }: MondayTrainingContentProps) {
   const trainingTabs = data?.trainingTabs ?? []
   const faqTabs = data?.faqTabs ?? []
@@ -175,8 +203,9 @@ export default function MondayTrainingContent({
   const primaryCtaLabel =
     data?.heroPrimaryCtaLabel ?? "\ud83d\ude80 Book a Consultation"
   const primaryCtaUrl = data?.heroPrimaryCtaUrl ?? CALENDLY_URL
-  const secondaryCtaLabel =
-    data?.heroSecondaryCtaLabel ?? "\u25b6\ufe0f Get Started with monday.com"
+  // Secondary CTA is optional — only render when both label and URL are set
+  const showSecondaryCta = Boolean(data?.heroSecondaryCtaLabel && data?.heroSecondaryCtaUrl)
+  const secondaryCtaLabel = data?.heroSecondaryCtaLabel ?? ""
   const secondaryCtaUrl = data?.heroSecondaryCtaUrl ?? CALENDLY_URL
 
   const logoCloudPart1 =
@@ -190,9 +219,21 @@ export default function MondayTrainingContent({
     data?.videoTitle ??
     "monday CRM Success Story - Star Aviation | Powered by Fruition"
 
+  const trainingIntroHeading =
+    data?.trainingIntroHeading ??
+    "Our consultants help drive adoption and ensure long term success with monday.com"
+  const trainingIntroSubheading =
+    data?.trainingIntroSubheading ??
+    "We transform fragmented business processes into cohesive, automated systems that enhance team collaboration and deliver measurable ROI across your entire organisation."
   const trainingSectionHeading =
     data?.trainingSectionHeading ??
-    "Our consultants help drive adoption and ensure long term success with monday.com"
+    "Our expert consultants empower you to adopt workflow automation & AI systems"
+
+  const empowerEyebrow = data?.empowerEyebrow ?? "monday.com Training Australia"
+  const empowerHeading = data?.empowerHeading ?? "Empower with monday.com training"
+  const empowerBody =
+    data?.empowerBody ??
+    "Make sure all key stakeholders get the onboarding they need to feel comfortable using and building on the platform day in and day out.\n\nSo no one is so overwhelmed they decide not to touch it\u2013or worse, revert to a combination of spreadsheets."
 
   const servicesHeading =
     data?.servicesHeading ??
@@ -212,8 +253,21 @@ export default function MondayTrainingContent({
 
   const calendlyHeading =
     data?.calendlyHeading ??
-    "Schedule A 30-Min Consultation With One of Our monday.com Consultants"
+    "Book a 30-minute monday.com training consultation"
+  const calendlySubheading = data?.calendlySubheading ?? ""
   const calendlyUrl = data?.calendlyUrl ?? CALENDLY_URL
+
+  const joinSectionHeadingPart1 = data?.joinSectionHeadingPart1 ?? "Join "
+  const joinSectionHeadingAccent =
+    data?.joinSectionHeadingAccent ?? "500+ businesses"
+  const joinSectionHeadingPart2 =
+    data?.joinSectionHeadingPart2 ??
+    " that have leveraged our monday.com expert consultants."
+  const joinSectionSubheading =
+    data?.joinSectionSubheading ?? "The economic impact of"
+  const joinSectionStats = data?.joinSectionStats ?? []
+  const joinSectionFootnote = data?.joinSectionFootnote ?? ""
+  const joinSectionBadgeSrc = imageUrl(data?.joinSectionBadge)
 
   const faqHeading = data?.faqHeading ?? "Frequently asked questions"
 
@@ -302,60 +356,65 @@ export default function MondayTrainingContent({
             </div>
           )}
 
-          {/* Dual CTA */}
+          {/* CTA(s) — secondary is optional */}
           <div
-            className="flex items-center justify-center"
-            style={{ gap: 20, marginTop: 40, width: 680 }}
+            className="flex items-center justify-center flex-wrap"
+            style={{ gap: 20, marginTop: 40 }}
           >
             <Link
               href={primaryCtaUrl}
-              className="flex items-center justify-center font-bold"
-              style={{
-                width: 330,
-                height: 53,
-                borderRadius: 100,
-                border: "1px solid #8015e8",
-                backgroundColor: "white",
-                color: "#8015e8",
-                fontSize: 16,
-              }}
-            >
-              {primaryCtaLabel}
-            </Link>
-            <Link
-              href={secondaryCtaUrl}
               className="flex items-center justify-center font-bold text-white"
               style={{
-                width: 330,
+                minWidth: 330,
+                paddingLeft: 28,
+                paddingRight: 28,
                 height: 53,
                 borderRadius: 100,
                 background: "linear-gradient(to right, #8015e8, #ba83f0)",
                 fontSize: 16,
               }}
             >
-              {secondaryCtaLabel}
+              {primaryCtaLabel}
             </Link>
+            {showSecondaryCta && (
+              <Link
+                href={secondaryCtaUrl}
+                className="flex items-center justify-center font-bold"
+                style={{
+                  minWidth: 330,
+                  paddingLeft: 28,
+                  paddingRight: 28,
+                  height: 53,
+                  borderRadius: 100,
+                  border: "1px solid #8015e8",
+                  backgroundColor: "white",
+                  color: "#8015e8",
+                  fontSize: 16,
+                }}
+              >
+                {secondaryCtaLabel}
+              </Link>
+            )}
           </div>
 
-          {/* Hero image */}
-          <div
-            className="rounded-[24px] overflow-hidden"
-            style={{
-              width: 1042,
-              height: 312,
-              backgroundColor: "#d9d9d9",
-              marginTop: 40,
-            }}
-          >
-            {heroImageSrc && (
-              /* eslint-disable-next-line @next/next/no-img-element */
+          {/* Hero image — only when actually set (no placeholder box) */}
+          {heroImageSrc && (
+            <div
+              className="rounded-[24px] overflow-hidden"
+              style={{
+                width: 1042,
+                height: 312,
+                marginTop: 40,
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroImageSrc}
                 alt="monday.com training"
                 className="w-full h-full object-cover"
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -395,31 +454,14 @@ export default function MondayTrainingContent({
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 3 -- YouTube Video Embed                             */}
-      {/* ============================================================ */}
-      <section className="bg-white py-[80px] px-[10px]">
-        <div className="mx-auto flex flex-col items-center justify-center">
-          <div className="w-full max-w-[979px] aspect-video">
-            <iframe
-              src={videoEmbedUrl}
-              title={videoTitle}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================ */}
-      {/* SECTION 4 -- Training Intro + Tabbed Content                 */}
+      {/* SECTION 3 -- Training Intro + Tabbed Content                 */}
       {/* ============================================================ */}
       <section style={{ backgroundColor: "#f0ecfe" }}>
         <div
           className="mx-auto flex flex-col items-center"
           style={{ paddingTop: 80, paddingBottom: 80 }}
         >
-          {/* Intro heading */}
+          {/* Intro heading (above tabs) */}
           <p
             className="text-center"
             style={{
@@ -429,7 +471,7 @@ export default function MondayTrainingContent({
               maxWidth: 924,
             }}
           >
-            <span className="text-black">{trainingSectionHeading}</span>
+            <span className="text-black">{trainingIntroHeading}</span>
           </p>
 
           <p
@@ -443,8 +485,25 @@ export default function MondayTrainingContent({
               maxWidth: 924,
             }}
           >
-            We transform fragmented business processes into cohesive, automated systems that enhance team collaboration and deliver measurable ROI across your entire organisation.
+            {trainingIntroSubheading}
           </p>
+
+          {/* Tab section heading */}
+          {trainingSectionHeading && (
+            <p
+              className="text-center"
+              style={{
+                fontSize: 24,
+                fontWeight: 500,
+                lineHeight: "32px",
+                color: "#2b074d",
+                marginTop: 32,
+                maxWidth: 924,
+              }}
+            >
+              {trainingSectionHeading}
+            </p>
+          )}
 
           {/* Training Tabs */}
           {trainingTabs.length > 0 && (
@@ -509,11 +568,17 @@ export default function MondayTrainingContent({
                     <p className="font-bold" style={{ fontSize: 16, color: '#2b074d', lineHeight: '22.4px' }}>
                       {item.title}
                     </p>
-                    <ul className="list-disc" style={{ paddingLeft: 18, marginTop: 8, fontSize: 14, color: '#2b074d', lineHeight: '22.4px' }}>
-                      {(item.bullets ?? []).map((b, j) => (
-                        <li key={j}>{b}</li>
-                      ))}
-                    </ul>
+                    {item.description ? (
+                      <p style={{ marginTop: 8, fontSize: 14, color: '#2b074d', lineHeight: '22.4px', whiteSpace: 'pre-line' }}>
+                        {item.description}
+                      </p>
+                    ) : (
+                      <ul className="list-disc" style={{ paddingLeft: 18, marginTop: 8, fontSize: 14, color: '#2b074d', lineHeight: '22.4px' }}>
+                        {(item.bullets ?? []).map((b, j) => (
+                          <li key={j}>{b}</li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </div>
               ))}
@@ -523,144 +588,7 @@ export default function MondayTrainingContent({
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 5 -- monday.com Training Australia (two-column)      */}
-      {/* ============================================================ */}
-      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto flex items-start" style={{ maxWidth: 1200, gap: 60 }}>
-          {/* Left: Text */}
-          <div style={{ flex: 1 }}>
-            <p style={{ fontSize: 14, fontWeight: 600, color: '#8015e8', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-              monday.com Training Australia
-            </p>
-            <h2 style={{ fontSize: 32, fontWeight: 600, color: 'black', lineHeight: '44.8px', marginTop: 12 }}>
-              Empower with <span style={{ color: '#8015e8' }}>monday.com training</span>
-            </h2>
-            <p style={{ fontSize: 16, lineHeight: '24px', color: 'black', marginTop: 20 }}>
-              Make sure all key stakeholders get the onboarding they need to feel comfortable using and building on the platform day in and day out.
-            </p>
-            <p style={{ fontSize: 16, lineHeight: '24px', color: 'black', marginTop: 16 }}>
-              So no one is so overwhelmed they decide not to touch it&ndash;or worse, revert to a combination of spreadsheets.
-            </p>
-            <Link
-              href={calendlyUrl}
-              className="inline-flex items-center justify-center font-bold text-white"
-              style={{
-                height: 53,
-                paddingLeft: 32,
-                paddingRight: 32,
-                borderRadius: 100,
-                background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                fontSize: 16,
-                marginTop: 32,
-              }}
-            >
-              {"\ud83d\ude80"} Book a Training Session
-            </Link>
-          </div>
-
-          {/* Right: Image */}
-          <div style={{ flex: 1 }}>
-            <Image
-              src="/images/service-monday-users.png"
-              alt="monday.com users training"
-              width={540}
-              height={380}
-              className="rounded-[24px] object-cover w-full h-auto"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================ */}
-      {/* SECTION 6 -- Our Training Services                           */}
-      {/* ============================================================ */}
-      <section style={{ backgroundColor: "#f0ecfe", paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto" style={{ maxWidth: 1200 }}>
-          <h2 className="text-center" style={{ fontSize: 35, fontWeight: 500, color: 'black' }}>
-            {servicesHeading}
-          </h2>
-
-          <div className="grid grid-cols-2" style={{ gap: 28, marginTop: 40 }}>
-            {trainingServices.map((service, i) => (
-              <div
-                key={service._key || `${service.title}-${i}`}
-                style={{
-                  backgroundColor: "white",
-                  border: "1px solid #e8e6e6",
-                  borderRadius: 24,
-                  padding: 28,
-                }}
-              >
-                <div className="flex items-start" style={{ gap: 16 }}>
-                  <span style={{ fontSize: 40 }}>{service.emoji}</span>
-                  <div>
-                    <h3 style={{ fontSize: 20, fontWeight: 600, color: '#2b074d' }}>
-                      {service.title}
-                    </h3>
-                    <p style={{ fontSize: 14, fontWeight: 500, color: '#8015e8', marginTop: 4 }}>
-                      {service.subtitle}
-                    </p>
-                  </div>
-                </div>
-                <p style={{ fontSize: 14, lineHeight: '22.4px', color: 'black', marginTop: 16, whiteSpace: 'pre-line' }}>
-                  {service.description}
-                </p>
-                {service.ctaLabel && (
-                  <Link
-                    href={service.ctaUrl || '#'}
-                    className="inline-flex items-center font-semibold"
-                    style={{ fontSize: 14, color: '#8015e8', marginTop: 16 }}
-                  >
-                    {service.ctaLabel}
-                  </Link>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================ */}
-      {/* SECTION 7 -- 500+ CTA Banner                                 */}
-      {/* ============================================================ */}
-      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto" style={{ maxWidth: 1200 }}>
-          <div
-            className="flex items-center"
-            style={{
-              background: "linear-gradient(98.14deg, rgb(28, 2, 76) 0%, rgb(125, 20, 227) 100.01%)",
-              borderRadius: 24,
-              paddingLeft: 27,
-              paddingRight: 44,
-              paddingTop: 28,
-              paddingBottom: 28,
-              gap: 24,
-            }}
-          >
-            <p className="flex-1" style={{ fontSize: 20, fontWeight: 500, color: "white" }}>
-              Join{" "}
-              <span style={{ color: "#d2acf7" }}>500+ businesses</span>
-              {" "}that have leveraged our monday.com expert consultants.
-            </p>
-            <Link
-              href={calendlyUrl}
-              className="flex shrink-0 items-center justify-center font-bold text-white"
-              style={{
-                width: 216,
-                height: 53,
-                border: "1px solid white",
-                borderRadius: 100,
-                fontSize: 16,
-              }}
-            >
-              {"\ud83d\ude80"} Schedule a Meeting
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================ */}
-      {/* SECTION 8 -- Testimonials                                    */}
+      {/* SECTION 4 -- Testimonials                                    */}
       {/* ============================================================ */}
       <section className="bg-white py-[80px] px-4">
         <div className="mx-auto max-w-[1343px]">
@@ -739,16 +667,146 @@ export default function MondayTrainingContent({
       </section>
 
       {/* ============================================================ */}
+      {/* SECTION 5 -- monday.com Training Australia (two-column)      */}
+      {/* ============================================================ */}
+      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+        <div className="mx-auto flex items-start" style={{ maxWidth: 1200, gap: 60 }}>
+          {/* Left: Text */}
+          <div style={{ flex: 1 }}>
+            <p style={{ fontSize: 14, fontWeight: 600, color: '#8015e8', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+              {empowerEyebrow}
+            </p>
+            <h2 style={{ fontSize: 32, fontWeight: 600, color: 'black', lineHeight: '44.8px', marginTop: 12 }}>
+              {empowerHeading}
+            </h2>
+            <p style={{ fontSize: 16, lineHeight: '24px', color: 'black', marginTop: 20, whiteSpace: 'pre-line' }}>
+              {empowerBody}
+            </p>
+            <Link
+              href={calendlyUrl}
+              className="inline-flex items-center justify-center font-bold text-white"
+              style={{
+                height: 53,
+                paddingLeft: 32,
+                paddingRight: 32,
+                borderRadius: 100,
+                background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                fontSize: 16,
+                marginTop: 32,
+              }}
+            >
+              {"\ud83d\ude80"} Book a Training Session
+            </Link>
+          </div>
+
+          {/* Right: Image */}
+          <div style={{ flex: 1 }}>
+            <Image
+              src="/images/service-monday-users.png"
+              alt="monday.com users training"
+              width={540}
+              height={380}
+              className="rounded-[24px] object-cover w-full h-auto"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/* SECTION 6 -- Our Training Services (first card only)        */}
+      {/* ============================================================ */}
+      {trainingServices.length > 0 && (
+        <section style={{ backgroundColor: "#f0ecfe", paddingTop: 80, paddingBottom: 80 }}>
+          <div className="mx-auto" style={{ maxWidth: 1200 }}>
+            <h2 className="text-center" style={{ fontSize: 35, fontWeight: 500, color: 'black' }}>
+              {servicesHeading}
+            </h2>
+
+            <div className="flex justify-center" style={{ marginTop: 40 }}>
+              {(() => {
+                const service = trainingServices[0]
+                const serviceImageSrc = imageUrl(service.image)
+                return (
+                  <div
+                    style={{
+                      backgroundColor: "white",
+                      border: "1px solid #e8e6e6",
+                      borderRadius: 24,
+                      padding: 28,
+                      maxWidth: 816,
+                      width: "100%",
+                    }}
+                    className="flex flex-col"
+                  >
+                    <div className="flex items-start" style={{ gap: 16 }}>
+                      <span style={{ fontSize: 48 }}>{service.emoji}</span>
+                      <div>
+                        <h3 style={{ fontSize: 24, fontWeight: 600, color: '#2b074d' }}>
+                          {service.title}
+                        </h3>
+                        <p style={{ fontSize: 16, fontWeight: 500, color: '#8015e8', marginTop: 4, whiteSpace: 'pre-line' }}>
+                          {service.subtitle}
+                        </p>
+                      </div>
+                    </div>
+                    {serviceImageSrc && (
+                      <div
+                        className="rounded-[16px] overflow-hidden"
+                        style={{ marginTop: 24, aspectRatio: "16 / 9" }}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={serviceImageSrc}
+                          alt={service.title || "Training service"}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    <p style={{ fontSize: 16, lineHeight: '25.6px', color: 'black', marginTop: 20, whiteSpace: 'pre-line' }}>
+                      {service.description}
+                    </p>
+                    {service.ctaLabel && (
+                      <Link
+                        href={service.ctaUrl || '#'}
+                        className="inline-flex items-center font-semibold"
+                        style={{ fontSize: 14, color: '#8015e8', marginTop: 16 }}
+                      >
+                        {service.ctaLabel}
+                      </Link>
+                    )}
+                  </div>
+                )
+              })()}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ============================================================ */}
       {/* SECTION 9 -- Calendly Booking                                */}
       {/* ============================================================ */}
       <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1200 }}>
           <h2
             className="text-center"
-            style={{ fontSize: 35, fontWeight: 500, color: "black", maxWidth: 800 }}
+            style={{ fontSize: 35, fontWeight: 500, color: "black", maxWidth: 900 }}
           >
             {calendlyHeading}
           </h2>
+          {calendlySubheading && (
+            <p
+              className="text-center"
+              style={{
+                fontSize: 16,
+                lineHeight: "24px",
+                color: "black",
+                marginTop: 20,
+                maxWidth: 900,
+              }}
+            >
+              {calendlySubheading}
+            </p>
+          )}
           <div
             className="w-full"
             style={{ marginTop: 40, borderRadius: 24, overflow: "hidden", height: 700 }}
@@ -889,6 +947,81 @@ export default function MondayTrainingContent({
           </div>
         </div>
       </section>
+
+      {/* ============================================================ */}
+      {/* SECTION 11b -- Remaining Training Service Cards              */}
+      {/* (Bird's-Eye View, IT Support, Handover Documentation)        */}
+      {/* ============================================================ */}
+      {trainingServices.length > 1 && (
+        <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+          <div className="mx-auto" style={{ maxWidth: 1200 }}>
+            <div className="flex flex-col" style={{ gap: 40 }}>
+              {trainingServices.slice(1).map((service, i) => {
+                const serviceImageSrc = imageUrl(service.image)
+                const isEven = i % 2 === 0
+                return (
+                  <div
+                    key={service._key || `${service.title}-${i + 1}`}
+                    className="flex items-start"
+                    style={{
+                      gap: 48,
+                      flexDirection: isEven ? "row" : "row-reverse",
+                    }}
+                  >
+                    {/* Text column */}
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{ fontSize: 28, fontWeight: 600, color: "#2b074d" }}>
+                        {service.title}
+                      </h3>
+                      <p style={{ fontSize: 18, fontWeight: 500, color: "#8015e8", marginTop: 8, whiteSpace: "pre-line" }}>
+                        {service.subtitle}
+                      </p>
+                      <p style={{ fontSize: 16, lineHeight: "25.6px", color: "black", marginTop: 20, whiteSpace: "pre-line" }}>
+                        {service.description}
+                      </p>
+                      {service.ctaLabel && (
+                        <Link
+                          href={service.ctaUrl || "#"}
+                          className="inline-flex items-center font-semibold"
+                          style={{ fontSize: 16, color: "#8015e8", marginTop: 20 }}
+                        >
+                          {service.ctaLabel}
+                        </Link>
+                      )}
+                    </div>
+                    {/* Image column */}
+                    {serviceImageSrc && (
+                      <div
+                        className="rounded-[24px] overflow-hidden"
+                        style={{ flex: 1, aspectRatio: "16 / 10" }}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={serviceImageSrc}
+                          alt={service.title || "Training service"}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ============================================================ */}
+      {/* SECTION 11c -- Join 500+ Stats (shared StatsBlockView)       */}
+      {/* ============================================================ */}
+      <StatsBlockView
+        heading={`${joinSectionHeadingPart1}${joinSectionHeadingAccent}${joinSectionHeadingPart2}`}
+        subheading={joinSectionSubheading}
+        stats={joinSectionStats.map((s) => ({ _key: s._key, value: s.value, label: s.label }))}
+        footnote={joinSectionFootnote || "Data by"}
+        siteSettings={siteSettings || undefined}
+        showMondayPartnersBadge={false}
+      />
 
       {/* ============================================================ */}
       {/* SECTION 12 -- Security Badge                                 */}

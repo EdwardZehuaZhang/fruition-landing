@@ -15,7 +15,21 @@ export default {
       of: [{ type: "reference", to: [{ type: "blogCategory" }] }],
     },
     { name: "excerpt", title: "Excerpt", type: "text" },
-    { name: "body", title: "Body", type: "array", of: [{ type: "block" }] },
+    {
+      name: "body",
+      title: "Body",
+      type: "array",
+      of: [
+        { type: "block" },
+        {
+          type: "image",
+          fields: [
+            { name: "alt", title: "Alt Text", type: "string" },
+            { name: "caption", title: "Caption", type: "string" },
+          ],
+        },
+      ],
+    },
     {
       name: "videoUrls",
       title: "Video URLs",

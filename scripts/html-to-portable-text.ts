@@ -37,6 +37,15 @@ export interface PTBlock {
   children: PTSpan[]
 }
 
+export interface PTImage {
+  _type: 'imagePlaceholder'
+  _key: string
+  src: string
+  alt?: string
+}
+
+export type PTNode = PTBlock | PTImage
+
 const SKIP_TAGS = new Set(['script', 'style', 'noscript', 'svg', 'button', 'input', 'select', 'textarea'])
 
 const rk = () => Math.random().toString(36).slice(2, 10)
@@ -179,7 +188,7 @@ function emitListBlocks(
   listEl: NHPElement,
   kind: 'bullet' | 'number',
   level: number,
-  out: PTBlock[],
+  out: PTNode[],
 ): void {
   for (const child of listEl.childNodes) {
     if (child.nodeType !== 1) continue
@@ -211,12 +220,26 @@ const HEADING_STYLES: Record<string, string> = {
   h6: 'h4',
 }
 
-function walkBlock(container: NHPElement, out: PTBlock[]): void {
+function walkBlock(container: NHPElement, out: PTNode[]): void {
   for (const child of container.childNodes) {
     if (child.nodeType !== 1) continue
     const el = child as NHPElement
     const tag = el.tagName?.toLowerCase()
     if (!tag || SKIP_TAGS.has(tag)) continue
+
+    // Images — emit a placeholder with the source URL
+    if (tag === 'img') {
+      const src = el.getAttribute('src') || el.getAttribute('data-src') || ''
+      if (src && !src.startsWith('data:')) {
+        out.push({
+          _type: 'imagePlaceholder',
+          _key: rk(),
+          src,
+          alt: el.getAttribute('alt') || undefined,
+        })
+      }
+      continue
+    }
 
     if (tag in HEADING_STYLES) {
       const b = buildBlock(HEADING_STYLES[tag], el)
@@ -225,6 +248,19 @@ function walkBlock(container: NHPElement, out: PTBlock[]): void {
     }
 
     if (tag === 'p') {
+      // Check if this paragraph contains only an image (common pattern: <p><img ...></p>)
+      const imgChild = el.querySelector('img')
+      if (imgChild) {
+        const src = imgChild.getAttribute('src') || imgChild.getAttribute('data-src') || ''
+        if (src && !src.startsWith('data:')) {
+          out.push({
+            _type: 'imagePlaceholder',
+            _key: rk(),
+            src,
+            alt: imgChild.getAttribute('alt') || undefined,
+          })
+        }
+      }
       const b = buildBlock('normal', el)
       if (b) out.push(b)
       continue
@@ -243,6 +279,23 @@ function walkBlock(container: NHPElement, out: PTBlock[]): void {
 
     if (tag === 'ol') {
       emitListBlocks(el, 'number', 1, out)
+      continue
+    }
+
+    // <picture> — extract the <img> inside
+    if (tag === 'picture') {
+      const imgChild = el.querySelector('img')
+      if (imgChild) {
+        const src = imgChild.getAttribute('src') || imgChild.getAttribute('data-src') || ''
+        if (src && !src.startsWith('data:')) {
+          out.push({
+            _type: 'imagePlaceholder',
+            _key: rk(),
+            src,
+            alt: imgChild.getAttribute('alt') || undefined,
+          })
+        }
+      }
       continue
     }
 
@@ -283,15 +336,26 @@ function textOf(b: PTBlock): string {
   return b.children.map((c) => c.text).join('')
 }
 
-function dedupeAdjacent(blocks: PTBlock[]): PTBlock[] {
-  const out: PTBlock[] = []
-  for (const b of blocks) {
+function dedupeAdjacent(nodes: PTNode[]): PTNode[] {
+  const out: PTNode[] = []
+  for (const node of nodes) {
+    if (node._type === 'imagePlaceholder') {
+      // Dedupe consecutive identical images
+      const last = out[out.length - 1]
+      if (last && last._type === 'imagePlaceholder' && (last as PTImage).src === (node as PTImage).src) {
+        continue
+      }
+      out.push(node)
+      continue
+    }
+    const b = node as PTBlock
     const last = out[out.length - 1]
     if (
       last &&
-      last.style === b.style &&
-      last.listItem === b.listItem &&
-      textOf(last) === textOf(b)
+      last._type === 'block' &&
+      (last as PTBlock).style === b.style &&
+      (last as PTBlock).listItem === b.listItem &&
+      textOf(last as PTBlock) === textOf(b)
     ) {
       continue
     }
@@ -304,8 +368,8 @@ function dedupeAdjacent(blocks: PTBlock[]): PTBlock[] {
 /*  Public entry point                                                 */
 /* ------------------------------------------------------------------ */
 
-export function htmlElementToPortableText(container: NHPElement): PTBlock[] {
-  const out: PTBlock[] = []
+export function htmlElementToPortableText(container: NHPElement): PTNode[] {
+  const out: PTNode[] = []
   walkBlock(container, out)
   return dedupeAdjacent(out)
 }

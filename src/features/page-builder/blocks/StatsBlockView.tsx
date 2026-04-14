@@ -20,6 +20,8 @@ interface StatsBlockProps {
   ctaUrl?: string
   footnote?: string
   siteSettings?: SiteSettings
+  /** Render the monday.com partners badge inline with the subheading (homepage style). Default: true. */
+  showMondayPartnersBadge?: boolean
 }
 
 // ROI icons — kept hardcoded because they're decorative/design icons (not content).
@@ -54,6 +56,7 @@ export default function StatsBlockView({
   ctaUrl,
   footnote,
   siteSettings,
+  showMondayPartnersBadge = true,
 }: StatsBlockProps) {
   const mondayPartnersBadgeSrc = siteSettings?.badgeMondayPartners?.asset
     ? urlFor(siteSettings.badgeMondayPartners).width(148).height(23).url()
@@ -72,13 +75,17 @@ export default function StatsBlockView({
           </h2>
         )}
 
-        {/* Subheading with monday.com partners badge */}
+        {/* Subheading with optional inline monday.com partners badge */}
         {subheading && (
-          <div className="flex items-start gap-[5px] text-[14px] text-[#242323]">
-            <span>{subheading}</span>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={mondayPartnersBadgeSrc} alt="monday.com partners" width={148} height={23} className="h-[23px] w-auto" />
-          </div>
+          showMondayPartnersBadge ? (
+            <div className="flex items-start gap-[5px] text-[14px] text-[#242323]">
+              <span>{subheading}</span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={mondayPartnersBadgeSrc} alt="monday.com partners" width={148} height={23} className="h-[23px] w-auto" />
+            </div>
+          ) : (
+            <p className="text-[18px] text-center text-[#242323]">{subheading}</p>
+          )
         )}
 
         {/* Stats row — with real icon images */}
@@ -126,20 +133,13 @@ export default function StatsBlockView({
           </div>
         )}
 
-        {/* CTA */}
-        {ctaLabel && ctaUrl ? (
+        {/* CTA (optional — only render if label + url both provided) */}
+        {ctaLabel && ctaUrl && (
           <Link
             href={ctaUrl}
             className="flex items-center justify-center h-[53px] w-[275px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
           >
             {ctaLabel}
-          </Link>
-        ) : (
-          <Link
-            href="https://calendly.com/global-calendar-fruitionservices"
-            className="flex items-center justify-center h-[53px] w-[275px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
-          >
-            🚀 Book a Time
           </Link>
         )}
 
