@@ -583,7 +583,7 @@ export default function ServicePageTemplate({
       {/* ============================================================ */}
       {/* SECTION 5 -- Calendly Booking                                */}
       {/* ============================================================ */}
-      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+      <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
         <div
           className="mx-auto flex flex-col items-center"
           style={{ maxWidth: 1200 }}

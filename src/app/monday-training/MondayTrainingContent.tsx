@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
 import StatsBlockView from "@/features/page-builder/blocks/StatsBlockView"
+import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
 import type { SiteSettings } from "@/features/page-builder/types"
 
 /* ------------------------------------------------------------------ */
@@ -342,19 +343,17 @@ export default function MondayTrainingContent({
             {heroSubheading}
           </p>
 
-          {/* Certification banner */}
-          {heroCertBadgeSrc && (
-            <div style={{ marginTop: 40 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={heroCertBadgeSrc}
-                alt="Certifications"
-                width={534}
-                height={133}
-                className="h-[133px] w-[534px] object-contain"
-              />
-            </div>
-          )}
+          {/* Monday Partners image */}
+          <div style={{ marginTop: 40 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/monday-partners.avif"
+              alt="Monday.com Partners"
+              width={924}
+              height={0}
+              className="w-full max-w-[924px] h-auto object-contain"
+            />
+          </div>
 
           {/* CTA(s) — secondary is optional */}
           <div
@@ -397,24 +396,18 @@ export default function MondayTrainingContent({
             )}
           </div>
 
-          {/* Hero image — only when actually set (no placeholder box) */}
-          {heroImageSrc && (
-            <div
-              className="rounded-[24px] overflow-hidden"
-              style={{
-                width: 1042,
-                height: 312,
-                marginTop: 40,
-              }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={heroImageSrc}
-                alt="monday.com training"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          )}
+          {/* Hero image */}
+          <div style={{ marginTop: 40 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={heroImageSrc || "/images/mask-group.avif"}
+              alt="monday.com training dashboards"
+              width={1042}
+              height={312}
+              className="rounded-[24px] object-cover"
+              style={{ width: 1042, height: 312 }}
+            />
+          </div>
         </div>
       </section>
 
@@ -454,6 +447,27 @@ export default function MondayTrainingContent({
       </section>
 
       {/* ============================================================ */}
+      {/* SECTION 2b -- Video Embed                                    */}
+      {/* ============================================================ */}
+      <section className="bg-white" style={{ paddingBottom: 80 }}>
+        <div className="mx-auto" style={{ maxWidth: 1042 }}>
+          <div
+            className="rounded-[24px] overflow-hidden"
+            style={{ aspectRatio: "16 / 9" }}
+          >
+            <iframe
+              src={videoEmbedUrl}
+              title={videoTitle}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+              style={{ border: 0 }}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
       {/* SECTION 3 -- Training Intro + Tabbed Content                 */}
       {/* ============================================================ */}
       <section style={{ backgroundColor: "#f0ecfe" }}>
@@ -487,23 +501,6 @@ export default function MondayTrainingContent({
           >
             {trainingIntroSubheading}
           </p>
-
-          {/* Tab section heading */}
-          {trainingSectionHeading && (
-            <p
-              className="text-center"
-              style={{
-                fontSize: 24,
-                fontWeight: 500,
-                lineHeight: "32px",
-                color: "#2b074d",
-                marginTop: 32,
-                maxWidth: 924,
-              }}
-            >
-              {trainingSectionHeading}
-            </p>
-          )}
 
           {/* Training Tabs */}
           {trainingTabs.length > 0 && (
@@ -588,204 +585,116 @@ export default function MondayTrainingContent({
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 4 -- Testimonials                                    */}
+      {/* SECTION 4 -- Testimonials (shared carousel component)        */}
       {/* ============================================================ */}
-      <section className="bg-white py-[80px] px-4">
-        <div className="mx-auto max-w-[1343px]">
-          <div className="flex items-center justify-center gap-[89px] mb-[58px] w-full">
-            <h2 className="text-[48px] text-black leading-[67.2px] w-[919px] shrink-0">
-              {testimonialsHeading}
-            </h2>
-            <Link
-              href={testimonialsCtaUrl}
-              className="shrink-0 flex items-center justify-center h-[53px] w-[330px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
-            >
-              {testimonialsCtaLabel}
-            </Link>
-          </div>
-          <div className="flex flex-wrap gap-x-[16px] gap-y-[18px]">
-            {/* Stat card */}
-            <div className="relative w-full max-w-[437px] bg-[#10003a] rounded-[24px] shadow-[0px_1px_17px_0px_rgba(0,0,0,0.2)] flex flex-col px-[38px]">
-              <div className="pt-[23px] pb-[30px]">
-                <p className="font-semibold text-[40px] text-[#ba83f0] leading-[60px]">{statCardValue}</p>
-                <p className="font-light text-[24px] text-white leading-[36px]" style={{ whiteSpace: 'pre-line' }}>
-                  {statCardSubtitle}
-                </p>
-              </div>
-              <div className="pb-[30px]">
-                <Link
-                  href={statCardCtaUrl}
-                  className="inline-flex items-center justify-center rounded-[100px] border border-white/40 px-6 py-2.5 text-sm font-semibold text-white hover:bg-white/10 transition"
-                >
-                  {statCardCtaLabel}
-                </Link>
-              </div>
-            </div>
-            {caseStudies.map((t, i) => {
-              const name = t.clientName ?? ""
-              const role =
-                t.clientRole && t.clientCompany
-                  ? `${t.clientRole}, ${t.clientCompany}`
-                  : t.clientRole || t.clientCompany || ""
-              const logoSrc = imageUrl(t.logo)
-              return (
-                <div
-                  key={t._id || `${name}-${i}`}
-                  className="relative flex flex-col bg-white rounded-[24px] border border-[#e8e6e6] w-full max-w-[437px] min-h-[300px]"
-                >
-                  <div className="flex items-start justify-between px-[38px] pt-[29px] pb-[18px]">
-                    <div>
-                      <p className="font-semibold text-[20px] text-[#2b074d] leading-[30px]">{name}</p>
-                      <p className="font-light text-[14px] text-[#595959] leading-[21px]">{role}</p>
-                    </div>
-                    {logoSrc ? (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
-                        src={logoSrc}
-                        alt={`${name} logo`}
-                        className="w-[57px] h-[53px] rounded-full object-contain shrink-0 ml-4"
-                      />
-                    ) : (
-                      <div className="w-[57px] h-[53px] rounded-full bg-[#e8e6e6] shrink-0 ml-4" />
-                    )}
-                  </div>
-                  <div className="px-[38px] flex-1">
-                    <p className="text-[15px] text-black leading-[22.5px]">{t.quote}</p>
-                  </div>
-                  <div className="flex gap-[2px] px-[38px] pb-[35px] pt-4">
-                    {[...Array(5)].map((_, si) => (
-                      <svg key={si} className="w-[23px] h-[21px]" viewBox="0 0 23 21" fill="#8015E8">
-                        <path d="M11.5 0L14.09 7.36H22.06L15.49 11.92L18.08 19.28L11.5 14.72L4.92 19.28L7.51 11.92L0.94 7.36H8.91L11.5 0Z" />
-                      </svg>
-                    ))}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
+      <TestimonialsGrid
+        heading={testimonialsHeading}
+        ctaLabel={testimonialsCtaLabel}
+        ctaUrl={testimonialsCtaUrl}
+        statCardValue={statCardValue}
+        statCardSubtitle={statCardSubtitle}
+        statCardCtaLabel={statCardCtaLabel}
+        statCardCtaUrl={statCardCtaUrl}
+        caseStudies={caseStudies}
+      />
 
       {/* ============================================================ */}
-      {/* SECTION 5 -- monday.com Training Australia (two-column)      */}
+      {/* SECTION 5 -- Empower + Training Services heading +            */}
+      {/*              first service (Customization) together            */}
       {/* ============================================================ */}
       <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto flex items-start" style={{ maxWidth: 1200, gap: 60 }}>
-          {/* Left: Text */}
-          <div style={{ flex: 1 }}>
-            <p style={{ fontSize: 14, fontWeight: 600, color: '#8015e8', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-              {empowerEyebrow}
-            </p>
-            <h2 style={{ fontSize: 32, fontWeight: 600, color: 'black', lineHeight: '44.8px', marginTop: 12 }}>
-              {empowerHeading}
-            </h2>
-            <p style={{ fontSize: 16, lineHeight: '24px', color: 'black', marginTop: 20, whiteSpace: 'pre-line' }}>
-              {empowerBody}
-            </p>
-            <Link
-              href={calendlyUrl}
-              className="inline-flex items-center justify-center font-bold text-white"
-              style={{
-                height: 53,
-                paddingLeft: 32,
-                paddingRight: 32,
-                borderRadius: 100,
-                background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                fontSize: 16,
-                marginTop: 32,
-              }}
-            >
-              {"\ud83d\ude80"} Book a Training Session
-            </Link>
-          </div>
-
-          {/* Right: Image */}
-          <div style={{ flex: 1 }}>
-            <Image
-              src="/images/service-monday-users.png"
-              alt="monday.com users training"
-              width={540}
-              height={380}
-              className="rounded-[24px] object-cover w-full h-auto"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================ */}
-      {/* SECTION 6 -- Our Training Services (first card only)        */}
-      {/* ============================================================ */}
-      {trainingServices.length > 0 && (
-        <section style={{ backgroundColor: "#f0ecfe", paddingTop: 80, paddingBottom: 80 }}>
-          <div className="mx-auto" style={{ maxWidth: 1200 }}>
-            <h2 className="text-center" style={{ fontSize: 35, fontWeight: 500, color: 'black' }}>
-              {servicesHeading}
-            </h2>
-
-            <div className="flex justify-center" style={{ marginTop: 40 }}>
-              {(() => {
-                const service = trainingServices[0]
-                const serviceImageSrc = imageUrl(service.image)
-                return (
-                  <div
-                    style={{
-                      backgroundColor: "white",
-                      border: "1px solid #e8e6e6",
-                      borderRadius: 24,
-                      padding: 28,
-                      maxWidth: 816,
-                      width: "100%",
-                    }}
-                    className="flex flex-col"
-                  >
-                    <div className="flex items-start" style={{ gap: 16 }}>
-                      <span style={{ fontSize: 48 }}>{service.emoji}</span>
-                      <div>
-                        <h3 style={{ fontSize: 24, fontWeight: 600, color: '#2b074d' }}>
-                          {service.title}
-                        </h3>
-                        <p style={{ fontSize: 16, fontWeight: 500, color: '#8015e8', marginTop: 4, whiteSpace: 'pre-line' }}>
-                          {service.subtitle}
-                        </p>
-                      </div>
-                    </div>
-                    {serviceImageSrc && (
-                      <div
-                        className="rounded-[16px] overflow-hidden"
-                        style={{ marginTop: 24, aspectRatio: "16 / 9" }}
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={serviceImageSrc}
-                          alt={service.title || "Training service"}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                    <p style={{ fontSize: 16, lineHeight: '25.6px', color: 'black', marginTop: 20, whiteSpace: 'pre-line' }}>
-                      {service.description}
-                    </p>
-                    {service.ctaLabel && (
-                      <Link
-                        href={service.ctaUrl || '#'}
-                        className="inline-flex items-center font-semibold"
-                        style={{ fontSize: 14, color: '#8015e8', marginTop: 16 }}
-                      >
-                        {service.ctaLabel}
-                      </Link>
-                    )}
-                  </div>
-                )
-              })()}
+        <div className="mx-auto" style={{ maxWidth: 1200 }}>
+          {/* Empower row (left text, right image) */}
+          <div className="flex items-start" style={{ gap: 60 }}>
+            <div style={{ flex: 1 }}>
+              <p style={{ fontSize: 14, fontWeight: 600, color: '#8015e8', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                {empowerEyebrow}
+              </p>
+              <h2 style={{ fontSize: 32, fontWeight: 600, color: 'black', lineHeight: '44.8px', marginTop: 12 }}>
+                {empowerHeading}
+              </h2>
+              <p style={{ fontSize: 16, lineHeight: '24px', color: 'black', marginTop: 20, whiteSpace: 'pre-line' }}>
+                {empowerBody}
+              </p>
+              <Link
+                href={calendlyUrl}
+                className="inline-flex items-center justify-center font-bold text-white"
+                style={{
+                  height: 53,
+                  paddingLeft: 32,
+                  paddingRight: 32,
+                  borderRadius: 100,
+                  background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                  fontSize: 16,
+                  marginTop: 32,
+                }}
+              >
+                {"\ud83d\ude80"} Book a Training Session
+              </Link>
+            </div>
+            <div style={{ flex: 1 }}>
+              <Image
+                src="/images/service-monday-users.png"
+                alt="monday.com users training"
+                width={540}
+                height={380}
+                className="rounded-[24px] object-cover w-full h-auto"
+              />
             </div>
           </div>
-        </section>
-      )}
+
+          {/* "Our Training Services" heading */}
+          <h2 className="text-center" style={{ fontSize: 35, fontWeight: 500, color: 'black', marginTop: 80 }}>
+            {servicesHeading}
+          </h2>
+
+          {/* First training service (Customization) — text left, image right */}
+          {trainingServices.length > 0 && (() => {
+            const service = trainingServices[0]
+            const serviceImageSrc = imageUrl(service.image)
+            return (
+              <div className="flex items-start" style={{ gap: 48, marginTop: 40 }}>
+                <div style={{ flex: 1 }}>
+                  <div className="flex items-start" style={{ gap: 12 }}>
+                    {service.emoji && <span style={{ fontSize: 32 }}>{service.emoji}</span>}
+                    <h3 style={{ fontSize: 28, fontWeight: 600, color: "#2b074d" }}>
+                      {service.title}
+                    </h3>
+                  </div>
+                  {service.subtitle && (
+                    <p style={{ fontSize: 18, fontWeight: 500, color: "#8015e8", marginTop: 8, whiteSpace: "pre-line" }}>
+                      {service.subtitle}
+                    </p>
+                  )}
+                  <p style={{ fontSize: 16, lineHeight: "25.6px", color: "black", marginTop: 20, whiteSpace: "pre-line" }}>
+                    {service.description}
+                  </p>
+                  {service.ctaLabel && (
+                    <Link
+                      href={service.ctaUrl || "#"}
+                      className="inline-flex items-center font-semibold"
+                      style={{ fontSize: 16, color: "#8015e8", marginTop: 20 }}
+                    >
+                      {service.ctaLabel}
+                    </Link>
+                  )}
+                </div>
+                {serviceImageSrc && (
+                  <div className="rounded-[24px] overflow-hidden" style={{ flex: 1, aspectRatio: "16 / 10" }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={serviceImageSrc} alt={service.title || "Training service"} className="w-full h-full object-cover" />
+                  </div>
+                )}
+              </div>
+            )
+          })()}
+        </div>
+      </section>
 
       {/* ============================================================ */}
       {/* SECTION 9 -- Calendly Booking                                */}
       {/* ============================================================ */}
-      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+      <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1200 }}>
           <h2
             className="text-center"
@@ -949,13 +858,13 @@ export default function MondayTrainingContent({
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 11b -- Remaining Training Service Cards              */}
-      {/* (Bird's-Eye View, IT Support, Handover Documentation)        */}
+      {/* SECTION 6 -- Remaining Training Services (left-right)         */}
+      {/* (Bird's-Eye View, IT Support, Handover Documentation)         */}
       {/* ============================================================ */}
       {trainingServices.length > 1 && (
         <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
           <div className="mx-auto" style={{ maxWidth: 1200 }}>
-            <div className="flex flex-col" style={{ gap: 40 }}>
+            <div className="flex flex-col" style={{ gap: 60 }}>
               {trainingServices.slice(1).map((service, i) => {
                 const serviceImageSrc = imageUrl(service.image)
                 const isEven = i % 2 === 0
@@ -965,17 +874,21 @@ export default function MondayTrainingContent({
                     className="flex items-start"
                     style={{
                       gap: 48,
-                      flexDirection: isEven ? "row" : "row-reverse",
+                      flexDirection: isEven ? "row-reverse" : "row",
                     }}
                   >
-                    {/* Text column */}
                     <div style={{ flex: 1 }}>
-                      <h3 style={{ fontSize: 28, fontWeight: 600, color: "#2b074d" }}>
-                        {service.title}
-                      </h3>
-                      <p style={{ fontSize: 18, fontWeight: 500, color: "#8015e8", marginTop: 8, whiteSpace: "pre-line" }}>
-                        {service.subtitle}
-                      </p>
+                      <div className="flex items-start" style={{ gap: 12 }}>
+                        {service.emoji && <span style={{ fontSize: 32 }}>{service.emoji}</span>}
+                        <h3 style={{ fontSize: 28, fontWeight: 600, color: "#2b074d" }}>
+                          {service.title}
+                        </h3>
+                      </div>
+                      {service.subtitle && (
+                        <p style={{ fontSize: 18, fontWeight: 500, color: "#8015e8", marginTop: 8, whiteSpace: "pre-line" }}>
+                          {service.subtitle}
+                        </p>
+                      )}
                       <p style={{ fontSize: 16, lineHeight: "25.6px", color: "black", marginTop: 20, whiteSpace: "pre-line" }}>
                         {service.description}
                       </p>
@@ -989,18 +902,10 @@ export default function MondayTrainingContent({
                         </Link>
                       )}
                     </div>
-                    {/* Image column */}
                     {serviceImageSrc && (
-                      <div
-                        className="rounded-[24px] overflow-hidden"
-                        style={{ flex: 1, aspectRatio: "16 / 10" }}
-                      >
+                      <div className="rounded-[24px] overflow-hidden" style={{ flex: 1, aspectRatio: "16 / 10" }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={serviceImageSrc}
-                          alt={service.title || "Training service"}
-                          className="w-full h-full object-cover"
-                        />
+                        <img src={serviceImageSrc} alt={service.title || "Training service"} className="w-full h-full object-cover" />
                       </div>
                     )}
                   </div>
@@ -1023,23 +928,7 @@ export default function MondayTrainingContent({
         showMondayPartnersBadge={false}
       />
 
-      {/* ============================================================ */}
-      {/* SECTION 12 -- Security Badge                                 */}
-      {/* ============================================================ */}
-      <section className="bg-white" style={{ paddingBottom: 80 }}>
-        <div className="mx-auto max-w-[976px]">
-          {securityBadgeSrc && (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={securityBadgeSrc}
-              alt="Security certifications"
-              width={976}
-              height={94}
-              className="w-full h-auto"
-            />
-          )}
-        </div>
-      </section>
+      {/* Security badge removed */}
     </div>
   )
 }

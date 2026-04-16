@@ -15,6 +15,27 @@ export default defineType({
     defineField({ name: 'heroHeadingPart1', title: 'Hero Heading (plain prefix)', type: 'string' }),
     defineField({ name: 'heroHeadingAccent', title: 'Hero Heading (accent middle)', type: 'string' }),
     defineField({ name: 'heroHeadingPart2', title: 'Hero Heading (plain suffix)', type: 'string' }),
+    defineField({
+      name: 'heroPartnerBadges',
+      title: 'Hero Partner Badges (row above heading)',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'partnerBadge',
+          fields: [
+            { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
+            { name: 'alt', title: 'Alt text', type: 'string' },
+          ],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'heroMondayPartnersImage',
+      title: 'Hero Monday Partners Image (shown below heading)',
+      type: 'image',
+      options: { hotspot: true },
+    }),
     defineField({ name: 'heroCertificationBadge', title: 'Hero Certification Banner', type: 'image' }),
     defineField({ name: 'heroImage', title: 'Hero Image', type: 'image', options: { hotspot: true } }),
     defineField({ name: 'heroPrimaryCtaLabel', title: 'Hero Primary CTA Label', type: 'string' }),
@@ -39,12 +60,10 @@ export default defineType({
     defineField({ name: 'videoTitle', title: 'Video Title', type: 'string' }),
 
     // Services content section
-    defineField({
-      name: 'servicesIntroHeading',
-      title: 'Services Intro Heading (Portable Text)',
-      type: 'array',
-      of: [defineArrayMember({ type: 'block' })],
-    }),
+    defineField({ name: 'servicesIntroHeadingPart1', title: 'Services Intro Heading (plain prefix)', type: 'string' }),
+    defineField({ name: 'servicesIntroHeadingAccent', title: 'Services Intro Heading (accent / purple)', type: 'string' }),
+    defineField({ name: 'servicesIntroHeadingPart2', title: 'Services Intro Heading (plain suffix)', type: 'string' }),
+    defineField({ name: 'servicesIntroImage', title: 'Services Intro Image', type: 'image', options: { hotspot: true } }),
     defineField({
       name: 'featureCards',
       title: 'Feature Cards',
@@ -85,6 +104,7 @@ export default defineType({
             { name: 'name', title: 'Name', type: 'string' },
             { name: 'badge', title: 'Badge (timeline)', type: 'string' },
             { name: 'description', title: 'Description', type: 'text' },
+            { name: 'supportLabel', title: 'Support Label (e.g. "Quick Start Plus:")', type: 'string' },
             {
               name: 'features',
               title: 'Features',

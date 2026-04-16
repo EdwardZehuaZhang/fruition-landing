@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { PortableText, type PortableTextBlock } from "@portabletext/react"
 import { urlFor } from "@/sanity/image"
+import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -28,6 +29,7 @@ interface PackageTier {
   name?: string
   badge?: string
   description?: string
+  supportLabel?: string
   features?: PackageFeature[]
 }
 
@@ -67,6 +69,8 @@ export interface ImplementationPackagesData {
   heroHeadingPart1?: string
   heroHeadingAccent?: string
   heroHeadingPart2?: string
+  heroPartnerBadges?: Array<{ _key?: string; image?: SanityImage; alt?: string }>
+  heroMondayPartnersImage?: SanityImage
   heroImage?: SanityImage
   heroCertificationBadge?: SanityImage
   heroPrimaryCtaLabel?: string
@@ -80,7 +84,10 @@ export interface ImplementationPackagesData {
   videoEmbedUrl?: string
   videoTitle?: string
 
-  servicesIntroHeading?: PortableTextBlock[]
+  servicesIntroHeadingPart1?: string
+  servicesIntroHeadingAccent?: string
+  servicesIntroHeadingPart2?: string
+  servicesIntroImage?: SanityImage
   featureCards?: FeatureCard[]
 
   socialProofBannerHtml?: PortableTextBlock[]
@@ -130,6 +137,7 @@ interface CaseStudy {
   clientCompany?: string
   quote?: string
   logo?: SanityImage
+  profilePhoto?: SanityImage
   linkedinUrl?: string
 }
 
@@ -152,6 +160,7 @@ const FALLBACK_PACKAGE_TIERS: PackageTier[] = [
     badge: "7 Day Delivery Timeline / 10 Hours",
     description:
       "Get up and running fast with monday.com. We\u2019ll help you configure templates and train you on best practices for your team\u2019s workflows. Transform monday.com into your centralized hub for project management and collaboration in record time.",
+    supportLabel: "Support Included:",
     features: [
       { emoji: "\ud83d\udcc4", label: "Requirements" },
       { emoji: "\ud83d\udcc2", label: "Template Configuration" },
@@ -160,73 +169,149 @@ const FALLBACK_PACKAGE_TIERS: PackageTier[] = [
   },
   {
     tabKey: "Lock-step",
-    name: "Growth",
-    badge: "14 Day Delivery Timeline / 20 Hours",
+    name: "We Build Together",
+    badge: "3 Weeks Delivery Timeline / 20 Hours",
     description:
-      "Ideal for teams that need deeper customization and hands-on guidance. We\u2019ll work alongside your team to design workflows, automate processes, and ensure full adoption across departments.",
+      "Partner with our monday.com experts in a collaborative, hands-on implementation where we work side-by-side with your team every step of the way. We\u2019ll map your existing processes, design a comprehensive solution architecture, build out your complete workspace with advanced automations and native integrations, and optimize workflows for maximum efficiency.",
+    supportLabel: "Quick Start Plus:",
     features: [
-      { emoji: "\ud83d\udcc4", label: "Requirements" },
-      { emoji: "\ud83d\udcc2", label: "Template Configuration" },
-      { emoji: "\ud83d\udc65", label: "Best Practices Training" },
-      { emoji: "\u2699\ufe0f", label: "Workflow Automation" },
-      { emoji: "\ud83d\udcca", label: "Dashboard Setup" },
+      { emoji: "\ud83d\udd27", label: "Process mapping" },
+      { emoji: "\ud83e\udd1d", label: "Optimisation" },
+      { emoji: "\u2699\ufe0f", label: "Solution design" },
+      { emoji: "\ud83d\udd17", label: "Automation & native integration support" },
+      { emoji: "\ud83e\uddd1\u200d\ud83d\udcbb", label: "Implementation" },
+      { emoji: "\ud83d\udc65", label: "CRM & Work Management training" },
     ],
   },
   {
     tabKey: "Bespoke",
-    name: "Enterprise",
-    badge: "Custom Delivery Timeline / 40+ Hours",
+    name: "Solution Delivered by Fruition",
+    badge: "4-8 Weeks Delivery Timeline / 20+ Hours",
     description:
-      "A fully tailored implementation for complex organizations. From integrations to change management, our consultants embed with your team to deliver a comprehensive monday.com rollout.",
+      "This is our most comprehensive package designed for complex organizations requiring enterprise-level customization.\n\nWe\u2019ll conduct deep multi-step process mapping across departments, architect scalable solutions for multiple teams and use cases, build fully custom monday.com environments tailored to your unique workflows, and leverage advanced integrations through Make, Zapier, or custom API development to connect your entire tech stack.",
+    supportLabel: "Lock-step Plus:",
     features: [
-      { emoji: "\ud83d\udcc4", label: "Requirements" },
-      { emoji: "\ud83d\udcc2", label: "Template Configuration" },
-      { emoji: "\ud83d\udc65", label: "Best Practices Training" },
-      { emoji: "\u2699\ufe0f", label: "Workflow Automation" },
-      { emoji: "\ud83d\udcca", label: "Dashboard Setup" },
-      { emoji: "\ud83d\udd17", label: "Integrations" },
+      { emoji: "\ud83d\udcdd", label: "Multi-step process mapping" },
+      { emoji: "\ud83d\udd17", label: "Integration (Make, Zapier, & API)" },
+      { emoji: "\ud83d\udee0\ufe0f", label: "Multi-team solution design" },
+      { emoji: "\ud83e\udd1d", label: "Training/adoption support" },
+      { emoji: "\ud83e\uddd1\u200d\ud83d\udcbb", label: "Custom solution build" },
     ],
   },
 ]
 
-const FALLBACK_CAROUSEL_LOGOS: { src: string; alt: string }[] = Array.from(
-  { length: 11 },
-  (_, i) => ({
-    src: `/images/carousel-logo-${i + 1}.png`,
-    alt: `Client ${i + 1}`,
-  })
-)
+const FALLBACK_CAROUSEL_LOGOS: { src: string; alt: string }[] = [
+  { src: "/images/carousel-logo-1.png", alt: "Client" },
+  { src: "/images/carousel-logo-2.jpg", alt: "Client" },
+  { src: "/images/carousel-logo-3.jpg", alt: "Client" },
+  { src: "/images/carousel-logo-4.png", alt: "Client" },
+  { src: "/images/carousel-logo-5.jpg", alt: "Client" },
+  { src: "/images/carousel-logo-6.jpg", alt: "Client" },
+  { src: "/images/carousel-logo-7.jpg", alt: "Client" },
+  { src: "/images/carousel-logo-8.png", alt: "Client" },
+  { src: "/images/carousel-logo-9.png", alt: "Client" },
+  { src: "/images/carousel-logo-10.jpg", alt: "Client" },
+  { src: "/images/carousel-logo-11.png", alt: "Client" },
+  { src: "/images/carousel-logo-12.jpg", alt: "Client" },
+  { src: "/images/carousel-logo-13.png", alt: "Client" },
+  { src: "/images/carousel-logo-14.png", alt: "Client" },
+]
 
-const FALLBACK_TESTIMONIALS: { name: string; role: string; quote: string }[] = [
+const FALLBACK_TESTIMONIALS: { name: string; role: string; quote: string; photo?: string }[] = [
   {
     name: "Jade Wood",
     role: "Managing Director, Popology",
     quote:
       "We are now utilising monday.com to its full potential, from lead through design and production teams - everyone knows what stage our projects are in, what's next and what our process is.",
+    photo: "/images/testimonial-jade-wood.jpg",
   },
   {
     name: "Mairhead McKinley",
     role: "Delivery Manager, Givergy",
     quote:
       "We found Monday to be more customisable and transparent for both internal and external stakeholders. It reduced double handling of issues, as the Monday boards provide clear, accessible information\u2014eliminating the need to email around for updates.",
+    photo: "/images/testimonial-mairhead-mckinley.png",
   },
   {
     name: "Brandon-Lee Horridge",
     role: "Managing Director, BL Air Conditioning",
     quote:
       "This system will save hundreds of thousands of dollars a year guaranteed.",
+    photo: "/images/testimonial-brandon-lee-horridge.png",
   },
   {
     name: "Ron Amaram",
     role: "General Manager, Risk 2 Solutions",
     quote:
       "Fruition have been instrumental in moving us to a \u2018single source of truth\u2019 system for managing sales and projects.",
+    photo: "/images/testimonial-ron-amaram.jpg",
   },
   {
     name: "Lorenzo Tejada-Orrell",
     role: "Chief Innovation Officer, CLSQ",
     quote:
       "Since implementing monday.com, CLSQ has experienced a significant transformation in operational efficiency.",
+    photo: "/images/testimonial-lorenzo-tejada-orrell.png",
+  },
+  {
+    name: "Louis Stenmark",
+    role: "Co-Founder, Windfall Bio",
+    quote:
+      "The Fruition team helped me get the most out of monday.com. They provided me with in depth instruction, custom templates and helped me solve problems unique to our early stage company\u2019s needs.",
+  },
+  {
+    name: "Luke Reddin",
+    role: "Director, Clean Power Australia",
+    quote:
+      "Josh and his team were excellent from start to finish on building our monday.com integrations and automations. Very happy with them.",
+  },
+  {
+    name: "Brad Cannon",
+    role: "Senior Account Executive, monday.com",
+    quote:
+      "Having experienced working with Josh directly at monday.com, I\u2019d have no hesitation recommending Josh in any consulting engagement.",
+  },
+  {
+    name: "Bianca Genesio",
+    role: "Central Manager, G8 Education",
+    quote:
+      "Couldn\u2019t be more happier. Thank you Josh for your hard work and commitment. Highly recommend!",
+  },
+  {
+    name: "Anthony D\u2019Agostino",
+    role: "True Steel Frames",
+    quote:
+      "Josh & the Fruition team were great to deal with and very thorough. would highly recommend!",
+  },
+  {
+    name: "Jemma Ryan",
+    role: "",
+    quote:
+      "What a pleasant and wonderful experience it was to be dealing with Josh and the fruition team. It made it a smooth and easy process for us and our team. They were all very professional and great to speak with. Looking forward to working again with you in the future.",
+  },
+  {
+    name: "Teddy Mangion",
+    role: "",
+    quote:
+      "Josh and the Fruition team were an absolute pleasure to work with. They were professional, knowledgeable, and made the whole process smooth and straightforward. I would highly recommend them to anyone looking for quality software solutions.",
+  },
+  {
+    name: "Anthony Rowson",
+    role: "",
+    quote:
+      "We are very Happy Little Campers, and our system is easy to use, portable, flexible and very informative and gives us a great insight to ALL facets of the business and where our communication and marketing efforts are best targeted to maximize our returns for effort. I would highly recommend you have an initial chat with these guys. They know their stuff.",
+  },
+  {
+    name: "Kerrie E",
+    role: "",
+    quote:
+      "A big thanks to Josh - spent a couple of hours working through ways to get our Event Project Plan on Monday into good shape. We know have a much more user friendly and useful Project Plan and we have made use of a variety of different automations to streamline processes. When our NFP is ready to undertake more complex Monday activities I will definitely be looking to Fruition for support.",
+  },
+  {
+    name: "Tedd Long",
+    role: "MCAG Inc.",
+    quote:
+      "Zach provided excellent training on Monday.com and he included some great insights on how we can best use the project management features. Thank you!",
   },
 ]
 
@@ -236,24 +321,66 @@ const FALLBACK_FAQ_TABS: FaqTab[] = [
     items: [
       {
         question: "Does monday com have a CRM?",
-        answer:
-          "Yes, monday has a dedicated CRM product. monday.com CRM is a flexible and highly customizable cloud-based CRM platform intended for businesses of all sizes.",
+        answer: "Yes, monday has a dedicated CRM product. monday.com CRM is a flexible and highly customizable cloud-based CRM platform intended for businesses of all sizes.",
       },
       {
         question: "Does monday com have task management?",
-        answer:
-          "Yes, monday.com excels at task management. It provides boards, timelines, Gantt charts, and Kanban views to help teams organize and track tasks efficiently.",
+        answer: "Yes, monday.com has task management. Take a trial of monday work management and discover just how efficiently you can manage your teams\u2019 to-do list.",
       },
       {
         question: "Why is monday.com so successful?",
-        answer:
-          "monday.com is successful because of its intuitive interface, powerful automations, flexible customization, and seamless integrations with hundreds of tools businesses already use.",
+        answer: "Here are key factors that make monday.com so successful:\n\nOne of Monday.com\u2019s key selling points is its highly customizable nature, allowing users to tailor workflows, add automations, and integrate third-party apps.\n\nExtremely user-friendly, making adoption easy\n\nHighly visual, agile, and, most importantly, scalable\n\nmonday.com can be used to manage anything you want. It\u2019s a veritable Swiss Army knife for managers around the world",
       },
       {
         question: "What exactly does monday.com do?",
-        answer:
-          "monday.com is a Work OS that powers teams to run projects, workflows, and everyday work. It centralizes all your work, processes, tools, and files into one platform.",
+        answer: "monday.com is the most versatile project management software you\u2019ll find on the market. You can use the platform to manage all of your projects, and also use it as a CRM, to manage your ad campaigns, track bugs, and manage video production.",
       },
+    ],
+  },
+  {
+    label: "monday Work Management",
+    items: [
+      { question: "Can monday.com be used for project management?", answer: "Yes, monday.com is an excellent project management platform that supports both waterfall and agile methodologies. monday.com Work Management provides comprehensive project portfolio management capabilities, allowing teams to efficiently manage portfolios, projects, and tasks in one centralized workspace." },
+      { question: "What is Monday.com Work Management?", answer: "monday.com Work Management is a cloud-based platform that helps teams plan, organize, and track their work in one centralized workspace. It offers customizable boards, task automation, and powerful integrations to streamline workflows across any industry." },
+      { question: "Is monday.com a PPM tool?", answer: "Yes, monday.com is a comprehensive Project Portfolio Management (PPM) tool. In October 2024, monday.com launched monday.com Portfolio as part of their Enterprise-level offering, establishing the platform as a robust PPM solution for organizations managing multiple projects and portfolios." },
+      { question: "Can Monday.com Work Management be customized for my team\u2019s needs?", answer: "Yes! Monday.com is fully customizable. You can build boards, workflows, and dashboards tailored to your team\u2019s unique processes, whether you manage projects, sales pipelines, marketing campaigns, or operations." },
+      { question: "Does Monday.com integrate with other tools?", answer: "Absolutely. Monday.com integrates with popular tools like Slack, Microsoft Teams, Google Workspace, Zoom, HubSpot, Salesforce, and more. These integrations ensure seamless data flow and keep your team connected." },
+      { question: "How secure is Monday.com Work Management?", answer: "Monday.com uses industry-leading security measures, including SOC 2 Type II compliance, GDPR compliance, data encryption, and role-based permissions. This ensures that your company data remains safe and protected." },
+      { question: "What are the five stages of project management?", answer: "The five stages of project management form the essential project management lifecycle that guides successful project delivery from start to finish: 1. Project Initiation, 2. Project Planning, 3. Project Execution, 4. Project Monitoring and Control, 5. Project Closure." },
+    ],
+  },
+  {
+    label: "monday CRM",
+    items: [
+      { question: "What is monday CRM used for?", answer: "monday CRM allows you to have full control over your sales pipeline, manage your contacts, streamline your post sales processes and sales enablement, all while seeing the big picture at a glance." },
+      { question: "Is monday.com a good CRM tool?", answer: "Yes, monday.com can be a great CRM tool, particularly for businesses that value flexibility, customization, and ease of use. Key features that make monday.com a great CRM tool include contact management, pipeline management, automation, and customisation." },
+      { question: "Does monday.com CRM provide good value for investment?", answer: "If your priorities include rapid implementation, extensive customization capabilities, and maintaining a unified workspace, then monday CRM delivers excellent value proposition." },
+      { question: "Does monday.com offer complimentary CRM functionality?", answer: "While Monday.com provides specialized CRM packages, these aren\u2019t offered at no cost. Nevertheless, their \u2018Free Forever\u2019 option remains accessible through standard work management subscriptions." },
+      { question: "What business functions does monday CRM support?", answer: "monday CRM provides comprehensive oversight of your sales funnel, contact database management, streamlined post-purchase workflows, and sales enablement tools, while delivering executive-level visibility across operations." },
+      { question: "How does monday.com compare to Salesforce?", answer: "monday.com and Salesforce serve different market segments with distinct capabilities. Salesforce operates as an enterprise-grade CRM solution for large corporations, whereas monday.com excels through its intuitive interface, adaptability, and implementation simplicity, positioning it perfectly for SMBs." },
+      { question: "How does monday.com compare to Hubspot?", answer: "Hubspot is a great tool for Marketing teams, but it lacks in CRM and Project Management capabilities. We have also found from our clients who have switched over to monday.com with our services that they saved on technical administration costs with monday.com due to the cost to develop on Hubspot." },
+      { question: "How does monday.com compare to Zoho?", answer: "Zoho is a cheaper CRM alternative, making it great for teams who are looking for a basic CRM that they don\u2019t plan on changing as their business evolves. Another key factor that pushed our clients to migrate off of Zoho CRM to monday CRM is due to Zoho\u2019s limited support." },
+      { question: "How effective is monday.com as a customer relationship management platform?", answer: "monday.com serves as an excellent CRM solution, especially for organizations prioritizing adaptability, customization capabilities, and user-friendly operation." },
+      { question: "What are the benefits of using monday.com as a CRM?", answer: "Key benefits include: Centralized lead and customer data, Automated task and follow-up management, Custom dashboards for real-time performance tracking, Seamless integrations with popular tools like Gmail, Outlook, Slack, and QuickBooks." },
+      { question: "Can monday.com integrate with other tools and CRMs?", answer: "Yes, monday.com integrates with email, project management, marketing, and financial tools, including Gmail & Outlook, Slack & Microsoft Teams, HubSpot, Salesforce, Mailchimp, QuickBooks & Xero. Custom integrations via API or Zapier are also available." },
+    ],
+  },
+  {
+    label: "Expert Consultant Guide",
+    items: [
+      { question: "What\u2019s the best monday.com CRM implementation strategy?", answer: "When implementing monday.com CRM, we recommend starting with a carefully planned phased rollout guided by certified monday.com consultants. We typically start by implementing proven sales workflows with powerful automation features, scaling department by department." },
+      { question: "How do monday.com Partners handle user adoption?", answer: "The secret to successful user adoption lies in demonstrating immediate wins that matter to your team. We\u2019ve developed change management best practices that ensure smooth transitions, especially when implementing CRM solutions tailored to your existing sales processes." },
+      { question: "What monday.com training do Partners recommend?", answer: "Our training approach combines consultant-led CRM sessions with practical, hands-on learning. We provide role-specific coaching and support, ensuring everyone from sales reps to administrators gets exactly what they need." },
+      { question: "How do monday.com consultants handle data migration?", answer: "Data migration is a crucial step that requires careful planning and execution. Our Partner team provides expert guidance throughout the CRM data transfer process, using proven templates that ensure data integrity." },
+      { question: "What success metrics do monday.com Partners track?", answer: "We focus on meaningful metrics that demonstrate real business impact. This includes monitoring CRM adoption rates, measuring improvements in sales efficiency, and tracking concrete ROI metrics." },
+    ],
+  },
+  {
+    label: "General Questions",
+    items: [
+      { question: "Do big companies use monday.com?", answer: "Yes, many large companies use monday.com for their work management needs. monday.com claims that over 180,000 companies globally use the platform, including well-known brands like Nissan, Elal, and Zippo, Canva, Coca-Cola, Wix, and Uber." },
+      { question: "Why is monday.com so popular?", answer: "Monday.com\u2019s popularity stems from its user-friendly interface, visual appeal, and powerful features that cater to various work management needs. It\u2019s known for its flexibility, customizable workflows, and ability to integrate with numerous third-party apps." },
+      { question: "What companies use monday.com?", answer: "Given monday\u2019s adaptability, businesses spanning diverse sectors leverage monday.com for project coordination, team collaboration, and numerous operational workflows. Notable clients include RayWhite, Landcom, and Government of Western Australia. According to monday.com, more than 180,000 organizations globally depend on their platform." },
     ],
   },
 ]
@@ -329,6 +456,16 @@ export default function ImplementationPackagesContent({
     imgSrc(data?.heroImage) ?? "/images/implementation-packages-hero.png"
   const heroCertBadgeSrc =
     imgSrc(data?.heroCertificationBadge) ?? "/images/badge-certifications.png"
+  type ResolvedPartnerBadge = { _key: string | undefined; src: string; alt: string }
+  const heroPartnerBadges: ResolvedPartnerBadge[] = (data?.heroPartnerBadges ?? [])
+    .map((b, i): ResolvedPartnerBadge | null => {
+      const src = imgSrc(b.image)
+      if (!src) return null
+      return { _key: b._key, src, alt: b.alt ?? `Partner badge ${i + 1}` }
+    })
+    .filter((x): x is ResolvedPartnerBadge => x !== null)
+  const heroMondayPartnersImageSrc =
+    imgSrc(data?.heroMondayPartnersImage) ?? "/images/monday-partners.avif"
   const heroPrimaryCtaLabel =
     data?.heroPrimaryCtaLabel ?? "\ud83d\ude80 Book a Consultation"
   const heroPrimaryCtaUrl = data?.heroPrimaryCtaUrl ?? CALENDLY_URL
@@ -347,7 +484,10 @@ export default function ImplementationPackagesContent({
     data?.videoTitle ??
     "monday CRM Success Story - Star Aviation | Powered by Fruition"
 
-  const servicesIntroHeading = data?.servicesIntroHeading
+  const servicesIntroHeadingPart1 = data?.servicesIntroHeadingPart1 ?? "As official "
+  const servicesIntroHeadingAccent = data?.servicesIntroHeadingAccent ?? "monday.com Partners"
+  const servicesIntroHeadingPart2 = data?.servicesIntroHeadingPart2 ?? ", let us help you get set up right, the first time."
+  const servicesIntroImageSrc = imgSrc(data?.servicesIntroImage) ?? "/images/monday-partners.avif"
   const featureCards: FeatureCard[] = data?.featureCards?.length
     ? data.featureCards
     : [
@@ -448,16 +588,6 @@ export default function ImplementationPackagesContent({
   // Duplicate logos for seamless marquee loop
   const duplicatedLogos = [...resolvedCarouselLogos, ...resolvedCarouselLogos]
 
-  /* -------- Testimonials (from case studies) -------- */
-  const resolvedTestimonials: { name: string; role: string; quote: string }[] =
-    caseStudies && caseStudies.length > 0
-      ? caseStudies.map((cs) => ({
-          name: cs.clientName ?? "",
-          role: [cs.clientRole, cs.clientCompany].filter(Boolean).join(", "),
-          quote: cs.quote ?? "",
-        }))
-      : FALLBACK_TESTIMONIALS
-
   return (
     <div>
       {/* ============================================================ */}
@@ -469,23 +599,21 @@ export default function ImplementationPackagesContent({
           style={{ paddingLeft: 273, paddingRight: 273, paddingTop: 80, paddingBottom: 80 }}
         >
           {/* Partner badges */}
-          <div className="flex items-center" style={{ gap: 22 }}>
-            {[
-              { src: "/images/partner-platinum.png", alt: "monday.com Platinum Partner" },
-              { src: "/images/partner-advanced-delivery.png", alt: "Advanced Delivery Partner" },
-              { src: "/images/partner-make.png", alt: "Make Partner" },
-            ].map((badge) => (
-              <Image
-                key={badge.src}
-                src={badge.src}
-                alt={badge.alt}
-                width={120}
-                height={44}
-                className="h-[44px] w-auto rounded-[5px]"
-                style={{ boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.5)" }}
-              />
-            ))}
-          </div>
+          {heroPartnerBadges.length > 0 && (
+            <div className="flex items-center" style={{ gap: 22 }}>
+              {heroPartnerBadges.map((badge) => (
+                <Image
+                  key={badge._key ?? badge.src}
+                  src={badge.src}
+                  alt={badge.alt}
+                  width={120}
+                  height={44}
+                  className="h-[44px] w-auto rounded-[5px]"
+                  style={{ boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.5)" }}
+                />
+              ))}
+            </div>
+          )}
 
           {/* Heading */}
           <h1
@@ -502,9 +630,22 @@ export default function ImplementationPackagesContent({
             <span className="text-black">{heroHeadingPart2}</span>
           </h1>
 
-          {/* Certification banner */}
-          <div style={{ marginTop: 40 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+          {/* Monday Partners image */}
+          {heroMondayPartnersImageSrc && (
+            <div style={{ marginTop: 40 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={heroMondayPartnersImageSrc}
+                alt="Monday.com Partners"
+                width={924}
+                height={0}
+                className="w-full max-w-[924px] h-auto object-contain"
+              />
+            </div>
+          )}
+
+          {/* Certification banner (hidden) */}
+          {/* <div style={{ marginTop: 40 }}>
             <img
               src={heroCertBadgeSrc}
               alt="Certifications"
@@ -512,7 +653,7 @@ export default function ImplementationPackagesContent({
               height={133}
               className="h-[133px] w-[534px] object-contain"
             />
-          </div>
+          </div> */}
 
           {/* Dual CTA */}
           <div
@@ -635,19 +776,23 @@ export default function ImplementationPackagesContent({
               maxWidth: 924,
             }}
           >
-            {servicesIntroHeading ? (
-              <PortableText value={servicesIntroHeading} />
-            ) : (
-              <p>
-                <span className="text-black">As official </span>
-                <span style={{ color: "#8015e8" }}>monday.com Partners</span>
-                <span style={{ color: "#550e9b" }}>,</span>
-                <span className="text-black">
-                  {" "}
-                  let us help you get set up right, the first time.
-                </span>
-              </p>
-            )}
+            <p>
+              <span className="text-black">{servicesIntroHeadingPart1}</span>
+              <span style={{ color: "#8015e8" }}>{servicesIntroHeadingAccent}</span>
+              <span className="text-black">{servicesIntroHeadingPart2}</span>
+            </p>
+          </div>
+
+          {/* Services intro image */}
+          <div style={{ marginTop: 40 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={servicesIntroImageSrc}
+              alt="Monday.com Partners"
+              width={924}
+              height={0}
+              className="w-full max-w-[924px] h-auto object-contain"
+            />
           </div>
 
           {/* 4b: Two feature cards */}
@@ -806,20 +951,21 @@ export default function ImplementationPackagesContent({
             >
               {/* Header row */}
               <div
-                className="flex items-center flex-wrap"
-                style={{ gap: 36 }}
+                className="flex items-center"
+                style={{ gap: 16 }}
               >
                 <h3
                   style={{
                     fontSize: 24,
                     fontWeight: 500,
                     color: "#2b074d",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   {pkg?.name}
                 </h3>
                 <span
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center shrink-0"
                   style={{
                     border: "1px solid #8015e8",
                     borderRadius: 12,
@@ -830,6 +976,7 @@ export default function ImplementationPackagesContent({
                     color: "#8015e8",
                     fontSize: 16,
                     fontWeight: 600,
+                    whiteSpace: "nowrap",
                   }}
                 >
                   {pkg?.badge}
@@ -837,7 +984,7 @@ export default function ImplementationPackagesContent({
               </div>
 
               {/* Description */}
-              <p
+              <div
                 style={{
                   fontSize: 16,
                   fontWeight: 400,
@@ -846,10 +993,14 @@ export default function ImplementationPackagesContent({
                   marginTop: 24,
                 }}
               >
-                {pkg?.description}
-              </p>
+                {pkg?.description?.split("\n").map((line, i) => (
+                  <p key={i} style={{ marginTop: i > 0 ? 16 : 0 }}>
+                    {line}
+                  </p>
+                ))}
+              </div>
 
-              {/* Support Included */}
+              {/* Support label */}
               <p
                 style={{
                   fontSize: 20,
@@ -858,7 +1009,7 @@ export default function ImplementationPackagesContent({
                   marginTop: 24,
                 }}
               >
-                Support Included:
+                {pkg?.supportLabel ?? "Support Included:"}
               </p>
 
               {/* Features grid */}
@@ -899,95 +1050,23 @@ export default function ImplementationPackagesContent({
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 5 -- Testimonials                                    */}
+      {/* SECTION 5 -- Testimonials (shared carousel component)        */}
       {/* ============================================================ */}
-      <section className="bg-white py-[80px] px-4">
-        <div className="mx-auto max-w-[1343px]">
-          {/* Header row: heading + CTA side by side */}
-          <div className="flex items-center justify-center gap-[89px] mb-[58px] w-full">
-            <h2 className="text-[48px] text-black leading-[67.2px] w-[919px] shrink-0">
-              {testimonialsHeading}
-            </h2>
-            <Link
-              href={testimonialsCtaUrl}
-              className="shrink-0 flex items-center justify-center h-[53px] w-[330px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
-            >
-              {testimonialsCtaLabel}
-            </Link>
-          </div>
-
-          {/* Cards grid: stat card + testimonials in flex-wrap */}
-          <div className="flex flex-wrap gap-x-[16px] gap-y-[18px]">
-            {/* Stat card */}
-            <div className="relative w-full max-w-[437px] bg-[#10003a] rounded-[24px] shadow-[0px_1px_17px_0px_rgba(0,0,0,0.2)] flex flex-col px-[38px]">
-              <div className="pt-[23px] pb-[30px]">
-                <p className="font-semibold text-[40px] text-[#ba83f0] leading-[60px]">
-                  {statCardValue}
-                </p>
-                <p className="font-light text-[24px] text-white leading-[36px]">
-                  {statCardSubtitle}
-                </p>
-              </div>
-              <div className="pb-[30px]">
-                <Link
-                  href={statCardCtaUrl}
-                  className="inline-flex items-center justify-center rounded-[100px] border border-white/40 px-6 py-2.5 text-sm font-semibold text-white hover:bg-white/10 transition"
-                >
-                  {statCardCtaLabel}
-                </Link>
-              </div>
-            </div>
-
-            {/* Testimonial cards */}
-            {resolvedTestimonials.map((t, ti) => (
-              <div
-                key={`${t.name}-${ti}`}
-                className="relative flex flex-col bg-white rounded-[24px] border border-[#e8e6e6] w-full max-w-[437px] min-h-[300px]"
-              >
-                {/* Top: Name + Title */}
-                <div className="flex items-start justify-between px-[38px] pt-[29px] pb-[18px]">
-                  <div>
-                    <p className="font-semibold text-[20px] text-[#2b074d] leading-[30px]">
-                      {t.name}
-                    </p>
-                    <p className="font-light text-[14px] text-[#595959] leading-[21px]">
-                      {t.role}
-                    </p>
-                  </div>
-                  {/* Avatar circle */}
-                  <div className="w-[57px] h-[53px] rounded-full bg-[#e8e6e6] shrink-0 ml-4" />
-                </div>
-
-                {/* Quote */}
-                <div className="px-[38px] flex-1">
-                  <p className="text-[15px] text-black leading-[22.5px]">
-                    {t.quote}
-                  </p>
-                </div>
-
-                {/* Stars */}
-                <div className="flex gap-[2px] px-[38px] pb-[35px] pt-4">
-                  {[...Array(5)].map((_, i) => (
-                    <svg
-                      key={i}
-                      className="w-[23px] h-[21px]"
-                      viewBox="0 0 23 21"
-                      fill="#8015E8"
-                    >
-                      <path d="M11.5 0L14.09 7.36H22.06L15.49 11.92L18.08 19.28L11.5 14.72L4.92 19.28L7.51 11.92L0.94 7.36H8.91L11.5 0Z" />
-                    </svg>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestimonialsGrid
+        heading={testimonialsHeading}
+        ctaLabel={testimonialsCtaLabel}
+        ctaUrl={testimonialsCtaUrl}
+        statCardValue={statCardValue}
+        statCardSubtitle={statCardSubtitle}
+        statCardCtaLabel={statCardCtaLabel}
+        statCardCtaUrl={statCardCtaUrl}
+        caseStudies={caseStudies as import("@/components/sections/types").CaseStudy[]}
+      />
 
       {/* ============================================================ */}
       {/* SECTION 6 -- Calendly Booking                                */}
       {/* ============================================================ */}
-      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+      <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
         <div
           className="mx-auto flex flex-col items-center"
           style={{ maxWidth: 1200 }}

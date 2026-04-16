@@ -84,14 +84,6 @@ export default function HeroBanner({
           </p>
         )}
 
-        {/* Certification banner */}
-        {certBadgeSrc && (
-          <div style={{ marginTop: 40 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={certBadgeSrc} alt="Certifications" width={534} height={133} className="h-[133px] w-[534px] object-contain" />
-          </div>
-        )}
-
         {/* CTA buttons */}
         <div className="flex items-center justify-center" style={{ gap: 20, marginTop: 40, width: 680 }}>
           {primaryCtaLabel && primaryCtaUrl && (

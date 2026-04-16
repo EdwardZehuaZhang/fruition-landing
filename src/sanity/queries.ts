@@ -82,6 +82,8 @@ const PAGE_FIELDS = `
   comparisonTabs,
   methodologyHeading,
   methodologySteps,
+  bottomVideoUrl,
+  bottomVideoTitle,
   calendlyHeading,
   calendlySubheading,
   faqTabs,
@@ -91,6 +93,29 @@ const PAGE_FIELDS = `
   joinSubheading,
   joinStats,
   joinFootnote,
+  industryHeading,
+  industryTabs,
+  capabilitiesHeading,
+  capabilitiesHeadingAccent,
+  capabilitiesSubheading,
+  capabilitiesTheme,
+  capabilitiesColumns,
+  capabilitiesCards,
+  servicesHeading,
+  servicesHeadingAccent,
+  servicesSubheading,
+  servicesTheme,
+  servicesCards,
+  featureListHeading,
+  featureListHeadingAccent,
+  featureListSubheading,
+  featureListTheme,
+  featureListColumns,
+  featureListItems,
+  comparisonTheme,
+  solutionCards,
+  caseStudySectionHeading,
+  caseStudyCards,
   logoCloudHeadingPart1,
   logoCloudHeadingAccent
 `
@@ -211,7 +236,7 @@ export async function getTeamMembers() {
 
 export async function getCaseStudies() {
   return client.fetch(
-    `*[_type == "caseStudy"] { _id, clientName, clientRole, clientCompany, quote, logo, linkedinUrl }`
+    `*[_type == "caseStudy"] { _id, clientName, clientRole, clientCompany, quote, logo, profilePhoto, linkedinUrl }`
   )
 }
 
@@ -248,12 +273,15 @@ export async function getImplementationPackagesPage() {
   return client.fetch(`*[_type == "implementationPackagesPage"][0]{
     title, seoTitle, seoDescription,
     heroHeadingPart1, heroHeadingAccent, heroHeadingPart2,
+    heroPartnerBadges[]{ image, alt },
+    heroMondayPartnersImage,
     heroCertificationBadge, heroImage,
     heroPrimaryCtaLabel, heroPrimaryCtaUrl,
     heroSecondaryCtaLabel, heroSecondaryCtaUrl,
     logoCloudHeadingPart1, logoCloudHeadingAccent,
     videoEmbedUrl, videoTitle,
-    servicesIntroHeading,
+    servicesIntroHeadingPart1, servicesIntroHeadingAccent, servicesIntroHeadingPart2,
+    servicesIntroImage,
     featureCards,
     socialProofBannerHtml, socialProofCtaLabel, socialProofCtaUrl,
     pricingHeading,
@@ -278,6 +306,7 @@ export async function getMondayTrainingPage() {
     heroPrimaryCtaLabel, heroPrimaryCtaUrl,
     heroSecondaryCtaLabel, heroSecondaryCtaUrl,
     logoCloudHeadingPart1, logoCloudHeadingAccent,
+    videoEmbedUrl, videoTitle,
     trainingIntroHeading, trainingIntroSubheading,
     trainingSectionHeading, trainingTabs,
     empowerEyebrow, empowerHeading, empowerBody,

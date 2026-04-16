@@ -4,6 +4,8 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
+import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
+import StatsBlockView from "@/features/page-builder/blocks/StatsBlockView"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -200,6 +202,7 @@ export default function MondayImplementationConsultantsContent({
   data,
   carouselLogos = [],
   caseStudies = [],
+  siteSettings,
 }: Props) {
   const comparisonTabs = data?.comparisonTabs ?? []
   const methodologySteps = data?.methodologySteps ?? []
@@ -249,11 +252,44 @@ export default function MondayImplementationConsultantsContent({
 
   const comparisonHeading =
     data?.comparisonSectionHeading ?? "DIY implementation vs expert monday.com support"
-  const currentComparisonItems = comparisonTabs[activeComparisonTab]?.items ?? []
 
   const methodologyHeading =
     data?.methodologyHeading ??
     "Our expert consultants empower you to adopt workflow automation & AI systems"
+
+  // Build the resolved tab list. The third tab ("Our Approach") has stale items in
+  // the CMS, so we override it with methodologySteps which contain the correct
+  // Process Discovery → ... Change Readiness content. We also attach per-tab
+  // section headings so they swap with the active tab.
+  const resolvedComparisonTabs = comparisonTabs.map((tab, idx) => {
+    const label = tab.label ?? ""
+    const isOurApproach =
+      label.toLowerCase().includes("our approach") ||
+      (idx === comparisonTabs.length - 1 && comparisonTabs.length >= 3)
+
+    if (isOurApproach && methodologySteps.length > 0) {
+      return {
+        ...tab,
+        heading: methodologyHeading,
+        items: methodologySteps.map((s) => ({
+          _key: s._key,
+          number: s.number,
+          title: s.title,
+          description: s.description,
+        })) as ComparisonItem[],
+      }
+    }
+
+    if (idx === 0) {
+      return { ...tab, heading: comparisonHeading }
+    }
+
+    return { ...tab, heading: undefined as string | undefined }
+  })
+
+  const activeTab = resolvedComparisonTabs[activeComparisonTab]
+  const currentComparisonItems = activeTab?.items ?? []
+  const currentTabHeading = activeTab?.heading
 
   const solutionsPart1 = data?.solutionsHeadingPart1 ?? "Create a CRM or project management tool that "
   const solutionsAccent = data?.solutionsHeadingAccent ?? "fits you"
@@ -371,19 +407,17 @@ export default function MondayImplementationConsultantsContent({
             {heroSubheading}
           </p>
 
-          {/* Certification banner */}
-          {heroCertBadgeSrc && (
-            <div style={{ marginTop: 40 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={heroCertBadgeSrc}
-                alt="Certifications"
-                width={534}
-                height={133}
-                className="h-[133px] w-[534px] object-contain"
-              />
-            </div>
-          )}
+          {/* Monday Partners image */}
+          <div style={{ marginTop: 40 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/monday-partners.avif"
+              alt="Monday.com Partners"
+              width={924}
+              height={0}
+              className="w-full max-w-[924px] h-auto object-contain"
+            />
+          </div>
 
           {/* Dual CTA */}
           <div
@@ -418,6 +452,38 @@ export default function MondayImplementationConsultantsContent({
             >
               {heroSecondaryCtaLabel}
             </Link>
+          </div>
+
+          {/* Hero dashboard image */}
+          <div style={{ marginTop: 40 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/group-hero.avif"
+              alt="monday.com dashboards"
+              width={1042}
+              height={312}
+              className="rounded-[24px] object-cover"
+              style={{ width: 1042, height: 312 }}
+            />
+          </div>
+
+          {/* Product images row */}
+          <div className="flex items-center justify-center" style={{ gap: 24, marginTop: 40 }}>
+            {[
+              { src: "/images/product-crm.avif", alt: "monday.com CRM" },
+              { src: "/images/product-dev.avif", alt: "monday.com Dev" },
+              { src: "/images/product-svc.avif", alt: "monday.com Service" },
+              { src: "/images/product-wm.avif", alt: "monday.com Work Management" },
+            ].map((img) => (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                key={img.src}
+                src={img.src}
+                alt={img.alt}
+                className="h-auto object-contain"
+                style={{ width: 220 }}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -458,6 +524,24 @@ export default function MondayImplementationConsultantsContent({
       </section>
 
       {/* ============================================================ */}
+      {/* SECTION 2b — Video Embed                                     */}
+      {/* ============================================================ */}
+      <section className="bg-white" style={{ paddingBottom: 80 }}>
+        <div className="mx-auto" style={{ maxWidth: 1042 }}>
+          <div className="rounded-[24px] overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
+            <iframe
+              src="https://www.youtube.com/embed/7vtrtlfC1Zg"
+              title="monday CRM Success Story - Star Aviation | Powered by Fruition"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+              style={{ border: 0 }}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
       {/* SECTION 3 — Teams Transformed banner                         */}
       {/* ============================================================ */}
       <section
@@ -494,21 +578,14 @@ export default function MondayImplementationConsultantsContent({
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 4 — Comparison tabs                                  */}
+      {/* SECTION 4 — Comparison tabs (DIY / Benefits / Our Approach)  */}
       {/* ============================================================ */}
       <section style={{ backgroundColor: "#f0ecfe", paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto flex flex-col items-center px-4" style={{ maxWidth: 1200 }}>
-          <h2
-            className="text-center font-bold"
-            style={{ fontSize: 40, lineHeight: "56px", color: "black", maxWidth: 924 }}
-          >
-            {comparisonHeading}
-          </h2>
-
           {/* Tab buttons */}
-          {comparisonTabs.length > 0 && (
-            <div className="flex items-center flex-wrap justify-center" style={{ gap: 12, marginTop: 40 }}>
-              {comparisonTabs.map((tab, idx) => {
+          {resolvedComparisonTabs.length > 0 && (
+            <div className="flex items-center flex-wrap justify-center" style={{ gap: 12 }}>
+              {resolvedComparisonTabs.map((tab, idx) => {
                 const isActive = idx === activeComparisonTab
                 return (
                   <button
@@ -540,6 +617,22 @@ export default function MondayImplementationConsultantsContent({
                 )
               })}
             </div>
+          )}
+
+          {/* Per-tab heading */}
+          {currentTabHeading && (
+            <h2
+              className="text-center font-bold"
+              style={{
+                fontSize: 40,
+                lineHeight: "56px",
+                color: "black",
+                maxWidth: 1000,
+                marginTop: 40,
+              }}
+            >
+              {currentTabHeading}
+            </h2>
           )}
 
           {/* Tab content card */}
@@ -630,72 +723,9 @@ export default function MondayImplementationConsultantsContent({
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 5 — Methodology (5 steps)                            */}
+      {/* SECTION 5 — Calendly                                         */}
       {/* ============================================================ */}
-      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
-          <h2
-            className="text-center font-medium"
-            style={{ fontSize: 40, lineHeight: "56px", color: "black", maxWidth: 1000, margin: "0 auto" }}
-          >
-            {methodologyHeading}
-          </h2>
-
-          <div
-            className="grid grid-cols-1 md:grid-cols-2"
-            style={{ gap: 28, marginTop: 48 }}
-          >
-            {methodologySteps.map((step, i) => (
-              <div
-                key={step._key || `${step.number}-${i}`}
-                style={{
-                  backgroundColor: "#f0ecfe",
-                  border: "1px solid #e8e6e6",
-                  borderRadius: 24,
-                  padding: 32,
-                }}
-              >
-                <p
-                  className="font-extralight"
-                  style={{
-                    fontSize: 56,
-                    color: "#8015e8",
-                    lineHeight: 1,
-                  }}
-                >
-                  {step.number}
-                </p>
-                <h3
-                  className="font-bold"
-                  style={{
-                    fontSize: 20,
-                    color: "#2b074d",
-                    lineHeight: "28px",
-                    marginTop: 16,
-                  }}
-                >
-                  {step.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: 15,
-                    color: "#2b074d",
-                    lineHeight: "22.5px",
-                    marginTop: 12,
-                  }}
-                >
-                  {step.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================ */}
-      {/* SECTION 6 — Calendly                                         */}
-      {/* ============================================================ */}
-      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+      <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto flex flex-col items-center px-4" style={{ maxWidth: 1200 }}>
           <h2
             className="text-center"
@@ -965,253 +995,32 @@ export default function MondayImplementationConsultantsContent({
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 9 — Testimonials                                     */}
+      {/* SECTION 9 — Testimonials (shared carousel component)         */}
       {/* ============================================================ */}
-      <section className="bg-white py-[80px] px-4">
-        <div className="mx-auto max-w-[1343px]">
-          <div className="flex items-start justify-between gap-[48px] mb-[58px] flex-wrap w-full">
-            <h2 className="text-[48px] text-black leading-[67.2px] flex-1 min-w-[300px]">
-              {testimonialsHeading}
-            </h2>
-            <Link
-              href={testimonialsCtaUrl}
-              className="shrink-0 flex items-center justify-center h-[53px] w-[330px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
-            >
-              {testimonialsCtaLabel}
-            </Link>
-          </div>
-          <div className="flex flex-wrap gap-x-[16px] gap-y-[18px]">
-            {/* Stat card */}
-            <div className="relative w-full max-w-[437px] bg-[#10003a] rounded-[24px] shadow-[0px_1px_17px_0px_rgba(0,0,0,0.2)] flex flex-col px-[38px]">
-              <div className="pt-[23px] pb-[30px]">
-                <p className="font-semibold text-[40px] text-[#ba83f0] leading-[60px]">
-                  {statCardValue}
-                </p>
-                <p
-                  className="font-light text-[24px] text-white leading-[36px]"
-                  style={{ whiteSpace: "pre-line" }}
-                >
-                  {statCardSubtitle}
-                </p>
-              </div>
-              <div className="pb-[30px]">
-                <Link
-                  href={statCardCtaUrl}
-                  className="inline-flex items-center justify-center rounded-[100px] border border-white/40 px-6 py-2.5 text-sm font-semibold text-white hover:bg-white/10 transition"
-                >
-                  {statCardCtaLabel}
-                </Link>
-              </div>
-            </div>
-            {caseStudies.map((t, i) => {
-              const name = t.clientName ?? ""
-              const role =
-                t.clientRole && t.clientCompany
-                  ? `${t.clientRole}, ${t.clientCompany}`
-                  : t.clientRole || t.clientCompany || ""
-              const logoSrc = imageUrl(t.logo)
-              return (
-                <div
-                  key={t._id || `${name}-${i}`}
-                  className="relative flex flex-col bg-white rounded-[24px] border border-[#e8e6e6] w-full max-w-[437px] min-h-[300px]"
-                >
-                  <div className="flex items-start justify-between px-[38px] pt-[29px] pb-[18px]">
-                    <div>
-                      <p className="font-semibold text-[20px] text-[#2b074d] leading-[30px]">
-                        {name}
-                      </p>
-                      <p className="font-light text-[14px] text-[#595959] leading-[21px]">
-                        {role}
-                      </p>
-                    </div>
-                    {logoSrc ? (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
-                        src={logoSrc}
-                        alt={`${name} logo`}
-                        className="w-[57px] h-[53px] rounded-full object-contain shrink-0 ml-4"
-                      />
-                    ) : (
-                      <div className="w-[57px] h-[53px] rounded-full bg-[#e8e6e6] shrink-0 ml-4" />
-                    )}
-                  </div>
-                  <div className="px-[38px] flex-1">
-                    <p className="text-[15px] text-black leading-[22.5px]">{t.quote}</p>
-                  </div>
-                  <div className="flex gap-[2px] px-[38px] pb-[35px] pt-4">
-                    {[...Array(5)].map((_, si) => (
-                      <svg
-                        key={si}
-                        className="w-[23px] h-[21px]"
-                        viewBox="0 0 23 21"
-                        fill="#8015E8"
-                      >
-                        <path d="M11.5 0L14.09 7.36H22.06L15.49 11.92L18.08 19.28L11.5 14.72L4.92 19.28L7.51 11.92L0.94 7.36H8.91L11.5 0Z" />
-                      </svg>
-                    ))}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
+      <TestimonialsGrid
+        heading={testimonialsHeading}
+        ctaLabel={testimonialsCtaLabel}
+        ctaUrl={testimonialsCtaUrl}
+        statCardValue={statCardValue}
+        statCardSubtitle={statCardSubtitle}
+        statCardCtaLabel={statCardCtaLabel}
+        statCardCtaUrl={statCardCtaUrl}
+        caseStudies={caseStudies as import("@/components/sections/types").CaseStudy[]}
+      />
+
+      {/* Discover CTA removed from this page */}
 
       {/* ============================================================ */}
-      {/* SECTION 10 — Discover CTA                                    */}
+      {/* SECTION 11 — Join 500+ stats (shared StatsBlockView)         */}
       {/* ============================================================ */}
-      <section style={{ backgroundColor: "#ece6fc", paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto flex flex-col items-center px-4">
-          {discoverBadgeSrc && (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={discoverBadgeSrc}
-              alt="Certifications"
-              width={325}
-              height={73}
-              className="h-[73px] w-[325px] object-contain"
-            />
-          )}
-          <h2
-            className="text-center font-medium"
-            style={{
-              fontFamily: "var(--font-poppins), Poppins, sans-serif",
-              fontSize: 35,
-              color: "black",
-              maxWidth: 694,
-              marginTop: 28,
-            }}
-          >
-            {discoverHeading}
-          </h2>
-          <div
-            className="flex items-center justify-center flex-wrap"
-            style={{ gap: 24, marginTop: 32, maxWidth: 694 }}
-          >
-            <Link
-              href={discoverPrimaryCtaUrl}
-              className="flex items-center justify-center font-bold"
-              style={{
-                width: 320,
-                height: 63,
-                borderRadius: 100,
-                backgroundColor: "white",
-                color: "#8015e8",
-                fontSize: 16,
-              }}
-            >
-              {discoverPrimaryCtaLabel}
-            </Link>
-            <Link
-              href={discoverSecondaryCtaUrl}
-              className="flex items-center justify-center font-bold text-white"
-              style={{
-                width: 320,
-                height: 63,
-                borderRadius: 100,
-                background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                fontSize: 16,
-              }}
-            >
-              {discoverSecondaryCtaLabel}
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================ */}
-      {/* SECTION 11 — Join 500+ stats                                 */}
-      {/* ============================================================ */}
-      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
-          <h2
-            className="text-center font-bold"
-            style={{ fontSize: 40, lineHeight: "52px", color: "black", maxWidth: 1000, margin: "0 auto" }}
-          >
-            <span className="text-black">{joinPart1}</span>
-            <span style={{ color: "#8015e8" }}>{joinAccent}</span>
-            <span className="text-black">{joinPart2}</span>
-          </h2>
-          <p
-            className="text-center"
-            style={{ fontSize: 18, color: "#595959", marginTop: 16 }}
-          >
-            {joinSubheading}
-          </p>
-
-          {/* Stats row */}
-          {stats.length > 0 && (
-            <div
-              className="grid grid-cols-2 md:grid-cols-4"
-              style={{ gap: 28, marginTop: 48 }}
-            >
-              {stats.map((s, i) => (
-                <div
-                  key={s._key || i}
-                  className="flex flex-col items-center text-center"
-                  style={{
-                    backgroundColor: "#f0ecfe",
-                    borderRadius: 24,
-                    padding: 32,
-                  }}
-                >
-                  <p
-                    className="font-bold"
-                    style={{ fontSize: 48, color: "#8015e8", lineHeight: 1 }}
-                  >
-                    {s.value}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 16,
-                      color: "#2b074d",
-                      marginTop: 12,
-                      lineHeight: "22px",
-                    }}
-                  >
-                    {s.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Footnote + forrester badge */}
-          <div
-            className="flex items-center justify-center"
-            style={{ gap: 12, marginTop: 32 }}
-          >
-            <p style={{ fontSize: 14, color: "#595959" }}>{joinFootnote}</p>
-            {joinBadgeSrc && (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={joinBadgeSrc}
-                alt="Forrester"
-                height={20}
-                className="h-[20px] w-auto object-contain"
-              />
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================ */}
-      {/* SECTION 12 — Security badge                                  */}
-      {/* ============================================================ */}
-      <section className="bg-white" style={{ paddingBottom: 80 }}>
-        <div className="mx-auto max-w-[976px] px-4">
-          {securityBadgeSrc && (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={securityBadgeSrc}
-              alt="Security certifications"
-              width={976}
-              height={94}
-              className="w-full h-auto"
-            />
-          )}
-        </div>
-      </section>
+      <StatsBlockView
+        heading={`${joinPart1}${joinAccent}${joinPart2}`}
+        subheading={joinSubheading}
+        stats={stats.map((s) => ({ _key: s._key, value: s.value, label: s.label }))}
+        footnote={joinFootnote}
+        siteSettings={siteSettings || undefined}
+        showMondayPartnersBadge={false}
+      />
     </div>
   )
 }

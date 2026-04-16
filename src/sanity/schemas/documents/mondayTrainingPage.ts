@@ -26,6 +26,10 @@ export default defineType({
     defineField({ name: 'logoCloudHeadingPart1', title: 'Logo Cloud Heading (prefix)', type: 'string' }),
     defineField({ name: 'logoCloudHeadingAccent', title: 'Logo Cloud Heading (accent)', type: 'string' }),
 
+    // Video
+    defineField({ name: 'videoEmbedUrl', title: 'Video Embed URL', type: 'url' }),
+    defineField({ name: 'videoTitle', title: 'Video Title', type: 'string' }),
+
     // Training section intro
     defineField({ name: 'trainingIntroHeading', title: 'Training Intro Heading', type: 'string' }),
     defineField({ name: 'trainingIntroSubheading', title: 'Training Intro Subheading', type: 'text' }),

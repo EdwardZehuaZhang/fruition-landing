@@ -10,7 +10,7 @@ export default function CalendlySection({
   calendlyUrl = "https://calendly.com/global-calendar-fruitionservices",
 }: CalendlySectionProps) {
   return (
-    <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1200 }}>
         <h2 className="text-center" style={{ fontSize: 35, fontWeight: 500, color: "black", maxWidth: 900 }}>
           {heading}

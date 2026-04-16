@@ -15,6 +15,7 @@ export interface CaseStudy {
   clientCompany?: string
   quote?: string
   logo?: SanityImageRef
+  profilePhoto?: SanityImageRef
   linkedinUrl?: string
 }
 
@@ -36,12 +37,18 @@ export interface StatItem {
   label?: string
 }
 
+export interface Bullet {
+  _key?: string
+  emoji?: string
+  text?: string
+}
+
 export interface ComparisonTabItem {
   _key?: string
   number?: string
   title?: string
   description?: string
-  bullets?: { _key?: string; emoji?: string; text?: string }[]
+  bullets?: Bullet[]
 }
 
 export interface ComparisonTab {
@@ -49,6 +56,23 @@ export interface ComparisonTab {
   label?: string
   items?: ComparisonTabItem[]
 }
+
+export interface CapabilityCard {
+  _key?: string
+  emoji?: string
+  title?: string
+  description?: string
+  bullets?: Bullet[]
+}
+
+export interface FeatureNumberItem {
+  _key?: string
+  number?: string
+  title?: string
+  description?: string
+}
+
+export type SectionTheme = "light" | "dark"
 
 export interface MethodologyStep {
   _key?: string
