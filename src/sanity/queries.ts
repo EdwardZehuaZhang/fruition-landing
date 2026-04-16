@@ -13,7 +13,7 @@ export async function getBlogPosts(limit = 12, offset = 0) {
       publishedAt,
       author,
       excerpt,
-      coverImage,
+      "coverImage": coalesce(coverImage, mainImage, featuredImage, heroImage, body[_type == "image"][0]),
       "charCount": length(pt::text(body)),
       categories[]->{ _id, title, "slug": slug.current }
     }`,
@@ -30,7 +30,7 @@ export async function getBlogPostBySlug(slug: string) {
       publishedAt,
       author,
       excerpt,
-      coverImage,
+      "coverImage": coalesce(coverImage, mainImage, featuredImage, heroImage, body[_type == "image"][0]),
       body,
       seoTitle,
       seoDescription,
@@ -48,7 +48,7 @@ export async function getRelatedBlogPosts(excludeSlug: string, limit = 2) {
       title,
       "slug": slug.current,
       publishedAt,
-      coverImage
+      "coverImage": coalesce(coverImage, mainImage, featuredImage, heroImage, body[_type == "image"][0])
     }`,
     { excludeSlug, limit }
   )

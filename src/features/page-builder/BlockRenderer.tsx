@@ -91,6 +91,19 @@ export default function BlockRenderer({
     const heading = (b.heading as string) ?? ''
     if (heading.includes('Teams Transformed') || heading.includes('Efficiency Gains')) return false
     if (b._type === 'ctaBlock' && (b.ctaLabel as string)?.includes('Book a Consultation') && (b.secondaryCtaLabel as string)?.includes('Get Started with monday')) return false
+
+    // Some imported homepage content includes a raw Wix navigation dump under Services.
+    // Hide that corrupted block until the CMS content is cleaned.
+    if (b._type === 'richTextBlock' && heading.trim().toLowerCase() === 'services') {
+      const content = (b.content as Array<{ children?: Array<{ text?: string }> }> | undefined) ?? []
+      const text = content
+        .map((block) => (block.children ?? []).map((child) => child.text ?? '').join(' '))
+        .join(' ')
+        .toLowerCase()
+
+      if (text.includes('skip to main content') || text.includes('static.wixstatic.com')) return false
+    }
+
     return true
   })
 

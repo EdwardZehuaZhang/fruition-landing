@@ -109,10 +109,8 @@ export default function FeatureListBlockView({ _key, heading, subheading, varian
           </div>
 
           {/* Partner badge */}
-          <div className="h-[53px] w-[176px] bg-white rounded-lg flex items-center justify-center shadow-sm">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={platinumBadgeSrc} alt="monday.com Platinum Partner" width={160} height={45} className="h-10 w-auto" />
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={platinumBadgeSrc} alt="monday.com Platinum Partner" width={160} height={45} className="h-10 w-auto" />
 
           {/* Industry cards grid */}
           <div className="flex flex-wrap justify-center gap-0 w-full max-w-[1020px]">

@@ -133,7 +133,7 @@ async function main() {
       profilePhoto = await uploadImage(filePath)
     }
 
-    const doc: Record<string, unknown> = {
+    const doc: { _id: string; _type: string; [key: string]: unknown } = {
       _id: `casestudy-${i}`,
       _type: 'caseStudy',
       clientName: t.clientName,

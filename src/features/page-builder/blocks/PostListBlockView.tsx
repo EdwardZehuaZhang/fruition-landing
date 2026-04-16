@@ -52,6 +52,9 @@ export default async function PostListBlockView({ heading, subheading, limit = 6
                   className="h-[173px] w-full object-cover"
                 />
               )}
+              {!post.coverImage?.asset && (
+                <div className="h-[173px] w-full bg-gradient-to-br from-[#8015e8] to-[#ba83f0]" />
+              )}
               <div className="flex flex-col items-center px-[6px] pt-[28px] pb-[25px] h-[172px]">
                 {post.categories && post.categories.length > 0 && (
                   <span className="mb-3 inline-block rounded-sm bg-[#604c97] px-2 py-0.5 text-[14px] font-extralight text-white">

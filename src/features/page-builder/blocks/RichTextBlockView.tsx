@@ -23,6 +23,7 @@ const SECTION_MAP: Record<string, {
   eyebrow: string
   subheadingJSX: React.ReactNode
   fallbackImage: string | null
+  fallbackVideo: string | null
   figmaImagePosition: 'left' | 'right'
 }> = {
   'setting up': {
@@ -36,7 +37,8 @@ const SECTION_MAP: Record<string, {
         <span>{'\n'}your monday workflows.</span>
       </p>
     ),
-    fallbackImage: null, // Gray placeholder in Figma
+    fallbackImage: null,
+    fallbackVideo: '/videos/implementation-optimisation.mp4',
     figmaImagePosition: 'right',
   },
   'training': {
@@ -49,6 +51,7 @@ const SECTION_MAP: Record<string, {
       </p>
     ),
     fallbackImage: '/images/service-monday-users.png',
+    fallbackVideo: null,
     figmaImagePosition: 'left',
   },
   'automation': {
@@ -61,8 +64,28 @@ const SECTION_MAP: Record<string, {
       </p>
     ),
     fallbackImage: '/images/service-gmail-automation.png',
+    fallbackVideo: null,
     figmaImagePosition: 'right',
   },
+}
+
+function isCorruptedWixDump(content?: PortableTextBlock[]): boolean {
+  if (!content?.length) return false
+
+  const flatText = content
+    .map((block) => (block.children ?? []).map((child) => child.text ?? '').join(' '))
+    .join(' ')
+    .toLowerCase()
+
+  const hasMarkers = [
+    'skip to main content',
+    'what we offer',
+    'static.wixstatic.com',
+    'implementation packages',
+    'monday.com training',
+  ].filter((marker) => flatText.includes(marker)).length
+
+  return hasMarkers >= 3
 }
 
 function detectSection(heading?: string): typeof SECTION_MAP[string] | null {
@@ -75,7 +98,6 @@ function detectSection(heading?: string): typeof SECTION_MAP[string] | null {
 }
 
 export default function RichTextBlockView({
-  _key,
   heading,
   subheading,
   content,
@@ -90,6 +112,8 @@ export default function RichTextBlockView({
   const imageOnLeft = section ? section.figmaImagePosition === 'left' : imagePosition === 'left'
   // Use Figma fallback image if Sanity doesn't have one
   const fallbackSrc = section?.fallbackImage ?? null
+  const fallbackVideoSrc = section?.fallbackVideo ?? null
+  const hideCorruptedBodyContent = isCorruptedWixDump(content)
 
   const textContent = (
     <div className="flex flex-col gap-[23px] items-start w-full max-w-[490px]">
@@ -108,7 +132,7 @@ export default function RichTextBlockView({
       )}
 
       {/* Body content from Sanity */}
-      {content && (
+      {content && !hideCorruptedBodyContent && (
         <div className="text-[16px] text-black leading-[22.4px]">
           <PortableText value={content} components={portableTextComponents} />
         </div>
@@ -136,6 +160,15 @@ export default function RichTextBlockView({
           alt={heading ?? ''}
           className="w-full h-auto"
           width={490}
+        />
+      ) : fallbackVideoSrc ? (
+        <video
+          src={fallbackVideoSrc}
+          className="w-full h-[413px] object-cover bg-black"
+          autoPlay
+          muted
+          loop
+          playsInline
         />
       ) : fallbackSrc ? (
         // eslint-disable-next-line @next/next/no-img-element

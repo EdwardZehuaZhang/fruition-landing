@@ -164,25 +164,23 @@ export default function HeroBlockView({
           </div>
         </div>
 
-        {/* Right column — image or placeholder */}
-        <div className="flex-1 min-w-0 hidden md:block">
-          {heroVideoSrc ? (
-            <video
-              className="w-full h-[550px] object-cover rounded-lg bg-black"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              poster={image?.asset ? urlFor(image).width(600).url() : undefined}
-              aria-label={heading ?? 'Hero video'}
-            >
-              <source src={heroVideoSrc} type="video/mp4" />
-            </video>
-          ) : (
-            <div className="w-full h-[550px] bg-[#d9d9d9]" />
-          )}
-        </div>
+        {/* Hero media */}
+        {heroVideoSrc ? (
+          <video
+            className="hidden md:block flex-1 min-w-0 w-full h-[550px] object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster={image?.asset ? urlFor(image).width(600).url() : undefined}
+            aria-label={heading ?? 'Hero video'}
+          >
+            <source src={heroVideoSrc} type="video/mp4" />
+          </video>
+        ) : (
+          <div className="hidden md:block flex-1 min-w-0 w-full h-[550px] bg-[#d9d9d9]" />
+        )}
       </div>
     </section>
   )
