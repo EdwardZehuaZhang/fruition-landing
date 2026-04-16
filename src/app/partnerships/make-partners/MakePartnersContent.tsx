@@ -14,17 +14,70 @@ import {
 import type { CaseStudy, SiteSettingsData } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
 
+/* ------------------------------------------------------------------ */
+/*  Types                                                               */
+/* ------------------------------------------------------------------ */
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SanityImageRef = any
+
+interface ShowcaseCard {
+  heading?: string
+  body?: string
+  imageRight?: boolean
+  mediaType?: "image" | "video"
+  image?: SanityImageRef
+  videoUrl?: string
+}
+
+interface MakePartnersPageData {
+  seoTitle?: string
+  seoDescription?: string
+  heroHeadingPart1?: string
+  heroHeadingAccent?: string
+  heroSubheading?: string
+  heroPrimaryCtaLabel?: string
+  heroPrimaryCtaUrl?: string
+  heroImage?: SanityImageRef
+  logoCloudHeadingPart1?: string
+  logoCloudHeadingAccent?: string
+  comparisonHeading?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  comparisonTabs?: any[]
+  showcaseHeading?: string
+  showcaseSubheading?: string
+  showcaseCards?: ShowcaseCard[]
+  calendlyHeading?: string
+  calendlySubheading?: string
+  testimonialsHeading?: string
+  testimonialsCtaLabel?: string
+  testimonialsCtaUrl?: string
+  statCardValue?: string
+  statCardSubtitle?: string
+  statCardCtaLabel?: string
+  statCardCtaUrl?: string
+  joinHeadingPart1?: string
+  joinHeadingAccent?: string
+  joinHeadingPart2?: string
+  joinStats?: Array<{ _key?: string; value?: string; label?: string }>
+  joinCtaLabel?: string
+  joinCtaUrl?: string
+  testimonialBannerHeadingPart1?: string
+  testimonialBannerHeadingAccent?: string
+  testimonialBannerHeadingPart2?: string
+}
+
 interface Props {
   siteSettings?: SiteSettingsData | null
   caseStudies?: CaseStudy[]
+  pageData?: MakePartnersPageData | null
 }
 
-const HERO_IMAGE = "/images/make-gold-partner-badge.png"
-const SHOWCASE_VIDEO = "/images/make-fruition-services.mp4"
-const SHOWCASE_IMAGE_OPS = "/images/make-operations-flow.avif"
-const SHOWCASE_IMAGE_FIN = "/images/make-finance-flow.avif"
+/* ------------------------------------------------------------------ */
+/*  Fallback data (used only when Sanity fields are empty)             */
+/* ------------------------------------------------------------------ */
 
-const FEATURE_TABS = [
+const FALLBACK_FEATURE_TABS = [
   {
     _key: "tab-features",
     label: "make.com Features",
@@ -115,30 +168,6 @@ const FEATURE_TABS = [
           { _key: "w3-e", emoji: "📈", text: "Strategic consulting to maximize your automation ROI" },
         ],
       },
-      {
-        _key: "w4",
-        number: "04",
-        title: "Drive Innovation and transform your operational capabilities:",
-        bullets: [
-          { _key: "w4-a", emoji: "💡", text: "Create custom automation solutions that solve unique challenges" },
-          { _key: "w4-b", emoji: "🔧", text: "Implement advanced integrations for enhanced functionality" },
-          { _key: "w4-c", emoji: "🧠", text: "Deploy intelligent workflows that adapt to changing needs" },
-          { _key: "w4-d", emoji: "⚙️", text: "Optimise business processes for maximum efficiency" },
-          { _key: "w4-e", emoji: "🚀", text: "Future-proof your operations with cutting-edge technology" },
-        ],
-      },
-      {
-        _key: "w5",
-        number: "05",
-        title: "Partner-Led Implementation Advantages that ensure your success:",
-        bullets: [
-          { _key: "w5-a", emoji: "🎯", text: "Expert scenario development from certified make specialists" },
-          { _key: "w5-b", emoji: "📋", text: "Best practices implementation based on proven methodologies" },
-          { _key: "w5-c", emoji: "⚡", text: "Performance optimisation for maximum speed and reliability" },
-          { _key: "w5-d", emoji: "🛟", text: "Comprehensive support throughout implementation and beyond" },
-          { _key: "w5-e", emoji: "🔮", text: "Future-proof solutions designed to evolve with your business" },
-        ],
-      },
     ],
   },
   {
@@ -178,40 +207,47 @@ const FEATURE_TABS = [
   },
 ]
 
-const SHOWCASE_CARDS: Array<{
-  heading: string
-  body: string
-  media: { type: "video" | "image"; src: string }
-  imageRight: boolean
-}> = [
+const FALLBACK_SHOWCASE_CARDS = [
   {
     heading: "Keep operations running smoothly",
     body: "Run operations smoothly, even across siloed systems, by connecting your teams and the key project management and data synchronisation tools that your business relies on.",
-    media: { type: "video", src: SHOWCASE_VIDEO },
     imageRight: true,
+    mediaType: "video" as const,
+    videoUrl: "/images/make-fruition-services.mp4",
   },
   {
     heading: "Solve finance complexities",
     body: "Integrate multiple apps and systems into one platform and automate time-consuming processes such as quote-to-cash and procure-to-pay.",
-    media: { type: "image", src: SHOWCASE_IMAGE_OPS },
     imageRight: false,
+    mediaType: "image" as const,
+    imageSrc: "/images/make-operations-flow.avif",
   },
   {
     heading: "Scale with intelligent workflows",
     body: "Design intelligent, multi-step workflows that adapt to your business — from sales handoffs to customer onboarding, with real-time data flowing across every tool you use.",
-    media: { type: "image", src: SHOWCASE_IMAGE_FIN },
     imageRight: true,
+    mediaType: "image" as const,
+    imageSrc: "/images/make-finance-flow.avif",
   },
 ]
 
-function safeBadgeSrc(ref: any): string | null {
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                             */
+/* ------------------------------------------------------------------ */
+
+function safeSrc(ref: SanityImageRef): string | null {
   if (!ref?.asset?._ref) return null
   try { return urlFor(ref).url() } catch { return null }
 }
 
+/* ------------------------------------------------------------------ */
+/*  Component                                                           */
+/* ------------------------------------------------------------------ */
+
 export default function MakePartnersContent({
   siteSettings,
   caseStudies = [],
+  pageData,
 }: Props) {
   const calendlyUrl =
     siteSettings?.calendlyLink ||
@@ -226,6 +262,111 @@ export default function MakePartnersContent({
         c.clientName?.toLowerCase().includes("louis stenmark"),
     ) || caseStudies[0]
 
+  // Hero
+  const heroHeadingPart1 = pageData?.heroHeadingPart1 ?? "Bring Your Workflows to Fruition with "
+  const heroHeadingAccent = pageData?.heroHeadingAccent ?? "Make.com Automation"
+  const heroSubheading =
+    pageData?.heroSubheading ??
+    "Transform your business operations with Fruition\u2019s certified Make Gold Partner expertise \u2014 enterprise-grade automation that connects your tools, scales with your growth, and unlocks new operational potential."
+  const heroPrimaryCtaLabel = pageData?.heroPrimaryCtaLabel ?? "\uD83D\uDE80 Book a Consultation"
+  const heroPrimaryCtaUrl = pageData?.heroPrimaryCtaUrl || calendlyUrl
+  const heroImageSrc = safeSrc(pageData?.heroImage) ?? "/images/make-gold-partner-badge.png"
+
+  // Logo cloud
+  const logoCloudPart1 = pageData?.logoCloudHeadingPart1 ?? "Clients who have used our "
+  const logoCloudAccent = pageData?.logoCloudHeadingAccent ?? "Make.com automation services"
+
+  // Feature tabs
+  const comparisonHeading =
+    pageData?.comparisonHeading ?? "Transform Your Business with Make Automations"
+  const featureTabs =
+    pageData?.comparisonTabs && pageData.comparisonTabs.length > 0
+      ? pageData.comparisonTabs
+      : FALLBACK_FEATURE_TABS
+
+  // Showcase
+  const showcaseHeading = pageData?.showcaseHeading ?? "Automation you can see, flex, and scale"
+  const showcaseSubheading =
+    pageData?.showcaseSubheading ??
+    "Realise your business\u2019s full potential with Make\u2019s intuitive no-code development platform."
+
+  // Resolve showcase cards: prefer Sanity, fall back to static
+  type ResolvedCard = {
+    heading: string
+    body: string
+    imageRight: boolean
+    mediaType: "video" | "image"
+    mediaSrc: string
+  }
+
+  let resolvedShowcaseCards: ResolvedCard[]
+  if (pageData?.showcaseCards && pageData.showcaseCards.length > 0) {
+    resolvedShowcaseCards = pageData.showcaseCards
+      .map((card): ResolvedCard | null => {
+        const heading = card.heading ?? ""
+        const body = card.body ?? ""
+        const imageRight = card.imageRight ?? true
+        const mediaType = card.mediaType ?? "image"
+        let mediaSrc = ""
+        if (mediaType === "video") {
+          mediaSrc = card.videoUrl ?? ""
+        } else {
+          mediaSrc = safeSrc(card.image) ?? ""
+        }
+        if (!mediaSrc) return null
+        return { heading, body, imageRight, mediaType, mediaSrc }
+      })
+      .filter((c): c is ResolvedCard => c !== null)
+  } else {
+    resolvedShowcaseCards = FALLBACK_SHOWCASE_CARDS.map((card) => ({
+      heading: card.heading,
+      body: card.body,
+      imageRight: card.imageRight,
+      mediaType: card.mediaType,
+      mediaSrc: card.mediaType === "video" ? (card.videoUrl ?? "") : ((card as any).imageSrc ?? ""),
+    }))
+  }
+
+  // Calendly
+  const calendlyHeading =
+    pageData?.calendlyHeading ?? "Book Your Personalised Make Automation Demo"
+  const calendlySubheading =
+    pageData?.calendlySubheading ??
+    "See how our Gold Partner team can map and automate your most time-consuming workflows."
+
+  // Join stats
+  const joinPart1 = pageData?.joinHeadingPart1 ?? "Join "
+  const joinAccent = pageData?.joinHeadingAccent ?? "500+ organisations"
+  const joinPart2 =
+    pageData?.joinHeadingPart2 ??
+    " that have transformed their operations with Make automation expertise"
+  const joinStats =
+    pageData?.joinStats && pageData.joinStats.length > 0
+      ? pageData.joinStats
+      : [
+          { _key: "s1", value: "500+", label: "Successful integrations delivered" },
+          { _key: "s2", value: "1000+", label: "Apps connected across client stacks" },
+          { _key: "s3", value: "Gold", label: "Certified Make.com Partner" },
+        ]
+  const joinCtaLabel = pageData?.joinCtaLabel ?? "\uD83D\uDE80 Book a Time"
+  const joinCtaUrl = pageData?.joinCtaUrl || calendlyUrl
+
+  // Testimonial banner
+  const bannerPart1 = pageData?.testimonialBannerHeadingPart1 ?? "Join "
+  const bannerAccent = pageData?.testimonialBannerHeadingAccent ?? "500+ organisations"
+  const bannerPart2 =
+    pageData?.testimonialBannerHeadingPart2 ??
+    " that have automated their workflows with Fruition\u2019s Make expertise"
+
+  // Testimonials
+  const testimonialsHeading = pageData?.testimonialsHeading
+  const testimonialsCtaLabel = pageData?.testimonialsCtaLabel
+  const testimonialsCtaUrl = pageData?.testimonialsCtaUrl
+  const statCardValue = pageData?.statCardValue
+  const statCardSubtitle = pageData?.statCardSubtitle
+  const statCardCtaLabel = pageData?.statCardCtaLabel
+  const statCardCtaUrl = pageData?.statCardCtaUrl
+
   return (
     <div>
       {/* 1. Hero */}
@@ -237,18 +378,17 @@ export default function MakePartnersContent({
           {partnerBadges.length > 0 && (
             <div className="flex items-center" style={{ gap: 22 }}>
               {partnerBadges.map((badge, i) => {
-                const src = safeBadgeSrc(badge.image)
+                const src = safeSrc(badge.image)
                 if (!src) return null
                 return (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    key={badge._key || `badge-${i}`}
+                    key={(badge as any)._key || `badge-${i}`}
                     src={src}
                     alt={badge.name || "Partner badge"}
                     width={120}
                     height={44}
                     className="h-[44px] w-auto rounded-[5px]"
-                    style={{ boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.5)" }}
                   />
                 )
               })}
@@ -259,8 +399,8 @@ export default function MakePartnersContent({
             className="text-center font-bold"
             style={{ fontSize: 48, lineHeight: "67.2px", marginTop: 42, maxWidth: 924 }}
           >
-            <span className="text-black">Bring Your Workflows to Fruition with </span>
-            <span style={{ color: "#8015e8" }}>Make.com Automation</span>
+            <span className="text-black">{heroHeadingPart1}</span>
+            <span style={{ color: "#8015e8" }}>{heroHeadingAccent}</span>
           </h1>
 
           <p
@@ -274,12 +414,12 @@ export default function MakePartnersContent({
               whiteSpace: "pre-line",
             }}
           >
-            Transform your business operations with Fruition&rsquo;s certified Make Gold Partner expertise — enterprise-grade automation that connects your tools, scales with your growth, and unlocks new operational potential.
+            {heroSubheading}
           </p>
 
           <div className="flex items-center justify-center" style={{ gap: 20, marginTop: 40, width: 680 }}>
             <Link
-              href={calendlyUrl}
+              href={heroPrimaryCtaUrl}
               className="flex items-center justify-center font-bold text-white"
               style={{
                 width: 330,
@@ -289,15 +429,15 @@ export default function MakePartnersContent({
                 fontSize: 16,
               }}
             >
-              {"\uD83D\uDE80 Book a Consultation"}
+              {heroPrimaryCtaLabel}
             </Link>
           </div>
 
-          {/* Hero image: Make.com Gold Partner badge composite */}
+          {/* Hero image */}
           <div style={{ marginTop: 40, width: "100%", maxWidth: 1042 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={HERO_IMAGE}
+              src={heroImageSrc}
               alt="Make.com Gold Partner badge with workflow automation visuals"
               className="w-full h-auto"
             />
@@ -307,15 +447,15 @@ export default function MakePartnersContent({
 
       {/* 2. Logo Cloud */}
       <LogoCloudMarquee
-        headingPart1="Clients who have used our "
-        headingAccent="Make.com automation services"
+        headingPart1={logoCloudPart1}
+        headingAccent={logoCloudAccent}
         logos={siteSettings?.carouselLogos || []}
       />
 
       {/* 3. Three-tab section */}
       <ComparisonTabsSection
-        heading="Transform Your Business with Make Automations"
-        tabs={FEATURE_TABS}
+        heading={comparisonHeading}
+        tabs={featureTabs}
       />
 
       {/* 4. Alternating media + text showcase */}
@@ -323,21 +463,21 @@ export default function MakePartnersContent({
         <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
           <div className="flex flex-col items-center text-center" style={{ marginBottom: 60 }}>
             <h2
-              className="font-medium text-black"
-              style={{ fontSize: 35, lineHeight: "49px", maxWidth: 900 }}
+              className="text-section-h2 text-black"
+              style={{ maxWidth: 900 }}
             >
-              Automation you can see, flex, and scale
+              {showcaseHeading}
             </h2>
             <p
               className="text-black"
               style={{ fontSize: 20, marginTop: 12, maxWidth: 760 }}
             >
-              Realise your business&rsquo;s full potential with Make&rsquo;s intuitive no-code development platform.
+              {showcaseSubheading}
             </p>
           </div>
 
           <div className="flex flex-col" style={{ gap: 60 }}>
-            {SHOWCASE_CARDS.map((card, i) => (
+            {resolvedShowcaseCards.map((card, i) => (
               <div
                 key={`showcase-${i}`}
                 className="flex items-center"
@@ -347,34 +487,20 @@ export default function MakePartnersContent({
                 }}
               >
                 <div style={{ flex: 1 }}>
-                  <h3
-                    style={{
-                      fontSize: 28,
-                      fontWeight: 600,
-                      color: "#2b074d",
-                      lineHeight: "36px",
-                    }}
-                  >
+                  <h3 style={{ fontSize: 28, fontWeight: 600, color: "#2b074d", lineHeight: "36px" }}>
                     {card.heading}
                   </h3>
-                  <p
-                    style={{
-                      fontSize: 16,
-                      lineHeight: "25.6px",
-                      color: "black",
-                      marginTop: 20,
-                    }}
-                  >
+                  <p style={{ fontSize: 16, lineHeight: "25.6px", color: "black", marginTop: 20 }}>
                     {card.body}
                   </p>
                 </div>
                 <div
-                  className="rounded-[24px] overflow-hidden"
+                  className="rounded-card overflow-hidden"
                   style={{ flex: 1, aspectRatio: "16 / 10", background: "#f5f3f7" }}
                 >
-                  {card.media.type === "video" ? (
+                  {card.mediaType === "video" ? (
                     <video
-                      src={card.media.src}
+                      src={card.mediaSrc}
                       autoPlay
                       loop
                       muted
@@ -384,7 +510,7 @@ export default function MakePartnersContent({
                   ) : (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={card.media.src}
+                      src={card.mediaSrc}
                       alt={card.heading}
                       className="w-full h-full object-cover"
                     />
@@ -398,37 +524,42 @@ export default function MakePartnersContent({
 
       {/* 5. Calendly */}
       <CalendlySection
-        heading="Book Your Personalised Make Automation Demo"
-        subheading="See how our Gold Partner team can map and automate your most time-consuming workflows."
+        heading={calendlyHeading}
+        subheading={calendlySubheading}
         calendlyUrl={calendlyUrl}
       />
 
       {/* 6. Testimonials */}
-      <TestimonialsGrid caseStudies={caseStudies} />
+      <TestimonialsGrid
+        caseStudies={caseStudies}
+        heading={testimonialsHeading}
+        ctaLabel={testimonialsCtaLabel}
+        ctaUrl={testimonialsCtaUrl}
+        statCardValue={statCardValue}
+        statCardSubtitle={statCardSubtitle}
+        statCardCtaLabel={statCardCtaLabel}
+        statCardCtaUrl={statCardCtaUrl}
+      />
 
       {/* 7. Discover CTA */}
       <DiscoverCtaSection badge={siteSettings?.badgeCertifications} />
 
       {/* 8. Join Stats */}
       <JoinStatsSection
-        headingPart1="Join "
-        headingAccent="500+ organisations"
-        headingPart2=" that have transformed their operations with Make automation expertise"
-        stats={[
-          { _key: "s1", value: "500+", label: "Successful integrations delivered" },
-          { _key: "s2", value: "1000+", label: "Apps connected across client stacks" },
-          { _key: "s3", value: "Gold", label: "Certified Make.com Partner" },
-        ]}
-        ctaLabel={"\uD83D\uDE80 Book a Time"}
-        ctaUrl={calendlyUrl}
+        headingPart1={joinPart1}
+        headingAccent={joinAccent}
+        headingPart2={joinPart2}
+        stats={joinStats as Array<{ _key?: string; value?: string; label?: string }>}
+        ctaLabel={joinCtaLabel}
+        ctaUrl={joinCtaUrl}
         siteSettings={siteSettings || undefined}
       />
 
       {/* 9. Testimonial CTA Banner */}
       <TestimonialCtaBanner
-        headingPart1="Join "
-        headingAccent="500+ organisations"
-        headingPart2=" that have automated their workflows with Fruition's Make expertise"
+        headingPart1={bannerPart1}
+        headingAccent={bannerAccent}
+        headingPart2={bannerPart2}
         primaryCtaUrl={calendlyUrl}
         secondaryCtaUrl={calendlyUrl}
         testimonial={featuredTestimonial}

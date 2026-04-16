@@ -14,6 +14,7 @@ export async function getBlogPosts(limit = 12, offset = 0) {
       author,
       excerpt,
       coverImage,
+      "charCount": length(pt::text(body)),
       categories[]->{ _id, title, "slug": slug.current }
     }`,
     { offset, end: offset + limit }
@@ -230,7 +231,7 @@ export async function getSiteSettings() {
 
 export async function getTeamMembers() {
   return client.fetch(
-    `*[_type == "teamMember"] | order(order asc) { _id, name, role, photo, bio, linkedinUrl, order }`
+    `*[_type == "teamMember"] | order(order asc) { _id, name, role, emoji, photo, bio, linkedinUrl, regions, order }`
   )
 }
 
@@ -242,7 +243,26 @@ export async function getCaseStudies() {
 
 export async function getFaqItems() {
   return client.fetch(
-    `*[_type == "faqItem"] | order(order asc) { _id, question, answer, order }`
+    `*[_type == "faqItem"] | order(coalesce(categoryOrder, 99) asc, order asc) {
+      _id, question, answer, category, categoryOrder, order, pages
+    }`
+  )
+}
+
+/**
+ * Return every faqItem that should render on the given page, already
+ * sorted so items within each category are in the right order and
+ * categories follow the curated tab order.
+ *
+ * Pass the page key that matches an entry in faqItem.pages (see the
+ * schema's `pages` dropdown). The /faqs page uses `"faqs"`.
+ */
+export async function getFaqItemsForPage(pageKey: string) {
+  return client.fetch(
+    `*[_type == "faqItem" && $pageKey in pages] | order(coalesce(categoryOrder, 99) asc, order asc) {
+      _id, question, answer, category, categoryOrder, order
+    }`,
+    { pageKey }
   )
 }
 
@@ -259,7 +279,9 @@ export async function getPageBySlug(slug: string) {
       faqTabs,
       joinHeadingPart1, joinHeadingAccent, joinHeadingPart2,
       joinSubheading, joinStats, joinFootnote,
-      logoCloudHeadingPart1, logoCloudHeadingAccent
+      logoCloudHeadingPart1, logoCloudHeadingAccent,
+      textContentSections,
+      heroPartnerBadges[]{ name, image, width, height }
     }`,
     { slug }
   )
@@ -302,6 +324,8 @@ export async function getMondayTrainingPage() {
   return client.fetch(`*[_type == "mondayTrainingPage"][0]{
     title, seoTitle, seoDescription,
     heroHeadingPart1, heroHeadingAccent, heroSubheading,
+    heroPartnerBadges[]{ image, alt },
+    heroMondayPartnersImage,
     heroCertificationBadge, heroImage,
     heroPrimaryCtaLabel, heroPrimaryCtaUrl,
     heroSecondaryCtaLabel, heroSecondaryCtaUrl,
@@ -310,6 +334,7 @@ export async function getMondayTrainingPage() {
     trainingIntroHeading, trainingIntroSubheading,
     trainingSectionHeading, trainingTabs,
     empowerEyebrow, empowerHeading, empowerBody,
+    empowerImage, empowerCtaLabel, empowerCtaUrl,
     servicesHeading, trainingServices,
     testimonialsHeading, testimonialsCtaLabel, testimonialsCtaUrl,
     statCardValue, statCardSubtitle, statCardCtaLabel, statCardCtaUrl,
@@ -328,7 +353,12 @@ export async function getMondayImplementationConsultantsPage() {
   return client.fetch(`*[_type == "mondayImplementationConsultantsPage"][0]{
     title, seoTitle, seoDescription,
     heroEyebrow, heroHeadingPart1, heroHeadingAccent, heroHeadingPart2,
-    heroSubheading, heroCertificationBadge, heroImage,
+    heroSubheading,
+    heroPartnerBadges[]{ image, alt },
+    heroMondayPartnersImage,
+    heroProductImages[]{ image, alt },
+    heroCertificationBadge, heroImage,
+    videoEmbedUrl, videoTitle,
     heroPrimaryCtaLabel, heroPrimaryCtaUrl,
     heroSecondaryCtaLabel, heroSecondaryCtaUrl,
     logoCloudHeadingPart1, logoCloudHeadingAccent,
@@ -347,6 +377,25 @@ export async function getMondayImplementationConsultantsPage() {
     joinSectionHeadingPart1, joinSectionHeadingAccent, joinSectionHeadingPart2,
     joinSectionSubheading, joinSectionStats, joinSectionFootnote, joinSectionBadge,
     securityBadge
+  }`)
+}
+
+export async function getMakePartnersPage() {
+  return client.fetch(`*[_type == "makePartnersPage"][0]{
+    title, seoTitle, seoDescription,
+    heroHeadingPart1, heroHeadingAccent, heroSubheading,
+    heroPrimaryCtaLabel, heroPrimaryCtaUrl,
+    heroImage,
+    logoCloudHeadingPart1, logoCloudHeadingAccent,
+    comparisonHeading, comparisonTabs,
+    showcaseHeading, showcaseSubheading,
+    showcaseCards[]{ heading, body, imageRight, mediaType, image, "videoUrl": video.asset->url },
+    calendlyHeading, calendlySubheading,
+    testimonialsHeading, testimonialsCtaLabel, testimonialsCtaUrl,
+    statCardValue, statCardSubtitle, statCardCtaLabel, statCardCtaUrl,
+    joinHeadingPart1, joinHeadingAccent, joinHeadingPart2,
+    joinStats, joinCtaLabel, joinCtaUrl,
+    testimonialBannerHeadingPart1, testimonialBannerHeadingAccent, testimonialBannerHeadingPart2
   }`)
 }
 

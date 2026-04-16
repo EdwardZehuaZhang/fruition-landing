@@ -121,7 +121,7 @@ export default function BlockRenderer({
                   {/* Cards grid: stat card + testimonials in flex-wrap */}
                   <div className="flex flex-wrap gap-x-[16px] gap-y-[18px]">
                     {/* Stat card — same width as testimonial cards */}
-                    <div className="relative w-full max-w-[437px] bg-[#10003a] rounded-[24px] shadow-[0px_1px_17px_0px_rgba(0,0,0,0.2)] flex flex-col px-[38px]">
+                    <div className="relative w-full max-w-[437px] bg-[#10003a] rounded-card shadow-card flex flex-col px-[38px]">
                       <div className="pt-[23px] pb-[30px]">
                         <p className="font-semibold text-[40px] text-[#ba83f0] leading-[60px]">500+</p>
                         <p className="font-light text-[24px] text-white leading-[36px]">

@@ -12,7 +12,7 @@ export default function CalendlySection({
   return (
     <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1200 }}>
-        <h2 className="text-center" style={{ fontSize: 35, fontWeight: 500, color: "black", maxWidth: 900 }}>
+        <h2 className="text-section-h2 text-center text-black" style={{ maxWidth: 900 }}>
           {heading}
         </h2>
         {subheading && (
@@ -20,7 +20,7 @@ export default function CalendlySection({
             {subheading}
           </p>
         )}
-        <div className="w-full" style={{ marginTop: 40, borderRadius: 24, overflow: "hidden", height: 700 }}>
+        <div className="w-full rounded-card overflow-hidden" style={{ marginTop: 40, height: 700 }}>
           <iframe src={calendlyUrl} width="100%" height="100%" frameBorder="0" title="Schedule a consultation" />
         </div>
       </div>

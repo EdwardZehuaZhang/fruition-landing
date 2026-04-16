@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import NumberedStepList from "@/components/common/NumberedStepList"
 import type { ComparisonTab, SectionTheme } from "./types"
 
 interface ComparisonTabsSectionProps {
@@ -38,7 +39,7 @@ export default function ComparisonTabsSection({
         <div className="flex flex-col gap-[12px] items-center text-center w-full">
           {heading && (
             <h2
-              className="text-[35px] font-medium leading-[49px]"
+              className="text-section-h2 text-center"
               style={{ color: headingColor }}
             >
               {heading}
@@ -46,8 +47,8 @@ export default function ComparisonTabsSection({
           )}
           {subheading && (
             <p
-              className="text-[17px] text-center mx-auto"
-              style={{ color: subheadingColor, maxWidth: 820, lineHeight: 1.55 }}
+              className="text-body text-center mx-auto"
+              style={{ color: subheadingColor, maxWidth: 820 }}
             >
               {subheading}
             </p>
@@ -81,83 +82,17 @@ export default function ComparisonTabsSection({
 
           {/* Content card */}
           <div
-            className="w-full rounded-[24px] border py-[12px]"
+            className="w-full rounded-card border py-[12px]"
             style={{
               backgroundColor: cardBg,
               borderColor: isDark ? "transparent" : "#e8e6e6",
             }}
           >
-            {(active?.items ?? []).map((item, i) => (
-              <div
-                key={item._key || `item-${i}`}
-                className="flex gap-[27px] items-start py-[20px] pl-[8px] pr-[30px] max-w-[740px]"
-              >
-                <span className="text-[48px] font-extralight text-[#8015e8] leading-[normal] text-center w-[75px] shrink-0">
-                  {item.number || String(i + 1).padStart(2, "0")}
-                </span>
-                <div className="flex-1 pt-[6px]">
-                  {item.description && item.bullets && item.bullets.length > 0 ? (
-                    <>
-                      <p className="font-bold text-[16px] text-[#2b074d] leading-[22.4px] mb-2">
-                        {item.title}
-                      </p>
-                      <p className="text-[14px] text-black leading-[22.4px] mb-3">
-                        {item.description}
-                      </p>
-                      <div className="flex flex-col gap-2">
-                        {item.bullets.map((b, bi) => (
-                          <div
-                            key={b._key || `bullet-${bi}`}
-                            className="flex items-start gap-2"
-                          >
-                            {b.emoji && (
-                              <span className="text-[16px] shrink-0">
-                                {b.emoji}
-                              </span>
-                            )}
-                            <span className="text-[14px] text-black leading-[22.4px]">
-                              {b.text}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  ) : item.description ? (
-                    <p className="text-[14px] text-black leading-[22.4px]">
-                      <span className="font-bold">{item.title}</span>
-                      <span className="font-normal"> {item.description}</span>
-                    </p>
-                  ) : item.bullets && item.bullets.length > 0 ? (
-                    <>
-                      <p className="font-bold text-[16px] text-[#2b074d] leading-[22.4px] mb-3">
-                        {item.title}
-                      </p>
-                      <div className="flex flex-col gap-2">
-                        {item.bullets.map((b, bi) => (
-                          <div
-                            key={b._key || `bullet-${bi}`}
-                            className="flex items-start gap-2"
-                          >
-                            {b.emoji && (
-                              <span className="text-[18px] shrink-0">
-                                {b.emoji}
-                              </span>
-                            )}
-                            <span className="text-[14px] text-black leading-[22.4px]">
-                              {b.text}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  ) : (
-                    <p className="text-[14px] text-black leading-[22.4px]">
-                      <span className="font-bold">{item.title}</span>
-                    </p>
-                  )}
-                </div>
-              </div>
-            ))}
+            <NumberedStepList
+              items={active?.items ?? []}
+              containerClassName="w-full p-0"
+              stepRowClassName="ui-step-row"
+            />
           </div>
         </div>
       </div>

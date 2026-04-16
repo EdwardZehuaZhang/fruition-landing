@@ -2,7 +2,9 @@ import {
   getPageBySlug,
   getSiteSettings,
   getCaseStudies,
+  getFaqItemsForPage,
 } from "@/sanity/queries"
+import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
 import UniversalPageTemplate from "@/components/UniversalPageTemplate"
 
 export async function generateMetadata() {
@@ -16,16 +18,18 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const [page, siteSettings, caseStudies] = await Promise.all([
+  const [page, siteSettings, caseStudies, centralFaqs] = await Promise.all([
     getPageBySlug("about-us"),
     getSiteSettings(),
     getCaseStudies(),
+    getFaqItemsForPage("about-us"),
   ])
   return (
     <UniversalPageTemplate
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
+      faqTabs={groupFaqsIntoTabs(centralFaqs)}
     />
   )
 }

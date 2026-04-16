@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import NumberedStepList from '@/components/common/NumberedStepList'
 
 const tabs = [
   {
@@ -133,22 +134,16 @@ export default function TeamsTransformedSection() {
           </div>
 
           {/* Content card */}
-          <div className="w-full rounded-[24px] border border-[#e8e6e6] py-[12px]">
-            {active.items.map((item, i) => (
-              <div
-                key={item.title}
-                className="flex gap-[27px] items-start py-[20px] pl-[8px] pr-[30px] max-w-[740px]"
-              >
-                <span className="text-[48px] font-extralight text-[#8015e8] leading-[normal] text-center w-[75px] shrink-0">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <p className="text-[14px] text-black leading-[22.4px] flex-1 pt-[6px]">
-                  <span className="font-bold">{item.title}</span>
-                  <span className="font-normal"> - {item.description}</span>
-                </p>
-              </div>
-            ))}
-          </div>
+          <NumberedStepList
+            items={active.items.map((item, i) => ({
+              _key: item.title,
+              number: String(i + 1).padStart(2, '0'),
+              title: item.title,
+              description: item.description,
+            }))}
+            containerClassName="w-full rounded-card border border-[#e8e6e6] py-2 px-0"
+            stepRowClassName="ui-step-row"
+          />
         </div>
       </div>
     </section>

@@ -338,27 +338,21 @@ export default function ServicePageTemplate({
                 width={badge.width}
                 height={badge.height}
                 className="h-[44px] w-auto rounded-[5px]"
-                style={{ boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.5)" }}
               />
             ))}
           </div>
 
           {/* Heading */}
           <h1
-            className="text-center font-bold"
-            style={{
-              fontSize: 48,
-              lineHeight: "67.2px",
-              marginTop: 42,
-              maxWidth: 924,
-            }}
+            className="text-display text-center"
+            style={{ marginTop: 42, maxWidth: 924 }}
           >
             {renderHeading(heroHeading, heroPurpleAccent)}
           </h1>
 
           {/* Subheading */}
           {heroSubheading && (
-            <p style={{ fontSize: 18, lineHeight: '25.2px', color: 'black', marginTop: 31, textAlign: 'center', maxWidth: 859 }}>
+            <p className="text-body-lead text-center text-black" style={{ marginTop: 31, maxWidth: 859 }}>
               {heroSubheading}
             </p>
           )}
@@ -419,13 +413,13 @@ export default function ServicePageTemplate({
               alt={heroHeading}
               width={1042}
               height={312}
-              className="rounded-[24px] object-cover"
+              className="rounded-card object-cover"
               style={{ width: 1042, height: 312, marginTop: 40 }}
               unoptimized={heroImageUrl.startsWith("http")}
             />
           ) : (
             <div
-              className="rounded-[24px]"
+              className="rounded-card"
               style={{
                 width: 1042,
                 height: 312,
@@ -443,7 +437,7 @@ export default function ServicePageTemplate({
       <section className="bg-white py-[80px] px-4">
         <div className="flex flex-col gap-[35px] items-center w-full max-w-[1348px] mx-auto">
           {/* Heading */}
-          <p className="text-[28px] font-medium leading-[39.2px] text-center">
+          <p className="text-section-h3 text-center">
             <span className="text-black">Clients who have used our </span>
             <span className="text-[#8015e8]">monday.com expert consulting services</span>
           </p>
@@ -497,8 +491,8 @@ export default function ServicePageTemplate({
         <div className="mx-auto max-w-[1343px]">
           {/* Header row: heading + CTA side by side */}
           <div className="flex items-center justify-center gap-[89px] mb-[58px] w-full">
-            <h2 className="text-[48px] text-black leading-[67.2px] w-[919px] shrink-0">
-              What our customers say about us {"\ud83d\ude4c"}
+            <h2 className="text-section-h2 text-black w-[919px] shrink-0">
+              What our customers say about us 🙌
             </h2>
             <Link
               href={calendlyLink}
@@ -511,7 +505,7 @@ export default function ServicePageTemplate({
           {/* Cards grid: stat card + testimonials in flex-wrap */}
           <div className="flex flex-wrap gap-x-[16px] gap-y-[18px]">
             {/* Stat card */}
-            <div className="relative w-full max-w-[437px] bg-[#10003a] rounded-[24px] shadow-[0px_1px_17px_0px_rgba(0,0,0,0.2)] flex flex-col px-[38px]">
+            <div className="relative w-full max-w-[437px] bg-[#10003a] rounded-card shadow-card flex flex-col px-[38px]">
               <div className="pt-[23px] pb-[30px]">
                 <p className="font-semibold text-[40px] text-[#ba83f0] leading-[60px]">
                   500+
@@ -538,7 +532,7 @@ export default function ServicePageTemplate({
             {testimonials.map((t, idx) => (
               <div
                 key={`${t.name}-${idx}`}
-                className="relative flex flex-col bg-white rounded-[24px] border border-[#e8e6e6] w-full max-w-[437px] min-h-[300px]"
+                className="relative flex flex-col bg-white rounded-card border border-[#e8e6e6] w-full max-w-[437px] min-h-[300px] shadow-whisper"
               >
                 {/* Top: Name + Title */}
                 <div className="flex items-start justify-between px-[38px] pt-[29px] pb-[18px]">
@@ -589,25 +583,15 @@ export default function ServicePageTemplate({
           style={{ maxWidth: 1200 }}
         >
           <h2
-            className="text-center"
-            style={{
-              fontSize: 35,
-              fontWeight: 500,
-              color: "black",
-              maxWidth: 800,
-            }}
+            className="text-section-h2 text-center text-black"
+            style={{ maxWidth: 800 }}
           >
             Schedule A 30-Min Consultation With One of Our monday.com
             Consultants
           </h2>
           <div
-            className="w-full"
-            style={{
-              marginTop: 40,
-              borderRadius: 24,
-              overflow: "hidden",
-              height: 700,
-            }}
+            className="w-full rounded-card overflow-hidden"
+            style={{ marginTop: 40, height: 700 }}
           >
             <iframe
               src={calendlyLink}
@@ -626,7 +610,7 @@ export default function ServicePageTemplate({
       <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
         <div className="mx-auto flex flex-col" style={{ width: 959, gap: 24 }}>
           {/* Heading */}
-          <h2 className="font-bold" style={{ fontSize: 32, lineHeight: '38.4px', color: '#8015e8' }}>
+          <h2 className="text-section-h2" style={{ color: "var(--purple-primary)" }}>
             Frequently asked questions
           </h2>
 
@@ -709,14 +693,8 @@ export default function ServicePageTemplate({
 
           {/* Heading */}
           <h2
-            className="text-center font-medium"
-            style={{
-              fontFamily: "var(--font-poppins), Poppins, sans-serif",
-              fontSize: 35,
-              color: "black",
-              width: 694,
-              marginTop: 28,
-            }}
+            className="text-section-h2 text-center text-black"
+            style={{ width: 694, marginTop: 28 }}
           >
             Discover how much monday.com can do for your team.
           </h2>

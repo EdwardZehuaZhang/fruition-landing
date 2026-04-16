@@ -77,7 +77,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
   const partnerBadges: PartnerBadge[] = siteSettings?.navbarPartnerBadges ?? []
 
   const logoUrl = siteSettings?.logo
-    ? urlFor(siteSettings.logo).width(280).height(80).url()
+    ? urlFor(siteSettings.logo).height(80).fit('max').url()
     : '/images/logo-fruition.png'
 
   return (
@@ -85,11 +85,11 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
       <div className="max-w-[1348px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-[85px]">
           {/* Logo */}
-          <Link href="/" className="shrink-0 -ml-10">
+          <Link href="/" className="shrink-0">
             <Image
               src={logoUrl}
               alt="Fruition Services"
-              width={140}
+              width={320}
               height={40}
               className="h-10 w-auto"
               priority
@@ -135,13 +135,12 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
             ))}
 
             {/* Partner badges + phone icon + CTA */}
-            <div className="flex items-center gap-[12px] border-l border-gray-200 pl-4 -mr-10">
+            <div className="flex items-center gap-[12px] border-l border-gray-200 pl-4">
               <div className="flex items-center gap-3">
                 {partnerBadges.map((badge, i) => {
-                  const w = badge.width ?? 80
                   const h = badge.height ?? 32
                   const src = badge.image
-                    ? urlFor(badge.image).width(w * 2).height(h * 2).url()
+                    ? urlFor(badge.image).height(h * 2).fit('max').url()
                     : null
                   if (!src) return null
                   return (
@@ -149,7 +148,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                       key={`${badge.name}-${i}`}
                       src={src}
                       alt={badge.name || 'Partner badge'}
-                      width={w}
+                      width={h * 4}
                       height={h}
                       className="h-7 w-auto"
                       unoptimized
@@ -228,10 +227,9 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
             {/* Partner badges mobile */}
             <div className="flex items-center gap-3 px-2 py-3 border-t border-gray-100">
               {partnerBadges.map((badge, i) => {
-                const w = Math.round((badge.width ?? 80) * 0.75)
                 const h = Math.round((badge.height ?? 32) * 0.75)
                 const src = badge.image
-                  ? urlFor(badge.image).width(w * 2).height(h * 2).url()
+                  ? urlFor(badge.image).height(h * 2).fit('max').url()
                   : null
                 if (!src) return null
                 return (
@@ -239,7 +237,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                     key={`m-${badge.name}-${i}`}
                     src={src}
                     alt={badge.name || 'Partner badge'}
-                    width={w}
+                    width={h * 4}
                     height={h}
                     className="h-6 w-auto"
                     unoptimized

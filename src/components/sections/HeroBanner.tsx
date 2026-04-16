@@ -5,11 +5,13 @@ import { urlFor } from "@/sanity/image"
 import type { SanityImageRef, PartnerBadge } from "./types"
 
 interface HeroBannerProps {
+  eyebrow?: string
   headingPart1?: string
   headingAccent?: string
   headingPart2?: string
   subheading?: string
   heroImage?: SanityImageRef
+  heroVideoSrc?: string
   certificationBadge?: SanityImageRef
   partnerBadges?: PartnerBadge[]
   primaryCtaLabel?: string
@@ -24,11 +26,13 @@ function safeImageUrl(ref: SanityImageRef): string | null {
 }
 
 export default function HeroBanner({
+  eyebrow,
   headingPart1 = "",
   headingAccent = "",
   headingPart2 = "",
   subheading,
   heroImage,
+  heroVideoSrc,
   certificationBadge,
   partnerBadges = [],
   primaryCtaLabel,
@@ -60,26 +64,41 @@ export default function HeroBanner({
                   width={120}
                   height={44}
                   className="h-[44px] w-auto rounded-[5px]"
-                  style={{ boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.5)" }}
                 />
               )
             })}
           </div>
         )}
 
+        {/* Eyebrow */}
+        {eyebrow && (
+          <div
+            style={{
+              marginTop: partnerBadges.length > 0 ? 32 : 0,
+              fontSize: 14,
+              fontWeight: 700,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "var(--purple-primary)",
+            }}
+          >
+            {eyebrow}
+          </div>
+        )}
+
         {/* Heading */}
         <h1
-          className="text-center font-bold"
-          style={{ fontSize: 48, lineHeight: "67.2px", marginTop: 42, maxWidth: 924 }}
+          className="text-display text-center"
+          style={{ marginTop: eyebrow ? 16 : 42, maxWidth: 924 }}
         >
           <span className="text-black">{headingPart1}</span>
-          {headingAccent && <span style={{ color: "#8015e8" }}>{headingAccent}</span>}
+          {headingAccent && <span style={{ color: "var(--purple-primary)" }}>{headingAccent}</span>}
           {headingPart2 && <span className="text-black">{headingPart2}</span>}
         </h1>
 
         {/* Subheading */}
         {subheading && (
-          <p style={{ fontSize: 18, lineHeight: "25.2px", color: "black", marginTop: 31, textAlign: "center", maxWidth: 859, whiteSpace: "pre-line" }}>
+          <p className="text-body-lead text-center text-black" style={{ marginTop: 31, maxWidth: 859, whiteSpace: "pre-line" }}>
             {subheading}
           </p>
         )}
@@ -112,13 +131,27 @@ export default function HeroBanner({
           )}
         </div>
 
-        {/* Hero image */}
-        {heroImageSrc && (
+        {/* Hero media — video takes precedence over image */}
+        {heroVideoSrc ? (
+          <div style={{ marginTop: 40 }}>
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="rounded-card object-cover"
+              style={{ width: 1042, height: 312 }}
+            >
+              <source src={heroVideoSrc} type="video/mp4" />
+            </video>
+          </div>
+        ) : heroImageSrc ? (
           <div style={{ marginTop: 40 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={heroImageSrc} alt="Hero" width={1042} height={312} className="rounded-[24px] object-cover" style={{ width: 1042, height: 312 }} />
+            <img src={heroImageSrc} alt="Hero" width={1042} height={312} className="rounded-card object-cover" style={{ width: 1042, height: 312 }} />
           </div>
-        )}
+        ) : null}
       </div>
     </section>
   )

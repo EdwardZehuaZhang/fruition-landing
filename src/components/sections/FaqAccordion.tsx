@@ -21,7 +21,7 @@ export default function FaqAccordion({
   return (
     <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
       <div className="mx-auto flex flex-col" style={{ width: 959, gap: 24 }}>
-        <h2 className="font-bold" style={{ fontSize: 32, lineHeight: "38.4px", color: "#8015e8" }}>
+        <h2 className="text-section-h2" style={{ color: "var(--purple-primary)" }}>
           {heading}
         </h2>
 

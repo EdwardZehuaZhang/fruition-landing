@@ -44,12 +44,10 @@ export default function FeatureNumberList({
       <div className="mx-auto px-4" style={{ maxWidth: 1100 }}>
         {(heading || headingAccent) && (
           <h2
-            className="text-center font-semibold"
+            className="text-section-h2 text-center"
             style={{
-              fontSize: 34,
               color: headingColor,
               marginBottom: subheading ? 14 : 40,
-              lineHeight: 1.25,
             }}
           >
             {heading}
@@ -60,10 +58,8 @@ export default function FeatureNumberList({
         )}
         {subheading && (
           <p
-            className="text-center mx-auto"
+            className="text-body text-center mx-auto"
             style={{
-              fontSize: 17,
-              lineHeight: 1.55,
               color: subheadingColor,
               maxWidth: 820,
               marginBottom: 48,

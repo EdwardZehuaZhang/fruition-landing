@@ -2472,83 +2472,158 @@ const PAGE_DATA: Record<string, Record<string, unknown>> = {
   },
 
   careers: {
-    comparisonHeading: 'What We\'re Looking For',
-    comparisonSubheading:
-      'If you\'re passionate about helping businesses work better, we want to hear from you.',
-    comparisonTabs: withKeys([
+    // Hero — eyebrow "Careers" above the big heading "Build Solutions That Matter"
+    heroEyebrow: 'Careers',
+    heroHeading: 'Build Solutions That Matter',
+    heroSubheading:
+      'At Fruition, we design solutions that simplify, scale and transform the way teams operate. As a Platinum monday.com partner, we tailor workflows, automations and integrations that turn software into a growth engine.',
+    primaryCtaLabel: '\uD83D\uDE80 Join Us',
+    primaryCtaUrl: '#application-form',
+    // Explicitly no hero video on careers
+    heroVideoUrl: null,
+    heroVideoTitle: null,
+
+    // Benefits grid — "Why Join Fruition"
+    capabilitiesEyebrow: 'BENEFITS',
+    capabilitiesHeading: 'Why Join ',
+    capabilitiesHeadingAccent: 'Fruition',
+    capabilitiesSubheading: '',
+    capabilitiesTheme: 'light',
+    capabilitiesColumns: 2,
+    capabilitiesCards: withKeys([
       {
-        _type: 'comparisonTab',
-        label: 'Problem-Solvers with a Consultant Mindset',
-        items: withKeys([
-          {
-            _type: 'comparisonItem',
-            number: '01',
-            title: 'Translate complex business needs into elegant automated workflows',
-            description: '',
-          },
-          {
-            _type: 'comparisonItem',
-            number: '02',
-            title: 'Conduct thorough process audits to identify optimization opportunities',
-            description: '',
-          },
-          {
-            _type: 'comparisonItem',
-            number: '03',
-            title: 'Ask the right questions to uncover root causes, not just symptoms',
-            description: '',
-          },
+        _type: 'capabilityCard',
+        emoji: '\uD83D\uDCA1',
+        title: 'Work That Makes an Impact',
+        description:
+          "Every solution you build directly transforms how our clients operate. You'll see the real-world impact of your work in faster processes, happier teams, and measurable ROI.",
+      },
+      {
+        _type: 'capabilityCard',
+        emoji: '\uD83D\uDCC8',
+        title: 'Flexibility & Growth',
+        description:
+          "Join a team that values smart work, not just hard work. We're building something special, and there's room to grow your career as we scale.",
+      },
+      {
+        _type: 'capabilityCard',
+        emoji: '\uD83C\uDFAF',
+        title: 'Upskill and Learn',
+        description:
+          "Work alongside expert consultants who are passionate about automation, workflow optimization, and user adoption. You'll continuously sharpen your skills on cutting-edge platforms while solving diverse business challenges.",
+      },
+      {
+        _type: 'capabilityCard',
+        emoji: '\uD83E\uDD1D',
+        title: 'Client-Focused Culture',
+        description:
+          "We measure success by our clients' success. You'll be empowered to deliver solutions that truly serve their needs—not just check boxes. You'll have the autonomy to recommend the right solutions, the support to implement them seamlessly, and the satisfaction of seeing clients achieve faster time to value and meaningful ROI on their software investment.",
+      },
+    ]),
+
+    // Secondary capabilities — "What We're Looking For" (3 parallel columns)
+    secondaryCapabilitiesEyebrow: '',
+    secondaryCapabilitiesHeading: "What We're Looking For",
+    secondaryCapabilitiesHeadingAccent: '',
+    secondaryCapabilitiesSubheading:
+      "If you're passionate about helping businesses work better, we want to hear from you.",
+    secondaryCapabilitiesColumns: 3,
+    secondaryCapabilitiesCtaLabel: '\uD83D\uDE80 Join Us',
+    secondaryCapabilitiesCtaUrl: '#application-form',
+    secondaryCapabilitiesCards: withKeys([
+      {
+        _type: 'secondaryCapabilityCard',
+        title: 'Problem-Solvers with a Consultant Mindset',
+        description: '',
+        bullets: withKeys([
+          { _type: 'bullet', emoji: '\uD83E\uDDE9', text: 'Translate complex business needs into elegant automated workflows' },
+          { _type: 'bullet', emoji: '\uD83D\uDD0D', text: 'Conduct thorough process audits to identify optimization opportunities' },
+          { _type: 'bullet', emoji: '\u2753', text: 'Ask the right questions to uncover root causes, not just symptoms' },
         ]),
       },
       {
-        _type: 'comparisonTab',
-        label: 'Technical Experts with a Human Touch',
-        items: withKeys([
-          {
-            _type: 'comparisonItem',
-            number: '01',
-            title: 'Build seamless integrations that eliminate manual work',
-            description: '',
-          },
-          {
-            _type: 'comparisonItem',
-            number: '02',
-            title: 'Design custom workflows that teams actually want to use',
-            description: '',
-          },
-          {
-            _type: 'comparisonItem',
-            number: '03',
-            title: 'Leverage monday.com\'s flexibility to deliver scalable, cost-effective solutions',
-            description: '',
-          },
+        _type: 'secondaryCapabilityCard',
+        title: 'Technical Experts with a Human Touch',
+        description: '',
+        bullets: withKeys([
+          { _type: 'bullet', emoji: '\uD83D\uDD17', text: 'Build seamless integrations that eliminate manual work' },
+          { _type: 'bullet', emoji: '\uD83D\uDEE0\uFE0F', text: 'Design custom workflows that teams actually want to use' },
+          { _type: 'bullet', emoji: '\u26A1', text: "Leverage monday.com's flexibility to deliver scalable, cost-effective solutions" },
         ]),
       },
       {
-        _type: 'comparisonTab',
-        label: 'Growth-Minded Professionals Who Love Learning',
-        items: withKeys([
-          {
-            _type: 'comparisonItem',
-            number: '01',
-            title: 'Stay ahead of monday.com feature releases and best practices',
-            description: '',
-          },
-          {
-            _type: 'comparisonItem',
-            number: '02',
-            title: 'Experiment with new automation ideas to unlock efficiencies',
-            description: '',
-          },
-          {
-            _type: 'comparisonItem',
-            number: '03',
-            title: 'Share knowledge with teams, empowering them to innovate and adapt',
-            description: '',
-          },
+        _type: 'secondaryCapabilityCard',
+        title: 'Growth-Minded Professionals Who Love Learning',
+        description: '',
+        bullets: withKeys([
+          { _type: 'bullet', emoji: '\uD83D\uDCDA', text: 'Stay ahead of monday.com feature releases and best practices' },
+          { _type: 'bullet', emoji: '\uD83E\uDDE0', text: 'Experiment with new automation ideas to unlock efficiencies' },
+          { _type: 'bullet', emoji: '\uD83C\uDF0D', text: 'Share knowledge with teams, empowering them to innovate and adapt' },
         ]),
       },
     ]),
+
+    // Remote team / global offices
+    remoteTeamEyebrow: '\uD83C\uDF0D FULLY REMOTE',
+    remoteTeamHeading: 'Work From Anywhere. ',
+    remoteTeamHeadingAccent: 'Our Team Is Global.',
+    remoteTeamSubheading:
+      'Fruition is a 100% remote company. Our consultants, developers, and strategists collaborate across five countries — meaning you can work from home, a café, or wherever you do your best thinking.',
+    officeLocations: withKeys([
+      {
+        _type: 'officeLocation',
+        flag: '\uD83C\uDDE6\uD83C\uDDFA',
+        city: 'Sydney',
+        region: 'Head Office',
+        address: '64 York Street\nNSW 2000, Australia',
+      },
+      {
+        _type: 'officeLocation',
+        flag: '\uD83C\uDDFA\uD83C\uDDF8',
+        city: 'New York',
+        region: 'North America',
+        address: '205 W 37th St\nNew York, NY 10018',
+      },
+      {
+        _type: 'officeLocation',
+        flag: '\uD83C\uDDEC\uD83C\uDDE7',
+        city: 'London',
+        region: 'EMEA',
+        address: 'Medius House, 2 Sheraton St\nLondon W1F 8BH',
+      },
+      {
+        _type: 'officeLocation',
+        flag: '\uD83C\uDDF8\uD83C\uDDEC',
+        city: 'Singapore',
+        region: 'South-East Asia',
+        address: 'Serving clients\nacross the region',
+      },
+      {
+        _type: 'officeLocation',
+        flag: '\uD83C\uDDEE\uD83C\uDDF3',
+        city: 'India',
+        region: 'South Asia',
+        address: 'Serving clients\nacross the region',
+      },
+    ]),
+    remoteFeatures: withKeys([
+      { _type: 'remoteFeature', emoji: '\uD83C\uDFE0', label: 'Work from home (or anywhere)' },
+      { _type: 'remoteFeature', emoji: '\u23F0', label: 'Flexible hours' },
+      { _type: 'remoteFeature', emoji: '\u2708\uFE0F', label: 'No relocation required' },
+      { _type: 'remoteFeature', emoji: '\uD83C\uDF10', label: 'Global team collaboration' },
+      { _type: 'remoteFeature', emoji: '\uD83D\uDCC5', label: 'Async-friendly culture' },
+    ]),
+    remoteTeamCtaLabel: '\uD83D\uDE80 Join Our Remote Team',
+    remoteTeamCtaUrl: '#application-form',
+
+    // Application form — monday.com WorkForms embed
+    applicationFormHeading: 'APPLICATION FORM',
+    applicationFormEmbedUrl: 'https://forms.monday.com/forms/embed/REPLACE_WITH_FORM_ID?r=use1',
+
+    // Clear old tabs/methodology that previously occupied this slot
+    comparisonHeading: '',
+    comparisonSubheading: '',
+    comparisonTabs: withKeys([]),
     methodologyHeading: '',
     methodologySteps: withKeys([]),
     calendlyHeading: '',

@@ -225,7 +225,6 @@ export default function MondayServicePage({
                     width={120}
                     height={44}
                     className="h-[44px] w-auto rounded-[5px]"
-                    style={{ boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.5)" }}
                   />
                 )
               })}
@@ -291,7 +290,7 @@ export default function MondayServicePage({
               alt="monday Service"
               width={1042}
               height={312}
-              className="rounded-[24px] object-cover"
+              className="rounded-card object-cover"
               style={{ width: 1042, height: "auto", maxHeight: 520 }}
             />
           </div>
@@ -350,8 +349,8 @@ function FeatureTabsSection() {
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1042 }}>
         <h2
-          className="text-center font-medium text-black"
-          style={{ fontSize: 35, lineHeight: "49px", maxWidth: 900 }}
+          className="text-section-h2 text-center text-black"
+          style={{ maxWidth: 900 }}
         >
           Easily shape every aspect of service to your business needs with{" "}
           <span style={{ color: "#8015e8" }}>monday Service</span>
@@ -548,8 +547,8 @@ function MondayServiceFaq() {
     <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
       <div className="mx-auto flex flex-col px-4" style={{ maxWidth: 959, gap: 24 }}>
         <h2
-          className="font-bold"
-          style={{ fontSize: 32, lineHeight: "38.4px", color: "#8015e8" }}
+          className="text-section-h2"
+          style={{ color: "var(--purple-primary)" }}
         >
           Frequently asked questions
         </h2>
@@ -620,8 +619,8 @@ function StrategicApproachSection() {
     <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, backgroundColor: "#f5f0ff" }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1200 }}>
         <h2
-          className="text-center font-bold"
-          style={{ fontSize: 38, lineHeight: "48px", color: "black", maxWidth: 900 }}
+          className="text-section-h2 text-center text-black"
+          style={{ maxWidth: 900 }}
         >
           How to Manage Service with monday.com:{" "}
           <span style={{ color: "#8015e8" }}>A Strategic Approach</span>

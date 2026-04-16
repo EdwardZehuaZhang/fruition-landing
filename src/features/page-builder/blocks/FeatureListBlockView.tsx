@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { urlFor } from '@/sanity/image'
+import NumberedStepList from '@/components/common/NumberedStepList'
 import type { SiteSettings } from '../types'
 
 interface Feature {
@@ -68,21 +69,7 @@ export default function FeatureListBlockView({ _key, heading, subheading, varian
           </div>
 
           {/* Bordered card with vertical numbered items */}
-          <div className="w-full max-w-[816px] rounded-[24px] border border-[#e8e6e6] py-[12px]">
-            {features?.map((f, i) => (
-              <div key={f._key ?? i} className="flex gap-[27px] items-start py-[20px] pl-[8px] pr-[30px] max-w-[740px]">
-                <span className="text-[48px] font-extralight text-[#8015e8] leading-[normal] text-center w-[75px] shrink-0">
-                  {f.icon || String(i + 1).padStart(2, '0')}
-                </span>
-                <p className="text-[14px] text-black leading-[22.4px] flex-1 pt-[6px]">
-                  <span className="font-bold">{f.title}</span>
-                  {f.description && (
-                    <span className="font-normal"> - {f.description}</span>
-                  )}
-                </p>
-              </div>
-            ))}
-          </div>
+          <NumberedStepList items={features ?? []} />
         </div>
       </section>
     )
@@ -210,7 +197,7 @@ export default function FeatureListBlockView({ _key, heading, subheading, varian
           {features?.map((f, i) => (
             <div
               key={f._key ?? i}
-              className="flex items-start gap-4 rounded-[24px] bg-white border border-[#e8e6e6] p-6"
+              className="flex items-start gap-4 rounded-card bg-white border border-[#e8e6e6] p-6"
             >
               {f.icon && (
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#8015e8]/10 text-sm font-bold text-[#8015e8]">

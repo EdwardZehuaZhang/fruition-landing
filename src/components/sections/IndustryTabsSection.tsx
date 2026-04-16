@@ -41,8 +41,8 @@ export default function IndustryTabsSection({
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         {heading && (
           <h2
-            className="text-center font-bold text-white"
-            style={{ fontSize: 35, lineHeight: "48px", marginBottom: 40 }}
+            className="text-section-h2 text-center text-white"
+            style={{ marginBottom: 40 }}
           >
             {heading}
           </h2>
@@ -88,12 +88,11 @@ export default function IndustryTabsSection({
 
         {/* Active tab content card */}
         <div
-          className="mx-auto"
+          className="mx-auto rounded-card"
           style={{
             maxWidth: 900,
             backgroundColor: "rgba(255,255,255,0.1)",
             border: "1px solid rgba(255,255,255,0.2)",
-            borderRadius: 24,
             padding: 40,
           }}
         >

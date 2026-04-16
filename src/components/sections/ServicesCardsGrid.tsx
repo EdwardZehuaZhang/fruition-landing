@@ -41,12 +41,10 @@ export default function ServicesCardsGrid({
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         {(heading || headingAccent) && (
           <h2
-            className="text-center font-semibold"
+            className="text-section-h2 text-center"
             style={{
-              fontSize: 36,
               color: headingColor,
               marginBottom: subheading ? 16 : 48,
-              lineHeight: 1.25,
             }}
           >
             {heading}
@@ -57,10 +55,8 @@ export default function ServicesCardsGrid({
         )}
         {subheading && (
           <p
-            className="text-center mx-auto"
+            className="text-body text-center mx-auto"
             style={{
-              fontSize: 17,
-              lineHeight: 1.55,
               color: subheadingColor,
               maxWidth: 820,
               marginBottom: 48,
@@ -77,10 +73,10 @@ export default function ServicesCardsGrid({
           {cards.map((card, i) => (
             <div
               key={card._key || i}
-              className="bg-white rounded-[20px]"
+              className="bg-white rounded-card"
               style={{
                 padding: 28,
-                boxShadow: "0 1px 2px rgba(43,7,77,0.08)",
+                boxShadow: "var(--shadow-whisper)",
               }}
             >
               {card.emoji && (
@@ -96,7 +92,7 @@ export default function ServicesCardsGrid({
               )}
               <h3
                 style={{
-                  fontSize: 19,
+                  fontSize: 20,
                   fontWeight: 700,
                   color: "#2b074d",
                   marginBottom: 10,

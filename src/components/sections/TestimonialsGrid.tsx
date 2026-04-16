@@ -25,7 +25,7 @@ const TESTIMONIALS_PER_PAGE = 5
 
 export default function TestimonialsGrid({
   heading = "What our customers say about us \uD83D\uDE4C",
-  ctaLabel = "\uD83D\uDE80 Start Your Transformation",
+  ctaLabel = "Start Your Transformation",
   ctaUrl = "https://calendly.com/global-calendar-fruitionservices",
   statCardValue = "500+",
   statCardSubtitle = "have maximised their workflows with our monday.com expert support",
@@ -67,10 +67,10 @@ export default function TestimonialsGrid({
       <div className="mx-auto max-w-[1343px]">
         {/* Header */}
         <div className="flex items-center justify-center gap-[89px] mb-[58px] w-full">
-          <h2 className="text-[48px] text-black leading-[67.2px] w-[919px] shrink-0">{heading}</h2>
+          <h2 className="text-section-h2 text-black w-[919px] shrink-0">{heading}</h2>
           <Link
             href={ctaUrl}
-            className="shrink-0 flex items-center justify-center h-[53px] w-[330px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
+            className="ui-cta-btn ui-cta-btn-secondary h-[53px] w-[330px] shrink-0"
           >
             {ctaLabel}
           </Link>
@@ -88,10 +88,10 @@ export default function TestimonialsGrid({
                 className="flex flex-wrap gap-x-[16px] gap-y-[18px] w-full shrink-0"
               >
                 {/* Stat card (repeats on every page) */}
-                <div className="relative w-full max-w-[437px] bg-[#10003a] rounded-[24px] shadow-[0px_1px_17px_0px_rgba(0,0,0,0.2)] flex flex-col px-[38px]">
+                <div className="relative flex w-full max-w-[437px] flex-col rounded-card bg-[#10003a] px-[38px] shadow-card">
                   <div className="pt-[23px] pb-[30px]">
                     <p className="font-semibold text-[40px] text-[#ba83f0] leading-[60px]">{statCardValue}</p>
-                    <p className="font-light text-[24px] text-white leading-[36px]" style={{ whiteSpace: "pre-line" }}>
+                    <p className="text-body-lead font-normal text-white" style={{ whiteSpace: "pre-line" }}>
                       {statCardSubtitle}
                     </p>
                   </div>
@@ -109,12 +109,12 @@ export default function TestimonialsGrid({
                 {pageItems.map((t, ti) => (
                   <div
                     key={t.id || `${t.name}-${ti}`}
-                    className="relative flex flex-col bg-white rounded-[24px] border border-[#e8e6e6] w-full max-w-[437px] min-h-[300px]"
+                    className="ui-surface-panel relative flex w-full max-w-[437px] min-h-[300px] flex-col"
                   >
                     <div className="flex items-start justify-between px-[38px] pt-[29px] pb-[18px]">
                       <div>
                         <p className="font-semibold text-[20px] text-[#2b074d] leading-[30px]">{t.name}</p>
-                        <p className="font-light text-[14px] text-[#595959] leading-[21px]">{t.role}</p>
+                        <p className="text-caption font-normal text-[#595959]">{t.role}</p>
                       </div>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
@@ -127,7 +127,7 @@ export default function TestimonialsGrid({
                       />
                     </div>
                     <div className="px-[38px] flex-1">
-                      <p className="text-[15px] text-black leading-[22.5px]">{t.quote}</p>
+                      <p className="text-body-sm text-black">{t.quote}</p>
                     </div>
                     <div className="flex gap-[2px] px-[38px] pb-[35px] pt-4">
                       {[...Array(5)].map((_, si) => (

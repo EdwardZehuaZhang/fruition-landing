@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import NumberedStepList from '@/components/common/NumberedStepList'
 
 interface Feature {
   _key?: string
@@ -101,7 +102,7 @@ export default function TabSectionBlockView({
         </div>
 
         {/* Tab content card — 816px wide */}
-        <div className="w-full max-w-[816px] rounded-[24px] border border-[#e8e6e6] p-[24px]">
+        <div className="w-full max-w-[816px] rounded-card border border-[#e8e6e6] p-[24px]">
           {isImplementSection ? (
             /* "Implement monday.com" layout: heading + button row, body text, emoji features grid */
             <div className="flex flex-col gap-[24px]">
@@ -141,25 +142,16 @@ export default function TabSectionBlockView({
             </div>
           ) : (
             /* "Teams Transformed" layout: vertical numbered list */
-            <div className="flex flex-col">
-              {active?.features && active.features.length > 0 && (
-                <div className="flex flex-col">
-                  {active.features.map((f, i) => (
-                    <div key={f._key ?? i} className="flex gap-[27px] items-start py-[20px] pl-[8px] pr-[30px]">
-                      <span className="text-[48px] font-extralight text-[#8015e8] leading-[normal] text-center w-[75px] shrink-0">
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                      <p className="text-[14px] text-black leading-[22.4px] flex-1">
-                        <span className="font-bold">{f.label?.split(' - ')[0] || f.label}</span>
-                        {f.label?.includes(' - ') && (
-                          <span> - {f.label.split(' - ').slice(1).join(' - ')}</span>
-                        )}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <NumberedStepList
+              items={active?.features?.map((f, i) => ({
+                _key: f._key,
+                number: String(i + 1).padStart(2, '0'),
+                title: f.label?.split(' - ')[0] || f.label,
+                description: f.label?.includes(' - ') ? f.label.split(' - ').slice(1).join(' - ') : '',
+              })) ?? []}
+              containerClassName="w-full p-0"
+              stepRowClassName="ui-step-row"
+            />
           )}
         </div>
       </div>

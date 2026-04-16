@@ -103,7 +103,7 @@ export default function SolutionCardsSection({
                 </div>
                 {imageSrc && (
                   <div
-                    className="rounded-[24px] overflow-hidden"
+                    className="rounded-card overflow-hidden shadow-whisper"
                     style={{ flex: 1, aspectRatio: "16 / 10" }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}

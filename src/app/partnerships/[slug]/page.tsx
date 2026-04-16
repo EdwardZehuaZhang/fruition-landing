@@ -3,7 +3,9 @@ import {
   getPartnershipPageBySlug,
   getSiteSettings,
   getCaseStudies,
+  getFaqItemsForPage,
 } from "@/sanity/queries"
+import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
 import UniversalPageTemplate from "@/components/UniversalPageTemplate"
 
 export async function generateStaticParams() {
@@ -30,16 +32,18 @@ export default async function PartnershipPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const [page, siteSettings, caseStudies] = await Promise.all([
+  const [page, siteSettings, caseStudies, centralFaqs] = await Promise.all([
     getPartnershipPageBySlug(slug),
     getSiteSettings(),
     getCaseStudies(),
+    getFaqItemsForPage(`partnerships/${slug}`),
   ])
   return (
     <UniversalPageTemplate
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
+      faqTabs={groupFaqsIntoTabs(centralFaqs)}
     />
   )
 }

@@ -145,6 +145,12 @@ interface Props {
   data?: ImplementationPackagesData | null
   carouselLogos?: CarouselLogo[]
   caseStudies?: CaseStudy[]
+  /**
+   * Central faqItem tabs fetched at the page.tsx level. When
+   * non-empty, overrides the embedded `data.faqTabs` so FAQ content
+   * is managed from the central faqItem document store.
+   */
+  faqTabs?: FaqTab[]
 }
 
 /* ------------------------------------------------------------------ */
@@ -446,6 +452,7 @@ export default function ImplementationPackagesContent({
   data,
   carouselLogos,
   caseStudies,
+  faqTabs: faqTabsOverride,
 }: Props) {
   // Resolve all fields with fallbacks
   const heroHeadingPart1 = data?.heroHeadingPart1 ?? "monday.com "
@@ -538,9 +545,11 @@ export default function ImplementationPackagesContent({
   const calendlyUrl = data?.calendlyUrl ?? CALENDLY_URL
 
   const faqHeading = data?.faqHeading ?? "Frequently asked questions"
-  const faqTabs: FaqTab[] = data?.faqTabs?.length
-    ? data.faqTabs
-    : FALLBACK_FAQ_TABS
+  const faqTabs: FaqTab[] = faqTabsOverride?.length
+    ? faqTabsOverride
+    : data?.faqTabs?.length
+      ? data.faqTabs
+      : FALLBACK_FAQ_TABS
 
   const [activeFaqTab, setActiveFaqTab] = useState<string>(
     faqTabs[0]?.label ?? ""
@@ -609,7 +618,6 @@ export default function ImplementationPackagesContent({
                   width={120}
                   height={44}
                   className="h-[44px] w-auto rounded-[5px]"
-                  style={{ boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.5)" }}
                 />
               ))}
             </div>
@@ -698,7 +706,7 @@ export default function ImplementationPackagesContent({
               alt="monday.com dashboards — project planning and team OKRs"
               width={1042}
               height={312}
-              className="rounded-[24px] object-cover"
+              className="rounded-card object-cover"
               style={{ width: 1042, height: 312 }}
             />
           </div>
@@ -807,7 +815,7 @@ export default function ImplementationPackagesContent({
                 style={{
                   backgroundColor: "white",
                   border: "1px solid #e8e6e6",
-                  borderRadius: 24,
+                  borderRadius: "var(--radius-card)",
                   padding: 28,
                 }}
               >
@@ -845,7 +853,7 @@ export default function ImplementationPackagesContent({
               marginTop: 60,
               background:
                 "linear-gradient(98.14deg, rgb(28, 2, 76) 0%, rgb(125, 20, 227) 100.01%)",
-              borderRadius: 24,
+              borderRadius: "var(--radius-card)",
               paddingLeft: 27,
               paddingRight: 44,
               paddingTop: 28,
@@ -893,8 +901,7 @@ export default function ImplementationPackagesContent({
             style={{ marginTop: 60 }}
           >
             <h2
-              className="text-center"
-              style={{ fontSize: 35, fontWeight: 500, color: "black" }}
+              className="text-section-h2 text-center text-black"
             >
               {pricingHeading}
             </h2>
@@ -944,7 +951,7 @@ export default function ImplementationPackagesContent({
                 width: 816,
                 backgroundColor: "white",
                 border: "1px solid #e8e6e6",
-                borderRadius: 24,
+                borderRadius: "var(--radius-card)",
                 padding: 28,
                 marginTop: 28,
               }}
@@ -1072,24 +1079,14 @@ export default function ImplementationPackagesContent({
           style={{ maxWidth: 1200 }}
         >
           <h2
-            className="text-center"
-            style={{
-              fontSize: 35,
-              fontWeight: 500,
-              color: "black",
-              maxWidth: 800,
-            }}
+            className="text-section-h2 text-center text-black"
+            style={{ maxWidth: 800 }}
           >
             {calendlyHeading}
           </h2>
           <div
-            className="w-full"
-            style={{
-              marginTop: 40,
-              borderRadius: 24,
-              overflow: "hidden",
-              height: 700,
-            }}
+            className="w-full rounded-card overflow-hidden"
+            style={{ marginTop: 40, height: 700 }}
           >
             <iframe
               src={calendlyUrl}
@@ -1108,7 +1105,7 @@ export default function ImplementationPackagesContent({
       <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
         <div className="mx-auto flex flex-col" style={{ width: 959, gap: 24 }}>
           {/* Heading */}
-          <h2 className="font-bold" style={{ fontSize: 32, lineHeight: '38.4px', color: '#8015e8' }}>
+          <h2 className="text-section-h2" style={{ color: "var(--purple-primary)" }}>
             {faqHeading}
           </h2>
 
@@ -1228,14 +1225,8 @@ export default function ImplementationPackagesContent({
 
           {/* Heading */}
           <h2
-            className="text-center font-medium"
-            style={{
-              fontFamily: "var(--font-poppins), Poppins, sans-serif",
-              fontSize: 35,
-              color: "black",
-              width: 694,
-              marginTop: 28,
-            }}
+            className="text-section-h2 text-center text-black"
+            style={{ width: 694, marginTop: 28 }}
           >
             {discoverHeading}
           </h2>
@@ -1280,10 +1271,10 @@ export default function ImplementationPackagesContent({
       <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto flex flex-col items-center" style={{ gap: 40, width: 959 }}>
           {/* Heading */}
-          <h2 className="text-center font-medium" style={{ fontSize: 32, lineHeight: '49px' }}>
+          <h2 className="text-section-h2 text-center">
             <span style={{ color: 'black' }}>{methodologyHeading}</span>
             <br />
-            <span style={{ color: '#8015e8' }}>{methodologyHeadingAccent}</span>
+            <span style={{ color: 'var(--purple-primary)' }}>{methodologyHeadingAccent}</span>
           </h2>
 
           {/* Steps grid — 2 columns, number above content in each cell */}

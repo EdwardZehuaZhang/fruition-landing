@@ -15,6 +15,27 @@ export default defineType({
     defineField({ name: 'heroHeadingPart1', title: 'Hero Heading (prefix)', type: 'string' }),
     defineField({ name: 'heroHeadingAccent', title: 'Hero Heading (accent)', type: 'string' }),
     defineField({ name: 'heroSubheading', title: 'Hero Subheading', type: 'text' }),
+    defineField({
+      name: 'heroPartnerBadges',
+      title: 'Hero Partner Badges (row above heading)',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'partnerBadge',
+          fields: [
+            { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
+            { name: 'alt', title: 'Alt text', type: 'string' },
+          ],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'heroMondayPartnersImage',
+      title: 'Hero Monday Partners Image (shown below subheading)',
+      type: 'image',
+      options: { hotspot: true },
+    }),
     defineField({ name: 'heroCertificationBadge', title: 'Hero Certification Banner', type: 'image' }),
     defineField({ name: 'heroImage', title: 'Hero Image (optional — leave empty to hide)', type: 'image', options: { hotspot: true } }),
     defineField({ name: 'heroPrimaryCtaLabel', title: 'Hero Primary CTA Label', type: 'string' }),
@@ -72,6 +93,9 @@ export default defineType({
     defineField({ name: 'empowerEyebrow', title: 'Empower Section Eyebrow', type: 'string' }),
     defineField({ name: 'empowerHeading', title: 'Empower Section Heading', type: 'string' }),
     defineField({ name: 'empowerBody', title: 'Empower Section Body', type: 'text' }),
+    defineField({ name: 'empowerImage', title: 'Empower Section Image', type: 'image', options: { hotspot: true } }),
+    defineField({ name: 'empowerCtaLabel', title: 'Empower Section CTA Label', type: 'string' }),
+    defineField({ name: 'empowerCtaUrl', title: 'Empower Section CTA URL (defaults to Calendly URL)', type: 'string' }),
 
     // Training Services
     defineField({ name: 'servicesHeading', title: 'Services Heading', type: 'string' }),

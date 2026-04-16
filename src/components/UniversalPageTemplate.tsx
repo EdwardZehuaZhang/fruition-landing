@@ -1,5 +1,6 @@
 "use client"
 
+import type { ReactNode } from "react"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -18,13 +19,28 @@ import {
   CaseStudyCardsSection,
   IndustryTabsSection,
   TestimonialCtaBanner,
+  RemoteTeamSection,
+  ApplicationFormSection,
+  TextContentSection,
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData } from "@/components/sections/types"
+
+import type { FaqTab } from "@/components/sections/types"
 
 interface UniversalPageTemplateProps {
   page: any // the Sanity page document
   siteSettings?: SiteSettingsData | null
   caseStudies?: CaseStudy[]
+  /**
+   * Central FAQs (faqItem docs) already grouped into tabs for this
+   * page. When provided and non-empty, takes precedence over the
+   * legacy embedded `page.faqTabs`. See src/sanity/groupFaqs.ts.
+   */
+  faqTabs?: FaqTab[]
+  /** Local mp4 src — when set, replaces the Sanity heroImage in the hero. */
+  heroVideoSrc?: string
+  /** Custom JSX injected directly after the FAQ section. */
+  afterFaq?: ReactNode
 }
 
 function youtubeEmbedUrl(url?: string): string | null {
@@ -50,6 +66,9 @@ export default function UniversalPageTemplate({
   page,
   siteSettings,
   caseStudies = [],
+  faqTabs,
+  heroVideoSrc,
+  afterFaq,
 }: UniversalPageTemplateProps) {
   if (!page) return null
 
@@ -81,6 +100,7 @@ export default function UniversalPageTemplate({
       })
     : comparisonTabs
 
+  const heroVideoEmbedSrc = youtubeEmbedUrl(page.heroVideoUrl)
   const bottomVideoEmbedSrc = youtubeEmbedUrl(page.bottomVideoUrl)
 
   const featuredTestimonial =
@@ -99,12 +119,18 @@ export default function UniversalPageTemplate({
     <div>
       {/* 1. Hero */}
       <HeroBanner
+        eyebrow={page.heroEyebrow}
         headingPart1={page.heroHeading || page.title || ""}
         headingAccent=""
         subheading={page.heroSubheading}
         heroImage={page.heroImage}
+        heroVideoSrc={heroVideoSrc}
         certificationBadge={siteSettings?.badgeCertifications}
-        partnerBadges={siteSettings?.navbarPartnerBadges || []}
+        partnerBadges={
+          page.heroPartnerBadges?.length > 0
+            ? page.heroPartnerBadges
+            : siteSettings?.navbarPartnerBadges || []
+        }
         primaryCtaLabel={page.primaryCtaLabel || "\uD83D\uDE80 Book a Consultation"}
         primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
         secondaryCtaLabel={page.secondaryCtaLabel}
@@ -122,31 +148,70 @@ export default function UniversalPageTemplate({
         logos={siteSettings?.carouselLogos || []}
       />
 
-      {/* 2b. Video */}
-      <section className="bg-white" style={{ paddingBottom: 80 }}>
-        <div className="mx-auto" style={{ maxWidth: 1042 }}>
-          <div className="rounded-[24px] overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
-            <iframe
-              src="https://www.youtube.com/embed/7vtrtlfC1Zg"
-              title="monday CRM Success Story - Star Aviation | Powered by Fruition"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-              style={{ border: 0 }}
-            />
+      {/* 2b. Hero video (only when heroVideoUrl is set on the page doc) */}
+      {heroVideoEmbedSrc && (
+        <section className="bg-white" style={{ paddingBottom: 80 }}>
+          <div className="mx-auto" style={{ maxWidth: 1042 }}>
+            <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
+              <iframe
+                src={heroVideoEmbedSrc}
+                title={page.heroVideoTitle || "Video"}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+                style={{ border: 0 }}
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* 7. Capabilities Grid (if populated) - moved earlier to match design flow */}
       {page.capabilitiesCards?.length > 0 && (
         <CapabilitiesGrid
+          eyebrow={page.capabilitiesEyebrow}
           heading={page.capabilitiesHeading}
           headingAccent={page.capabilitiesHeadingAccent}
           subheading={page.capabilitiesSubheading}
           theme={page.capabilitiesTheme || "light"}
           columns={capabilitiesColumns}
           cards={page.capabilitiesCards}
+          ctaLabel={page.capabilitiesCtaLabel}
+          ctaUrl={page.capabilitiesCtaUrl}
+        />
+      )}
+
+      {/* 7b. Secondary Capabilities Grid (e.g. "What We're Looking For") */}
+      {page.secondaryCapabilitiesCards?.length > 0 && (
+        <CapabilitiesGrid
+          eyebrow={page.secondaryCapabilitiesEyebrow}
+          heading={page.secondaryCapabilitiesHeading}
+          headingAccent={page.secondaryCapabilitiesHeadingAccent}
+          subheading={page.secondaryCapabilitiesSubheading}
+          theme="light"
+          columns={
+            page.secondaryCapabilitiesColumns === 2 ||
+            page.secondaryCapabilitiesColumns === 3
+              ? page.secondaryCapabilitiesColumns
+              : undefined
+          }
+          cards={page.secondaryCapabilitiesCards}
+          ctaLabel={page.secondaryCapabilitiesCtaLabel}
+          ctaUrl={page.secondaryCapabilitiesCtaUrl}
+        />
+      )}
+
+      {/* 7c. Remote Team / Global Offices section */}
+      {(page.officeLocations?.length > 0 || page.remoteTeamHeading) && (
+        <RemoteTeamSection
+          eyebrow={page.remoteTeamEyebrow}
+          heading={page.remoteTeamHeading}
+          headingAccent={page.remoteTeamHeadingAccent}
+          subheading={page.remoteTeamSubheading}
+          offices={page.officeLocations || []}
+          features={page.remoteFeatures || []}
+          ctaLabel={page.remoteTeamCtaLabel}
+          ctaUrl={page.remoteTeamCtaUrl}
         />
       )}
 
@@ -190,8 +255,29 @@ export default function UniversalPageTemplate({
         calendlyUrl={calendlyUrl}
       />
 
-      {/* 5. FAQ */}
-      {page.faqTabs?.length > 0 && <FaqAccordion tabs={page.faqTabs} />}
+      {/* 4a. Long-form text content sections (e.g. About Us narrative) */}
+      {page.textContentSections?.length > 0 &&
+        page.textContentSections.map((section: { _key?: string; heading?: string; headingAccent?: string; body?: string; theme?: "light" | "tint" }, i: number) => (
+          <TextContentSection
+            key={section._key || `text-${i}`}
+            heading={section.heading}
+            headingAccent={section.headingAccent}
+            body={section.body}
+            theme={section.theme}
+          />
+        ))}
+
+      {/* 5. FAQ — prefer central faqItem docs (single source of truth); fall
+          back to the page's embedded faqTabs when the page hasn't been
+          migrated yet. */}
+      {(faqTabs && faqTabs.length > 0) ? (
+        <FaqAccordion tabs={faqTabs} />
+      ) : page.faqTabs?.length > 0 ? (
+        <FaqAccordion tabs={page.faqTabs} />
+      ) : null}
+
+      {/* Slot: custom sections immediately after the FAQ */}
+      {afterFaq}
 
       {/* 6. Case Study Cards (if populated) */}
       {page.caseStudyCards?.length > 0 && (
@@ -224,10 +310,10 @@ export default function UniversalPageTemplate({
 
       {/* 11. Bottom video embed (if populated) */}
       {bottomVideoEmbedSrc && (
-        <section className="bg-white" style={{ paddingTop: 40, paddingBottom: 80 }}>
+        <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
           <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
             <div
-              className="rounded-[24px] overflow-hidden"
+              className="rounded-card overflow-hidden"
               style={{ aspectRatio: "16 / 9" }}
             >
               <iframe
@@ -241,6 +327,14 @@ export default function UniversalPageTemplate({
             </div>
           </div>
         </section>
+      )}
+
+      {/* 11b. Application form embed (monday.com WorkForms) */}
+      {page.applicationFormEmbedUrl && (
+        <ApplicationFormSection
+          heading={page.applicationFormHeading}
+          embedUrl={page.applicationFormEmbedUrl}
+        />
       )}
 
       {/* 12. Testimonials */}

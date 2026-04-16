@@ -41,8 +41,8 @@ export default function CaseStudyCardsSection({
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         {heading && (
           <h2
-            className="font-medium"
-            style={{ fontSize: 35, color: "black", marginBottom: 48 }}
+            className="text-section-h2 text-black"
+            style={{ marginBottom: 48 }}
           >
             {heading}
           </h2>
@@ -54,7 +54,7 @@ export default function CaseStudyCardsSection({
             return (
               <div
                 key={card._key || i}
-                className="bg-white rounded-[24px] border border-[#e8e6e6] overflow-hidden flex flex-col"
+                className="bg-white rounded-card border border-[#e8e6e6] overflow-hidden flex flex-col shadow-whisper"
               >
                 {/* Media: video or image */}
                 {embedUrl ? (

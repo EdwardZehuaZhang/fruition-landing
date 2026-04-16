@@ -89,9 +89,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
   const departmentLinks = siteSettings?.footerDepartmentLinks ?? []
   const industryLinks = siteSettings?.footerIndustryLinks ?? []
 
-  const logoSrc = siteSettings?.logo
-    ? urlFor(siteSettings.logo).width(294).height(56).url()
-    : '/images/logo-fruition.png'
+  const logoSrc = '/images/logo-fruition-white.avif'
 
   return (
     <footer className="flex flex-col lg:flex-row w-full">
@@ -110,9 +108,9 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
             <Image
               src={logoSrc}
               alt="Fruition Services"
-              width={147}
+              width={320}
               height={28}
-              className="h-[28px] w-auto brightness-0 invert"
+              className="h-[28px] w-auto"
               unoptimized
             />
           </Link>

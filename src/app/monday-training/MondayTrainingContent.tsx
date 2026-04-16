@@ -79,6 +79,8 @@ interface MondayTrainingData {
   heroHeadingPart1?: string
   heroHeadingAccent?: string
   heroSubheading?: string
+  heroPartnerBadges?: Array<{ _key?: string; image?: SanityImageRef; alt?: string }>
+  heroMondayPartnersImage?: SanityImageRef
   heroImage?: SanityImageRef
   heroCertificationBadge?: SanityImageRef
   heroPrimaryCtaLabel?: string
@@ -101,6 +103,9 @@ interface MondayTrainingData {
   empowerEyebrow?: string
   empowerHeading?: string
   empowerBody?: string
+  empowerImage?: SanityImageRef
+  empowerCtaLabel?: string
+  empowerCtaUrl?: string
 
   servicesHeading?: string
   trainingServices?: TrainingService[]
@@ -143,6 +148,8 @@ interface MondayTrainingContentProps {
   carouselLogos?: CarouselLogo[]
   caseStudies?: CaseStudy[]
   siteSettings?: SiteSettings | null
+  /** Central faqItem tabs — overrides `data.faqTabs` when non-empty. */
+  faqTabs?: FaqTab[]
 }
 
 /* ------------------------------------------------------------------ */
@@ -169,9 +176,10 @@ export default function MondayTrainingContent({
   carouselLogos = [],
   caseStudies = [],
   siteSettings = null,
+  faqTabs: faqTabsOverride,
 }: MondayTrainingContentProps) {
   const trainingTabs = data?.trainingTabs ?? []
-  const faqTabs = data?.faqTabs ?? []
+  const faqTabs = faqTabsOverride?.length ? faqTabsOverride : (data?.faqTabs ?? [])
   const trainingServices = data?.trainingServices ?? []
 
   const [activeTrainingTab, setActiveTrainingTab] = useState<number>(0)
@@ -193,6 +201,17 @@ export default function MondayTrainingContent({
   const heroCertBadgeSrc = imageUrl(data?.heroCertificationBadge)
   const discoverBadgeSrc = imageUrl(data?.discoverBadge)
   const securityBadgeSrc = imageUrl(data?.securityBadge)
+
+  type ResolvedPartnerBadge = { _key: string | undefined; src: string; alt: string }
+  const heroPartnerBadges: ResolvedPartnerBadge[] = (data?.heroPartnerBadges ?? [])
+    .map((b, i): ResolvedPartnerBadge | null => {
+      const src = imageUrl(b.image)
+      if (!src) return null
+      return { _key: b._key, src, alt: b.alt ?? `Partner badge ${i + 1}` }
+    })
+    .filter((x): x is ResolvedPartnerBadge => x !== null)
+  const heroMondayPartnersImageSrc = imageUrl(data?.heroMondayPartnersImage)
+  const empowerImageSrc = imageUrl(data?.empowerImage)
 
   const heroHeadingPart1 =
     data?.heroHeadingPart1 ?? "Get your team official monday.com "
@@ -296,23 +315,20 @@ export default function MondayTrainingContent({
           style={{ paddingLeft: 273, paddingRight: 273, paddingTop: 80, paddingBottom: 80 }}
         >
           {/* Partner badges */}
-          <div className="flex items-center" style={{ gap: 22 }}>
-            {[
-              { src: "/images/partner-platinum.png", alt: "monday.com Platinum Partner" },
-              { src: "/images/partner-advanced-delivery.png", alt: "Advanced Delivery Partner" },
-              { src: "/images/partner-make.png", alt: "Make Partner" },
-            ].map((badge) => (
-              <Image
-                key={badge.src}
-                src={badge.src}
-                alt={badge.alt}
-                width={120}
-                height={44}
-                className="h-[44px] w-auto rounded-[5px]"
-                style={{ boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.5)" }}
-              />
-            ))}
-          </div>
+          {heroPartnerBadges.length > 0 && (
+            <div className="flex items-center" style={{ gap: 22 }}>
+              {heroPartnerBadges.map((badge) => (
+                <Image
+                  key={badge._key ?? badge.src}
+                  src={badge.src}
+                  alt={badge.alt}
+                  width={120}
+                  height={44}
+                  className="h-[44px] w-auto rounded-[5px]"
+                />
+              ))}
+            </div>
+          )}
 
           {/* Heading */}
           <h1
@@ -344,16 +360,18 @@ export default function MondayTrainingContent({
           </p>
 
           {/* Monday Partners image */}
-          <div style={{ marginTop: 40 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/monday-partners.avif"
-              alt="Monday.com Partners"
-              width={924}
-              height={0}
-              className="w-full max-w-[924px] h-auto object-contain"
-            />
-          </div>
+          {heroMondayPartnersImageSrc && (
+            <div style={{ marginTop: 40 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={heroMondayPartnersImageSrc}
+                alt="Monday.com Partners"
+                width={924}
+                height={0}
+                className="w-full max-w-[924px] h-auto object-contain"
+              />
+            </div>
+          )}
 
           {/* CTA(s) — secondary is optional */}
           <div
@@ -404,7 +422,7 @@ export default function MondayTrainingContent({
               alt="monday.com training dashboards"
               width={1042}
               height={312}
-              className="rounded-[24px] object-cover"
+              className="rounded-card object-cover"
               style={{ width: 1042, height: 312 }}
             />
           </div>
@@ -452,7 +470,7 @@ export default function MondayTrainingContent({
       <section className="bg-white" style={{ paddingBottom: 80 }}>
         <div className="mx-auto" style={{ maxWidth: 1042 }}>
           <div
-            className="rounded-[24px] overflow-hidden"
+            className="rounded-card overflow-hidden"
             style={{ aspectRatio: "16 / 9" }}
           >
             <iframe
@@ -549,7 +567,7 @@ export default function MondayTrainingContent({
                 width: 816,
                 backgroundColor: "white",
                 border: "1px solid #e8e6e6",
-                borderRadius: 24,
+                borderRadius: "var(--radius-card)",
                 padding: 28,
                 marginTop: 28,
               }}
@@ -610,14 +628,14 @@ export default function MondayTrainingContent({
               <p style={{ fontSize: 14, fontWeight: 600, color: '#8015e8', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
                 {empowerEyebrow}
               </p>
-              <h2 style={{ fontSize: 32, fontWeight: 600, color: 'black', lineHeight: '44.8px', marginTop: 12 }}>
+              <h2 className="text-section-h2 text-black" style={{ marginTop: 12 }}>
                 {empowerHeading}
               </h2>
               <p style={{ fontSize: 16, lineHeight: '24px', color: 'black', marginTop: 20, whiteSpace: 'pre-line' }}>
                 {empowerBody}
               </p>
               <Link
-                href={calendlyUrl}
+                href={data?.empowerCtaUrl || calendlyUrl}
                 className="inline-flex items-center justify-center font-bold text-white"
                 style={{
                   height: 53,
@@ -629,22 +647,25 @@ export default function MondayTrainingContent({
                   marginTop: 32,
                 }}
               >
-                {"\ud83d\ude80"} Book a Training Session
+                {data?.empowerCtaLabel ?? "\ud83d\ude80 Book a Training Session"}
               </Link>
             </div>
-            <div style={{ flex: 1 }}>
-              <Image
-                src="/images/service-monday-users.png"
-                alt="monday.com users training"
-                width={540}
-                height={380}
-                className="rounded-[24px] object-cover w-full h-auto"
-              />
-            </div>
+            {empowerImageSrc && (
+              <div style={{ flex: 1 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={empowerImageSrc}
+                  alt="monday.com users training"
+                  width={540}
+                  height={380}
+                  className="rounded-card object-cover w-full h-auto"
+                />
+              </div>
+            )}
           </div>
 
           {/* "Our Training Services" heading */}
-          <h2 className="text-center" style={{ fontSize: 35, fontWeight: 500, color: 'black', marginTop: 80 }}>
+          <h2 className="text-section-h2 text-center text-black" style={{ marginTop: 80 }}>
             {servicesHeading}
           </h2>
 
@@ -680,7 +701,7 @@ export default function MondayTrainingContent({
                   )}
                 </div>
                 {serviceImageSrc && (
-                  <div className="rounded-[24px] overflow-hidden" style={{ flex: 1, aspectRatio: "16 / 10" }}>
+                  <div className="rounded-card overflow-hidden" style={{ flex: 1, aspectRatio: "16 / 10" }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={serviceImageSrc} alt={service.title || "Training service"} className="w-full h-full object-cover" />
                   </div>
@@ -697,8 +718,8 @@ export default function MondayTrainingContent({
       <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1200 }}>
           <h2
-            className="text-center"
-            style={{ fontSize: 35, fontWeight: 500, color: "black", maxWidth: 900 }}
+            className="text-section-h2 text-center text-black"
+            style={{ maxWidth: 900 }}
           >
             {calendlyHeading}
           </h2>
@@ -717,8 +738,8 @@ export default function MondayTrainingContent({
             </p>
           )}
           <div
-            className="w-full"
-            style={{ marginTop: 40, borderRadius: 24, overflow: "hidden", height: 700 }}
+            className="w-full rounded-card overflow-hidden"
+            style={{ marginTop: 40, height: 700 }}
           >
             <iframe
               src={calendlyUrl}
@@ -736,7 +757,7 @@ export default function MondayTrainingContent({
       {/* ============================================================ */}
       <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
         <div className="mx-auto flex flex-col" style={{ width: 959, gap: 24 }}>
-          <h2 className="font-bold" style={{ fontSize: 32, lineHeight: '38.4px', color: '#8015e8' }}>
+          <h2 className="text-section-h2" style={{ color: "var(--purple-primary)" }}>
             {faqHeading}
           </h2>
 
@@ -813,14 +834,8 @@ export default function MondayTrainingContent({
             />
           )}
           <h2
-            className="text-center font-medium"
-            style={{
-              fontFamily: "var(--font-poppins), Poppins, sans-serif",
-              fontSize: 35,
-              color: "black",
-              width: 694,
-              marginTop: 28,
-            }}
+            className="text-section-h2 text-center text-black"
+            style={{ width: 694, marginTop: 28 }}
           >
             {discoverHeading}
           </h2>
@@ -903,7 +918,7 @@ export default function MondayTrainingContent({
                       )}
                     </div>
                     {serviceImageSrc && (
-                      <div className="rounded-[24px] overflow-hidden" style={{ flex: 1, aspectRatio: "16 / 10" }}>
+                      <div className="rounded-card overflow-hidden" style={{ flex: 1, aspectRatio: "16 / 10" }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={serviceImageSrc} alt={service.title || "Training service"} className="w-full h-full object-cover" />
                       </div>

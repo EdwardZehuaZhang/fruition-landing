@@ -93,6 +93,8 @@ export default function HeroBlockView({
   image,
   siteSettings,
 }: HeroBlockProps) {
+  const heroVideoSrc = '/videos/home-hero.mp4'
+
   // Use Sanity navbar partner badges (first 3) when available, else hardcoded fallbacks
   const sanityBadges = siteSettings?.navbarPartnerBadges?.slice(0, 3) ?? []
   const partnerBadges = sanityBadges.length >= 3
@@ -124,7 +126,7 @@ export default function HeroBlockView({
                     alt={badge.alt}
                     width={badge.width}
                     height={badge.height}
-                    className="h-[44px] w-auto rounded-[5px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.5)]"
+                    className="h-[44px] w-auto rounded-[5px]"
                   />
                 ))}
               </div>
@@ -164,13 +166,19 @@ export default function HeroBlockView({
 
         {/* Right column — image or placeholder */}
         <div className="flex-1 min-w-0 hidden md:block">
-          {image?.asset ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={urlFor(image).width(600).url()}
-              alt={heading ?? ''}
-              className="w-full h-[550px] object-cover rounded-lg"
-            />
+          {heroVideoSrc ? (
+            <video
+              className="w-full h-[550px] object-cover rounded-lg bg-black"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster={image?.asset ? urlFor(image).width(600).url() : undefined}
+              aria-label={heading ?? 'Hero video'}
+            >
+              <source src={heroVideoSrc} type="video/mp4" />
+            </video>
           ) : (
             <div className="w-full h-[550px] bg-[#d9d9d9]" />
           )}

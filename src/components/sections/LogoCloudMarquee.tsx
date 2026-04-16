@@ -27,9 +27,9 @@ export default function LogoCloudMarquee({
   return (
     <section className="bg-white py-[80px] px-4">
       <div className="flex flex-col gap-[35px] items-center w-full max-w-[1348px] mx-auto">
-        <p className="text-[28px] font-medium leading-[39.2px] text-center">
+        <p className="text-section-h3 text-center">
           <span className="text-black">{headingPart1}</span>
-          <span className="text-[#8015e8]">{headingAccent}</span>
+          <span style={{ color: "var(--purple-primary)" }}>{headingAccent}</span>
         </p>
         <div className="w-full overflow-visible">
           <div className="flex items-center gap-[65px] animate-marquee" style={{ width: "max-content" }}>

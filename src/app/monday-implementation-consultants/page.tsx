@@ -2,7 +2,9 @@ import {
   getMondayImplementationConsultantsPage,
   getSiteSettings,
   getCaseStudies,
+  getFaqItemsForPage,
 } from "@/sanity/queries"
+import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
 import MondayImplementationConsultantsContent from "./MondayImplementationConsultantsContent"
 
 export async function generateMetadata() {
@@ -18,10 +20,11 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const [data, settings, caseStudies] = await Promise.all([
+  const [data, settings, caseStudies, centralFaqs] = await Promise.all([
     getMondayImplementationConsultantsPage(),
     getSiteSettings(),
     getCaseStudies(),
+    getFaqItemsForPage("monday-implementation-consultants"),
   ])
 
   return (
@@ -30,6 +33,7 @@ export default async function Page() {
       carouselLogos={settings?.carouselLogos || []}
       caseStudies={caseStudies || []}
       siteSettings={settings}
+      faqTabs={groupFaqsIntoTabs(centralFaqs)}
     />
   )
 }

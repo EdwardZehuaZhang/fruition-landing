@@ -102,8 +102,13 @@ export interface MicPageData {
   heroHeadingAccent?: string
   heroHeadingPart2?: string
   heroSubheading?: string
+  heroPartnerBadges?: Array<{ _key?: string; image?: SanityImageRef; alt?: string }>
+  heroMondayPartnersImage?: SanityImageRef
+  heroProductImages?: Array<{ _key?: string; image?: SanityImageRef; alt?: string }>
   heroCertificationBadge?: SanityImageRef
   heroImage?: SanityImageRef
+  videoEmbedUrl?: string
+  videoTitle?: string
   heroPrimaryCtaLabel?: string
   heroPrimaryCtaUrl?: string
   heroSecondaryCtaLabel?: string
@@ -165,6 +170,8 @@ interface Props {
   caseStudies: CaseStudy[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   siteSettings?: any
+  /** Central faqItem tabs — overrides `data.faqTabs` when non-empty. */
+  faqTabs?: FaqTab[]
 }
 
 /* ------------------------------------------------------------------ */
@@ -203,11 +210,12 @@ export default function MondayImplementationConsultantsContent({
   carouselLogos = [],
   caseStudies = [],
   siteSettings,
+  faqTabs: faqTabsOverride,
 }: Props) {
   const comparisonTabs = data?.comparisonTabs ?? []
   const methodologySteps = data?.methodologySteps ?? []
   const solutionCards = data?.solutionCards ?? []
-  const faqTabs = data?.faqTabs ?? []
+  const faqTabs = faqTabsOverride?.length ? faqTabsOverride : (data?.faqTabs ?? [])
   const stats = data?.joinSectionStats ?? []
 
   const [activeComparisonTab, setActiveComparisonTab] = useState<number>(0)
@@ -236,6 +244,26 @@ export default function MondayImplementationConsultantsContent({
   const discoverBadgeSrc = imageUrl(data?.discoverBadge)
   const securityBadgeSrc = imageUrl(data?.securityBadge)
   const joinBadgeSrc = imageUrl(data?.joinSectionBadge)
+
+  type ResolvedImage = { _key: string | undefined; src: string; alt: string }
+  const heroPartnerBadges: ResolvedImage[] = (data?.heroPartnerBadges ?? [])
+    .map((b, i): ResolvedImage | null => {
+      const src = imageUrl(b.image)
+      if (!src) return null
+      return { _key: b._key, src, alt: b.alt ?? `Partner badge ${i + 1}` }
+    })
+    .filter((x): x is ResolvedImage => x !== null)
+  const heroMondayPartnersImageSrc = imageUrl(data?.heroMondayPartnersImage)
+  const heroDashboardImageSrc = imageUrl(data?.heroImage)
+  const heroProductImages: ResolvedImage[] = (data?.heroProductImages ?? [])
+    .map((b, i): ResolvedImage | null => {
+      const src = imageUrl(b.image)
+      if (!src) return null
+      return { _key: b._key, src, alt: b.alt ?? `Product ${i + 1}` }
+    })
+    .filter((x): x is ResolvedImage => x !== null)
+  const videoEmbedUrl = data?.videoEmbedUrl ?? "https://www.youtube.com/embed/7vtrtlfC1Zg"
+  const videoTitle = data?.videoTitle ?? "monday CRM Success Story"
 
   const heroPrimaryCtaLabel = data?.heroPrimaryCtaLabel ?? "\ud83d\ude80 Book a Consultation"
   const heroPrimaryCtaUrl = data?.heroPrimaryCtaUrl ?? CALENDLY_URL
@@ -343,23 +371,20 @@ export default function MondayImplementationConsultantsContent({
           style={{ paddingTop: 80, paddingBottom: 80, maxWidth: 1600 }}
         >
           {/* Partner badges */}
-          <div className="flex items-center flex-wrap justify-center" style={{ gap: 22 }}>
-            {[
-              { src: "/images/partner-platinum.png", alt: "monday.com Platinum Partner" },
-              { src: "/images/partner-advanced-delivery.png", alt: "Advanced Delivery Partner" },
-              { src: "/images/partner-make.png", alt: "Make Partner" },
-            ].map((badge) => (
-              <Image
-                key={badge.src}
-                src={badge.src}
-                alt={badge.alt}
-                width={120}
-                height={44}
-                className="h-[44px] w-auto rounded-[5px]"
-                style={{ boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.5)" }}
-              />
-            ))}
-          </div>
+          {heroPartnerBadges.length > 0 && (
+            <div className="flex items-center flex-wrap justify-center" style={{ gap: 22 }}>
+              {heroPartnerBadges.map((badge) => (
+                <Image
+                  key={badge._key ?? badge.src}
+                  src={badge.src}
+                  alt={badge.alt}
+                  width={120}
+                  height={44}
+                  className="h-[44px] w-auto rounded-[5px]"
+                />
+              ))}
+            </div>
+          )}
 
           {/* Eyebrow */}
           <p
@@ -408,16 +433,18 @@ export default function MondayImplementationConsultantsContent({
           </p>
 
           {/* Monday Partners image */}
-          <div style={{ marginTop: 40 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/monday-partners.avif"
-              alt="Monday.com Partners"
-              width={924}
-              height={0}
-              className="w-full max-w-[924px] h-auto object-contain"
-            />
-          </div>
+          {heroMondayPartnersImageSrc && (
+            <div style={{ marginTop: 40 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={heroMondayPartnersImageSrc}
+                alt="Monday.com Partners"
+                width={924}
+                height={0}
+                className="w-full max-w-[924px] h-auto object-contain"
+              />
+            </div>
+          )}
 
           {/* Dual CTA */}
           <div
@@ -455,36 +482,35 @@ export default function MondayImplementationConsultantsContent({
           </div>
 
           {/* Hero dashboard image */}
-          <div style={{ marginTop: 40 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/group-hero.avif"
-              alt="monday.com dashboards"
-              width={1042}
-              height={312}
-              className="rounded-[24px] object-cover"
-              style={{ width: 1042, height: 312 }}
-            />
-          </div>
+          {heroDashboardImageSrc && (
+            <div style={{ marginTop: 40 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={heroDashboardImageSrc}
+                alt="monday.com dashboards"
+                width={1042}
+                height={312}
+                className="rounded-card object-cover"
+                style={{ width: 1042, height: 312 }}
+              />
+            </div>
+          )}
 
           {/* Product images row */}
-          <div className="flex items-center justify-center" style={{ gap: 24, marginTop: 40 }}>
-            {[
-              { src: "/images/product-crm.avif", alt: "monday.com CRM" },
-              { src: "/images/product-dev.avif", alt: "monday.com Dev" },
-              { src: "/images/product-svc.avif", alt: "monday.com Service" },
-              { src: "/images/product-wm.avif", alt: "monday.com Work Management" },
-            ].map((img) => (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                key={img.src}
-                src={img.src}
-                alt={img.alt}
-                className="h-auto object-contain"
-                style={{ width: 220 }}
-              />
-            ))}
-          </div>
+          {heroProductImages.length > 0 && (
+            <div className="flex items-center justify-center" style={{ gap: 24, marginTop: 40 }}>
+              {heroProductImages.map((img) => (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  key={img._key ?? img.src}
+                  src={img.src}
+                  alt={img.alt}
+                  className="h-auto object-contain"
+                  style={{ width: 220 }}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -528,10 +554,10 @@ export default function MondayImplementationConsultantsContent({
       {/* ============================================================ */}
       <section className="bg-white" style={{ paddingBottom: 80 }}>
         <div className="mx-auto" style={{ maxWidth: 1042 }}>
-          <div className="rounded-[24px] overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
+          <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
             <iframe
-              src="https://www.youtube.com/embed/7vtrtlfC1Zg"
-              title="monday CRM Success Story - Star Aviation | Powered by Fruition"
+              src={videoEmbedUrl}
+              title={videoTitle}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="w-full h-full"
@@ -643,7 +669,7 @@ export default function MondayImplementationConsultantsContent({
                 maxWidth: 900,
                 backgroundColor: "white",
                 border: "1px solid #e8e6e6",
-                borderRadius: 24,
+                borderRadius: "var(--radius-card)",
                 padding: 36,
                 marginTop: 32,
               }}
@@ -728,14 +754,14 @@ export default function MondayImplementationConsultantsContent({
       <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto flex flex-col items-center px-4" style={{ maxWidth: 1200 }}>
           <h2
-            className="text-center"
-            style={{ fontSize: 35, fontWeight: 500, color: "black", maxWidth: 820 }}
+            className="text-section-h2 text-center text-black"
+            style={{ maxWidth: 820 }}
           >
             {calendlyHeading}
           </h2>
           <div
-            className="w-full"
-            style={{ marginTop: 40, borderRadius: 24, overflow: "hidden", height: 700 }}
+            className="w-full rounded-card overflow-hidden"
+            style={{ marginTop: 40, height: 700 }}
           >
             <iframe
               src={calendlyUrl}
@@ -754,8 +780,8 @@ export default function MondayImplementationConsultantsContent({
       <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
         <div className="mx-auto flex flex-col px-4" style={{ maxWidth: 959, gap: 24 }}>
           <h2
-            className="font-bold"
-            style={{ fontSize: 32, lineHeight: "38.4px", color: "#8015e8" }}
+            className="text-section-h2"
+            style={{ color: "var(--purple-primary)" }}
           >
             {faqHeading}
           </h2>
@@ -905,7 +931,7 @@ export default function MondayImplementationConsultantsContent({
                   style={{
                     backgroundColor: "white",
                     border: "1px solid #e8e6e6",
-                    borderRadius: 24,
+                    borderRadius: "var(--radius-card)",
                     overflow: "hidden",
                     gap: 0,
                   }}

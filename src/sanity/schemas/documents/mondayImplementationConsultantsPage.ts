@@ -17,8 +17,46 @@ export default defineType({
     defineField({ name: 'heroHeadingAccent', title: 'Hero Heading (accent / purple)', type: 'string' }),
     defineField({ name: 'heroHeadingPart2', title: 'Hero Heading (suffix)', type: 'string' }),
     defineField({ name: 'heroSubheading', title: 'Hero Subheading', type: 'text' }),
+    defineField({
+      name: 'heroPartnerBadges',
+      title: 'Hero Partner Badges (row above eyebrow)',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'partnerBadge',
+          fields: [
+            { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
+            { name: 'alt', title: 'Alt text', type: 'string' },
+          ],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'heroMondayPartnersImage',
+      title: 'Hero Monday Partners Image (shown under subheading)',
+      type: 'image',
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: 'heroProductImages',
+      title: 'Hero Product Images Row (under hero dashboard)',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'productImage',
+          fields: [
+            { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
+            { name: 'alt', title: 'Alt text', type: 'string' },
+          ],
+        }),
+      ],
+    }),
     defineField({ name: 'heroCertificationBadge', title: 'Hero Certification Banner', type: 'image' }),
-    defineField({ name: 'heroImage', title: 'Hero Image (optional)', type: 'image', options: { hotspot: true } }),
+    defineField({ name: 'heroImage', title: 'Hero Dashboard Image', type: 'image', options: { hotspot: true } }),
+    defineField({ name: 'videoEmbedUrl', title: 'Video Embed URL (YouTube embed)', type: 'url' }),
+    defineField({ name: 'videoTitle', title: 'Video Title', type: 'string' }),
     defineField({ name: 'heroPrimaryCtaLabel', title: 'Hero Primary CTA Label', type: 'string' }),
     defineField({ name: 'heroPrimaryCtaUrl', title: 'Hero Primary CTA URL', type: 'string' }),
     defineField({ name: 'heroSecondaryCtaLabel', title: 'Hero Secondary CTA Label', type: 'string' }),
