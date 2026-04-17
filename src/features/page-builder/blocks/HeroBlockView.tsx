@@ -10,6 +10,7 @@ interface HeroBlockProps {
   secondaryCtaLabel?: string
   secondaryCtaUrl?: string
   image?: { asset: { _ref: string } }
+  heroLocalVideoSrc?: string
   siteSettings?: SiteSettings
 }
 
@@ -91,9 +92,10 @@ export default function HeroBlockView({
   secondaryCtaLabel,
   secondaryCtaUrl,
   image,
+  heroLocalVideoSrc,
   siteSettings,
 }: HeroBlockProps) {
-  const heroVideoSrc = '/videos/home-hero.mp4'
+  const heroVideoSrc = heroLocalVideoSrc || '/videos/home-hero.mp4'
 
   // Use Sanity navbar partner badges (first 3) when available, else hardcoded fallbacks
   const sanityBadges = siteSettings?.navbarPartnerBadges?.slice(0, 3) ?? []

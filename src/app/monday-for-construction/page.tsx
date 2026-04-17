@@ -32,7 +32,7 @@ export default async function Page() {
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
       faqTabs={groupFaqsIntoTabs(centralFaqs)}
-      heroVideoSrc="/videos/construction-hero.mp4"
+      heroVideoSrc={page?.heroLocalVideoSrc || "/videos/construction-hero.mp4"}
       afterFaq={<ConstructionExtras />}
     />
   )

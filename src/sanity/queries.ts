@@ -73,6 +73,7 @@ const PAGE_FIELDS = `
   heroHeading,
   heroSubheading,
   heroImage,
+  heroLocalVideoSrc,
   primaryCtaLabel,
   primaryCtaUrl,
   secondaryCtaLabel,
@@ -206,6 +207,7 @@ export async function getAllServicePages() {
 
 export async function getSiteSettings() {
   return client.fetch(`*[_type == "siteSettings"][0]{
+    contactEmail,
     phone,
     calendlyLink,
     mondayAffiliateLink,
@@ -270,9 +272,38 @@ export async function getPageBySlug(slug: string) {
   return client.fetch(
     `*[_type == "page" && slug.current == $slug][0]{
       _id, title, "slug": slug.current, seoTitle, seoDescription,
-      heroHeading, heroSubheading, heroImage,
+      heroEyebrow, heroHeading, heroSubheading, heroBody, heroImage,
+      heroLocalVideoSrc,
+      heroStats,
       primaryCtaLabel, primaryCtaUrl,
+      secondaryCtaLabel, secondaryCtaUrl,
+      heroVideoUrl, heroVideoTitle,
       body, pageType,
+
+      // Capabilities grid
+      capabilitiesEyebrow, capabilitiesHeading, capabilitiesHeadingAccent,
+      capabilitiesSubheading, capabilitiesTheme, capabilitiesColumns,
+      capabilitiesCards, capabilitiesCtaLabel, capabilitiesCtaUrl,
+
+      // Secondary capabilities
+      secondaryCapabilitiesEyebrow, secondaryCapabilitiesHeading,
+      secondaryCapabilitiesHeadingAccent, secondaryCapabilitiesSubheading,
+      secondaryCapabilitiesCards, secondaryCapabilitiesColumns,
+      secondaryCapabilitiesCtaLabel, secondaryCapabilitiesCtaUrl,
+
+      // Partner ecosystem
+      partnerEcosystemEyebrow, partnerEcosystemHeading,
+      partnerEcosystemHeadingAccent, partnerEcosystemSubheading,
+      partnerEcosystemCards[]{ _key, name, tier, description, logo, tint },
+
+      // Remote team / offices
+      remoteTeamEyebrow, remoteTeamHeading, remoteTeamHeadingAccent,
+      remoteTeamSubheading, officeLocations, remoteFeatures,
+      remoteTeamCtaLabel, remoteTeamCtaUrl,
+
+      // Application form
+      applicationFormHeading, applicationFormEmbedUrl,
+
       comparisonHeading, comparisonSubheading, comparisonTabs,
       methodologyHeading, methodologySteps,
       calendlyHeading, calendlySubheading,
@@ -281,7 +312,23 @@ export async function getPageBySlug(slug: string) {
       joinSubheading, joinStats, joinFootnote,
       logoCloudHeadingPart1, logoCloudHeadingAccent,
       textContentSections,
-      heroPartnerBadges[]{ name, image, width, height }
+      heroPartnerBadges[]{ name, image, width, height },
+
+      // Case study cards
+      caseStudySectionHeading, caseStudyCards,
+
+      // Testimonials
+      testimonialsHeading,
+
+      // Discover CTA
+      discoverHeading, discoverPrimaryCtaLabel, discoverPrimaryCtaUrl,
+      discoverSecondaryCtaLabel, discoverSecondaryCtaUrl,
+
+      // Testimonial banner
+      testimonialBannerHeadingPart1, testimonialBannerHeadingAccent,
+      testimonialBannerHeadingPart2, testimonialBannerPrimaryCtaLabel,
+      testimonialBannerPrimaryCtaUrl, testimonialBannerSecondaryCtaLabel,
+      testimonialBannerSecondaryCtaUrl
     }`,
     { slug }
   )
@@ -401,6 +448,6 @@ export async function getMakePartnersPage() {
 
 export async function getHomePage() {
   return client.fetch(`*[_type == "homePage"][0]{
-    title, seoTitle, seoDescription, contentBlocks
+    title, seoTitle, seoDescription, contentBlocks[]{..., heroLocalVideoSrc}
   }`)
 }

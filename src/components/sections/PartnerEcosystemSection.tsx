@@ -1,12 +1,16 @@
 "use client"
 
+import { urlFor } from "@/sanity/image"
+
 export interface Partner {
   _key?: string
   name: string
   tier?: string
   description?: string
-  /** Inline SVG content for wordmark — no external assets needed. */
-  wordmark: React.ReactNode
+  /** Inline SVG content for wordmark — legacy, not CMS-driven. */
+  wordmark?: React.ReactNode
+  /** Sanity image reference for partner logo. */
+  logo?: { asset?: { _ref: string } }
   /** Background accent used inside the logo plate. */
   tint?: string
 }
@@ -97,7 +101,18 @@ export default function PartnerEcosystemSection({
                   marginBottom: 14,
                 }}
               >
-                {p.wordmark}
+                {p.logo?.asset?._ref ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={urlFor(p.logo).height(80).url()}
+                    alt={p.name}
+                    style={{ maxHeight: 40, width: "auto" }}
+                  />
+                ) : p.wordmark ? (
+                  p.wordmark
+                ) : (
+                  <span style={{ fontSize: 18, fontWeight: 700, color: "#111" }}>{p.name}</span>
+                )}
               </div>
               <div
                 style={{

@@ -341,10 +341,12 @@ export default function UniversalPageTemplate({
       <TestimonialsGrid caseStudies={caseStudies} />
 
       {/* 13. Discover CTA */}
-      <DiscoverCtaSection badge={siteSettings?.badgeCertifications} />
+      {!page.hideDiscoverSection && (
+        <DiscoverCtaSection badge={siteSettings?.badgeCertifications} />
+      )}
 
       {/* 14. Join Stats */}
-      {page.joinStats?.length > 0 && (
+      {!page.hideJoinStatsSection && page.joinStats?.length > 0 && (
         <JoinStatsSection
           headingPart1={page.joinHeadingPart1}
           headingAccent={page.joinHeadingAccent}
@@ -359,17 +361,19 @@ export default function UniversalPageTemplate({
       )}
 
       {/* 15. Testimonial CTA Banner (bottom) */}
-      <TestimonialCtaBanner
-        headingPart1={page.joinHeadingPart1 || "Join "}
-        headingAccent={page.joinHeadingAccent || "500+ organisations"}
-        headingPart2={
-          page.joinHeadingPart2 ||
-          " that have maximised their workflows with our monday.com expert support"
-        }
-        primaryCtaUrl={calendlyUrl}
-        secondaryCtaUrl={calendlyUrl}
-        testimonial={featuredTestimonial}
-      />
+      {!page.hideTestimonialBanner && (
+        <TestimonialCtaBanner
+          headingPart1={page.joinHeadingPart1 || "Join "}
+          headingAccent={page.joinHeadingAccent || "500+ organisations"}
+          headingPart2={
+            page.joinHeadingPart2 ||
+            " that have maximised their workflows with our monday.com expert support"
+          }
+          primaryCtaUrl={calendlyUrl}
+          secondaryCtaUrl={calendlyUrl}
+          testimonial={featuredTestimonial}
+        />
+      )}
 
       {/* 16. Security Badge */}
       <SecurityBadgeSection badge={siteSettings?.badgeSecurity} />

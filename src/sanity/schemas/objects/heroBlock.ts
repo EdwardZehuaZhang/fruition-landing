@@ -48,5 +48,10 @@ export default defineType({
       type: 'image',
       options: { hotspot: true },
     }),
+    defineField({
+      name: 'heroLocalVideoSrc',
+      title: 'Hero Local Video Path (e.g. /videos/home-hero.mp4)',
+      type: 'string',
+    }),
   ],
 })

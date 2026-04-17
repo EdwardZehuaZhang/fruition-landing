@@ -10,6 +10,7 @@ export default {
     { name: 'heroHeading', title: 'Hero Heading', type: 'string' },
     { name: 'heroSubheading', title: 'Hero Subheading', type: 'text' },
     { name: 'heroImage', title: 'Hero Image', type: 'image', options: { hotspot: true } },
+    { name: 'heroLocalVideoSrc', title: 'Hero Local Video Path (e.g. /videos/construction-hero.mp4)', type: 'string' },
     { name: 'primaryCtaLabel', title: 'Primary CTA Label', type: 'string' },
     { name: 'primaryCtaUrl', title: 'Primary CTA URL', type: 'string' },
     { name: 'secondaryCtaLabel', title: 'Secondary CTA Label', type: 'string' },
@@ -221,5 +222,10 @@ export default {
     // Logo cloud overrides
     { name: 'logoCloudHeadingPart1', title: 'Logo Cloud Heading (prefix)', type: 'string' },
     { name: 'logoCloudHeadingAccent', title: 'Logo Cloud Heading (accent)', type: 'string' },
+
+    // Section visibility toggles
+    { name: 'hideDiscoverSection', title: 'Hide Discover CTA Section', type: 'boolean', initialValue: false },
+    { name: 'hideJoinStatsSection', title: 'Hide Join Stats Section', type: 'boolean', initialValue: false },
+    { name: 'hideTestimonialBanner', title: 'Hide Testimonial CTA Banner', type: 'boolean', initialValue: false },
   ],
 }

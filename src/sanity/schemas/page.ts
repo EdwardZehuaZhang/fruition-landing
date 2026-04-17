@@ -28,8 +28,25 @@ export default {
     },
     { name: 'heroVideoUrl', title: 'Hero Video URL (YouTube, shown below logo cloud)', type: 'url' },
     { name: 'heroVideoTitle', title: 'Hero Video Title', type: 'string' },
+    { name: 'heroBody', title: 'Hero Body Text (paragraph below subheading)', type: 'text' },
     { name: 'primaryCtaLabel', title: 'Primary CTA Label', type: 'string' },
     { name: 'primaryCtaUrl', title: 'Primary CTA URL', type: 'string' },
+    { name: 'secondaryCtaLabel', title: 'Secondary CTA Label', type: 'string' },
+    { name: 'secondaryCtaUrl', title: 'Secondary CTA URL', type: 'string' },
+    {
+      name: 'heroStats',
+      title: 'Hero Stats Row',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'heroStat',
+        fields: [
+          { name: 'value', title: 'Value (e.g. "500+")', type: 'string' },
+          { name: 'label', title: 'Label', type: 'string' },
+        ],
+      }],
+    },
+    { name: 'heroLocalVideoSrc', title: 'Hero Local Video Path (e.g. /videos/hero.mp4)', type: 'string' },
     { name: 'body', title: 'Body', type: 'array', of: [{ type: 'block' }] },
 
     // Capabilities / Benefits grid (e.g. "Why Join Fruition")
@@ -77,6 +94,28 @@ export default {
     },
     { name: 'secondaryCapabilitiesCtaLabel', title: 'Secondary Capabilities CTA Label', type: 'string' },
     { name: 'secondaryCapabilitiesCtaUrl', title: 'Secondary Capabilities CTA URL', type: 'string' },
+
+    // Partner Ecosystem section (e.g. careers "Built on trusted partners")
+    { name: 'partnerEcosystemEyebrow', title: 'Partner Ecosystem Eyebrow', type: 'string' },
+    { name: 'partnerEcosystemHeading', title: 'Partner Ecosystem Heading', type: 'string' },
+    { name: 'partnerEcosystemHeadingAccent', title: 'Partner Ecosystem Heading Accent', type: 'string' },
+    { name: 'partnerEcosystemSubheading', title: 'Partner Ecosystem Subheading', type: 'text' },
+    {
+      name: 'partnerEcosystemCards',
+      title: 'Partner Ecosystem Cards',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'partnerEcosystemCard',
+        fields: [
+          { name: 'name', title: 'Partner Name', type: 'string' },
+          { name: 'tier', title: 'Tier (e.g. "Platinum Partner")', type: 'string' },
+          { name: 'description', title: 'Description', type: 'text' },
+          { name: 'logo', title: 'Logo Image', type: 'image' },
+          { name: 'tint', title: 'Card Background Tint (hex e.g. #FFF2E6)', type: 'string' },
+        ],
+      }],
+    },
 
     // Remote team / global offices section (e.g. careers page "Work From Anywhere")
     { name: 'remoteTeamEyebrow', title: 'Remote Team Eyebrow (e.g. "🌍 FULLY REMOTE")', type: 'string' },
@@ -254,6 +293,44 @@ export default {
         ],
       }],
     },
+
+    // Case Study Cards (for listing pages like /customer-testimonials)
+    { name: 'caseStudySectionHeading', title: 'Case Study Section Heading', type: 'string' },
+    {
+      name: 'caseStudyCards',
+      title: 'Case Study Cards',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'caseStudyCard',
+        fields: [
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
+          { name: 'product', title: 'Product (e.g. "monday CRM")', type: 'string' },
+          { name: 'services', title: 'Services Description', type: 'text' },
+          { name: 'timeline', title: 'Timeline (e.g. "4 weeks")', type: 'string' },
+        ],
+      }],
+    },
+
+    // Testimonials section
+    { name: 'testimonialsHeading', title: 'Testimonials Heading', type: 'string' },
+
+    // Discover CTA section overrides
+    { name: 'discoverHeading', title: 'Discover CTA Heading', type: 'string' },
+    { name: 'discoverPrimaryCtaLabel', title: 'Discover Primary CTA Label', type: 'string' },
+    { name: 'discoverPrimaryCtaUrl', title: 'Discover Primary CTA URL', type: 'string' },
+    { name: 'discoverSecondaryCtaLabel', title: 'Discover Secondary CTA Label', type: 'string' },
+    { name: 'discoverSecondaryCtaUrl', title: 'Discover Secondary CTA URL', type: 'string' },
+
+    // Testimonial CTA Banner (bottom) overrides
+    { name: 'testimonialBannerHeadingPart1', title: 'Testimonial Banner Heading Part 1', type: 'string' },
+    { name: 'testimonialBannerHeadingAccent', title: 'Testimonial Banner Heading Accent', type: 'string' },
+    { name: 'testimonialBannerHeadingPart2', title: 'Testimonial Banner Heading Part 2', type: 'string' },
+    { name: 'testimonialBannerPrimaryCtaLabel', title: 'Testimonial Banner Primary CTA Label', type: 'string' },
+    { name: 'testimonialBannerPrimaryCtaUrl', title: 'Testimonial Banner Primary CTA URL', type: 'string' },
+    { name: 'testimonialBannerSecondaryCtaLabel', title: 'Testimonial Banner Secondary CTA Label', type: 'string' },
+    { name: 'testimonialBannerSecondaryCtaUrl', title: 'Testimonial Banner Secondary CTA URL', type: 'string' },
 
     {
       name: 'pageType',

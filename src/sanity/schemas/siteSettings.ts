@@ -3,6 +3,7 @@ export default {
   title: 'Site Settings',
   type: 'document',
   fields: [
+    { name: 'contactEmail', title: 'Contact Email', type: 'string' },
     { name: 'phone', title: 'Phone', type: 'string' },
     { name: 'calendlyLink', title: 'Calendly Link', type: 'string' },
     { name: 'mondayAffiliateLink', title: 'Monday Affiliate Link', type: 'string' },

@@ -34,6 +34,7 @@ interface FooterPartnerLogo {
 }
 
 interface SiteSettingsProp {
+  contactEmail?: string
   phone?: string
   calendlyLink?: string
   logo?: unknown
@@ -89,7 +90,10 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
   const departmentLinks = siteSettings?.footerDepartmentLinks ?? []
   const industryLinks = siteSettings?.footerIndustryLinks ?? []
 
-  const logoSrc = '/images/logo-fruition-white.avif'
+  const contactEmail = siteSettings?.contactEmail || 'contact@fruitionservices.io'
+  const logoSrc = siteSettings?.logoWhite
+    ? urlFor(siteSettings.logoWhite).width(640).url()
+    : '/images/logo-fruition-white.avif'
 
   return (
     <footer className="flex flex-col lg:flex-row w-full">
@@ -128,11 +132,11 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
         <div className="flex flex-col gap-[10px]">
           {/* Email */}
           <a
-            href="mailto:contact@fruitionservices.io"
+            href={`mailto:${contactEmail}`}
             className="flex items-start gap-2 text-white hover:opacity-80 transition-opacity"
           >
             <EnvelopeIcon />
-            <span className="text-[13px] leading-[20px]">contact@fruitionservices.io</span>
+            <span className="text-[13px] leading-[20px]">{contactEmail}</span>
           </a>
 
           {/* Phone numbers (one per office) */}
