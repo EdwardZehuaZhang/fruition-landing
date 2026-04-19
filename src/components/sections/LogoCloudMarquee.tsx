@@ -6,12 +6,14 @@ import type { CarouselLogo } from "./types"
 interface LogoCloudMarqueeProps {
   headingPart1?: string
   headingAccent?: string
+  description?: string
   logos?: CarouselLogo[]
 }
 
 export default function LogoCloudMarquee({
   headingPart1 = "Clients who have used our ",
   headingAccent = "monday.com consulting services",
+  description,
   logos = [],
 }: LogoCloudMarqueeProps) {
   const normalizedLogos = logos
@@ -31,6 +33,20 @@ export default function LogoCloudMarquee({
           <span className="text-black">{headingPart1}</span>
           <span style={{ color: "var(--purple-primary)" }}>{headingAccent}</span>
         </p>
+        {description && (
+          <p
+            className="text-center"
+            style={{
+              fontSize: 16,
+              lineHeight: "25.6px",
+              color: "#555",
+              maxWidth: 860,
+              whiteSpace: "pre-line",
+            }}
+          >
+            {description}
+          </p>
+        )}
         <div className="w-full overflow-visible">
           <div className="flex items-center gap-[65px] animate-marquee" style={{ width: "max-content" }}>
             {duplicatedLogos.map((logo, i) => (

@@ -10,8 +10,8 @@ interface BlogCategory {
 export async function generateMetadata() {
   const page = await getPageBySlug("consulting-blog")
   return {
-    title: page?.seoTitle || "monday.com Blog | Fruition Services",
-    description: page?.seoDescription || "Expert insights on monday.com implementation, CRM, automation and integrations from certified Fruition consultants.",
+    title: page?.seoTitle,
+    description: page?.seoDescription,
   }
 }
 
@@ -22,13 +22,14 @@ export default async function BlogPage() {
     getPageBySlug("consulting-blog"),
   ])
 
-  const heading = page?.heroHeading || "Consulting Blog"
-  const subheading = page?.heroSubheading || "Insights, guides, and updates from the Fruition team."
-
   return (
     <div className="max-w-7xl mx-auto px-4 py-16">
-      <h1 className="text-4xl font-bold text-gray-900 mb-4">{heading}</h1>
-      <p className="text-lg text-gray-600 mb-8">{subheading}</p>
+      {page?.heroHeading && (
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">{page.heroHeading}</h1>
+      )}
+      {page?.heroSubheading && (
+        <p className="text-lg text-gray-600 mb-8">{page.heroSubheading}</p>
+      )}
 
       <div className="flex flex-wrap gap-2 mb-10">
         <Link href="/consulting-blog" className="px-3 py-1 bg-blue-700 text-white rounded-full text-sm">All Posts</Link>

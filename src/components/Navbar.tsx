@@ -2,10 +2,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { urlFor } from '@/sanity/image'
 
+// Calendly fallback only used when siteSettings is not yet loaded
 const FALLBACK_CALENDLY_URL = 'https://calendly.com/global-calendar-fruitionservices'
-const FALLBACK_PHONE_AU = '+61 483 955 931'
 
 interface NavLink {
   label?: string
@@ -15,6 +16,7 @@ interface NavLink {
 interface NavSubSection {
   heading?: string
   items?: NavLink[]
+  columns?: number
 }
 
 interface NavItem {
@@ -37,105 +39,70 @@ interface SiteSettingsProp {
   navbarPartnerBadges?: PartnerBadge[]
 }
 
-const FALLBACK_NAV: NavItem[] = [
-  {
-    label: 'What We Offer',
-    sections: [
-      {
-        heading: 'Services',
-        items: [
-          { label: 'Implementation Packages', href: '/implementation-packages' },
-          { label: 'monday.com Training', href: '/monday-training' },
-          { label: 'monday.com Implementation Consultants', href: '/monday-implementation-consultants' },
-          { label: 'monday CRM Consulting', href: '/monday-crm-consulting' },
-        ],
-      },
-    ],
-  },
-  {
-    label: 'About',
-    sections: [
-      {
-        heading: 'About',
-        items: [
-          { label: 'About Us', href: '/about-us' },
-          { label: 'Blog', href: '/consulting-blog' },
-        ],
-      },
-    ],
-  },
-]
-
 export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsProp | null }) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const pathname = usePathname()
 
   const calendlyUrl = siteSettings?.calendlyLink || FALLBACK_CALENDLY_URL
-  const phoneAu = siteSettings?.phone || FALLBACK_PHONE_AU
-  const navItems: NavItem[] =
-    siteSettings?.navigation && siteSettings.navigation.length > 0 ? siteSettings.navigation : FALLBACK_NAV
+  const phoneAu = siteSettings?.phone
+  const navItems: NavItem[] = siteSettings?.navigation || []
   const partnerBadges: PartnerBadge[] = siteSettings?.navbarPartnerBadges ?? []
 
   const logoUrl = siteSettings?.logo
     ? urlFor(siteSettings.logo).height(80).fit('max').url()
-    : '/images/logo-fruition.png'
+    : null
+
+  const isNavItemActive = (item: NavItem) =>
+    item.sections?.some((s) => s.items?.some((link) => link.href && pathname === link.href)) ?? false
 
   return (
-    <nav className="bg-white sticky top-0 z-50 shadow-sm">
+    <nav className="bg-white sticky top-0 z-50 shadow-sm" onMouseLeave={() => setOpenMenu(null)}>
       <div className="max-w-[1348px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-[85px]">
           {/* Logo */}
           <Link href="/" className="shrink-0">
-            <Image
-              src={logoUrl}
-              alt="Fruition Services"
-              width={320}
-              height={40}
-              className="h-10 w-auto"
-              priority
-              unoptimized
-            />
+            {logoUrl ? (
+              <Image
+                src={logoUrl}
+                alt="Fruition Services"
+                width={320}
+                height={40}
+                className="h-10 w-auto"
+                priority
+                unoptimized
+              />
+            ) : (
+              <span className="font-bold text-lg">Fruition Services</span>
+            )}
           </Link>
 
           {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-6">
-            {navItems.map((item) => (
-              <div
-                key={item.label}
-                className="relative"
-                onMouseEnter={() => setOpenMenu(item.label || null)}
-                onMouseLeave={() => setOpenMenu(null)}
-              >
-                <button className="text-[#242323] hover:text-[#8015e8] font-medium text-sm py-2 transition-colors">
-                  {item.label}
-                </button>
-                {openMenu === item.label && (
-                  <div className="absolute top-full left-0 bg-white shadow-lg rounded-xl py-4 z-50 flex gap-6 px-5 min-w-max border border-gray-100">
-                    {item.sections?.map((section, sIdx) => (
-                      <div key={`${section.heading}-${sIdx}`} className="min-w-[220px]">
-                        {section.heading && (
-                          <p className="text-xs font-semibold text-[#8015e8] uppercase tracking-wider mb-2">
-                            {section.heading}
-                          </p>
-                        )}
-                        {section.items?.map((sub) => (
-                          <Link
-                            key={sub.href}
-                            href={sub.href || '#'}
-                            className="block py-1.5 text-sm text-[#242323] hover:text-[#8015e8] transition-colors"
-                          >
-                            {sub.label}
-                          </Link>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+            {navItems.map((item) => {
+              const active = isNavItemActive(item)
+              return (
+                <div
+                  key={item.label}
+                  onMouseEnter={() => setOpenMenu(item.label || null)}
+                >
+                  <button
+                    className={`font-medium text-sm py-1.5 px-3 transition-colors border ${
+                      openMenu === item.label
+                        ? 'text-[#242323] border-[#242323] rounded-[4px]'
+                        : active
+                          ? 'text-[#8015e8] border-transparent'
+                          : 'text-[#242323] border-transparent hover:text-[#8015e8]'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                </div>
+              )
+            })}
 
             {/* Partner badges + phone icon + CTA */}
-            <div className="flex items-center gap-[12px] border-l border-gray-200 pl-4">
+            <div className="flex items-center gap-[12px] border-l border-gray-200 pl-4" onMouseEnter={() => setOpenMenu(null)}>
               <div className="flex items-center gap-3">
                 {partnerBadges.map((badge, i) => {
                   const h = badge.height ?? 32
@@ -158,15 +125,17 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
               </div>
 
               {/* Phone icon */}
-              <a
-                href={`tel:${phoneAu.replace(/\s/g, '')}`}
-                className="flex items-center justify-center w-[36px] h-[32px] rounded-[7px] hover:bg-gray-100 transition-colors"
-                aria-label="Call us"
-              >
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M17.22 22.167h-.047a15.633 15.633 0 0 1-6.803-2.987 15.388 15.388 0 0 1-4.678-5.133A15.517 15.517 0 0 1 3.85 7.583a3.395 3.395 0 0 1 .77-2.753A4.667 4.667 0 0 1 6.44 3.5h1.633c.98-.01 1.84.647 2.1 1.587.18.72.432 1.42.747 2.093a2.333 2.333 0 0 1-.525 2.567l-.688.688a11.667 11.667 0 0 0 5.858 5.858l.688-.688a2.333 2.333 0 0 1 2.567-.525c.673.316 1.373.567 2.093.747a2.18 2.18 0 0 1 1.587 2.147v1.633a2.333 2.333 0 0 1-2.333 2.333 3.267 3.267 0 0 1-.467.035l-.48-.007Z" stroke="#8015E8" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </a>
+              {phoneAu && (
+                <a
+                  href={`tel:${phoneAu.replace(/\s/g, '')}`}
+                  className="flex items-center justify-center w-[36px] h-[32px] rounded-[7px] hover:bg-gray-100 transition-colors"
+                  aria-label="Call us"
+                >
+                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.22 22.167h-.047a15.633 15.633 0 0 1-6.803-2.987 15.388 15.388 0 0 1-4.678-5.133A15.517 15.517 0 0 1 3.85 7.583a3.395 3.395 0 0 1 .77-2.753A4.667 4.667 0 0 1 6.44 3.5h1.633c.98-.01 1.84.647 2.1 1.587.18.72.432 1.42.747 2.093a2.333 2.333 0 0 1-.525 2.567l-.688.688a11.667 11.667 0 0 0 5.858 5.858l.688-.688a2.333 2.333 0 0 1 2.567-.525c.673.316 1.373.567 2.093.747a2.18 2.18 0 0 1 1.587 2.147v1.633a2.333 2.333 0 0 1-2.333 2.333 3.267 3.267 0 0 1-.467.035l-.48-.007Z" stroke="#8015E8" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </a>
+              )}
 
               {/* CTA */}
               <a
@@ -214,7 +183,11 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                       <Link
                         key={sub.href}
                         href={sub.href || '#'}
-                        className="block px-2 py-1.5 text-sm text-[#242323] hover:text-[#8015e8]"
+                        className={`block px-2 py-1.5 text-sm transition-colors ${
+                          sub.href && pathname === sub.href
+                            ? 'text-[#8015e8] font-medium'
+                            : 'text-[#242323] hover:text-[#8015e8]'
+                        }`}
                         onClick={() => setMobileOpen(false)}
                       >
                         {sub.label}
@@ -256,6 +229,74 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
           </div>
         )}
       </div>
+
+      {/* Desktop mega dropdown */}
+      {openMenu && (() => {
+        const activeItem = navItems.find((item) => item.label === openMenu)
+        if (!activeItem?.sections?.length) return null
+        const sectionCount = activeItem.sections.length
+        const hasMultipleSections = sectionCount > 1
+        return (
+          <div className="hidden lg:block border-t border-gray-200">
+            <div className="max-w-[1348px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <div className="flex gap-16">
+                {activeItem.sections.map((section, sIdx) => {
+                  const itemCount = section.items?.length ?? 0
+                  /* Auto-compute columns when not explicitly set */
+                  let cols = section.columns
+                  if (!cols) {
+                    if (hasMultipleSections) {
+                      cols = itemCount >= 6 ? 3 : 1
+                    } else {
+                      cols = itemCount >= 7 ? 4 : itemCount >= 4 ? 2 : 1
+                    }
+                  }
+                  const isNarrow = cols <= 1
+                  return (
+                    <div
+                      key={`${section.heading}-${sIdx}`}
+                      className={
+                        hasMultipleSections && isNarrow
+                          ? 'min-w-[240px] shrink-0'
+                          : 'flex-1'
+                      }
+                    >
+                      {section.heading && (
+                        <p className="text-base font-medium text-[#686b82] pb-3 border-b border-gray-200 mb-5">
+                          {section.heading}
+                        </p>
+                      )}
+                      <div
+                        className={
+                          cols > 1
+                            ? 'grid gap-y-5'
+                            : 'flex flex-col gap-5'
+                        }
+                        style={cols > 1 ? { gridTemplateColumns: `repeat(${cols}, 1fr)`, columnGap: '3rem' } : undefined}
+                      >
+                        {section.items?.map((sub) => (
+                          <Link
+                            key={sub.href}
+                            href={sub.href || '#'}
+                            className={`text-sm transition-colors whitespace-nowrap ${
+                              sub.href && pathname === sub.href
+                                ? 'text-[#8015e8] font-medium'
+                                : 'text-[#242323] hover:text-[#8015e8]'
+                            }`}
+                            onClick={() => setOpenMenu(null)}
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        )
+      })()}
     </nav>
   )
 }

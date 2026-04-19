@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/image'
 
+// Calendly fallback only used when siteSettings is not yet loaded
 const FALLBACK_CALENDLY_URL = 'https://calendly.com/global-calendar-fruitionservices'
 
 interface FooterLink {
@@ -47,18 +48,6 @@ interface SiteSettingsProp {
   footerIndustryLinks?: FooterLink[]
 }
 
-const FALLBACK_OFFICES: Office[] = [
-  {
-    flag: '\u{1F1E6}\u{1F1FA}',
-    city: 'Sydney, Australia',
-    label: 'Head Office',
-    href: '/monday-partner-australia',
-    address: '64 York Street, Sydney NSW 2000 Australia',
-    addressUrl: 'https://g.co/kgs/gAajXzG',
-    phone: '+61 483 955 931',
-    phoneTel: '+61483955931',
-  },
-]
 
 /* ------------------------------------------------------------------ */
 /*  Inline SVG icons                                                   */
@@ -83,17 +72,17 @@ function PhoneIcon() {
 
 export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsProp | null }) {
   const calendlyUrl = siteSettings?.calendlyLink || FALLBACK_CALENDLY_URL
-  const offices = siteSettings?.offices && siteSettings.offices.length > 0 ? siteSettings.offices : FALLBACK_OFFICES
+  const offices = siteSettings?.offices ?? []
   const socials = siteSettings?.socialLinks ?? []
   const partnerLogos = siteSettings?.footerPartnerLogos ?? []
   const servicesLinks = siteSettings?.footerServicesLinks ?? []
   const departmentLinks = siteSettings?.footerDepartmentLinks ?? []
   const industryLinks = siteSettings?.footerIndustryLinks ?? []
 
-  const contactEmail = siteSettings?.contactEmail || 'contact@fruitionservices.io'
+  const contactEmail = siteSettings?.contactEmail
   const logoSrc = siteSettings?.logoWhite
     ? urlFor(siteSettings.logoWhite).width(640).url()
-    : '/images/logo-fruition-white.avif'
+    : null
 
   return (
     <footer className="flex flex-col lg:flex-row w-full">
@@ -109,14 +98,18 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
         {/* Logo + CTA row */}
         <div className="flex items-center gap-[15px] flex-wrap">
           <Link href="/">
-            <Image
-              src={logoSrc}
-              alt="Fruition Services"
-              width={320}
-              height={28}
-              className="h-[28px] w-auto"
-              unoptimized
-            />
+            {logoSrc ? (
+              <Image
+                src={logoSrc}
+                alt="Fruition Services"
+                width={320}
+                height={28}
+                className="h-[28px] w-auto"
+                unoptimized
+              />
+            ) : (
+              <span className="font-bold text-lg text-white">Fruition Services</span>
+            )}
           </Link>
           <a
             href={calendlyUrl}
@@ -131,13 +124,15 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
         {/* Contact info */}
         <div className="flex flex-col gap-[10px]">
           {/* Email */}
-          <a
-            href={`mailto:${contactEmail}`}
-            className="flex items-start gap-2 text-white hover:opacity-80 transition-opacity"
-          >
-            <EnvelopeIcon />
-            <span className="text-[13px] leading-[20px]">{contactEmail}</span>
-          </a>
+          {contactEmail && (
+            <a
+              href={`mailto:${contactEmail}`}
+              className="flex items-start gap-2 text-white hover:opacity-80 transition-opacity"
+            >
+              <EnvelopeIcon />
+              <span className="text-[13px] leading-[20px]">{contactEmail}</span>
+            </a>
+          )}
 
           {/* Phone numbers (one per office) */}
           <div className="flex items-start gap-2">

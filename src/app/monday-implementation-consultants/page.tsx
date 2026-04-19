@@ -10,12 +10,8 @@ import MondayImplementationConsultantsContent from "./MondayImplementationConsul
 export async function generateMetadata() {
   const data = await getMondayImplementationConsultantsPage()
   return {
-    title:
-      data?.seoTitle ||
-      "monday.com Implementation Consultants | Fruition Services",
-    description:
-      data?.seoDescription ||
-      "Certified monday.com implementation consultants helping 500+ businesses streamline their workflows.",
+    title: data?.seoTitle,
+    description: data?.seoDescription,
   }
 }
 

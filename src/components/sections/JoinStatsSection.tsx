@@ -29,6 +29,7 @@ export default function JoinStatsSection({
   return (
     <StatsBlockView
       heading={`${headingPart1}${headingAccent}${headingPart2}`}
+      headingAccent={headingAccent}
       subheading={subheading || undefined}
       stats={stats.map((s) => ({ _key: s._key, value: s.value, label: s.label }))}
       footnote={footnote}

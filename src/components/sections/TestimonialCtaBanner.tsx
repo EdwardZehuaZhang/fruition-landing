@@ -34,109 +34,77 @@ export default function TestimonialCtaBanner({
   const role = testimonial?.clientCompany || testimonial?.clientRole || ""
 
   return (
-    <section className="bg-white py-[80px]">
-      <div className="mx-auto max-w-[1200px] px-4">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          {/* Left: dark gradient CTA */}
-          <div
-            className="relative flex min-h-[340px] flex-col justify-center overflow-hidden rounded-card p-8 md:p-12"
-            style={{
-              background:
-                "linear-gradient(135deg, #0a0028 0%, #1a0b52 50%, #10003a 100%)",
-            }}
-          >
-            {/* Decorative glow (top-left) */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute"
-              style={{
-                top: -120,
-                left: -120,
-                width: 340,
-                height: 340,
-                background:
-                  "radial-gradient(circle, rgba(186,131,240,0.45) 0%, rgba(128,21,232,0.15) 45%, transparent 70%)",
-                filter: "blur(4px)",
-              }}
-            />
-            <h2
-              className="relative text-section-h2 max-w-[26ch] text-white"
-            >
-              <span>{headingPart1}</span>
-              <span style={{ color: "#ba83f0" }}>{headingAccent}</span>
-              <span>{headingPart2}</span>
-            </h2>
-            <div
-              className="relative mt-8 flex w-full max-w-[340px] flex-col gap-3.5"
-            >
-              {primaryCtaLabel && primaryCtaUrl && (
-                <Link
-                  href={primaryCtaUrl}
-                  className="ui-cta-btn ui-cta-btn-primary"
-                >
-                  {primaryCtaLabel}
-                </Link>
-              )}
-              {secondaryCtaLabel && secondaryCtaUrl && (
-                <Link
-                  href={secondaryCtaUrl}
-                  className="ui-cta-btn ui-cta-btn-secondary"
-                >
-                  {secondaryCtaLabel}
-                </Link>
-              )}
-            </div>
+    <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6">
+      <div className="mx-auto max-w-6xl">
+        <div className="relative w-full rounded-[28px] bg-black text-white overflow-hidden">
+          {/* Layered gradient background */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(90,110,255,0.32),transparent_25%),radial-gradient(circle_at_45%_70%,rgba(70,90,255,0.22),transparent_28%),linear-gradient(135deg,#020307_15%,#050814_45%,#090d24_75%,#04050c_100%)]" />
+
+          {/* Decorative orbs */}
+          <div className="absolute inset-0 opacity-80 pointer-events-none">
+            <div className="absolute -left-20 top-20 h-[420px] w-[420px] rounded-full border border-white/5" />
+            <div className="absolute left-[22%] top-[18%] h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(83,106,255,0.25),transparent_60%)] blur-2xl" />
+            <div className="absolute left-[10%] bottom-[-10%] h-[320px] w-[900px] rotate-[-28deg] bg-[linear-gradient(90deg,transparent,rgba(99,122,255,0.55),transparent)] blur-xl" />
+            <div className="absolute left-[18%] top-[12%] h-[260px] w-[780px] rotate-[-28deg] bg-[linear-gradient(90deg,transparent,rgba(92,115,255,0.4),transparent)] blur-xl" />
           </div>
 
-          {/* Right: testimonial card */}
-          <div
-            className="ui-surface-panel-strong relative flex min-h-[340px] flex-col p-8 md:p-12"
-          >
-            <div className="relative flex-1">
-              <p
-                className="text-body-lead text-black"
-                style={{
-                  whiteSpace: "pre-line",
-                }}
-              >
-                {testimonial?.quote ?? ""}
-              </p>
-              {/* Quote mark */}
-              <svg
-                aria-hidden
-                className="absolute"
-                style={{ bottom: 0, right: 0, opacity: 0.9 }}
-                width="36"
-                height="28"
-                viewBox="0 0 36 28"
-                fill="#1a0b52"
-              >
-                <path d="M0 28V16.8C0 12 1.2 7.9 3.6 4.7 6 1.5 9.4 0 13.8 0v5.3c-2.2.4-4 1.4-5.3 3-1.4 1.6-2 3.6-2 6H13.8V28H0zm22.2 0V16.8c0-4.8 1.2-8.9 3.6-12.1C28.2 1.5 31.6 0 36 0v5.3c-2.2.4-4 1.4-5.3 3-1.4 1.6-2 3.6-2 6H36V28H22.2z" />
-              </svg>
-            </div>
-            <div
-              className="mt-6 flex items-center gap-3.5"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={photoSrc || "/images/default-avatar.svg"}
-                alt={testimonial?.clientName || ""}
-                width={53}
-                height={53}
-                className="h-[53px] w-[53px] shrink-0 rounded-full object-cover"
-                style={{
-                  backgroundColor: "#e8e6e6",
-                }}
-              />
-              <div>
-                <p className="text-[18px] font-semibold leading-[1.4] text-[#2b074d]">
-                  {testimonial?.clientName ?? ""}
-                </p>
-                {role && (
-                  <p className="text-caption font-normal text-[#595959]">
-                    {role}
-                  </p>
+          {/* Content grid */}
+          <div className="relative grid grid-cols-1 lg:grid-cols-[1.05fr_1fr] gap-8 lg:gap-10 px-8 py-10 md:px-12 md:py-14 items-center">
+            {/* Left: heading + CTAs */}
+            <div className="max-w-[480px]">
+              <h2 className="text-[2.25rem] md:text-[3.25rem] leading-[1.12] font-semibold tracking-[-0.04em]">
+                <span>{headingPart1}</span>
+                <span className="text-[#b493ff]">{headingAccent}</span>
+                <span>{headingPart2}</span>
+              </h2>
+
+              <div className="mt-10 flex flex-col gap-4 max-w-[330px]">
+                {primaryCtaLabel && primaryCtaUrl && (
+                  <Link
+                    href={primaryCtaUrl}
+                    className="flex items-center justify-center h-14 rounded-full bg-white text-[#7b35ff] font-semibold text-lg shadow-lg shadow-black/20 transition hover:scale-[1.01]"
+                  >
+                    {primaryCtaLabel}
+                  </Link>
                 )}
+                {secondaryCtaLabel && secondaryCtaUrl && (
+                  <Link
+                    href={secondaryCtaUrl}
+                    className="flex items-center justify-center h-14 rounded-full bg-[linear-gradient(90deg,#7d22ff_0%,#cb8dff_100%)] text-white font-semibold text-lg shadow-lg shadow-purple-900/30 transition hover:scale-[1.01]"
+                  >
+                    {secondaryCtaLabel}
+                  </Link>
+                )}
+              </div>
+            </div>
+
+            {/* Right: testimonial card */}
+            <div className="bg-white text-black rounded-[18px] px-8 py-9 md:px-10 md:py-10 shadow-2xl shadow-black/30 max-w-[500px] justify-self-end">
+              {testimonial?.quote && (
+                <p className="text-[1.08rem] md:text-[1.15rem] leading-[1.5] font-semibold tracking-[-0.02em] text-black/90">
+                  {testimonial.quote}
+                </p>
+              )}
+
+              <div className="mt-10 flex items-end gap-5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={photoSrc || "/images/default-avatar.svg"}
+                  alt={testimonial?.clientName || ""}
+                  className="h-24 w-24 shrink-0 rounded-full object-cover"
+                  style={{ backgroundColor: "#ddd" }}
+                />
+                <div className="pb-1">
+                  <div className="mb-3 flex h-9 w-9 items-center justify-center bg-[#6c35c8] text-white text-2xl font-bold rounded-sm">
+                    &ldquo;
+                  </div>
+                  <div className="text-[1.05rem] font-semibold">
+                    {testimonial?.clientName ?? ""}
+                  </div>
+                  {role && (
+                    <div className="text-[0.95rem] text-black/60">{role}</div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

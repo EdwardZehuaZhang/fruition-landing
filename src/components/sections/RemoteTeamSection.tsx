@@ -25,6 +25,8 @@ interface RemoteTeamSectionProps {
   features?: RemoteFeature[]
   ctaLabel?: string
   ctaUrl?: string
+  bg?: string
+  children?: React.ReactNode
 }
 
 const ACCENT = "#8015e8"
@@ -38,11 +40,13 @@ export default function RemoteTeamSection({
   features = [],
   ctaLabel,
   ctaUrl,
+  bg = "#f7f5ff",
+  children,
 }: RemoteTeamSectionProps) {
   if (!heading && !headingAccent && offices.length === 0) return null
 
   return (
-    <section style={{ backgroundColor: "#f7f5ff", paddingTop: 80, paddingBottom: 80 }}>
+    <section style={{ backgroundColor: bg, paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         {eyebrow && (
           <div
@@ -81,6 +85,8 @@ export default function RemoteTeamSection({
             {subheading}
           </p>
         )}
+
+        {children}
 
         {offices.length > 0 && (
           <div

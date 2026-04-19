@@ -7,10 +7,8 @@ import { urlFor } from "@/sanity/image"
 export async function generateMetadata() {
   const page = await getPageBySlug("customer-testimonials")
   return {
-    title: page?.seoTitle || "Case Studies | Fruition Services",
-    description:
-      page?.seoDescription ||
-      "Real results from 500+ businesses. See how Fruition transformed operations with monday.com.",
+    title: page?.seoTitle,
+    description: page?.seoDescription,
   }
 }
 

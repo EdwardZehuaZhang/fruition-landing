@@ -14,6 +14,8 @@ interface HeroBannerProps {
   heroVideoSrc?: string
   certificationBadge?: SanityImageRef
   partnerBadges?: PartnerBadge[]
+  /** When set, hides individual partner badges and shows this image below the hero media instead. */
+  partnerImageSrc?: SanityImageRef | string
   primaryCtaLabel?: string
   primaryCtaUrl?: string
   secondaryCtaLabel?: string
@@ -35,6 +37,7 @@ export default function HeroBanner({
   heroVideoSrc,
   certificationBadge,
   partnerBadges = [],
+  partnerImageSrc,
   primaryCtaLabel,
   primaryCtaUrl,
   secondaryCtaLabel,
@@ -42,6 +45,9 @@ export default function HeroBanner({
 }: HeroBannerProps) {
   const heroImageSrc = safeImageUrl(heroImage)
   const certBadgeSrc = safeImageUrl(certificationBadge)
+  const partnerImageUrl = typeof partnerImageSrc === "string"
+    ? partnerImageSrc
+    : safeImageUrl(partnerImageSrc as SanityImageRef)
 
   return (
     <section className="bg-white">
@@ -49,8 +55,8 @@ export default function HeroBanner({
         className="mx-auto flex flex-col items-center"
         style={{ paddingLeft: 273, paddingRight: 273, paddingTop: 80, paddingBottom: 80 }}
       >
-        {/* Partner badges */}
-        {partnerBadges.length > 0 && (
+        {/* Partner badges — hidden when a single partnerImageUrl is used */}
+        {!partnerImageUrl && partnerBadges.length > 0 && (
           <div className="flex items-center" style={{ gap: 22 }}>
             {partnerBadges.map((badge, i) => {
               const src = safeImageUrl(badge.image)
@@ -103,6 +109,18 @@ export default function HeroBanner({
           </p>
         )}
 
+        {/* Partner image — shown below hero text when partnerImageUrl is resolved */}
+        {partnerImageUrl && (
+          <div style={{ marginTop: 40 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={partnerImageUrl}
+              alt="monday.com partner certifications"
+              style={{ maxWidth: 700, height: "auto" }}
+            />
+          </div>
+        )}
+
         {/* CTA buttons */}
         <div className="flex items-center justify-center" style={{ gap: 20, marginTop: 40, width: 680 }}>
           {primaryCtaLabel && primaryCtaUrl && (
@@ -152,6 +170,7 @@ export default function HeroBanner({
             <img src={heroImageSrc} alt="Hero" width={1042} height={312} className="rounded-card object-cover" style={{ width: 1042, height: 312 }} />
           </div>
         ) : null}
+
       </div>
     </section>
   )

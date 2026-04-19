@@ -19,5 +19,6 @@ export { default as RemoteTeamSection } from "./RemoteTeamSection"
 export { default as ApplicationFormSection } from "./ApplicationFormSection"
 export { default as TextContentSection } from "./TextContentSection"
 export { default as PartnerEcosystemSection } from "./PartnerEcosystemSection"
+export { default as IndustryCaseStudy } from "./IndustryCaseStudy"
 
 export type * from "./types"

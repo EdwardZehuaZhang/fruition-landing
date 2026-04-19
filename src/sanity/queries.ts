@@ -70,56 +70,134 @@ const PAGE_FIELDS = `
   "slug": slug.current,
   seoTitle,
   seoDescription,
+
+  // Hero
+  heroEyebrow,
   heroHeading,
   heroSubheading,
+  heroBody,
   heroImage,
   heroLocalVideoSrc,
+  heroVideoUrl,
+  heroVideoTitle,
+  heroPartnerBadges[]{ name, image, width, height },
+  heroStats,
+  hideHeroSubheading,
   primaryCtaLabel,
   primaryCtaUrl,
   secondaryCtaLabel,
   secondaryCtaUrl,
+
   body,
+
+  // Logo cloud
+  logoCloudHeadingPart1,
+  logoCloudHeadingAccent,
+  logoCloudDescription,
+
+  // Comparison tabs
   comparisonHeading,
   comparisonSubheading,
+  comparisonTheme,
   comparisonTabs,
+
+  // Methodology
   methodologyHeading,
   methodologySteps,
-  bottomVideoUrl,
-  bottomVideoTitle,
+
+  // Calendly
   calendlyHeading,
   calendlySubheading,
+
+  // FAQ
   faqTabs,
-  joinHeadingPart1,
-  joinHeadingAccent,
-  joinHeadingPart2,
-  joinSubheading,
-  joinStats,
-  joinFootnote,
-  industryHeading,
-  industryTabs,
+
+  // Capabilities
+  capabilitiesEyebrow,
   capabilitiesHeading,
   capabilitiesHeadingAccent,
   capabilitiesSubheading,
   capabilitiesTheme,
   capabilitiesColumns,
   capabilitiesCards,
-  servicesHeading,
-  servicesHeadingAccent,
-  servicesSubheading,
-  servicesTheme,
-  servicesCards,
+  capabilitiesCtaLabel,
+  capabilitiesCtaUrl,
+
+  // Secondary capabilities
+  secondaryCapabilitiesEyebrow,
+  secondaryCapabilitiesHeading,
+  secondaryCapabilitiesHeadingAccent,
+  secondaryCapabilitiesSubheading,
+  secondaryCapabilitiesCards,
+  secondaryCapabilitiesColumns,
+  secondaryCapabilitiesCtaLabel,
+  secondaryCapabilitiesCtaUrl,
+
+  // Remote team / offices
+  remoteTeamEyebrow,
+  remoteTeamHeading,
+  remoteTeamHeadingAccent,
+  remoteTeamSubheading,
+  officeLocations,
+  remoteFeatures,
+  remoteTeamCtaLabel,
+  remoteTeamCtaUrl,
+
+  // Feature list
   featureListHeading,
   featureListHeadingAccent,
   featureListSubheading,
   featureListTheme,
   featureListColumns,
   featureListItems,
-  comparisonTheme,
+
+  // Services cards
+  servicesHeading,
+  servicesHeadingAccent,
+  servicesSubheading,
+  servicesTheme,
+  servicesCards,
+
+  // Industry tabs
+  industryHeading,
+  industryTabs,
+
+  // Solution cards
   solutionCards,
+
+  // Case study cards
   caseStudySectionHeading,
   caseStudyCards,
-  logoCloudHeadingPart1,
-  logoCloudHeadingAccent
+
+  // Bottom video
+  bottomVideoUrl,
+  bottomVideoTitle,
+
+  // Text content
+  textContentSections,
+
+  // Application form
+  applicationFormHeading,
+  applicationFormEmbedUrl,
+
+  // Join stats
+  joinHeadingPart1,
+  joinHeadingAccent,
+  joinHeadingPart2,
+  joinSubheading,
+  joinStats,
+  joinFootnote,
+
+  // Section visibility toggles
+  hideDiscoverSection,
+  hideJoinStatsSection,
+  hideTestimonialBanner,
+  hideSecurityBadgeSection,
+  hideTestimonialsSection,
+  hideFaqSection,
+  hideCapabilitiesSection,
+  hideCaseStudyCardsSection,
+  hideSolutionCardsSection
 `
 
 export async function getSolutionPageBySlug(slug: string) {
@@ -310,9 +388,18 @@ export async function getPageBySlug(slug: string) {
       faqTabs,
       joinHeadingPart1, joinHeadingAccent, joinHeadingPart2,
       joinSubheading, joinStats, joinFootnote,
-      logoCloudHeadingPart1, logoCloudHeadingAccent,
+      logoCloudHeadingPart1, logoCloudHeadingAccent, logoCloudDescription,
       textContentSections,
       heroPartnerBadges[]{ name, image, width, height },
+
+      // Documents (PDFs)
+      documents[]{ _key, label, "fileUrl": file.asset->url },
+
+      // Section visibility toggles
+      hideDiscoverSection, hideJoinStatsSection, hideTestimonialBanner,
+      hideSecurityBadgeSection, hideTestimonialsSection, hideFaqSection,
+      hideCapabilitiesSection, hideCaseStudyCardsSection, hideSolutionCardsSection,
+      hideHeroSubheading,
 
       // Case study cards
       caseStudySectionHeading, caseStudyCards,

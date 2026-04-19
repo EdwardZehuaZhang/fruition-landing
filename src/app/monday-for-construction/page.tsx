@@ -6,16 +6,12 @@ import {
 } from "@/sanity/queries"
 import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
 import UniversalPageTemplate from "@/components/UniversalPageTemplate"
-import ConstructionExtras from "./ConstructionExtras"
 
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-construction")
   return {
-    title:
-      page?.seoTitle || "monday.com for Construction | Fruition Services",
-    description:
-      page?.seoDescription ||
-      "monday.com implementation for construction companies. Manage projects, sites and subcontractors.",
+    title: page?.seoTitle,
+    description: page?.seoDescription,
   }
 }
 
@@ -32,8 +28,6 @@ export default async function Page() {
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
       faqTabs={groupFaqsIntoTabs(centralFaqs)}
-      heroVideoSrc={page?.heroLocalVideoSrc || "/videos/construction-hero.mp4"}
-      afterFaq={<ConstructionExtras />}
     />
   )
 }

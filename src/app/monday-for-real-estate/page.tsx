@@ -10,10 +10,8 @@ import UniversalPageTemplate from "@/components/UniversalPageTemplate"
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-real-estate")
   return {
-    title: page?.seoTitle || "monday.com for Real Estate | Fruition Services",
-    description:
-      page?.seoDescription ||
-      "monday.com solutions for real estate companies. Manage listings, deals and client relationships.",
+    title: page?.seoTitle,
+    description: page?.seoDescription,
   }
 }
 

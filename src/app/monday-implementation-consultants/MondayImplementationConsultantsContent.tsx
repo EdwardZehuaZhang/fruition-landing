@@ -178,8 +178,6 @@ interface Props {
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-const CALENDLY_URL = "https://calendly.com/global-calendar-fruitionservices"
-
 function imageUrl(ref: SanityImageRef): string | null {
   if (!ref || !ref.asset?._ref) return null
   try {
@@ -232,13 +230,11 @@ export default function MondayImplementationConsultantsContent({
     .filter((l) => l.src)
   const duplicatedLogos = [...normalizedLogos, ...normalizedLogos]
 
-  const heroEyebrow = data?.heroEyebrow ?? "monday.com"
-  const heroHeadingPart1 = data?.heroHeadingPart1 ?? ""
-  const heroHeadingAccent = data?.heroHeadingAccent ?? "Implementation Consultants"
-  const heroHeadingPart2 = data?.heroHeadingPart2 ?? "\nCertified monday.com Experts"
-  const heroSubheading =
-    data?.heroSubheading ??
-    "Get set up the right way, without spending valuable hours figuring it out yourself. Make monday.com work for you and the architecture of your business with a monday.com implementation expert."
+  const heroEyebrow = data?.heroEyebrow
+  const heroHeadingPart1 = data?.heroHeadingPart1
+  const heroHeadingAccent = data?.heroHeadingAccent
+  const heroHeadingPart2 = data?.heroHeadingPart2
+  const heroSubheading = data?.heroSubheading
 
   const heroCertBadgeSrc = imageUrl(data?.heroCertificationBadge)
   const discoverBadgeSrc = imageUrl(data?.discoverBadge)
@@ -262,28 +258,23 @@ export default function MondayImplementationConsultantsContent({
       return { _key: b._key, src, alt: b.alt ?? `Product ${i + 1}` }
     })
     .filter((x): x is ResolvedImage => x !== null)
-  const videoEmbedUrl = data?.videoEmbedUrl ?? "https://www.youtube.com/embed/7vtrtlfC1Zg"
-  const videoTitle = data?.videoTitle ?? "monday CRM Success Story"
+  const videoEmbedUrl = data?.videoEmbedUrl
+  const videoTitle = data?.videoTitle
 
-  const heroPrimaryCtaLabel = data?.heroPrimaryCtaLabel ?? "\ud83d\ude80 Book a Consultation"
-  const heroPrimaryCtaUrl = data?.heroPrimaryCtaUrl ?? CALENDLY_URL
-  const heroSecondaryCtaLabel =
-    data?.heroSecondaryCtaLabel ?? "\u25b6\ufe0f Get Started with monday.com"
-  const heroSecondaryCtaUrl = data?.heroSecondaryCtaUrl ?? CALENDLY_URL
+  const heroPrimaryCtaLabel = data?.heroPrimaryCtaLabel
+  const heroPrimaryCtaUrl = data?.heroPrimaryCtaUrl
+  const heroSecondaryCtaLabel = data?.heroSecondaryCtaLabel
+  const heroSecondaryCtaUrl = data?.heroSecondaryCtaUrl
 
-  const logoCloudPart1 = data?.logoCloudHeadingPart1 ?? "Clients who have used our "
-  const logoCloudAccent = data?.logoCloudHeadingAccent ?? "monday.com consulting services"
+  const logoCloudPart1 = data?.logoCloudHeadingPart1
+  const logoCloudAccent = data?.logoCloudHeadingAccent
 
-  const teamsHeading =
-    data?.teamsTransformedHeading ?? "Teams Transformed with Proven Efficiency Gains."
+  const teamsHeading = data?.teamsTransformedHeading
   const teamsBody = portableTextToString(data?.teamsTransformedBody)
 
-  const comparisonHeading =
-    data?.comparisonSectionHeading ?? "DIY implementation vs expert monday.com support"
+  const comparisonHeading = data?.comparisonSectionHeading
 
-  const methodologyHeading =
-    data?.methodologyHeading ??
-    "Our expert consultants empower you to adopt workflow automation & AI systems"
+  const methodologyHeading = data?.methodologyHeading
 
   // Build the resolved tab list. The third tab ("Our Approach") has stale items in
   // the CMS, so we override it with methodologySteps which contain the correct
@@ -319,46 +310,36 @@ export default function MondayImplementationConsultantsContent({
   const currentComparisonItems = activeTab?.items ?? []
   const currentTabHeading = activeTab?.heading
 
-  const solutionsPart1 = data?.solutionsHeadingPart1 ?? "Create a CRM or project management tool that "
-  const solutionsAccent = data?.solutionsHeadingAccent ?? "fits you"
-  const solutionsPart2 = data?.solutionsHeadingPart2 ?? "."
-  const solutionsIntro = data?.solutionsIntro ?? ""
+  const solutionsPart1 = data?.solutionsHeadingPart1
+  const solutionsAccent = data?.solutionsHeadingAccent
+  const solutionsPart2 = data?.solutionsHeadingPart2
+  const solutionsIntro = data?.solutionsIntro
 
-  const testimonialsHeading =
-    data?.testimonialsHeading ?? "What our customers say about us \ud83d\ude4c"
-  const testimonialsCtaLabel =
-    data?.testimonialsCtaLabel ?? "\ud83d\ude80 Start Your Transformation"
-  const testimonialsCtaUrl = data?.testimonialsCtaUrl ?? CALENDLY_URL
-  const statCardValue = data?.statCardValue ?? "500+"
-  const statCardSubtitle =
-    data?.statCardSubtitle ??
-    "have maximised their workflows with our monday.com expert support"
-  const statCardCtaLabel = data?.statCardCtaLabel ?? "Read our case studies"
-  const statCardCtaUrl = data?.statCardCtaUrl ?? "/customer-testimonials"
+  const testimonialsHeading = data?.testimonialsHeading
+  const testimonialsCtaLabel = data?.testimonialsCtaLabel
+  const testimonialsCtaUrl = data?.testimonialsCtaUrl
+  const statCardValue = data?.statCardValue
+  const statCardSubtitle = data?.statCardSubtitle
+  const statCardCtaLabel = data?.statCardCtaLabel
+  const statCardCtaUrl = data?.statCardCtaUrl
 
-  const calendlyHeading =
-    data?.calendlyHeading ??
-    "Schedule A 30-Min Consultation With One of Our Expert monday.com Consultants"
-  const calendlyUrl = data?.calendlyUrl ?? CALENDLY_URL
+  const calendlyHeading = data?.calendlyHeading
+  const calendlyUrl = data?.calendlyUrl
 
-  const faqHeading = data?.faqHeading ?? "Frequently asked questions"
+  const faqHeading = data?.faqHeading
   const currentFaqItems = faqTabs[activeFaqTab]?.items ?? []
 
-  const discoverHeading =
-    data?.discoverHeading ?? "Discover how much monday.com can do for your team."
-  const discoverPrimaryCtaLabel =
-    data?.discoverPrimaryCtaLabel ?? "\ud83d\ude80 Schedule a Consultation"
-  const discoverPrimaryCtaUrl = data?.discoverPrimaryCtaUrl ?? CALENDLY_URL
-  const discoverSecondaryCtaLabel =
-    data?.discoverSecondaryCtaLabel ?? "\u25b6\ufe0f Get Started with monday.com"
-  const discoverSecondaryCtaUrl = data?.discoverSecondaryCtaUrl ?? CALENDLY_URL
+  const discoverHeading = data?.discoverHeading
+  const discoverPrimaryCtaLabel = data?.discoverPrimaryCtaLabel
+  const discoverPrimaryCtaUrl = data?.discoverPrimaryCtaUrl
+  const discoverSecondaryCtaLabel = data?.discoverSecondaryCtaLabel
+  const discoverSecondaryCtaUrl = data?.discoverSecondaryCtaUrl
 
-  const joinPart1 = data?.joinSectionHeadingPart1 ?? "Join "
-  const joinAccent = data?.joinSectionHeadingAccent ?? "500+ businesses"
-  const joinPart2 =
-    data?.joinSectionHeadingPart2 ?? " that have leveraged our monday.com implementation experts."
-  const joinSubheading = data?.joinSectionSubheading ?? "The economic impact of"
-  const joinFootnote = data?.joinSectionFootnote ?? "Data by"
+  const joinPart1 = data?.joinSectionHeadingPart1
+  const joinAccent = data?.joinSectionHeadingAccent
+  const joinPart2 = data?.joinSectionHeadingPart2
+  const joinSubheading = data?.joinSectionSubheading
+  const joinFootnote = data?.joinSectionFootnote
 
   return (
     <div>
@@ -387,19 +368,21 @@ export default function MondayImplementationConsultantsContent({
           )}
 
           {/* Eyebrow */}
-          <p
-            className="text-center"
-            style={{
-              fontSize: 16,
-              fontWeight: 600,
-              color: "#8015e8",
-              letterSpacing: "0.5px",
-              textTransform: "uppercase",
-              marginTop: 32,
-            }}
-          >
-            {heroEyebrow}
-          </p>
+          {heroEyebrow && (
+            <p
+              className="text-center"
+              style={{
+                fontSize: 16,
+                fontWeight: 600,
+                color: "#8015e8",
+                letterSpacing: "0.5px",
+                textTransform: "uppercase",
+                marginTop: 32,
+              }}
+            >
+              {heroEyebrow}
+            </p>
+          )}
 
           {/* Heading */}
           <h1
@@ -418,19 +401,21 @@ export default function MondayImplementationConsultantsContent({
           </h1>
 
           {/* Subheading */}
-          <p
-            style={{
-              fontSize: 18,
-              lineHeight: "25.2px",
-              color: "black",
-              marginTop: 31,
-              textAlign: "center",
-              maxWidth: 859,
-              whiteSpace: "pre-line",
-            }}
-          >
-            {heroSubheading}
-          </p>
+          {heroSubheading && (
+            <p
+              style={{
+                fontSize: 18,
+                lineHeight: "25.2px",
+                color: "black",
+                marginTop: 31,
+                textAlign: "center",
+                maxWidth: 859,
+                whiteSpace: "pre-line",
+              }}
+            >
+              {heroSubheading}
+            </p>
+          )}
 
           {/* Monday Partners image */}
           {heroMondayPartnersImageSrc && (
@@ -447,39 +432,45 @@ export default function MondayImplementationConsultantsContent({
           )}
 
           {/* Dual CTA */}
-          <div
-            className="flex items-center justify-center flex-wrap"
-            style={{ gap: 20, marginTop: 40, maxWidth: 680 }}
-          >
-            <Link
-              href={heroPrimaryCtaUrl}
-              className="flex items-center justify-center font-bold"
-              style={{
-                width: 330,
-                height: 53,
-                borderRadius: 100,
-                border: "1px solid #8015e8",
-                backgroundColor: "white",
-                color: "#8015e8",
-                fontSize: 16,
-              }}
+          {(heroPrimaryCtaUrl || heroSecondaryCtaUrl) && (
+            <div
+              className="flex items-center justify-center flex-wrap"
+              style={{ gap: 20, marginTop: 40, maxWidth: 680 }}
             >
-              {heroPrimaryCtaLabel}
-            </Link>
-            <Link
-              href={heroSecondaryCtaUrl}
-              className="flex items-center justify-center font-bold text-white"
-              style={{
-                width: 330,
-                height: 53,
-                borderRadius: 100,
-                background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                fontSize: 16,
-              }}
-            >
-              {heroSecondaryCtaLabel}
-            </Link>
-          </div>
+              {heroPrimaryCtaUrl && (
+                <Link
+                  href={heroPrimaryCtaUrl}
+                  className="flex items-center justify-center font-bold"
+                  style={{
+                    width: 330,
+                    height: 53,
+                    borderRadius: 100,
+                    border: "1px solid #8015e8",
+                    backgroundColor: "white",
+                    color: "#8015e8",
+                    fontSize: 16,
+                  }}
+                >
+                  {heroPrimaryCtaLabel}
+                </Link>
+              )}
+              {heroSecondaryCtaUrl && (
+                <Link
+                  href={heroSecondaryCtaUrl}
+                  className="flex items-center justify-center font-bold text-white"
+                  style={{
+                    width: 330,
+                    height: 53,
+                    borderRadius: 100,
+                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                    fontSize: 16,
+                  }}
+                >
+                  {heroSecondaryCtaLabel}
+                </Link>
+              )}
+            </div>
+          )}
 
           {/* Hero dashboard image */}
           {heroDashboardImageSrc && (
@@ -552,20 +543,22 @@ export default function MondayImplementationConsultantsContent({
       {/* ============================================================ */}
       {/* SECTION 2b — Video Embed                                     */}
       {/* ============================================================ */}
-      <section className="bg-white" style={{ paddingBottom: 80 }}>
-        <div className="mx-auto" style={{ maxWidth: 1042 }}>
-          <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
-            <iframe
-              src={videoEmbedUrl}
-              title={videoTitle}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-              style={{ border: 0 }}
-            />
+      {videoEmbedUrl && (
+        <section className="bg-white" style={{ paddingBottom: 80 }}>
+          <div className="mx-auto" style={{ maxWidth: 1042 }}>
+            <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
+              <iframe
+                src={videoEmbedUrl}
+                title={videoTitle}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+                style={{ border: 0 }}
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ============================================================ */}
       {/* SECTION 3 — Teams Transformed banner                         */}
@@ -751,28 +744,32 @@ export default function MondayImplementationConsultantsContent({
       {/* ============================================================ */}
       {/* SECTION 5 — Calendly                                         */}
       {/* ============================================================ */}
-      <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto flex flex-col items-center px-4" style={{ maxWidth: 1200 }}>
-          <h2
-            className="text-section-h2 text-center text-black"
-            style={{ maxWidth: 820 }}
-          >
-            {calendlyHeading}
-          </h2>
-          <div
-            className="w-full rounded-card overflow-hidden"
-            style={{ marginTop: 40, height: 700 }}
-          >
-            <iframe
-              src={calendlyUrl}
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              title="Schedule a consultation"
-            />
+      {calendlyUrl && (
+        <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
+          <div className="mx-auto flex flex-col items-center px-4" style={{ maxWidth: 1200 }}>
+            {calendlyHeading && (
+              <h2
+                className="text-section-h2 text-center text-black"
+                style={{ maxWidth: 820 }}
+              >
+                {calendlyHeading}
+              </h2>
+            )}
+            <div
+              className="w-full rounded-card overflow-hidden"
+              style={{ marginTop: 40, height: 700 }}
+            >
+              <iframe
+                src={calendlyUrl}
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                title="Schedule a consultation"
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ============================================================ */}
       {/* SECTION 7 — FAQ                                              */}
@@ -975,9 +972,9 @@ export default function MondayImplementationConsultantsContent({
                         {card.body}
                       </p>
                     )}
-                    {card.ctaLabel && (
+                    {card.ctaLabel && card.ctaUrl && (
                       <Link
-                        href={card.ctaUrl || "#"}
+                        href={card.ctaUrl}
                         className="inline-flex items-center justify-center font-bold"
                         style={{
                           height: 48,
@@ -1007,7 +1004,7 @@ export default function MondayImplementationConsultantsContent({
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
                         src={imgSrc}
-                        alt={card.heading || "solution"}
+                        alt={card.heading ?? ""}
                         className="w-full h-full object-cover"
                         style={{ minHeight: 320 }}
                       />
@@ -1040,7 +1037,7 @@ export default function MondayImplementationConsultantsContent({
       {/* SECTION 11 — Join 500+ stats (shared StatsBlockView)         */}
       {/* ============================================================ */}
       <StatsBlockView
-        heading={`${joinPart1}${joinAccent}${joinPart2}`}
+        heading={`${joinPart1 ?? ""}${joinAccent ?? ""}${joinPart2 ?? ""}`}
         subheading={joinSubheading}
         stats={stats.map((s) => ({ _key: s._key, value: s.value, label: s.label }))}
         footnote={joinFootnote}

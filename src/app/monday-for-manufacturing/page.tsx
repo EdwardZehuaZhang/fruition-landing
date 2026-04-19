@@ -10,10 +10,8 @@ import UniversalPageTemplate from "@/components/UniversalPageTemplate"
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-manufacturing")
   return {
-    title: page?.seoTitle || "monday.com for Manufacturing | Fruition Services",
-    description:
-      page?.seoDescription ||
-      "Streamline manufacturing operations with monday.com. Production tracking, quality control and more.",
+    title: page?.seoTitle,
+    description: page?.seoDescription,
   }
 }
 

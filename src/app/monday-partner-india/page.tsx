@@ -10,10 +10,8 @@ import UniversalPageTemplate from "@/components/UniversalPageTemplate"
 export async function generateMetadata() {
   const page = await getLocationPageBySlug("monday-partner-india")
   return {
-    title: page?.seoTitle || "monday.com Partner India | Fruition Services",
-    description:
-      page?.seoDescription ||
-      "Certified monday.com consulting partner in India. Expert implementation and training across major cities.",
+    title: page?.seoTitle,
+    description: page?.seoDescription,
   }
 }
 

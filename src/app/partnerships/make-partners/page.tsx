@@ -4,10 +4,8 @@ import MakePartnersContent from "./MakePartnersContent"
 export async function generateMetadata() {
   const page = await getMakePartnersPage()
   return {
-    title: page?.seoTitle ?? "Make.com Gold Partner | Workflow Automation Experts | Fruition",
-    description:
-      page?.seoDescription ??
-      "As a certified Make.com Gold Partner, Fruition delivers enterprise-grade workflow automations that connect your systems and scale with your business.",
+    title: page?.seoTitle,
+    description: page?.seoDescription,
   }
 }
 

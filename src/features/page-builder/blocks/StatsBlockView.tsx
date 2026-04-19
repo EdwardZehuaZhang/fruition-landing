@@ -14,6 +14,8 @@ interface Stat {
 
 interface StatsBlockProps {
   heading?: string
+  /** When provided, this substring within `heading` is rendered in accent color. */
+  headingAccent?: string
   subheading?: string
   stats?: Stat[]
   ctaLabel?: string
@@ -33,15 +35,15 @@ const fallbackIcons = [
   '/images/icon-roi-4.png',
 ]
 
-function renderHeadingWithAccent(heading: string) {
-  const accent = '500+ businesses'
-  const idx = heading.indexOf(accent)
+function renderHeadingWithAccent(heading: string, accent?: string) {
+  const target = accent || '500+ businesses'
+  const idx = heading.indexOf(target)
   if (idx >= 0) {
     return (
       <>
         <span className="text-black">{heading.slice(0, idx)}</span>
-        <span className="text-[#8015e8]">{accent}</span>
-        <span className="text-black">{heading.slice(idx + accent.length)}</span>
+        <span className="text-[#8015e8]">{target}</span>
+        <span className="text-black">{heading.slice(idx + target.length)}</span>
       </>
     )
   }
@@ -50,6 +52,7 @@ function renderHeadingWithAccent(heading: string) {
 
 export default function StatsBlockView({
   heading,
+  headingAccent,
   subheading,
   stats,
   ctaLabel,
@@ -66,12 +69,12 @@ export default function StatsBlockView({
     : '/images/badge-forrester.png'
 
   return (
-    <section className="bg-white py-[80px] px-4">
-      <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[24px]">
+    <section className="bg-white py-16 sm:py-20 lg:py-24 px-4">
+      <div className="mx-auto max-w-[1040px] flex flex-col items-center gap-8">
         {/* Heading */}
         {heading && (
-          <h2 className="text-center text-[28px] font-medium leading-[39.2px]">
-            {renderHeadingWithAccent(heading)}
+          <h2 className="text-center text-2xl sm:text-3xl lg:text-[36px] font-semibold leading-snug max-w-[720px]">
+            {renderHeadingWithAccent(heading, headingAccent)}
           </h2>
         )}
 
@@ -84,21 +87,21 @@ export default function StatsBlockView({
               <img src={mondayPartnersBadgeSrc} alt="monday.com partners" width={148} height={23} className="h-[23px] w-auto" />
             </div>
           ) : (
-            <p className="text-[18px] text-center text-[#242323]">{subheading}</p>
+            <p className="text-base sm:text-lg text-center text-[#4a4a4a] max-w-[600px]">{subheading}</p>
           )
         )}
 
-        {/* Stats row — with real icon images */}
+        {/* Stats row */}
         {stats && stats.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-[40px]">
+          <div className="flex flex-wrap justify-center gap-8 sm:gap-12 lg:gap-16 mt-4">
             {stats.map((stat, i) => (
-              <div key={stat._key ?? i} className="flex flex-col items-center gap-[2px]">
+              <div key={stat._key ?? i} className="flex flex-col items-center gap-1 min-w-[120px]">
                 {stat.icon?.asset ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={urlFor(stat.icon).width(64).height(64).url()}
                     alt=""
-                    className="w-[64px] h-[64px] mb-2"
+                    className="w-[56px] h-[56px] sm:w-[64px] sm:h-[64px] mb-2"
                   />
                 ) : (
                   <Image
@@ -106,13 +109,13 @@ export default function StatsBlockView({
                     alt=""
                     width={64}
                     height={64}
-                    className="w-[64px] h-[64px] mb-2"
+                    className="w-[56px] h-[56px] sm:w-[64px] sm:h-[64px] mb-2"
                   />
                 )}
-                <span className="text-[20px] font-semibold text-[#550e9b] leading-[28px] whitespace-nowrap">
+                <span className="text-3xl sm:text-4xl lg:text-[44px] font-bold text-[#6b16c1] leading-tight whitespace-nowrap">
                   {stat.value}
                 </span>
-                <span className="text-[14px] text-black leading-[28px] text-center">{stat.label}</span>
+                <span className="text-sm sm:text-[15px] text-[#333] leading-snug text-center mt-1">{stat.label}</span>
               </div>
             ))}
           </div>
@@ -120,24 +123,24 @@ export default function StatsBlockView({
 
         {/* Footnote with Forrester */}
         {footnote ? (
-          <div className="flex items-center gap-[3px] text-[12px] text-[#242323]">
+          <div className="flex items-center gap-1.5 text-xs text-[#666] mt-2">
             <span>{footnote}</span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={forresterBadgeSrc} alt="Forrester" width={60} height={24} className="h-5 w-auto" />
           </div>
         ) : (
-          <div className="flex items-center gap-[3px] text-[12px] text-[#242323]">
+          <div className="flex items-center gap-1.5 text-xs text-[#666] mt-2">
             <span>Data by</span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={forresterBadgeSrc} alt="Forrester" width={64} height={14} className="h-[14px] w-auto" />
           </div>
         )}
 
-        {/* CTA (optional — only render if label + url both provided) */}
+        {/* CTA */}
         {ctaLabel && ctaUrl && (
           <Link
             href={ctaUrl}
-            className="flex items-center justify-center h-[53px] w-[275px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
+            className="inline-flex items-center justify-center px-10 py-4 rounded-full bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-lg sm:text-xl font-bold tracking-wide hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-purple-500/20 mt-2"
           >
             {ctaLabel}
           </Link>

@@ -37,10 +37,6 @@ interface UniversalPageTemplateProps {
    * legacy embedded `page.faqTabs`. See src/sanity/groupFaqs.ts.
    */
   faqTabs?: FaqTab[]
-  /** Local mp4 src — when set, replaces the Sanity heroImage in the hero. */
-  heroVideoSrc?: string
-  /** Custom JSX injected directly after the FAQ section. */
-  afterFaq?: ReactNode
 }
 
 function youtubeEmbedUrl(url?: string): string | null {
@@ -67,8 +63,6 @@ export default function UniversalPageTemplate({
   siteSettings,
   caseStudies = [],
   faqTabs,
-  heroVideoSrc,
-  afterFaq,
 }: UniversalPageTemplateProps) {
   if (!page) return null
 
@@ -122,29 +116,27 @@ export default function UniversalPageTemplate({
         eyebrow={page.heroEyebrow}
         headingPart1={page.heroHeading || page.title || ""}
         headingAccent=""
-        subheading={page.heroSubheading}
+        subheading={page.hideHeroSubheading ? undefined : page.heroSubheading}
         heroImage={page.heroImage}
-        heroVideoSrc={heroVideoSrc}
+        heroVideoSrc={page.heroLocalVideoSrc}
         certificationBadge={siteSettings?.badgeCertifications}
         partnerBadges={
           page.heroPartnerBadges?.length > 0
             ? page.heroPartnerBadges
             : siteSettings?.navbarPartnerBadges || []
         }
-        primaryCtaLabel={page.primaryCtaLabel || "\uD83D\uDE80 Book a Consultation"}
+        partnerImageSrc={siteSettings?.badgeMondayPartners}
+        primaryCtaLabel={page.primaryCtaLabel}
         primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl}
+        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
       />
 
       {/* 2. Logo Cloud */}
       <LogoCloudMarquee
-        headingPart1={
-          page.logoCloudHeadingPart1 || "Clients who have used our "
-        }
-        headingAccent={
-          page.logoCloudHeadingAccent || "monday.com consulting services"
-        }
+        headingPart1={page.logoCloudHeadingPart1 || "Clients who have used our "}
+        headingAccent={page.logoCloudHeadingAccent ?? "monday.com consulting services"}
+        description={page.logoCloudDescription}
         logos={siteSettings?.carouselLogos || []}
       />
 
@@ -167,7 +159,7 @@ export default function UniversalPageTemplate({
       )}
 
       {/* 7. Capabilities Grid (if populated) - moved earlier to match design flow */}
-      {page.capabilitiesCards?.length > 0 && (
+      {!page.hideCapabilitiesSection && page.capabilitiesCards?.length > 0 && (
         <CapabilitiesGrid
           eyebrow={page.capabilitiesEyebrow}
           heading={page.capabilitiesHeading}
@@ -270,17 +262,14 @@ export default function UniversalPageTemplate({
       {/* 5. FAQ — prefer central faqItem docs (single source of truth); fall
           back to the page's embedded faqTabs when the page hasn't been
           migrated yet. */}
-      {(faqTabs && faqTabs.length > 0) ? (
+      {!page.hideFaqSection && ((faqTabs && faqTabs.length > 0) ? (
         <FaqAccordion tabs={faqTabs} />
       ) : page.faqTabs?.length > 0 ? (
         <FaqAccordion tabs={page.faqTabs} />
-      ) : null}
-
-      {/* Slot: custom sections immediately after the FAQ */}
-      {afterFaq}
+      ) : null)}
 
       {/* 6. Case Study Cards (if populated) */}
-      {page.caseStudyCards?.length > 0 && (
+      {!page.hideCaseStudyCardsSection && page.caseStudyCards?.length > 0 && (
         <CaseStudyCardsSection
           heading={page.caseStudySectionHeading}
           cards={page.caseStudyCards}
@@ -288,7 +277,7 @@ export default function UniversalPageTemplate({
       )}
 
       {/* 8. Solution Cards - left/right (if populated) */}
-      {page.solutionCards?.length > 0 && (
+      {!page.hideSolutionCardsSection && page.solutionCards?.length > 0 && (
         <SolutionCardsSection cards={page.solutionCards} />
       )}
 
@@ -338,7 +327,7 @@ export default function UniversalPageTemplate({
       )}
 
       {/* 12. Testimonials */}
-      <TestimonialsGrid caseStudies={caseStudies} />
+      {!page.hideTestimonialsSection && <TestimonialsGrid caseStudies={caseStudies} />}
 
       {/* 13. Discover CTA */}
       {!page.hideDiscoverSection && (
@@ -354,8 +343,8 @@ export default function UniversalPageTemplate({
           subheading={page.joinSubheading}
           stats={page.joinStats}
           footnote={page.joinFootnote}
-          ctaLabel="\uD83D\uDE80 Book a Time"
-          ctaUrl={calendlyUrl}
+          ctaLabel={page.joinCtaLabel}
+          ctaUrl={page.joinCtaUrl || calendlyUrl}
           siteSettings={siteSettings || undefined}
         />
       )}
@@ -376,7 +365,9 @@ export default function UniversalPageTemplate({
       )}
 
       {/* 16. Security Badge */}
-      <SecurityBadgeSection badge={siteSettings?.badgeSecurity} />
+      {!page.hideSecurityBadgeSection && (
+        <SecurityBadgeSection badge={siteSettings?.badgeSecurity} />
+      )}
     </div>
   )
 }

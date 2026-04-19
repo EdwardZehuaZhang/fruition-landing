@@ -5,10 +5,8 @@ import FruitionTeamClient, { type TeamMember } from "./FruitionTeamClient"
 export async function generateMetadata() {
   const page = await getPageBySlug("fruition-team")
   return {
-    title: page?.seoTitle || "Meet The Fruition Team | Fruition Services",
-    description:
-      page?.seoDescription ||
-      "Meet the Fruition team — 37 certified consultants in monday.com, Atlassian, Make, n8n, and Hootsuite, across Australia, the UK, and the US.",
+    title: page?.seoTitle,
+    description: page?.seoDescription,
   }
 }
 
@@ -27,7 +25,7 @@ export default async function TeamPage() {
   return (
     <FruitionTeamClient
       members={members}
-      heroHeading={page?.heroHeading || "Meet The Fruition Team"}
+      heroHeading={page?.heroHeading}
       calendlyUrl={calendlyUrl}
       partnerBadges={partnerBadges}
       certificationBadge={certificationBadge}

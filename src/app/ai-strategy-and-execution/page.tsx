@@ -10,10 +10,8 @@ import UniversalPageTemplate from "@/components/UniversalPageTemplate"
 export async function generateMetadata() {
   const page = await getServicePageBySlug("ai-strategy-and-execution")
   return {
-    title: page?.seoTitle || "AI Strategy & Execution | Fruition Services",
-    description:
-      page?.seoDescription ||
-      "Leverage AI and automation to transform your business operations with Fruition's expert consultants.",
+    title: page?.seoTitle,
+    description: page?.seoDescription,
   }
 }
 

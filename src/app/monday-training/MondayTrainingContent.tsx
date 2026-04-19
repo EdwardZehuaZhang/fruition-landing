@@ -156,8 +156,6 @@ interface MondayTrainingContentProps {
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-const CALENDLY_URL = "https://calendly.com/global-calendar-fruitionservices"
-
 function imageUrl(ref: SanityImageRef): string | null {
   if (!ref || !ref.asset?._ref) return null
   try {
@@ -196,7 +194,6 @@ export default function MondayTrainingContent({
     .filter((l) => l.src)
   const duplicatedLogos = [...normalizedLogos, ...normalizedLogos]
 
-  // Hero image with fallback
   const heroImageSrc = imageUrl(data?.heroImage)
   const heroCertBadgeSrc = imageUrl(data?.heroCertificationBadge)
   const discoverBadgeSrc = imageUrl(data?.discoverBadge)
@@ -213,92 +210,60 @@ export default function MondayTrainingContent({
   const heroMondayPartnersImageSrc = imageUrl(data?.heroMondayPartnersImage)
   const empowerImageSrc = imageUrl(data?.empowerImage)
 
-  const heroHeadingPart1 =
-    data?.heroHeadingPart1 ?? "Get your team official monday.com "
-  const heroHeadingAccent = data?.heroHeadingAccent ?? "workflow training"
-  const heroSubheading =
-    data?.heroSubheading ??
-    "Expert Workflow Training delivered by a certified monday partner.\nOur training and adoption programs helps you onboard and adopt monday.com up to 10x faster."
+  const heroHeadingPart1 = data?.heroHeadingPart1
+  const heroHeadingAccent = data?.heroHeadingAccent
+  const heroSubheading = data?.heroSubheading
 
-  const primaryCtaLabel =
-    data?.heroPrimaryCtaLabel ?? "\ud83d\ude80 Book a Consultation"
-  const primaryCtaUrl = data?.heroPrimaryCtaUrl ?? CALENDLY_URL
+  const primaryCtaLabel = data?.heroPrimaryCtaLabel
+  const primaryCtaUrl = data?.heroPrimaryCtaUrl
   // Secondary CTA is optional — only render when both label and URL are set
   const showSecondaryCta = Boolean(data?.heroSecondaryCtaLabel && data?.heroSecondaryCtaUrl)
-  const secondaryCtaLabel = data?.heroSecondaryCtaLabel ?? ""
-  const secondaryCtaUrl = data?.heroSecondaryCtaUrl ?? CALENDLY_URL
+  const secondaryCtaLabel = data?.heroSecondaryCtaLabel
+  const secondaryCtaUrl = data?.heroSecondaryCtaUrl
 
-  const logoCloudPart1 =
-    data?.logoCloudHeadingPart1 ?? "Clients who have used our "
-  const logoCloudAccent =
-    data?.logoCloudHeadingAccent ?? "monday.com expert consulting services"
+  const logoCloudPart1 = data?.logoCloudHeadingPart1
+  const logoCloudAccent = data?.logoCloudHeadingAccent
 
-  const videoEmbedUrl =
-    data?.videoEmbedUrl ?? "https://www.youtube.com/embed/7vtrtlfC1Zg"
-  const videoTitle =
-    data?.videoTitle ??
-    "monday CRM Success Story - Star Aviation | Powered by Fruition"
+  const videoEmbedUrl = data?.videoEmbedUrl
+  const videoTitle = data?.videoTitle
 
-  const trainingIntroHeading =
-    data?.trainingIntroHeading ??
-    "Our consultants help drive adoption and ensure long term success with monday.com"
-  const trainingIntroSubheading =
-    data?.trainingIntroSubheading ??
-    "We transform fragmented business processes into cohesive, automated systems that enhance team collaboration and deliver measurable ROI across your entire organisation."
-  const trainingSectionHeading =
-    data?.trainingSectionHeading ??
-    "Our expert consultants empower you to adopt workflow automation & AI systems"
+  const trainingIntroHeading = data?.trainingIntroHeading
+  const trainingIntroSubheading = data?.trainingIntroSubheading
+  const trainingSectionHeading = data?.trainingSectionHeading
 
-  const empowerEyebrow = data?.empowerEyebrow ?? "monday.com Training Australia"
-  const empowerHeading = data?.empowerHeading ?? "Empower with monday.com training"
-  const empowerBody =
-    data?.empowerBody ??
-    "Make sure all key stakeholders get the onboarding they need to feel comfortable using and building on the platform day in and day out.\n\nSo no one is so overwhelmed they decide not to touch it\u2013or worse, revert to a combination of spreadsheets."
+  const empowerEyebrow = data?.empowerEyebrow
+  const empowerHeading = data?.empowerHeading
+  const empowerBody = data?.empowerBody
 
-  const servicesHeading =
-    data?.servicesHeading ??
-    "\ud83d\udc69\ud83c\udffd\u200d\ud83d\udcbc\ud83d\udc68\ud83c\udffb\u200d\ud83d\udcbc Our Training Services"
+  const servicesHeading = data?.servicesHeading
 
-  const testimonialsHeading =
-    data?.testimonialsHeading ?? "What our customers say about us \ud83d\ude4c"
-  const testimonialsCtaLabel =
-    data?.testimonialsCtaLabel ?? "\ud83d\ude80 Start Your Transformation"
-  const testimonialsCtaUrl = data?.testimonialsCtaUrl ?? CALENDLY_URL
-  const statCardValue = data?.statCardValue ?? "500+"
-  const statCardSubtitle =
-    data?.statCardSubtitle ??
-    "have maximised their workflows with our monday.com expert support"
-  const statCardCtaLabel = data?.statCardCtaLabel ?? "Read our case studies"
-  const statCardCtaUrl = data?.statCardCtaUrl ?? "/customer-testimonials"
+  const testimonialsHeading = data?.testimonialsHeading
+  const testimonialsCtaLabel = data?.testimonialsCtaLabel
+  const testimonialsCtaUrl = data?.testimonialsCtaUrl
+  const statCardValue = data?.statCardValue
+  const statCardSubtitle = data?.statCardSubtitle
+  const statCardCtaLabel = data?.statCardCtaLabel
+  const statCardCtaUrl = data?.statCardCtaUrl
 
-  const calendlyHeading =
-    data?.calendlyHeading ??
-    "Book a 30-minute monday.com training consultation"
-  const calendlySubheading = data?.calendlySubheading ?? ""
-  const calendlyUrl = data?.calendlyUrl ?? CALENDLY_URL
+  const calendlyHeading = data?.calendlyHeading
+  const calendlySubheading = data?.calendlySubheading
+  const calendlyUrl = data?.calendlyUrl
 
-  const joinSectionHeadingPart1 = data?.joinSectionHeadingPart1 ?? "Join "
-  const joinSectionHeadingAccent =
-    data?.joinSectionHeadingAccent ?? "500+ businesses"
-  const joinSectionHeadingPart2 =
-    data?.joinSectionHeadingPart2 ??
-    " that have leveraged our monday.com expert consultants."
-  const joinSectionSubheading =
-    data?.joinSectionSubheading ?? "The economic impact of"
+  const joinSectionHeadingPart1 = data?.joinSectionHeadingPart1
+  const joinSectionHeadingAccent = data?.joinSectionHeadingAccent
+  const joinSectionHeadingPart2 = data?.joinSectionHeadingPart2
+  const joinSectionSubheading = data?.joinSectionSubheading
   const joinSectionStats = data?.joinSectionStats ?? []
-  const joinSectionFootnote = data?.joinSectionFootnote ?? ""
+  const joinSectionFootnote = data?.joinSectionFootnote
   const joinSectionBadgeSrc = imageUrl(data?.joinSectionBadge)
 
-  const faqHeading = data?.faqHeading ?? "Frequently asked questions"
+  const faqHeading = data?.faqHeading
 
-  const discoverHeading =
-    data?.discoverHeading ?? "Discover how much monday.com can do for your team."
-  const discoverPrimaryCtaLabel =
-    data?.discoverPrimaryCtaLabel ?? "\ud83d\ude80 Schedule a Consultation"
-  const discoverPrimaryCtaUrl = data?.discoverPrimaryCtaUrl ?? CALENDLY_URL
-  const discoverSecondaryCtaLabel =
-    data?.discoverSecondaryCtaLabel ?? "\u25b6\ufe0f Get Started with monday.com"
-  const discoverSecondaryCtaUrl = data?.discoverSecondaryCtaUrl ?? CALENDLY_URL
+  const discoverHeading = data?.discoverHeading
+  const discoverPrimaryCtaLabel = data?.discoverPrimaryCtaLabel
+  const discoverPrimaryCtaUrl = data?.discoverPrimaryCtaUrl
+  const discoverSecondaryCtaLabel = data?.discoverSecondaryCtaLabel
+  const discoverSecondaryCtaUrl = data?.discoverSecondaryCtaUrl
 
   const currentTrainingItems =
     trainingTabs[activeTrainingTab]?.items ?? []
@@ -374,58 +339,64 @@ export default function MondayTrainingContent({
           )}
 
           {/* CTA(s) — secondary is optional */}
-          <div
-            className="flex items-center justify-center flex-wrap"
-            style={{ gap: 20, marginTop: 40 }}
-          >
-            <Link
-              href={primaryCtaUrl}
-              className="flex items-center justify-center font-bold text-white"
-              style={{
-                minWidth: 330,
-                paddingLeft: 28,
-                paddingRight: 28,
-                height: 53,
-                borderRadius: 100,
-                background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                fontSize: 16,
-              }}
+          {(primaryCtaUrl || showSecondaryCta) && (
+            <div
+              className="flex items-center justify-center flex-wrap"
+              style={{ gap: 20, marginTop: 40 }}
             >
-              {primaryCtaLabel}
-            </Link>
-            {showSecondaryCta && (
-              <Link
-                href={secondaryCtaUrl}
-                className="flex items-center justify-center font-bold"
-                style={{
-                  minWidth: 330,
-                  paddingLeft: 28,
-                  paddingRight: 28,
-                  height: 53,
-                  borderRadius: 100,
-                  border: "1px solid #8015e8",
-                  backgroundColor: "white",
-                  color: "#8015e8",
-                  fontSize: 16,
-                }}
-              >
-                {secondaryCtaLabel}
-              </Link>
-            )}
-          </div>
+              {primaryCtaUrl && (
+                <Link
+                  href={primaryCtaUrl}
+                  className="flex items-center justify-center font-bold text-white"
+                  style={{
+                    minWidth: 330,
+                    paddingLeft: 28,
+                    paddingRight: 28,
+                    height: 53,
+                    borderRadius: 100,
+                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                    fontSize: 16,
+                  }}
+                >
+                  {primaryCtaLabel}
+                </Link>
+              )}
+              {showSecondaryCta && secondaryCtaUrl && (
+                <Link
+                  href={secondaryCtaUrl}
+                  className="flex items-center justify-center font-bold"
+                  style={{
+                    minWidth: 330,
+                    paddingLeft: 28,
+                    paddingRight: 28,
+                    height: 53,
+                    borderRadius: 100,
+                    border: "1px solid #8015e8",
+                    backgroundColor: "white",
+                    color: "#8015e8",
+                    fontSize: 16,
+                  }}
+                >
+                  {secondaryCtaLabel}
+                </Link>
+              )}
+            </div>
+          )}
 
           {/* Hero image */}
-          <div style={{ marginTop: 40 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={heroImageSrc || "/images/mask-group.avif"}
-              alt="monday.com training dashboards"
-              width={1042}
-              height={312}
-              className="rounded-card object-cover"
-              style={{ width: 1042, height: 312 }}
-            />
-          </div>
+          {heroImageSrc && (
+            <div style={{ marginTop: 40 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={heroImageSrc}
+                alt="monday.com training dashboards"
+                width={1042}
+                height={312}
+                className="rounded-card object-cover"
+                style={{ width: 1042, height: 312 }}
+              />
+            </div>
+          )}
         </div>
       </section>
 
@@ -467,23 +438,25 @@ export default function MondayTrainingContent({
       {/* ============================================================ */}
       {/* SECTION 2b -- Video Embed                                    */}
       {/* ============================================================ */}
-      <section className="bg-white" style={{ paddingBottom: 80 }}>
-        <div className="mx-auto" style={{ maxWidth: 1042 }}>
-          <div
-            className="rounded-card overflow-hidden"
-            style={{ aspectRatio: "16 / 9" }}
-          >
-            <iframe
-              src={videoEmbedUrl}
-              title={videoTitle}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-              style={{ border: 0 }}
-            />
+      {videoEmbedUrl && (
+        <section className="bg-white" style={{ paddingBottom: 80 }}>
+          <div className="mx-auto" style={{ maxWidth: 1042 }}>
+            <div
+              className="rounded-card overflow-hidden"
+              style={{ aspectRatio: "16 / 9" }}
+            >
+              <iframe
+                src={videoEmbedUrl}
+                title={videoTitle}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+                style={{ border: 0 }}
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ============================================================ */}
       {/* SECTION 3 -- Training Intro + Tabbed Content                 */}
@@ -634,21 +607,23 @@ export default function MondayTrainingContent({
               <p style={{ fontSize: 16, lineHeight: '24px', color: 'black', marginTop: 20, whiteSpace: 'pre-line' }}>
                 {empowerBody}
               </p>
-              <Link
-                href={data?.empowerCtaUrl || calendlyUrl}
-                className="inline-flex items-center justify-center font-bold text-white"
-                style={{
-                  height: 53,
-                  paddingLeft: 32,
-                  paddingRight: 32,
-                  borderRadius: 100,
-                  background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                  fontSize: 16,
-                  marginTop: 32,
-                }}
-              >
-                {data?.empowerCtaLabel ?? "\ud83d\ude80 Book a Training Session"}
-              </Link>
+              {data?.empowerCtaLabel && data?.empowerCtaUrl && (
+                <Link
+                  href={data.empowerCtaUrl}
+                  className="inline-flex items-center justify-center font-bold text-white"
+                  style={{
+                    height: 53,
+                    paddingLeft: 32,
+                    paddingRight: 32,
+                    borderRadius: 100,
+                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                    fontSize: 16,
+                    marginTop: 32,
+                  }}
+                >
+                  {data.empowerCtaLabel}
+                </Link>
+              )}
             </div>
             {empowerImageSrc && (
               <div style={{ flex: 1 }}>
@@ -690,9 +665,9 @@ export default function MondayTrainingContent({
                   <p style={{ fontSize: 16, lineHeight: "25.6px", color: "black", marginTop: 20, whiteSpace: "pre-line" }}>
                     {service.description}
                   </p>
-                  {service.ctaLabel && (
+                  {service.ctaLabel && service.ctaUrl && (
                     <Link
-                      href={service.ctaUrl || "#"}
+                      href={service.ctaUrl}
                       className="inline-flex items-center font-semibold"
                       style={{ fontSize: 16, color: "#8015e8", marginTop: 20 }}
                     >
@@ -703,7 +678,7 @@ export default function MondayTrainingContent({
                 {serviceImageSrc && (
                   <div className="rounded-card overflow-hidden" style={{ flex: 1, aspectRatio: "16 / 10" }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={serviceImageSrc} alt={service.title || "Training service"} className="w-full h-full object-cover" />
+                    <img src={serviceImageSrc} alt={service.title ?? ""} className="w-full h-full object-cover" />
                   </div>
                 )}
               </div>
@@ -715,42 +690,46 @@ export default function MondayTrainingContent({
       {/* ============================================================ */}
       {/* SECTION 9 -- Calendly Booking                                */}
       {/* ============================================================ */}
-      <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1200 }}>
-          <h2
-            className="text-section-h2 text-center text-black"
-            style={{ maxWidth: 900 }}
-          >
-            {calendlyHeading}
-          </h2>
-          {calendlySubheading && (
-            <p
-              className="text-center"
-              style={{
-                fontSize: 16,
-                lineHeight: "24px",
-                color: "black",
-                marginTop: 20,
-                maxWidth: 900,
-              }}
+      {calendlyUrl && (
+        <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
+          <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1200 }}>
+            {calendlyHeading && (
+              <h2
+                className="text-section-h2 text-center text-black"
+                style={{ maxWidth: 900 }}
+              >
+                {calendlyHeading}
+              </h2>
+            )}
+            {calendlySubheading && (
+              <p
+                className="text-center"
+                style={{
+                  fontSize: 16,
+                  lineHeight: "24px",
+                  color: "black",
+                  marginTop: 20,
+                  maxWidth: 900,
+                }}
+              >
+                {calendlySubheading}
+              </p>
+            )}
+            <div
+              className="w-full rounded-card overflow-hidden"
+              style={{ marginTop: 40, height: 700 }}
             >
-              {calendlySubheading}
-            </p>
-          )}
-          <div
-            className="w-full rounded-card overflow-hidden"
-            style={{ marginTop: 40, height: 700 }}
-          >
-            <iframe
-              src={calendlyUrl}
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              title="Schedule a consultation"
-            />
+              <iframe
+                src={calendlyUrl}
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                title="Schedule a consultation"
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ============================================================ */}
       {/* SECTION 10 -- FAQ                                            */}
@@ -839,36 +818,42 @@ export default function MondayTrainingContent({
           >
             {discoverHeading}
           </h2>
-          <div
-            className="flex items-center justify-center"
-            style={{ gap: 24, marginTop: 32, width: 694 }}
-          >
-            <Link
-              href={discoverPrimaryCtaUrl}
-              className="flex flex-1 items-center justify-center font-bold"
-              style={{
-                height: 63,
-                borderRadius: 100,
-                backgroundColor: "white",
-                color: "#8015e8",
-                fontSize: 16,
-              }}
+          {(discoverPrimaryCtaUrl || discoverSecondaryCtaUrl) && (
+            <div
+              className="flex items-center justify-center"
+              style={{ gap: 24, marginTop: 32, width: 694 }}
             >
-              {discoverPrimaryCtaLabel}
-            </Link>
-            <Link
-              href={discoverSecondaryCtaUrl}
-              className="flex flex-1 items-center justify-center font-bold text-white"
-              style={{
-                height: 63,
-                borderRadius: 100,
-                background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                fontSize: 16,
-              }}
-            >
-              {discoverSecondaryCtaLabel}
-            </Link>
-          </div>
+              {discoverPrimaryCtaUrl && (
+                <Link
+                  href={discoverPrimaryCtaUrl}
+                  className="flex flex-1 items-center justify-center font-bold"
+                  style={{
+                    height: 63,
+                    borderRadius: 100,
+                    backgroundColor: "white",
+                    color: "#8015e8",
+                    fontSize: 16,
+                  }}
+                >
+                  {discoverPrimaryCtaLabel}
+                </Link>
+              )}
+              {discoverSecondaryCtaUrl && (
+                <Link
+                  href={discoverSecondaryCtaUrl}
+                  className="flex flex-1 items-center justify-center font-bold text-white"
+                  style={{
+                    height: 63,
+                    borderRadius: 100,
+                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                    fontSize: 16,
+                  }}
+                >
+                  {discoverSecondaryCtaLabel}
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
@@ -907,9 +892,9 @@ export default function MondayTrainingContent({
                       <p style={{ fontSize: 16, lineHeight: "25.6px", color: "black", marginTop: 20, whiteSpace: "pre-line" }}>
                         {service.description}
                       </p>
-                      {service.ctaLabel && (
+                      {service.ctaLabel && service.ctaUrl && (
                         <Link
-                          href={service.ctaUrl || "#"}
+                          href={service.ctaUrl}
                           className="inline-flex items-center font-semibold"
                           style={{ fontSize: 16, color: "#8015e8", marginTop: 20 }}
                         >
@@ -920,7 +905,7 @@ export default function MondayTrainingContent({
                     {serviceImageSrc && (
                       <div className="rounded-card overflow-hidden" style={{ flex: 1, aspectRatio: "16 / 10" }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={serviceImageSrc} alt={service.title || "Training service"} className="w-full h-full object-cover" />
+                        <img src={serviceImageSrc} alt={service.title ?? ""} className="w-full h-full object-cover" />
                       </div>
                     )}
                   </div>
@@ -935,10 +920,10 @@ export default function MondayTrainingContent({
       {/* SECTION 11c -- Join 500+ Stats (shared StatsBlockView)       */}
       {/* ============================================================ */}
       <StatsBlockView
-        heading={`${joinSectionHeadingPart1}${joinSectionHeadingAccent}${joinSectionHeadingPart2}`}
+        heading={`${joinSectionHeadingPart1 ?? ""}${joinSectionHeadingAccent ?? ""}${joinSectionHeadingPart2 ?? ""}`}
         subheading={joinSectionSubheading}
         stats={joinSectionStats.map((s) => ({ _key: s._key, value: s.value, label: s.label }))}
-        footnote={joinSectionFootnote || "Data by"}
+        footnote={joinSectionFootnote}
         siteSettings={siteSettings || undefined}
         showMondayPartnersBadge={false}
       />

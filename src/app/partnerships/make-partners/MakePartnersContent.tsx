@@ -74,164 +74,6 @@ interface Props {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Fallback data (used only when Sanity fields are empty)             */
-/* ------------------------------------------------------------------ */
-
-const FALLBACK_FEATURE_TABS = [
-  {
-    _key: "tab-features",
-    label: "make.com Features",
-    items: [
-      {
-        _key: "f1",
-        number: "01",
-        title: "As a Gold Partner, we leverage make's features to transform your operations:",
-        bullets: [
-          { _key: "f1-a", emoji: "🔗", text: "Unlimited Integration Possibilities: Connect seamlessly with 1000+ apps and services" },
-          { _key: "f1-b", emoji: "⚡", text: "Real-Time Execution: Experience immediate process automation that responds instantly to triggers" },
-          { _key: "f1-c", emoji: "🔒", text: "Enterprise-Grade Security: Trust in our SOC 2 Type II certified platform for maximum protection" },
-          { _key: "f1-d", emoji: "📈", text: "Scalable Architecture: Effortlessly handle millions of operations as your business grows" },
-        ],
-      },
-      {
-        _key: "f2",
-        number: "02",
-        title: "Streamline operations and eliminate workflow friction:",
-        bullets: [
-          { _key: "f2-a", emoji: "🤖", text: "Automate repetitive tasks that drain your team's productivity and consume valuable working hours" },
-          { _key: "f2-b", emoji: "✋", text: "Reduce manual data entry errors while saving time and improving overall operational accuracy" },
-          { _key: "f2-c", emoji: "🎯", text: "Enhance process accuracy with consistent, reliable automation that delivers predictable results every time" },
-          { _key: "f2-d", emoji: "🚀", text: "Accelerate workflow execution across all departments to boost team performance and output" },
-        ],
-      },
-      {
-        _key: "f3",
-        number: "03",
-        title: "Improve efficiency and maximise your operational potential:",
-        bullets: [
-          { _key: "f3-a", emoji: "🔄", text: "Connect disparate systems into one cohesive ecosystem that works harmoniously across platforms" },
-          { _key: "f3-b", emoji: "📊", text: "Synchronise data in real-time across all platforms to ensure information consistency and accessibility" },
-          { _key: "f3-c", emoji: "🚧", text: "Eliminate process bottlenecks that slow down your business and create operational inefficiencies" },
-          { _key: "f3-d", emoji: "📏", text: "Scale operations seamlessly without adding complexity or requiring additional manual oversight" },
-        ],
-      },
-      {
-        _key: "f4",
-        number: "04",
-        title: "Drive innovation and stay ahead of the competition:",
-        bullets: [
-          { _key: "f4-a", emoji: "🛠️", text: "Create custom automation solutions tailored to your unique business needs and specific requirements" },
-          { _key: "f4-b", emoji: "🔧", text: "Implement advanced integrations that unlock new possibilities and enhance your existing systems" },
-          { _key: "f4-c", emoji: "🧠", text: "Deploy intelligent workflows that adapt to your business requirements and evolving operational demands" },
-          { _key: "f4-d", emoji: "⚙️", text: "Optimise business processes for maximum efficiency, growth, and long-term competitive advantage" },
-        ],
-      },
-    ],
-  },
-  {
-    _key: "tab-why",
-    label: "Why Choose Fruition?",
-    items: [
-      {
-        _key: "w1",
-        number: "01",
-        title: "Our Gold Partner status demonstrates our expertise in:",
-        bullets: [
-          { _key: "w1-a", emoji: "🔧", text: "Advanced automation capabilities to handle complex business requirements" },
-          { _key: "w1-b", emoji: "🎯", text: "Complex multi-step workflow design for sophisticated process automation" },
-          { _key: "w1-c", emoji: "🔄", text: "Real-time data synchronisation across all your connected systems" },
-          { _key: "w1-d", emoji: "🛡️", text: "Error handling and monitoring systems for reliable operation" },
-          { _key: "w1-e", emoji: "🔗", text: "Custom API integration development tailored to your needs" },
-        ],
-      },
-      {
-        _key: "w2",
-        number: "02",
-        title: "Enterprise integration solutions that connect your entire business ecosystem:",
-        bullets: [
-          { _key: "w2-a", emoji: "📊", text: "Cross-platform data management for seamless information flow" },
-          { _key: "w2-b", emoji: "🏢", text: "Legacy system connectivity to modernise existing infrastructure" },
-          { _key: "w2-c", emoji: "☁️", text: "Cloud service orchestration for optimal performance" },
-          { _key: "w2-d", emoji: "🔒", text: "Secure data transfer protocols ensuring complete protection" },
-          { _key: "w2-e", emoji: "⚙️", text: "Scalable architecture design that grows with your business" },
-        ],
-      },
-      {
-        _key: "w3",
-        number: "03",
-        title: "Professional services that guide you from concept to completion:",
-        bullets: [
-          { _key: "w3-a", emoji: "👨‍💼", text: "Expert implementation guidance throughout your automation journey" },
-          { _key: "w3-b", emoji: "🛠️", text: "Custom scenario development aligned with your business goals" },
-          { _key: "w3-c", emoji: "🎓", text: "Team training and enablement for long-term success" },
-          { _key: "w3-d", emoji: "🤝", text: "Ongoing support and optimisation for continuous improvement" },
-          { _key: "w3-e", emoji: "📈", text: "Strategic consulting to maximize your automation ROI" },
-        ],
-      },
-    ],
-  },
-  {
-    _key: "tab-help",
-    label: "How We Can Help",
-    items: [
-      {
-        _key: "h1",
-        number: "01",
-        title: "Our certified team will guide you through:",
-        bullets: [
-          { _key: "h1-a", emoji: "📋", text: "Automation strategy development" },
-          { _key: "h1-b", emoji: "🎨", text: "Workflow design and implementation" },
-          { _key: "h1-c", emoji: "🔗", text: "System integration and testing" },
-          { _key: "h1-d", emoji: "🔧", text: "Ongoing optimisation and support" },
-        ],
-      },
-      {
-        _key: "h2",
-        number: "02",
-        title: "As your dedicated make Gold Partner, we specialise in:",
-        bullets: [
-          { _key: "h2-a", emoji: "⚙️", text: "Advanced Workflow Design" },
-          { _key: "h2-b", emoji: "🔌", text: "System Integration Development" },
-          { _key: "h2-c", emoji: "🛠️", text: "Custom Automation Solutions" },
-          { _key: "h2-d", emoji: "📈", text: "Enterprise Scaling Support" },
-        ],
-      },
-      {
-        _key: "h3",
-        number: "03",
-        title: "Begin your digital transformation journey:",
-        description:
-          "Contact Fruition's Make automation experts to begin your digital transformation journey. As a certified Gold Partner, we deliver enterprise-grade automation solutions that drive efficiency and growth. Transform your business operations and bring your workflows to Fruition.",
-      },
-    ],
-  },
-]
-
-const FALLBACK_SHOWCASE_CARDS = [
-  {
-    heading: "Keep operations running smoothly",
-    body: "Run operations smoothly, even across siloed systems, by connecting your teams and the key project management and data synchronisation tools that your business relies on.",
-    imageRight: true,
-    mediaType: "video" as const,
-    videoUrl: "/images/make-fruition-services.mp4",
-  },
-  {
-    heading: "Solve finance complexities",
-    body: "Integrate multiple apps and systems into one platform and automate time-consuming processes such as quote-to-cash and procure-to-pay.",
-    imageRight: false,
-    mediaType: "image" as const,
-    imageSrc: "/images/make-operations-flow.avif",
-  },
-  {
-    heading: "Scale with intelligent workflows",
-    body: "Design intelligent, multi-step workflows that adapt to your business — from sales handoffs to customer onboarding, with real-time data flowing across every tool you use.",
-    imageRight: true,
-    mediaType: "image" as const,
-    imageSrc: "/images/make-finance-flow.avif",
-  },
-]
-
-/* ------------------------------------------------------------------ */
 /*  Helpers                                                             */
 /* ------------------------------------------------------------------ */
 
@@ -249,9 +91,7 @@ export default function MakePartnersContent({
   caseStudies = [],
   pageData,
 }: Props) {
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = siteSettings?.calendlyLink
 
   const partnerBadges = siteSettings?.navbarPartnerBadges || []
 
@@ -263,34 +103,26 @@ export default function MakePartnersContent({
     ) || caseStudies[0]
 
   // Hero
-  const heroHeadingPart1 = pageData?.heroHeadingPart1 ?? "Bring Your Workflows to Fruition with "
-  const heroHeadingAccent = pageData?.heroHeadingAccent ?? "Make.com Automation"
-  const heroSubheading =
-    pageData?.heroSubheading ??
-    "Transform your business operations with Fruition\u2019s certified Make Gold Partner expertise \u2014 enterprise-grade automation that connects your tools, scales with your growth, and unlocks new operational potential."
-  const heroPrimaryCtaLabel = pageData?.heroPrimaryCtaLabel ?? "\uD83D\uDE80 Book a Consultation"
-  const heroPrimaryCtaUrl = pageData?.heroPrimaryCtaUrl || calendlyUrl
-  const heroImageSrc = safeSrc(pageData?.heroImage) ?? "/images/make-gold-partner-badge.png"
+  const heroHeadingPart1 = pageData?.heroHeadingPart1
+  const heroHeadingAccent = pageData?.heroHeadingAccent
+  const heroSubheading = pageData?.heroSubheading
+  const heroPrimaryCtaLabel = pageData?.heroPrimaryCtaLabel
+  const heroPrimaryCtaUrl = pageData?.heroPrimaryCtaUrl || calendlyUrl || "#"
+  const heroImageSrc = safeSrc(pageData?.heroImage)
 
   // Logo cloud
-  const logoCloudPart1 = pageData?.logoCloudHeadingPart1 ?? "Clients who have used our "
-  const logoCloudAccent = pageData?.logoCloudHeadingAccent ?? "Make.com automation services"
+  const logoCloudPart1 = pageData?.logoCloudHeadingPart1
+  const logoCloudAccent = pageData?.logoCloudHeadingAccent
 
   // Feature tabs
-  const comparisonHeading =
-    pageData?.comparisonHeading ?? "Transform Your Business with Make Automations"
-  const featureTabs =
-    pageData?.comparisonTabs && pageData.comparisonTabs.length > 0
-      ? pageData.comparisonTabs
-      : FALLBACK_FEATURE_TABS
+  const comparisonHeading = pageData?.comparisonHeading
+  const featureTabs = pageData?.comparisonTabs
 
   // Showcase
-  const showcaseHeading = pageData?.showcaseHeading ?? "Automation you can see, flex, and scale"
-  const showcaseSubheading =
-    pageData?.showcaseSubheading ??
-    "Realise your business\u2019s full potential with Make\u2019s intuitive no-code development platform."
+  const showcaseHeading = pageData?.showcaseHeading
+  const showcaseSubheading = pageData?.showcaseSubheading
 
-  // Resolve showcase cards: prefer Sanity, fall back to static
+  // Resolve showcase cards from Sanity
   type ResolvedCard = {
     heading: string
     body: string
@@ -299,64 +131,39 @@ export default function MakePartnersContent({
     mediaSrc: string
   }
 
-  let resolvedShowcaseCards: ResolvedCard[]
-  if (pageData?.showcaseCards && pageData.showcaseCards.length > 0) {
-    resolvedShowcaseCards = pageData.showcaseCards
-      .map((card): ResolvedCard | null => {
-        const heading = card.heading ?? ""
-        const body = card.body ?? ""
-        const imageRight = card.imageRight ?? true
-        const mediaType = card.mediaType ?? "image"
-        let mediaSrc = ""
-        if (mediaType === "video") {
-          mediaSrc = card.videoUrl ?? ""
-        } else {
-          mediaSrc = safeSrc(card.image) ?? ""
-        }
-        if (!mediaSrc) return null
-        return { heading, body, imageRight, mediaType, mediaSrc }
-      })
-      .filter((c): c is ResolvedCard => c !== null)
-  } else {
-    resolvedShowcaseCards = FALLBACK_SHOWCASE_CARDS.map((card) => ({
-      heading: card.heading,
-      body: card.body,
-      imageRight: card.imageRight,
-      mediaType: card.mediaType,
-      mediaSrc: card.mediaType === "video" ? (card.videoUrl ?? "") : ((card as any).imageSrc ?? ""),
-    }))
-  }
+  const resolvedShowcaseCards: ResolvedCard[] = (pageData?.showcaseCards ?? [])
+    .map((card): ResolvedCard | null => {
+      const heading = card.heading ?? ""
+      const body = card.body ?? ""
+      const imageRight = card.imageRight ?? true
+      const mediaType = card.mediaType ?? "image"
+      let mediaSrc = ""
+      if (mediaType === "video") {
+        mediaSrc = card.videoUrl ?? ""
+      } else {
+        mediaSrc = safeSrc(card.image) ?? ""
+      }
+      if (!mediaSrc) return null
+      return { heading, body, imageRight, mediaType, mediaSrc }
+    })
+    .filter((c): c is ResolvedCard => c !== null)
 
   // Calendly
-  const calendlyHeading =
-    pageData?.calendlyHeading ?? "Book Your Personalised Make Automation Demo"
-  const calendlySubheading =
-    pageData?.calendlySubheading ??
-    "See how our Gold Partner team can map and automate your most time-consuming workflows."
+  const calendlyHeading = pageData?.calendlyHeading
+  const calendlySubheading = pageData?.calendlySubheading
 
   // Join stats
-  const joinPart1 = pageData?.joinHeadingPart1 ?? "Join "
-  const joinAccent = pageData?.joinHeadingAccent ?? "500+ organisations"
-  const joinPart2 =
-    pageData?.joinHeadingPart2 ??
-    " that have transformed their operations with Make automation expertise"
-  const joinStats =
-    pageData?.joinStats && pageData.joinStats.length > 0
-      ? pageData.joinStats
-      : [
-          { _key: "s1", value: "500+", label: "Successful integrations delivered" },
-          { _key: "s2", value: "1000+", label: "Apps connected across client stacks" },
-          { _key: "s3", value: "Gold", label: "Certified Make.com Partner" },
-        ]
-  const joinCtaLabel = pageData?.joinCtaLabel ?? "\uD83D\uDE80 Book a Time"
-  const joinCtaUrl = pageData?.joinCtaUrl || calendlyUrl
+  const joinPart1 = pageData?.joinHeadingPart1
+  const joinAccent = pageData?.joinHeadingAccent
+  const joinPart2 = pageData?.joinHeadingPart2
+  const joinStats = pageData?.joinStats
+  const joinCtaLabel = pageData?.joinCtaLabel
+  const joinCtaUrl = pageData?.joinCtaUrl || calendlyUrl || "#"
 
   // Testimonial banner
-  const bannerPart1 = pageData?.testimonialBannerHeadingPart1 ?? "Join "
-  const bannerAccent = pageData?.testimonialBannerHeadingAccent ?? "500+ organisations"
-  const bannerPart2 =
-    pageData?.testimonialBannerHeadingPart2 ??
-    " that have automated their workflows with Fruition\u2019s Make expertise"
+  const bannerPart1 = pageData?.testimonialBannerHeadingPart1
+  const bannerAccent = pageData?.testimonialBannerHeadingAccent
+  const bannerPart2 = pageData?.testimonialBannerHeadingPart2
 
   // Testimonials
   const testimonialsHeading = pageData?.testimonialsHeading
@@ -434,14 +241,16 @@ export default function MakePartnersContent({
           </div>
 
           {/* Hero image */}
-          <div style={{ marginTop: 40, width: "100%", maxWidth: 1042 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={heroImageSrc}
-              alt="Make.com Gold Partner badge with workflow automation visuals"
-              className="w-full h-auto"
-            />
-          </div>
+          {heroImageSrc && (
+            <div style={{ marginTop: 40, width: "100%", maxWidth: 1042 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={heroImageSrc}
+                alt="Make.com Gold Partner badge with workflow automation visuals"
+                className="w-full h-auto"
+              />
+            </div>
+          )}
         </div>
       </section>
 
@@ -453,74 +262,82 @@ export default function MakePartnersContent({
       />
 
       {/* 3. Three-tab section */}
-      <ComparisonTabsSection
-        heading={comparisonHeading}
-        tabs={featureTabs}
-      />
+      {featureTabs && featureTabs.length > 0 && (
+        <ComparisonTabsSection
+          heading={comparisonHeading}
+          tabs={featureTabs}
+        />
+      )}
 
       {/* 4. Alternating media + text showcase */}
-      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
-          <div className="flex flex-col items-center text-center" style={{ marginBottom: 60 }}>
-            <h2
-              className="text-section-h2 text-black"
-              style={{ maxWidth: 900 }}
-            >
-              {showcaseHeading}
-            </h2>
-            <p
-              className="text-black"
-              style={{ fontSize: 20, marginTop: 12, maxWidth: 760 }}
-            >
-              {showcaseSubheading}
-            </p>
-          </div>
-
-          <div className="flex flex-col" style={{ gap: 60 }}>
-            {resolvedShowcaseCards.map((card, i) => (
-              <div
-                key={`showcase-${i}`}
-                className="flex items-center"
-                style={{
-                  gap: 48,
-                  flexDirection: card.imageRight ? "row" : "row-reverse",
-                }}
-              >
-                <div style={{ flex: 1 }}>
-                  <h3 style={{ fontSize: 28, fontWeight: 600, color: "#2b074d", lineHeight: "36px" }}>
-                    {card.heading}
-                  </h3>
-                  <p style={{ fontSize: 16, lineHeight: "25.6px", color: "black", marginTop: 20 }}>
-                    {card.body}
-                  </p>
-                </div>
-                <div
-                  className="rounded-card overflow-hidden"
-                  style={{ flex: 1, aspectRatio: "16 / 10", background: "#f5f3f7" }}
+      {resolvedShowcaseCards.length > 0 && (
+        <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+          <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
+            <div className="flex flex-col items-center text-center" style={{ marginBottom: 60 }}>
+              {showcaseHeading && (
+                <h2
+                  className="text-section-h2 text-black"
+                  style={{ maxWidth: 900 }}
                 >
-                  {card.mediaType === "video" ? (
-                    <video
-                      src={card.mediaSrc}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={card.mediaSrc}
-                      alt={card.heading}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
+                  {showcaseHeading}
+                </h2>
+              )}
+              {showcaseSubheading && (
+                <p
+                  className="text-black"
+                  style={{ fontSize: 20, marginTop: 12, maxWidth: 760 }}
+                >
+                  {showcaseSubheading}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col" style={{ gap: 60 }}>
+              {resolvedShowcaseCards.map((card, i) => (
+                <div
+                  key={`showcase-${i}`}
+                  className="flex items-center"
+                  style={{
+                    gap: 48,
+                    flexDirection: card.imageRight ? "row" : "row-reverse",
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ fontSize: 28, fontWeight: 600, color: "#2b074d", lineHeight: "36px" }}>
+                      {card.heading}
+                    </h3>
+                    <p style={{ fontSize: 16, lineHeight: "25.6px", color: "black", marginTop: 20 }}>
+                      {card.body}
+                    </p>
+                  </div>
+                  <div
+                    className="rounded-card overflow-hidden"
+                    style={{ flex: 1, aspectRatio: "16 / 10", background: "#f5f3f7" }}
+                  >
+                    {card.mediaType === "video" ? (
+                      <video
+                        src={card.mediaSrc}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={card.mediaSrc}
+                        alt={card.heading}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* 5. Calendly */}
       <CalendlySection

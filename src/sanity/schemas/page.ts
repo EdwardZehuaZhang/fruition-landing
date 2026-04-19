@@ -157,6 +157,21 @@ export default {
     { name: 'applicationFormHeading', title: 'Application Form Heading', type: 'string' },
     { name: 'applicationFormEmbedUrl', title: 'Application Form Embed URL (forms.monday.com/...)', type: 'url' },
 
+    // Downloadable documents (e.g. Terms & Conditions PDFs)
+    {
+      name: 'documents',
+      title: 'Downloadable Documents',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'downloadableDoc',
+        fields: [
+          { name: 'label', title: 'Label', type: 'string' },
+          { name: 'file', title: 'File (PDF)', type: 'file' },
+        ],
+      }],
+    },
+
     // Comparison / tabbed section
     { name: 'comparisonHeading', title: 'Comparison Section Heading', type: 'string' },
     { name: 'comparisonSubheading', title: 'Comparison Section Subheading', type: 'text' },
@@ -271,6 +286,7 @@ export default {
     // Logo cloud overrides
     { name: 'logoCloudHeadingPart1', title: 'Logo Cloud Heading (prefix)', type: 'string' },
     { name: 'logoCloudHeadingAccent', title: 'Logo Cloud Heading (accent)', type: 'string' },
+    { name: 'logoCloudDescription', title: 'Logo Cloud Description (below heading)', type: 'text' },
 
     // Long-form text content sections (e.g. About Us scalability narrative)
     {
@@ -331,6 +347,18 @@ export default {
     { name: 'testimonialBannerPrimaryCtaUrl', title: 'Testimonial Banner Primary CTA URL', type: 'string' },
     { name: 'testimonialBannerSecondaryCtaLabel', title: 'Testimonial Banner Secondary CTA Label', type: 'string' },
     { name: 'testimonialBannerSecondaryCtaUrl', title: 'Testimonial Banner Secondary CTA URL', type: 'string' },
+
+    // Section visibility toggles
+    { name: 'hideDiscoverSection', title: 'Hide Discover CTA Section', type: 'boolean', initialValue: false },
+    { name: 'hideJoinStatsSection', title: 'Hide Join Stats Section', type: 'boolean', initialValue: false },
+    { name: 'hideTestimonialBanner', title: 'Hide Testimonial CTA Banner', type: 'boolean', initialValue: false },
+    { name: 'hideSecurityBadgeSection', title: 'Hide Security Badge Section', type: 'boolean', initialValue: false },
+    { name: 'hideTestimonialsSection', title: 'Hide Testimonials Grid', type: 'boolean', initialValue: false },
+    { name: 'hideFaqSection', title: 'Hide FAQ Section', type: 'boolean', initialValue: false },
+    { name: 'hideCapabilitiesSection', title: 'Hide Capabilities Section', type: 'boolean', initialValue: false },
+    { name: 'hideCaseStudyCardsSection', title: 'Hide Case Study Cards', type: 'boolean', initialValue: false },
+    { name: 'hideSolutionCardsSection', title: 'Hide Solution Cards', type: 'boolean', initialValue: false },
+    { name: 'hideHeroSubheading', title: 'Hide Hero Subheading', type: 'boolean', initialValue: false },
 
     {
       name: 'pageType',

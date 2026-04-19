@@ -1,32 +1,31 @@
 import Link from "next/link"
 import HeroSection from "@/components/HeroSection"
-import { getAllSolutionPages, getPageBySlug } from "@/sanity/queries"
+import { getAllSolutionPages, getPageBySlug, getSiteSettings } from "@/sanity/queries"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("monday-consulting-solutions")
   return {
-    title: page?.seoTitle || "monday.com Solutions | Fruition Services",
-    description: page?.seoDescription || "Purpose-built monday.com solutions for every team. Project management, CRM, HR, Finance and more.",
+    title: page?.seoTitle,
+    description: page?.seoDescription,
   }
 }
 
 export default async function SolutionsPage() {
-  const [solutions, page] = await Promise.all([
+  const [solutions, page, siteSettings] = await Promise.all([
     getAllSolutionPages(),
     getPageBySlug("monday-consulting-solutions"),
+    getSiteSettings(),
   ])
 
-  const heading = page?.heroHeading || "monday.com Solutions"
-  const subheading = page?.heroSubheading || "Purpose-built solutions for every team. Powered by monday.com, configured by Fruition."
-  const ctaLabel = page?.primaryCtaLabel || "Book a Consultation"
-  const ctaUrl = page?.primaryCtaUrl || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
 
   return (
     <div>
       <HeroSection
-        heading={heading}
-        subheading={subheading}
-        primaryCta={{ label: ctaLabel, url: ctaUrl }}
+        heading={page.heroHeading || ""}
+        subheading={page.heroSubheading}
+        primaryCta={{ label: page.primaryCtaLabel || "", url: page.primaryCtaUrl || calendlyUrl }}
       />
       <div className="max-w-6xl mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {solutions.map((s: { slug: string; title: string; heroSubheading?: string }) => (
