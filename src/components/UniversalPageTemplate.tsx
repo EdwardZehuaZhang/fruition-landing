@@ -125,7 +125,7 @@ export default function UniversalPageTemplate({
             ? page.heroPartnerBadges
             : siteSettings?.navbarPartnerBadges || []
         }
-        partnerImageSrc={siteSettings?.badgeMondayPartners}
+        partnerImageSrc={undefined}
         primaryCtaLabel={page.primaryCtaLabel}
         primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
         secondaryCtaLabel={page.secondaryCtaLabel}
@@ -156,21 +156,6 @@ export default function UniversalPageTemplate({
             </div>
           </div>
         </section>
-      )}
-
-      {/* 7. Capabilities Grid (if populated) - moved earlier to match design flow */}
-      {!page.hideCapabilitiesSection && page.capabilitiesCards?.length > 0 && (
-        <CapabilitiesGrid
-          eyebrow={page.capabilitiesEyebrow}
-          heading={page.capabilitiesHeading}
-          headingAccent={page.capabilitiesHeadingAccent}
-          subheading={page.capabilitiesSubheading}
-          theme={page.capabilitiesTheme || "light"}
-          columns={capabilitiesColumns}
-          cards={page.capabilitiesCards}
-          ctaLabel={page.capabilitiesCtaLabel}
-          ctaUrl={page.capabilitiesCtaUrl}
-        />
       )}
 
       {/* 7b. Secondary Capabilities Grid (e.g. "What We're Looking For") */}
@@ -273,6 +258,21 @@ export default function UniversalPageTemplate({
         <CaseStudyCardsSection
           heading={page.caseStudySectionHeading}
           cards={page.caseStudyCards}
+        />
+      )}
+
+      {/* 7. Capabilities Grid (if populated) - after case studies */}
+      {!page.hideCapabilitiesSection && page.capabilitiesCards?.length > 0 && (
+        <CapabilitiesGrid
+          eyebrow={page.capabilitiesEyebrow}
+          heading={page.capabilitiesHeading}
+          headingAccent={page.capabilitiesHeadingAccent}
+          subheading={page.capabilitiesSubheading}
+          theme={page.capabilitiesTheme || "light"}
+          columns={capabilitiesColumns}
+          cards={page.capabilitiesCards}
+          ctaLabel={page.capabilitiesCtaLabel}
+          ctaUrl={page.capabilitiesCtaUrl}
         />
       )}
 

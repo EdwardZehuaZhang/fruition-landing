@@ -38,59 +38,61 @@ const tabs = [
     label: 'Top Team Challenges',
     items: [
       {
-        title: 'Information Silos',
+        title: 'Hybrid Collaboration',
         description:
-          'Breaking down barriers between departments so teams can collaborate effectively and share critical data in real time.',
+          'Adopting the right tools to maintain effective teamwork, communication, and workload capacity',
       },
       {
-        title: 'Manual Repetitive Tasks',
+        title: 'Digital Adaptation',
         description:
-          'Eliminating time-consuming manual processes that drain productivity and increase the risk of human error.',
+          'Get expert training support to rapidly learn new tools and technologies while maintaining productivity',
       },
       {
-        title: 'Lack of Visibility',
+        title: 'Work-Life Integration',
         description:
-          'Gaining a clear, centralised view of project progress, workloads, and team performance across the organisation.',
+          'Giving team members time back with an automated system that cuts out manual work',
       },
       {
-        title: 'Inefficient Communication',
+        title: 'Personal Development',
         description:
-          'Streamlining how teams communicate, reducing email overload and ensuring the right people get the right information.',
+          'Develop team members to learn how to optimise processes with better systems',
       },
       {
-        title: 'Scaling Operations',
+        title: 'Team Cohesion',
         description:
-          'Building repeatable processes and workflows that grow with the team without adding complexity.',
+          'Unify the team with communication and work management systems',
       },
     ],
   },
   {
     label: 'How We Can Help',
+    subheading:
+      'Our expert consultants empower you to adopt workflow automation & AI systems',
     items: [
       {
-        title: 'Consulting & Strategy',
+        title: 'Process Discovery → Business Process Audit',
         description:
-          'Expert guidance to align your technology stack with business objectives and drive measurable outcomes.',
+          'We meticulously map your existing workflows against industry benchmarks, analysing bottlenecks and efficiency gaps that hold your team back from scaling.',
       },
       {
-        title: 'Implementation & Migration',
+        title: 'Technical Architecture → System Integration Scope',
         description:
-          'End-to-end setup, configuration and migration to get your teams productive on monday.com from day one.',
+          'Our technical assessment reveals the hidden potential in your current tech stack, identifying precise automated solution design to visualise where monday.com can transform fragmented processes into seamless workflows.',
       },
       {
-        title: 'Integration & Automation',
+        title: 'Solution Design → Implementation',
         description:
-          'Connecting your tools and automating workflows to eliminate manual work and create seamless data flow.',
+          'Through in-depth process analysis, we build your system with perfect balance between automated sophistication and user adoption, ensuring you see faster set up and team usage.',
       },
       {
-        title: 'Training & Enablement',
+        title: 'Efficiency Impact → ROI Opportunity Analysis',
         description:
-          'Tailored training programs that empower your teams to get the most from their monday.com investment.',
+          'By quantifying potential efficiency gains across your operations, we pinpoint exactly where automation and optimisation will deliver the highest return on your investment.',
       },
       {
-        title: 'Ongoing Support & Optimisation',
+        title: 'Change Readiness → Adoption & Training Strategies',
         description:
-          'Continuous improvement and dedicated support to ensure your workflows evolve as your business grows.',
+          'Our proven change impact framework measures organisational readiness and crafts a tailored adoption and training strategy, turning potential resistance into enthusiastic system adoption.',
       },
     ],
   },
@@ -132,6 +134,13 @@ export default function TeamsTransformedSection() {
               </button>
             ))}
           </div>
+
+          {/* Optional tab subheading */}
+          {'subheading' in active && active.subheading && (
+            <p className="text-[20px] text-black text-center">
+              {active.subheading}
+            </p>
+          )}
 
           {/* Content card */}
           <NumberedStepList

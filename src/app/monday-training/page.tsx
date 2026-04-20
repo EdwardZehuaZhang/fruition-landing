@@ -30,6 +30,7 @@ export default async function Page() {
       caseStudies={caseStudies || []}
       siteSettings={settings}
       faqTabs={groupFaqsIntoTabs(centralFaqs)}
+      navbarPartnerBadges={settings?.navbarPartnerBadges || []}
     />
   )
 }

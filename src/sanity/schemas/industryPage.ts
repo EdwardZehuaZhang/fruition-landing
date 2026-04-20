@@ -404,6 +404,7 @@ export default {
           { name: 'personName', title: 'Person Name', type: 'string' },
           { name: 'personRole', title: 'Person Role', type: 'string' },
           { name: 'image', title: 'Image / Logo', type: 'image' },
+          { name: 'imageUrl', title: 'Image URL (optional, alternative to upload)', type: 'string' },
           { name: 'videoUrl', title: 'Video URL (optional)', type: 'url' },
         ],
       }],

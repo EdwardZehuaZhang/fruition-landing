@@ -28,6 +28,7 @@ export default async function Page() {
       carouselLogos={settings?.carouselLogos || []}
       caseStudies={caseStudies || []}
       faqTabs={groupFaqsIntoTabs(centralFaqs)}
+      navbarPartnerBadges={settings?.navbarPartnerBadges || []}
     />
   )
 }

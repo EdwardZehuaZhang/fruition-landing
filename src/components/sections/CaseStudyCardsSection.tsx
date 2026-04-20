@@ -10,6 +10,7 @@ interface CaseStudyCard {
   personName?: string
   personRole?: string
   image?: SanityImageRef
+  imageUrl?: string
   videoUrl?: string
 }
 
@@ -49,7 +50,7 @@ export default function CaseStudyCardsSection({
         )}
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 28 }}>
           {cards.map((card, i) => {
-            const imageSrc = safeImageUrl(card.image)
+            const imageSrc = safeImageUrl(card.image) || card.imageUrl || null
             const embedUrl = toEmbedUrl(card.videoUrl)
             return (
               <div

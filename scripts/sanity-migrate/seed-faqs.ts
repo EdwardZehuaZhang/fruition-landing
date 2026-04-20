@@ -30,13 +30,13 @@ const DRY_RUN = process.argv.includes('--dry-run')
  * Values are ordered — lower index = tab shown earlier.
  */
 const CANONICAL_CATEGORIES: Array<{ label: string; aliases?: string[] }> = [
+  { label: 'Professional Services' },
   { label: 'monday Work Management', aliases: ['Work Management'] },
   { label: 'monday CRM' },
-  { label: 'monday Service' },
-  { label: 'monday Dev' },
-  { label: 'Professional Services' },
   { label: 'Expert Consultant Guide' },
   { label: 'General Questions' },
+  { label: 'monday Service' },
+  { label: 'monday Dev' },
   { label: 'Project Management' },
   { label: 'Training' },
   { label: 'AI FAQs' },

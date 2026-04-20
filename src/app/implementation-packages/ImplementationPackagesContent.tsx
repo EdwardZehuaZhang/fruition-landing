@@ -6,6 +6,7 @@ import Link from "next/link"
 import { PortableText, type PortableTextBlock } from "@portabletext/react"
 import { urlFor } from "@/sanity/image"
 import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
+import CalendlySection from "@/components/sections/CalendlySection"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -141,6 +142,13 @@ interface CaseStudy {
   linkedinUrl?: string
 }
 
+interface NavbarPartnerBadge {
+  name?: string
+  image?: SanityImage
+  width?: number
+  height?: number
+}
+
 interface Props {
   data?: ImplementationPackagesData | null
   carouselLogos?: CarouselLogo[]
@@ -151,6 +159,7 @@ interface Props {
    * is managed from the central faqItem document store.
    */
   faqTabs?: FaqTab[]
+  navbarPartnerBadges?: NavbarPartnerBadge[]
 }
 
 
@@ -176,6 +185,7 @@ export default function ImplementationPackagesContent({
   carouselLogos,
   caseStudies,
   faqTabs: faqTabsOverride,
+  navbarPartnerBadges,
 }: Props) {
   // Resolve all fields from Sanity data (no local fallbacks)
   const heroHeadingPart1 = data?.heroHeadingPart1
@@ -184,13 +194,22 @@ export default function ImplementationPackagesContent({
   const heroImageSrc = imgSrc(data?.heroImage)
   const heroCertBadgeSrc = imgSrc(data?.heroCertificationBadge)
   type ResolvedPartnerBadge = { _key: string | undefined; src: string; alt: string }
-  const heroPartnerBadges: ResolvedPartnerBadge[] = (data?.heroPartnerBadges ?? [])
+  const sanityBadges: ResolvedPartnerBadge[] = (data?.heroPartnerBadges ?? [])
     .map((b, i): ResolvedPartnerBadge | null => {
       const src = imgSrc(b.image)
       if (!src) return null
       return { _key: b._key, src, alt: b.alt ?? `Partner badge ${i + 1}` }
     })
     .filter((x): x is ResolvedPartnerBadge => x !== null)
+  const heroPartnerBadges: ResolvedPartnerBadge[] = sanityBadges.length > 0
+    ? sanityBadges
+    : (navbarPartnerBadges ?? [])
+        .map((b, i): ResolvedPartnerBadge | null => {
+          const src = imgSrc(b.image)
+          if (!src) return null
+          return { _key: `nav-badge-${i}`, src, alt: b.name ?? `Partner badge ${i + 1}` }
+        })
+        .filter((x): x is ResolvedPartnerBadge => x !== null)
   const heroMondayPartnersImageSrc = imgSrc(data?.heroMondayPartnersImage)
   const heroPrimaryCtaLabel = data?.heroPrimaryCtaLabel
   const heroPrimaryCtaUrl = data?.heroPrimaryCtaUrl
@@ -559,7 +578,34 @@ export default function ImplementationPackagesContent({
                   className="flex-1"
                   style={{ fontSize: 20, fontWeight: 500, color: "white" }}
                 >
-                  <PortableText value={socialProofBannerHtml} />
+                  <PortableText
+                    value={socialProofBannerHtml}
+                    components={{
+                      block: {
+                        normal: ({ children }) => {
+                          return (
+                            <p>
+                              {(Array.isArray(children) ? children : [children]).map((child, i) => {
+                                if (typeof child !== "string") return child
+                                const highlight = "500+ small-medium sized enterprises"
+                                const idx = child.indexOf(highlight)
+                                if (idx === -1) return child
+                                return (
+                                  <span key={i}>
+                                    {child.slice(0, idx)}
+                                    <span style={{ color: "#8015e8" }}>
+                                      {highlight}
+                                    </span>
+                                    {child.slice(idx + highlight.length)}
+                                  </span>
+                                )
+                              })}
+                            </p>
+                          )
+                        },
+                      },
+                    }}
+                  />
                 </div>
               )}
               {socialProofCtaUrl && (
@@ -761,31 +807,10 @@ export default function ImplementationPackagesContent({
       {/* SECTION 6 -- Calendly Booking                                */}
       {/* ============================================================ */}
       {calendlyUrl && (
-        <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
-          <div
-            className="mx-auto flex flex-col items-center"
-            style={{ maxWidth: 1200 }}
-          >
-            <h2
-              className="text-section-h2 text-center text-black"
-              style={{ maxWidth: 800 }}
-            >
-              {calendlyHeading}
-            </h2>
-            <div
-              className="w-full rounded-card overflow-hidden"
-              style={{ marginTop: 40, height: 700 }}
-            >
-              <iframe
-                src={calendlyUrl}
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                title="Schedule a consultation"
-              />
-            </div>
-          </div>
-        </section>
+        <CalendlySection
+          heading={calendlyHeading}
+          calendlyUrl={calendlyUrl}
+        />
       )}
 
       {/* ============================================================ */}

@@ -27,6 +27,20 @@ function safeImageUrl(ref: SanityImageRef): string | null {
   try { return urlFor(ref).url() } catch { return null }
 }
 
+/** Override specific partner badges with local dark variants */
+const DARK_LOGO_OVERRIDES: Record<string, string> = {
+  n8n: '/images/partner-n8n-dark.avif',
+  aircall: '/images/partner-aircall-dark.avif',
+}
+
+function getDarkBadgeSrc(name: string | undefined, fallbackSrc: string | null): string | null {
+  const n = (name || '').toLowerCase()
+  for (const [key, darkSrc] of Object.entries(DARK_LOGO_OVERRIDES)) {
+    if (n.includes(key)) return darkSrc
+  }
+  return fallbackSrc
+}
+
 export default function HeroBanner({
   eyebrow,
   headingPart1 = "",
@@ -59,7 +73,8 @@ export default function HeroBanner({
         {!partnerImageUrl && partnerBadges.length > 0 && (
           <div className="flex items-center" style={{ gap: 22 }}>
             {partnerBadges.map((badge, i) => {
-              const src = safeImageUrl(badge.image)
+              const cmsSrc = safeImageUrl(badge.image)
+              const src = getDarkBadgeSrc(badge.name, cmsSrc)
               if (!src) return null
               return (
                 // eslint-disable-next-line @next/next/no-img-element

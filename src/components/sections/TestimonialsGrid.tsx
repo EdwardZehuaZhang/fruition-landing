@@ -91,7 +91,7 @@ export default function TestimonialsGrid({
                 <div className="relative flex w-full max-w-[437px] flex-col rounded-card bg-[#10003a] px-[38px] shadow-card">
                   <div className="pt-[23px] pb-[30px]">
                     <p className="font-semibold text-[40px] text-[#ba83f0] leading-[60px]">{statCardValue}</p>
-                    <p className="text-body-lead font-normal text-white" style={{ whiteSpace: "pre-line" }}>
+                    <p className="font-normal text-white text-[24px] leading-[34px]" style={{ whiteSpace: "pre-line" }}>
                       {statCardSubtitle}
                     </p>
                   </div>

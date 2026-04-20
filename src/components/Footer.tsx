@@ -80,9 +80,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
   const industryLinks = siteSettings?.footerIndustryLinks ?? []
 
   const contactEmail = siteSettings?.contactEmail
-  const logoSrc = siteSettings?.logoWhite
-    ? urlFor(siteSettings.logoWhite).width(640).url()
-    : null
+  const logoSrc = "/images/footer-logo-white.avif"
 
   return (
     <footer className="flex flex-col lg:flex-row w-full">

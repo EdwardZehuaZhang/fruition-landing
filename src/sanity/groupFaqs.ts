@@ -11,9 +11,21 @@ export interface CentralFaqItem {
 }
 
 /**
+ * Preferred tab display order. Categories listed here appear first (in
+ * this order); any categories not listed fall back to their Sanity
+ * `categoryOrder` value and appear after the preferred ones.
+ */
+const PREFERRED_TAB_ORDER = [
+  'Professional Services',
+  'monday Work Management',
+  'monday CRM',
+  'Expert Consultant Guide',
+  'General Questions',
+]
+
+/**
  * Group central faqItem documents into the `FaqTab[]` shape that
- * `FaqAccordion` expects. Preserves the curated category order set by
- * the seed script (see scripts/sanity-migrate/seed-faqs.ts).
+ * `FaqAccordion` expects.
  *
  * The accordion renders plain-text answers — block text is flattened
  * here with paragraph breaks so existing markup keeps working without
@@ -35,7 +47,17 @@ export function groupFaqsIntoTabs(items: CentralFaqItem[]): FaqTab[] {
   }
 
   return Array.from(byCategory.entries())
-    .sort(([, a], [, b]) => a.order - b.order)
+    .sort(([labelA, a], [labelB, b]) => {
+      const idxA = PREFERRED_TAB_ORDER.indexOf(labelA)
+      const idxB = PREFERRED_TAB_ORDER.indexOf(labelB)
+      // Both in preferred list → use preferred order
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB
+      // Only one in preferred list → it comes first
+      if (idxA !== -1) return -1
+      if (idxB !== -1) return 1
+      // Neither in preferred list → fall back to categoryOrder
+      return a.order - b.order
+    })
     .map(([label, group], tabIdx) => ({
       _key: `tab-${tabIdx}-${label.replace(/\s+/g, "-").toLowerCase()}`,
       label,

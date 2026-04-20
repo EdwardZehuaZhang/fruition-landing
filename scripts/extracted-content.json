@@ -1,0 +1,154 @@
+{
+  "_meta": {
+    "source": "git history extraction from commit 7902be0 and its parent",
+    "extractedAt": "2026-04-18",
+    "notes": {
+      "constructionExtras": "Recovered from git (deleted in commit 7902be0). Full data extracted.",
+      "constructionFaqData": "FILE NEVER COMMITTED TO GIT. Was listed as untracked (??) in working tree but no longer exists on disk. Not recoverable.",
+      "governmentHero": "FILE NEVER COMMITTED TO GIT. Was listed as untracked (??) in working tree but no longer exists on disk. Not recoverable.",
+      "governmentExtras": "FILE NEVER COMMITTED TO GIT. Was listed as untracked (??) in working tree but no longer exists on disk. Not recoverable.",
+      "governmentComparisonTabs": "FILE NEVER COMMITTED TO GIT. Was listed as untracked (??) in working tree but no longer exists on disk. Not recoverable.",
+      "marketingExtras": "FILE NEVER COMMITTED TO GIT. Was listed as untracked (??) in working tree but no longer exists on disk. Not recoverable.",
+      "marketingComparisonTabs": "FILE NEVER COMMITTED TO GIT. Was listed as untracked (??) in working tree but no longer exists on disk. Not recoverable.",
+      "professionalServicesExtras": "FILE NEVER COMMITTED TO GIT. Was listed as untracked (??) in working tree but no longer exists on disk. Not recoverable.",
+      "professionalServicesTabs": "FILE NEVER COMMITTED TO GIT. Was listed as untracked (??) in working tree but no longer exists on disk. Not recoverable.",
+      "realEstateExtras": "FILE NEVER COMMITTED TO GIT. Was listed as untracked (??) in working tree but no longer exists on disk. Not recoverable.",
+      "realEstateComparisonTabs": "FILE NEVER COMMITTED TO GIT. Was listed as untracked (??) in working tree but no longer exists on disk. Not recoverable.",
+      "retailExtras": "FILE NEVER COMMITTED TO GIT. Was listed as untracked (??) in working tree but no longer exists on disk. Not recoverable.",
+      "retailComparisonTabs": "FILE NEVER COMMITTED TO GIT. Was listed as untracked (??) in working tree but no longer exists on disk. Not recoverable.",
+      "pageFiles": "Page .tsx files were committed. Hardcoded content extracted from parent commit (7902be0^). Most pages had NO hardcoded content props beyond SEO fallback strings - all content came from Sanity CMS via getIndustryPageBySlug()."
+    }
+  },
+
+  "constructionExtras": {
+    "_source": "src/app/monday-for-construction/ConstructionExtras.tsx (git show 7902be0^)",
+    "featureNumberList": {
+      "heading": "Support Each Stage of Your Project Life Cycle with a ",
+      "headingAccent": "monday.com Expert",
+      "theme": "light",
+      "columns": 3
+    },
+    "lifecycleItems": [
+      {
+        "_key": "01",
+        "number": "01",
+        "title": "Bidding & Pre-Construction \ud83c\udfaf",
+        "description": "Centralise bid documents and RFPs in collaborative workspaces. Track deadlines, assign team members to proposals, and maintain databases of past bids with automated notifications."
+      },
+      {
+        "_key": "02",
+        "number": "02",
+        "title": "Planning & Design \ud83d\udccb",
+        "description": "Transform schedules into visual timelines with dependencies and critical path tracking. Coordinate stakeholders with shared boards that automatically update on design changes and milestone achievements."
+      },
+      {
+        "_key": "03",
+        "number": "03",
+        "title": "Execution & Construction \ud83c\udfd7\ufe0f",
+        "description": "Monitor progress, track labor hours, and manage deliveries through mobile dashboards. Field teams update tasks and upload photos while managers maintain oversight through automated progress and budget reports."
+      },
+      {
+        "_key": "04",
+        "number": "04",
+        "title": "Handover & Closeout \ud83d\udcc1",
+        "description": "Organise punch lists, warranties, and inspections in structured workflows. Track outstanding items and coordinate final walkthroughs with automated reminders for efficient project closeout."
+      },
+      {
+        "_key": "05",
+        "number": "05",
+        "title": "Post-Construction Support \ud83d\udd27",
+        "description": "Maintain client relationships with warranty tracking and maintenance scheduling. Historical project data improves future estimates and business processes."
+      }
+    ],
+    "testimonialSection": {
+      "heading": "Construction",
+      "headingAccent": "Testimonials"
+    },
+    "testimonials": [
+      {
+        "title": "HOLT CAT Case Study",
+        "quote": "monday.com has given us the visibility we need to get everyone on the same page and keep track of all the moving parts.",
+        "author": "Jason Doan | VP of Heavy Rental & Sales, HOLT CAT",
+        "imageSrc": "/images/construction-testimonial-1.avif",
+        "imageAlt": "Fruition monday.com consulting solution for construction \u2014 HOLT CAT"
+      },
+      {
+        "title": "Falkbuilt Case Study",
+        "quote": "The monday.com mobile app gives our technicians on raw construction sites instant access to the project information they need and makes connecting with the team at HQ easy.",
+        "author": "Allie Swindlehurst | Operations Manager, Falkbuilt",
+        "imageSrc": "/images/construction-testimonial-2.avif",
+        "imageAlt": "Fruition monday.com consulting solution for construction \u2014 Falkbuilt"
+      }
+    ]
+  },
+
+  "constructionPage": {
+    "_source": "src/app/monday-for-construction/page.tsx (git show 7902be0^)",
+    "slug": "monday-for-construction",
+    "seoFallbackTitle": "monday.com for Construction | Fruition Services",
+    "seoFallbackDescription": "monday.com implementation for construction companies. Manage projects, sites and subcontractors.",
+    "heroVideoSrc": "/videos/construction-hero.mp4",
+    "heroVideoSrcExpression": "page?.heroLocalVideoSrc || \"/videos/construction-hero.mp4\"",
+    "afterFaq": "ConstructionExtras",
+    "imports": ["ConstructionExtras from ./ConstructionExtras"]
+  },
+
+  "governmentPage": {
+    "_source": "src/app/monday-for-government/page.tsx (git show 7902be0^)",
+    "_note": "No hardcoded content props. No extra components imported. All content from Sanity.",
+    "slug": "monday-for-government",
+    "seoFallbackTitle": "monday.com for Government | Fruition Services",
+    "seoFallbackDescription": "monday.com solutions for government and public sector organisations."
+  },
+
+  "marketingPage": {
+    "_source": "src/app/monday-for-marketing/page.tsx (git show 7902be0^)",
+    "_note": "No hardcoded content props. No extra components imported. All content from Sanity.",
+    "slug": "monday-for-marketing",
+    "seoFallbackTitle": "monday.com for Marketing & Creative | Fruition Services",
+    "seoFallbackDescription": "monday.com for marketing and creative teams. Manage campaigns, assets and creative workflows."
+  },
+
+  "professionalServicesPage": {
+    "_source": "src/app/monday-for-professional-services/page.tsx (git show 7902be0^)",
+    "_note": "No hardcoded content props. No extra components imported. All content from Sanity.",
+    "slug": "monday-for-professional-services",
+    "seoFallbackTitle": "monday.com for Professional Services | Fruition Services",
+    "seoFallbackDescription": "monday.com for professional services and agencies. Manage clients, projects and billing in one place."
+  },
+
+  "realEstatePage": {
+    "_source": "src/app/monday-for-real-estate/page.tsx (git show 7902be0^)",
+    "_note": "No hardcoded content props. No extra components imported. All content from Sanity.",
+    "slug": "monday-for-real-estate",
+    "seoFallbackTitle": "monday.com for Real Estate | Fruition Services",
+    "seoFallbackDescription": "monday.com solutions for real estate companies. Manage listings, deals and client relationships."
+  },
+
+  "retailPage": {
+    "_source": "src/app/monday-for-retail/page.tsx (git show 7902be0^)",
+    "_note": "Had a wrapping <div className='monday-for-retail-page'> that was removed in 7902be0. No other hardcoded content props.",
+    "slug": "monday-for-retail",
+    "seoFallbackTitle": "monday.com for Retail | Fruition Services",
+    "seoFallbackDescription": "monday.com for retail and eCommerce operations. Inventory, fulfilment and team coordination.",
+    "wrapperClassName": "monday-for-retail-page"
+  },
+
+  "unrecoverableFiles": {
+    "_explanation": "The following files were listed as untracked (??) in the git status snapshot but were NEVER committed to git. They have since been deleted from disk and cannot be recovered from git history, dangling objects, or reflog. If these files existed, they were created locally and removed before ever being staged or committed.",
+    "files": [
+      "src/app/monday-for-construction/faqData.ts",
+      "src/app/monday-for-government/GovernmentExtras.tsx",
+      "src/app/monday-for-government/GovernmentHero.tsx",
+      "src/app/monday-for-government/governmentComparisonTabs.ts",
+      "src/app/monday-for-marketing/MarketingExtras.tsx",
+      "src/app/monday-for-marketing/marketingComparisonTabs.ts",
+      "src/app/monday-for-professional-services/ProfessionalServicesExtras.tsx",
+      "src/app/monday-for-professional-services/professionalServicesTabs.ts",
+      "src/app/monday-for-real-estate/RealEstateExtras.tsx",
+      "src/app/monday-for-real-estate/realEstateComparisonTabs.ts",
+      "src/app/monday-for-retail/RetailExtras.tsx",
+      "src/app/monday-for-retail/retailComparisonTabs.ts"
+    ]
+  }
+}

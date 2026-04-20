@@ -4,18 +4,16 @@ import { useState } from "react"
 import Link from "next/link"
 import {
   LogoCloudMarquee,
-  TestimonialsGrid,
   CalendlySection,
-  DiscoverCtaSection,
+  JoinStatsSection,
   SecurityBadgeSection,
 } from "@/components/sections"
-import type { CaseStudy, SiteSettingsData, PartnerBadge, SanityImageRef } from "@/components/sections/types"
+import type { SiteSettingsData, PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
 
 interface Props {
   page: any
   siteSettings?: SiteSettingsData | null
-  caseStudies?: CaseStudy[]
 }
 
 function safeImageUrl(ref: SanityImageRef): string | null {
@@ -190,7 +188,6 @@ const STRATEGIC_COLUMNS = [
 export default function MondayServicePage({
   page,
   siteSettings,
-  caseStudies = [],
 }: Props) {
   const calendlyUrl =
     siteSettings?.calendlyLink ||
@@ -323,13 +320,19 @@ export default function MondayServicePage({
       {/* 7. Strategic approach section */}
       <StrategicApproachSection />
 
-      {/* 8. Testimonials */}
-      <TestimonialsGrid caseStudies={caseStudies} />
+      {/* 8. Join 500+ Stats */}
+      <JoinStatsSection
+        headingPart1={page?.joinHeadingPart1}
+        headingAccent={page?.joinHeadingAccent}
+        headingPart2={page?.joinHeadingPart2}
+        subheading={page?.joinSubheading}
+        stats={page?.joinStats as Array<{ _key?: string; value?: string; label?: string }>}
+        ctaLabel={page?.joinCtaLabel}
+        ctaUrl={page?.joinCtaUrl || calendlyUrl}
+        siteSettings={siteSettings || undefined}
+      />
 
-      {/* 9. Discover CTA */}
-      <DiscoverCtaSection badge={siteSettings?.badgeCertifications} />
-
-      {/* 10. Security Badge */}
+      {/* 9. Security Badge */}
       <SecurityBadgeSection badge={siteSettings?.badgeSecurity} />
     </div>
   )
@@ -461,7 +464,7 @@ function FeatureTabsSection() {
 function FourCardSection({ calendlyUrl }: { calendlyUrl: string }) {
   return (
     <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, backgroundColor: "#f7f7f7" }}>
-      <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1342 }}>
+      <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1100 }}>
         <h2
           className="text-center font-bold"
           style={{ fontSize: 40, lineHeight: "52px", color: "#2b074d", maxWidth: 900 }}
@@ -485,55 +488,54 @@ function FourCardSection({ calendlyUrl }: { calendlyUrl: string }) {
           {"\uD83D\uDE80 Book a Meeting"}
         </Link>
 
-        <div
-          className="grid w-full"
-          style={{
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: 24,
-            marginTop: 56,
-          }}
-        >
-          {FOUR_CARDS.map((card) => (
-            <div
-              key={card.title}
-              className="flex flex-col"
-              style={{
-                backgroundColor: "white",
-                borderRadius: 20,
-                overflow: "hidden",
-                boxShadow: "0 1px 10px rgba(0,0,0,0.06)",
-              }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={card.image}
-                alt={card.title}
+        <div className="flex flex-col w-full" style={{ gap: 48, marginTop: 56 }}>
+          {FOUR_CARDS.map((card, i) => {
+            const isEven = i % 2 === 0
+            return (
+              <div
+                key={card.title}
+                className="flex items-center"
                 style={{
-                  width: "100%",
-                  height: 200,
-                  objectFit: "cover",
+                  flexDirection: isEven ? "row" : "row-reverse",
+                  gap: 48,
+                  backgroundColor: "white",
+                  borderRadius: 20,
+                  overflow: "hidden",
+                  boxShadow: "0 1px 10px rgba(0,0,0,0.06)",
                 }}
-              />
-              <div style={{ padding: 24 }}>
-                <p
-                  className="font-bold"
-                  style={{ fontSize: 18, color: "#2b074d", lineHeight: "24px" }}
-                >
-                  {card.title}
-                </p>
-                <p
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={card.image}
+                  alt={card.title}
                   style={{
-                    fontSize: 14,
-                    lineHeight: "22px",
-                    color: "#444",
-                    marginTop: 12,
+                    width: "50%",
+                    height: 320,
+                    objectFit: "cover",
+                    flexShrink: 0,
                   }}
-                >
-                  {card.description}
-                </p>
+                />
+                <div style={{ padding: 40, flex: 1 }}>
+                  <p
+                    className="font-bold"
+                    style={{ fontSize: 24, color: "#2b074d", lineHeight: "32px" }}
+                  >
+                    {card.title}
+                  </p>
+                  <p
+                    style={{
+                      fontSize: 16,
+                      lineHeight: "26px",
+                      color: "#444",
+                      marginTop: 16,
+                    }}
+                  >
+                    {card.description}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>

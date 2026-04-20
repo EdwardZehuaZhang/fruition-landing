@@ -5,7 +5,10 @@ import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
 import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
+import CalendlySection from "@/components/sections/CalendlySection"
 import StatsBlockView from "@/features/page-builder/blocks/StatsBlockView"
+import ComparisonTabsSection from "@/components/sections/ComparisonTabsSection"
+import type { ComparisonTab as SharedComparisonTab } from "@/components/sections/types"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -216,7 +219,6 @@ export default function MondayImplementationConsultantsContent({
   const faqTabs = faqTabsOverride?.length ? faqTabsOverride : (data?.faqTabs ?? [])
   const stats = data?.joinSectionStats ?? []
 
-  const [activeComparisonTab, setActiveComparisonTab] = useState<number>(0)
   const [activeFaqTab, setActiveFaqTab] = useState<number>(0)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0)
 
@@ -236,21 +238,29 @@ export default function MondayImplementationConsultantsContent({
   const heroHeadingPart2 = data?.heroHeadingPart2
   const heroSubheading = data?.heroSubheading
 
-  const heroCertBadgeSrc = imageUrl(data?.heroCertificationBadge)
+  const heroCertBadgeSrc = imageUrl(data?.heroCertificationBadge) || imageUrl(siteSettings?.badgeCertifications)
   const discoverBadgeSrc = imageUrl(data?.discoverBadge)
   const securityBadgeSrc = imageUrl(data?.securityBadge)
   const joinBadgeSrc = imageUrl(data?.joinSectionBadge)
 
   type ResolvedImage = { _key: string | undefined; src: string; alt: string }
-  const heroPartnerBadges: ResolvedImage[] = (data?.heroPartnerBadges ?? [])
+  const sanityPartnerBadges: ResolvedImage[] = (data?.heroPartnerBadges ?? [])
     .map((b, i): ResolvedImage | null => {
       const src = imageUrl(b.image)
       if (!src) return null
       return { _key: b._key, src, alt: b.alt ?? `Partner badge ${i + 1}` }
     })
     .filter((x): x is ResolvedImage => x !== null)
+  const navPartnerBadges: ResolvedImage[] = (siteSettings?.navbarPartnerBadges ?? [])
+    .map((b: { _key?: string; name?: string; image?: SanityImageRef }, i: number): ResolvedImage | null => {
+      const src = imageUrl(b.image)
+      if (!src) return null
+      return { _key: b._key ?? `nav-badge-${i}`, src, alt: b.name ?? `Partner badge ${i + 1}` }
+    })
+    .filter((x: ResolvedImage | null): x is ResolvedImage => x !== null)
+  const heroPartnerBadges = sanityPartnerBadges.length > 0 ? sanityPartnerBadges : navPartnerBadges
   const heroMondayPartnersImageSrc = imageUrl(data?.heroMondayPartnersImage)
-  const heroDashboardImageSrc = imageUrl(data?.heroImage)
+  const heroDashboardImageSrc = imageUrl(data?.heroImage) || "/images/hero-monday-dashboards.avif"
   const heroProductImages: ResolvedImage[] = (data?.heroProductImages ?? [])
     .map((b, i): ResolvedImage | null => {
       const src = imageUrl(b.image)
@@ -305,10 +315,6 @@ export default function MondayImplementationConsultantsContent({
 
     return { ...tab, heading: undefined as string | undefined }
   })
-
-  const activeTab = resolvedComparisonTabs[activeComparisonTab]
-  const currentComparisonItems = activeTab?.items ?? []
-  const currentTabHeading = activeTab?.heading
 
   const solutionsPart1 = data?.solutionsHeadingPart1
   const solutionsAccent = data?.solutionsHeadingAccent
@@ -367,23 +373,6 @@ export default function MondayImplementationConsultantsContent({
             </div>
           )}
 
-          {/* Eyebrow */}
-          {heroEyebrow && (
-            <p
-              className="text-center"
-              style={{
-                fontSize: 16,
-                fontWeight: 600,
-                color: "#8015e8",
-                letterSpacing: "0.5px",
-                textTransform: "uppercase",
-                marginTop: 32,
-              }}
-            >
-              {heroEyebrow}
-            </p>
-          )}
-
           {/* Heading */}
           <h1
             className="text-center font-bold"
@@ -415,6 +404,19 @@ export default function MondayImplementationConsultantsContent({
             >
               {heroSubheading}
             </p>
+          )}
+
+          {/* Certification badge */}
+          {heroCertBadgeSrc && (
+            <div style={{ marginTop: 40 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={heroCertBadgeSrc}
+                alt="monday.com Certifications"
+                className="h-auto object-contain"
+                style={{ maxWidth: 534 }}
+              />
+            </div>
           )}
 
           {/* Monday Partners image */}
@@ -599,176 +601,19 @@ export default function MondayImplementationConsultantsContent({
       {/* ============================================================ */}
       {/* SECTION 4 — Comparison tabs (DIY / Benefits / Our Approach)  */}
       {/* ============================================================ */}
-      <section style={{ backgroundColor: "#f0ecfe", paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto flex flex-col items-center px-4" style={{ maxWidth: 1200 }}>
-          {/* Tab buttons */}
-          {resolvedComparisonTabs.length > 0 && (
-            <div className="flex items-center flex-wrap justify-center" style={{ gap: 12 }}>
-              {resolvedComparisonTabs.map((tab, idx) => {
-                const isActive = idx === activeComparisonTab
-                return (
-                  <button
-                    key={tab._key || idx}
-                    onClick={() => setActiveComparisonTab(idx)}
-                    className="flex items-center justify-center font-bold"
-                    style={{
-                      height: 39,
-                      paddingLeft: 28,
-                      paddingRight: 28,
-                      borderRadius: 99,
-                      fontSize: 16,
-                      cursor: "pointer",
-                      ...(isActive
-                        ? {
-                            background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                            color: "white",
-                            boxShadow: "0px 2px 8px rgba(128,21,232,0.35)",
-                          }
-                        : {
-                            backgroundColor: "white",
-                            border: "1px solid #e8e6e6",
-                            color: "black",
-                          }),
-                    }}
-                  >
-                    {tab.label}
-                  </button>
-                )
-              })}
-            </div>
-          )}
-
-          {/* Per-tab heading */}
-          {currentTabHeading && (
-            <h2
-              className="text-center font-bold"
-              style={{
-                fontSize: 40,
-                lineHeight: "56px",
-                color: "black",
-                maxWidth: 1000,
-                marginTop: 40,
-              }}
-            >
-              {currentTabHeading}
-            </h2>
-          )}
-
-          {/* Tab content card */}
-          {currentComparisonItems.length > 0 && (
-            <div
-              className="w-full"
-              style={{
-                maxWidth: 900,
-                backgroundColor: "white",
-                border: "1px solid #e8e6e6",
-                borderRadius: "var(--radius-card)",
-                padding: 36,
-                marginTop: 32,
-              }}
-            >
-              {currentComparisonItems.map((item, i) => (
-                <div
-                  key={item._key || `${item.number}-${i}`}
-                  className="flex items-start"
-                  style={{
-                    gap: 24,
-                    marginBottom: i === currentComparisonItems.length - 1 ? 0 : 32,
-                  }}
-                >
-                  {/* Number */}
-                  <p
-                    className="font-extralight shrink-0"
-                    style={{
-                      fontSize: 56,
-                      color: "#8015e8",
-                      lineHeight: 1,
-                      width: 70,
-                      textAlign: "center",
-                    }}
-                  >
-                    {item.number}
-                  </p>
-                  {/* Content */}
-                  <div style={{ flex: 1 }}>
-                    <p
-                      className="font-bold"
-                      style={{ fontSize: 20, color: "#2b074d", lineHeight: "28px" }}
-                    >
-                      {item.title}
-                    </p>
-                    {item.description && (
-                      <p
-                        style={{
-                          fontSize: 15,
-                          color: "#2b074d",
-                          lineHeight: "22.5px",
-                          marginTop: 10,
-                        }}
-                      >
-                        {item.description}
-                      </p>
-                    )}
-                    {item.bullets && item.bullets.length > 0 && (
-                      <ul className="flex flex-col" style={{ gap: 10, marginTop: 14 }}>
-                        {item.bullets.map((b, j) => (
-                          <li
-                            key={b._key || j}
-                            className="flex items-start"
-                            style={{ gap: 12 }}
-                          >
-                            <span style={{ fontSize: 18, lineHeight: "22.5px" }}>
-                              {b.emoji}
-                            </span>
-                            <span
-                              style={{
-                                fontSize: 15,
-                                color: "#2b074d",
-                                lineHeight: "22.5px",
-                              }}
-                            >
-                              {b.text}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+      <ComparisonTabsSection
+        heading={comparisonHeading}
+        tabs={resolvedComparisonTabs as SharedComparisonTab[]}
+      />
 
       {/* ============================================================ */}
       {/* SECTION 5 — Calendly                                         */}
       {/* ============================================================ */}
       {calendlyUrl && (
-        <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
-          <div className="mx-auto flex flex-col items-center px-4" style={{ maxWidth: 1200 }}>
-            {calendlyHeading && (
-              <h2
-                className="text-section-h2 text-center text-black"
-                style={{ maxWidth: 820 }}
-              >
-                {calendlyHeading}
-              </h2>
-            )}
-            <div
-              className="w-full rounded-card overflow-hidden"
-              style={{ marginTop: 40, height: 700 }}
-            >
-              <iframe
-                src={calendlyUrl}
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                title="Schedule a consultation"
-              />
-            </div>
-          </div>
-        </section>
+        <CalendlySection
+          heading={calendlyHeading}
+          calendlyUrl={calendlyUrl}
+        />
       )}
 
       {/* ============================================================ */}

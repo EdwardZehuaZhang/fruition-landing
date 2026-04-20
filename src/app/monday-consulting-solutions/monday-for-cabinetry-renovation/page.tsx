@@ -1,29 +1,34 @@
 import {
-  getServicePageBySlug,
+  getSolutionPageBySlug,
   getSiteSettings,
   getCaseStudies,
   getFaqItemsForPage,
 } from "@/sanity/queries"
 import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
-import MondayCrmConsultingContent from "./MondayCrmConsultingContent"
+import MondayForCabinetryRenovationContent from "./MondayForCabinetryRenovationContent"
 
 export async function generateMetadata() {
-  const page = await getServicePageBySlug("monday-crm-consulting")
+  const page = await getSolutionPageBySlug("monday-for-cabinetry-renovation")
   return {
-    title: page?.seoTitle,
+    title:
+      page?.seoTitle ||
+      page?.title ||
+      "monday.com for Cabinetry & Renovation",
     description: page?.seoDescription,
   }
 }
 
 export default async function Page() {
   const [page, siteSettings, caseStudies, centralFaqs] = await Promise.all([
-    getServicePageBySlug("monday-crm-consulting"),
+    getSolutionPageBySlug("monday-for-cabinetry-renovation"),
     getSiteSettings(),
     getCaseStudies(),
-    getFaqItemsForPage("monday-crm-consulting"),
+    getFaqItemsForPage(
+      "monday-consulting-solutions/monday-for-cabinetry-renovation",
+    ),
   ])
   return (
-    <MondayCrmConsultingContent
+    <MondayForCabinetryRenovationContent
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}

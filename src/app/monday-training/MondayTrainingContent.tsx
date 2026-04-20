@@ -6,6 +6,7 @@ import Link from "next/link"
 import { urlFor } from "@/sanity/image"
 import StatsBlockView from "@/features/page-builder/blocks/StatsBlockView"
 import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
+import CalendlySection from "@/components/sections/CalendlySection"
 import type { SiteSettings } from "@/features/page-builder/types"
 
 /* ------------------------------------------------------------------ */
@@ -143,6 +144,13 @@ interface MondayTrainingData {
   securityBadge?: SanityImageRef
 }
 
+interface NavbarPartnerBadge {
+  name?: string
+  image?: SanityImageRef
+  width?: number
+  height?: number
+}
+
 interface MondayTrainingContentProps {
   data?: MondayTrainingData | null
   carouselLogos?: CarouselLogo[]
@@ -150,6 +158,7 @@ interface MondayTrainingContentProps {
   siteSettings?: SiteSettings | null
   /** Central faqItem tabs — overrides `data.faqTabs` when non-empty. */
   faqTabs?: FaqTab[]
+  navbarPartnerBadges?: NavbarPartnerBadge[]
 }
 
 /* ------------------------------------------------------------------ */
@@ -175,6 +184,7 @@ export default function MondayTrainingContent({
   caseStudies = [],
   siteSettings = null,
   faqTabs: faqTabsOverride,
+  navbarPartnerBadges,
 }: MondayTrainingContentProps) {
   const trainingTabs = data?.trainingTabs ?? []
   const faqTabs = faqTabsOverride?.length ? faqTabsOverride : (data?.faqTabs ?? [])
@@ -200,13 +210,22 @@ export default function MondayTrainingContent({
   const securityBadgeSrc = imageUrl(data?.securityBadge)
 
   type ResolvedPartnerBadge = { _key: string | undefined; src: string; alt: string }
-  const heroPartnerBadges: ResolvedPartnerBadge[] = (data?.heroPartnerBadges ?? [])
+  const sanityBadges: ResolvedPartnerBadge[] = (data?.heroPartnerBadges ?? [])
     .map((b, i): ResolvedPartnerBadge | null => {
       const src = imageUrl(b.image)
       if (!src) return null
       return { _key: b._key, src, alt: b.alt ?? `Partner badge ${i + 1}` }
     })
     .filter((x): x is ResolvedPartnerBadge => x !== null)
+  const heroPartnerBadges: ResolvedPartnerBadge[] = sanityBadges.length > 0
+    ? sanityBadges
+    : (navbarPartnerBadges ?? [])
+        .map((b, i): ResolvedPartnerBadge | null => {
+          const src = imageUrl(b.image)
+          if (!src) return null
+          return { _key: `nav-badge-${i}`, src, alt: b.name ?? `Partner badge ${i + 1}` }
+        })
+        .filter((x): x is ResolvedPartnerBadge => x !== null)
   const heroMondayPartnersImageSrc = imageUrl(data?.heroMondayPartnersImage)
   const empowerImageSrc = imageUrl(data?.empowerImage)
 
@@ -323,6 +342,20 @@ export default function MondayTrainingContent({
           >
             {heroSubheading}
           </p>
+
+          {/* Certification badge */}
+          {heroCertBadgeSrc && (
+            <div style={{ marginTop: 40 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={heroCertBadgeSrc}
+                alt="Certifications"
+                width={534}
+                height={133}
+                className="h-[133px] w-auto object-contain"
+              />
+            </div>
+          )}
 
           {/* Monday Partners image */}
           {heroMondayPartnersImageSrc && (
@@ -647,7 +680,7 @@ export default function MondayTrainingContent({
           {/* First training service (Customization) — text left, image right */}
           {trainingServices.length > 0 && (() => {
             const service = trainingServices[0]
-            const serviceImageSrc = imageUrl(service.image)
+            const serviceImageSrc = imageUrl(service.image) || "/images/monday-training-customization.avif"
             return (
               <div className="flex items-start" style={{ gap: 48, marginTop: 40 }}>
                 <div style={{ flex: 1 }}>
@@ -691,44 +724,11 @@ export default function MondayTrainingContent({
       {/* SECTION 9 -- Calendly Booking                                */}
       {/* ============================================================ */}
       {calendlyUrl && (
-        <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
-          <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1200 }}>
-            {calendlyHeading && (
-              <h2
-                className="text-section-h2 text-center text-black"
-                style={{ maxWidth: 900 }}
-              >
-                {calendlyHeading}
-              </h2>
-            )}
-            {calendlySubheading && (
-              <p
-                className="text-center"
-                style={{
-                  fontSize: 16,
-                  lineHeight: "24px",
-                  color: "black",
-                  marginTop: 20,
-                  maxWidth: 900,
-                }}
-              >
-                {calendlySubheading}
-              </p>
-            )}
-            <div
-              className="w-full rounded-card overflow-hidden"
-              style={{ marginTop: 40, height: 700 }}
-            >
-              <iframe
-                src={calendlyUrl}
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                title="Schedule a consultation"
-              />
-            </div>
-          </div>
-        </section>
+        <CalendlySection
+          heading={calendlyHeading}
+          subheading={calendlySubheading}
+          calendlyUrl={calendlyUrl}
+        />
       )}
 
       {/* ============================================================ */}

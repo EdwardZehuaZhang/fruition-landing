@@ -1,7 +1,6 @@
 import {
   getSolutionPageBySlug,
   getSiteSettings,
-  getCaseStudies,
 } from "@/sanity/queries"
 import MondayServicePage from "./MondayServicePage"
 
@@ -14,16 +13,14 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const [page, siteSettings, caseStudies] = await Promise.all([
+  const [page, siteSettings] = await Promise.all([
     getSolutionPageBySlug("monday-service"),
     getSiteSettings(),
-    getCaseStudies(),
   ])
   return (
     <MondayServicePage
       page={page}
       siteSettings={siteSettings}
-      caseStudies={caseStudies || []}
     />
   )
 }

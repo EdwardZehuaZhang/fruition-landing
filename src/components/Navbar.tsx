@@ -8,6 +8,20 @@ import { urlFor } from '@/sanity/image'
 // Calendly fallback only used when siteSettings is not yet loaded
 const FALLBACK_CALENDLY_URL = 'https://calendly.com/global-calendar-fruitionservices'
 
+/** Override specific partner badges with local dark variants */
+const DARK_LOGO_OVERRIDES: Record<string, string> = {
+  n8n: '/images/partner-n8n-dark.avif',
+  aircall: '/images/partner-aircall-dark.avif',
+}
+
+function getDarkBadgeSrc(badge: PartnerBadge, fallbackSrc: string | null): string | null {
+  const name = (badge.name || '').toLowerCase()
+  for (const [key, darkSrc] of Object.entries(DARK_LOGO_OVERRIDES)) {
+    if (name.includes(key)) return darkSrc
+  }
+  return fallbackSrc
+}
+
 interface NavLink {
   label?: string
   href?: string
@@ -106,9 +120,10 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
               <div className="flex items-center gap-3">
                 {partnerBadges.map((badge, i) => {
                   const h = badge.height ?? 32
-                  const src = badge.image
+                  const cmsSrc = badge.image
                     ? urlFor(badge.image).height(h * 2).fit('max').url()
                     : null
+                  const src = getDarkBadgeSrc(badge, cmsSrc)
                   if (!src) return null
                   return (
                     <Image
@@ -201,9 +216,10 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
             <div className="flex items-center gap-3 px-2 py-3 border-t border-gray-100">
               {partnerBadges.map((badge, i) => {
                 const h = Math.round((badge.height ?? 32) * 0.75)
-                const src = badge.image
+                const cmsSrc = badge.image
                   ? urlFor(badge.image).height(h * 2).fit('max').url()
                   : null
+                const src = getDarkBadgeSrc(badge, cmsSrc)
                 if (!src) return null
                 return (
                   <Image
@@ -237,7 +253,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
         const sectionCount = activeItem.sections.length
         const hasMultipleSections = sectionCount > 1
         return (
-          <div className="hidden lg:block border-t border-gray-200">
+          <div className="hidden lg:block absolute left-0 right-0 top-full border-t border-gray-200 bg-white shadow-lg z-50">
             <div className="max-w-[1348px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
               <div className="flex gap-16">
                 {activeItem.sections.map((section, sIdx) => {
@@ -248,7 +264,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                     if (hasMultipleSections) {
                       cols = itemCount >= 6 ? 3 : 1
                     } else {
-                      cols = itemCount >= 7 ? 4 : itemCount >= 4 ? 2 : 1
+                      cols = itemCount >= 7 ? 4 : itemCount >= 6 ? 3 : itemCount >= 4 ? 2 : 1
                     }
                   }
                   const isNarrow = cols <= 1

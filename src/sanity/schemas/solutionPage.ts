@@ -208,6 +208,7 @@ export default {
           { name: 'personName', title: 'Person Name', type: 'string' },
           { name: 'personRole', title: 'Person Role', type: 'string' },
           { name: 'image', title: 'Image / Logo', type: 'image' },
+          { name: 'imageUrl', title: 'Image URL (optional, alternative to upload)', type: 'string' },
           { name: 'videoUrl', title: 'Video URL (optional)', type: 'url' },
         ],
       }],
@@ -216,5 +217,11 @@ export default {
     // Logo cloud overrides
     { name: 'logoCloudHeadingPart1', title: 'Logo Cloud Heading (prefix)', type: 'string' },
     { name: 'logoCloudHeadingAccent', title: 'Logo Cloud Heading (accent)', type: 'string' },
+
+    // Section visibility toggles
+    { name: 'hideDiscoverSection', title: 'Hide Discover CTA Section', type: 'boolean', initialValue: false },
+    { name: 'hideJoinStatsSection', title: 'Hide Join Stats Section', type: 'boolean', initialValue: false },
+    { name: 'hideTestimonialBanner', title: 'Hide Testimonial CTA Banner', type: 'boolean', initialValue: false },
+    { name: 'hideTestimonialsSection', title: 'Hide Testimonials Grid', type: 'boolean', initialValue: false },
   ],
 }

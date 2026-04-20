@@ -3,6 +3,7 @@ import { Poppins, Montserrat } from "next/font/google"
 import "./globals.css"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
+import NavigationProgress from "@/components/NavigationProgress"
 import { getSiteSettings } from "@/sanity/queries"
 
 const poppins = Poppins({
@@ -32,6 +33,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} ${montserrat.variable} antialiased`}>
+        <NavigationProgress />
         <Navbar siteSettings={siteSettings} />
         <main>{children}</main>
         <Footer siteSettings={siteSettings} />
