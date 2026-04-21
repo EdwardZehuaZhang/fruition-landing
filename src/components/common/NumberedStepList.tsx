@@ -15,7 +15,7 @@ interface StepBullet {
 interface StepItem {
   _key?: string
   number?: string
-  icon?: stringfeat
+  icon?: string
   title?: string
   label?: string
   description?: string

@@ -41,7 +41,7 @@ const comparisonTabs = [
   {
     _key: 'ct-why-partner',
     _type: 'comparisonTab',
-    label: 'Why Partner with Senzo',
+    label: 'Why Partner with Fruition',
     items: [
       {
         _key: 'ct-why-01',
