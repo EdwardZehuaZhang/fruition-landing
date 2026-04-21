@@ -278,7 +278,7 @@ export default function MakePartnersContent({
   const heroPrimaryCtaUrl = pageData?.heroPrimaryCtaUrl || calendlyUrl
   const heroSecondaryCtaLabel = (pageData as any)?.heroSecondaryCtaLabel || "\u{25B6}\u{FE0F} Get Started with make.com"
   const heroSecondaryCtaUrl = (pageData as any)?.heroSecondaryCtaUrl || "https://www.make.com/en/register?pc=fruition2023"
-  const heroImageSrc = safeSrc(pageData?.heroImage) || "https://static.wixstatic.com/media/a280a5_be254e3f3e074227ada52a11697aabfe~mv2.png"
+  const heroImageSrc = safeSrc(pageData?.heroImage) || "/images/make-partners-hero.png"
 
   // Logo cloud
   const logoCloudPart1 = pageData?.logoCloudHeadingPart1 || "Trusted by "

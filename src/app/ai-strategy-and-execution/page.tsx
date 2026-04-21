@@ -5,7 +5,7 @@ import {
   getFaqItemsForPage,
 } from "@/sanity/queries"
 import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
-import UniversalPageTemplate from "@/components/UniversalPageTemplate"
+import AiStrategyContent from "./AiStrategyContent"
 
 export async function generateMetadata() {
   const page = await getServicePageBySlug("ai-strategy-and-execution")
@@ -23,7 +23,7 @@ export default async function Page() {
     getFaqItemsForPage("ai-strategy-and-execution"),
   ])
   return (
-    <UniversalPageTemplate
+    <AiStrategyContent
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}

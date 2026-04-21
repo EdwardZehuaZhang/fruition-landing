@@ -13,6 +13,8 @@ interface CapabilitiesGridProps {
   columns?: 2 | 3
   ctaLabel?: string
   ctaUrl?: string
+  ctaSecondaryLabel?: string
+  ctaSecondaryUrl?: string
 }
 
 const DARK_BG = "#2b074d"
@@ -29,6 +31,8 @@ export default function CapabilitiesGrid({
   columns,
   ctaLabel,
   ctaUrl,
+  ctaSecondaryLabel,
+  ctaSecondaryUrl,
 }: CapabilitiesGridProps) {
   if (cards.length === 0) return null
 
@@ -186,22 +190,46 @@ export default function CapabilitiesGrid({
             )
           })}
         </div>
-        {ctaLabel && ctaUrl && (
-          <div className="flex justify-center" style={{ marginTop: 40 }}>
-            <Link
-              href={ctaUrl}
-              className="flex items-center justify-center font-bold"
-              style={{
-                height: 53,
-                padding: "0 40px",
-                borderRadius: 100,
-                background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                color: "white",
-                fontSize: 16,
-              }}
-            >
-              {ctaLabel}
-            </Link>
+        {((ctaLabel && ctaUrl) || (ctaSecondaryLabel && ctaSecondaryUrl)) && (
+          <div
+            className="flex flex-wrap justify-center"
+            style={{ marginTop: 40, gap: 16 }}
+          >
+            {ctaLabel && ctaUrl && (
+              <Link
+                href={ctaUrl}
+                className="flex items-center justify-center font-bold"
+                style={{
+                  height: 53,
+                  padding: "0 40px",
+                  borderRadius: 100,
+                  background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                  color: "white",
+                  fontSize: 16,
+                }}
+              >
+                {ctaLabel}
+              </Link>
+            )}
+            {ctaSecondaryLabel && ctaSecondaryUrl && (
+              <Link
+                href={ctaSecondaryUrl}
+                className="flex items-center justify-center font-bold"
+                style={{
+                  height: 53,
+                  padding: "0 40px",
+                  borderRadius: 100,
+                  background: isDark ? "rgba(255,255,255,0.08)" : "#ffffff",
+                  color: isDark ? "#ffffff" : ACCENT,
+                  border: isDark
+                    ? "1px solid rgba(255,255,255,0.3)"
+                    : `1px solid ${ACCENT}`,
+                  fontSize: 16,
+                }}
+              >
+                {ctaSecondaryLabel}
+              </Link>
+            )}
           </div>
         )}
       </div>

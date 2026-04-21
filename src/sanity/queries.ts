@@ -99,6 +99,7 @@ const PAGE_FIELDS = `
   comparisonHeading,
   comparisonSubheading,
   comparisonTheme,
+  comparisonLayout,
   comparisonTabs,
 
   // Methodology
@@ -122,6 +123,8 @@ const PAGE_FIELDS = `
   capabilitiesCards,
   capabilitiesCtaLabel,
   capabilitiesCtaUrl,
+  capabilitiesCtaSecondaryLabel,
+  capabilitiesCtaSecondaryUrl,
 
   // Secondary capabilities
   secondaryCapabilitiesEyebrow,
@@ -161,6 +164,28 @@ const PAGE_FIELDS = `
   // Industry tabs
   industryHeading,
   industryTabs,
+
+  // Why Product Teams (Monday PM)
+  whyProductTeamsHeadingPart1,
+  whyProductTeamsHeadingAccent,
+  whyProductTeamsSubheading,
+  whyProductTeamsCards,
+
+  // Strategic Approach (Monday PM)
+  strategicApproachHeadingPart1,
+  strategicApproachHeadingAccent,
+  strategicApproachSubheading,
+  strategicApproachTabs,
+
+  // Industry Product Solutions (Monday PM)
+  industryProductSolutionsHeading,
+  industryProductSolutionsTabs,
+
+  // Product Development (Monday PM)
+  productDevelopmentHeadingPart1,
+  productDevelopmentHeadingAccent,
+  productDevelopmentHeadingPart2,
+  productDevelopmentTabs,
 
   // Solution cards
   solutionCards,

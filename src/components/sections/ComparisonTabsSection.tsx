@@ -2,31 +2,180 @@
 
 import { useState } from "react"
 import NumberedStepList from "@/components/common/NumberedStepList"
-import type { ComparisonTab, SectionTheme } from "./types"
+import type { ComparisonTab, ComparisonTabItem, SectionTheme } from "./types"
 
 interface ComparisonTabsSectionProps {
   heading?: string
   subheading?: string
   tabs?: ComparisonTab[]
   theme?: SectionTheme
+  /** "tabs" (default) or "sideBySide" for a two-column before/after view */
+  layout?: "tabs" | "sideBySide"
 }
 
 const DARK_BG = "#2b074d"
+
+function XIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ flexShrink: 0, marginTop: 2 }}
+      aria-hidden="true"
+    >
+      <circle cx="10" cy="10" r="10" fill="#EF4444" />
+      <path
+        d="M6.5 6.5L13.5 13.5M13.5 6.5L6.5 13.5"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+}
+
+function CheckIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ flexShrink: 0, marginTop: 2 }}
+      aria-hidden="true"
+    >
+      <circle cx="10" cy="10" r="10" fill="#22C55E" />
+      <path
+        d="M6 10.5L8.5 13L14 7.5"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function renderItemText(item: ComparisonTabItem) {
+  const number = (item.number || "").trim()
+  const hasBoldPrefix =
+    number && number !== "✅" && number !== "❌" && number !== "✓" && number !== "✗"
+  const description = item.description || item.title || ""
+  if (hasBoldPrefix) {
+    return (
+      <span
+        style={{
+          fontSize: 15,
+          lineHeight: "22px",
+          color: "#111",
+        }}
+      >
+        <span style={{ fontWeight: 700 }}>{number}</span>
+        {description ? ` ${description}` : ""}
+      </span>
+    )
+  }
+  return (
+    <span
+      style={{
+        fontSize: 15,
+        lineHeight: "22px",
+        color: "#111",
+      }}
+    >
+      {description}
+    </span>
+  )
+}
 
 export default function ComparisonTabsSection({
   heading,
   subheading,
   tabs = [],
   theme = "light",
+  layout = "tabs",
 }: ComparisonTabsSectionProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   if (tabs.length === 0) return null
-  const active = tabs[activeIndex]
   const isDark = theme === "dark"
 
   const sectionBg = isDark ? DARK_BG : "#ffffff"
   const headingColor = isDark ? "#ffffff" : "#000000"
   const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "#000000"
+
+  if (layout === "sideBySide" && tabs.length >= 2) {
+    const beforeItems = tabs[0]?.items ?? []
+    const afterItems = tabs.slice(1).flatMap((t) => t.items ?? [])
+
+    return (
+      <section
+        className="py-[80px] px-4"
+        style={{ backgroundColor: sectionBg }}
+      >
+        <div className="mx-auto max-w-[1040px] flex flex-col items-center gap-[40px]">
+          <div className="flex flex-col gap-[12px] items-center text-center w-full">
+            {heading && (
+              <h2
+                className="text-section-h2 text-center"
+                style={{ color: headingColor }}
+              >
+                {heading}
+              </h2>
+            )}
+            {subheading && (
+              <p
+                className="text-body text-center mx-auto"
+                style={{ color: subheadingColor, maxWidth: 820 }}
+              >
+                {subheading}
+              </p>
+            )}
+          </div>
+
+          <div
+            className="grid w-full"
+            style={{
+              gridTemplateColumns: "1fr 1fr",
+              gap: 48,
+              alignItems: "start",
+            }}
+          >
+            <ul className="flex flex-col" style={{ gap: 20, listStyle: "none" }}>
+              {beforeItems.map((item, i) => (
+                <li
+                  key={item._key || `before-${i}`}
+                  className="flex items-start"
+                  style={{ gap: 12 }}
+                >
+                  <XIcon />
+                  {renderItemText(item)}
+                </li>
+              ))}
+            </ul>
+
+            <ul className="flex flex-col" style={{ gap: 20, listStyle: "none" }}>
+              {afterItems.map((item, i) => (
+                <li
+                  key={item._key || `after-${i}`}
+                  className="flex items-start"
+                  style={{ gap: 12 }}
+                >
+                  <CheckIcon />
+                  {renderItemText(item)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  const active = tabs[activeIndex]
   const cardBg = "#ffffff"
 
   return (

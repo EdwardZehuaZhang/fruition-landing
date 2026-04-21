@@ -10,6 +10,8 @@ export default {
     { name: 'heroHeading', title: 'Hero Heading', type: 'string' },
     { name: 'heroSubheading', title: 'Hero Subheading', type: 'text' },
     { name: 'heroImage', title: 'Hero Image', type: 'image', options: { hotspot: true } },
+    { name: 'heroVideoUrl', title: 'Hero Video URL (YouTube, shown below logo cloud)', type: 'url' },
+    { name: 'heroVideoTitle', title: 'Hero Video Title', type: 'string' },
     { name: 'primaryCtaLabel', title: 'Primary CTA Label', type: 'string' },
     { name: 'primaryCtaUrl', title: 'Primary CTA URL', type: 'string' },
     { name: 'secondaryCtaLabel', title: 'Secondary CTA Label', type: 'string' },
@@ -160,9 +162,14 @@ export default {
     },
 
     // Capabilities grid
+    { name: 'capabilitiesEyebrow', title: 'Capabilities Eyebrow', type: 'string' },
     { name: 'capabilitiesHeading', title: 'Capabilities Heading', type: 'string' },
     { name: 'capabilitiesHeadingAccent', title: 'Capabilities Heading Accent', type: 'string' },
     { name: 'capabilitiesSubheading', title: 'Capabilities Subheading', type: 'text' },
+    { name: 'capabilitiesCtaLabel', title: 'Capabilities CTA Label', type: 'string' },
+    { name: 'capabilitiesCtaUrl', title: 'Capabilities CTA URL', type: 'string' },
+    { name: 'capabilitiesCtaSecondaryLabel', title: 'Capabilities Secondary CTA Label', type: 'string' },
+    { name: 'capabilitiesCtaSecondaryUrl', title: 'Capabilities Secondary CTA URL', type: 'string' },
     {
       name: 'capabilitiesTheme',
       title: 'Capabilities Theme',

@@ -9,7 +9,6 @@ import {
   FaqAccordion,
   SecurityBadgeSection,
   TestimonialCtaBanner,
-  TestimonialsGrid,
 } from "@/components/sections"
 import type {
   CaseStudy,
@@ -33,6 +32,48 @@ function safeImageUrl(ref: SanityImageRef): string | null {
   } catch {
     return null
   }
+}
+
+interface EmojiItem {
+  emoji?: string
+  text?: string
+  _key?: string
+}
+
+interface EmojiCard {
+  emoji?: string
+  title?: string
+  description?: string
+  _key?: string
+}
+
+interface ApproachTab {
+  label?: string
+  items?: EmojiItem[]
+  _key?: string
+}
+
+interface NumberedSection {
+  number?: string
+  title?: string
+  bullets?: EmojiItem[]
+  _key?: string
+}
+
+interface IndustryTab {
+  label?: string
+  description?: string
+  sections?: NumberedSection[]
+  _key?: string
+}
+
+interface ProductDevTab {
+  label?: string
+  description?: string
+  bullets?: EmojiItem[]
+  image?: SanityImageRef
+  imageAlt?: string
+  _key?: string
 }
 
 function youtubeEmbedUrl(url?: string): string | null {
@@ -223,6 +264,63 @@ const INDUSTRY_TABS = [
 ]
 
 /* ------------------------------------------------------------------ */
+/*  Local consultants — Product Development tabs                       */
+/* ------------------------------------------------------------------ */
+
+const PRODUCT_DEVELOPMENT_TABS = [
+  {
+    label: "Epic & Feature Management",
+    description:
+      "monday.com's hierarchical board structure enables sophisticated product planning. Teams can break down product initiatives into manageable components:",
+    bullets: [
+      { emoji: "\uD83C\uDFAF", text: "High-level epics linked to strategic objectives" },
+      { emoji: "\uD83D\uDDFA\uFE0F", text: "User story mapping with acceptance criteria" },
+      { emoji: "\uD83D\uDCCB", text: "Feature specifications with detailed requirements" },
+      { emoji: "\uD83D\uDD17", text: "Dependency tracking across multiple product areas" },
+    ],
+    image: "/images/product-management/sprint-planning.avif",
+    imageAlt: "Sprint planning board in monday.com",
+  },
+  {
+    label: "Roadmap Visualisation",
+    description:
+      "The platform's timeline and Gantt chart views provide powerful roadmap visualisation:",
+    bullets: [
+      { emoji: "\uD83C\uDFC1", text: "Multi-quarter product planning with milestone markers" },
+      { emoji: "\uD83D\uDCAC", text: "Stakeholder communication through automated roadmap updates" },
+      { emoji: "\u2696\uFE0F", text: "Resource allocation and capacity planning" },
+      { emoji: "\uD83D\uDD2E", text: "Scenario planning for different product launch timelines" },
+    ],
+    image: "/images/product-management/regular-board.avif",
+    imageAlt: "Roadmap board in monday.com",
+  },
+  {
+    label: "Agile Approach",
+    description: "monday.com seamlessly supports agile methodologies with:",
+    bullets: [
+      { emoji: "\uD83D\uDCC5", text: "Sprint planning and backlog management" },
+      { emoji: "\uD83D\uDD04", text: "Daily standup automation and progress reports" },
+      { emoji: "\uD83D\uDCCA", text: "Burndown charts and velocity tracking" },
+      { emoji: "\uD83D\uDD0D", text: "Retrospective planning and action item tracking" },
+    ],
+    image: "/images/product-management/sprint-retrospective.avif",
+    imageAlt: "Sprint retrospective board in monday.com",
+  },
+  {
+    label: "Feature Request Management",
+    description: "Centralise and prioritise feature requests with:",
+    bullets: [
+      { emoji: "\uD83D\uDCE5", text: "Customer feedback integration from multiple channels" },
+      { emoji: "\uD83D\uDDF3\uFE0F", text: "Stakeholder voting and prioritisation" },
+      { emoji: "\uD83D\uDCCA", text: "Impact vs. effort scoring matrices" },
+      { emoji: "\uD83D\uDE80", text: "Automated feature request routing to product teams" },
+    ],
+    image: "/images/product-management/bugs-queue.avif",
+    imageAlt: "Bugs queue board in monday.com",
+  },
+]
+
+/* ------------------------------------------------------------------ */
 /*  Main component                                                     */
 /* ------------------------------------------------------------------ */
 
@@ -373,18 +471,16 @@ export default function MondayProductManagementContent({
 
           {/* Hero image */}
           {(() => {
-            const src = safeImageUrl(page.heroImage)
-            if (!src) return null
-            if (src.includes("e69b4156af7ede871484c1ee217c99c87bd289e7"))
-              return null
+            const heroSrc =
+              safeImageUrl(page.heroImage) || "/images/product-management/hero.png"
             return (
-              <div style={{ marginTop: 40 }}>
+              <div style={{ marginTop: 40, width: "100%", maxWidth: 1042 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={src}
-                  alt="Hero"
+                  src={heroSrc}
+                  alt="monday.com product management boards"
                   className="rounded-card"
-                  style={{ width: 1042, height: "auto" }}
+                  style={{ width: "100%", height: "auto" }}
                 />
               </div>
             )
@@ -424,10 +520,28 @@ export default function MondayProductManagementContent({
       )}
 
       {/* 4. Why Product Teams Choose monday.com */}
-      <WhyProductTeamsSection />
+      <WhyProductTeamsSection
+        headingPart1={page.whyProductTeamsHeadingPart1}
+        headingAccent={page.whyProductTeamsHeadingAccent}
+        subheading={page.whyProductTeamsSubheading}
+        cards={page.whyProductTeamsCards}
+      />
 
       {/* 5. How to Manage Products — Strategic Approach */}
-      <StrategicApproachSection />
+      <StrategicApproachSection
+        headingPart1={page.strategicApproachHeadingPart1}
+        headingAccent={page.strategicApproachHeadingAccent}
+        subheading={page.strategicApproachSubheading}
+        tabs={page.strategicApproachTabs}
+      />
+
+      {/* 5b. Local Consultants — Product Development */}
+      <ProductDevelopmentSection
+        headingPart1={page.productDevelopmentHeadingPart1}
+        headingAccent={page.productDevelopmentHeadingAccent}
+        headingPart2={page.productDevelopmentHeadingPart2}
+        tabs={page.productDevelopmentTabs}
+      />
 
       {/* 6. Calendly */}
       <CalendlySection
@@ -440,7 +554,10 @@ export default function MondayProductManagementContent({
       />
 
       {/* 7. Industry-Specific Product Management Solutions */}
-      <IndustrySpecificSection />
+      <IndustrySpecificSection
+        heading={page.industryProductSolutionsHeading}
+        tabs={page.industryProductSolutionsTabs}
+      />
 
       {/* 8. FAQ */}
       {!page.hideFaqSection &&
@@ -449,11 +566,6 @@ export default function MondayProductManagementContent({
         ) : page.faqTabs?.length > 0 ? (
           <FaqAccordion tabs={page.faqTabs} />
         ) : null)}
-
-      {/* 9. Testimonials */}
-      {!page.hideTestimonialsSection && (
-        <TestimonialsGrid caseStudies={caseStudies} />
-      )}
 
       {/* 10. Testimonial CTA Banner */}
       {!page.hideTestimonialBanner && (
@@ -482,7 +594,30 @@ export default function MondayProductManagementContent({
 /*  Why Product Teams Choose monday.com                                */
 /* ------------------------------------------------------------------ */
 
-function WhyProductTeamsSection() {
+interface WhyProductTeamsSectionProps {
+  headingPart1?: string
+  headingAccent?: string
+  subheading?: string
+  cards?: EmojiCard[]
+}
+
+function WhyProductTeamsSection({
+  headingPart1,
+  headingAccent,
+  subheading,
+  cards,
+}: WhyProductTeamsSectionProps) {
+  const resolvedHeadingPart1 =
+    headingPart1 ?? "Why Product Teams Choose monday.com for "
+  const resolvedHeadingAccent = headingAccent ?? "Product Management"
+  const resolvedSubheading =
+    subheading ??
+    "monday.com's product roadmap software capabilities transform how teams plan, track, and execute product strategies. Unlike traditional product management tools, monday.com provides:"
+  const resolvedCards: EmojiCard[] =
+    cards && cards.length > 0
+      ? cards
+      : (WHY_PRODUCT_TEAMS_CARDS as EmojiCard[])
+
   return (
     <section
       style={{
@@ -496,8 +631,8 @@ function WhyProductTeamsSection() {
           className="text-section-h2 text-center"
           style={{ color: "#000", marginBottom: 16 }}
         >
-          Why Product Teams Choose monday.com for{" "}
-          <span style={{ color: "#8015e8" }}>Product Management</span>
+          {resolvedHeadingPart1}
+          <span style={{ color: "#8015e8" }}>{resolvedHeadingAccent}</span>
         </h2>
         <p
           className="text-body text-center mx-auto"
@@ -507,18 +642,16 @@ function WhyProductTeamsSection() {
             marginBottom: 48,
           }}
         >
-          monday.com&apos;s product roadmap software capabilities transform how
-          teams plan, track, and execute product strategies. Unlike traditional
-          product management tools, monday.com provides:
+          {resolvedSubheading}
         </p>
 
         <div
           className="grid grid-cols-1 sm:grid-cols-2"
           style={{ gap: 24 }}
         >
-          {WHY_PRODUCT_TEAMS_CARDS.map((card) => (
+          {resolvedCards.map((card, i) => (
             <div
-              key={card.title}
+              key={card._key || card.title || `why-card-${i}`}
               className="flex flex-col items-center text-center bg-white rounded-card border border-[#ece7fb]"
               style={{ padding: 28, boxShadow: "var(--shadow-whisper)" }}
             >
@@ -554,9 +687,30 @@ function WhyProductTeamsSection() {
 /*  How to Manage Products — Strategic Approach Tabs                   */
 /* ------------------------------------------------------------------ */
 
-function StrategicApproachSection() {
+interface StrategicApproachSectionProps {
+  headingPart1?: string
+  headingAccent?: string
+  subheading?: string
+  tabs?: ApproachTab[]
+}
+
+function StrategicApproachSection({
+  headingPart1,
+  headingAccent,
+  subheading,
+  tabs,
+}: StrategicApproachSectionProps) {
+  const resolvedHeadingPart1 =
+    headingPart1 ?? "How to Manage Products with monday.com: "
+  const resolvedHeadingAccent = headingAccent ?? "A Strategic Approach"
+  const resolvedSubheading =
+    subheading ??
+    "Managing products effectively with monday.com requires understanding both the platform's capabilities and proven product management methodologies. Our monday.com expert consultants guide teams through:"
+  const resolvedTabs: ApproachTab[] =
+    tabs && tabs.length > 0 ? tabs : (APPROACH_TABS as unknown as ApproachTab[])
+
   const [activeTab, setActiveTab] = useState(0)
-  const active = APPROACH_TABS[activeTab]
+  const active = resolvedTabs[activeTab] ?? resolvedTabs[0]
 
   return (
     <section
@@ -571,8 +725,8 @@ function StrategicApproachSection() {
           className="text-section-h2 text-center text-black"
           style={{ maxWidth: 900 }}
         >
-          How to Manage Products with monday.com:{" "}
-          <span style={{ color: "#8015e8" }}>A Strategic Approach</span>
+          {resolvedHeadingPart1}
+          <span style={{ color: "#8015e8" }}>{resolvedHeadingAccent}</span>
         </h2>
         <p
           className="text-body text-center mx-auto"
@@ -583,9 +737,7 @@ function StrategicApproachSection() {
             marginBottom: 40,
           }}
         >
-          Managing products effectively with monday.com requires understanding
-          both the platform&apos;s capabilities and proven product management
-          methodologies. Our monday.com expert consultants guide teams through:
+          {resolvedSubheading}
         </p>
 
         {/* Tab buttons */}
@@ -593,9 +745,9 @@ function StrategicApproachSection() {
           className="flex justify-center flex-wrap"
           style={{ gap: 12, width: "100%" }}
         >
-          {APPROACH_TABS.map((tab, i) => (
+          {resolvedTabs.map((tab, i) => (
             <button
-              key={tab.label}
+              key={tab._key || tab.label || `approach-tab-${i}`}
               onClick={() => setActiveTab(i)}
               className="cursor-pointer transition-all"
               style={{
@@ -633,7 +785,7 @@ function StrategicApproachSection() {
             className="font-semibold"
             style={{ fontSize: 22, color: "#8015e8", marginBottom: 24 }}
           >
-            {active.label}
+            {active?.label}
           </h3>
           <div
             style={{
@@ -642,9 +794,9 @@ function StrategicApproachSection() {
               gap: 16,
             }}
           >
-            {active.items.map((item, i) => (
+            {(active?.items ?? []).map((item, i) => (
               <div
-                key={i}
+                key={item._key || `approach-item-${i}`}
                 className="flex items-start"
                 style={{ gap: 12 }}
               >
@@ -673,9 +825,23 @@ function StrategicApproachSection() {
 /*  Industry-Specific Product Management Solutions                     */
 /* ------------------------------------------------------------------ */
 
-function IndustrySpecificSection() {
+interface IndustrySpecificSectionProps {
+  heading?: string
+  tabs?: IndustryTab[]
+}
+
+function IndustrySpecificSection({
+  heading,
+  tabs,
+}: IndustrySpecificSectionProps) {
+  const resolvedHeading = heading ?? "Industry-Specific Product Management Solutions"
+  const resolvedTabs: IndustryTab[] =
+    tabs && tabs.length > 0
+      ? tabs
+      : (INDUSTRY_TABS as unknown as IndustryTab[])
+
   const [activeTab, setActiveTab] = useState(0)
-  const active = INDUSTRY_TABS[activeTab]
+  const active = resolvedTabs[activeTab] ?? resolvedTabs[0]
 
   return (
     <section
@@ -690,7 +856,7 @@ function IndustrySpecificSection() {
           className="text-section-h2 text-center text-white"
           style={{ marginBottom: 40 }}
         >
-          Industry-Specific Product Management Solutions
+          {resolvedHeading}
         </h2>
 
         {/* Tab pills */}
@@ -698,11 +864,11 @@ function IndustrySpecificSection() {
           className="flex items-center justify-center flex-wrap"
           style={{ gap: 12, marginBottom: 40 }}
         >
-          {INDUSTRY_TABS.map((tab, idx) => {
+          {resolvedTabs.map((tab, idx) => {
             const isActive = idx === activeTab
             return (
               <button
-                key={tab.label}
+                key={tab._key || tab.label || `industry-tab-${idx}`}
                 onClick={() => setActiveTab(idx)}
                 className="flex items-center justify-center font-bold"
                 style={{
@@ -742,7 +908,7 @@ function IndustrySpecificSection() {
             marginBottom: 32,
           }}
         >
-          {active.description}
+          {active?.description}
         </p>
 
         {/* Numbered sub-sections */}
@@ -750,9 +916,9 @@ function IndustrySpecificSection() {
           className="mx-auto"
           style={{ maxWidth: 900, display: "flex", flexDirection: "column", gap: 24 }}
         >
-          {active.sections.map((section) => (
+          {(active?.sections ?? []).map((section, si) => (
             <div
-              key={section.number}
+              key={section._key || section.number || `industry-section-${si}`}
               className="rounded-card"
               style={{
                 backgroundColor: "rgba(255,255,255,0.1)",
@@ -782,9 +948,9 @@ function IndustrySpecificSection() {
                 className="grid grid-cols-1 sm:grid-cols-2"
                 style={{ gap: 12 }}
               >
-                {section.bullets.map((bullet, bi) => (
+                {(section.bullets ?? []).map((bullet, bi) => (
                   <div
-                    key={bi}
+                    key={bullet._key || `industry-bullet-${si}-${bi}`}
                     className="flex items-start"
                     style={{ gap: 10 }}
                   >
@@ -805,6 +971,182 @@ function IndustrySpecificSection() {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  Local Consultants — Product Development                            */
+/* ------------------------------------------------------------------ */
+
+interface ProductDevelopmentSectionProps {
+  headingPart1?: string
+  headingAccent?: string
+  headingPart2?: string
+  tabs?: ProductDevTab[]
+}
+
+function ProductDevelopmentSection({
+  headingPart1,
+  headingAccent,
+  headingPart2,
+  tabs,
+}: ProductDevelopmentSectionProps) {
+  const resolvedHeadingPart1 = headingPart1 ?? "Local monday.com consultants for "
+  const resolvedHeadingAccent = headingAccent ?? "Product Development"
+  const resolvedHeadingPart2 =
+    headingPart2 ?? " in Australia, United States, and United Kingdom"
+  const resolvedTabs: ProductDevTab[] =
+    tabs && tabs.length > 0
+      ? tabs
+      : (PRODUCT_DEVELOPMENT_TABS as unknown as ProductDevTab[])
+
+  const [activeTab, setActiveTab] = useState(0)
+  const active = resolvedTabs[activeTab] ?? resolvedTabs[0]
+  const activeImageSrc =
+    typeof active?.image === "string"
+      ? active.image
+      : safeImageUrl(active?.image as SanityImageRef | undefined)
+
+  return (
+    <section
+      style={{
+        backgroundColor: "#f7f5ff",
+        paddingTop: 80,
+        paddingBottom: 80,
+      }}
+    >
+      <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
+        <h2
+          className="text-section-h2 text-center"
+          style={{ color: "#000", marginBottom: 40, maxWidth: 1000, marginLeft: "auto", marginRight: "auto" }}
+        >
+          {resolvedHeadingPart1}
+          <span style={{ color: "#8015e8" }}>{resolvedHeadingAccent}</span>
+          {resolvedHeadingPart2}
+        </h2>
+
+        {/* Tab pills */}
+        <div
+          className="flex items-center justify-center flex-wrap"
+          style={{ gap: 12, marginBottom: 40 }}
+        >
+          {resolvedTabs.map((tab, i) => {
+            const isActive = i === activeTab
+            return (
+              <button
+                key={tab._key || tab.label || `prod-dev-tab-${i}`}
+                onClick={() => setActiveTab(i)}
+                className="cursor-pointer transition-all font-semibold"
+                style={{
+                  padding: "10px 24px",
+                  borderRadius: 99,
+                  fontSize: 15,
+                  ...(isActive
+                    ? {
+                        background:
+                          "linear-gradient(to right, #8015e8, #ba83f0)",
+                        color: "white",
+                        boxShadow:
+                          "2.83px 2.83px 15px 3px rgba(0,0,0,0.18)",
+                        border: "none",
+                      }
+                    : {
+                        backgroundColor: "white",
+                        color: "#2b074d",
+                        border: "1px solid #e8e6e6",
+                      }),
+                }}
+              >
+                {tab.label}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Tab content */}
+        <div
+          className="w-full rounded-card border border-[#ece7fb] bg-white"
+          style={{ padding: "40px" }}
+        >
+          <div
+            className="grid grid-cols-1 lg:grid-cols-2"
+            style={{ gap: 40, alignItems: "center" }}
+          >
+            {/* Text column */}
+            <div>
+              <h3
+                className="font-semibold"
+                style={{ fontSize: 24, color: "#8015e8", marginBottom: 16 }}
+              >
+                {active?.label}
+              </h3>
+              <p
+                style={{
+                  fontSize: 16,
+                  lineHeight: "24px",
+                  color: "#2b074d",
+                  marginBottom: 24,
+                }}
+              >
+                {active?.description}
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 16,
+                }}
+              >
+                {(active?.bullets ?? []).map((bullet, i) => (
+                  <div
+                    key={bullet._key || `prod-dev-bullet-${i}`}
+                    className="flex items-start"
+                    style={{ gap: 12 }}
+                  >
+                    <span
+                      style={{
+                        fontSize: 22,
+                        lineHeight: 1,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {bullet.emoji}
+                    </span>
+                    <p
+                      style={{
+                        fontSize: 16,
+                        lineHeight: "24px",
+                        color: "#2b074d",
+                      }}
+                    >
+                      {bullet.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Image column */}
+            <div
+              className="rounded-card overflow-hidden"
+              style={{
+                border: "1px solid #ece7fb",
+                backgroundColor: "#fff",
+              }}
+            >
+              {activeImageSrc && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={activeImageSrc}
+                  alt={active?.imageAlt || ""}
+                  style={{ width: "100%", height: "auto", display: "block" }}
+                />
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </section>

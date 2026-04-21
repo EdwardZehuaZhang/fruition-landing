@@ -215,6 +215,11 @@ export default function UniversalPageTemplate({
         />
       )}
 
+      {/* 8. Solution Cards - left/right (if populated) — render before comparison */}
+      {!page.hideSolutionCardsSection && page.solutionCards?.length > 0 && (
+        <SolutionCardsSection cards={page.solutionCards} />
+      )}
+
       {/* 3. Comparison Tabs (if populated) */}
       {mergedComparisonTabs.length > 0 && (
         <ComparisonTabsSection
@@ -222,6 +227,7 @@ export default function UniversalPageTemplate({
           subheading={page.comparisonSubheading}
           tabs={mergedComparisonTabs}
           theme={page.comparisonTheme || "light"}
+          layout={page.comparisonLayout === "sideBySide" ? "sideBySide" : "tabs"}
         />
       )}
 
@@ -273,12 +279,9 @@ export default function UniversalPageTemplate({
           cards={page.capabilitiesCards}
           ctaLabel={page.capabilitiesCtaLabel}
           ctaUrl={page.capabilitiesCtaUrl}
+          ctaSecondaryLabel={page.capabilitiesCtaSecondaryLabel}
+          ctaSecondaryUrl={page.capabilitiesCtaSecondaryUrl}
         />
-      )}
-
-      {/* 8. Solution Cards - left/right (if populated) */}
-      {!page.hideSolutionCardsSection && page.solutionCards?.length > 0 && (
-        <SolutionCardsSection cards={page.solutionCards} />
       )}
 
       {/* 9. Industry Tabs (if populated) */}

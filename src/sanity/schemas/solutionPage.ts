@@ -218,6 +218,130 @@ export default {
     { name: 'logoCloudHeadingPart1', title: 'Logo Cloud Heading (prefix)', type: 'string' },
     { name: 'logoCloudHeadingAccent', title: 'Logo Cloud Heading (accent)', type: 'string' },
 
+    // Why Product Teams Choose monday.com (Monday PM)
+    { name: 'whyProductTeamsHeadingPart1', title: 'Why Product Teams Heading (prefix)', type: 'string' },
+    { name: 'whyProductTeamsHeadingAccent', title: 'Why Product Teams Heading (accent)', type: 'string' },
+    { name: 'whyProductTeamsSubheading', title: 'Why Product Teams Subheading', type: 'text' },
+    {
+      name: 'whyProductTeamsCards',
+      title: 'Why Product Teams Cards',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'whyProductTeamCard',
+        fields: [
+          { name: 'emoji', title: 'Emoji', type: 'string' },
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'description', title: 'Description', type: 'text' },
+        ],
+      }],
+    },
+
+    // Strategic Approach Tabs (Monday PM)
+    { name: 'strategicApproachHeadingPart1', title: 'Strategic Approach Heading (prefix)', type: 'string' },
+    { name: 'strategicApproachHeadingAccent', title: 'Strategic Approach Heading (accent)', type: 'string' },
+    { name: 'strategicApproachSubheading', title: 'Strategic Approach Subheading', type: 'text' },
+    {
+      name: 'strategicApproachTabs',
+      title: 'Strategic Approach Tabs',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'strategicApproachTab',
+        fields: [
+          { name: 'label', title: 'Tab Label', type: 'string' },
+          {
+            name: 'items',
+            title: 'Items',
+            type: 'array',
+            of: [{
+              type: 'object',
+              name: 'emojiItem',
+              fields: [
+                { name: 'emoji', title: 'Emoji', type: 'string' },
+                { name: 'text', title: 'Text', type: 'text' },
+              ],
+            }],
+          },
+        ],
+      }],
+    },
+
+    // Industry Product Solutions Tabs (Monday PM — dark gradient section)
+    { name: 'industryProductSolutionsHeading', title: 'Industry Product Solutions Heading', type: 'string' },
+    {
+      name: 'industryProductSolutionsTabs',
+      title: 'Industry Product Solutions Tabs',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'industryProductSolutionTab',
+        fields: [
+          { name: 'label', title: 'Tab Label', type: 'string' },
+          { name: 'description', title: 'Description', type: 'text' },
+          {
+            name: 'sections',
+            title: 'Numbered Sections',
+            type: 'array',
+            of: [{
+              type: 'object',
+              name: 'numberedSection',
+              fields: [
+                { name: 'number', title: 'Number', type: 'string' },
+                { name: 'title', title: 'Title', type: 'string' },
+                {
+                  name: 'bullets',
+                  title: 'Bullets',
+                  type: 'array',
+                  of: [{
+                    type: 'object',
+                    name: 'emojiBullet',
+                    fields: [
+                      { name: 'emoji', title: 'Emoji', type: 'string' },
+                      { name: 'text', title: 'Text', type: 'text' },
+                    ],
+                  }],
+                },
+              ],
+            }],
+          },
+        ],
+      }],
+    },
+
+    // Product Development Tabs (Monday PM — tabs with image + bullets)
+    { name: 'productDevelopmentHeadingPart1', title: 'Product Development Heading (prefix)', type: 'string' },
+    { name: 'productDevelopmentHeadingAccent', title: 'Product Development Heading (accent)', type: 'string' },
+    { name: 'productDevelopmentHeadingPart2', title: 'Product Development Heading (suffix)', type: 'string' },
+    {
+      name: 'productDevelopmentTabs',
+      title: 'Product Development Tabs',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'productDevelopmentTab',
+        fields: [
+          { name: 'label', title: 'Tab Label', type: 'string' },
+          { name: 'description', title: 'Description', type: 'text' },
+          {
+            name: 'bullets',
+            title: 'Bullets',
+            type: 'array',
+            of: [{
+              type: 'object',
+              name: 'emojiBullet',
+              fields: [
+                { name: 'emoji', title: 'Emoji', type: 'string' },
+                { name: 'text', title: 'Text', type: 'text' },
+              ],
+            }],
+          },
+          { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
+          { name: 'imageAlt', title: 'Image Alt', type: 'string' },
+        ],
+      }],
+    },
+
     // Section visibility toggles
     { name: 'hideDiscoverSection', title: 'Hide Discover CTA Section', type: 'boolean', initialValue: false },
     { name: 'hideJoinStatsSection', title: 'Hide Join Stats Section', type: 'boolean', initialValue: false },

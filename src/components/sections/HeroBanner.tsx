@@ -11,6 +11,12 @@ interface HeroBannerProps {
   headingPart2?: string
   subheading?: string
   heroImage?: SanityImageRef
+  /** Local URL fallback for the hero image. Takes precedence over heroImage when both are set. */
+  heroImageUrl?: string
+  /** When true, the hero image renders contained (no crop) at natural aspect ratio. */
+  heroImageContain?: boolean
+  /** Override for the hero image height in px (used with heroImageContain to control vertical space). */
+  heroImageMaxHeight?: number
   heroVideoSrc?: string
   certificationBadge?: SanityImageRef
   partnerBadges?: PartnerBadge[]
@@ -48,6 +54,9 @@ export default function HeroBanner({
   headingPart2 = "",
   subheading,
   heroImage,
+  heroImageUrl,
+  heroImageContain = false,
+  heroImageMaxHeight,
   heroVideoSrc,
   certificationBadge,
   partnerBadges = [],
@@ -57,7 +66,7 @@ export default function HeroBanner({
   secondaryCtaLabel,
   secondaryCtaUrl,
 }: HeroBannerProps) {
-  const heroImageSrc = safeImageUrl(heroImage)
+  const heroImageSrc = heroImageUrl || safeImageUrl(heroImage)
   const certBadgeSrc = safeImageUrl(certificationBadge)
   const partnerImageUrl = typeof partnerImageSrc === "string"
     ? partnerImageSrc
@@ -182,7 +191,22 @@ export default function HeroBanner({
         ) : heroImageSrc ? (
           <div style={{ marginTop: 40 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={heroImageSrc} alt="Hero" width={1042} height={312} className="rounded-card object-cover" style={{ width: 1042, height: 312 }} />
+            <img
+              src={heroImageSrc}
+              alt="Hero"
+              className="rounded-card"
+              style={
+                heroImageContain
+                  ? {
+                      maxWidth: 1042,
+                      width: "100%",
+                      maxHeight: heroImageMaxHeight ?? 520,
+                      height: "auto",
+                      objectFit: "contain",
+                    }
+                  : { width: 1042, height: 312, objectFit: "cover" }
+              }
+            />
           </div>
         ) : null}
 
