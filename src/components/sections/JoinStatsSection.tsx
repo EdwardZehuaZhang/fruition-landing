@@ -24,7 +24,7 @@ export default function JoinStatsSection({
   ctaUrl,
   siteSettings,
 }: JoinStatsSectionProps) {
-  if (stats.length === 0) return null
+  if (!stats || stats.length === 0) return null
 
   return (
     <StatsBlockView
