@@ -1,16 +1,25 @@
+import { urlFor } from '@/sanity/image'
+
 interface TestimonialBlockProps {
   quote?: string
   authorName?: string
   authorRole?: string
   company?: string
+  profilePhoto?: { asset?: { _ref?: string } }
 }
 
-export default function TestimonialBlockView({ quote, authorName, authorRole, company }: TestimonialBlockProps) {
+function photoUrl(photo?: TestimonialBlockProps['profilePhoto']): string | null {
+  if (!photo?.asset?._ref) return null
+  try { return urlFor(photo).width(106).height(106).url() } catch { return null }
+}
+
+export default function TestimonialBlockView({ quote, authorName, authorRole, company, profilePhoto }: TestimonialBlockProps) {
   if (!quote) return null
+
+  const src = photoUrl(profilePhoto)
 
   return (
     <div className="ui-surface-panel relative flex w-full max-w-[437px] min-h-[300px] flex-col">
-      {/* Top: Name + Title (left) + Avatar (right) */}
       <div className="flex items-start justify-between px-8 pb-4 pt-7">
         <div>
           {authorName && (
@@ -22,18 +31,27 @@ export default function TestimonialBlockView({ quote, authorName, authorRole, co
             </p>
           )}
         </div>
-        {/* Avatar circle */}
-        <div className="w-[57px] h-[53px] rounded-full bg-[#e8e6e6] shrink-0 ml-4" />
+        {src ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={src}
+            alt={authorName ?? 'Testimonial author'}
+            width={53}
+            height={53}
+            className="w-[53px] h-[53px] rounded-full object-cover shrink-0 ml-4"
+            style={{ backgroundColor: '#e8e6e6' }}
+          />
+        ) : (
+          <div className="w-[53px] h-[53px] rounded-full bg-[#e8e6e6] shrink-0 ml-4" />
+        )}
       </div>
 
-      {/* Quote */}
       <div className="flex-1 px-8">
         <p className="text-body-sm text-black">
           {quote}
         </p>
       </div>
 
-      {/* Stars */}
       <div className="flex gap-[2px] px-8 pb-8 pt-4">
         {[...Array(5)].map((_, i) => (
           <svg key={i} className="w-[23px] h-[21px]" viewBox="0 0 23 21" fill="#8015E8">

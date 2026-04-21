@@ -32,5 +32,11 @@ export default defineType({
       title: 'Company',
       type: 'string',
     }),
+    defineField({
+      name: 'profilePhoto',
+      title: 'Profile Photo',
+      type: 'image',
+      options: { hotspot: true },
+    }),
   ],
 })

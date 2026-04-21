@@ -37,6 +37,11 @@ interface UniversalPageTemplateProps {
    * legacy embedded `page.faqTabs`. See src/sanity/groupFaqs.ts.
    */
   faqTabs?: FaqTab[]
+  /**
+   * When set, hides the individual partner-badge row in the hero and
+   * renders this image below the heading instead.
+   */
+  heroPartnerImageSrc?: string
 }
 
 function youtubeEmbedUrl(url?: string): string | null {
@@ -63,6 +68,7 @@ export default function UniversalPageTemplate({
   siteSettings,
   caseStudies = [],
   faqTabs,
+  heroPartnerImageSrc,
 }: UniversalPageTemplateProps) {
   if (!page) return null
 
@@ -125,7 +131,7 @@ export default function UniversalPageTemplate({
             ? page.heroPartnerBadges
             : siteSettings?.navbarPartnerBadges || []
         }
-        partnerImageSrc={undefined}
+        partnerImageSrc={heroPartnerImageSrc}
         primaryCtaLabel={page.primaryCtaLabel}
         primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
         secondaryCtaLabel={page.secondaryCtaLabel}

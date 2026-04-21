@@ -29,7 +29,7 @@ export default function DiscoverCtaSection({
           <img src={badgeSrc} alt="Certifications" width={325} height={73} className="h-[73px] w-[325px] object-contain" />
         )}
         <h2
-          className="mt-7 text-section-h2 text-center text-black"
+          className="mt-7 text-section-h2 text-center text-black text-balance max-w-[720px]"
         >
           {heading}
         </h2>

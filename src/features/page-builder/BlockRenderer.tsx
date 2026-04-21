@@ -1,9 +1,9 @@
-import Link from 'next/link'
 import HeroBlockView from './blocks/HeroBlockView'
 import RichTextBlockView from './blocks/RichTextBlockView'
 import CtaBlockView from './blocks/CtaBlockView'
 import FeatureListBlockView from './blocks/FeatureListBlockView'
 import TestimonialBlockView from './blocks/TestimonialBlockView'
+import HomeTestimonialsGrid from './blocks/HomeTestimonialsGrid'
 import LogoCloudBlockView from './blocks/LogoCloudBlockView'
 import PostListBlockView from './blocks/PostListBlockView'
 import FaqBlockView from './blocks/FaqBlockView'
@@ -112,59 +112,20 @@ export default function BlockRenderer({
   return (
     <>
       {grouped.map((item, idx) => {
-        // Testimonial grid section
+        // Testimonial grid section — paginated 5 per page with auto-scroll
         if (Array.isArray(item)) {
+          const testimonials = item.map((block) => ({
+            _key: block._key,
+            _type: block._type,
+            quote: block.quote as string | undefined,
+            authorName: block.authorName as string | undefined,
+            authorRole: block.authorRole as string | undefined,
+            company: block.company as string | undefined,
+            profilePhoto: block.profilePhoto as { asset?: { _ref?: string } } | undefined,
+          }))
           return (
             <div key={`testimonials-${idx}`}>
-              <section className="bg-white py-[80px] px-4">
-                <div className="mx-auto max-w-[1343px]">
-                  {/* Header row: heading + CTA side by side */}
-                  <div className="flex items-center justify-center gap-[89px] mb-[58px] w-full">
-                    <h2 className="text-[48px] text-black leading-[67.2px] w-[919px] shrink-0">
-                      What our customers say about us 🙌
-                    </h2>
-                    <Link
-                      href="/customer-testimonials"
-                      className="shrink-0 flex items-center justify-center h-[53px] w-[330px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
-                    >
-                      🚀 Start Your Transformation
-                    </Link>
-                  </div>
-
-                  {/* Cards grid: stat card + testimonials in flex-wrap */}
-                  <div className="flex flex-wrap gap-x-[16px] gap-y-[18px]">
-                    {/* Stat card — same width as testimonial cards */}
-                    <div className="relative w-full max-w-[437px] bg-[#10003a] rounded-card shadow-card flex flex-col px-[38px]">
-                      <div className="pt-[23px] pb-[30px]">
-                        <p className="font-semibold text-[40px] text-[#ba83f0] leading-[60px]">500+</p>
-                        <p className="font-light text-[24px] text-white leading-[36px]">
-                          have maximised their<br />
-                          workflows with our<br />
-                          monday.com expert support
-                        </p>
-                      </div>
-                      <div className="pb-[30px]">
-                        <Link
-                          href="/customer-testimonials"
-                          className="inline-flex items-center justify-center rounded-[100px] border border-white/40 px-6 py-2.5 text-sm font-semibold text-white hover:bg-white/10 transition"
-                        >
-                          Read our case studies
-                        </Link>
-                      </div>
-                    </div>
-
-                    {item.map((block) => (
-                      <TestimonialBlockView
-                        key={block._key}
-                        quote={block.quote as string}
-                        authorName={block.authorName as string}
-                        authorRole={block.authorRole as string}
-                        company={block.company as string}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </section>
+              <HomeTestimonialsGrid testimonials={testimonials} />
               <TeamsTransformedSection />
             </div>
           )
@@ -190,6 +151,7 @@ export default function BlockRenderer({
                     authorName={block.authorName as string}
                     authorRole={block.authorRole as string}
                     company={block.company as string}
+                    profilePhoto={block.profilePhoto as { asset?: { _ref?: string } } | undefined}
                   />
                 </div>
               </section>

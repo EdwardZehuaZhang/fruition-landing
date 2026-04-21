@@ -332,18 +332,16 @@ export default function ImplementationPackagesContent({
           </h1>
 
           {/* Monday Partners image */}
-          {heroMondayPartnersImageSrc && (
-            <div style={{ marginTop: 40 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={heroMondayPartnersImageSrc}
-                alt="Monday.com Partners"
-                width={924}
-                height={0}
-                className="w-full max-w-[924px] h-auto object-contain"
-              />
-            </div>
-          )}
+          <div style={{ marginTop: 40 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/monday-partners.avif"
+              alt="Monday.com Partners"
+              width={924}
+              height={0}
+              className="w-full max-w-[924px] h-auto object-contain"
+            />
+          </div>
 
           {/* Certification banner (hidden) */}
           {/* <div style={{ marginTop: 40 }}>
