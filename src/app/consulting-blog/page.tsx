@@ -1,11 +1,13 @@
 import { getBlogPosts, getBlogCategories, getPageBySlug } from "@/sanity/queries"
-import BlogCard from "@/components/BlogCard"
+import BlogInfiniteList from "@/components/BlogInfiniteList"
 import Link from "next/link"
 
 interface BlogCategory {
   slug: string
   title: string
 }
+
+const INITIAL_PAGE_SIZE = 12
 
 export async function generateMetadata() {
   const page = await getPageBySlug("consulting-blog")
@@ -17,7 +19,7 @@ export async function generateMetadata() {
 
 export default async function BlogPage() {
   const [posts, categories, page] = await Promise.all([
-    getBlogPosts(24, 0),
+    getBlogPosts(INITIAL_PAGE_SIZE, 0),
     getBlogCategories(),
     getPageBySlug("consulting-blog"),
   ])
@@ -41,11 +43,7 @@ export default async function BlogPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {posts.map((post: Parameters<typeof BlogCard>[0]) => (
-          <BlogCard key={post.slug} {...post} />
-        ))}
-      </div>
+      <BlogInfiniteList initialPosts={posts} pageSize={INITIAL_PAGE_SIZE} />
     </div>
   )
 }
