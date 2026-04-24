@@ -71,8 +71,13 @@ export default function FeatureNumberList({
         )}
         <div className={gridClass} style={{ gap: 36, rowGap: 44 }}>
           {items.map((item, i) => (
-            <div key={item._key || i} style={{ maxWidth: 460 }}>
+            <div
+              key={item._key || i}
+              className="feature-number-card"
+              style={{ maxWidth: 460 }}
+            >
               <div
+                className="feature-number-card__number"
                 style={{
                   fontSize: 40,
                   fontWeight: 600,

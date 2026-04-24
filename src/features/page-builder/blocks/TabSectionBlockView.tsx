@@ -46,8 +46,21 @@ export default function TabSectionBlockView({
   const isImplementSection = manyTabs
 
   return (
-    <section className="bg-white pt-[80px] pb-[120px] px-4">
-      <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[24px]">
+    <section className="bg-white pt-[80px] pb-[120px] px-4 relative overflow-hidden">
+      {/* Decorative squiggle bg — only for the "Implement monday.com for any team" section */}
+      {isImplementSection && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-0 right-0 top-[60px] h-[200px] opacity-70"
+          style={{
+            backgroundImage: "url(/images/bg-squiggle.avif)",
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        />
+      )}
+      <div className="relative mx-auto max-w-[959px] flex flex-col items-center gap-[24px]">
         {/* Heading */}
         {heading && (
           <h2 className="text-center text-[35px] font-medium text-black leading-[49px]">

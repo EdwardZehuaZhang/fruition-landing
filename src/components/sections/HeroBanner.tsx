@@ -75,8 +75,8 @@ export default function HeroBanner({
   return (
     <section className="bg-white">
       <div
-        className="mx-auto flex flex-col items-center"
-        style={{ paddingLeft: 273, paddingRight: 273, paddingTop: 80, paddingBottom: 80 }}
+        className="mx-auto flex flex-col items-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-[120px] 2xl:px-[273px] max-w-[1588px] w-full"
+        style={{ paddingTop: 80, paddingBottom: 80 }}
       >
         {/* Partner badges — hidden when a single partnerImageUrl is used */}
         {!partnerImageUrl && partnerBadges.length > 0 && (
@@ -146,13 +146,13 @@ export default function HeroBanner({
         )}
 
         {/* CTA buttons */}
-        <div className="flex items-center justify-center" style={{ gap: 20, marginTop: 40, width: 680 }}>
+        <div className="flex flex-col sm:flex-row items-center justify-center w-full max-w-[680px]" style={{ gap: 20, marginTop: 40 }}>
           {primaryCtaLabel && primaryCtaUrl && (
             <Link
               href={primaryCtaUrl}
-              className="flex items-center justify-center font-bold"
+              className="flex items-center justify-center font-bold w-full sm:flex-1 sm:max-w-[330px]"
               style={{
-                width: 330, height: 53, borderRadius: 100,
+                height: 53, borderRadius: 100,
                 ...(secondaryCtaLabel
                   ? { border: "1px solid #8015e8", backgroundColor: "white", color: "#8015e8" }
                   : { background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white" }),
@@ -165,8 +165,8 @@ export default function HeroBanner({
           {secondaryCtaLabel && secondaryCtaUrl && (
             <Link
               href={secondaryCtaUrl}
-              className="flex items-center justify-center font-bold text-white"
-              style={{ width: 330, height: 53, borderRadius: 100, background: "linear-gradient(to right, #8015e8, #ba83f0)", fontSize: 16 }}
+              className="flex items-center justify-center font-bold text-white w-full sm:flex-1 sm:max-w-[330px]"
+              style={{ height: 53, borderRadius: 100, background: "linear-gradient(to right, #8015e8, #ba83f0)", fontSize: 16 }}
             >
               {secondaryCtaLabel}
             </Link>
@@ -175,36 +175,34 @@ export default function HeroBanner({
 
         {/* Hero media — video takes precedence over image */}
         {heroVideoSrc ? (
-          <div style={{ marginTop: 40 }}>
+          <div className="w-full max-w-[1042px]" style={{ marginTop: 40 }}>
             <video
               autoPlay
               muted
               loop
               playsInline
               preload="metadata"
-              className="rounded-card object-cover"
-              style={{ width: 1042, height: 312 }}
+              className="rounded-card object-cover w-full"
+              style={{ height: "auto", aspectRatio: "1042 / 312" }}
             >
               <source src={heroVideoSrc} type="video/mp4" />
             </video>
           </div>
         ) : heroImageSrc ? (
-          <div style={{ marginTop: 40 }}>
+          <div className="w-full max-w-[1042px]" style={{ marginTop: 40 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={heroImageSrc}
               alt="Hero"
-              className="rounded-card"
+              className="rounded-card w-full"
               style={
                 heroImageContain
                   ? {
-                      maxWidth: 1042,
-                      width: "100%",
                       maxHeight: heroImageMaxHeight ?? 520,
                       height: "auto",
                       objectFit: "contain",
                     }
-                  : { width: 1042, height: 312, objectFit: "cover" }
+                  : { height: "auto", aspectRatio: "1042 / 312", objectFit: "cover" }
               }
             />
           </div>

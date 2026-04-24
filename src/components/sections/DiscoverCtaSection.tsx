@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
+import PaperPlaneIcon from "@/components/common/icons/PaperPlaneIcon"
 import type { SanityImageRef } from "./types"
 
 interface DiscoverCtaSectionProps {
@@ -38,12 +39,14 @@ export default function DiscoverCtaSection({
             href={primaryCtaUrl}
             className="ui-cta-btn ui-cta-btn-primary w-full sm:flex-1"
           >
+            <PaperPlaneIcon />
             {primaryCtaLabel}
           </Link>
           <Link
             href={secondaryCtaUrl}
             className="ui-cta-btn ui-cta-btn-secondary w-full sm:flex-1"
           >
+            <PaperPlaneIcon />
             {secondaryCtaLabel}
           </Link>
         </div>

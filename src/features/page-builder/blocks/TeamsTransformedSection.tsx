@@ -103,8 +103,19 @@ export default function TeamsTransformedSection() {
   const active = tabs[activeIndex]
 
   return (
-    <section className="bg-white py-[80px] px-4">
-      <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[40px]">
+    <section className="bg-white py-[80px] px-4 relative overflow-hidden">
+      {/* Decorative purple circle bg */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-[200px] -right-[200px] w-[600px] h-[600px] opacity-40"
+        style={{
+          backgroundImage: "url(/images/bg-purple-circle.avif)",
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
+      />
+      <div className="relative mx-auto max-w-[959px] flex flex-col items-center gap-[40px]">
         {/* Heading + subheading */}
         <div className="flex flex-col gap-[12px] items-center text-center w-full">
           <h2 className="text-[35px] font-medium text-black leading-[49px]">

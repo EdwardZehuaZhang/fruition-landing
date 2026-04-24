@@ -303,13 +303,14 @@ function VideoEmbeds({ urls }: { urls: string[] }) {
   return (
     <div className="w-full flex flex-col gap-[24px] pt-[27.5px]">
       {embeds.map((v, i) => (
-        <div key={i} className="aspect-video w-full overflow-hidden">
+        <div key={i} className="aspect-video w-full overflow-hidden rounded-card">
           <iframe
             src={v.embed}
             title={`Video ${i + 1}`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="w-full h-full"
+            style={{ border: 0 }}
           />
         </div>
       ))}

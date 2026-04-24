@@ -7,6 +7,7 @@ import { PortableText, type PortableTextBlock } from "@portabletext/react"
 import { urlFor } from "@/sanity/image"
 import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
 import CalendlySection from "@/components/sections/CalendlySection"
+import PaperPlaneIcon from "@/components/common/icons/PaperPlaneIcon"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -456,13 +457,14 @@ export default function ImplementationPackagesContent({
       {videoEmbedUrl && (
         <section className="bg-white py-[80px] px-[10px]">
           <div className="mx-auto flex flex-col items-center justify-center">
-            <div className="w-full max-w-[979px] aspect-video">
+            <div className="w-full max-w-[979px] aspect-video rounded-card overflow-hidden">
               <iframe
                 src={videoEmbedUrl}
                 title={videoTitle}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="w-full h-full"
+                style={{ border: 0 }}
               />
             </div>
           </div>
@@ -591,7 +593,7 @@ export default function ImplementationPackagesContent({
                                 return (
                                   <span key={i}>
                                     {child.slice(0, idx)}
-                                    <span style={{ color: "#8015e8" }}>
+                                    <span style={{ color: "#ba83f0" }}>
                                       {highlight}
                                     </span>
                                     {child.slice(idx + highlight.length)}
@@ -609,7 +611,7 @@ export default function ImplementationPackagesContent({
               {socialProofCtaUrl && (
                 <Link
                   href={socialProofCtaUrl}
-                  className="flex shrink-0 items-center justify-center font-bold text-white"
+                  className="flex shrink-0 items-center justify-center gap-2 font-bold text-white transition-colors hover:bg-[#579bfc] hover:border-[#579bfc]"
                   style={{
                     width: 216,
                     height: 53,
@@ -618,6 +620,7 @@ export default function ImplementationPackagesContent({
                     fontSize: 16,
                   }}
                 >
+                  <PaperPlaneIcon size={16} />
                   {socialProofCtaLabel}
                 </Link>
               )}
@@ -996,7 +999,7 @@ export default function ImplementationPackagesContent({
       {/* ============================================================ */}
       {methodologySteps.length > 0 && (
       <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto flex flex-col items-center" style={{ gap: 40, width: 959 }}>
+        <div className="mx-auto flex flex-col items-center px-4 sm:px-6 lg:px-8" style={{ gap: 56, maxWidth: 1040 }}>
           {/* Heading */}
           <h2 className="text-section-h2 text-center">
             <span style={{ color: 'black' }}>{methodologyHeading}</span>
@@ -1004,182 +1007,60 @@ export default function ImplementationPackagesContent({
             <span style={{ color: 'var(--purple-primary)' }}>{methodologyHeadingAccent}</span>
           </h2>
 
-          {/* Steps grid — 2 columns, number above content in each cell */}
-          {/* Row 1: steps 01 + 02 */}
-          <div className="flex items-start w-full">
-            {methodologySteps.slice(0, 2).map((step, si) => (
+          {/* Steps grid — 2 columns on md+, 1 column on mobile */}
+          <div className="grid grid-cols-1 md:grid-cols-2 w-full" style={{ gap: "48px 64px" }}>
+            {methodologySteps.map((step, si) => (
               <div
                 key={step._key ?? step.number ?? si}
-                className="flex flex-col items-start shrink-0"
-                style={{ width: 417, paddingBottom: 48 }}
+                className="flex flex-col items-start"
               >
                 {/* Number */}
-                <div style={{ width: 75, minHeight: 86, paddingTop: 6 }}>
-                  <p
-                    className="font-extralight text-center"
-                    style={{ fontSize: 48, color: '#8015e8', lineHeight: 'normal' }}
-                  >
-                    {step.number}
-                  </p>
-                </div>
+                <p
+                  className="font-extralight"
+                  style={{ fontSize: 56, color: '#8015e8', lineHeight: 1, marginBottom: 16 }}
+                >
+                  {step.number}
+                </p>
                 {/* Content */}
-                <div>
-                  <p
-                    className="font-bold"
-                    style={{ fontSize: 14, color: '#2b074d', lineHeight: '22.4px' }}
-                  >
-                    {step.title}
-                  </p>
-                  <p style={{ fontSize: 14, color: '#2b074d', lineHeight: '19.6px', marginTop: 4 }}>
+                <h3
+                  className="font-bold"
+                  style={{ fontSize: 18, color: '#2b074d', lineHeight: 1.4, marginBottom: 8 }}
+                >
+                  {step.title}
+                </h3>
+                {step.description && (
+                  <p style={{ fontSize: 15, color: '#4a4a4a', lineHeight: 1.6 }}>
                     {step.description}
                   </p>
-                  {step.bullets && step.bullets.length > 0 && (
-                    <ul
-                      className="list-disc"
-                      style={{
-                        paddingLeft: 18,
-                        paddingTop: 20,
-                        fontSize: 14,
-                        color: '#2b074d',
-                        lineHeight: '19.6px',
-                      }}
-                    >
-                      {step.bullets.map((b, bi) => (
-                        <li key={bi}>{b}</li>
-                      ))}
-                    </ul>
-                  )}
-                  {step.extraText && (
-                    <p
-                      style={{
-                        fontSize: 14,
-                        color: '#2b074d',
-                        lineHeight: '19.6px',
-                        marginTop: 20,
-                      }}
-                    >
-                      {step.extraText}
-                    </p>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Row 2: steps 03 + 04 */}
-          <div className="flex items-start w-full">
-            {methodologySteps.slice(2, 4).map((step, si) => (
-              <div
-                key={step._key ?? step.number ?? si}
-                className="flex flex-col items-start shrink-0"
-                style={{ width: 417, paddingBottom: 48 }}
-              >
-                <div style={{ width: 75, minHeight: 86, paddingTop: 6 }}>
-                  <p
-                    className="font-extralight text-center"
-                    style={{ fontSize: 48, color: '#8015e8', lineHeight: 'normal' }}
+                )}
+                {step.bullets && step.bullets.length > 0 && (
+                  <ul
+                    className="list-disc"
+                    style={{
+                      paddingLeft: 20,
+                      marginTop: 16,
+                      fontSize: 15,
+                      color: '#4a4a4a',
+                      lineHeight: 1.6,
+                    }}
                   >
-                    {step.number}
-                  </p>
-                </div>
-                <div>
+                    {step.bullets.map((b, bi) => (
+                      <li key={bi} style={{ marginBottom: 4 }}>{b}</li>
+                    ))}
+                  </ul>
+                )}
+                {step.extraText && (
                   <p
-                    className="font-bold"
-                    style={{ fontSize: 14, color: '#2b074d', lineHeight: '22.4px' }}
+                    style={{
+                      fontSize: 15,
+                      color: '#4a4a4a',
+                      lineHeight: 1.6,
+                      marginTop: 16,
+                    }}
                   >
-                    {step.title}
+                    {step.extraText}
                   </p>
-                  <p style={{ fontSize: 14, color: '#2b074d', lineHeight: '19.6px', marginTop: 4 }}>
-                    {step.description}
-                  </p>
-                  {step.bullets && step.bullets.length > 0 && (
-                    <ul
-                      className="list-disc"
-                      style={{
-                        paddingLeft: 18,
-                        paddingTop: 20,
-                        fontSize: 14,
-                        color: '#2b074d',
-                        lineHeight: '19.6px',
-                      }}
-                    >
-                      {step.bullets.map((b, bi) => (
-                        <li key={bi}>{b}</li>
-                      ))}
-                    </ul>
-                  )}
-                  {step.extraText && (
-                    <p
-                      style={{
-                        fontSize: 14,
-                        color: '#2b074d',
-                        lineHeight: '19.6px',
-                        marginTop: 20,
-                      }}
-                    >
-                      {step.extraText}
-                    </p>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Row 3: step 05+ (single-row) */}
-          <div className="flex items-start w-full">
-            {methodologySteps.slice(4).map((step, si) => (
-              <div
-                key={step._key ?? step.number ?? si}
-                className="flex flex-col items-start shrink-0"
-                style={{ width: 417, paddingBottom: 48 }}
-              >
-                <div style={{ width: 75, minHeight: 86, paddingTop: 6 }}>
-                  <p
-                    className="font-extralight text-center"
-                    style={{ fontSize: 48, color: '#8015e8', lineHeight: 'normal' }}
-                  >
-                    {step.number}
-                  </p>
-                </div>
-                <div>
-                  <p
-                    className="font-bold"
-                    style={{ fontSize: 14, color: '#2b074d', lineHeight: '22.4px' }}
-                  >
-                    {step.title}
-                  </p>
-                  <p style={{ fontSize: 14, color: '#2b074d', lineHeight: '19.6px', marginTop: 4 }}>
-                    {step.description}
-                  </p>
-                  {step.bullets && step.bullets.length > 0 && (
-                    <ul
-                      className="list-disc"
-                      style={{
-                        paddingLeft: 18,
-                        paddingTop: 20,
-                        fontSize: 14,
-                        color: '#2b074d',
-                        lineHeight: '19.6px',
-                      }}
-                    >
-                      {step.bullets.map((b, bi) => (
-                        <li key={bi}>{b}</li>
-                      ))}
-                    </ul>
-                  )}
-                  {step.extraText && (
-                    <p
-                      style={{
-                        fontSize: 14,
-                        color: '#2b074d',
-                        lineHeight: '19.6px',
-                        marginTop: 20,
-                      }}
-                    >
-                      {step.extraText}
-                    </p>
-                  )}
-                </div>
+                )}
               </div>
             ))}
           </div>

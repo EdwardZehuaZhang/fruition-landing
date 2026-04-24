@@ -1,3 +1,5 @@
+import Script from "next/script"
+
 interface CalendlySectionProps {
   heading?: string
   subheading?: string
@@ -9,6 +11,10 @@ export default function CalendlySection({
   subheading,
   calendlyUrl = "https://calendly.com/global-calendar-fruitionservices",
 }: CalendlySectionProps) {
+  const embedUrl = calendlyUrl.includes("?")
+    ? `${calendlyUrl}&hide_gdpr_banner=1&embed_type=Inline`
+    : `${calendlyUrl}?hide_gdpr_banner=1&embed_type=Inline`
+
   return (
     <section className="bg-[#f7f7f7]" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1200 }}>
@@ -20,9 +26,12 @@ export default function CalendlySection({
             {subheading}
           </p>
         )}
-        <div className="w-full rounded-card overflow-hidden" style={{ marginTop: 40, height: 700 }}>
-          <iframe src={calendlyUrl} width="100%" height="100%" frameBorder="0" title="Schedule a consultation" />
-        </div>
+        <div
+          className="calendly-inline-widget w-full rounded-card overflow-hidden"
+          data-url={embedUrl}
+          style={{ marginTop: 40, minWidth: 320, height: 1400 }}
+        />
+        <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="lazyOnload" />
       </div>
     </section>
   )

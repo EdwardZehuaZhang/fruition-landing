@@ -7,6 +7,7 @@ import { urlFor } from "@/sanity/image"
 import StatsBlockView from "@/features/page-builder/blocks/StatsBlockView"
 import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
 import CalendlySection from "@/components/sections/CalendlySection"
+import PaperPlaneIcon from "@/components/common/icons/PaperPlaneIcon"
 import type { SiteSettings } from "@/features/page-builder/types"
 
 /* ------------------------------------------------------------------ */
@@ -494,9 +495,20 @@ export default function MondayTrainingContent({
       {/* ============================================================ */}
       {/* SECTION 3 -- Training Intro + Tabbed Content                 */}
       {/* ============================================================ */}
-      <section style={{ backgroundColor: "#f0ecfe" }}>
+      <section className="relative overflow-hidden" style={{ backgroundColor: "#f0ecfe" }}>
+        {/* Decorative purple circle bg */}
         <div
-          className="mx-auto flex flex-col items-center"
+          aria-hidden
+          className="pointer-events-none absolute -bottom-[150px] -left-[150px] w-[500px] h-[500px] opacity-50"
+          style={{
+            backgroundImage: "url(/images/bg-purple-circle.avif)",
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        />
+        <div
+          className="relative mx-auto flex flex-col items-center"
           style={{ paddingTop: 80, paddingBottom: 80 }}
         >
           {/* Intro heading (above tabs) */}
@@ -627,39 +639,28 @@ export default function MondayTrainingContent({
       {/*              first service (Customization) together            */}
       {/* ============================================================ */}
       <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto" style={{ maxWidth: 1200 }}>
-          {/* Empower row (left text, right image) */}
-          <div className="flex items-start" style={{ gap: 60 }}>
-            <div style={{ flex: 1 }}>
-              <p style={{ fontSize: 14, fontWeight: 600, color: '#8015e8', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-                {empowerEyebrow}
-              </p>
-              <h2 className="text-section-h2 text-black" style={{ marginTop: 12 }}>
-                {empowerHeading}
+        <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1200 }}>
+          {/* Empower row (left text, right image) — matches homepage RichTextBlockView template */}
+          <div className="flex flex-col md:flex-row items-center gap-[60px] md:items-center md:justify-center">
+            <div className="w-full max-w-[490px] flex flex-col gap-[23px] items-start">
+              <h2 className="text-[30px] font-medium text-[#8015e8] leading-[42px]">
+                {empowerHeading || empowerEyebrow}
               </h2>
-              <p style={{ fontSize: 16, lineHeight: '24px', color: 'black', marginTop: 20, whiteSpace: 'pre-line' }}>
+              <p style={{ fontSize: 16, lineHeight: '24px', color: 'black', whiteSpace: 'pre-line' }}>
                 {empowerBody}
               </p>
               {data?.empowerCtaLabel && data?.empowerCtaUrl && (
                 <Link
                   href={data.empowerCtaUrl}
-                  className="inline-flex items-center justify-center font-bold text-white"
-                  style={{
-                    height: 53,
-                    paddingLeft: 32,
-                    paddingRight: 32,
-                    borderRadius: 100,
-                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                    fontSize: 16,
-                    marginTop: 32,
-                  }}
+                  className="group flex items-center justify-center gap-2 h-[53px] w-[326px] max-w-full rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white text-[16px] font-bold tracking-[0.32px] transition-colors"
                 >
+                  <PaperPlaneIcon />
                   {data.empowerCtaLabel}
                 </Link>
               )}
             </div>
             {empowerImageSrc && (
-              <div style={{ flex: 1 }}>
+              <div className="w-full max-w-[490px]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={empowerImageSrc}

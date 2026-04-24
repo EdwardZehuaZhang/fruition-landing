@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/image'
+import PaperPlaneIcon from '@/components/common/icons/PaperPlaneIcon'
 import type { SiteSettings } from '../types'
 
 interface Stat {
@@ -140,8 +141,9 @@ export default function StatsBlockView({
         {ctaLabel && ctaUrl && (
           <Link
             href={ctaUrl}
-            className="inline-flex items-center justify-center px-10 py-4 rounded-full bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-lg sm:text-xl font-bold tracking-wide hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-purple-500/20 mt-2"
+            className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white text-lg sm:text-xl font-bold tracking-wide hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-purple-500/20 mt-2"
           >
+            <PaperPlaneIcon size={20} />
             {ctaLabel}
           </Link>
         )}

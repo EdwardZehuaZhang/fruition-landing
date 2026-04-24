@@ -69,7 +69,8 @@ export default function MondayCrmConsultingContent({
     "https://calendly.com/global-calendar-fruitionservices"
 
   const heroImageSrc = safeImageUrl(page.heroImage)
-  const heroVideoEmbedSrc = youtubeEmbedUrl(page.heroVideoUrl)
+  const FALLBACK_VIDEO_EMBED = "https://www.youtube.com/embed/7vtrtlfC1Zg"
+  const heroVideoEmbedSrc = youtubeEmbedUrl(page.heroVideoUrl) || FALLBACK_VIDEO_EMBED
   const bottomVideoEmbedSrc = youtubeEmbedUrl(page.bottomVideoUrl)
 
   const comparisonTabs = page.comparisonTabs ?? []
@@ -106,13 +107,8 @@ export default function MondayCrmConsultingContent({
       {/* 1. Hero */}
       <section className="bg-white">
         <div
-          className="mx-auto flex flex-col items-center"
-          style={{
-            paddingLeft: 273,
-            paddingRight: 273,
-            paddingTop: 80,
-            paddingBottom: 80,
-          }}
+          className="mx-auto flex flex-col items-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-[120px] 2xl:px-[273px] max-w-[1588px] w-full"
+          style={{ paddingTop: 80, paddingBottom: 80 }}
         >
           {/* Three certificate badges */}
           <div className="flex items-center" style={{ gap: 22 }}>
@@ -171,15 +167,14 @@ export default function MondayCrmConsultingContent({
 
           {/* CTA buttons */}
           <div
-            className="flex items-center justify-center"
-            style={{ gap: 20, marginTop: 40, width: 680 }}
+            className="flex flex-col sm:flex-row items-center justify-center w-full max-w-[680px]"
+            style={{ gap: 20, marginTop: 40 }}
           >
             {page.primaryCtaLabel && (
               <Link
                 href={page.primaryCtaUrl || calendlyUrl}
-                className="flex items-center justify-center font-bold"
+                className="flex items-center justify-center font-bold w-full sm:flex-1 sm:max-w-[330px]"
                 style={{
-                  width: 330,
                   height: 53,
                   borderRadius: 100,
                   ...(page.secondaryCtaLabel
@@ -202,9 +197,8 @@ export default function MondayCrmConsultingContent({
             {page.secondaryCtaLabel && (
               <Link
                 href={page.secondaryCtaUrl || calendlyUrl}
-                className="flex items-center justify-center font-bold text-white"
+                className="flex items-center justify-center font-bold text-white w-full sm:flex-1 sm:max-w-[330px]"
                 style={{
-                  width: 330,
                   height: 53,
                   borderRadius: 100,
                   background: "linear-gradient(to right, #8015e8, #ba83f0)",
@@ -218,13 +212,13 @@ export default function MondayCrmConsultingContent({
 
           {/* Hero image - full height, no cropping */}
           {heroImageSrc && (
-            <div style={{ marginTop: 40 }}>
+            <div className="w-full max-w-[1042px]" style={{ marginTop: 40 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroImageSrc}
                 alt="Hero"
-                className="rounded-card"
-                style={{ width: 1042, height: "auto" }}
+                className="rounded-card w-full"
+                style={{ height: "auto" }}
               />
             </div>
           )}

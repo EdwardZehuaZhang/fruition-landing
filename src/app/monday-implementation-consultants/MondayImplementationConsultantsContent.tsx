@@ -436,15 +436,14 @@ export default function MondayImplementationConsultantsContent({
           {/* Dual CTA */}
           {(heroPrimaryCtaUrl || heroSecondaryCtaUrl) && (
             <div
-              className="flex items-center justify-center flex-wrap"
-              style={{ gap: 20, marginTop: 40, maxWidth: 680 }}
+              className="flex flex-col sm:flex-row items-center justify-center flex-wrap w-full max-w-[680px]"
+              style={{ gap: 20, marginTop: 40 }}
             >
               {heroPrimaryCtaUrl && (
                 <Link
                   href={heroPrimaryCtaUrl}
-                  className="flex items-center justify-center font-bold"
+                  className="flex items-center justify-center font-bold w-full sm:flex-1 sm:max-w-[330px]"
                   style={{
-                    width: 330,
                     height: 53,
                     borderRadius: 100,
                     border: "1px solid #8015e8",
@@ -459,9 +458,8 @@ export default function MondayImplementationConsultantsContent({
               {heroSecondaryCtaUrl && (
                 <Link
                   href={heroSecondaryCtaUrl}
-                  className="flex items-center justify-center font-bold text-white"
+                  className="flex items-center justify-center font-bold text-white w-full sm:flex-1 sm:max-w-[330px]"
                   style={{
-                    width: 330,
                     height: 53,
                     borderRadius: 100,
                     background: "linear-gradient(to right, #8015e8, #ba83f0)",
@@ -476,15 +474,15 @@ export default function MondayImplementationConsultantsContent({
 
           {/* Hero dashboard image */}
           {heroDashboardImageSrc && (
-            <div style={{ marginTop: 40 }}>
+            <div className="w-full max-w-[1042px]" style={{ marginTop: 40 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroDashboardImageSrc}
                 alt="monday.com dashboards"
                 width={1042}
                 height={312}
-                className="rounded-card object-cover"
-                style={{ width: 1042, height: 312 }}
+                className="rounded-card object-cover w-full"
+                style={{ height: "auto", aspectRatio: "1042 / 312" }}
               />
             </div>
           )}

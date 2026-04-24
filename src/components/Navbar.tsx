@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { urlFor } from '@/sanity/image'
+import PaperPlaneIcon from '@/components/common/icons/PaperPlaneIcon'
 
 // Calendly fallback only used when siteSettings is not yet loaded
 const FALLBACK_CALENDLY_URL = 'https://calendly.com/global-calendar-fruitionservices'
@@ -72,8 +73,8 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
 
   return (
     <nav className="bg-white sticky top-0 z-50 shadow-sm" onMouseLeave={() => setOpenMenu(null)}>
-      <div className="max-w-[1348px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-[85px]">
+      <div className="mx-auto max-w-[1348px] px-4 xl:px-0 w-full">
+        <div className="flex justify-between items-center gap-4 h-[85px]">
           {/* Logo */}
           <Link href="/" className="shrink-0">
             {logoUrl ? (
@@ -92,7 +93,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden lg:flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-3 xl:gap-6">
             {navItems.map((item) => {
               const active = isNavItemActive(item)
               return (
@@ -101,7 +102,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                   onMouseEnter={() => setOpenMenu(item.label || null)}
                 >
                   <button
-                    className={`font-medium text-sm py-1.5 px-3 transition-colors border ${
+                    className={`font-medium text-sm py-1.5 px-3 transition-colors border whitespace-nowrap ${
                       openMenu === item.label
                         ? 'text-[#242323] border-[#242323] rounded-[4px]'
                         : active
@@ -116,8 +117,8 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
             })}
 
             {/* Partner badges + phone icon + CTA */}
-            <div className="flex items-center gap-[12px] border-l border-gray-200 pl-4" onMouseEnter={() => setOpenMenu(null)}>
-              <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 xl:gap-[12px] border-l border-gray-200 pl-3 xl:pl-4" onMouseEnter={() => setOpenMenu(null)}>
+              <div className="hidden xl:flex items-center gap-3">
                 {partnerBadges.map((badge, i) => {
                   const h = badge.height ?? 32
                   const cmsSrc = badge.image
@@ -157,8 +158,9 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                 href={calendlyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity shadow-md"
+                className="inline-flex items-center gap-2 whitespace-nowrap bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-colors shadow-md"
               >
+                <PaperPlaneIcon size={16} />
                 Book a Time
               </a>
             </div>
@@ -238,8 +240,9 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
               href={calendlyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="block mt-4 mx-2 bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-center px-6 py-2.5 rounded-full text-sm font-semibold"
+              className="mt-4 mx-2 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white text-center px-6 py-2.5 rounded-full text-sm font-semibold transition-colors"
             >
+              <PaperPlaneIcon size={16} />
               Book a Time
             </a>
           </div>
@@ -254,7 +257,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
         const hasMultipleSections = sectionCount > 1
         return (
           <div className="hidden lg:block absolute left-0 right-0 top-full border-t border-gray-200 bg-white shadow-lg z-50">
-            <div className="max-w-[1348px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="max-w-[1348px] mx-auto px-4 xl:px-0 py-8">
               <div className="flex gap-16">
                 {activeItem.sections.map((section, sIdx) => {
                   const itemCount = section.items?.length ?? 0

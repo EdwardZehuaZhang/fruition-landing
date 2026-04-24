@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { PortableText, type PortableTextBlock } from '@portabletext/react'
 import { portableTextComponents } from '@/components/PortableTextComponents'
+import PaperPlaneIcon from '@/components/common/icons/PaperPlaneIcon'
 import { urlFor } from '@/sanity/image'
 
 interface RichTextBlockProps {
@@ -142,8 +143,9 @@ export default function RichTextBlockView({
       {ctaLabel && ctaUrl && (
         <Link
           href={ctaUrl}
-          className="flex items-center justify-center h-[53px] w-[326px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
+          className="group flex items-center justify-center gap-2 h-[53px] w-[326px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white text-[16px] font-bold tracking-[0.32px] transition-colors"
         >
+          <PaperPlaneIcon />
           {ctaLabel}
         </Link>
       )}
@@ -186,8 +188,8 @@ export default function RichTextBlockView({
   )
 
   return (
-    <section className="bg-white py-[80px] px-4 lg:px-[273px]">
-      <div className="mx-auto flex flex-col items-center gap-[60px] md:flex-row md:items-center md:justify-center">
+    <section className="bg-white py-[80px] px-4 sm:px-8 md:px-16 lg:px-24 xl:px-[120px] 2xl:px-[273px]">
+      <div className="mx-auto flex flex-col items-center gap-[60px] md:flex-row md:items-center md:justify-center max-w-[1440px]">
         {imageOnLeft && imageContent}
         {textContent}
         {!imageOnLeft && imageContent}
