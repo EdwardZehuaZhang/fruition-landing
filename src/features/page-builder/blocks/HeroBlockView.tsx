@@ -169,7 +169,7 @@ export default function HeroBlockView({
         {/* Hero media */}
         {heroVideoSrc ? (
           <video
-            className="hidden md:block flex-1 min-w-0 w-full h-[550px] object-cover"
+            className="hidden md:block flex-1 min-w-0 w-full h-[550px] object-contain"
             autoPlay
             muted
             loop

@@ -405,7 +405,7 @@ export default function ImplementationPackagesContent({
                 alt="monday.com dashboards — project planning and team OKRs"
                 width={1042}
                 height={312}
-                className="rounded-card object-cover"
+                className="rounded-card object-contain bg-white"
                 style={{ width: 1042, height: 312 }}
               />
             </div>

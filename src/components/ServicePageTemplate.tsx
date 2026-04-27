@@ -413,7 +413,7 @@ export default function ServicePageTemplate({
               alt={heroHeading}
               width={1042}
               height={312}
-              className="rounded-card object-cover"
+              className="rounded-card object-contain bg-white"
               style={{ width: 1042, height: 312, marginTop: 40 }}
               unoptimized={heroImageUrl.startsWith("http")}
             />

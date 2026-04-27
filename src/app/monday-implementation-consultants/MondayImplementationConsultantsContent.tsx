@@ -481,7 +481,7 @@ export default function MondayImplementationConsultantsContent({
                 alt="monday.com dashboards"
                 width={1042}
                 height={312}
-                className="rounded-card object-cover w-full"
+                className="rounded-card object-contain bg-white w-full"
                 style={{ height: "auto", aspectRatio: "1042 / 312" }}
               />
             </div>
@@ -840,7 +840,7 @@ export default function MondayImplementationConsultantsContent({
                     className="flex-1 w-full"
                     style={{
                       minHeight: 320,
-                      backgroundColor: "#f0ecfe",
+                      backgroundColor: "#ffffff",
                     }}
                   >
                     {imgSrc && (
@@ -848,7 +848,7 @@ export default function MondayImplementationConsultantsContent({
                       <img
                         src={imgSrc}
                         alt={card.heading ?? ""}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                         style={{ minHeight: 320 }}
                       />
                     )}

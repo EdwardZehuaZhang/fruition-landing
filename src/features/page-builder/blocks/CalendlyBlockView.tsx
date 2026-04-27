@@ -40,7 +40,7 @@ export default function CalendlyBlockView({
           <div
             className="calendly-inline-widget w-full"
             data-url={calendlyUrl}
-            style={{ minWidth: '320px', height: '1000px' }}
+            style={{ minWidth: '320px', height: '880px' }}
           />
         )}
       </div>

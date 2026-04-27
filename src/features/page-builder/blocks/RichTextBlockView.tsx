@@ -166,7 +166,7 @@ export default function RichTextBlockView({
       ) : fallbackVideoSrc ? (
         <video
           src={fallbackVideoSrc}
-          className="w-full h-[413px] object-cover bg-black"
+          className="w-full h-[413px] object-contain bg-white"
           autoPlay
           muted
           loop
@@ -177,7 +177,7 @@ export default function RichTextBlockView({
         <img
           src={fallbackSrc}
           alt={section?.eyebrow ?? ''}
-          className="w-full h-[413px] object-cover"
+          className="w-full h-[413px] object-contain"
           width={490}
           height={413}
         />

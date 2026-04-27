@@ -440,7 +440,7 @@ function SolutionCardsSection() {
                   <img
                     src={card.image}
                     alt={card.heading}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               </div>

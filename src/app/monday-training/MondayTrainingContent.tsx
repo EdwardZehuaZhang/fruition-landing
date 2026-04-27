@@ -426,7 +426,7 @@ export default function MondayTrainingContent({
                 alt="monday.com training dashboards"
                 width={1042}
                 height={312}
-                className="rounded-card object-cover"
+                className="rounded-card object-contain bg-white"
                 style={{ width: 1042, height: 312 }}
               />
             </div>
@@ -712,7 +712,7 @@ export default function MondayTrainingContent({
                 {serviceImageSrc && (
                   <div className="rounded-card overflow-hidden" style={{ flex: 1, aspectRatio: "16 / 10" }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={serviceImageSrc} alt={service.title ?? ""} className="w-full h-full object-cover" />
+                    <img src={serviceImageSrc} alt={service.title ?? ""} className="w-full h-full object-contain" />
                   </div>
                 )}
               </div>
@@ -906,7 +906,7 @@ export default function MondayTrainingContent({
                     {serviceImageSrc && (
                       <div className="rounded-card overflow-hidden" style={{ flex: 1, aspectRatio: "16 / 10" }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={serviceImageSrc} alt={service.title ?? ""} className="w-full h-full object-cover" />
+                        <img src={serviceImageSrc} alt={service.title ?? ""} className="w-full h-full object-contain" />
                       </div>
                     )}
                   </div>

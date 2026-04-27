@@ -556,7 +556,7 @@ export default function MakePartnersContent({
                   </div>
                   <div
                     className="rounded-card overflow-hidden w-full"
-                    style={{ flex: 1, aspectRatio: "16 / 10", background: "#f5f3f7" }}
+                    style={{ flex: 1, aspectRatio: "16 / 10", background: "#ffffff" }}
                   >
                     {card.mediaType === "video" ? (
                       <video
@@ -565,14 +565,14 @@ export default function MakePartnersContent({
                         loop
                         muted
                         playsInline
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                       />
                     ) : (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={card.mediaSrc}
                         alt={card.heading}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                       />
                     )}
                   </div>

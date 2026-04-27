@@ -182,7 +182,7 @@ export default function HeroBanner({
               loop
               playsInline
               preload="metadata"
-              className="rounded-card object-cover w-full"
+              className="rounded-card object-contain bg-white w-full"
               style={{ height: "auto", aspectRatio: "1042 / 312" }}
             >
               <source src={heroVideoSrc} type="video/mp4" />
@@ -194,7 +194,7 @@ export default function HeroBanner({
             <img
               src={heroImageSrc}
               alt="Hero"
-              className="rounded-card w-full"
+              className="rounded-card bg-white w-full"
               style={
                 heroImageContain
                   ? {
@@ -202,7 +202,7 @@ export default function HeroBanner({
                       height: "auto",
                       objectFit: "contain",
                     }
-                  : { height: "auto", aspectRatio: "1042 / 312", objectFit: "cover" }
+                  : { height: "auto", aspectRatio: "1042 / 312", objectFit: "contain" }
               }
             />
           </div>

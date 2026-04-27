@@ -168,14 +168,14 @@ export default function IndustryCaseStudy({
           {/* Right: image */}
           {hasImage && (
             <div
-              className="rounded-card overflow-hidden"
+              className="rounded-card overflow-hidden bg-white"
               style={{ flex: 1, minHeight: 340 }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={imageSrc}
                 alt={imageAlt}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </div>
           )}
