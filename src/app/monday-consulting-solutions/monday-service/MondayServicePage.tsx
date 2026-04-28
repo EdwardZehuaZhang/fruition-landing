@@ -10,6 +10,7 @@ import {
 } from "@/components/sections"
 import type { SiteSettingsData, PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
+import CtaButton from "@/components/CtaButton"
 
 interface Props {
   page: any
@@ -250,34 +251,18 @@ export default function MondayServicePage({
           </p>
 
           <div className="flex items-center justify-center" style={{ gap: 20, marginTop: 40, width: 680 }}>
-            <Link
+            <CtaButton
               href={calendlyUrl}
-              className="flex items-center justify-center font-bold"
-              style={{
-                width: 330,
-                height: 53,
-                borderRadius: 100,
-                border: "1px solid #8015e8",
-                backgroundColor: "white",
-                color: "#8015e8",
-                fontSize: 16,
-              }}
-            >
-              {"\uD83D\uDE80 Book a Consultation"}
-            </Link>
-            <Link
+              label="Book a Consultation"
+              variant="outline"
+              style={{ width: 330 }}
+            />
+            <CtaButton
               href={calendlyUrl}
-              className="flex items-center justify-center font-bold text-white"
-              style={{
-                width: 330,
-                height: 53,
-                borderRadius: 100,
-                background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                fontSize: 16,
-              }}
-            >
-              {"\u25B6\uFE0F Get Started with monday.com"}
-            </Link>
+              label="Get Started with monday.com"
+              variant="primary"
+              style={{ width: 330 }}
+            />
           </div>
 
           <div style={{ marginTop: 40 }}>

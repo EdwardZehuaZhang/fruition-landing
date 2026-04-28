@@ -3,6 +3,7 @@ import { getSiteSettings, getPageBySlug } from "@/sanity/queries"
 import { LogoCloudMarquee, CalendlySection, DiscoverCtaSection } from "@/components/sections"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
+import CtaButton from "@/components/CtaButton"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("customer-testimonials")
@@ -152,34 +153,18 @@ export default async function CustomerTestimonialsPage() {
             className="flex items-center justify-center flex-wrap"
             style={{ gap: 20, marginTop: 40 }}
           >
-            <Link
+            <CtaButton
               href={primaryCtaUrl}
-              className="flex items-center justify-center font-bold text-white"
-              style={{
-                width: 260,
-                height: 53,
-                borderRadius: 100,
-                background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                fontSize: 16,
-              }}
-            >
-              {primaryCtaLabel}
-            </Link>
-            <Link
+              label={primaryCtaLabel}
+              variant="primary"
+              style={{ width: 260 }}
+            />
+            <CtaButton
               href={secondaryCtaUrl}
-              className="flex items-center justify-center font-bold"
-              style={{
-                width: 260,
-                height: 53,
-                borderRadius: 100,
-                border: "1px solid #8015e8",
-                backgroundColor: "white",
-                color: "#8015e8",
-                fontSize: 16,
-              }}
-            >
-              {secondaryCtaLabel}
-            </Link>
+              label={secondaryCtaLabel}
+              variant="outline"
+              style={{ width: 260 }}
+            />
           </div>
         </div>
       </section>

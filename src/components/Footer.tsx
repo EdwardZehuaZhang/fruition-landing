@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import CtaButton from '@/components/CtaButton'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/image'
 
@@ -109,14 +110,12 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
               <span className="font-bold text-lg text-white">Fruition Services</span>
             )}
           </Link>
-          <a
+          <CtaButton
             href={calendlyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white px-6 py-2 rounded-full text-[13px] font-semibold hover:opacity-90 transition-opacity whitespace-nowrap"
-          >
-            Book a Meeting
-          </a>
+            label="Book a Meeting"
+            variant="primary"
+            style={{ height: 40, fontSize: 13, padding: "0 22px" }}
+          />
         </div>
 
         {/* Contact info */}

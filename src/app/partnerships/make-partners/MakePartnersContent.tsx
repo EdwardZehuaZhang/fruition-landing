@@ -13,6 +13,7 @@ import {
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData, ComparisonTab } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
+import CtaButton from "@/components/CtaButton"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                               */
@@ -398,33 +399,18 @@ export default function MakePartnersContent({
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center" style={{ gap: 20, marginTop: 40 }}>
-            <Link
+            <CtaButton
               href={heroPrimaryCtaUrl}
-              className="flex items-center justify-center font-bold text-white"
-              style={{
-                width: 330,
-                height: 53,
-                borderRadius: 100,
-                background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                fontSize: 16,
-              }}
-            >
-              {heroPrimaryCtaLabel}
-            </Link>
-            <Link
+              label={heroPrimaryCtaLabel}
+              variant="outline"
+              style={{ width: 330 }}
+            />
+            <CtaButton
               href={heroSecondaryCtaUrl}
-              className="flex items-center justify-center font-bold"
-              style={{
-                width: 330,
-                height: 53,
-                borderRadius: 100,
-                border: "2px solid #8015e8",
-                color: "#8015e8",
-                fontSize: 16,
-              }}
-            >
-              {heroSecondaryCtaLabel}
-            </Link>
+              label={heroSecondaryCtaLabel}
+              variant="primary"
+              style={{ width: 330 }}
+            />
           </div>
 
           {/* Hero image */}

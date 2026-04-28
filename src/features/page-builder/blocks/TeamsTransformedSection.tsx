@@ -103,13 +103,13 @@ export default function TeamsTransformedSection() {
   const active = tabs[activeIndex]
 
   return (
-    <section className="bg-white py-[80px] px-4 relative overflow-hidden">
+    <section className="bg-white py-[80px] px-4 relative overflow-visible">
       {/* Decorative purple circle bg */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-[200px] -right-[200px] w-[600px] h-[600px] opacity-40"
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1400px] h-[1400px] max-w-none"
         style={{
-          backgroundImage: "url(/images/bg-purple-circle.avif)",
+          backgroundImage: "url(/images/purple-circle-background.avif)",
           backgroundSize: "contain",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
@@ -135,7 +135,7 @@ export default function TeamsTransformedSection() {
               <button
                 key={tab.label}
                 onClick={() => setActiveIndex(i)}
-                className={`relative rounded-[99px] px-[31px] py-[7px] text-[16px] transition-all ${
+                className={`relative inline-flex items-center justify-center rounded-[99px] px-[31px] py-[7px] text-[16px] leading-[1.2] transition-all ${
                   i === activeIndex
                     ? 'bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]'
                     : 'bg-white text-[#2b074d] border border-[#e8e6e6] hover:border-[#8015e8]'
@@ -161,7 +161,7 @@ export default function TeamsTransformedSection() {
               title: item.title,
               description: item.description,
             }))}
-            containerClassName="w-full rounded-card border border-[#e8e6e6] py-2 px-0"
+            containerClassName="w-full rounded-card border border-[#e8e6e6] bg-white py-2 px-0"
             stepRowClassName="ui-step-row"
           />
         </div>

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { PortableText, type PortableTextBlock } from '@portabletext/react'
 import { portableTextComponents } from '@/components/PortableTextComponents'
 import PaperPlaneIcon from '@/components/common/icons/PaperPlaneIcon'
+import LeftRightSection from '@/components/sections/LeftRightSection'
 import { urlFor } from '@/sanity/image'
 
 interface RichTextBlockProps {
@@ -117,8 +118,7 @@ export default function RichTextBlockView({
   const hideCorruptedBodyContent = isCorruptedWixDump(content)
 
   const textContent = (
-    <div className="flex flex-col gap-[23px] items-start w-full max-w-[490px]">
-      {/* Purple eyebrow heading */}
+    <>
       {section ? (
         <h2 className="text-[30px] font-medium text-[#8015e8] leading-[42px]">
           {section.eyebrow}
@@ -127,19 +127,16 @@ export default function RichTextBlockView({
         <h2 className="text-[30px] font-medium text-[#8015e8] leading-[42px]">{heading}</h2>
       )}
 
-      {/* Subheading with purple accent words */}
       {section ? section.subheadingJSX : subheading && (
         <p className="text-[20px] font-semibold text-black leading-[28px]">{subheading}</p>
       )}
 
-      {/* Body content from Sanity */}
       {content && !hideCorruptedBodyContent && (
         <div className="text-[16px] text-black leading-[22.4px]">
           <PortableText value={content} components={portableTextComponents} />
         </div>
       )}
 
-      {/* CTA button */}
       {ctaLabel && ctaUrl && (
         <Link
           href={ctaUrl}
@@ -149,51 +146,42 @@ export default function RichTextBlockView({
           {ctaLabel}
         </Link>
       )}
-    </div>
+    </>
   )
 
-  // Always show image column — Sanity image > Figma fallback > gray placeholder
-  const imageContent = (
-    <div className="w-full max-w-[490px]">
-      {hasImage ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={urlFor(image).width(540).url()}
-          alt={heading ?? ''}
-          className="w-full h-auto"
-          width={490}
-        />
-      ) : fallbackVideoSrc ? (
-        <video
-          src={fallbackVideoSrc}
-          className="w-full h-[413px] object-contain bg-white"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
-      ) : fallbackSrc ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={fallbackSrc}
-          alt={section?.eyebrow ?? ''}
-          className="w-full h-[413px] object-contain"
-          width={490}
-          height={413}
-        />
-      ) : (
-        <div className="w-full h-[413px] bg-[#d9d9d9]" />
-      )}
-    </div>
+  const imageContent = hasImage ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={urlFor(image).width(540).url()}
+      alt={heading ?? ''}
+      className="w-full h-auto"
+      width={490}
+    />
+  ) : fallbackVideoSrc ? (
+    <video
+      src={fallbackVideoSrc}
+      className="w-full h-[413px] object-contain bg-white"
+      autoPlay
+      muted
+      loop
+      playsInline
+    />
+  ) : fallbackSrc ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={fallbackSrc}
+      alt={section?.eyebrow ?? ''}
+      className="w-full h-[413px] object-contain"
+      width={490}
+      height={413}
+    />
+  ) : (
+    <div className="w-full h-[413px] bg-[#d9d9d9]" />
   )
 
   return (
-    <section className="bg-white py-[80px] px-4 sm:px-8 md:px-16 lg:px-24 xl:px-[120px] 2xl:px-[273px]">
-      <div className="mx-auto flex flex-col items-center gap-[60px] md:flex-row md:items-center md:justify-center max-w-[1440px]">
-        {imageOnLeft && imageContent}
-        {textContent}
-        {!imageOnLeft && imageContent}
-      </div>
-    </section>
+    <LeftRightSection imageOnLeft={imageOnLeft} image={imageContent}>
+      {textContent}
+    </LeftRightSection>
   )
 }

@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { urlFor } from '@/sanity/image'
+import CtaButton from '@/components/CtaButton'
 import type { SiteSettings } from '../types'
 
 interface HeroBlockProps {
@@ -148,20 +148,20 @@ export default function HeroBlockView({
           {/* Buttons */}
           <div className="flex gap-[20px] items-start w-full max-w-[680px]">
             {primaryCtaLabel && primaryCtaUrl && (
-              <Link
+              <CtaButton
                 href={primaryCtaUrl}
-                className="flex items-center justify-center h-[53px] w-[330px] rounded-[100px] border border-[#8015e8] bg-white text-[#8015e8] text-[16px] font-bold tracking-[0.32px] hover:bg-[#8015e8] hover:text-white transition"
-              >
-                {primaryCtaLabel}
-              </Link>
+                label={primaryCtaLabel}
+                variant="outline"
+                className="w-[330px]"
+              />
             )}
             {secondaryCtaLabel && secondaryCtaUrl && (
-              <Link
+              <CtaButton
                 href={secondaryCtaUrl}
-                className="flex items-center justify-center h-[53px] w-[330px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
-              >
-                {secondaryCtaLabel}
-              </Link>
+                label={secondaryCtaLabel}
+                variant="primary"
+                className="w-[330px]"
+              />
             )}
           </div>
         </div>

@@ -11,6 +11,8 @@ interface ComparisonTabsSectionProps {
   theme?: SectionTheme
   /** "tabs" (default) or "sideBySide" for a two-column before/after view */
   layout?: "tabs" | "sideBySide"
+  /** Render decorative purple circle bg behind section */
+  withPurpleCircle?: boolean
 }
 
 const DARK_BG = "#2b074d"
@@ -98,6 +100,7 @@ export default function ComparisonTabsSection({
   tabs = [],
   theme = "light",
   layout = "tabs",
+  withPurpleCircle = false,
 }: ComparisonTabsSectionProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   if (tabs.length === 0) return null
@@ -180,10 +183,22 @@ export default function ComparisonTabsSection({
 
   return (
     <section
-      className="py-[80px] px-4"
+      className="py-[80px] px-4 relative overflow-visible"
       style={{ backgroundColor: sectionBg }}
     >
-      <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[40px]">
+      {withPurpleCircle && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1400px] h-[1400px] max-w-none"
+          style={{
+            backgroundImage: "url(/images/purple-circle-background.avif)",
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        />
+      )}
+      <div className="relative mx-auto max-w-[959px] flex flex-col items-center gap-[40px]">
         {/* Heading + subheading */}
         <div className="flex flex-col gap-[12px] items-center text-center w-full">
           {heading && (
@@ -217,7 +232,7 @@ export default function ComparisonTabsSection({
                 <button
                   key={tab._key || tab.label || i}
                   onClick={() => setActiveIndex(i)}
-                  className={`relative rounded-[99px] px-[31px] py-[7px] text-[16px] transition-all cursor-pointer ${
+                  className={`relative inline-flex items-center justify-center rounded-[99px] px-[31px] py-[7px] text-[16px] leading-[1.2] transition-all cursor-pointer ${
                     isActive
                       ? "bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]"
                       : inactiveClass

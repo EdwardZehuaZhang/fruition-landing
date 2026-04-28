@@ -79,10 +79,10 @@ export default function FaqAccordion({
               type="button"
               aria-label="Scroll tabs left"
               onClick={() => scrollBy(-1)}
-              className="absolute left-0 top-0 h-full w-8 flex items-center justify-start bg-gradient-to-r from-white via-white to-transparent"
+              className="faq-tab-arrow absolute left-0 top-0 h-full w-10 flex items-center justify-start bg-gradient-to-r from-white via-white to-transparent text-[#8e5cbf] hover:text-[#2563eb] transition-colors cursor-pointer"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path d="M15 6l-6 6 6 6" stroke="#8e5cbf" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           )}
@@ -91,10 +91,10 @@ export default function FaqAccordion({
               type="button"
               aria-label="Scroll tabs right"
               onClick={() => scrollBy(1)}
-              className="absolute right-0 top-0 h-full w-8 flex items-center justify-end bg-gradient-to-l from-white via-white to-transparent"
+              className="faq-tab-arrow absolute right-0 top-0 h-full w-10 flex items-center justify-end bg-gradient-to-l from-white via-white to-transparent text-[#8e5cbf] hover:text-[#2563eb] transition-colors cursor-pointer"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path d="M9 6l6 6-6 6" stroke="#8e5cbf" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           )}
