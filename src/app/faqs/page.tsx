@@ -17,8 +17,7 @@ export default async function FaqsPage() {
     getSiteSettings(),
   ])
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = siteSettings?.calendlyLink || ""
 
   return (
     <div className="bg-white">
@@ -47,23 +46,29 @@ export default async function FaqsPage() {
         <FaqList items={faqs ?? []} />
       </section>
 
-      <section className="bg-[color:var(--dark-bg)] text-white">
-        <div className="mx-auto flex max-w-4xl flex-col items-center px-4 py-16 text-center md:py-20">
-          <h2 className="text-section-h2 text-white">Still have questions?</h2>
-          <p className="mt-4 max-w-xl text-body-lead text-white/80">
-            Our team is happy to walk you through monday.com and how Fruition can help your business grow.
-          </p>
-          {page.primaryCtaLabel && (
-            <Link
-              href={page.primaryCtaUrl || calendlyUrl}
-              className="ui-cta-btn ui-cta-btn-secondary mt-8"
-              style={{ minWidth: 260 }}
-            >
-              {page.primaryCtaLabel}
-            </Link>
-          )}
-        </div>
-      </section>
+      {(page.calendlyHeading || page.calendlySubheading || page.primaryCtaLabel) && (
+        <section className="bg-[color:var(--dark-bg)] text-white">
+          <div className="mx-auto flex max-w-4xl flex-col items-center px-4 py-16 text-center md:py-20">
+            {page.calendlyHeading && (
+              <h2 className="text-section-h2 text-white">{page.calendlyHeading}</h2>
+            )}
+            {page.calendlySubheading && (
+              <p className="mt-4 max-w-xl text-body-lead text-white/80">
+                {page.calendlySubheading}
+              </p>
+            )}
+            {page.primaryCtaLabel && (
+              <Link
+                href={page.primaryCtaUrl || calendlyUrl}
+                className="ui-cta-btn ui-cta-btn-secondary mt-8"
+                style={{ minWidth: 260 }}
+              >
+                {page.primaryCtaLabel}
+              </Link>
+            )}
+          </div>
+        </section>
+      )}
     </div>
   )
 }

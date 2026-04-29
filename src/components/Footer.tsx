@@ -1,9 +1,7 @@
 import Link from 'next/link'
+import CtaButton from '@/components/CtaButton'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/image'
-
-// Calendly fallback only used when siteSettings is not yet loaded
-const FALLBACK_CALENDLY_URL = 'https://calendly.com/global-calendar-fruitionservices'
 
 interface FooterLink {
   label?: string
@@ -46,6 +44,14 @@ interface SiteSettingsProp {
   footerServicesLinks?: FooterLink[]
   footerDepartmentLinks?: FooterLink[]
   footerIndustryLinks?: FooterLink[]
+  footerCtaLabel?: string
+  footerPartnerExpertiseHeading?: string
+  footerServicesHeading?: string
+  footerDepartmentSolutionsHeading?: string
+  footerIndustrySolutionsHeading?: string
+  footerOurLocationsHeading?: string
+  footerLegalLinks?: FooterLink[]
+  footerCopyrightText?: string
 }
 
 
@@ -71,16 +77,20 @@ function PhoneIcon() {
 }
 
 export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsProp | null }) {
-  const calendlyUrl = siteSettings?.calendlyLink || FALLBACK_CALENDLY_URL
+  const calendlyUrl = siteSettings?.calendlyLink || ''
   const offices = siteSettings?.offices ?? []
   const socials = siteSettings?.socialLinks ?? []
   const partnerLogos = siteSettings?.footerPartnerLogos ?? []
   const servicesLinks = siteSettings?.footerServicesLinks ?? []
   const departmentLinks = siteSettings?.footerDepartmentLinks ?? []
   const industryLinks = siteSettings?.footerIndustryLinks ?? []
+  const legalLinks = siteSettings?.footerLegalLinks ?? []
+  const ctaLabel = siteSettings?.footerCtaLabel || ''
 
   const contactEmail = siteSettings?.contactEmail
-  const logoSrc = "/images/footer-logo-white.avif"
+  const logoSrc = siteSettings?.logoWhite
+    ? urlFor(siteSettings.logoWhite).height(56).fit('max').url()
+    : null
 
   return (
     <footer className="flex flex-col lg:flex-row w-full">
@@ -96,27 +106,25 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
         {/* Logo + CTA row */}
         <div className="flex items-center gap-[15px] flex-wrap">
           <Link href="/">
-            {logoSrc ? (
+            {logoSrc && (
               <Image
                 src={logoSrc}
-                alt="Fruition Services"
+                alt="Site logo"
                 width={320}
                 height={28}
                 className="h-[28px] w-auto"
                 unoptimized
               />
-            ) : (
-              <span className="font-bold text-lg text-white">Fruition Services</span>
             )}
           </Link>
-          <a
-            href={calendlyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white px-6 py-2 rounded-full text-[13px] font-semibold hover:opacity-90 transition-opacity whitespace-nowrap"
-          >
-            Book a Meeting
-          </a>
+          {ctaLabel && calendlyUrl && (
+            <CtaButton
+              href={calendlyUrl}
+              label={ctaLabel}
+              variant="primary"
+              style={{ height: 40, fontSize: 13, padding: "0 22px" }}
+            />
+          )}
         </div>
 
         {/* Contact info */}
@@ -151,7 +159,9 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
 
         {/* Partner Expertise */}
         <div>
-          <h4 className="text-white font-semibold text-[16px] mb-3">Partner Expertise</h4>
+          {siteSettings?.footerPartnerExpertiseHeading && (
+            <h4 className="text-white font-semibold text-[16px] mb-3">{siteSettings.footerPartnerExpertiseHeading}</h4>
+          )}
           <div className="grid grid-cols-2 gap-x-[40px] gap-y-[7px]">
             {partnerLogos.map((p, i) => {
               const w = p.width ?? 110
@@ -194,20 +204,27 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
           })}
         </div>
 
-        {/* Privacy links */}
-        <div className="flex items-center gap-[14px]">
-          <Link href="/data-privacy" className="text-white text-[12px] hover:opacity-80 transition-opacity">
-            Data Privacy
-          </Link>
-          <Link href="/terms-and-conditions" className="text-white text-[12px] hover:opacity-80 transition-opacity">
-            Terms and Conditions
-          </Link>
-        </div>
+        {/* Legal links */}
+        {legalLinks.length > 0 && (
+          <div className="flex items-center gap-[14px]">
+            {legalLinks.map((link, i) => (
+              <Link
+                key={`${link.href}-${i}`}
+                href={link.href || '#'}
+                className="text-white text-[12px] hover:opacity-80 transition-opacity"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        )}
 
         {/* Copyright */}
-        <p className="text-white text-[11px] tracking-[0.55px]">
-          &copy; 2025 Fruition Services. All rights reserved.
-        </p>
+        {siteSettings?.footerCopyrightText && (
+          <p className="text-white text-[11px] tracking-[0.55px]">
+            {siteSettings.footerCopyrightText}
+          </p>
+        )}
       </div>
 
       {/* ============================================================ */}
@@ -218,7 +235,9 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-8">
           {/* Services */}
           <div>
-            <h4 className="text-white font-semibold text-[16px] mb-4">Services</h4>
+            {siteSettings?.footerServicesHeading && (
+              <h4 className="text-white font-semibold text-[16px] mb-4">{siteSettings.footerServicesHeading}</h4>
+            )}
             <div className="flex flex-col">
               {servicesLinks.map((link, i) => (
                 <Link
@@ -234,7 +253,9 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
 
           {/* Department Solutions */}
           <div>
-            <h4 className="text-white font-semibold text-[16px] mb-4">Department Solutions</h4>
+            {siteSettings?.footerDepartmentSolutionsHeading && (
+              <h4 className="text-white font-semibold text-[16px] mb-4">{siteSettings.footerDepartmentSolutionsHeading}</h4>
+            )}
             <div className="flex flex-col">
               {departmentLinks.map((link, i) => (
                 <Link
@@ -250,7 +271,9 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
 
           {/* Industry Solutions */}
           <div>
-            <h4 className="text-white font-semibold text-[16px] mb-4">Industry Solutions</h4>
+            {siteSettings?.footerIndustrySolutionsHeading && (
+              <h4 className="text-white font-semibold text-[16px] mb-4">{siteSettings.footerIndustrySolutionsHeading}</h4>
+            )}
             <div className="flex flex-col">
               {industryLinks.map((link, i) => (
                 <Link
@@ -267,7 +290,9 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
 
         {/* Our Locations */}
         <div className="mt-12">
-          <h4 className="text-white font-semibold text-[16px] mb-5">Our Locations</h4>
+          {siteSettings?.footerOurLocationsHeading && (
+            <h4 className="text-white font-semibold text-[16px] mb-5">{siteSettings.footerOurLocationsHeading}</h4>
+          )}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {offices.map((loc, i) => (
               <div key={`${loc.phoneTel}-${i}`}>

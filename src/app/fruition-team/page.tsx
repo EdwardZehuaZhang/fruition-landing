@@ -17,8 +17,7 @@ export default async function TeamPage() {
     getSiteSettings(),
   ])
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = siteSettings?.calendlyLink || ""
   const partnerBadges: PartnerBadge[] = (siteSettings?.navbarPartnerBadges as PartnerBadge[]) || []
   const certificationBadge = siteSettings?.badgeCertifications as SanityImageRef
 

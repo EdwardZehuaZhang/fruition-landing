@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { urlFor } from '@/sanity/image'
+import CtaButton from '@/components/CtaButton'
 import type { SiteSettings } from '../types'
 
 interface CtaBlockProps {
@@ -27,10 +27,10 @@ export default function CtaBlockView({
 }: CtaBlockProps) {
   // Use gradient as default style to match Figma design
   const isGradient = variant !== 'default'
-  // Prefer Sanity badge: per-block badgeImage, then siteSettings.badgeCertifications, then hardcoded fallback
+  // Prefer per-block badgeImage, then siteSettings.badgeCertifications
   const certificationsBadgeSrc = siteSettings?.badgeCertifications?.asset
     ? urlFor(siteSettings.badgeCertifications).height(146).url()
-    : '/images/badge-certifications.png'
+    : null
 
   return (
     <section
@@ -50,10 +50,10 @@ export default function CtaBlockView({
             className="h-[73px] w-auto"
           />
         </div>
-      ) : isGradient ? (
+      ) : isGradient && certificationsBadgeSrc ? (
         <div className="mb-6">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={certificationsBadgeSrc} alt="monday.com Certifications" width={325} height={73} className="h-[73px] w-auto" />
+          <img src={certificationsBadgeSrc} alt="Certifications" width={325} height={73} className="h-[73px] w-auto" />
         </div>
       ) : null}
 
@@ -67,20 +67,20 @@ export default function CtaBlockView({
       {/* Buttons */}
       <div className="flex flex-wrap justify-center gap-[24px] items-start">
         {ctaLabel && ctaUrl && (
-          <Link
+          <CtaButton
             href={ctaUrl}
-            className="flex items-center justify-center h-[53px] w-[330px] rounded-[100px] bg-white text-[#8015e8] text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
-          >
-            {ctaLabel}
-          </Link>
+            label={ctaLabel}
+            variant="onDarkPrimary"
+            className="w-[330px]"
+          />
         )}
         {secondaryCtaLabel && secondaryCtaUrl && (
-          <Link
+          <CtaButton
             href={secondaryCtaUrl}
-            className="flex items-center justify-center h-[53px] w-[330px] rounded-[100px] border border-white text-white text-[16px] font-bold tracking-[0.32px] hover:bg-white/10 transition"
-          >
-            {secondaryCtaLabel}
-          </Link>
+            label={secondaryCtaLabel}
+            variant="onDarkOutline"
+            className="w-[330px]"
+          />
         )}
       </div>
     </section>

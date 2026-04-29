@@ -6,6 +6,36 @@ export default {
     { name: 'contactEmail', title: 'Contact Email', type: 'string' },
     { name: 'phone', title: 'Phone', type: 'string' },
     { name: 'calendlyLink', title: 'Calendly Link', type: 'string' },
+
+    // Reusable button labels
+    { name: 'navbarCtaLabel', title: 'Navbar CTA Label', type: 'string' },
+    { name: 'footerCtaLabel', title: 'Footer CTA Label', type: 'string' },
+
+    // Footer column headings
+    { name: 'footerPartnerExpertiseHeading', title: 'Footer Heading: Partner Expertise', type: 'string' },
+    { name: 'footerServicesHeading', title: 'Footer Heading: Services', type: 'string' },
+    { name: 'footerDepartmentSolutionsHeading', title: 'Footer Heading: Department Solutions', type: 'string' },
+    { name: 'footerIndustrySolutionsHeading', title: 'Footer Heading: Industry Solutions', type: 'string' },
+    { name: 'footerOurLocationsHeading', title: 'Footer Heading: Our Locations', type: 'string' },
+
+    // Footer privacy/terms links
+    {
+      name: 'footerLegalLinks',
+      title: 'Footer Legal Links',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'label', title: 'Label', type: 'string' },
+            { name: 'href', title: 'Href', type: 'string' },
+          ],
+        },
+      ],
+    },
+
+    // Footer copyright text
+    { name: 'footerCopyrightText', title: 'Footer Copyright Text', type: 'string' },
     { name: 'mondayAffiliateLink', title: 'Monday Affiliate Link', type: 'string' },
     { name: 'logo', title: 'Logo (color)', type: 'image' },
     { name: 'logoWhite', title: 'Logo (white, for dark bg)', type: 'image' },

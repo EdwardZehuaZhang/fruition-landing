@@ -1,3 +1,4 @@
+import type React from 'react'
 import HeroBlockView from './blocks/HeroBlockView'
 import RichTextBlockView from './blocks/RichTextBlockView'
 import CtaBlockView from './blocks/CtaBlockView'
@@ -127,7 +128,6 @@ export default function BlockRenderer({
           return (
             <div key={`testimonials-${idx}`}>
               <HomeTestimonialsGrid testimonials={testimonials} />
-              <TeamsTransformedSection />
             </div>
           )
         }
@@ -195,6 +195,15 @@ export default function BlockRenderer({
             return <CalendlyBlockView key={block._key} {...block} />
           case 'tabSectionBlock':
             return <TabSectionBlockView key={block._key} {...block} />
+          case 'teamsTransformedBlock':
+            return (
+              <TeamsTransformedSection
+                key={block._key}
+                heading={block.heading as string}
+                subheading={block.subheading as string}
+                tabs={block.tabs as React.ComponentProps<typeof TeamsTransformedSection>['tabs']}
+              />
+            )
           default:
             return (
               <div key={block._key}>

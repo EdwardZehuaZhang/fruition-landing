@@ -28,7 +28,6 @@ export default async function Page() {
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
       faqTabs={groupFaqsIntoTabs(centralFaqs)}
-      heroPartnerImageSrc="/images/monday-partners.avif"
     />
   )
 }

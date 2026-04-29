@@ -9,7 +9,7 @@ interface FaqAccordionProps {
 }
 
 export default function FaqAccordion({
-  heading = "Frequently asked questions",
+  heading,
   tabs = [],
 }: FaqAccordionProps) {
   const [activeFaqTab, setActiveFaqTab] = useState(0)
@@ -47,9 +47,11 @@ export default function FaqAccordion({
   return (
     <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
       <div className="mx-auto flex flex-col px-4 sm:px-6 lg:px-8" style={{ maxWidth: 959, gap: 24 }}>
-        <h2 className="text-section-h2" style={{ color: "var(--purple-primary)" }}>
-          {heading}
-        </h2>
+        {heading && (
+          <h2 className="text-section-h2" style={{ color: "var(--purple-primary)" }}>
+            {heading}
+          </h2>
+        )}
 
         {/* Tab navigation bar with icon-triggered horizontal scroll */}
         <div className="relative" style={{ height: 52 }}>
@@ -79,10 +81,10 @@ export default function FaqAccordion({
               type="button"
               aria-label="Scroll tabs left"
               onClick={() => scrollBy(-1)}
-              className="absolute left-0 top-0 h-full w-8 flex items-center justify-start bg-gradient-to-r from-white via-white to-transparent"
+              className="faq-tab-arrow absolute left-0 top-0 h-full w-10 flex items-center justify-start bg-gradient-to-r from-white via-white to-transparent text-[#8e5cbf] hover:text-[#2563eb] transition-colors cursor-pointer"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path d="M15 6l-6 6 6 6" stroke="#8e5cbf" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           )}
@@ -91,10 +93,10 @@ export default function FaqAccordion({
               type="button"
               aria-label="Scroll tabs right"
               onClick={() => scrollBy(1)}
-              className="absolute right-0 top-0 h-full w-8 flex items-center justify-end bg-gradient-to-l from-white via-white to-transparent"
+              className="faq-tab-arrow absolute right-0 top-0 h-full w-10 flex items-center justify-end bg-gradient-to-l from-white via-white to-transparent text-[#8e5cbf] hover:text-[#2563eb] transition-colors cursor-pointer"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path d="M9 6l6 6-6 6" stroke="#8e5cbf" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           )}

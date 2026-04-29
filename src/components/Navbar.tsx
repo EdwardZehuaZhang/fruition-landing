@@ -6,23 +6,6 @@ import { usePathname } from 'next/navigation'
 import { urlFor } from '@/sanity/image'
 import PaperPlaneIcon from '@/components/common/icons/PaperPlaneIcon'
 
-// Calendly fallback only used when siteSettings is not yet loaded
-const FALLBACK_CALENDLY_URL = 'https://calendly.com/global-calendar-fruitionservices'
-
-/** Override specific partner badges with local dark variants */
-const DARK_LOGO_OVERRIDES: Record<string, string> = {
-  n8n: '/images/partner-n8n-dark.avif',
-  aircall: '/images/partner-aircall-dark.avif',
-}
-
-function getDarkBadgeSrc(badge: PartnerBadge, fallbackSrc: string | null): string | null {
-  const name = (badge.name || '').toLowerCase()
-  for (const [key, darkSrc] of Object.entries(DARK_LOGO_OVERRIDES)) {
-    if (name.includes(key)) return darkSrc
-  }
-  return fallbackSrc
-}
-
 interface NavLink {
   label?: string
   href?: string
@@ -52,6 +35,7 @@ interface SiteSettingsProp {
   logo?: unknown
   navigation?: NavItem[]
   navbarPartnerBadges?: PartnerBadge[]
+  navbarCtaLabel?: string
 }
 
 export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsProp | null }) {
@@ -59,10 +43,11 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
   const [mobileOpen, setMobileOpen] = useState(false)
   const pathname = usePathname()
 
-  const calendlyUrl = siteSettings?.calendlyLink || FALLBACK_CALENDLY_URL
+  const calendlyUrl = siteSettings?.calendlyLink || ''
   const phoneAu = siteSettings?.phone
   const navItems: NavItem[] = siteSettings?.navigation || []
   const partnerBadges: PartnerBadge[] = siteSettings?.navbarPartnerBadges ?? []
+  const ctaLabel = siteSettings?.navbarCtaLabel || ''
 
   const logoUrl = siteSettings?.logo
     ? urlFor(siteSettings.logo).height(80).fit('max').url()
@@ -121,10 +106,9 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
               <div className="hidden xl:flex items-center gap-3">
                 {partnerBadges.map((badge, i) => {
                   const h = badge.height ?? 32
-                  const cmsSrc = badge.image
+                  const src = badge.image
                     ? urlFor(badge.image).height(h * 2).fit('max').url()
                     : null
-                  const src = getDarkBadgeSrc(badge, cmsSrc)
                   if (!src) return null
                   return (
                     <Image
@@ -154,15 +138,17 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
               )}
 
               {/* CTA */}
-              <a
-                href={calendlyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 whitespace-nowrap bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-colors shadow-md"
-              >
-                <PaperPlaneIcon size={16} />
-                Book a Time
-              </a>
+              {ctaLabel && calendlyUrl && (
+                <a
+                  href={calendlyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 whitespace-nowrap bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-colors shadow-md"
+                >
+                  <PaperPlaneIcon size={16} />
+                  {ctaLabel}
+                </a>
+              )}
             </div>
           </div>
 
@@ -218,10 +204,9 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
             <div className="flex items-center gap-3 px-2 py-3 border-t border-gray-100">
               {partnerBadges.map((badge, i) => {
                 const h = Math.round((badge.height ?? 32) * 0.75)
-                const cmsSrc = badge.image
+                const src = badge.image
                   ? urlFor(badge.image).height(h * 2).fit('max').url()
                   : null
-                const src = getDarkBadgeSrc(badge, cmsSrc)
                 if (!src) return null
                 return (
                   <Image
@@ -236,15 +221,17 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                 )
               })}
             </div>
-            <a
-              href={calendlyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 mx-2 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white text-center px-6 py-2.5 rounded-full text-sm font-semibold transition-colors"
-            >
-              <PaperPlaneIcon size={16} />
-              Book a Time
-            </a>
+            {ctaLabel && calendlyUrl && (
+              <a
+                href={calendlyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 mx-2 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white text-center px-6 py-2.5 rounded-full text-sm font-semibold transition-colors"
+              >
+                <PaperPlaneIcon size={16} />
+                {ctaLabel}
+              </a>
+            )}
           </div>
         )}
       </div>

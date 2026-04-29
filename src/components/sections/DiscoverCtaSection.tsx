@@ -1,6 +1,5 @@
-import Link from "next/link"
 import { urlFor } from "@/sanity/image"
-import PaperPlaneIcon from "@/components/common/icons/PaperPlaneIcon"
+import CtaButton from "@/components/CtaButton"
 import type { SanityImageRef } from "./types"
 
 interface DiscoverCtaSectionProps {
@@ -14,13 +13,19 @@ interface DiscoverCtaSectionProps {
 
 export default function DiscoverCtaSection({
   badge,
-  heading = "Discover how much monday.com can do for your team.",
-  primaryCtaLabel = "Schedule a Consultation",
-  primaryCtaUrl = "https://calendly.com/global-calendar-fruitionservices",
-  secondaryCtaLabel = "Get Started with monday.com",
-  secondaryCtaUrl = "https://calendly.com/global-calendar-fruitionservices",
+  heading,
+  primaryCtaLabel,
+  primaryCtaUrl,
+  secondaryCtaLabel,
+  secondaryCtaUrl,
 }: DiscoverCtaSectionProps) {
-  const badgeSrc = badge?.asset?._ref ? (() => { try { return urlFor(badge).width(325).height(73).url() } catch { return null } })() : null
+  const badgeSrc = badge?.asset?._ref
+    ? (() => {
+        try { return urlFor(badge).width(325).height(73).url() } catch { return null }
+      })()
+    : null
+
+  if (!heading && !primaryCtaLabel && !secondaryCtaLabel && !badgeSrc) return null
 
   return (
     <section style={{ backgroundColor: "#ece6fc" }} className="py-[80px] px-4">
@@ -29,27 +34,31 @@ export default function DiscoverCtaSection({
           // eslint-disable-next-line @next/next/no-img-element
           <img src={badgeSrc} alt="Certifications" width={325} height={73} className="h-[73px] w-[325px] object-contain" />
         )}
-        <h2
-          className="mt-7 text-section-h2 text-center text-black text-balance max-w-[720px]"
-        >
-          {heading}
-        </h2>
-        <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
-          <Link
-            href={primaryCtaUrl}
-            className="ui-cta-btn ui-cta-btn-primary w-full sm:flex-1"
-          >
-            <PaperPlaneIcon />
-            {primaryCtaLabel}
-          </Link>
-          <Link
-            href={secondaryCtaUrl}
-            className="ui-cta-btn ui-cta-btn-secondary w-full sm:flex-1"
-          >
-            <PaperPlaneIcon />
-            {secondaryCtaLabel}
-          </Link>
-        </div>
+        {heading && (
+          <h2 className="mt-7 text-section-h2 text-center text-black text-balance max-w-[720px]">
+            {heading}
+          </h2>
+        )}
+        {(primaryCtaLabel || secondaryCtaLabel) && (
+          <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
+            {primaryCtaLabel && primaryCtaUrl && (
+              <CtaButton
+                href={primaryCtaUrl}
+                label={primaryCtaLabel}
+                variant="outline"
+                className="w-full sm:flex-1"
+              />
+            )}
+            {secondaryCtaLabel && secondaryCtaUrl && (
+              <CtaButton
+                href={secondaryCtaUrl}
+                label={secondaryCtaLabel}
+                variant="primary"
+                className="w-full sm:flex-1"
+              />
+            )}
+          </div>
+        )}
       </div>
     </section>
   )

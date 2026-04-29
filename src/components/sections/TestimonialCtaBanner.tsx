@@ -1,7 +1,7 @@
 "use client"
 
-import Link from "next/link"
 import { urlFor } from "@/sanity/image"
+import CtaButton from "@/components/CtaButton"
 import type { CaseStudy, SanityImageRef } from "./types"
 
 interface TestimonialCtaBannerProps {
@@ -21,13 +21,13 @@ function safeImageUrl(ref?: SanityImageRef): string | null {
 }
 
 export default function TestimonialCtaBanner({
-  headingPart1 = "Join ",
-  headingAccent = "500+ organisations",
-  headingPart2 = " that have maximised their workflows with our monday.com expert support",
-  primaryCtaLabel = "Start Your Transformation",
-  primaryCtaUrl = "https://calendly.com/global-calendar-fruitionservices",
-  secondaryCtaLabel = "Get Started with monday.com",
-  secondaryCtaUrl = "https://calendly.com/global-calendar-fruitionservices",
+  headingPart1,
+  headingAccent,
+  headingPart2,
+  primaryCtaLabel,
+  primaryCtaUrl,
+  secondaryCtaLabel,
+  secondaryCtaUrl,
   testimonial,
 }: TestimonialCtaBannerProps) {
   const photoSrc = safeImageUrl(testimonial?.profilePhoto)
@@ -60,20 +60,22 @@ export default function TestimonialCtaBanner({
 
               <div className="mt-10 flex flex-col gap-4 max-w-[330px]">
                 {primaryCtaLabel && primaryCtaUrl && (
-                  <Link
+                  <CtaButton
                     href={primaryCtaUrl}
-                    className="flex items-center justify-center h-14 rounded-full bg-white text-[#7b35ff] font-semibold text-lg shadow-lg shadow-black/20 transition hover:scale-[1.01]"
-                  >
-                    {primaryCtaLabel}
-                  </Link>
+                    label={primaryCtaLabel}
+                    variant="onDarkPrimary"
+                    className="w-full"
+                    style={{ height: 56 }}
+                  />
                 )}
                 {secondaryCtaLabel && secondaryCtaUrl && (
-                  <Link
+                  <CtaButton
                     href={secondaryCtaUrl}
-                    className="flex items-center justify-center h-14 rounded-full bg-[linear-gradient(90deg,#7d22ff_0%,#cb8dff_100%)] text-white font-semibold text-lg shadow-lg shadow-purple-900/30 transition hover:scale-[1.01]"
-                  >
-                    {secondaryCtaLabel}
-                  </Link>
+                    label={secondaryCtaLabel}
+                    variant="primary"
+                    className="w-full"
+                    style={{ height: 56 }}
+                  />
                 )}
               </div>
             </div>

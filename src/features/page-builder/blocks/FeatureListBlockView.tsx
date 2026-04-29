@@ -14,41 +14,22 @@ interface Feature {
 interface FeatureListBlockProps {
   _key?: string
   heading?: string
+  headingAccent?: string
   subheading?: string
   variant?: string
   features?: Feature[]
   siteSettings?: SiteSettings
 }
 
-// Static industry navigation icons — kept hardcoded because these are a fixed
-// set of design-time decorative thumbnails that rarely change and would be
-// unwieldy to manage per-industry in Sanity. Sanity feature.image still wins
-// when populated per-feature.
-const INDUSTRY_IMAGES: Record<string, string> = {
-  'Construction': '/images/industry-construction.png',
-  'Customer Service': '/images/industry-customer-service.png',
-  'Retail': '/images/industry-retail.png',
-  'Government': '/images/industry-government.png',
-  'Manufacturing': '/images/industry-manufacturing.png',
-  'Marketing & Creative': '/images/industry-marketing.png',
-  'Professional Services': '/images/industry-professional-services.png',
-  'Real Estate': '/images/industry-real-estate.png',
-}
-
-export default function FeatureListBlockView({ _key, heading, subheading, variant, features, siteSettings }: FeatureListBlockProps) {
-  // Platinum partner badge for the industries variant — prefer Sanity navbarPartnerBadges[0], fall back to hardcoded image
+export default function FeatureListBlockView({ _key, heading, headingAccent, subheading, variant, features, siteSettings }: FeatureListBlockProps) {
+  // Platinum partner badge for the industries variant — pulled from Sanity navbarPartnerBadges
   const platinumBadgeImage = siteSettings?.navbarPartnerBadges?.[0]?.image
   const platinumBadgeSrc = platinumBadgeImage?.asset
     ? urlFor(platinumBadgeImage).height(90).url()
-    : '/images/partner-platinum-lg.png'
-  const isIndustryGrid = variant === 'industries' || features?.some(f => f.description?.startsWith('/'))
-
-  // "Teams Transformed" = challenges variant: white bg, vertical numbered list in bordered card
-  // Detect by heading or key
-  const isChallenges = heading?.includes('Teams Transformed') || heading?.includes('Efficiency Gains') || _key === 'challenges-01'
-
-  // Steps variant = dark bg horizontal numbered steps (NOT challenges)
-  const isStepsBlock = !isChallenges && (variant === 'steps' || features?.some(f => /^\d+$/.test(f.icon ?? '')))
+    : null
+  const isIndustryGrid = variant === 'industries'
+  const isChallenges = variant === 'challenges' || _key === 'challenges-01'
+  const isStepsBlock = !isChallenges && variant === 'steps'
 
   // ── Challenges variant ──────────────────────────────────────────────
   // Matches Figma: white bg, heading + subheading, bordered card with vertical numbered items
@@ -63,9 +44,9 @@ export default function FeatureListBlockView({ _key, heading, subheading, varian
                 {heading}
               </h2>
             )}
-            <p className="text-[20px] text-black text-center">
-              {subheading || 'Authorised monday.com, Atlassian and make Consulting, implementation and integration partner consultants across Australia, UK, and US.'}
-            </p>
+            {subheading && (
+              <p className="text-[20px] text-black text-center">{subheading}</p>
+            )}
           </div>
 
           {/* Bordered card with vertical numbered items */}
@@ -83,34 +64,33 @@ export default function FeatureListBlockView({ _key, heading, subheading, varian
           <div className="flex flex-col gap-[12px] items-center text-center">
             {heading && (
               <h2 className="text-[35px] font-medium text-black leading-[49px]">
-                {(() => {
-                  const accent = 'With You For You'
-                  const idx = heading.indexOf(accent)
-                  if (idx >= 0) {
-                    return (
-                      <>
-                        <span>{heading.slice(0, idx)}</span>
-                        <span className="text-[#8015e8]">{accent}</span>
-                        <span>{heading.slice(idx + accent.length)}</span>
-                      </>
-                    )
-                  }
-                  return heading
-                })()}
+                {headingAccent ? (
+                  (() => {
+                    const idx = heading.indexOf(headingAccent)
+                    if (idx >= 0) {
+                      return (
+                        <>
+                          <span>{heading.slice(0, idx)}</span>
+                          <span className="text-[#8015e8]">{headingAccent}</span>
+                          <span>{heading.slice(idx + headingAccent.length)}</span>
+                        </>
+                      )
+                    }
+                    return heading
+                  })()
+                ) : heading}
               </h2>
             )}
-            {subheading ? (
+            {subheading && (
               <p className="text-[20px] text-black text-center">{subheading}</p>
-            ) : heading?.includes('Solution Built') && (
-              <p className="text-[20px] text-black text-center">
-                Our monday.com consultants have expertise across various industries. As a Platinum monday.com partner, we the guarantee delivery of the right solution and training to optimise your teams efficiency.
-              </p>
             )}
           </div>
 
           {/* Partner badge */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={platinumBadgeSrc} alt="monday.com Platinum Partner" width={160} height={45} className="h-10 w-auto" />
+          {platinumBadgeSrc && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={platinumBadgeSrc} alt={siteSettings?.navbarPartnerBadges?.[0]?.name || 'Partner badge'} width={160} height={45} className="h-10 w-auto" />
+          )}
 
           {/* Industry cards grid */}
           <div className="flex flex-wrap justify-center gap-0 w-full max-w-[1020px]">
@@ -125,13 +105,6 @@ export default function FeatureListBlockView({ _key, heading, subheading, varian
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={urlFor(f.image).width(300).height(300).url()}
-                      alt={f.title ?? ''}
-                      className="w-full h-full object-cover group-hover:scale-105 transition"
-                    />
-                  ) : INDUSTRY_IMAGES[f.title ?? ''] ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={INDUSTRY_IMAGES[f.title ?? '']}
                       alt={f.title ?? ''}
                       className="w-full h-full object-cover group-hover:scale-105 transition"
                     />
@@ -150,26 +123,32 @@ export default function FeatureListBlockView({ _key, heading, subheading, varian
 
   // ── Steps variant — dark purple bg with horizontal numbered steps ──
   if (isStepsBlock) {
+    const stepsHeading = heading
+    const stepsSubheading = subheading
+
     return (
       <section className="relative py-[80px] pb-[120px] px-4 overflow-hidden">
         <div className="absolute inset-0 bg-[#10003a]" />
         <div className="absolute inset-0 bg-gradient-to-br from-[#2b074d] via-[#10003a] to-[#10003a] opacity-30" />
 
         <div className="mx-auto max-w-[1199px] relative z-10 flex flex-col items-center">
-          {heading && (
-            <h2 className="mb-3 text-center text-[45px] text-white leading-[63px]">{heading}</h2>
+          {stepsHeading && (
+            <h2 className="mb-3 text-center text-[45px] text-white leading-[63px]">{stepsHeading}</h2>
           )}
-          {subheading && (
-            <p className="mb-12 text-center text-[25px] font-extralight italic text-white">{subheading}</p>
+          {stepsSubheading && (
+            <p className="mb-12 text-center text-[25px] font-extralight italic text-white">{stepsSubheading}</p>
           )}
 
           <div className="flex flex-wrap gap-0 w-full justify-center">
             {features?.map((f, i) => (
-              <div key={f._key ?? i} className="w-[237px] text-center">
-                <p className="text-[48px] font-light text-[#b162fe] leading-[67.2px]">
+              <div
+                key={f._key ?? i}
+                className="group w-[237px] text-center cursor-default transition-transform duration-300 ease-out hover:-translate-y-1"
+              >
+                <p className="text-[48px] font-light text-[#b162fe] leading-[67.2px] transition-all duration-300 ease-out group-hover:font-bold group-hover:text-white">
                   {String(i + 1).padStart(2, '0')}
                 </p>
-                <p className="text-[14px] font-medium text-white mb-2">{f.title}</p>
+                <p className="text-[14px] font-medium text-white mb-2 transition-all duration-300 ease-out group-hover:font-bold">{f.title}</p>
                 {f.description && (
                   <p className="text-[14px] font-light text-white leading-[22.4px] mx-auto max-w-[190px]">{f.description}</p>
                 )}

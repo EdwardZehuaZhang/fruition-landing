@@ -9,6 +9,7 @@ export default {
     { name: 'seoDescription', title: 'SEO Description', type: 'text' },
     { name: 'heroEyebrow', title: 'Hero Eyebrow (small label above heading, e.g. "Careers")', type: 'string' },
     { name: 'heroHeading', title: 'Hero Heading', type: 'string' },
+    { name: 'heroHeadingAccent', title: 'Hero Heading Accent (rendered purple inside heading)', type: 'string' },
     { name: 'heroSubheading', title: 'Hero Subheading', type: 'text' },
     { name: 'heroImage', title: 'Hero Image', type: 'image', options: { hotspot: true } },
     {

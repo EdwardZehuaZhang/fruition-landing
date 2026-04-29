@@ -17,8 +17,7 @@ export default async function SolutionsPage() {
     getSiteSettings(),
   ])
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = siteSettings?.calendlyLink || ""
 
   return (
     <div>

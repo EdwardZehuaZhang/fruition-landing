@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
@@ -8,7 +7,8 @@ import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
 import CalendlySection from "@/components/sections/CalendlySection"
 import StatsBlockView from "@/features/page-builder/blocks/StatsBlockView"
 import ComparisonTabsSection from "@/components/sections/ComparisonTabsSection"
-import type { ComparisonTab as SharedComparisonTab } from "@/components/sections/types"
+import FaqAccordion from "@/components/sections/FaqAccordion"
+import type { ComparisonTab as SharedComparisonTab, FaqTab as SharedFaqTab } from "@/components/sections/types"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -219,9 +219,6 @@ export default function MondayImplementationConsultantsContent({
   const faqTabs = faqTabsOverride?.length ? faqTabsOverride : (data?.faqTabs ?? [])
   const stats = data?.joinSectionStats ?? []
 
-  const [activeFaqTab, setActiveFaqTab] = useState<number>(0)
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0)
-
   // Carousel logos — duplicate for the marquee loop
   const normalizedLogos = carouselLogos
     .map((logo, i) => ({
@@ -268,7 +265,7 @@ export default function MondayImplementationConsultantsContent({
       return { _key: b._key, src, alt: b.alt ?? `Product ${i + 1}` }
     })
     .filter((x): x is ResolvedImage => x !== null)
-  const videoEmbedUrl = data?.videoEmbedUrl
+  const videoEmbedUrl = data?.videoEmbedUrl || "https://www.youtube.com/embed/7vtrtlfC1Zg"
   const videoTitle = data?.videoTitle
 
   const heroPrimaryCtaLabel = data?.heroPrimaryCtaLabel
@@ -333,7 +330,6 @@ export default function MondayImplementationConsultantsContent({
   const calendlyUrl = data?.calendlyUrl
 
   const faqHeading = data?.faqHeading
-  const currentFaqItems = faqTabs[activeFaqTab]?.items ?? []
 
   const discoverHeading = data?.discoverHeading
   const discoverPrimaryCtaLabel = data?.discoverPrimaryCtaLabel
@@ -561,46 +557,11 @@ export default function MondayImplementationConsultantsContent({
       )}
 
       {/* ============================================================ */}
-      {/* SECTION 3 — Teams Transformed banner                         */}
-      {/* ============================================================ */}
-      <section
-        style={{
-          background:
-            "linear-gradient(98.14deg, rgb(28, 2, 76) 0%, rgb(125, 20, 227) 100.01%)",
-          paddingTop: 80,
-          paddingBottom: 80,
-        }}
-      >
-        <div className="mx-auto flex flex-col items-center px-4" style={{ maxWidth: 1080 }}>
-          <h2
-            className="text-center font-bold text-white"
-            style={{ fontSize: 40, lineHeight: "56px", maxWidth: 900 }}
-          >
-            {teamsHeading}
-          </h2>
-          {teamsBody && (
-            <p
-              className="text-center"
-              style={{
-                fontSize: 18,
-                lineHeight: "28px",
-                color: "#e8dcfb",
-                marginTop: 24,
-                maxWidth: 900,
-                whiteSpace: "pre-line",
-              }}
-            >
-              {teamsBody}
-            </p>
-          )}
-        </div>
-      </section>
-
-      {/* ============================================================ */}
       {/* SECTION 4 — Comparison tabs (DIY / Benefits / Our Approach)  */}
       {/* ============================================================ */}
       <ComparisonTabsSection
-        heading={comparisonHeading}
+        heading={teamsHeading}
+        subheading={teamsBody}
         tabs={resolvedComparisonTabs as SharedComparisonTab[]}
       />
 
@@ -617,161 +578,58 @@ export default function MondayImplementationConsultantsContent({
       {/* ============================================================ */}
       {/* SECTION 7 — FAQ                                              */}
       {/* ============================================================ */}
-      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
-        <div className="mx-auto flex flex-col px-4" style={{ maxWidth: 959, gap: 24 }}>
-          <h2
-            className="text-section-h2"
-            style={{ color: "var(--purple-primary)" }}
-          >
-            {faqHeading}
-          </h2>
-
-          {/* Tab navigation */}
-          {faqTabs.length > 0 && (
-            <div
-              className="flex items-start overflow-auto"
-              style={{ width: "100%", height: 52 }}
-            >
-              {faqTabs.map((tab, idx) => (
-                <button
-                  key={tab._key || idx}
-                  onClick={() => {
-                    setActiveFaqTab(idx)
-                    setOpenFaqIndex(0)
-                  }}
-                  className="h-full shrink-0 relative"
-                  style={{
-                    paddingTop: 14,
-                    paddingBottom: 17,
-                    paddingLeft: 27.469,
-                    paddingRight: 27.469,
-                    borderBottom:
-                      activeFaqTab === idx
-                        ? "3px solid #8e5cbf"
-                        : "3px solid transparent",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: 16,
-                      color: activeFaqTab === idx ? "#8e5cbf" : "black",
-                      textAlign: "center",
-                    }}
-                  >
-                    {tab.label}
-                  </span>
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* FAQ items */}
-          <div className="flex flex-col" style={{ gap: 12 }}>
-            {currentFaqItems.map((item, i) => (
-              <div key={item._key || i} style={{ paddingTop: i === 0 ? 20 : 24 }}>
-                <button
-                  onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                  className="w-full flex items-center justify-between text-left"
-                  style={{ minHeight: 30 }}
-                >
-                  <span style={{ fontSize: 20, lineHeight: "24px", color: "black" }}>
-                    {item.question}
-                  </span>
-                  <div className="shrink-0" style={{ width: 30, height: 30 }}>
-                    <svg
-                      className={`transition-transform ${
-                        openFaqIndex === i ? "rotate-180" : ""
-                      }`}
-                      width="30"
-                      height="30"
-                      viewBox="0 0 30 30"
-                      fill="none"
-                    >
-                      <path
-                        d="M8 12L15 19L22 12"
-                        stroke="black"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </button>
-                {openFaqIndex === i && (
-                  <div
-                    style={{
-                      paddingBottom: 16,
-                      paddingTop: 31,
-                      fontSize: 16,
-                      lineHeight: "24px",
-                      color: "black",
-                      whiteSpace: "pre-line",
-                    }}
-                  >
-                    {item.answer}
-                  </div>
-                )}
-                <div
-                  style={{
-                    borderBottom: "1px solid #2b074d",
-                    marginTop: openFaqIndex === i ? 0 : 36,
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <FaqAccordion heading={faqHeading} tabs={faqTabs as SharedFaqTab[]} />
 
       {/* ============================================================ */}
-      {/* SECTION 8 — Create a CRM that fits you (solution cards)      */}
+      {/* SECTION 8 — Solution cards                                   */}
       {/* ============================================================ */}
-      <section style={{ backgroundColor: "#f0ecfe", paddingTop: 80, paddingBottom: 80 }}>
+      <section style={{ backgroundColor: "#ffffff", paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
-          <h2
-            className="text-center font-bold"
-            style={{
-              fontSize: 44,
-              lineHeight: "58px",
-              color: "black",
-              maxWidth: 900,
-              margin: "0 auto",
-            }}
-          >
-            <span className="text-black">{solutionsPart1}</span>
-            <span style={{ color: "#8015e8" }}>{solutionsAccent}</span>
-            <span className="text-black">{solutionsPart2}</span>
-          </h2>
-          {solutionsIntro && (
-            <p
-              className="text-center"
-              style={{
-                fontSize: 16,
-                lineHeight: "24px",
-                color: "black",
-                marginTop: 20,
-                maxWidth: 860,
-                margin: "20px auto 0",
-                whiteSpace: "pre-line",
-              }}
-            >
-              {solutionsIntro}
-            </p>
-          )}
+          {/* Solution cards — alternating sides.
+              Re-map source data to match design: synthesize CRM card from
+              section heading/intro + first card's eyebrow-as-CTA, then
+              shift remaining cards down one slot. */}
+          {(() => {
+            const crmHeading = `${solutionsPart1 ?? ""}${solutionsAccent ?? ""}${solutionsPart2 ?? ""}`.trim()
+            const crmCard: SolutionCard = {
+              _key: "synthesized-crm",
+              heading: crmHeading,
+              body: solutionsIntro,
+              ctaLabel: solutionCards[0]?.eyebrow,
+              ctaUrl: "/monday-crm-consulting",
+              image: solutionCards[3]?.image ?? solutionCards[0]?.image,
+            }
+            const rollupCard: SolutionCard | null = solutionCards[0]
+              ? {
+                  _key: solutionCards[0]._key ?? "rollup",
+                  eyebrow: undefined,
+                  heading: solutionCards[0].heading,
+                  body: solutionCards[0].body,
+                  ctaLabel: solutionCards[0].ctaLabel,
+                  ctaUrl: solutionCards[0].ctaUrl,
+                  image: solutionCards[0].image,
+                }
+              : null
+            const orderedCards: SolutionCard[] = [
+              crmCard,
+              ...(rollupCard ? [rollupCard] : []),
+              ...(solutionCards[1] ? [solutionCards[1]] : []),
+              ...(solutionCards[2] ? [solutionCards[2]] : []),
+            ]
 
-          {/* Solution cards — alternating sides */}
-          <div className="flex flex-col" style={{ gap: 40, marginTop: 56 }}>
-            {solutionCards.map((card, i) => {
-              const imgSrc = imageUrl(card.image)
-              const reverse = i % 2 === 1
+            return (
+              <div className="flex flex-col" style={{ gap: 40 }}>
+                {orderedCards.map((card, i) => {
+                  const imgSrc = imageUrl(card.image)
+                  const reverse = i % 2 === 0
               return (
                 <div
                   key={card._key || i}
                   className={`flex flex-col ${reverse ? "md:flex-row-reverse" : "md:flex-row"} items-center`}
                   style={{
-                    backgroundColor: "white",
-                    border: "1px solid #e8e6e6",
-                    borderRadius: "var(--radius-card)",
+                    backgroundColor: "transparent",
+                    border: "none",
+                    borderRadius: 0,
                     overflow: "hidden",
                     gap: 0,
                   }}
@@ -855,8 +713,10 @@ export default function MondayImplementationConsultantsContent({
                   </div>
                 </div>
               )
-            })}
-          </div>
+                })}
+              </div>
+            )
+          })()}
         </div>
       </section>
 

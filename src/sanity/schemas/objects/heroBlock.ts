@@ -18,6 +18,12 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'headingAccents',
+      title: 'Heading Accent Words (rendered purple)',
+      type: 'array',
+      of: [{ type: 'string' }],
+    }),
+    defineField({
       name: 'subheading',
       title: 'Subheading',
       type: 'text',

@@ -213,6 +213,24 @@ const PAGE_FIELDS = `
   joinStats,
   joinFootnote,
 
+  // monday Service specific
+  serviceHeroImage,
+  comparisonHeadingAccent,
+  comparisonEyebrow,
+  featureTabsIntroSubheading,
+  fourCardsHeadingPart1,
+  fourCardsHeadingAccent,
+  fourCardsCtaLabel,
+  fourCardsCtaUrl,
+  fourCards,
+  faqHeading,
+  faqEyebrow,
+  faqFlatItems,
+  strategicColumnsHeadingPart1,
+  strategicColumnsHeadingAccent,
+  strategicColumnsSubheading,
+  strategicColumns,
+
   // Section visibility toggles
   hideDiscoverSection,
   hideJoinStatsSection,
@@ -330,7 +348,16 @@ export async function getSiteSettings() {
     badgeCertifications,
     badgeSecurity,
     badgeForrester,
-    badgeMondayPartners
+    badgeMondayPartners,
+    navbarCtaLabel,
+    footerCtaLabel,
+    footerPartnerExpertiseHeading,
+    footerServicesHeading,
+    footerDepartmentSolutionsHeading,
+    footerIndustrySolutionsHeading,
+    footerOurLocationsHeading,
+    footerLegalLinks,
+    footerCopyrightText
   }`)
 }
 
@@ -375,7 +402,7 @@ export async function getPageBySlug(slug: string) {
   return client.fetch(
     `*[_type == "page" && slug.current == $slug][0]{
       _id, title, "slug": slug.current, seoTitle, seoDescription,
-      heroEyebrow, heroHeading, heroSubheading, heroBody, heroImage,
+      heroEyebrow, heroHeading, heroHeadingAccent, heroSubheading, heroBody, heroImage,
       heroLocalVideoSrc,
       heroStats,
       primaryCtaLabel, primaryCtaUrl,
@@ -554,7 +581,14 @@ export async function getMakePartnersPage() {
     statCardValue, statCardSubtitle, statCardCtaLabel, statCardCtaUrl,
     joinHeadingPart1, joinHeadingAccent, joinHeadingPart2,
     joinStats, joinCtaLabel, joinCtaUrl,
-    testimonialBannerHeadingPart1, testimonialBannerHeadingAccent, testimonialBannerHeadingPart2
+    testimonialBannerHeadingPart1, testimonialBannerHeadingAccent, testimonialBannerHeadingPart2,
+    testimonialBannerPrimaryCtaLabel, testimonialBannerPrimaryCtaUrl,
+    testimonialBannerSecondaryCtaLabel, testimonialBannerSecondaryCtaUrl,
+    heroSecondaryCtaLabel, heroSecondaryCtaUrl,
+    announcementHeading, announcementBody, announcementImage,
+    featureListsHeading, featureListsSubheading, featureListsRightEyebrow, featureListsFooter,
+    featureListLeft, featureListRight,
+    discoverHeading
   }`)
 }
 

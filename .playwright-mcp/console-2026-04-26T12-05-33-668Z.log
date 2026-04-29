@@ -1,8 +1,0 @@
-[     525ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3211/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
-[     623ms] [LOG] [HMR] connected @ http://localhost:3211/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
-[     743ms] [WARNING] Image with src "https://cdn.sanity.io/images/bt6nb58h/production/049b6e990c316b87afeb5844f38aa75b0a4c5eb4-165x39.png?h=80&fit=max" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio. @ http://localhost:3211/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
-[     744ms] [WARNING] Image with src "http://localhost:3211/images/footer-logo-white.avif" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio. @ http://localhost:3211/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
-[     765ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3211/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
-[     791ms] [LOG] [Fast Refresh] done in 140ms @ http://localhost:3211/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
-[   74708ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3211/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
-[   75394ms] [LOG] [Fast Refresh] done in 724ms @ http://localhost:3211/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431

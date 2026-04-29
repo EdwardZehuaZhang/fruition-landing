@@ -1,8 +1,8 @@
-import Link from "next/link"
 import { getSiteSettings, getPageBySlug } from "@/sanity/queries"
 import { LogoCloudMarquee, CalendlySection, DiscoverCtaSection } from "@/components/sections"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
+import CtaButton from "@/components/CtaButton"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("customer-testimonials")
@@ -43,42 +43,31 @@ export default async function CustomerTestimonialsPage() {
     getPageBySlug("customer-testimonials"),
   ])
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = siteSettings?.calendlyLink || ""
   const partnerBadges: PartnerBadge[] = page?.heroPartnerBadges?.length > 0
     ? page.heroPartnerBadges
     : siteSettings?.navbarPartnerBadges || []
 
-  const heroHeading = page?.heroHeading || "Case Studies"
-  const heroSubheading =
-    page?.heroSubheading ||
-    "A big part of our operation is ensuring we set up our clients for success through our specialized monday.com and AI expertise."
-  const heroBody =
-    page?.heroBody ||
-    "Become part of the growing community of companies across all industries that have optimised their workflows and boosted team performance with our proven guidance."
-  const primaryCtaLabel = page?.primaryCtaLabel || "\uD83D\uDE80 Get Started"
+  const heroHeading = page?.heroHeading
+  const heroSubheading = page?.heroSubheading
+  const heroBody = page?.heroBody
+  const primaryCtaLabel = page?.primaryCtaLabel
   const primaryCtaUrl = page?.primaryCtaUrl || calendlyUrl
-  const secondaryCtaLabel = page?.secondaryCtaLabel || "\uD83D\uDCD1 Learn More"
-  const secondaryCtaUrl = page?.secondaryCtaUrl || "#case-studies"
+  const secondaryCtaLabel = page?.secondaryCtaLabel
+  const secondaryCtaUrl = page?.secondaryCtaUrl
 
-  const logoCloudPart1 = page?.logoCloudHeadingPart1 || "Clients who have used our "
-  const logoCloudAccent = page?.logoCloudHeadingAccent || "monday.com expert consultants"
+  const logoCloudPart1 = page?.logoCloudHeadingPart1
+  const logoCloudAccent = page?.logoCloudHeadingAccent
 
   const caseStudyCards: CaseStudyCard[] = page?.caseStudyCards || []
 
-  const calendlyHeading =
-    page?.calendlyHeading ||
-    "Schedule Your Personalised Demo With A monday.com Expert"
-  const calendlySubheading =
-    page?.calendlySubheading ||
-    "Schedule a demo with our monday.com implementation consultants to discover how monday.com can be customised for your business, and get a free 4-week extended trial to experience its full potential."
+  const calendlyHeading = page?.calendlyHeading
+  const calendlySubheading = page?.calendlySubheading
 
-  const discoverHeading =
-    page?.discoverHeading ||
-    "Discover how much monday.com can do for your team."
-  const discoverPrimaryLabel = page?.discoverPrimaryCtaLabel || "Schedule a Consultation"
+  const discoverHeading = page?.discoverHeading
+  const discoverPrimaryLabel = page?.discoverPrimaryCtaLabel
   const discoverPrimaryUrl = page?.discoverPrimaryCtaUrl || calendlyUrl
-  const discoverSecondaryLabel = page?.discoverSecondaryCtaLabel || "Get Started with monday.com"
+  const discoverSecondaryLabel = page?.discoverSecondaryCtaLabel
   const discoverSecondaryUrl = page?.discoverSecondaryCtaUrl || calendlyUrl
 
   return (
@@ -109,87 +98,85 @@ export default async function CustomerTestimonialsPage() {
             </div>
           )}
 
-          <h1
-            className="text-center font-bold"
-            style={{
-              fontSize: 48,
-              lineHeight: "67.2px",
-              marginTop: partnerBadges.length > 0 ? 42 : 0,
-              maxWidth: 924,
-              color: "black",
-            }}
-          >
-            {heroHeading}
-          </h1>
-
-          <p
-            className="text-center"
-            style={{
-              fontSize: 18,
-              lineHeight: "28px",
-              color: "black",
-              marginTop: 24,
-              maxWidth: 860,
-            }}
-          >
-            {heroSubheading}
-          </p>
-
-          <p
-            className="text-center"
-            style={{
-              fontSize: 16,
-              lineHeight: "26px",
-              color: "#444",
-              marginTop: 16,
-              maxWidth: 860,
-            }}
-          >
-            {heroBody}
-          </p>
-
-          <div
-            className="flex items-center justify-center flex-wrap"
-            style={{ gap: 20, marginTop: 40 }}
-          >
-            <Link
-              href={primaryCtaUrl}
-              className="flex items-center justify-center font-bold text-white"
+          {heroHeading && (
+            <h1
+              className="text-center font-bold"
               style={{
-                width: 260,
-                height: 53,
-                borderRadius: 100,
-                background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                fontSize: 16,
+                fontSize: 48,
+                lineHeight: "67.2px",
+                marginTop: partnerBadges.length > 0 ? 42 : 0,
+                maxWidth: 924,
+                color: "black",
               }}
             >
-              {primaryCtaLabel}
-            </Link>
-            <Link
-              href={secondaryCtaUrl}
-              className="flex items-center justify-center font-bold"
+              {heroHeading}
+            </h1>
+          )}
+
+          {heroSubheading && (
+            <p
+              className="text-center"
               style={{
-                width: 260,
-                height: 53,
-                borderRadius: 100,
-                border: "1px solid #8015e8",
-                backgroundColor: "white",
-                color: "#8015e8",
-                fontSize: 16,
+                fontSize: 18,
+                lineHeight: "28px",
+                color: "black",
+                marginTop: 24,
+                maxWidth: 860,
               }}
             >
-              {secondaryCtaLabel}
-            </Link>
-          </div>
+              {heroSubheading}
+            </p>
+          )}
+
+          {heroBody && (
+            <p
+              className="text-center"
+              style={{
+                fontSize: 16,
+                lineHeight: "26px",
+                color: "#444",
+                marginTop: 16,
+                maxWidth: 860,
+              }}
+            >
+              {heroBody}
+            </p>
+          )}
+
+          {(primaryCtaLabel || secondaryCtaLabel) && (
+            <div
+              className="flex items-center justify-center flex-wrap"
+              style={{ gap: 20, marginTop: 40 }}
+            >
+              {primaryCtaLabel && (
+                <CtaButton
+                  href={primaryCtaUrl}
+                  label={primaryCtaLabel}
+                  variant="primary"
+                  style={{ width: 260 }}
+                />
+              )}
+              {secondaryCtaLabel && (
+                <CtaButton
+                  href={secondaryCtaUrl || "#case-studies"}
+                  label={secondaryCtaLabel}
+                  variant="outline"
+                  style={{ width: 260 }}
+                />
+              )}
+            </div>
+          )}
         </div>
       </section>
 
       {/* Client logos */}
-      <LogoCloudMarquee
-        headingPart1={logoCloudPart1}
-        headingAccent={logoCloudAccent}
-        logos={siteSettings?.carouselLogos || []}
-      />
+      {(logoCloudPart1 || logoCloudAccent) && (
+        <LogoCloudMarquee
+          headingPart1={logoCloudPart1}
+          headingAccent={logoCloudAccent}
+          logos={siteSettings?.carouselLogos || []}
+        />
+      )}
 
       {/* Case studies */}
       {caseStudyCards.length > 0 && (
@@ -370,21 +357,25 @@ export default async function CustomerTestimonialsPage() {
       )}
 
       {/* Calendly */}
-      <CalendlySection
-        heading={calendlyHeading}
-        subheading={calendlySubheading}
-        calendlyUrl={calendlyUrl}
-      />
+      {(calendlyHeading || calendlySubheading) && (
+        <CalendlySection
+          heading={calendlyHeading}
+          subheading={calendlySubheading}
+          calendlyUrl={calendlyUrl}
+        />
+      )}
 
       {/* Final CTA */}
-      <DiscoverCtaSection
-        badge={siteSettings?.badgeCertifications}
-        heading={discoverHeading}
-        primaryCtaLabel={discoverPrimaryLabel}
-        primaryCtaUrl={discoverPrimaryUrl}
-        secondaryCtaLabel={discoverSecondaryLabel}
-        secondaryCtaUrl={discoverSecondaryUrl}
-      />
+      {discoverHeading && (
+        <DiscoverCtaSection
+          badge={siteSettings?.badgeCertifications}
+          heading={discoverHeading}
+          primaryCtaLabel={discoverPrimaryLabel}
+          primaryCtaUrl={discoverPrimaryUrl}
+          secondaryCtaLabel={discoverSecondaryLabel}
+          secondaryCtaUrl={discoverSecondaryUrl}
+        />
+      )}
     </div>
   )
 }

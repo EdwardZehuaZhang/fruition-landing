@@ -23,6 +23,7 @@ import faqBlock from './objects/faqBlock'
 import statsBlock from './objects/statsBlock'
 import calendlyBlock from './objects/calendlyBlock'
 import tabSectionBlock from './objects/tabSectionBlock'
+import teamsTransformedBlock from './objects/teamsTransformedBlock'
 
 // Documents
 import homePage from './documents/homePage'
@@ -58,6 +59,7 @@ export const schemaTypes = [
   statsBlock,
   calendlyBlock,
   tabSectionBlock,
+  teamsTransformedBlock,
 
   // Document types
   homePage,

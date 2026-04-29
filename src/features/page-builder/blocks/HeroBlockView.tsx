@@ -1,9 +1,10 @@
-import Link from 'next/link'
 import { urlFor } from '@/sanity/image'
+import CtaButton from '@/components/CtaButton'
 import type { SiteSettings } from '../types'
 
 interface HeroBlockProps {
   heading?: string
+  headingAccents?: string[]
   subheading?: string
   primaryCtaLabel?: string
   primaryCtaUrl?: string
@@ -14,23 +15,19 @@ interface HeroBlockProps {
   siteSettings?: SiteSettings
 }
 
-// Fallback partner badges used when siteSettings doesn't yet have navbarPartnerBadges
-const FALLBACK_PARTNER_BADGES = [
-  { src: '/images/partner-platinum.png', alt: 'monday.com Platinum Partner', width: 146, height: 44 },
-  { src: '/images/partner-advanced-delivery.png', alt: 'Advanced Delivery Partner', width: 157, height: 44 },
-  { src: '/images/partner-make.png', alt: 'Make Partners', width: 178, height: 44 },
-]
+// Render heading with words listed in `accents` highlighted purple
+function renderHeading(heading: string, accents: string[]) {
+  if (!accents || accents.length === 0) {
+    return <span>{heading}</span>
+  }
 
-// Render heading with "Consulting" and "Integration Services" in purple
-function renderHeading(heading: string) {
-  const purpleWords = ['Consulting', 'Integration Services']
   const parts: { text: string; purple: boolean }[] = []
   let remaining = heading
 
   while (remaining.length > 0) {
     let earliest = -1
     let earliestWord = ''
-    for (const word of purpleWords) {
+    for (const word of accents) {
       const idx = remaining.indexOf(word)
       if (idx >= 0 && (earliest < 0 || idx < earliest)) {
         earliest = idx
@@ -56,36 +53,24 @@ function renderHeading(heading: string) {
   )
 }
 
-// Split subheading into paragraphs at natural break points
+// Render subheading — supports newlines for paragraph breaks
 function renderSubheading(text: string) {
-  // Split on patterns that suggest paragraph breaks
-  // The Figma shows two separate paragraphs separated by line break
-  const breakPoints = [
-    'Australia, US and the UK.',
-    'Australia, US and UK.',
-  ]
-
-  for (const bp of breakPoints) {
-    const idx = text.indexOf(bp)
-    if (idx >= 0) {
-      const p1 = text.slice(0, idx + bp.length).trim()
-      const p2 = text.slice(idx + bp.length).trim()
-      if (p2) {
-        return (
-          <div className="flex flex-col gap-[12px] w-full max-w-[859px]">
-            <p className="text-[18px] text-black leading-[25.2px]">{p1}</p>
-            <p className="text-[18px] text-black leading-[25.2px]">{p2}</p>
-          </div>
-        )
-      }
-    }
+  const paragraphs = text.split(/\n{2,}|\r\n\r\n/).map((p) => p.trim()).filter(Boolean)
+  if (paragraphs.length > 1) {
+    return (
+      <div className="flex flex-col gap-[12px] w-full max-w-[859px]">
+        {paragraphs.map((p, i) => (
+          <p key={i} className="text-[18px] text-black leading-[25.2px]">{p}</p>
+        ))}
+      </div>
+    )
   }
-
   return <p className="text-[18px] text-black leading-[25.2px] max-w-[859px]">{text}</p>
 }
 
 export default function HeroBlockView({
   heading,
+  headingAccents,
   subheading,
   primaryCtaLabel,
   primaryCtaUrl,
@@ -95,21 +80,21 @@ export default function HeroBlockView({
   heroLocalVideoSrc,
   siteSettings,
 }: HeroBlockProps) {
-  const heroVideoSrc = heroLocalVideoSrc || '/videos/home-hero.mp4'
+  const heroVideoSrc = heroLocalVideoSrc
 
-  // Use Sanity navbar partner badges (first 3) when available, else hardcoded fallbacks
   const sanityBadges = siteSettings?.navbarPartnerBadges?.slice(0, 3) ?? []
-  const partnerBadges = sanityBadges.length >= 3
-    ? sanityBadges.map((b, i) => {
-        const fallback = FALLBACK_PARTNER_BADGES[i]
-        return {
-          src: b.image?.asset ? urlFor(b.image).height(88).url() : fallback.src,
-          alt: b.name ?? fallback.alt,
-          width: b.width ?? fallback.width,
-          height: b.height ?? fallback.height,
-        }
-      })
-    : FALLBACK_PARTNER_BADGES
+  const partnerBadges = sanityBadges
+    .map((b) => {
+      const src = b.image?.asset ? urlFor(b.image).height(88).url() : null
+      if (!src) return null
+      return {
+        src,
+        alt: b.name ?? 'Partner badge',
+        width: b.width ?? 146,
+        height: b.height ?? 44,
+      }
+    })
+    .filter((b): b is { src: string; alt: string; width: number; height: number } => b !== null)
 
   return (
     <section className="bg-white w-full">
@@ -136,7 +121,7 @@ export default function HeroBlockView({
               {/* Heading */}
               {heading && (
                 <h1 className="text-[48px] font-bold text-black leading-[67.2px]">
-                  {renderHeading(heading)}
+                  {renderHeading(heading, headingAccents ?? [])}
                 </h1>
               )}
             </div>
@@ -148,20 +133,20 @@ export default function HeroBlockView({
           {/* Buttons */}
           <div className="flex gap-[20px] items-start w-full max-w-[680px]">
             {primaryCtaLabel && primaryCtaUrl && (
-              <Link
+              <CtaButton
                 href={primaryCtaUrl}
-                className="flex items-center justify-center h-[53px] w-[330px] rounded-[100px] border border-[#8015e8] bg-white text-[#8015e8] text-[16px] font-bold tracking-[0.32px] hover:bg-[#8015e8] hover:text-white transition"
-              >
-                {primaryCtaLabel}
-              </Link>
+                label={primaryCtaLabel}
+                variant="outline"
+                className="w-[330px]"
+              />
             )}
             {secondaryCtaLabel && secondaryCtaUrl && (
-              <Link
+              <CtaButton
                 href={secondaryCtaUrl}
-                className="flex items-center justify-center h-[53px] w-[330px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
-              >
-                {secondaryCtaLabel}
-              </Link>
+                label={secondaryCtaLabel}
+                variant="primary"
+                className="w-[330px]"
+              />
             )}
           </div>
         </div>

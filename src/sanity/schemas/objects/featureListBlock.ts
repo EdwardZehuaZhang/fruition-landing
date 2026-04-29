@@ -18,6 +18,11 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'headingAccent',
+      title: 'Heading Accent (rendered purple inside heading)',
+      type: 'string',
+    }),
+    defineField({
       name: 'subheading',
       title: 'Subheading',
       type: 'text',
@@ -31,6 +36,7 @@ export default defineType({
           { title: 'Default', value: 'default' },
           { title: 'Steps', value: 'steps' },
           { title: 'Industries', value: 'industries' },
+          { title: 'Challenges', value: 'challenges' },
         ],
       },
       initialValue: 'default',

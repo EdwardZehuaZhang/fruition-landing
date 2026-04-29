@@ -1,7 +1,7 @@
 "use client"
 
-import Link from "next/link"
 import { urlFor } from "@/sanity/image"
+import CtaButton from "@/components/CtaButton"
 import type { SanityImageRef, PartnerBadge } from "./types"
 
 interface HeroBannerProps {
@@ -148,28 +148,20 @@ export default function HeroBanner({
         {/* CTA buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center w-full max-w-[680px]" style={{ gap: 20, marginTop: 40 }}>
           {primaryCtaLabel && primaryCtaUrl && (
-            <Link
+            <CtaButton
               href={primaryCtaUrl}
-              className="flex items-center justify-center font-bold w-full sm:flex-1 sm:max-w-[330px]"
-              style={{
-                height: 53, borderRadius: 100,
-                ...(secondaryCtaLabel
-                  ? { border: "1px solid #8015e8", backgroundColor: "white", color: "#8015e8" }
-                  : { background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white" }),
-                fontSize: 16,
-              }}
-            >
-              {primaryCtaLabel}
-            </Link>
+              label={primaryCtaLabel}
+              variant={secondaryCtaLabel ? "outline" : "primary"}
+              className="w-full sm:flex-1 sm:max-w-[330px]"
+            />
           )}
           {secondaryCtaLabel && secondaryCtaUrl && (
-            <Link
+            <CtaButton
               href={secondaryCtaUrl}
-              className="flex items-center justify-center font-bold text-white w-full sm:flex-1 sm:max-w-[330px]"
-              style={{ height: 53, borderRadius: 100, background: "linear-gradient(to right, #8015e8, #ba83f0)", fontSize: 16 }}
-            >
-              {secondaryCtaLabel}
-            </Link>
+              label={secondaryCtaLabel}
+              variant="primary"
+              className="w-full sm:flex-1 sm:max-w-[330px]"
+            />
           )}
         </div>
 

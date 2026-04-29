@@ -33,9 +33,6 @@ export default async function CareersPage() {
     getFaqItemsForPage("careers"),
   ])
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
-
   const faqTabs = centralFaqs?.length > 0
     ? groupFaqsIntoTabs(centralFaqs)
     : page.faqTabs || []
@@ -74,8 +71,23 @@ export default async function CareersPage() {
               className="text-display text-center"
               style={{ marginTop: 24, maxWidth: 900 }}
             >
-              <span className="text-black">{page.heroHeading.replace(/\s\S+$/, "")} </span>
-              <span style={{ color: "var(--purple-primary)" }}>{page.heroHeading.split(" ").pop()}</span>
+              {page.heroHeadingAccent ? (
+                (() => {
+                  const idx = page.heroHeading.indexOf(page.heroHeadingAccent)
+                  if (idx >= 0) {
+                    return (
+                      <>
+                        <span className="text-black">{page.heroHeading.slice(0, idx)}</span>
+                        <span style={{ color: "var(--purple-primary)" }}>{page.heroHeadingAccent}</span>
+                        <span className="text-black">{page.heroHeading.slice(idx + page.heroHeadingAccent.length)}</span>
+                      </>
+                    )
+                  }
+                  return <span className="text-black">{page.heroHeading}</span>
+                })()
+              ) : (
+                <span className="text-black">{page.heroHeading}</span>
+              )}
             </h1>
           )}
 

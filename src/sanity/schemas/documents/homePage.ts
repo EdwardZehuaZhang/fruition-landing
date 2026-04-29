@@ -39,6 +39,7 @@ export default defineType({
         defineArrayMember({ type: 'statsBlock' }),
         defineArrayMember({ type: 'calendlyBlock' }),
         defineArrayMember({ type: 'tabSectionBlock' }),
+        defineArrayMember({ type: 'teamsTransformedBlock' }),
       ],
     }),
   ],

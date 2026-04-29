@@ -10,13 +10,88 @@ import {
 } from "@/components/sections"
 import type { SiteSettingsData, PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
+import CtaButton from "@/components/CtaButton"
+
+interface ComparisonItem {
+  _key?: string
+  number?: string
+  title?: string
+  description?: string
+}
+interface ComparisonTab {
+  _key?: string
+  label?: string
+  items?: ComparisonItem[]
+}
+interface FourCard {
+  _key?: string
+  image?: SanityImageRef
+  title?: string
+  description?: string
+}
+interface FaqFlatItem {
+  _key?: string
+  question?: string
+  answer?: string
+}
+interface EmojiItem {
+  _key?: string
+  emoji?: string
+  text?: string
+}
+interface StrategicColumn {
+  _key?: string
+  title?: string
+  items?: EmojiItem[]
+}
+
+interface SolutionPageData {
+  title?: string
+  heroHeading?: string
+  heroSubheading?: string
+  heroImage?: SanityImageRef
+  serviceHeroImage?: SanityImageRef
+  primaryCtaLabel?: string
+  primaryCtaUrl?: string
+  secondaryCtaLabel?: string
+  secondaryCtaUrl?: string
+  logoCloudHeadingPart1?: string
+  logoCloudHeadingAccent?: string
+  comparisonHeading?: string
+  comparisonHeadingAccent?: string
+  comparisonSubheading?: string
+  comparisonEyebrow?: string
+  featureTabsIntroSubheading?: string
+  comparisonTabs?: ComparisonTab[]
+  fourCardsHeadingPart1?: string
+  fourCardsHeadingAccent?: string
+  fourCardsCtaLabel?: string
+  fourCardsCtaUrl?: string
+  fourCards?: FourCard[]
+  calendlyHeading?: string
+  calendlySubheading?: string
+  faqHeading?: string
+  faqEyebrow?: string
+  faqFlatItems?: FaqFlatItem[]
+  strategicColumnsHeadingPart1?: string
+  strategicColumnsHeadingAccent?: string
+  strategicColumnsSubheading?: string
+  strategicColumns?: StrategicColumn[]
+  joinHeadingPart1?: string
+  joinHeadingAccent?: string
+  joinHeadingPart2?: string
+  joinSubheading?: string
+  joinStats?: Array<{ _key?: string; value?: string; label?: string }>
+  joinCtaLabel?: string
+  joinCtaUrl?: string
+}
 
 interface Props {
-  page: any
+  page: SolutionPageData | null
   siteSettings?: SiteSettingsData | null
 }
 
-function safeImageUrl(ref: SanityImageRef): string | null {
+function safeImageUrl(ref?: SanityImageRef): string | null {
   if (!ref?.asset?._ref) return null
   try {
     return urlFor(ref).url()
@@ -25,180 +100,15 @@ function safeImageUrl(ref: SanityImageRef): string | null {
   }
 }
 
-const CS_FEATURES = [
-  {
-    title: "Ticketing system integration",
-    description: "Seamlessly integrate your email ticketing system with Monday.com",
-  },
-  {
-    title: "Unified data source",
-    description: "Centralise your customer service management for optimal efficiency",
-  },
-  {
-    title: "Shared inboxes",
-    description: "Leverage shared inbox solutions for collaborative customer support",
-  },
-  {
-    title: "Turn service needs into action",
-    description:
-      "Bridge the gap between tickets and larger scale service initiatives by managing them in one place.",
-  },
-  {
-    title: "Solve tickets with full context",
-    description:
-      "Connect service management with organisational resources like assets, knowledge base, directories, inventory, and more.",
-  },
-  {
-    title: "Accelerate stakeholder collaboration",
-    description:
-      "Replace messy email threads with in-platform communication to connect internal and external stakeholders.",
-  },
-]
-
-const AI_FEATURES = [
-  {
-    title: "Self-service customer experiences",
-    description:
-      "Enable customers to solve common issues on their own so agents can focus on critical issues.",
-  },
-  {
-    title: "Automatic ticket classification",
-    description:
-      "Let AI automatically tag tickets by type, urgency, sentiment, department, and more to accurately prioritise incoming tickets.",
-  },
-  {
-    title: "Smart ticket routing",
-    description:
-      "Speed up ticket handling and reduce manual work with automatic assignment to relevant agent or team.",
-  },
-  {
-    title: "Knowledge base assistance for agents",
-    description:
-      "Solve a wider range of issues with AI assistance that pulls relevant knowledge and minimises unnecessary escalations and delays.",
-  },
-  {
-    title: "Streamlined communication",
-    description:
-      "Automate replies, follow-ups, and more to speed up communication between agents, customers, and all of your stakeholders.",
-  },
-]
-
-const FOUR_CARDS = [
-  {
-    image: "/images/monday-service-card-1.avif",
-    title: "Email Ticketing with monday.com",
-    description:
-      "Integrate your email ticketing system, including Outlook and Gmail, with monday.com's service desk software for unparalleled efficiency and enhanced customer satisfaction.",
-  },
-  {
-    image: "/images/monday-service-card-2.avif",
-    title: "Outlook and Gmail Integration Made Easy",
-    description:
-      "Fruition specialises in integrating monday.com with your existing email ticketing system, including Outlook and Gmail.",
-  },
-  {
-    image: "/images/monday-service-card-3.avif",
-    title: "Stay Ahead of Service Trends and Issues",
-    description:
-      "Monitor your entire service operations performance to detect issues before they escalate and identify areas for improvement.",
-  },
-  {
-    image: "/images/monday-service-card-4.avif",
-    title: "Streamline Your Customer Service Workflow",
-    description:
-      "With the monday.com helpdesk and shared inbox solution, your team can collaborate effortlessly on customer inquiries. Assign tickets, track progress, and resolve issues faster than ever before.",
-  },
-]
-
-const FAQ_ITEMS = [
-  {
-    question: "How much does monday service cost?",
-    answer:
-      "On the Basic Plan, the monthly cost per user is $12 while the annual cost per user is $108. On the Standard Plan, the monthly cost becomes $14 per user while the annual cost per user is $144. On the Pro plan, it is $79.99 per user monthly and $228 per user annually.",
-  },
-  {
-    question: "What is monday Service?",
-    answer:
-      "monday service is an intuitive, fully customizable service platform where help desk teams manage and automate their service operations and processes to resolve incidents and requests within SLAs, and deliver great customer experiences at scale.\n\nmonday service connects ticketing, projects, and cross-department teams in one centralized support platform.",
-  },
-  {
-    question: "Can you use Monday as a ticketing system?",
-    answer:
-      "Yes, with monday.com, you can build a functional ticket-tracking system that helps your team's needs. You can track all incoming, open, and closed tickets with one comprehensive board. Connect channels to your monday Service \"Tickets\" board to receive all tickets in your board, and track correspondence within the ticket's item.\n\nLearn more about using monday Service as a ticketing system here.",
-  },
-  {
-    question: "What is the best customer service ticketing system?",
-    answer:
-      "The best customer service ticketing system will have all of the following:\n\n• User-Friendly Interface\n• Seamless Collaboration\n• Integration with Other Systems\n• Multi-channel support\n• Reliable and Robust Reporting\n• Scalability\n• Exceptional Customer Support",
-  },
-  {
-    question: "Is monday Service secure?",
-    answer:
-      "Yes. It offers enterprise-grade security including SOC 2 compliance, GDPR, HIPAA (Enterprise), SSO, 2FA, and audit logs.",
-  },
-  {
-    question: "What can I use Monday Service for?",
-    answer:
-      "• Handling IT tickets and service requests\n• Automating incident management and approvals\n• Tracking IT assets and change requests\n• Providing employees with a self-service portal for quick support",
-  },
-  {
-    question: "Does monday Service include automations?",
-    answer:
-      "Yes. You can automate ticket routing, priority settings, status changes, SLA tracking, and escalations to reduce manual work and resolve issues faster.",
-  },
-  {
-    question: "Can monday Service integrate with other tools?",
-    answer:
-      "Yes. It connects with Slack, Microsoft Teams, Gmail, Outlook, Jira, and more. You can also use the API, Zapier, or Make for advanced integrations.",
-  },
-  {
-    question: "Is monday Service secure enough for IT operations?",
-    answer:
-      "Yes. It includes enterprise-grade security features like SSO, 2FA, SOC 2 compliance, GDPR alignment, audit logs, and role-based permissions to keep IT data safe.",
-  },
-]
-
-const STRATEGIC_COLUMNS = [
-  {
-    title: "Licenses, product consultancy, and implementation",
-    items: [
-      { emoji: "📋", text: "Analyse your operations and recommend the optimal monday.com plan" },
-      { emoji: "🔧", text: "Deliver customised implementation with detailed project roadmap" },
-      { emoji: "✅", text: "Configure your workspace to match your specific business requirements" },
-    ],
-  },
-  {
-    title: "Onboarding, training, and business-wide adoption",
-    items: [
-      { emoji: "🚀", text: "Accelerate team productivity through comprehensive onboarding programs" },
-      { emoji: "👥", text: "Drive adoption across all departments with expert-led training sessions" },
-      { emoji: "📝", text: "Ensure immediate value delivery and measurable ROI from implementation" },
-    ],
-  },
-  {
-    title: "Optimisations, automations and integrations",
-    items: [
-      { emoji: "⚙️", text: "Design intelligent automations and ongoing workflow optimisations and improvements" },
-      { emoji: "🔗", text: "Build seamless integrations with your existing business tools" },
-      { emoji: "🎯", text: "Create tailored dashboards, templates, and reporting solutions" },
-    ],
-  },
-]
-
-export default function MondayServicePage({
-  page,
-  siteSettings,
-}: Props) {
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
-
+export default function MondayServicePage({ page, siteSettings }: Props) {
+  const calendlyUrl = siteSettings?.calendlyLink || ""
   const partnerBadges: PartnerBadge[] = siteSettings?.navbarPartnerBadges || []
 
-  const heroTitle = page?.heroHeading || page?.title || "monday Service"
-  const heroSubheading =
-    page?.heroSubheading ||
-    "Transform your customer service operations with monday Service — unified ticketing, shared inboxes, automations, and AI-powered workflows on one platform."
+  const heroTitle = page?.heroHeading || page?.title
+  const heroSubheading = page?.heroSubheading
+  const heroImageSrc = safeImageUrl(page?.serviceHeroImage) || safeImageUrl(page?.heroImage)
+  const primaryCtaUrl = page?.primaryCtaUrl || calendlyUrl
+  const secondaryCtaUrl = page?.secondaryCtaUrl || calendlyUrl
 
   return (
     <div>
@@ -228,97 +138,126 @@ export default function MondayServicePage({
             </div>
           )}
 
-          <h1
-            className="text-center font-bold"
-            style={{ fontSize: 48, lineHeight: "67.2px", marginTop: 42, maxWidth: 924 }}
-          >
-            <span className="text-black">{heroTitle}</span>
-          </h1>
+          {heroTitle && (
+            <h1
+              className="text-center font-bold"
+              style={{ fontSize: 48, lineHeight: "67.2px", marginTop: 42, maxWidth: 924 }}
+            >
+              <span className="text-black">{heroTitle}</span>
+            </h1>
+          )}
 
-          <p
-            style={{
-              fontSize: 18,
-              lineHeight: "25.2px",
-              color: "black",
-              marginTop: 31,
-              textAlign: "center",
-              maxWidth: 859,
-              whiteSpace: "pre-line",
-            }}
-          >
-            {heroSubheading}
-          </p>
-
-          <div className="flex items-center justify-center" style={{ gap: 20, marginTop: 40, width: 680 }}>
-            <Link
-              href={calendlyUrl}
-              className="flex items-center justify-center font-bold"
+          {heroSubheading && (
+            <p
               style={{
-                width: 330,
-                height: 53,
-                borderRadius: 100,
-                border: "1px solid #8015e8",
-                backgroundColor: "white",
-                color: "#8015e8",
-                fontSize: 16,
+                fontSize: 18,
+                lineHeight: "25.2px",
+                color: "black",
+                marginTop: 31,
+                textAlign: "center",
+                maxWidth: 859,
+                whiteSpace: "pre-line",
               }}
             >
-              {"\uD83D\uDE80 Book a Consultation"}
-            </Link>
-            <Link
-              href={calendlyUrl}
-              className="flex items-center justify-center font-bold text-white"
-              style={{
-                width: 330,
-                height: 53,
-                borderRadius: 100,
-                background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                fontSize: 16,
-              }}
-            >
-              {"\u25B6\uFE0F Get Started with monday.com"}
-            </Link>
-          </div>
+              {heroSubheading}
+            </p>
+          )}
 
-          <div style={{ marginTop: 40 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/monday-service-hero.avif"
-              alt="monday Service"
-              width={1042}
-              height={312}
-              className="rounded-card object-contain bg-white"
-              style={{ width: 1042, height: "auto", maxHeight: 520 }}
-            />
-          </div>
+          {(page?.primaryCtaLabel || page?.secondaryCtaLabel) && (
+            <div className="flex items-center justify-center" style={{ gap: 20, marginTop: 40, width: 680 }}>
+              {page?.primaryCtaLabel && (
+                <CtaButton
+                  href={primaryCtaUrl}
+                  label={page.primaryCtaLabel}
+                  variant="outline"
+                  style={{ width: 330 }}
+                />
+              )}
+              {page?.secondaryCtaLabel && (
+                <CtaButton
+                  href={secondaryCtaUrl}
+                  label={page.secondaryCtaLabel}
+                  variant="primary"
+                  style={{ width: 330 }}
+                />
+              )}
+            </div>
+          )}
+
+          {heroImageSrc && (
+            <div style={{ marginTop: 40 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={heroImageSrc}
+                alt={heroTitle || "Hero"}
+                width={1042}
+                height={312}
+                className="rounded-card object-contain bg-white"
+                style={{ width: 1042, height: "auto", maxHeight: 520 }}
+              />
+            </div>
+          )}
         </div>
       </section>
 
-      {/* 2. Logo Cloud (no video under it) */}
-      <LogoCloudMarquee
-        headingPart1={page?.logoCloudHeadingPart1 || "Clients who have used our "}
-        headingAccent={page?.logoCloudHeadingAccent || "monday.com consulting services"}
-        logos={siteSettings?.carouselLogos || []}
-      />
+      {/* 2. Logo Cloud */}
+      {(page?.logoCloudHeadingPart1 || page?.logoCloudHeadingAccent) && (
+        <LogoCloudMarquee
+          headingPart1={page?.logoCloudHeadingPart1}
+          headingAccent={page?.logoCloudHeadingAccent}
+          logos={siteSettings?.carouselLogos || []}
+        />
+      )}
 
       {/* 3. Feature Tabs */}
-      <FeatureTabsSection />
+      {page?.comparisonTabs && page.comparisonTabs.length > 0 && (
+        <FeatureTabsSection
+          headingPart1={page.comparisonHeading}
+          headingAccent={page.comparisonHeadingAccent}
+          subheading={page.featureTabsIntroSubheading || page.comparisonSubheading}
+          eyebrow={page.comparisonEyebrow}
+          tabs={page.comparisonTabs}
+        />
+      )}
 
-      {/* 4. Four image cards side-by-side */}
-      <FourCardSection calendlyUrl={calendlyUrl} />
+      {/* 4. Four image cards */}
+      {page?.fourCards && page.fourCards.length > 0 && (
+        <FourCardSection
+          headingPart1={page.fourCardsHeadingPart1}
+          headingAccent={page.fourCardsHeadingAccent}
+          ctaLabel={page.fourCardsCtaLabel}
+          ctaUrl={page.fourCardsCtaUrl || calendlyUrl}
+          cards={page.fourCards}
+        />
+      )}
 
       {/* 5. Calendly */}
-      <CalendlySection
-        heading={page?.calendlyHeading}
-        subheading={page?.calendlySubheading}
-        calendlyUrl={calendlyUrl}
-      />
+      {(page?.calendlyHeading || page?.calendlySubheading) && (
+        <CalendlySection
+          heading={page?.calendlyHeading}
+          subheading={page?.calendlySubheading}
+          calendlyUrl={calendlyUrl}
+        />
+      )}
 
       {/* 6. FAQ */}
-      <MondayServiceFaq />
+      {page?.faqFlatItems && page.faqFlatItems.length > 0 && (
+        <MondayServiceFaq
+          heading={page.faqHeading}
+          eyebrow={page.faqEyebrow}
+          items={page.faqFlatItems}
+        />
+      )}
 
-      {/* 7. Strategic approach section */}
-      <StrategicApproachSection />
+      {/* 7. Strategic columns */}
+      {page?.strategicColumns && page.strategicColumns.length > 0 && (
+        <StrategicApproachSection
+          headingPart1={page.strategicColumnsHeadingPart1}
+          headingAccent={page.strategicColumnsHeadingAccent}
+          subheading={page.strategicColumnsSubheading}
+          columns={page.strategicColumns}
+        />
+      )}
 
       {/* 8. Join 500+ Stats */}
       <JoinStatsSection
@@ -326,7 +265,7 @@ export default function MondayServicePage({
         headingAccent={page?.joinHeadingAccent}
         headingPart2={page?.joinHeadingPart2}
         subheading={page?.joinSubheading}
-        stats={page?.joinStats as Array<{ _key?: string; value?: string; label?: string }>}
+        stats={page?.joinStats}
         ctaLabel={page?.joinCtaLabel}
         ctaUrl={page?.joinCtaUrl || calendlyUrl}
         siteSettings={siteSettings || undefined}
@@ -340,46 +279,50 @@ export default function MondayServicePage({
 
 /* -------------------------- Custom sections -------------------------- */
 
-function FeatureTabsSection() {
+function FeatureTabsSection({
+  headingPart1,
+  headingAccent,
+  subheading,
+  eyebrow,
+  tabs,
+}: {
+  headingPart1?: string
+  headingAccent?: string
+  subheading?: string
+  eyebrow?: string
+  tabs: ComparisonTab[]
+}) {
   const [tab, setTab] = useState(0)
-  const tabs = [
-    { label: "Customer Service Features", items: CS_FEATURES },
-    { label: "AI-Powered Service", items: AI_FEATURES },
-  ]
   const active = tabs[tab]
 
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1042 }}>
-        <h2
-          className="text-section-h2 text-center text-black"
-          style={{ maxWidth: 900 }}
-        >
-          Easily shape every aspect of service to your business needs with{" "}
-          <span style={{ color: "#8015e8" }}>monday Service</span>
-        </h2>
-        <p
-          className="text-center text-black"
-          style={{ fontSize: 18, lineHeight: "28px", marginTop: 20, maxWidth: 860 }}
-        >
-          We transform fragmented service systems into cohesive, automated operations that enhance
-          team collaboration and deliver measurable ROI across your entire organisation.
-        </p>
-        <p
-          className="text-center font-semibold"
-          style={{ fontSize: 22, color: "#8015e8", marginTop: 32 }}
-        >
-          Why monday.com for customer service?
-        </p>
+        {(headingPart1 || headingAccent) && (
+          <h2 className="text-section-h2 text-center text-black" style={{ maxWidth: 900 }}>
+            {headingPart1 && <span className="text-black">{headingPart1}</span>}
+            {headingAccent && <span style={{ color: "#8015e8" }}>{headingAccent}</span>}
+          </h2>
+        )}
+        {subheading && (
+          <p
+            className="text-center text-black"
+            style={{ fontSize: 18, lineHeight: "28px", marginTop: 20, maxWidth: 860 }}
+          >
+            {subheading}
+          </p>
+        )}
+        {eyebrow && (
+          <p className="text-center font-semibold" style={{ fontSize: 22, color: "#8015e8", marginTop: 32 }}>
+            {eyebrow}
+          </p>
+        )}
 
         {/* Tabs */}
-        <div
-          className="flex justify-center flex-wrap"
-          style={{ gap: 12, marginTop: 40, width: "100%" }}
-        >
+        <div className="flex justify-center flex-wrap" style={{ gap: 12, marginTop: 40, width: "100%" }}>
           {tabs.map((t, i) => (
             <button
-              key={t.label}
+              key={t._key || t.label || i}
               onClick={() => setTab(i)}
               className="cursor-pointer transition-all"
               style={{
@@ -407,93 +350,117 @@ function FeatureTabsSection() {
         </div>
 
         {/* Feature grid */}
-        <div
-          className="grid w-full"
-          style={{
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: 24,
-            marginTop: 40,
-          }}
-        >
-          {active.items.map((item, i) => (
-            <div
-              key={item.title}
-              className="flex flex-col"
-              style={{
-                padding: 24,
-                borderRadius: 16,
-                border: "1px solid #e8e6e6",
-                backgroundColor: "#fafafa",
-              }}
-            >
-              <span
+        {active?.items && (
+          <div
+            className="grid w-full"
+            style={{
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: 24,
+              marginTop: 40,
+            }}
+          >
+            {active.items.map((item, i) => (
+              <div
+                key={item._key || item.title || i}
+                className="flex flex-col"
                 style={{
-                  fontSize: 40,
-                  fontWeight: 200,
-                  color: "#8015e8",
-                  lineHeight: 1,
+                  padding: 24,
+                  borderRadius: 16,
+                  border: "1px solid #e8e6e6",
+                  backgroundColor: "#fafafa",
                 }}
               >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <p
-                className="font-bold"
-                style={{ fontSize: 18, marginTop: 16, color: "#2b074d" }}
-              >
-                {item.title}
-              </p>
-              <p
-                style={{
-                  fontSize: 14,
-                  lineHeight: "22px",
-                  color: "#444",
-                  marginTop: 10,
-                  whiteSpace: "pre-line",
-                }}
-              >
-                {item.description}
-              </p>
-            </div>
-          ))}
-        </div>
+                <span
+                  style={{
+                    fontSize: 40,
+                    fontWeight: 200,
+                    color: "#8015e8",
+                    lineHeight: 1,
+                  }}
+                >
+                  {item.number || String(i + 1).padStart(2, "0")}
+                </span>
+                {item.title && (
+                  <p className="font-bold" style={{ fontSize: 18, marginTop: 16, color: "#2b074d" }}>
+                    {item.title}
+                  </p>
+                )}
+                {item.description && (
+                  <p
+                    style={{
+                      fontSize: 14,
+                      lineHeight: "22px",
+                      color: "#444",
+                      marginTop: 10,
+                      whiteSpace: "pre-line",
+                    }}
+                  >
+                    {item.description}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )
 }
 
-function FourCardSection({ calendlyUrl }: { calendlyUrl: string }) {
+function FourCardSection({
+  headingPart1,
+  headingAccent,
+  ctaLabel,
+  ctaUrl,
+  cards,
+}: {
+  headingPart1?: string
+  headingAccent?: string
+  ctaLabel?: string
+  ctaUrl?: string
+  cards: FourCard[]
+}) {
   return (
     <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, backgroundColor: "#f7f7f7" }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1100 }}>
-        <h2
-          className="text-center font-bold"
-          style={{ fontSize: 40, lineHeight: "52px", color: "#2b074d", maxWidth: 900 }}
-        >
-          Holistic service management.
-          <br />
-          <span style={{ color: "#8015e8" }}>One shared platform.</span>
-        </h2>
-        <Link
-          href={calendlyUrl}
-          className="flex items-center justify-center font-bold text-white"
-          style={{
-            marginTop: 32,
-            height: 53,
-            width: 260,
-            borderRadius: 100,
-            background: "linear-gradient(to right, #8015e8, #ba83f0)",
-            fontSize: 16,
-          }}
-        >
-          {"\uD83D\uDE80 Book a Meeting"}
-        </Link>
+        {(headingPart1 || headingAccent) && (
+          <h2
+            className="text-center font-bold"
+            style={{ fontSize: 40, lineHeight: "52px", color: "#2b074d", maxWidth: 900 }}
+          >
+            {headingPart1 && (
+              <>
+                {headingPart1}
+                {headingAccent && <br />}
+              </>
+            )}
+            {headingAccent && <span style={{ color: "#8015e8" }}>{headingAccent}</span>}
+          </h2>
+        )}
+        {ctaLabel && ctaUrl && (
+          <Link
+            href={ctaUrl}
+            className="flex items-center justify-center font-bold text-white"
+            style={{
+              marginTop: 32,
+              height: 53,
+              width: 260,
+              borderRadius: 100,
+              background: "linear-gradient(to right, #8015e8, #ba83f0)",
+              fontSize: 16,
+            }}
+          >
+            {ctaLabel}
+          </Link>
+        )}
 
         <div className="flex flex-col w-full" style={{ gap: 48, marginTop: 56 }}>
-          {FOUR_CARDS.map((card, i) => {
+          {cards.map((card, i) => {
             const isEven = i % 2 === 0
+            const imgSrc = safeImageUrl(card.image)
             return (
               <div
-                key={card.title}
+                key={card._key || card.title || i}
                 className="flex items-center"
                 style={{
                   flexDirection: isEven ? "row" : "row-reverse",
@@ -504,34 +471,40 @@ function FourCardSection({ calendlyUrl }: { calendlyUrl: string }) {
                   boxShadow: "0 1px 10px rgba(0,0,0,0.06)",
                 }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  style={{
-                    width: "50%",
-                    height: 320,
-                    objectFit: "cover",
-                    flexShrink: 0,
-                  }}
-                />
-                <div style={{ padding: 40, flex: 1 }}>
-                  <p
-                    className="font-bold"
-                    style={{ fontSize: 24, color: "#2b074d", lineHeight: "32px" }}
-                  >
-                    {card.title}
-                  </p>
-                  <p
+                {imgSrc && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={imgSrc}
+                    alt={card.title || ""}
                     style={{
-                      fontSize: 16,
-                      lineHeight: "26px",
-                      color: "#444",
-                      marginTop: 16,
+                      width: "50%",
+                      height: 320,
+                      objectFit: "cover",
+                      flexShrink: 0,
                     }}
-                  >
-                    {card.description}
-                  </p>
+                  />
+                )}
+                <div style={{ padding: 40, flex: 1 }}>
+                  {card.title && (
+                    <p
+                      className="font-bold"
+                      style={{ fontSize: 24, color: "#2b074d", lineHeight: "32px" }}
+                    >
+                      {card.title}
+                    </p>
+                  )}
+                  {card.description && (
+                    <p
+                      style={{
+                        fontSize: 16,
+                        lineHeight: "26px",
+                        color: "#444",
+                        marginTop: 16,
+                      }}
+                    >
+                      {card.description}
+                    </p>
+                  )}
                 </div>
               </div>
             )
@@ -542,25 +515,34 @@ function FourCardSection({ calendlyUrl }: { calendlyUrl: string }) {
   )
 }
 
-function MondayServiceFaq() {
+function MondayServiceFaq({
+  heading,
+  eyebrow,
+  items,
+}: {
+  heading?: string
+  eyebrow?: string
+  items: FaqFlatItem[]
+}) {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
 
   return (
     <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
       <div className="mx-auto flex flex-col px-4" style={{ maxWidth: 959, gap: 24 }}>
-        <h2
-          className="text-section-h2"
-          style={{ color: "var(--purple-primary)" }}
-        >
-          Frequently asked questions
-        </h2>
-        <p style={{ fontSize: 18, color: "#2b074d", marginTop: -8 }}>monday Service</p>
+        {heading && (
+          <h2 className="text-section-h2" style={{ color: "var(--purple-primary)" }}>
+            {heading}
+          </h2>
+        )}
+        {eyebrow && (
+          <p style={{ fontSize: 18, color: "#2b074d", marginTop: -8 }}>{eyebrow}</p>
+        )}
 
         <div className="flex flex-col" style={{ gap: 12, marginTop: 12 }}>
-          {FAQ_ITEMS.map((item, i) => {
+          {items.map((item, i) => {
             const isOpen = openIndex === i
             return (
-              <div key={item.question} style={{ paddingTop: i === 0 ? 20 : 24 }}>
+              <div key={item._key || item.question || i} style={{ paddingTop: i === 0 ? 20 : 24 }}>
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   className="w-full flex items-center justify-between text-left cursor-pointer"
@@ -587,7 +569,7 @@ function MondayServiceFaq() {
                     </svg>
                   </div>
                 </button>
-                {isOpen && (
+                {isOpen && item.answer && (
                   <div
                     style={{
                       paddingBottom: 16,
@@ -616,25 +598,34 @@ function MondayServiceFaq() {
   )
 }
 
-function StrategicApproachSection() {
+function StrategicApproachSection({
+  headingPart1,
+  headingAccent,
+  subheading,
+  columns,
+}: {
+  headingPart1?: string
+  headingAccent?: string
+  subheading?: string
+  columns: StrategicColumn[]
+}) {
   return (
     <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, backgroundColor: "#f5f0ff" }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1200 }}>
-        <h2
-          className="text-section-h2 text-center text-black"
-          style={{ maxWidth: 900 }}
-        >
-          How to Manage Service with monday.com:{" "}
-          <span style={{ color: "#8015e8" }}>A Strategic Approach</span>
-        </h2>
-        <p
-          className="text-center"
-          style={{ fontSize: 16, lineHeight: "24px", color: "#333", marginTop: 20, maxWidth: 860 }}
-        >
-          Managing products effectively with monday.com requires understanding both the platform&apos;s
-          capabilities and proven service management methodologies. Our monday.com service
-          management consultants guide teams through:
-        </p>
+        {(headingPart1 || headingAccent) && (
+          <h2 className="text-section-h2 text-center text-black" style={{ maxWidth: 900 }}>
+            {headingPart1 && <>{headingPart1}{headingAccent ? " " : ""}</>}
+            {headingAccent && <span style={{ color: "#8015e8" }}>{headingAccent}</span>}
+          </h2>
+        )}
+        {subheading && (
+          <p
+            className="text-center"
+            style={{ fontSize: 16, lineHeight: "24px", color: "#333", marginTop: 20, maxWidth: 860 }}
+          >
+            {subheading}
+          </p>
+        )}
 
         <div
           className="grid w-full"
@@ -644,9 +635,9 @@ function StrategicApproachSection() {
             marginTop: 48,
           }}
         >
-          {STRATEGIC_COLUMNS.map((col) => (
+          {columns.map((col, ci) => (
             <div
-              key={col.title}
+              key={col._key || col.title || ci}
               className="flex flex-col"
               style={{
                 padding: 32,
@@ -655,20 +646,25 @@ function StrategicApproachSection() {
                 boxShadow: "0 1px 12px rgba(0,0,0,0.06)",
               }}
             >
-              <h3
-                className="font-bold"
-                style={{ fontSize: 20, lineHeight: "28px", color: "#8015e8" }}
-              >
-                {col.title}
-              </h3>
-              <div className="flex flex-col" style={{ gap: 20, marginTop: 24 }}>
-                {col.items.map((it, i) => (
-                  <div key={i} className="flex items-start" style={{ gap: 12 }}>
-                    <span style={{ fontSize: 20, lineHeight: "24px", flexShrink: 0 }}>{it.emoji}</span>
-                    <p style={{ fontSize: 14, lineHeight: "22px", color: "#333" }}>{it.text}</p>
-                  </div>
-                ))}
-              </div>
+              {col.title && (
+                <h3 className="font-bold" style={{ fontSize: 20, lineHeight: "28px", color: "#8015e8" }}>
+                  {col.title}
+                </h3>
+              )}
+              {col.items && (
+                <div className="flex flex-col" style={{ gap: 20, marginTop: 24 }}>
+                  {col.items.map((it, i) => (
+                    <div key={it._key || i} className="flex items-start" style={{ gap: 12 }}>
+                      {it.emoji && (
+                        <span style={{ fontSize: 20, lineHeight: "24px", flexShrink: 0 }}>{it.emoji}</span>
+                      )}
+                      {it.text && (
+                        <p style={{ fontSize: 14, lineHeight: "22px", color: "#333" }}>{it.text}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>

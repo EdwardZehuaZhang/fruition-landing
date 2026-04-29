@@ -342,6 +342,84 @@ export default {
       }],
     },
 
+    // ── monday Service-specific sections ────────────────────────────
+    // Hero image override (alt to heroImage)
+    { name: 'serviceHeroImage', title: 'Service Hero Image', type: 'image', options: { hotspot: true } },
+
+    // Comparison/feature tabs eyebrow ("Why monday.com for customer service?")
+    { name: 'comparisonHeadingAccent', title: 'Comparison Heading Accent', type: 'string' },
+    { name: 'comparisonEyebrow', title: 'Comparison Eyebrow', type: 'string' },
+
+    // Four image cards section (alternating image/text rows)
+    { name: 'fourCardsHeadingPart1', title: 'Four Cards Heading (prefix)', type: 'string' },
+    { name: 'fourCardsHeadingAccent', title: 'Four Cards Heading (accent)', type: 'string' },
+    { name: 'fourCardsCtaLabel', title: 'Four Cards CTA Label', type: 'string' },
+    { name: 'fourCardsCtaUrl', title: 'Four Cards CTA URL', type: 'string' },
+    {
+      name: 'fourCards',
+      title: 'Four Cards',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'fourCard',
+        fields: [
+          { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'description', title: 'Description', type: 'text' },
+        ],
+      }],
+    },
+
+    // Flat FAQ for service page (alternative to faqTabs)
+    { name: 'faqHeading', title: 'FAQ Heading', type: 'string' },
+    { name: 'faqEyebrow', title: 'FAQ Eyebrow', type: 'string' },
+    {
+      name: 'faqFlatItems',
+      title: 'FAQ Flat Items',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'faqFlatItem',
+        fields: [
+          { name: 'question', title: 'Question', type: 'string' },
+          { name: 'answer', title: 'Answer', type: 'text' },
+        ],
+      }],
+    },
+
+    // Strategic columns (3-column emoji bullets layout)
+    { name: 'strategicColumnsHeadingPart1', title: 'Strategic Columns Heading (prefix)', type: 'string' },
+    { name: 'strategicColumnsHeadingAccent', title: 'Strategic Columns Heading (accent)', type: 'string' },
+    { name: 'strategicColumnsSubheading', title: 'Strategic Columns Subheading', type: 'text' },
+    {
+      name: 'strategicColumns',
+      title: 'Strategic Columns',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'strategicColumn',
+        fields: [
+          { name: 'title', title: 'Column Title', type: 'string' },
+          {
+            name: 'items',
+            title: 'Items',
+            type: 'array',
+            of: [{
+              type: 'object',
+              name: 'emojiItem',
+              fields: [
+                { name: 'emoji', title: 'Emoji', type: 'string' },
+                { name: 'text', title: 'Text', type: 'text' },
+              ],
+            }],
+          },
+        ],
+      }],
+    },
+
+    // Feature tabs intro copy (above tab pills)
+    { name: 'featureTabsIntroSubheading', title: 'Feature Tabs Intro Subheading', type: 'text' },
+
     // Section visibility toggles
     { name: 'hideDiscoverSection', title: 'Hide Discover CTA Section', type: 'boolean', initialValue: false },
     { name: 'hideJoinStatsSection', title: 'Hide Join Stats Section', type: 'boolean', initialValue: false },

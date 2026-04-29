@@ -135,5 +135,51 @@ export default defineType({
     defineField({ name: 'testimonialBannerHeadingPart1', title: 'Testimonial Banner Heading (prefix)', type: 'string' }),
     defineField({ name: 'testimonialBannerHeadingAccent', title: 'Testimonial Banner Heading (accent)', type: 'string' }),
     defineField({ name: 'testimonialBannerHeadingPart2', title: 'Testimonial Banner Heading (suffix)', type: 'string' }),
+    defineField({ name: 'testimonialBannerPrimaryCtaLabel', title: 'Testimonial Banner Primary CTA Label', type: 'string' }),
+    defineField({ name: 'testimonialBannerPrimaryCtaUrl', title: 'Testimonial Banner Primary CTA URL', type: 'string' }),
+    defineField({ name: 'testimonialBannerSecondaryCtaLabel', title: 'Testimonial Banner Secondary CTA Label', type: 'string' }),
+    defineField({ name: 'testimonialBannerSecondaryCtaUrl', title: 'Testimonial Banner Secondary CTA URL', type: 'string' }),
+
+    // Hero secondary CTA
+    defineField({ name: 'heroSecondaryCtaLabel', title: 'Hero Secondary CTA Label', type: 'string' }),
+    defineField({ name: 'heroSecondaryCtaUrl', title: 'Hero Secondary CTA URL', type: 'string' }),
+
+    // Partnership announcement
+    defineField({ name: 'announcementHeading', title: 'Announcement Heading', type: 'text' }),
+    defineField({ name: 'announcementBody', title: 'Announcement Body', type: 'text' }),
+    defineField({ name: 'announcementImage', title: 'Announcement Image', type: 'image', options: { hotspot: true } }),
+
+    // Feature lists section (dark)
+    defineField({ name: 'featureListsHeading', title: 'Feature Lists Section Heading', type: 'string' }),
+    defineField({ name: 'featureListsSubheading', title: 'Feature Lists Section Subheading', type: 'text' }),
+    defineField({ name: 'featureListsRightEyebrow', title: 'Feature Lists Right Column Eyebrow', type: 'string' }),
+    defineField({ name: 'featureListsFooter', title: 'Feature Lists Footer Paragraph', type: 'text' }),
+    defineField({
+      name: 'featureListLeft',
+      title: 'Feature List Left Column',
+      type: 'array',
+      of: [defineArrayMember({
+        type: 'object',
+        fields: [
+          { name: 'emoji', title: 'Emoji', type: 'string' },
+          { name: 'text', title: 'Text', type: 'string' },
+        ],
+      })],
+    }),
+    defineField({
+      name: 'featureListRight',
+      title: 'Feature List Right Column',
+      type: 'array',
+      of: [defineArrayMember({
+        type: 'object',
+        fields: [
+          { name: 'emoji', title: 'Emoji', type: 'string' },
+          { name: 'text', title: 'Text', type: 'string' },
+        ],
+      })],
+    }),
+
+    // Discover CTA
+    defineField({ name: 'discoverHeading', title: 'Discover Section Heading', type: 'string' }),
   ],
 })
