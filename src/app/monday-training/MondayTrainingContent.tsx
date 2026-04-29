@@ -8,9 +8,6 @@ import StatsBlockView from "@/features/page-builder/blocks/StatsBlockView"
 import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
 import CalendlySection from "@/components/sections/CalendlySection"
 import PaperPlaneIcon from "@/components/common/icons/PaperPlaneIcon"
-import FaqAccordion from "@/components/sections/FaqAccordion"
-import LeftRightSection from "@/components/sections/LeftRightSection"
-import type { FaqTab as SharedFaqTab } from "@/components/sections/types"
 import type { SiteSettings } from "@/features/page-builder/types"
 
 /* ------------------------------------------------------------------ */
@@ -195,6 +192,8 @@ export default function MondayTrainingContent({
   const trainingServices = data?.trainingServices ?? []
 
   const [activeTrainingTab, setActiveTrainingTab] = useState<number>(0)
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0)
+  const [activeFaqTab, setActiveFaqTab] = useState<number>(0)
 
   // Carousel logos — duplicate for the marquee effect
   const normalizedLogos = carouselLogos
@@ -256,6 +255,8 @@ export default function MondayTrainingContent({
   const empowerHeading = data?.empowerHeading
   const empowerBody = data?.empowerBody
 
+  const servicesHeading = data?.servicesHeading
+
   const testimonialsHeading = data?.testimonialsHeading
   const testimonialsCtaLabel = data?.testimonialsCtaLabel
   const testimonialsCtaUrl = data?.testimonialsCtaUrl
@@ -286,6 +287,7 @@ export default function MondayTrainingContent({
 
   const currentTrainingItems =
     trainingTabs[activeTrainingTab]?.items ?? []
+  const currentFaqItems = faqTabs[activeFaqTab]?.items ?? []
 
   return (
     <div>
@@ -493,13 +495,13 @@ export default function MondayTrainingContent({
       {/* ============================================================ */}
       {/* SECTION 3 -- Training Intro + Tabbed Content                 */}
       {/* ============================================================ */}
-      <section className="relative overflow-visible" style={{ backgroundColor: "#f0ecfe" }}>
+      <section className="relative overflow-hidden" style={{ backgroundColor: "#f0ecfe" }}>
         {/* Decorative purple circle bg */}
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1400px] h-[1400px] max-w-none"
+          className="pointer-events-none absolute -bottom-[150px] -left-[150px] w-[500px] h-[500px] opacity-50"
           style={{
-            backgroundImage: "url(/images/purple-circle-background.avif)",
+            backgroundImage: "url(/images/bg-purple-circle.avif)",
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
@@ -633,114 +635,91 @@ export default function MondayTrainingContent({
       />
 
       {/* ============================================================ */}
-      {/* SECTION 5 -- Empower (image left, text right)                */}
-      {/* Reuses homepage LeftRightSection layout shell.               */}
+      {/* SECTION 5 -- Empower + Training Services heading +            */}
+      {/*              first service (Customization) together            */}
       {/* ============================================================ */}
-      <LeftRightSection
-        imageOnLeft
-        image={
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={empowerImageSrc || "/images/empower-monday-training.avif"}
-            alt="monday.com users training"
-            width={490}
-            className="w-full h-auto"
-          />
-        }
-      >
-        {empowerEyebrow && (
-          <p className="text-[14px] font-medium text-[#8015e8]">
-            {empowerEyebrow}
-          </p>
-        )}
-        <h2 className="text-[30px] font-medium text-[#8015e8] leading-[42px]">
-          {empowerHeading}
-        </h2>
-        <div className="text-[16px] text-black leading-[22.4px]" style={{ whiteSpace: "pre-line" }}>
-          {empowerBody}
-        </div>
-        {data?.empowerCtaLabel && data?.empowerCtaUrl && (
-          <Link
-            href={data.empowerCtaUrl}
-            className="group flex items-center justify-center gap-2 h-[53px] w-[326px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white text-[16px] font-bold tracking-[0.32px] transition-colors"
-          >
-            <PaperPlaneIcon />
-            {data.empowerCtaLabel}
-          </Link>
-        )}
-      </LeftRightSection>
-
-      {/* ============================================================ */}
-      {/* SECTION 5b -- First training service (text left, image right) */}
-      {/* ============================================================ */}
-      {trainingServices.length > 0 && (() => {
-        const service = trainingServices[0]
-        const serviceImageSrc =
-          imageUrl(service.image) || "/images/monday-training-customization.avif"
-        return (
-          <LeftRightSection
-            beforeRow={
-              <div className="flex justify-center mb-[60px]">
-                <span
-                  className="inline-flex items-center"
-                  style={{
-                    gap: 8,
-                    paddingLeft: 20,
-                    paddingRight: 20,
-                    height: 39,
-                    borderRadius: 99,
-                    backgroundColor: "#f0ecfe",
-                    color: "#8015e8",
-                    fontSize: 16,
-                    fontWeight: 600,
-                  }}
-                >
-                  <span style={{ fontSize: 18 }}>👩🏽‍💼👨🏻‍💼</span>
-                  Our Training Services
-                </span>
-              </div>
-            }
-            image={
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={serviceImageSrc}
-                alt={service.title ?? ""}
-                width={490}
-                className="w-full h-auto"
-              />
-            }
-          >
-            {service.title && (
-              <p className="text-[14px] font-medium text-[#8015e8] flex items-center gap-2">
-                {service.emoji && <span>{service.emoji}</span>}
-                {service.title}
-              </p>
-            )}
-            {service.subtitle && (
-              <h2
-                className="text-[30px] font-medium text-black leading-[42px]"
-                style={{ whiteSpace: "pre-line" }}
-              >
-                {service.subtitle}
+      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+        <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1200 }}>
+          {/* Empower row (left text, right image) — matches homepage RichTextBlockView template */}
+          <div className="flex flex-col md:flex-row items-center gap-[60px] md:items-center md:justify-center">
+            <div className="w-full max-w-[490px] flex flex-col gap-[23px] items-start">
+              <h2 className="text-[30px] font-medium text-[#8015e8] leading-[42px]">
+                {empowerHeading || empowerEyebrow}
               </h2>
+              <p style={{ fontSize: 16, lineHeight: '24px', color: 'black', whiteSpace: 'pre-line' }}>
+                {empowerBody}
+              </p>
+              {data?.empowerCtaLabel && data?.empowerCtaUrl && (
+                <Link
+                  href={data.empowerCtaUrl}
+                  className="group flex items-center justify-center gap-2 h-[53px] w-[326px] max-w-full rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white text-[16px] font-bold tracking-[0.32px] transition-colors"
+                >
+                  <PaperPlaneIcon />
+                  {data.empowerCtaLabel}
+                </Link>
+              )}
+            </div>
+            {empowerImageSrc && (
+              <div className="w-full max-w-[490px]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={empowerImageSrc}
+                  alt="monday.com users training"
+                  width={540}
+                  height={380}
+                  className="rounded-card object-cover w-full h-auto"
+                />
+              </div>
             )}
-            <p
-              className="text-[16px] text-black leading-[22.4px]"
-              style={{ whiteSpace: "pre-line" }}
-            >
-              {service.description}
-            </p>
-            {service.ctaLabel && service.ctaUrl && (
-              <Link
-                href={service.ctaUrl}
-                className="inline-flex items-center font-semibold text-[16px] text-[#8015e8]"
-              >
-                {service.ctaLabel}
-              </Link>
-            )}
-          </LeftRightSection>
-        )
-      })()}
+          </div>
+
+          {/* "Our Training Services" heading */}
+          <h2 className="text-section-h2 text-center text-black" style={{ marginTop: 80 }}>
+            {servicesHeading}
+          </h2>
+
+          {/* First training service (Customization) — text left, image right */}
+          {trainingServices.length > 0 && (() => {
+            const service = trainingServices[0]
+            const serviceImageSrc = imageUrl(service.image) || "/images/monday-training-customization.avif"
+            return (
+              <div className="flex items-start" style={{ gap: 48, marginTop: 40 }}>
+                <div style={{ flex: 1 }}>
+                  <div className="flex items-start" style={{ gap: 12 }}>
+                    {service.emoji && <span style={{ fontSize: 32 }}>{service.emoji}</span>}
+                    <h3 style={{ fontSize: 28, fontWeight: 600, color: "#2b074d" }}>
+                      {service.title}
+                    </h3>
+                  </div>
+                  {service.subtitle && (
+                    <p style={{ fontSize: 18, fontWeight: 500, color: "#8015e8", marginTop: 8, whiteSpace: "pre-line" }}>
+                      {service.subtitle}
+                    </p>
+                  )}
+                  <p style={{ fontSize: 16, lineHeight: "25.6px", color: "black", marginTop: 20, whiteSpace: "pre-line" }}>
+                    {service.description}
+                  </p>
+                  {service.ctaLabel && service.ctaUrl && (
+                    <Link
+                      href={service.ctaUrl}
+                      className="inline-flex items-center font-semibold"
+                      style={{ fontSize: 16, color: "#8015e8", marginTop: 20 }}
+                    >
+                      {service.ctaLabel}
+                    </Link>
+                  )}
+                </div>
+                {serviceImageSrc && (
+                  <div className="rounded-card overflow-hidden" style={{ flex: 1, aspectRatio: "16 / 10" }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={serviceImageSrc} alt={service.title ?? ""} className="w-full h-full object-contain" />
+                  </div>
+                )}
+              </div>
+            )
+          })()}
+        </div>
+      </section>
 
       {/* ============================================================ */}
       {/* SECTION 9 -- Calendly Booking                                */}
@@ -756,7 +735,68 @@ export default function MondayTrainingContent({
       {/* ============================================================ */}
       {/* SECTION 10 -- FAQ                                            */}
       {/* ============================================================ */}
-      <FaqAccordion heading={faqHeading} tabs={faqTabs as SharedFaqTab[]} />
+      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
+        <div className="mx-auto flex flex-col" style={{ width: 959, gap: 24 }}>
+          <h2 className="text-section-h2" style={{ color: "var(--purple-primary)" }}>
+            {faqHeading}
+          </h2>
+
+          {/* Tab navigation bar */}
+          {faqTabs.length > 0 && (
+            <div className="flex items-start overflow-auto" style={{ width: 916, height: 52 }}>
+              {faqTabs.map((tab, idx) => (
+                <button
+                  key={tab._key || idx}
+                  onClick={() => { setActiveFaqTab(idx); setOpenFaqIndex(0) }}
+                  className="h-full shrink-0 relative"
+                  style={{
+                    paddingTop: 14,
+                    paddingBottom: 17,
+                    paddingLeft: 27.469,
+                    paddingRight: 27.469,
+                    borderBottom: activeFaqTab === idx ? '3px solid #8e5cbf' : '3px solid transparent',
+                  }}
+                >
+                  <span style={{ fontSize: 16, color: activeFaqTab === idx ? '#8e5cbf' : 'black', textAlign: 'center' }}>
+                    {tab.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* FAQ items for active tab */}
+          <div className="flex flex-col" style={{ gap: 12 }}>
+            {currentFaqItems.map((item, i) => (
+              <div key={i} style={{ paddingTop: i === 0 ? 20 : 24 }}>
+                <button
+                  onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
+                  className="w-full flex items-center justify-between text-left"
+                  style={{ height: 30 }}
+                >
+                  <span style={{ fontSize: 20, lineHeight: '24px', color: 'black' }}>
+                    {item.question}
+                  </span>
+                  <div className="shrink-0" style={{ width: 30, height: 30 }}>
+                    <svg
+                      className={`transition-transform ${openFaqIndex === i ? 'rotate-180' : ''}`}
+                      width="30" height="30" viewBox="0 0 30 30" fill="none"
+                    >
+                      <path d="M8 12L15 19L22 12" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                </button>
+                {openFaqIndex === i && (
+                  <div style={{ paddingBottom: 16, paddingTop: 31, fontSize: 16, lineHeight: '24px', color: 'black', whiteSpace: 'pre-line' }}>
+                    {item.answer}
+                  </div>
+                )}
+                <div style={{ borderBottom: '1px solid #2b074d', marginTop: openFaqIndex === i ? 0 : 36 }} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ============================================================ */}
       {/* SECTION 11 -- Discover CTA                                   */}
@@ -824,62 +864,49 @@ export default function MondayTrainingContent({
       {/* ============================================================ */}
       {trainingServices.length > 1 && (
         <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
-          <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1200 }}>
-            <div className="flex flex-col" style={{ gap: 80 }}>
+          <div className="mx-auto" style={{ maxWidth: 1200 }}>
+            <div className="flex flex-col" style={{ gap: 60 }}>
               {trainingServices.slice(1).map((service, i) => {
                 const serviceImageSrc = imageUrl(service.image)
                 const isEven = i % 2 === 0
                 return (
                   <div
                     key={service._key || `${service.title}-${i + 1}`}
-                    className={`flex flex-col items-center gap-[60px] md:items-center md:justify-center ${isEven ? "md:flex-row-reverse" : "md:flex-row"}`}
+                    className="flex items-start"
+                    style={{
+                      gap: 48,
+                      flexDirection: isEven ? "row-reverse" : "row",
+                    }}
                   >
-                    <div className="w-full max-w-[490px] flex flex-col gap-[23px] items-start">
-                      <span
-                        className="inline-flex items-center"
-                        style={{
-                          gap: 8,
-                          paddingLeft: 16,
-                          paddingRight: 16,
-                          height: 32,
-                          borderRadius: 99,
-                          backgroundColor: "#f0ecfe",
-                          color: "#8015e8",
-                          fontSize: 14,
-                          fontWeight: 600,
-                        }}
-                      >
-                        {service.emoji && <span style={{ fontSize: 16 }}>{service.emoji}</span>}
-                        {service.title}
-                      </span>
+                    <div style={{ flex: 1 }}>
+                      <div className="flex items-start" style={{ gap: 12 }}>
+                        {service.emoji && <span style={{ fontSize: 32 }}>{service.emoji}</span>}
+                        <h3 style={{ fontSize: 28, fontWeight: 600, color: "#2b074d" }}>
+                          {service.title}
+                        </h3>
+                      </div>
                       {service.subtitle && (
-                        <h2 className="text-[30px] font-bold text-black leading-[42px]" style={{ whiteSpace: "pre-line" }}>
+                        <p style={{ fontSize: 18, fontWeight: 500, color: "#8015e8", marginTop: 8, whiteSpace: "pre-line" }}>
                           {service.subtitle}
-                        </h2>
+                        </p>
                       )}
-                      <p style={{ fontSize: 16, lineHeight: "24px", color: "black", whiteSpace: "pre-line" }}>
+                      <p style={{ fontSize: 16, lineHeight: "25.6px", color: "black", marginTop: 20, whiteSpace: "pre-line" }}>
                         {service.description}
                       </p>
                       {service.ctaLabel && service.ctaUrl && (
                         <Link
                           href={service.ctaUrl}
                           className="inline-flex items-center font-semibold"
-                          style={{ fontSize: 16, color: "#8015e8" }}
+                          style={{ fontSize: 16, color: "#8015e8", marginTop: 20 }}
                         >
                           {service.ctaLabel}
                         </Link>
                       )}
                     </div>
                     {serviceImageSrc && (
-                      <div className="w-full max-w-[490px]">
+                      <div className="rounded-card overflow-hidden" style={{ flex: 1, aspectRatio: "16 / 10" }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={serviceImageSrc}
-                          alt={service.title ?? ""}
-                          width={540}
-                          height={380}
-                          className="rounded-card object-cover w-full h-auto"
-                        />
+                        <img src={serviceImageSrc} alt={service.title ?? ""} className="w-full h-full object-contain" />
                       </div>
                     )}
                   </div>

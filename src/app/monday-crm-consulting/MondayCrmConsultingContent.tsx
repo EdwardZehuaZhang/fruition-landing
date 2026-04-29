@@ -50,49 +50,6 @@ function safeImageUrl(ref: SanityImageRef): string | null {
   }
 }
 
-const CRM_CAPABILITY_CARDS: {
-  title: string
-  emoji: string
-  description: string
-}[] = [
-  {
-    title: "Forms, Emails & Leads",
-    emoji: "📋",
-    description:
-      "As official monday.com Partners, Fruition offers professional CRM data migration and integration solutions to help businesses better manage and streamline their customer data.",
-  },
-  {
-    title: "Opportunity, Contracts & Tender",
-    emoji: "🎯",
-    description:
-      "Our monday.com CRM consulting team provides fully customisable opportunity, contracts, and tender management solutions that streamline business processes for companies of all sizes.",
-  },
-  {
-    title: "PM & Client Onboarding",
-    emoji: "📁",
-    description:
-      "Once your deal closes, our monday.com CRM implementation specialists seamlessly integrate comprehensive project management and client delivery systems for optimal results.",
-  },
-  {
-    title: "Dashboards & Reporting",
-    emoji: "📊",
-    description:
-      "We deliver advanced monday.com CRM consulting solutions featuring dynamic dashboards, comprehensive reporting, and powerful analytics to drive informed business decisions.",
-  },
-  {
-    title: "Marketing & Finance",
-    emoji: "💰",
-    description:
-      "Our monday.com CRM implementation services provide tailored marketing and finance automation solutions designed to maximise efficiency, reduce costs, and accelerate business growth.",
-  },
-  {
-    title: "Data Migration & Integration",
-    emoji: "🔗",
-    description:
-      "We offer professional monday.com CRM consulting for seamless data migration, system optimisation, and integration solutions that streamline your customer relationship management.",
-  },
-]
-
 const CERTIFICATE_BADGES = [
   { src: "/images/partner-platinum.png", alt: "Monday.com Platinum Partner" },
   { src: "/images/partner-advanced-delivery.png", alt: "Advanced Delivery Partner" },
@@ -308,7 +265,6 @@ export default function MondayCrmConsultingContent({
           subheading={page.comparisonSubheading}
           tabs={mergedComparisonTabs}
           theme={page.comparisonTheme || "light"}
-          withPurpleCircle
         />
       )}
 
@@ -332,7 +288,7 @@ export default function MondayCrmConsultingContent({
 
       {/* 8. CRM Management Capabilities (bottom section) */}
       {!page.hideCapabilitiesSection &&
-        (page.capabilitiesCards?.length > 0 ? (
+        page.capabilitiesCards?.length > 0 && (
           <CapabilitiesGrid
             eyebrow={page.capabilitiesEyebrow}
             heading={page.capabilitiesHeading}
@@ -344,83 +300,10 @@ export default function MondayCrmConsultingContent({
             ctaLabel={page.capabilitiesCtaLabel}
             ctaUrl={page.capabilitiesCtaUrl}
           />
-        ) : (
-          <section
-            style={{
-              backgroundColor: "#f7f5ff",
-              paddingTop: 80,
-              paddingBottom: 80,
-            }}
-          >
-            <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
-              <h2
-                className="text-section-h2 text-center"
-                style={{ marginBottom: 48 }}
-              >
-                <span style={{ color: "#8015e8" }}>monday CRM</span>{" "}
-                <span style={{ color: "#000" }}>Management Capabilities</span>
-              </h2>
-              <div
-                className="grid grid-cols-1 sm:grid-cols-2"
-                style={{ gap: 24 }}
-              >
-                {CRM_CAPABILITY_CARDS.map((card) => (
-                  <div
-                    key={card.title}
-                    className="bg-white rounded-card border border-[#ece7fb]"
-                    style={{
-                      padding: 28,
-                      boxShadow: "var(--shadow-whisper)",
-                    }}
-                  >
-                    <div
-                      className="flex items-start justify-between"
-                      style={{ gap: 16, marginBottom: 12 }}
-                    >
-                      <h3
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 700,
-                          color: "#8015e8",
-                        }}
-                      >
-                        {card.title}
-                      </h3>
-                      <span style={{ fontSize: 28, lineHeight: 1 }}>
-                        {card.emoji}
-                      </span>
-                    </div>
-                    <p
-                      style={{
-                        fontSize: 14,
-                        lineHeight: 1.55,
-                        color: "#111",
-                      }}
-                    >
-                      {card.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-              <div
-                className="rounded-card overflow-hidden"
-                style={{ aspectRatio: "16 / 9", marginTop: 48 }}
-              >
-                <iframe
-                  src="https://www.youtube.com/embed/EPxa_uYJy3w"
-                  title="monday CRM overview"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full"
-                  style={{ border: 0 }}
-                />
-              </div>
-            </div>
-          </section>
-        ))}
+        )}
 
-      {/* 9. Bottom video (under capabilities) — only when Sanity-driven capabilities exist */}
-      {bottomVideoEmbedSrc && page.capabilitiesCards?.length > 0 && (
+      {/* 9. Bottom video (under capabilities) */}
+      {bottomVideoEmbedSrc && (
         <section className="bg-white" style={{ paddingBottom: 80 }}>
           <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
             <div

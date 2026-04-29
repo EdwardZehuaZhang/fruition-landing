@@ -150,42 +150,26 @@ export default function FeatureListBlockView({ _key, heading, subheading, varian
 
   // ── Steps variant — dark purple bg with horizontal numbered steps ──
   if (isStepsBlock) {
-    // Heading may include the italic subtext baked in (legacy content):
-    // "Get set up right, the first time. Measure twice, cut once."
-    // Split on the last sentence so the tail renders as italic subtext.
-    let stepsHeading = heading
-    let stepsSubheading = subheading
-    if (heading && !subheading) {
-      const match = heading.match(/^(.*?[.!?])\s+(.+?)$/)
-      if (match) {
-        stepsHeading = match[1]
-        stepsSubheading = match[2]
-      }
-    }
-
     return (
       <section className="relative py-[80px] pb-[120px] px-4 overflow-hidden">
         <div className="absolute inset-0 bg-[#10003a]" />
         <div className="absolute inset-0 bg-gradient-to-br from-[#2b074d] via-[#10003a] to-[#10003a] opacity-30" />
 
         <div className="mx-auto max-w-[1199px] relative z-10 flex flex-col items-center">
-          {stepsHeading && (
-            <h2 className="mb-3 text-center text-[45px] text-white leading-[63px]">{stepsHeading}</h2>
+          {heading && (
+            <h2 className="mb-3 text-center text-[45px] text-white leading-[63px]">{heading}</h2>
           )}
-          {stepsSubheading && (
-            <p className="mb-12 text-center text-[25px] font-extralight italic text-white">{stepsSubheading}</p>
+          {subheading && (
+            <p className="mb-12 text-center text-[25px] font-extralight italic text-white">{subheading}</p>
           )}
 
           <div className="flex flex-wrap gap-0 w-full justify-center">
             {features?.map((f, i) => (
-              <div
-                key={f._key ?? i}
-                className="group w-[237px] text-center cursor-default transition-transform duration-300 ease-out hover:-translate-y-1"
-              >
-                <p className="text-[48px] font-light text-[#b162fe] leading-[67.2px] transition-all duration-300 ease-out group-hover:font-bold group-hover:text-white">
+              <div key={f._key ?? i} className="w-[237px] text-center">
+                <p className="text-[48px] font-light text-[#b162fe] leading-[67.2px]">
                   {String(i + 1).padStart(2, '0')}
                 </p>
-                <p className="text-[14px] font-medium text-white mb-2 transition-all duration-300 ease-out group-hover:font-bold">{f.title}</p>
+                <p className="text-[14px] font-medium text-white mb-2">{f.title}</p>
                 {f.description && (
                   <p className="text-[14px] font-light text-white leading-[22.4px] mx-auto max-w-[190px]">{f.description}</p>
                 )}

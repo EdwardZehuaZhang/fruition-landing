@@ -8,8 +8,6 @@ import { urlFor } from "@/sanity/image"
 import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
 import CalendlySection from "@/components/sections/CalendlySection"
 import PaperPlaneIcon from "@/components/common/icons/PaperPlaneIcon"
-import FaqAccordion from "@/components/sections/FaqAccordion"
-import type { FaqTab as SharedFaqTab } from "@/components/sections/types"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -259,6 +257,13 @@ export default function ImplementationPackagesContent({
     ? faqTabsOverride
     : data?.faqTabs ?? []
 
+  const [activeFaqTab, setActiveFaqTab] = useState<string>(
+    faqTabs[0]?.label ?? ""
+  )
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0)
+  const activeFaqTabObj =
+    faqTabs.find((t) => t.label === activeFaqTab) ?? faqTabs[0]
+  const activeFaqItems: FaqPair[] = activeFaqTabObj?.items ?? []
 
   const discoverBadgeSrc = imgSrc(data?.discoverBadge)
   const discoverHeading = data?.discoverHeading
@@ -813,7 +818,109 @@ export default function ImplementationPackagesContent({
       {/* SECTION 7 -- FAQ                                             */}
       {/* ============================================================ */}
       {faqTabs.length > 0 && (
-        <FaqAccordion heading={faqHeading} tabs={faqTabs as SharedFaqTab[]} />
+      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
+        <div className="mx-auto flex flex-col" style={{ width: 959, gap: 24 }}>
+          {/* Heading */}
+          <h2 className="text-section-h2" style={{ color: "var(--purple-primary)" }}>
+            {faqHeading}
+          </h2>
+
+          {/* Tab navigation bar — underline style matching Figma */}
+          <div className="flex items-start overflow-auto" style={{ width: 916, height: 52 }}>
+            {faqTabs.map((tab) => {
+              const label = tab.label ?? ""
+              return (
+                <button
+                  key={tab._key ?? label}
+                  onClick={() => {
+                    setActiveFaqTab(label)
+                    setOpenFaqIndex(0)
+                  }}
+                  className="h-full shrink-0 relative"
+                  style={{
+                    paddingTop: 14,
+                    paddingBottom: 17,
+                    paddingLeft: 27.469,
+                    paddingRight: 27.469,
+                    borderBottom:
+                      activeFaqTab === label
+                        ? '3px solid #8e5cbf'
+                        : '3px solid transparent',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: 16,
+                      color: activeFaqTab === label ? '#8e5cbf' : 'black',
+                      textAlign: 'center',
+                    }}
+                  >
+                    {label}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+
+          {/* FAQ items for active tab */}
+          <div className="flex flex-col" style={{ gap: 12 }}>
+            {activeFaqItems.map((item, i) => (
+              <div key={item._key ?? i} style={{ paddingTop: i === 0 ? 20 : 24 }}>
+                {/* Question row */}
+                <button
+                  onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
+                  className="w-full flex items-center justify-between text-left"
+                  style={{ height: 30 }}
+                >
+                  <span style={{ fontSize: 20, lineHeight: '24px', color: 'black' }}>
+                    {item.question}
+                  </span>
+                  <div className="shrink-0" style={{ width: 30, height: 30 }}>
+                    <svg
+                      className={`transition-transform ${openFaqIndex === i ? 'rotate-180' : ''}`}
+                      width="30"
+                      height="30"
+                      viewBox="0 0 30 30"
+                      fill="none"
+                    >
+                      <path
+                        d="M8 12L15 19L22 12"
+                        stroke="black"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </button>
+
+                {/* Answer (expanded) */}
+                {openFaqIndex === i && (
+                  <div
+                    style={{
+                      paddingBottom: 16,
+                      paddingTop: 31,
+                      fontSize: 16,
+                      lineHeight: '24px',
+                      color: 'black',
+                    }}
+                  >
+                    {item.answer}
+                  </div>
+                )}
+
+                {/* Bottom border */}
+                <div
+                  style={{
+                    borderBottom: '1px solid #2b074d',
+                    marginTop: openFaqIndex === i ? 0 : 36,
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
       )}
 
       {/* ============================================================ */}

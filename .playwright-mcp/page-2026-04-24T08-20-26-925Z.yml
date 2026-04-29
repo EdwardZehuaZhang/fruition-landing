@@ -1,0 +1,764 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - link "Fruition Services" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "Fruition Services" [ref=e6]
+      - generic [ref=e7]:
+        - button "What We Offer" [ref=e9]
+        - button "Partnerships & Locations" [ref=e11]
+        - button "Industries" [ref=e13]
+        - button "About" [ref=e15]
+        - generic [ref=e16]:
+          - generic [ref=e17]:
+            - img "monday.com Platinum Partner" [ref=e18]
+            - img "Advanced Delivery Partner" [ref=e19]
+            - img "Make Partners" [ref=e20]
+          - link "Call us" [ref=e21] [cursor=pointer]:
+            - /url: tel:+61483955931
+            - img [ref=e22]
+          - link "Book a Time" [ref=e24] [cursor=pointer]:
+            - /url: https://calendly.com/global-calendar-fruitionservices
+            - img [ref=e25]
+            - text: Book a Time
+  - main [ref=e27]:
+    - generic [ref=e29]:
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - generic [ref=e33]:
+              - img "monday.com Platinum Partner" [ref=e34]
+              - img "Advanced Delivery Partner" [ref=e35]
+              - img "Make Partners" [ref=e36]
+            - heading "monday.com Partners with Fruition for Consulting & Integration Services" [level=1] [ref=e37]
+          - generic [ref=e38]:
+            - paragraph [ref=e39]: Fruition is a Platinum monday.com consulting partner with over 500+ implementations completed within the Private & Public sectors across Australia, US and the UK.
+            - paragraph [ref=e40]: Our certified monday.com implementation consultants specialise in monday CRM and integrating your tech stack using make.com.
+        - generic [ref=e41]:
+          - link "Book a Consultation" [ref=e42] [cursor=pointer]:
+            - /url: https://calendly.com/global-calendar-fruitionservices
+          - link "Get Started with monday.com" [ref=e43] [cursor=pointer]:
+            - /url: https://monday.com/crm?utm_source=Partner&utm_campaign=fruitionanz&utm_banner=fruition_monday_crm__4
+      - generic "monday.com Partners with Fruition for Consulting & Integration Services" [ref=e44]
+    - generic [ref=e45]:
+      - generic [ref=e47]:
+        - paragraph [ref=e48]: Clients who have used our monday.com consulting services
+        - generic [ref=e50]:
+          - img "Client Logo" [ref=e52]
+          - img "Client Logo" [ref=e54]
+          - img "Client Logo" [ref=e56]
+          - img "Client Logo" [ref=e58]
+          - img "Client Logo" [ref=e60]
+          - img "Client Logo" [ref=e62]
+          - img "Client Logo" [ref=e64]
+          - img "Client Logo" [ref=e66]
+          - img "Client Logo" [ref=e68]
+          - img "Client Logo" [ref=e70]
+          - img "Client Logo" [ref=e72]
+          - img "Client Logo" [ref=e74]
+          - img "Client Logo" [ref=e76]
+          - img "Client Logo" [ref=e78]
+          - img "Client Logo" [ref=e80]
+          - img "Client Logo" [ref=e82]
+          - img "Client Logo" [ref=e84]
+          - img "Client Logo" [ref=e86]
+          - img "Client Logo" [ref=e88]
+          - img "Client Logo" [ref=e90]
+          - img "Client Logo" [ref=e92]
+          - img "Client Logo" [ref=e94]
+          - img "Client Logo" [ref=e96]
+          - img "Client Logo" [ref=e98]
+          - img "Client Logo" [ref=e100]
+          - img "Client Logo" [ref=e102]
+          - img "Client Logo" [ref=e104]
+          - img "Client Logo" [ref=e106]
+          - img "Client Logo" [ref=e108]
+          - img "Client Logo" [ref=e110]
+          - img "Client Logo" [ref=e112]
+          - img "Client Logo" [ref=e114]
+          - img "Client Logo" [ref=e116]
+          - img "Client Logo" [ref=e118]
+          - img "Client Logo" [ref=e120]
+          - img "Client Logo" [ref=e122]
+          - img "Client Logo" [ref=e124]
+          - img "Client Logo" [ref=e126]
+          - img "Client Logo" [ref=e128]
+          - img "Client Logo" [ref=e130]
+          - img "Client Logo" [ref=e132]
+          - img "Client Logo" [ref=e134]
+          - img "Client Logo" [ref=e136]
+          - img "Client Logo" [ref=e138]
+          - img "Client Logo" [ref=e140]
+          - img "Client Logo" [ref=e142]
+          - img "Client Logo" [ref=e144]
+          - img "Client Logo" [ref=e146]
+          - img "Client Logo" [ref=e148]
+          - img "Client Logo" [ref=e150]
+          - img "Client Logo" [ref=e152]
+          - img "Client Logo" [ref=e154]
+          - img "Client Logo" [ref=e156]
+          - img "Client Logo" [ref=e158]
+          - img "Client Logo" [ref=e160]
+          - img "Client Logo" [ref=e162]
+          - img "Client Logo" [ref=e164]
+          - img "Client Logo" [ref=e166]
+          - img "Client Logo" [ref=e168]
+          - img "Client Logo" [ref=e170]
+          - img "Client Logo" [ref=e172]
+          - img "Client Logo" [ref=e174]
+          - img "Client Logo" [ref=e176]
+          - img "Client Logo" [ref=e178]
+          - img "Client Logo" [ref=e180]
+          - img "Client Logo" [ref=e182]
+          - img "Client Logo" [ref=e184]
+          - img "Client Logo" [ref=e186]
+          - img "Client Logo" [ref=e188]
+          - img "Client Logo" [ref=e190]
+          - img "Client Logo" [ref=e192]
+          - img "Client Logo" [ref=e194]
+          - img "Client Logo" [ref=e196]
+          - img "Client Logo" [ref=e198]
+          - img "Client Logo" [ref=e200]
+          - img "Client Logo" [ref=e202]
+          - img "Client Logo" [ref=e204]
+          - img "Client Logo" [ref=e206]
+          - img "Client Logo" [ref=e208]
+          - img "Client Logo" [ref=e210]
+          - img "Client Logo" [ref=e212]
+          - img "Client Logo" [ref=e214]
+          - img "Client Logo" [ref=e216]
+          - img "Client Logo" [ref=e218]
+      - iframe [ref=e222]:
+        - generic [active] [ref=f3e1]:
+          - generic "YouTube Video Player" [ref=f3e3]
+          - generic [ref=f3e5]:
+            - generic:
+              - generic:
+                - button "Play video" [ref=f3e10] [cursor=pointer]
+                - button "Hide player controls" [ref=f3e12] [cursor=pointer]
+                - generic [ref=f3e14]:
+                  - generic [ref=f3e19]:
+                    - generic [ref=f3e20]:
+                      - link "monday CRM Success Story - Star Aviation | Powered by Fruition" [ref=f3e21] [cursor=pointer]:
+                        - /url: https://www.youtube.com/watch?v=7vtrtlfC1Zg
+                      - link "Fruition Services" [ref=f3e22] [cursor=pointer]:
+                        - /url: /channel/UCF8mr3qiFVwiX0xrcAaKxgA
+                        - generic [ref=f3e23]: Fruition Services
+                    - generic [ref=f3e24]:
+                      - button [ref=f3e25] [cursor=pointer]
+                      - generic [ref=f3e27]:
+                        - generic: Fruition Services
+                        - generic: 48 subscribers
+                  - generic [ref=f3e28]:
+                    - button "Share" [ref=f3e31] [cursor=pointer]:
+                      - generic [ref=f3e35]:
+                        - img
+                    - link "Watch on YouTube" [ref=f3e42] [cursor=pointer]:
+                      - /url: https://www.youtube.com/watch?v=7vtrtlfC1Zg
+                      - generic [ref=f3e45]:
+                        - text: Watch on
+                        - img [ref=f3e47]:
+                          - generic [ref=f3e49]:
+                            - img
+    - generic [ref=e223]:
+      - generic [ref=e225]:
+        - generic [ref=e226]:
+          - heading "What our customers say about us 🙌" [level=2] [ref=e227]
+          - link "🚀 Start Your Transformation" [ref=e228] [cursor=pointer]:
+            - /url: /customer-testimonials
+        - generic [ref=e230]:
+          - generic [ref=e231]:
+            - generic [ref=e232]:
+              - generic [ref=e233]:
+                - paragraph [ref=e234]: 500+
+                - paragraph [ref=e235]:
+                  - text: have maximised their
+                  - text: workflows with our
+                  - text: monday.com expert support
+              - link "Read our case studies" [ref=e237] [cursor=pointer]:
+                - /url: /customer-testimonials
+            - generic [ref=e238]:
+              - generic [ref=e239]:
+                - generic [ref=e240]:
+                  - paragraph [ref=e241]: Jade Wood
+                  - paragraph [ref=e242]: Managing Director, Popology
+                - img "Jade Wood" [ref=e243]
+              - paragraph [ref=e245]: We are now utilising monday.com to its full potential, from lead through design and production teams - everyone knows what stage our projects are in, what's next and what our process is.
+              - generic [ref=e246]:
+                - img [ref=e247]
+                - img [ref=e249]
+                - img [ref=e251]
+                - img [ref=e253]
+                - img [ref=e255]
+            - generic [ref=e257]:
+              - generic [ref=e258]:
+                - generic [ref=e259]:
+                  - paragraph [ref=e260]: Mairhead McKinley
+                  - paragraph [ref=e261]: Delivery Manager, Givergy
+                - img "Mairhead McKinley" [ref=e262]
+              - paragraph [ref=e264]: We found Monday to be more customisable and transparent for both internal and external stakeholders. It reduced double handling of issues, as the Monday boards provide clear, accessible information—eliminating the need to email around for updates.
+              - generic [ref=e265]:
+                - img [ref=e266]
+                - img [ref=e268]
+                - img [ref=e270]
+                - img [ref=e272]
+                - img [ref=e274]
+            - generic [ref=e276]:
+              - generic [ref=e277]:
+                - generic [ref=e278]:
+                  - paragraph [ref=e279]: Brandon-Lee Horridge
+                  - paragraph [ref=e280]: Managing Director, BL Air Conditioning
+                - img "Brandon-Lee Horridge" [ref=e281]
+              - paragraph [ref=e283]: This system will save hundreds of thousands of dollars a year guaranteed.
+              - generic [ref=e284]:
+                - img [ref=e285]
+                - img [ref=e287]
+                - img [ref=e289]
+                - img [ref=e291]
+                - img [ref=e293]
+            - generic [ref=e295]:
+              - generic [ref=e296]:
+                - generic [ref=e297]:
+                  - paragraph [ref=e298]: Ron Amaram
+                  - paragraph [ref=e299]: General Manager, Risk 2 Solutions
+                - img "Ron Amaram" [ref=e300]
+              - paragraph [ref=e302]: Fruition have been instrumental in moving us to a 'single source of truth' system for managing sales and projects.
+              - generic [ref=e303]:
+                - img [ref=e304]
+                - img [ref=e306]
+                - img [ref=e308]
+                - img [ref=e310]
+                - img [ref=e312]
+            - generic [ref=e314]:
+              - generic [ref=e315]:
+                - generic [ref=e316]:
+                  - paragraph [ref=e317]: Lorenzo Tejada-Orrell
+                  - paragraph [ref=e318]: Chief Innovation Officer, CLSQ
+                - img "Lorenzo Tejada-Orrell" [ref=e319]
+              - paragraph [ref=e321]: Since implementing monday.com, CLSQ has experienced a significant transformation in operational efficiency.
+              - generic [ref=e322]:
+                - img [ref=e323]
+                - img [ref=e325]
+                - img [ref=e327]
+                - img [ref=e329]
+                - img [ref=e331]
+          - generic [ref=e333]:
+            - generic [ref=e334]:
+              - generic [ref=e335]:
+                - paragraph [ref=e336]: 500+
+                - paragraph [ref=e337]:
+                  - text: have maximised their
+                  - text: workflows with our
+                  - text: monday.com expert support
+              - link "Read our case studies" [ref=e339] [cursor=pointer]:
+                - /url: /customer-testimonials
+            - generic [ref=e340]:
+              - generic [ref=e341]:
+                - generic [ref=e342]:
+                  - paragraph [ref=e343]: Louis Stenmark
+                  - paragraph [ref=e344]: Co-Founder, Windfall Bio
+                - img "Louis Stenmark" [ref=e345]
+              - paragraph [ref=e347]: The Fruition team helped me get the most out of monday.com. They provided me with in depth instruction, custom templates and helped me solve problems unique to our early stage company's needs.
+              - generic [ref=e348]:
+                - img [ref=e349]
+                - img [ref=e351]
+                - img [ref=e353]
+                - img [ref=e355]
+                - img [ref=e357]
+            - generic [ref=e359]:
+              - generic [ref=e360]:
+                - generic [ref=e361]:
+                  - paragraph [ref=e362]: Luke Reddin
+                  - paragraph [ref=e363]: Director, Clean Power Australia
+                - img "Luke Reddin" [ref=e364]
+              - paragraph [ref=e366]: Josh and his team were excellent from start to finish on building our monday.com integrations and automations. Very happy with them.
+              - generic [ref=e367]:
+                - img [ref=e368]
+                - img [ref=e370]
+                - img [ref=e372]
+                - img [ref=e374]
+                - img [ref=e376]
+            - generic [ref=e378]:
+              - generic [ref=e379]:
+                - generic [ref=e380]:
+                  - paragraph [ref=e381]: Brad Cannon
+                  - paragraph [ref=e382]: Senior Account Executive, monday.com
+                - img "Brad Cannon" [ref=e383]
+              - paragraph [ref=e385]: Having experienced working with Josh directly at monday.com, I'd have no hesitation recommending Josh in any consulting engagement.
+              - generic [ref=e386]:
+                - img [ref=e387]
+                - img [ref=e389]
+                - img [ref=e391]
+                - img [ref=e393]
+                - img [ref=e395]
+            - generic [ref=e397]:
+              - generic [ref=e398]:
+                - generic [ref=e399]:
+                  - paragraph [ref=e400]: Bianca Genesio
+                  - paragraph [ref=e401]: Central Manager, G8 Education
+                - img "Bianca Genesio" [ref=e402]
+              - paragraph [ref=e404]: Couldn't be more happier. Thank you Josh for your hard work and commitment. Highly recommend!
+              - generic [ref=e405]:
+                - img [ref=e406]
+                - img [ref=e408]
+                - img [ref=e410]
+                - img [ref=e412]
+                - img [ref=e414]
+            - generic [ref=e416]:
+              - generic [ref=e417]:
+                - generic [ref=e418]:
+                  - paragraph [ref=e419]: Anthony D'Agostino
+                  - paragraph [ref=e420]: True Steel Frames
+                - img "Anthony D'Agostino" [ref=e421]
+              - paragraph [ref=e423]: Josh & the Fruition team were great to deal with and very thorough. would highly recommend!
+              - generic [ref=e424]:
+                - img [ref=e425]
+                - img [ref=e427]
+                - img [ref=e429]
+                - img [ref=e431]
+                - img [ref=e433]
+          - generic [ref=e435]:
+            - generic [ref=e436]:
+              - generic [ref=e437]:
+                - paragraph [ref=e438]: 500+
+                - paragraph [ref=e439]:
+                  - text: have maximised their
+                  - text: workflows with our
+                  - text: monday.com expert support
+              - link "Read our case studies" [ref=e441] [cursor=pointer]:
+                - /url: /customer-testimonials
+            - generic [ref=e442]:
+              - paragraph [ref=e445]: Jemma Ryan
+              - paragraph [ref=e448]: What a pleasant and wonderful experience it was to be dealing with Josh and the fruition team. It made it a smooth and easy process for us and our team. They were all very professional and great to speak with. Looking forward to working again with you in the future.
+              - generic [ref=e449]:
+                - img [ref=e450]
+                - img [ref=e452]
+                - img [ref=e454]
+                - img [ref=e456]
+                - img [ref=e458]
+            - generic [ref=e460]:
+              - paragraph [ref=e463]: Teddy Mangion
+              - paragraph [ref=e466]: Josh and the Fruition team were an absolute pleasure to work with. They were professional, knowledgeable, and made the whole process smooth and straightforward. I would highly recommend them to anyone looking for quality software solutions.
+              - generic [ref=e467]:
+                - img [ref=e468]
+                - img [ref=e470]
+                - img [ref=e472]
+                - img [ref=e474]
+                - img [ref=e476]
+            - generic [ref=e478]:
+              - paragraph [ref=e481]: Anthony Rowson
+              - paragraph [ref=e484]: We are very Happy Little Campers, and our system is easy to use, portable, flexible and very informative and gives us a great insight to ALL facets of the business and where our communication and marketing efforts are best targeted to maximize our returns for effort. I would highly recommend you have an initial chat with these guys. They know their stuff.
+              - generic [ref=e485]:
+                - img [ref=e486]
+                - img [ref=e488]
+                - img [ref=e490]
+                - img [ref=e492]
+                - img [ref=e494]
+            - generic [ref=e496]:
+              - paragraph [ref=e499]: Kerrie E
+              - paragraph [ref=e502]: A big thanks to Josh - spent a couple of hours working through ways to get our Event Project Plan on Monday into good shape. We know have a much more user friendly and useful Project Plan and we have made use of a variety of different automations to streamline processes. When our NFP is ready to undertake more complex Monday activities I will definitely be looking to Fruition for support.
+              - generic [ref=e503]:
+                - img [ref=e504]
+                - img [ref=e506]
+                - img [ref=e508]
+                - img [ref=e510]
+                - img [ref=e512]
+            - generic [ref=e514]:
+              - generic [ref=e515]:
+                - generic [ref=e516]:
+                  - paragraph [ref=e517]: Tedd Long
+                  - paragraph [ref=e518]: MCAG Inc.
+                - img "Tedd Long" [ref=e519]
+              - paragraph [ref=e521]: Zach provided excellent training on Monday.com and he included some great insights on how we can best use the project management features. Thank you!
+              - generic [ref=e522]:
+                - img [ref=e523]
+                - img [ref=e525]
+                - img [ref=e527]
+                - img [ref=e529]
+                - img [ref=e531]
+        - generic [ref=e533]:
+          - button "Go to testimonial page 1" [ref=e534]
+          - button "Go to testimonial page 2" [ref=e535]
+          - button "Go to testimonial page 3" [ref=e536]
+      - generic [ref=e538]:
+        - generic [ref=e539]:
+          - heading "Teams Transformed with Proven Efficiency Gains." [level=2] [ref=e540]
+          - paragraph [ref=e541]: Authorised monday.com, Atlassian and make Consulting, implementation and integration partner consultants across Australia, UK, and US.
+        - generic [ref=e542]:
+          - generic [ref=e543]:
+            - button "Top Leadership Challenges" [ref=e544]
+            - button "Top Team Challenges" [ref=e545]
+            - button "How We Can Help" [ref=e546]
+          - generic [ref=e547]:
+            - generic [ref=e548]:
+              - generic [ref=e549]: "01"
+              - paragraph [ref=e551]:
+                - text: Financial Uncertainty
+                - generic [ref=e552]: Improving reporting visibility of business performance to make better decisions and to quickly correct course on strategic initiatives.
+            - generic [ref=e553]:
+              - generic [ref=e554]: "02"
+              - paragraph [ref=e556]:
+                - text: AI & Automation
+                - generic [ref=e557]: Team enablement and implementation of AI & Automation technologies to improve workforce efficiency and unlock hidden inefficiencies
+            - generic [ref=e558]:
+              - generic [ref=e559]: "03"
+              - paragraph [ref=e561]:
+                - text: Hybrid Work Management
+                - generic [ref=e562]: Optimising productivity and culture across distributed teams while maintaining operational excellence
+            - generic [ref=e563]:
+              - generic [ref=e564]: "04"
+              - paragraph [ref=e566]:
+                - text: Talent Retention & Personal Development
+                - generic [ref=e567]: Attracting and keeping key talent in a competitive market while upskilling for future needs
+            - generic [ref=e568]:
+              - generic [ref=e569]: "05"
+              - paragraph [ref=e571]:
+                - text: Cybersecurity & Digital Risk
+                - generic [ref=e572]: Protecting against evolving threats while ensuring data privacy and regulatory compliance
+    - heading "Schedule A 30-Min Consultation With One of Our monday.com Consultants" [level=2] [ref=e575]
+    - generic [ref=e578]:
+      - heading "Implement monday.com for any team" [level=2] [ref=e579]
+      - generic [ref=e580]:
+        - generic [ref=e581]:
+          - button "CRM Sales Process" [ref=e582]
+          - button "Project Management" [ref=e583]
+          - button "Marketing & Creative" [ref=e584]
+        - generic [ref=e585]:
+          - button "HR Operations" [ref=e586]
+          - button "Finance Workflows" [ref=e587]
+          - button "IT Operations" [ref=e588]
+          - button "Customer Service" [ref=e589]
+      - generic [ref=e591]:
+        - generic [ref=e592]:
+          - heading "Streamline your sales & CRM processes" [level=3] [ref=e593]
+          - link "Show me more" [ref=e594] [cursor=pointer]:
+            - /url: /monday-crm-consulting
+            - text: Show me more
+            - img [ref=e595]
+        - paragraph [ref=e597]: Have a monday.com partner build a CRM for your business that can still adapt with you as your requirements change. So, instead of spinning your wheels trying to figure it out for six months, you can start inputting data in 2-3 weeks.
+        - generic [ref=e598]:
+          - generic [ref=e599]:
+            - generic [ref=e600]: 📊
+            - generic [ref=e601]: Pipeline visualisation
+          - generic [ref=e602]:
+            - generic [ref=e603]: 📈
+            - generic [ref=e604]: Sales forecasting
+          - generic [ref=e605]:
+            - generic [ref=e606]: ⚡
+            - generic [ref=e607]: Automated lead scoring
+          - generic [ref=e608]:
+            - generic [ref=e609]: 📧
+            - generic [ref=e610]: Email integration
+          - generic [ref=e611]:
+            - generic [ref=e612]: 📋
+            - generic [ref=e613]: Custom deal stages
+          - generic [ref=e614]:
+            - generic [ref=e615]: 🎯
+            - generic [ref=e616]: Performance analytics
+    - generic [ref=e620]:
+      - heading "Get set up right, the first time. Measure twice, cut once." [level=2] [ref=e621]
+      - generic [ref=e622]:
+        - generic [ref=e623]:
+          - paragraph [ref=e624]: "01"
+          - paragraph [ref=e625]: Map & Design
+          - paragraph [ref=e626]: Map out your key business processes.
+        - generic [ref=e627]:
+          - paragraph [ref=e628]: "02"
+          - paragraph [ref=e629]: Build & Optimise
+          - paragraph [ref=e630]: Build custom workflows and automations tailored to your industry.
+        - generic [ref=e631]:
+          - paragraph [ref=e632]: "03"
+          - paragraph [ref=e633]: Integration & Automate
+          - paragraph [ref=e634]: Integrate monday.com with other systems.
+        - generic [ref=e635]:
+          - paragraph [ref=e636]: "04"
+          - paragraph [ref=e637]: Train & Change
+          - paragraph [ref=e638]: Train your team and provide ongoing support.
+        - generic [ref=e639]:
+          - paragraph [ref=e640]: "05"
+          - paragraph [ref=e641]: Reporting & Analytics
+          - paragraph [ref=e642]: Create dashboards displaying the metrics that are important to you.
+    - generic [ref=e644]:
+      - generic [ref=e645]:
+        - heading "A Solution Built With You For You" [level=2] [ref=e646]: A Solution Built With You For You
+        - paragraph [ref=e647]: Our monday.com consultants have expertise across various industries. As a Platinum monday.com partner, we the guarantee delivery of the right solution and training to optimise your teams efficiency.
+      - img "monday.com Platinum Partner" [ref=e648]
+      - generic [ref=e649]:
+        - link "Construction Construction" [ref=e650] [cursor=pointer]:
+          - /url: /monday-for-construction
+          - img "Construction" [ref=e652]
+          - paragraph [ref=e653]: Construction
+        - link "Customer Service Customer Service" [ref=e654] [cursor=pointer]:
+          - /url: /monday-consulting-solutions/monday-service
+          - img "Customer Service" [ref=e656]
+          - paragraph [ref=e657]: Customer Service
+        - link "Retail Retail" [ref=e658] [cursor=pointer]:
+          - /url: /monday-for-retail
+          - img "Retail" [ref=e660]
+          - paragraph [ref=e661]: Retail
+        - link "Government Government" [ref=e662] [cursor=pointer]:
+          - /url: /monday-for-government
+          - img "Government" [ref=e664]
+          - paragraph [ref=e665]: Government
+        - link "Manufacturing Manufacturing" [ref=e666] [cursor=pointer]:
+          - /url: /monday-for-manufacturing
+          - img "Manufacturing" [ref=e668]
+          - paragraph [ref=e669]: Manufacturing
+        - link "Marketing & Creative Marketing & Creative" [ref=e670] [cursor=pointer]:
+          - /url: /monday-for-marketing
+          - img "Marketing & Creative" [ref=e672]
+          - paragraph [ref=e673]: Marketing & Creative
+        - link "Professional Services Professional Services" [ref=e674] [cursor=pointer]:
+          - /url: /monday-for-professional-services
+          - img "Professional Services" [ref=e676]
+          - paragraph [ref=e677]: Professional Services
+        - link "Real Estate Real Estate" [ref=e678] [cursor=pointer]:
+          - /url: /monday-for-real-estate
+          - img "Real Estate" [ref=e680]
+          - paragraph [ref=e681]: Real Estate
+    - generic [ref=e684]:
+      - heading "Implementation & optimisation" [level=2] [ref=e685]
+      - paragraph [ref=e686]:
+        - text: Get help setting up or fine-tuning
+        - generic [ref=e687]: your monday workflows.
+      - paragraph [ref=e689]: Have our monday.com consultants design a system to support the way you want your business to run. Already have an account? Let us help you optimise and automate your existing workflows so you're more efficient than ever.
+      - link "Our Implementation Services" [ref=e690] [cursor=pointer]:
+        - /url: /monday-implementation-consultants
+        - img [ref=e691]
+        - text: Our Implementation Services
+    - generic [ref=e696]:
+      - img "Training & managed services" [ref=e698]
+      - generic [ref=e699]:
+        - heading "Training & managed services" [level=2] [ref=e700]
+        - paragraph [ref=e701]: Get the entire team monday.com training.
+        - paragraph [ref=e703]: Make sure all of your team members get the onboarding they need to feel comfortable using the platform day in and day out. So, when you actually start using the platform, it becomes your single source of truth.
+        - link "Our Training Services" [ref=e704] [cursor=pointer]:
+          - /url: /monday-training
+          - img [ref=e705]
+          - text: Our Training Services
+    - generic [ref=e708]:
+      - generic [ref=e709]:
+        - heading "Integration & API development" [level=2] [ref=e710]
+        - paragraph [ref=e711]:
+          - generic [ref=e712]: Eliminate manual work with
+          - text: automation.
+        - paragraph [ref=e714]: Seamlessly integrate Gmail, Outlook, Sharepoint, Teams, accounting software, ChatGPT, and dozens of other tools with the software's open API.
+        - link "See Our Solutions" [ref=e715] [cursor=pointer]:
+          - /url: /monday-consulting-solutions
+          - img [ref=e716]
+          - text: See Our Solutions
+      - img "Integration & API development" [ref=e719]
+    - generic [ref=e720]:
+      - img "monday.com Certifications" [ref=e722]
+      - heading "Discover how much monday.com can do for your team." [level=2] [ref=e723]
+      - generic [ref=e724]:
+        - link "Schedule a Consultation" [ref=e725] [cursor=pointer]:
+          - /url: https://calendly.com/global-calendar-fruitionservices
+        - link "Get Started with monday.com" [ref=e726] [cursor=pointer]:
+          - /url: https://monday.com/crm?utm_source=Partner&utm_campaign=fruitionanz&utm_banner=fruition_monday_crm__4
+    - generic [ref=e728]:
+      - heading "Join 500+ businesses that have leveraged our monday.com expert consultants." [level=2] [ref=e729]
+      - generic [ref=e730]:
+        - generic [ref=e731]:
+          - generic [ref=e732]: 288%
+          - generic [ref=e733]: ROI
+        - generic [ref=e734]:
+          - generic [ref=e735]: 15,600
+          - generic [ref=e736]: Hours Saved
+        - generic [ref=e737]:
+          - generic [ref=e738]: 50%
+          - generic [ref=e739]: Meeting reduction
+        - generic [ref=e740]:
+          - generic [ref=e741]: 489,794
+          - generic [ref=e742]: Net Value
+      - generic [ref=e743]:
+        - generic [ref=e744]: The economic impact of
+        - img "Forrester" [ref=e745]
+      - link "Book a Time" [ref=e746] [cursor=pointer]:
+        - /url: https://calendly.com/global-calendar-fruitionservices
+        - img [ref=e747]
+        - text: Book a Time
+    - generic [ref=e749]:
+      - generic [ref=e751]:
+        - generic [ref=e752]:
+          - heading "Latest from the Blog" [level=2] [ref=e753]
+          - paragraph [ref=e754]: Grab our latest guides, articles, and case studies to see all the ways monday.com could make your life easier.
+        - generic [ref=e755]:
+          - 'link "Cross-Functional Product Collaboration in monday: Can You Connect Dev, Marketing, and Design Workflows in 2026? Monday Com Cross-Functional Product Collaboration in monday: Can You Connect Dev, Marketing, and Design Workflows in 2026?" [ref=e756] [cursor=pointer]':
+            - /url: /post/cross-functional-product-collaboration-monday
+            - 'img "Cross-Functional Product Collaboration in monday: Can You Connect Dev, Marketing, and Design Workflows in 2026?" [ref=e757]'
+            - generic [ref=e758]:
+              - generic [ref=e759]: Monday Com
+              - 'heading "Cross-Functional Product Collaboration in monday: Can You Connect Dev, Marketing, and Design Workflows in 2026?" [level=3] [ref=e760]'
+          - 'link "monday.com Consultants in the UK: Top 5 Experts Who Can Build Workflows for You in 2026 Monday Com monday.com Consultants in the UK: Top 5 Experts Who Can Build Workflows for You in 2026" [ref=e761] [cursor=pointer]':
+            - /url: /post/mondaycom-consultants-in-the-uk
+            - 'img "monday.com Consultants in the UK: Top 5 Experts Who Can Build Workflows for You in 2026" [ref=e762]'
+            - generic [ref=e763]:
+              - generic [ref=e764]: Monday Com
+              - 'heading "monday.com Consultants in the UK: Top 5 Experts Who Can Build Workflows for You in 2026" [level=3] [ref=e765]'
+          - 'link "The New Oil: AI Tokens Explained Monday Com The New Oil: AI Tokens Explained" [ref=e766] [cursor=pointer]':
+            - /url: /post/the-new-oil-ai-tokens-explained
+            - 'img "The New Oil: AI Tokens Explained" [ref=e767]'
+            - generic [ref=e768]:
+              - generic [ref=e769]: Monday Com
+              - 'heading "The New Oil: AI Tokens Explained" [level=3] [ref=e770]'
+          - link "monday.com Integrations, Linking Boards, and monday AI—Maximise These Workflows with a Certified UK Partner Monday Com monday.com Integrations, Linking Boards, and monday AI—Maximise These Workflows with a Certified UK Partner" [ref=e771] [cursor=pointer]:
+            - /url: /post/monday-com-ai-integrations-and-linking-boards
+            - img "monday.com Integrations, Linking Boards, and monday AI—Maximise These Workflows with a Certified UK Partner" [ref=e772]
+            - generic [ref=e773]:
+              - generic [ref=e774]: Monday Com
+              - heading "monday.com Integrations, Linking Boards, and monday AI—Maximise These Workflows with a Certified UK Partner" [level=3] [ref=e775]
+          - 'link "Best 6 Job Scheduling Apps of 2026: Construction Management From Field to Office Monday Com Best 6 Job Scheduling Apps of 2026: Construction Management From Field to Office" [ref=e776] [cursor=pointer]':
+            - /url: /post/best-job-scheduling-apps-for-construction
+            - 'img "Best 6 Job Scheduling Apps of 2026: Construction Management From Field to Office" [ref=e777]'
+            - generic [ref=e778]:
+              - generic [ref=e779]: Monday Com
+              - 'heading "Best 6 Job Scheduling Apps of 2026: Construction Management From Field to Office" [level=3] [ref=e780]'
+          - 'link "monday WorkForms: The A-to-Z of Comprehensive Data Collection to Streamline Workflows in 2026 Monday Com monday WorkForms: The A-to-Z of Comprehensive Data Collection to Streamline Workflows in 2026" [ref=e781] [cursor=pointer]':
+            - /url: /post/monday-workforms
+            - 'img "monday WorkForms: The A-to-Z of Comprehensive Data Collection to Streamline Workflows in 2026" [ref=e782]'
+            - generic [ref=e783]:
+              - generic [ref=e784]: Monday Com
+              - 'heading "monday WorkForms: The A-to-Z of Comprehensive Data Collection to Streamline Workflows in 2026" [level=3] [ref=e785]'
+        - link "✍️ Check Out Our Blog" [ref=e786] [cursor=pointer]:
+          - /url: /consulting-blog
+      - img "Security Partners" [ref=e789]
+  - contentinfo [ref=e790]:
+    - generic [ref=e791]:
+      - generic [ref=e792]:
+        - link "Fruition Services" [ref=e793] [cursor=pointer]:
+          - /url: /
+          - img "Fruition Services" [ref=e794]
+        - link "Book a Meeting" [ref=e795] [cursor=pointer]:
+          - /url: https://calendly.com/global-calendar-fruitionservices
+      - generic [ref=e796]:
+        - link "contact@fruitionservices.io" [ref=e797] [cursor=pointer]:
+          - /url: mailto:contact@fruitionservices.io
+          - img [ref=e798]
+          - generic [ref=e801]: contact@fruitionservices.io
+        - generic [ref=e802]:
+          - img [ref=e803]
+          - generic [ref=e805]:
+            - link "+61 483 955 931" [ref=e806] [cursor=pointer]:
+              - /url: tel:+61483955931
+            - link "+1 302 330 2496" [ref=e807] [cursor=pointer]:
+              - /url: tel:+13023302496
+            - link "+44 7822 019548" [ref=e808] [cursor=pointer]:
+              - /url: tel:+447822019548
+      - generic [ref=e809]:
+        - heading "Partner Expertise" [level=4] [ref=e810]
+        - generic [ref=e811]:
+          - img "monday.com Platinum Partner" [ref=e813]
+          - img "Gold Solution Partner" [ref=e815]
+          - img "Advanced Delivery Partner" [ref=e817]
+          - img "n8n Partner" [ref=e819]
+          - img "Make Partners" [ref=e821]
+          - img "Aircall Partners" [ref=e823]
+          - img "Hootsuite Partners" [ref=e825]
+          - img "Guidde Partner" [ref=e827]
+      - generic [ref=e828]:
+        - link "Facebook" [ref=e829] [cursor=pointer]:
+          - /url: https://www.facebook.com/profile.php?id=100092289551680
+          - img "Facebook" [ref=e830]
+        - link "LinkedIn" [ref=e831] [cursor=pointer]:
+          - /url: https://www.linkedin.com/company/fruition-services
+          - img "LinkedIn" [ref=e832]
+        - link "WhatsApp" [ref=e833] [cursor=pointer]:
+          - /url: https://wa.me/61483955931
+          - img "WhatsApp" [ref=e834]
+        - link "YouTube" [ref=e835] [cursor=pointer]:
+          - /url: https://www.youtube.com/channel/UCF8mr3qiFVwiX0xrcAaKxgA
+          - img "YouTube" [ref=e836]
+      - generic [ref=e837]:
+        - link "Data Privacy" [ref=e838] [cursor=pointer]:
+          - /url: /data-privacy
+        - link "Terms and Conditions" [ref=e839] [cursor=pointer]:
+          - /url: /terms-and-conditions
+      - paragraph [ref=e840]: © 2025 Fruition Services. All rights reserved.
+    - generic [ref=e841]:
+      - generic [ref=e842]:
+        - generic [ref=e843]:
+          - heading "Services" [level=4] [ref=e844]
+          - generic [ref=e845]:
+            - link "Implementation Packages" [ref=e846] [cursor=pointer]:
+              - /url: /implementation-packages
+            - link "monday.com Training" [ref=e847] [cursor=pointer]:
+              - /url: /monday-training
+            - link "monday.com Implementation Consultants" [ref=e848] [cursor=pointer]:
+              - /url: /monday-implementation-consultants
+            - link "monday CRM Consulting" [ref=e849] [cursor=pointer]:
+              - /url: /monday-crm-consulting
+        - generic [ref=e850]:
+          - heading "Department Solutions" [level=4] [ref=e851]
+          - generic [ref=e852]:
+            - link "monday.com Project Management" [ref=e853] [cursor=pointer]:
+              - /url: /monday-consulting-solutions/monday-project-management
+            - link "monday.com Service" [ref=e854] [cursor=pointer]:
+              - /url: /monday-consulting-solutions/monday-service
+            - link "monday.com HR Solutions" [ref=e855] [cursor=pointer]:
+              - /url: /monday-consulting-solutions/monday-for-hr
+            - link "monday.com for Marketing & Creative" [ref=e856] [cursor=pointer]:
+              - /url: /monday-for-marketing
+            - link "monday.com Finance" [ref=e857] [cursor=pointer]:
+              - /url: /monday-consulting-solutions/monday-for-finance
+            - link "monday.com for Product Management" [ref=e858] [cursor=pointer]:
+              - /url: /monday-consulting-solutions/monday-product-management
+            - link "Solar CRM & Work Management Solution" [ref=e859] [cursor=pointer]:
+              - /url: /monday-consulting-solutions/solar-crm-solution
+            - link "AI Strategy & Execution" [ref=e860] [cursor=pointer]:
+              - /url: /ai-strategy-and-execution
+            - link "Case Studies" [ref=e861] [cursor=pointer]:
+              - /url: /customer-testimonials
+        - generic [ref=e862]:
+          - heading "Industry Solutions" [level=4] [ref=e863]
+          - generic [ref=e864]:
+            - link "monday.com for Construction" [ref=e865] [cursor=pointer]:
+              - /url: /monday-for-construction
+            - link "monday.com for Manufacturing" [ref=e866] [cursor=pointer]:
+              - /url: /monday-for-manufacturing
+            - link "monday.com for Retail" [ref=e867] [cursor=pointer]:
+              - /url: /monday-for-retail
+            - link "monday.com for Professional Services" [ref=e868] [cursor=pointer]:
+              - /url: /monday-for-professional-services
+            - link "monday.com for Government" [ref=e869] [cursor=pointer]:
+              - /url: /monday-for-government
+            - link "monday.com for Marketing & Creative" [ref=e870] [cursor=pointer]:
+              - /url: /monday-for-marketing
+            - link "monday.com for Real Estate" [ref=e871] [cursor=pointer]:
+              - /url: /monday-for-real-estate
+      - generic [ref=e872]:
+        - heading "Our Locations" [level=4] [ref=e873]
+        - generic [ref=e874]:
+          - generic [ref=e875]:
+            - generic [ref=e876]:
+              - generic [ref=e877]: 🇦🇺
+              - link "Sydney, Australia" [ref=e878] [cursor=pointer]:
+                - /url: /monday-partner-australia
+            - paragraph [ref=e879]: (Head Office)
+            - link "64 York Street, Sydney NSW 2000 Australia" [ref=e880] [cursor=pointer]:
+              - /url: https://g.co/kgs/gAajXzG
+            - link "+61 483 955 931" [ref=e881] [cursor=pointer]:
+              - /url: tel:+61483955931
+          - generic [ref=e882]:
+            - generic [ref=e883]:
+              - generic [ref=e884]: 🇺🇸
+              - link "New York, US Office" [ref=e885] [cursor=pointer]:
+                - /url: /monday-partner-us
+            - paragraph [ref=e886]: (North America Office)
+            - link "205 W 37th St, New York, NY 10018, United States" [ref=e887] [cursor=pointer]:
+              - /url: https://maps.app.goo.gl/4u1KjFHfUgiXGGta9
+            - link "+1 302 330 2496" [ref=e888] [cursor=pointer]:
+              - /url: tel:+13023302496
+          - generic [ref=e889]:
+            - generic [ref=e890]:
+              - generic [ref=e891]: 🇬🇧
+              - link "London, UK" [ref=e892] [cursor=pointer]:
+                - /url: /monday-partner-uk
+            - paragraph [ref=e893]: (EMEA Office)
+            - link "Medius House, 2 Sheraton St, London W1F 8BH, United Kingdom" [ref=e894] [cursor=pointer]:
+              - /url: https://g.co/kgs/wmakkDU
+            - link "+44 7822 019548" [ref=e895] [cursor=pointer]:
+              - /url: tel:+447822019548
+  - button "Open Next.js Dev Tools" [ref=e901] [cursor=pointer]:
+    - img [ref=e902]
+  - alert [ref=e905]

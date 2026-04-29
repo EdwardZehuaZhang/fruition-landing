@@ -1,0 +1,445 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - link "Fruition Services" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "Fruition Services" [ref=e6]
+      - generic [ref=e7]:
+        - button "What We Offer" [ref=e9]
+        - button "Partnerships & Locations" [ref=e11]
+        - button "Industries" [ref=e13]
+        - button "About" [ref=e15]
+        - generic [ref=e16]:
+          - link "Call us" [ref=e17] [cursor=pointer]:
+            - /url: tel:+61483955931
+            - img [ref=e18]
+          - link "Book a Time" [ref=e20] [cursor=pointer]:
+            - /url: https://calendly.com/global-calendar-fruitionservices
+            - img [ref=e21]
+            - text: Book a Time
+  - main [ref=e23]:
+    - generic [ref=e24]:
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - generic [ref=e30]: 2026 Solutions Atlas · Global · 2024 to 2026
+          - heading "The full map of what Fruition builds on monday.com." [level=1] [ref=e33]
+          - paragraph [ref=e34]: Tell the advisor your industry and what you are trying to fix. It will match you to the right solution from our 2026 catalog.
+          - generic [ref=e35]:
+            - generic [ref=e36]: 45 solutions
+            - generic [ref=e37]: 289 client builds
+            - generic [ref=e38]: US, APAC & UK
+            - generic [ref=e39]: monday.com Platinum Partner
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - generic [ref=e43]: F
+            - generic [ref=e44]:
+              - generic [ref=e45]: Fruition Solutions Advisor
+              - generic [ref=e46]: Live · Answers in 6 quick taps
+          - generic [ref=e48]:
+            - generic [ref=e49]: Hi, I am the Fruition Solutions Advisor. To start, which industry best describes your business?
+            - generic [ref=e50]:
+              - button "Construction" [ref=e51]
+              - button "Real Estate" [ref=e52]
+              - button "Manufacturing" [ref=e53]
+              - button "Financial Services" [ref=e54]
+              - button "Healthcare" [ref=e55]
+              - button "Agency / Marketing" [ref=e56]
+              - button "Field Service" [ref=e57]
+              - button "People Ops / HR" [ref=e58]
+              - button "Retail / Commerce" [ref=e59]
+              - button "Logistics / Fleet" [ref=e60]
+              - button "Nonprofit" [ref=e61]
+              - button "Energy / Solar" [ref=e62]
+              - button "Services / Platform" [ref=e63]
+              - button "Something else" [ref=e64]
+          - generic [ref=e65]:
+            - generic [ref=e66]:
+              - textbox "Tap an option above" [ref=e67]
+              - button "Send" [disabled] [ref=e68]
+            - button "Skip this step →" [ref=e70]
+      - generic [ref=e72]:
+        - generic [ref=e73]:
+          - generic [ref=e74]: Solutions Catalog
+          - heading "Every solution in one filterable atlas." [level=2] [ref=e75]
+          - paragraph [ref=e76]: 45 productized monday.com builds, organized by category and tagged by industry, product type, and depth. Tap any card to see workflow, modules, and similar client implementations.
+        - generic [ref=e77]:
+          - generic [ref=e78]: Work Management
+          - generic [ref=e80]: CRM
+          - generic [ref=e82]: Service
+          - generic [ref=e84]: Operations & ERP
+          - generic [ref=e86]: New in 2026
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - generic [ref=e91]: Industry
+            - button "All 45" [ref=e92]:
+              - generic [ref=e93]: All
+              - generic [ref=e94]: "45"
+            - button "Construction 10" [ref=e95]:
+              - generic [ref=e96]: Construction
+              - generic [ref=e97]: "10"
+            - button "Manufacturing 3" [ref=e98]:
+              - generic [ref=e99]: Manufacturing
+              - generic [ref=e100]: "3"
+            - button "Real Estate & Property 6" [ref=e101]:
+              - generic [ref=e102]: Real Estate & Property
+              - generic [ref=e103]: "6"
+            - button "Financial Services 4" [ref=e104]:
+              - generic [ref=e105]: Financial Services
+              - generic [ref=e106]: "4"
+            - button "Healthcare 1" [ref=e107]:
+              - generic [ref=e108]: Healthcare
+              - generic [ref=e109]: "1"
+            - button "Agency & Marketing 6" [ref=e110]:
+              - generic [ref=e111]: Agency & Marketing
+              - generic [ref=e112]: "6"
+            - button "Field Service 4" [ref=e113]:
+              - generic [ref=e114]: Field Service
+              - generic [ref=e115]: "4"
+            - button "People Ops 4" [ref=e116]:
+              - generic [ref=e117]: People Ops
+              - generic [ref=e118]: "4"
+            - button "Retail & Commerce 4" [ref=e119]:
+              - generic [ref=e120]: Retail & Commerce
+              - generic [ref=e121]: "4"
+            - button "Logistics 2" [ref=e122]:
+              - generic [ref=e123]: Logistics
+              - generic [ref=e124]: "2"
+            - button "Nonprofit 1" [ref=e125]:
+              - generic [ref=e126]: Nonprofit
+              - generic [ref=e127]: "1"
+            - button "Energy & Solar 1" [ref=e128]:
+              - generic [ref=e129]: Energy & Solar
+              - generic [ref=e130]: "1"
+            - button "Platform 15" [ref=e131]:
+              - generic [ref=e132]: Platform
+              - generic [ref=e133]: "15"
+            - button "Australia 43" [ref=e134]:
+              - generic [ref=e135]: Australia
+              - generic [ref=e136]: "43"
+            - button "APAC 13" [ref=e137]:
+              - generic [ref=e138]: APAC
+              - generic [ref=e139]: "13"
+            - button "UK 35" [ref=e140]:
+              - generic [ref=e141]: UK
+              - generic [ref=e142]: "35"
+          - generic [ref=e143]:
+            - generic [ref=e144]: Product Type
+            - button "All 45" [ref=e145]:
+              - generic [ref=e146]: All
+              - generic [ref=e147]: "45"
+            - button "Work Management 10" [ref=e148]:
+              - generic [ref=e149]: Work Management
+              - generic [ref=e150]: "10"
+            - button "CRM 8" [ref=e151]:
+              - generic [ref=e152]: CRM
+              - generic [ref=e153]: "8"
+            - button "Operations & ERP 3" [ref=e154]:
+              - generic [ref=e155]: Operations & ERP
+              - generic [ref=e156]: "3"
+            - button "Service 1" [ref=e157]:
+              - generic [ref=e158]: Service
+              - generic [ref=e159]: "1"
+            - button "New in 2026 23" [ref=e160]:
+              - generic [ref=e161]: New in 2026
+              - generic [ref=e162]: "23"
+          - generic [ref=e163]:
+            - generic [ref=e164]: Depth
+            - button "All 45" [ref=e165]:
+              - generic [ref=e166]: All
+              - generic [ref=e167]: "45"
+            - button "Full Detail 10" [ref=e168]:
+              - generic [ref=e169]: Full Detail
+              - generic [ref=e170]: "10"
+            - button "Standard 35" [ref=e171]:
+              - generic [ref=e172]: Standard
+              - generic [ref=e173]: "35"
+          - generic [ref=e174]:
+            - text: Showing
+            - strong [ref=e175]: all 45
+            - text: solutions.
+        - generic [ref=e176]:
+          - button "Work Management 27 of 27 solutions Click to expand" [ref=e178]:
+            - generic [ref=e179]: ▾
+            - generic [ref=e180]: Work Management
+            - generic [ref=e181]:
+              - strong [ref=e182]: "27"
+              - text: of 27 solutions
+            - generic [ref=e183]: Click to expand
+          - button "CRM 8 of 8 solutions Click to expand" [ref=e185]:
+            - generic [ref=e186]: ▾
+            - generic [ref=e187]: CRM
+            - generic [ref=e188]:
+              - strong [ref=e189]: "8"
+              - text: of 8 solutions
+            - generic [ref=e190]: Click to expand
+          - button "Fruition R&D Platform 10 of 10 solutions Click to expand" [ref=e192]:
+            - generic [ref=e193]: ▾
+            - generic [ref=e194]: Fruition R&D Platform
+            - generic [ref=e195]:
+              - strong [ref=e196]: "10"
+              - text: of 10 solutions
+            - generic [ref=e197]: Click to expand
+      - generic [ref=e199]:
+        - generic [ref=e200]:
+          - generic [ref=e201]: Industry Map
+          - heading "Where the work is actually landing." [level=2] [ref=e202]
+          - paragraph [ref=e203]: The catalog is organized by product category, but clients hire us by industry. This is the real map of where our implementations are concentrated over the last twelve months.
+        - generic [ref=e204]:
+          - generic [ref=e205]:
+            - heading "C Construction & Trades" [level=3] [ref=e206]:
+              - generic [ref=e207]: C
+              - text: Construction & Trades
+            - list [ref=e208]:
+              - listitem [ref=e209]: —Commercial PPM
+              - listitem [ref=e210]: —Residential High Volume
+              - listitem [ref=e211]: —Commercial Low Volume
+              - listitem [ref=e212]: —Job Trades Management
+              - listitem [ref=e213]: —Pool Construction
+              - listitem [ref=e214]: —Engineering PPM
+              - listitem [ref=e215]: —Signage & Architectural
+              - listitem [ref=e216]: —Estimating & Budgets
+          - generic [ref=e217]:
+            - heading "M Manufacturing & Operations" [level=3] [ref=e218]:
+              - generic [ref=e219]: M
+              - text: Manufacturing & Operations
+            - list [ref=e220]:
+              - listitem [ref=e221]: —Project Build Tracker
+              - listitem [ref=e222]: —ERP Production
+              - listitem [ref=e223]: —Asset Management
+              - listitem [ref=e224]: —Logistics & Fleet
+              - listitem [ref=e225]: —Packaging
+              - listitem [ref=e226]: —Inventory & PO
+          - generic [ref=e227]:
+            - heading "S Sales & CRM" [level=3] [ref=e228]:
+              - generic [ref=e229]: S
+              - text: Sales & CRM
+            - list [ref=e230]:
+              - listitem [ref=e231]: —Dream CRM
+              - listitem [ref=e232]: —Account Management
+              - listitem [ref=e233]: —Real Estate Residential
+              - listitem [ref=e234]: —Real Estate Commercial
+              - listitem [ref=e235]: —Financial Services
+              - listitem [ref=e236]: —Wealth Management
+              - listitem [ref=e237]: —Agriculture & Livestock
+              - listitem [ref=e238]: —Retail & Ecommerce
+              - listitem [ref=e239]: —Solar
+          - generic [ref=e240]:
+            - heading "P Professional & People Ops" [level=3] [ref=e241]:
+              - generic [ref=e242]: P
+              - text: Professional & People Ops
+            - list [ref=e243]:
+              - listitem [ref=e244]: —Fruition PPM
+              - listitem [ref=e245]: —Fruition HR
+              - listitem [ref=e246]: —Recruitment & ATS
+              - listitem [ref=e247]: —Global Marketing Agency
+              - listitem [ref=e248]: —Training & Enablement
+              - listitem [ref=e249]: —Migration Services
+              - listitem [ref=e250]: —AI Agent Enablement
+              - listitem [ref=e251]: —Proposal Automation
+          - generic [ref=e252]:
+            - heading "F Field Service & Property" [level=3] [ref=e253]:
+              - generic [ref=e254]: F
+              - text: Field Service & Property
+            - list [ref=e255]:
+              - listitem [ref=e256]: —Customer Service Ticketing
+              - listitem [ref=e257]: —Insurance Claims
+              - listitem [ref=e258]: —Property Management OS
+              - listitem [ref=e259]: —Healthcare Practice
+              - listitem [ref=e260]: —Fleet Dispatch
+          - generic [ref=e261]:
+            - heading "I Integrations & Platform" [level=3] [ref=e262]:
+              - generic [ref=e263]: I
+              - text: Integrations & Platform
+            - list [ref=e264]:
+              - listitem [ref=e265]: —NetSuite
+              - listitem [ref=e266]: —QuickBooks
+              - listitem [ref=e267]: —Apollo
+              - listitem [ref=e268]: —OpenPhone
+              - listitem [ref=e269]: —Qarma
+              - listitem [ref=e270]: —DocuSign
+              - listitem [ref=e271]: —Make.com
+              - listitem [ref=e272]: —N8N
+      - generic [ref=e274]:
+        - generic [ref=e275]:
+          - generic [ref=e276]: Project Builds Index
+          - heading "289 client engagements across the US, Australia, APAC, and the UK." [level=2] [ref=e277]
+          - paragraph [ref=e278]: Every build below has been delivered and is in active support across our three regional books of business.
+        - button "Fruition Clients 289delivered implementations across US, APAC & UK Click to expand" [ref=e280]:
+          - generic [ref=e281]: ▾
+          - generic [ref=e282]: Fruition Clients
+          - generic [ref=e283]:
+            - strong [ref=e284]: "289"
+            - text: delivered implementations across US, APAC & UK
+          - generic [ref=e285]: Click to expand
+      - generic [ref=e287]:
+        - generic [ref=e288]:
+          - generic [ref=e289]: Delivery Method
+          - heading "How a Fruition build actually ships." [level=2] [ref=e290]
+          - paragraph [ref=e291]: Every solution above runs on the same five-phase delivery method. We treat monday.com as a product platform, not a template library, so each phase is about fit and adoption as much as configuration.
+        - generic [ref=e292]:
+          - generic [ref=e293]: The Fruition Delivery Method
+          - heading "Discovery to adoption in five phases." [level=3] [ref=e294]
+          - generic [ref=e295]:
+            - generic [ref=e296]:
+              - generic [ref=e297]: Phase 01
+              - heading "Discovery" [level=4] [ref=e298]
+              - paragraph [ref=e299]: Stakeholder interviews, current-state map, and solution fit from our catalog.
+            - generic [ref=e300]:
+              - generic [ref=e301]: Phase 02
+              - heading "Design" [level=4] [ref=e302]
+              - paragraph [ref=e303]: Board architecture, column taxonomy, automations, and integration shape locked in writing.
+            - generic [ref=e304]:
+              - generic [ref=e305]: Phase 03
+              - heading "Build" [level=4] [ref=e306]
+              - paragraph [ref=e307]: Configure boards, dashboards, forms, docs, and connectors against the signed design.
+            - generic [ref=e308]:
+              - generic [ref=e309]: Phase 04
+              - heading "Enablement" [level=4] [ref=e310]
+              - paragraph [ref=e311]: Role-based training, runbooks, and admin certification so the system sticks after go-live.
+            - generic [ref=e312]:
+              - generic [ref=e313]: Phase 05
+              - heading "Hypercare" [level=4] [ref=e314]
+              - paragraph [ref=e315]: 30-to-90 day adoption monitoring, tuning, and a clean hand-off to support or managed services.
+      - generic [ref=e318]:
+        - heading "The 2026 catalog keeps growing every quarter." [level=2] [ref=e319]
+        - paragraph [ref=e320]: If a client need does not match a template above, it usually becomes next quarter’s solution. Ask about the ones we are pressure-testing right now.
+        - link "Talk to Zach" [ref=e321] [cursor=pointer]:
+          - /url: https://calendly.com/global-calendar-fruitionservices
+          - text: Talk to Zach
+          - generic [ref=e322]: →
+  - contentinfo [ref=e323]:
+    - generic [ref=e324]:
+      - generic [ref=e325]:
+        - link "Fruition Services" [ref=e326] [cursor=pointer]:
+          - /url: /
+          - img "Fruition Services" [ref=e327]
+        - link "Book a Meeting" [ref=e328] [cursor=pointer]:
+          - /url: https://calendly.com/global-calendar-fruitionservices
+      - generic [ref=e329]:
+        - link "contact@fruitionservices.io" [ref=e330] [cursor=pointer]:
+          - /url: mailto:contact@fruitionservices.io
+          - img [ref=e331]
+          - generic [ref=e334]: contact@fruitionservices.io
+        - generic [ref=e335]:
+          - img [ref=e336]
+          - generic [ref=e338]:
+            - link "+61 483 955 931" [ref=e339] [cursor=pointer]:
+              - /url: tel:+61483955931
+            - link "+1 302 330 2496" [ref=e340] [cursor=pointer]:
+              - /url: tel:+13023302496
+            - link "+44 7822 019548" [ref=e341] [cursor=pointer]:
+              - /url: tel:+447822019548
+      - generic [ref=e342]:
+        - heading "Partner Expertise" [level=4] [ref=e343]
+        - generic [ref=e344]:
+          - img "monday.com Platinum Partner" [ref=e346]
+          - img "Gold Solution Partner" [ref=e348]
+          - img "Advanced Delivery Partner" [ref=e350]
+          - img "n8n Partner" [ref=e352]
+          - img "Make Partners" [ref=e354]
+          - img "Aircall Partners" [ref=e356]
+          - img "Hootsuite Partners" [ref=e358]
+          - img "Guidde Partner" [ref=e360]
+      - generic [ref=e361]:
+        - link "Facebook" [ref=e362] [cursor=pointer]:
+          - /url: https://www.facebook.com/profile.php?id=100092289551680
+          - img "Facebook" [ref=e363]
+        - link "LinkedIn" [ref=e364] [cursor=pointer]:
+          - /url: https://www.linkedin.com/company/fruition-services
+          - img "LinkedIn" [ref=e365]
+        - link "WhatsApp" [ref=e366] [cursor=pointer]:
+          - /url: https://wa.me/61483955931
+          - img "WhatsApp" [ref=e367]
+        - link "YouTube" [ref=e368] [cursor=pointer]:
+          - /url: https://www.youtube.com/channel/UCF8mr3qiFVwiX0xrcAaKxgA
+          - img "YouTube" [ref=e369]
+      - generic [ref=e370]:
+        - link "Data Privacy" [ref=e371] [cursor=pointer]:
+          - /url: /data-privacy
+        - link "Terms and Conditions" [ref=e372] [cursor=pointer]:
+          - /url: /terms-and-conditions
+      - paragraph [ref=e373]: © 2025 Fruition Services. All rights reserved.
+    - generic [ref=e374]:
+      - generic [ref=e375]:
+        - generic [ref=e376]:
+          - heading "Services" [level=4] [ref=e377]
+          - generic [ref=e378]:
+            - link "Implementation Packages" [ref=e379] [cursor=pointer]:
+              - /url: /implementation-packages
+            - link "monday.com Training" [ref=e380] [cursor=pointer]:
+              - /url: /monday-training
+            - link "monday.com Implementation Consultants" [ref=e381] [cursor=pointer]:
+              - /url: /monday-implementation-consultants
+            - link "monday CRM Consulting" [ref=e382] [cursor=pointer]:
+              - /url: /monday-crm-consulting
+        - generic [ref=e383]:
+          - heading "Department Solutions" [level=4] [ref=e384]
+          - generic [ref=e385]:
+            - link "monday.com Project Management" [ref=e386] [cursor=pointer]:
+              - /url: /monday-consulting-solutions/monday-project-management
+            - link "monday.com Service" [ref=e387] [cursor=pointer]:
+              - /url: /monday-consulting-solutions/monday-service
+            - link "monday.com HR Solutions" [ref=e388] [cursor=pointer]:
+              - /url: /monday-consulting-solutions/monday-for-hr
+            - link "monday.com for Marketing & Creative" [ref=e389] [cursor=pointer]:
+              - /url: /monday-for-marketing
+            - link "monday.com Finance" [ref=e390] [cursor=pointer]:
+              - /url: /monday-consulting-solutions/monday-for-finance
+            - link "monday.com for Product Management" [ref=e391] [cursor=pointer]:
+              - /url: /monday-consulting-solutions/monday-product-management
+            - link "Solar CRM & Work Management Solution" [ref=e392] [cursor=pointer]:
+              - /url: /monday-consulting-solutions/solar-crm-solution
+            - link "AI Strategy & Execution" [ref=e393] [cursor=pointer]:
+              - /url: /ai-strategy-and-execution
+            - link "Case Studies" [ref=e394] [cursor=pointer]:
+              - /url: /customer-testimonials
+        - generic [ref=e395]:
+          - heading "Industry Solutions" [level=4] [ref=e396]
+          - generic [ref=e397]:
+            - link "monday.com for Construction" [ref=e398] [cursor=pointer]:
+              - /url: /monday-for-construction
+            - link "monday.com for Manufacturing" [ref=e399] [cursor=pointer]:
+              - /url: /monday-for-manufacturing
+            - link "monday.com for Retail" [ref=e400] [cursor=pointer]:
+              - /url: /monday-for-retail
+            - link "monday.com for Professional Services" [ref=e401] [cursor=pointer]:
+              - /url: /monday-for-professional-services
+            - link "monday.com for Government" [ref=e402] [cursor=pointer]:
+              - /url: /monday-for-government
+            - link "monday.com for Marketing & Creative" [ref=e403] [cursor=pointer]:
+              - /url: /monday-for-marketing
+            - link "monday.com for Real Estate" [ref=e404] [cursor=pointer]:
+              - /url: /monday-for-real-estate
+      - generic [ref=e405]:
+        - heading "Our Locations" [level=4] [ref=e406]
+        - generic [ref=e407]:
+          - generic [ref=e408]:
+            - generic [ref=e409]:
+              - generic [ref=e410]: 🇦🇺
+              - link "Sydney, Australia" [ref=e411] [cursor=pointer]:
+                - /url: /monday-partner-australia
+            - paragraph [ref=e412]: (Head Office)
+            - link "64 York Street, Sydney NSW 2000 Australia" [ref=e413] [cursor=pointer]:
+              - /url: https://g.co/kgs/gAajXzG
+            - link "+61 483 955 931" [ref=e414] [cursor=pointer]:
+              - /url: tel:+61483955931
+          - generic [ref=e415]:
+            - generic [ref=e416]:
+              - generic [ref=e417]: 🇺🇸
+              - link "New York, US Office" [ref=e418] [cursor=pointer]:
+                - /url: /monday-partner-us
+            - paragraph [ref=e419]: (North America Office)
+            - link "205 W 37th St, New York, NY 10018, United States" [ref=e420] [cursor=pointer]:
+              - /url: https://maps.app.goo.gl/4u1KjFHfUgiXGGta9
+            - link "+1 302 330 2496" [ref=e421] [cursor=pointer]:
+              - /url: tel:+13023302496
+          - generic [ref=e422]:
+            - generic [ref=e423]:
+              - generic [ref=e424]: 🇬🇧
+              - link "London, UK" [ref=e425] [cursor=pointer]:
+                - /url: /monday-partner-uk
+            - paragraph [ref=e426]: (EMEA Office)
+            - link "Medius House, 2 Sheraton St, London W1F 8BH, United Kingdom" [ref=e427] [cursor=pointer]:
+              - /url: https://g.co/kgs/wmakkDU
+            - link "+44 7822 019548" [ref=e428] [cursor=pointer]:
+              - /url: tel:+447822019548

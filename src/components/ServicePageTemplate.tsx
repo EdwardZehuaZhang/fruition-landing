@@ -1,11 +1,9 @@
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
-import CtaButton from "@/components/CtaButton"
-import FaqAccordion from "@/components/sections/FaqAccordion"
-import type { FaqTab as SharedFaqTab } from "@/components/sections/types"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -242,6 +240,8 @@ export default function ServicePageTemplate({
   caseStudies,
   faqItems,
 }: ServicePageTemplateProps) {
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0)
+  const [activeFaqTab, setActiveFaqTab] = useState<FaqTab>('Professional Services')
 
   /* -------------------- Derived data -------------------- */
 
@@ -313,17 +313,10 @@ export default function ServicePageTemplate({
 
   // FAQ items — accept prop override, otherwise fall back to hardcoded
   const effectiveFaqItems: Record<string, FaqItemShape[]> = faqItems || FALLBACK_FAQ_ITEMS
-  const faqTabLabels: string[] =
+  const faqTabs: string[] =
     faqItems && Object.keys(faqItems).length > 0 ? Object.keys(faqItems) : (FAQ_TABS as readonly string[]).slice()
-  const faqAccordionTabs: SharedFaqTab[] = faqTabLabels.map((label) => ({
-    _key: label,
-    label,
-    items: (effectiveFaqItems[label] ?? []).map((it, i) => ({
-      _key: `${label}-${i}`,
-      question: it.question,
-      answer: it.answer,
-    })),
-  }))
+  const currentFaqList: FaqItemShape[] =
+    effectiveFaqItems[activeFaqTab] || effectiveFaqItems[faqTabs[0]] || []
 
   return (
     <div>
@@ -383,18 +376,34 @@ export default function ServicePageTemplate({
             className="flex items-center justify-center"
             style={{ gap: 20, marginTop: 40, width: 680 }}
           >
-            <CtaButton
+            <Link
               href={primaryCtaUrl || calendlyLink}
-              label={primaryCtaLabel || "Book a Consultation"}
-              variant="outline"
-              style={{ width: 330 }}
-            />
-            <CtaButton
+              className="flex items-center justify-center font-bold"
+              style={{
+                width: 330,
+                height: 53,
+                borderRadius: 100,
+                border: "1px solid #8015e8",
+                backgroundColor: "white",
+                color: "#8015e8",
+                fontSize: 16,
+              }}
+            >
+              {primaryCtaLabel || "\ud83d\ude80 Book a Consultation"}
+            </Link>
+            <Link
               href={secondaryCtaUrl || calendlyLink}
-              label={secondaryCtaLabel || "Get Started with monday.com"}
-              variant="primary"
-              style={{ width: 330 }}
-            />
+              className="flex items-center justify-center font-bold text-white"
+              style={{
+                width: 330,
+                height: 53,
+                borderRadius: 100,
+                background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                fontSize: 16,
+              }}
+            >
+              {secondaryCtaLabel || "\u25b6\ufe0f Get Started with monday.com"}
+            </Link>
           </div>
 
           {/* Hero image */}
@@ -599,7 +608,72 @@ export default function ServicePageTemplate({
       {/* ============================================================ */}
       {/* SECTION 6 -- FAQ                                             */}
       {/* ============================================================ */}
-      <FaqAccordion tabs={faqAccordionTabs} />
+      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
+        <div className="mx-auto flex flex-col" style={{ width: 959, gap: 24 }}>
+          {/* Heading */}
+          <h2 className="text-section-h2" style={{ color: "var(--purple-primary)" }}>
+            Frequently asked questions
+          </h2>
+
+          {/* Tab navigation bar */}
+          <div className="flex items-start overflow-auto" style={{ width: 916, height: 52 }}>
+            {faqTabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => { setActiveFaqTab(tab as FaqTab); setOpenFaqIndex(0) }}
+                className="h-full shrink-0 relative"
+                style={{
+                  paddingTop: 14,
+                  paddingBottom: 17,
+                  paddingLeft: 27.469,
+                  paddingRight: 27.469,
+                  borderBottom: activeFaqTab === tab ? '3px solid #8e5cbf' : '3px solid transparent',
+                }}
+              >
+                <span style={{ fontSize: 16, color: activeFaqTab === tab ? '#8e5cbf' : 'black', textAlign: 'center' }}>
+                  {tab}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* FAQ items for active tab */}
+          <div className="flex flex-col" style={{ gap: 12 }}>
+            {currentFaqList.map((item, i) => (
+              <div key={i} style={{ paddingTop: i === 0 ? 20 : 24 }}>
+                {/* Question row */}
+                <button
+                  onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
+                  className="w-full flex items-center justify-between text-left"
+                  style={{ height: 30 }}
+                >
+                  <span style={{ fontSize: 20, lineHeight: '24px', color: 'black' }}>
+                    {item.question}
+                  </span>
+                  <div className="shrink-0" style={{ width: 30, height: 30 }}>
+                    <svg
+                      className={`transition-transform ${openFaqIndex === i ? 'rotate-180' : ''}`}
+                      width="30" height="30" viewBox="0 0 30 30" fill="none"
+                    >
+                      <path d="M8 12L15 19L22 12" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                </button>
+
+                {/* Answer (expanded) */}
+                {openFaqIndex === i && (
+                  <div style={{ paddingBottom: 16, paddingTop: 31, fontSize: 16, lineHeight: '24px', color: 'black' }}>
+                    {item.answer}
+                  </div>
+                )}
+
+                {/* Bottom border */}
+                <div style={{ borderBottom: '1px solid #2b074d', marginTop: openFaqIndex === i ? 0 : 36 }} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ============================================================ */}
       {/* SECTION 7 -- Discover CTA                                    */}
@@ -631,20 +705,31 @@ export default function ServicePageTemplate({
             className="flex items-center justify-center"
             style={{ gap: 24, marginTop: 32, width: 694 }}
           >
-            <CtaButton
+            <Link
               href={calendlyLink}
-              label="Schedule a Consultation"
-              variant="outline"
-              className="flex-1"
-              style={{ height: 63 }}
-            />
-            <CtaButton
+              className="flex flex-1 items-center justify-center font-bold"
+              style={{
+                height: 63,
+                borderRadius: 100,
+                backgroundColor: "white",
+                color: "#8015e8",
+                fontSize: 16,
+              }}
+            >
+              {"\ud83d\ude80"} Schedule a Consultation
+            </Link>
+            <Link
               href={calendlyLink}
-              label="Get Started with monday.com"
-              variant="primary"
-              className="flex-1"
-              style={{ height: 63 }}
-            />
+              className="flex flex-1 items-center justify-center font-bold text-white"
+              style={{
+                height: 63,
+                borderRadius: 100,
+                background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                fontSize: 16,
+              }}
+            >
+              {"\u25b6\ufe0f"} Get Started with monday.com
+            </Link>
           </div>
         </div>
       </section>
