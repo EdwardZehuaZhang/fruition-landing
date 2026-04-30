@@ -42,8 +42,8 @@ export default function LogoCloudBlockView({ heading, logos }: LogoCloudBlockPro
         {/* Heading */}
         {heading && renderHeadingWithAccent(heading)}
 
-        {/* Horizontal marquee logo strip — overflow visible so logos aren't clipped */}
-        <div className="w-full overflow-visible">
+        {/* Horizontal marquee logo strip — clip overflow to prevent page horizontal scroll */}
+        <div className="w-full overflow-hidden">
           <div className="flex items-center gap-[65px] animate-marquee" style={{ width: 'max-content' }}>
             {duplicatedLogos.map((logo, i) => (
               <div key={`logo-${i}`} className="flex items-center justify-center shrink-0 h-[65px] overflow-hidden">

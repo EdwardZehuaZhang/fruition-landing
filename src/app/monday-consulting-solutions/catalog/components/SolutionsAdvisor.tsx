@@ -43,7 +43,6 @@ export default function SolutionsAdvisor({
   } | null>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
 
-  // Scroll the chat to bottom on new messages
   useEffect(() => {
     if (!bodyRef.current) return
     bodyRef.current.scrollTop = bodyRef.current.scrollHeight
@@ -173,18 +172,21 @@ export default function SolutionsAdvisor({
       className={
         isFloating
           ? "fixed inset-0 z-40 bg-white flex flex-col lg:hidden"
-          : "rounded-[var(--radius-card)] bg-[#10003a] text-white overflow-hidden shadow-card flex flex-col max-h-[640px] min-h-[520px]"
+          : "rounded-[var(--radius-card)] bg-white text-[var(--text-dark)] overflow-hidden border border-[var(--color-border)] shadow-card flex flex-col max-h-[640px] min-h-[520px]"
       }
     >
-      <div className={isFloating ? "px-5 py-4 border-b border-[var(--color-border)] bg-white text-[var(--text-dark)] flex items-center gap-3" : "px-5 py-4 bg-gradient-to-br from-[#2b074d] to-[#550e9b] flex items-center gap-3"}>
-        <div className={isFloating ? "w-9 h-9 rounded-full bg-[var(--purple-primary)] text-white flex items-center justify-center font-bold" : "w-9 h-9 rounded-full bg-[var(--purple-light)] text-[#10003a] flex items-center justify-center font-bold"}>
+      <div className="px-5 py-4 border-b border-[var(--color-border)] bg-white flex items-center gap-3">
+        <div className="w-9 h-9 rounded-full bg-[var(--purple-primary)] text-white flex items-center justify-center font-bold">
           F
         </div>
         <div className="flex-1">
-          <div className={isFloating ? "text-body font-semibold" : "text-body font-semibold text-white"}>
+          <div className="text-body font-semibold text-[var(--text-dark)]">
             Fruition Solutions Advisor
           </div>
-          <div className={isFloating ? "text-caption text-[var(--color-text-secondary)]" : "text-caption text-white/70"}>
+          <div className="text-caption text-[var(--color-text-secondary)] flex items-center gap-1.5">
+            <span className="relative inline-block w-1.5 h-1.5 rounded-full bg-[#22c55e]">
+              <span className="absolute inset-0 rounded-full bg-[#22c55e] opacity-60 animate-ping" />
+            </span>
             Live · Answers in 6 quick taps
           </div>
         </div>
@@ -200,23 +202,19 @@ export default function SolutionsAdvisor({
         )}
       </div>
 
-      <div className="h-1 bg-white/10">
+      <div className="h-1 bg-[#f1edfa]">
         <div
-          className="h-full bg-[var(--purple-light)] transition-all"
+          className="h-full bg-[var(--purple-primary)] transition-all"
           style={{ width: `${progress}%` }}
         />
       </div>
 
       <div
         ref={bodyRef}
-        className={
-          isFloating
-            ? "flex-1 overflow-y-auto px-5 py-4 space-y-3 bg-white text-[var(--text-dark)]"
-            : "flex-1 overflow-y-auto px-5 py-4 space-y-3"
-        }
+        className="flex-1 overflow-y-auto px-5 py-4 space-y-3 bg-white text-[var(--text-dark)]"
       >
         {messages.map((m, i) => (
-          <ChatBubble key={i} message={m} dark={!isFloating} />
+          <ChatBubble key={i} message={m} />
         ))}
 
         {currentStep && !recommendations && (
@@ -227,7 +225,6 @@ export default function SolutionsAdvisor({
             multiSelected={multiSelections[currentStep.key] || []}
             onSingle={(val, label) => selectSingleChip(currentStep, val, label)}
             onToggleMulti={(label) => toggleMultiChip(currentStep, label)}
-            dark={!isFloating}
           />
         )}
 
@@ -238,19 +235,12 @@ export default function SolutionsAdvisor({
             answers={answers}
             onOpenSolution={onOpenSolution}
             onReset={reset}
-            dark={!isFloating}
           />
         )}
       </div>
 
       {!recommendations && (
-        <div
-          className={
-            isFloating
-              ? "border-t border-[var(--color-border)] px-4 py-3 bg-white"
-              : "border-t border-white/10 px-4 py-3 bg-[#0c022e]"
-          }
-        >
+        <div className="border-t border-[var(--color-border)] px-4 py-3 bg-white">
           <div className="flex items-center gap-2">
             <input
               type="text"
@@ -266,11 +256,7 @@ export default function SolutionsAdvisor({
                     ? "Or type your answer here"
                     : "Tap an option above"
               }
-              className={
-                isFloating
-                  ? "flex-1 text-caption px-3 py-2 rounded-lg border border-[var(--color-border)] bg-white text-[var(--text-dark)] placeholder:text-[var(--color-text-secondary)] focus:outline-none focus:border-[var(--purple-primary)]"
-                  : "flex-1 text-caption px-3 py-2 rounded-lg border border-white/15 bg-[#10003a] text-white placeholder:text-white/40 focus:outline-none focus:border-[var(--purple-light)]"
-              }
+              className="flex-1 text-caption px-3 py-2 rounded-lg border border-[var(--color-border)] bg-white text-[var(--text-dark)] placeholder:text-[var(--color-text-secondary)] focus:outline-none focus:border-[var(--purple-primary)]"
               disabled={!currentStep || chipsLocked[currentStep.key]}
             />
             <button
@@ -284,7 +270,7 @@ export default function SolutionsAdvisor({
                   (multiSelections[currentStep.key] || []).length === 0 &&
                   !textInput.trim())
               }
-              className="text-caption font-semibold px-3 py-2 rounded-lg bg-[var(--purple-primary)] text-white disabled:bg-white/20 disabled:text-white/50"
+              className="text-caption font-semibold px-3 py-2 rounded-lg bg-[var(--purple-primary)] text-white disabled:bg-[#e7e0f3] disabled:text-[var(--color-text-secondary)]"
             >
               Send
             </button>
@@ -294,11 +280,7 @@ export default function SolutionsAdvisor({
               type="button"
               onClick={handleSkip}
               disabled={!currentStep || chipsLocked[currentStep.key]}
-              className={
-                isFloating
-                  ? "text-caption text-[var(--color-text-secondary)] hover:text-[var(--purple-primary)] disabled:opacity-40"
-                  : "text-caption text-white/60 hover:text-white disabled:opacity-40"
-              }
+              className="text-caption text-[var(--color-text-secondary)] hover:text-[var(--purple-primary)] disabled:opacity-40"
             >
               Skip this step →
             </button>
@@ -309,31 +291,17 @@ export default function SolutionsAdvisor({
   )
 }
 
-function ChatBubble({ message, dark }: { message: Message; dark: boolean }) {
+function ChatBubble({ message }: { message: Message }) {
   if (message.role === "bot") {
     return (
-      <div
-        className={
-          dark
-            ? "rounded-2xl px-4 py-2.5 text-body-sm bg-white/8 text-white max-w-[88%]"
-            : "rounded-2xl px-4 py-2.5 text-body-sm bg-[#f7f4fe] text-[var(--text-dark)] max-w-[88%]"
-        }
-        style={dark ? { backgroundColor: "rgba(255,255,255,0.08)" } : undefined}
-      >
-        {/* Bot bot strings sometimes contain inline markdown-ish bold; render plain */}
+      <div className="rounded-2xl px-4 py-2.5 text-body-sm bg-[#f7f4fe] text-[var(--text-dark)] max-w-[88%]">
         <span dangerouslySetInnerHTML={{ __html: renderInline(message.html) }} />
       </div>
     )
   }
   return (
     <div className="flex justify-end">
-      <div
-        className={
-          dark
-            ? "rounded-2xl px-4 py-2.5 text-body-sm bg-[var(--purple-primary)] text-white max-w-[88%]"
-            : "rounded-2xl px-4 py-2.5 text-body-sm bg-[var(--purple-primary)] text-white max-w-[88%]"
-        }
-      >
+      <div className="rounded-2xl px-4 py-2.5 text-body-sm bg-[var(--purple-primary)] text-white max-w-[88%]">
         {message.text}
       </div>
     </div>
@@ -341,7 +309,6 @@ function ChatBubble({ message, dark }: { message: Message; dark: boolean }) {
 }
 
 function renderInline(s: string): string {
-  // Allow **bold** and basic <h6> tags lifted from the mock summaries.
   const escaped = s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
   return escaped
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
@@ -356,7 +323,6 @@ interface ChipRowProps {
   multiSelected: string[]
   onSingle: (val: string, label: string) => void
   onToggleMulti: (label: string) => void
-  dark: boolean
 }
 
 function ChipRow({
@@ -366,7 +332,6 @@ function ChipRow({
   multiSelected,
   onSingle,
   onToggleMulti,
-  dark,
 }: ChipRowProps) {
   return (
     <div className="flex flex-wrap gap-1.5 pt-1">
@@ -374,12 +339,10 @@ function ChipRow({
         const isSelected = multi && multiSelected.includes(label)
         const baseClasses = locked
           ? "opacity-40 cursor-not-allowed"
-          : "hover:border-[var(--purple-light)]"
+          : "hover:border-[var(--purple-primary)] hover:text-[var(--purple-primary)]"
         const colorClasses = isSelected
           ? "bg-[var(--purple-primary)] text-white border-[var(--purple-primary)]"
-          : dark
-            ? "bg-white/8 text-white border-white/15"
-            : "bg-white text-[var(--purple-dark)] border-[var(--color-border)]"
+          : "bg-white text-[var(--purple-dark)] border-[var(--color-border)]"
         return (
           <button
             key={val}
@@ -387,11 +350,6 @@ function ChipRow({
             disabled={locked}
             onClick={() => (multi ? onToggleMulti(label) : onSingle(val, label))}
             className={`text-[12px] font-medium px-3 py-1.5 rounded-full border transition-colors ${baseClasses} ${colorClasses}`}
-            style={
-              !isSelected && dark
-                ? { backgroundColor: "rgba(255,255,255,0.08)" }
-                : undefined
-            }
           >
             {label}
           </button>
@@ -407,46 +365,34 @@ function RecommendationsBlock({
   answers,
   onOpenSolution,
   onReset,
-  dark,
 }: {
   summary: string
   picks: Pick[]
   answers: AdvisorAnswers
   onOpenSolution: (key: string) => void
   onReset: () => void
-  dark: boolean
 }) {
-  const baseCard = dark
-    ? "bg-white/8 text-white border-white/15"
-    : "bg-white text-[var(--text-dark)] border-[var(--color-border)]"
+  const baseCard =
+    "bg-white text-[var(--text-dark)] border-[var(--color-border)]"
 
   return (
     <div className="space-y-3 pt-2">
-      <div
-        className={`rounded-2xl px-4 py-3 text-body-sm border ${baseCard}`}
-        style={dark ? { backgroundColor: "rgba(255,255,255,0.08)" } : undefined}
-      >
-        <div className="text-[10px] uppercase tracking-wider font-semibold opacity-70 mb-1">
+      <div className={`rounded-2xl px-4 py-3 text-body-sm border ${baseCard}`}>
+        <div className="text-[10px] uppercase tracking-wider font-semibold text-[var(--purple-primary)] mb-1">
           Summary
         </div>
         <span dangerouslySetInnerHTML={{ __html: renderInline(summary) }} />
       </div>
 
       {picks.length === 0 ? (
-        <div
-          className={`rounded-2xl px-4 py-3 text-body-sm border ${baseCard}`}
-          style={dark ? { backgroundColor: "rgba(255,255,255,0.08)" } : undefined}
-        >
+        <div className={`rounded-2xl px-4 py-3 text-body-sm border ${baseCard}`}>
           We did not find a clean fit in the catalog. The right next step is a 30-minute discovery
           call with a Fruition solutions engineer.
         </div>
       ) : (
         <>
-          <div
-            className={`rounded-2xl px-4 py-3 text-body-sm border ${baseCard}`}
-            style={dark ? { backgroundColor: "rgba(255,255,255,0.08)" } : undefined}
-          >
-            <div className="text-[10px] uppercase tracking-wider font-semibold opacity-70 mb-1">
+          <div className={`rounded-2xl px-4 py-3 text-body-sm border ${baseCard}`}>
+            <div className="text-[10px] uppercase tracking-wider font-semibold text-[var(--purple-primary)] mb-1">
               Recommended solutions
             </div>
             Here are {picks.length} solutions ranked for your situation. Tap any card to open the
@@ -462,21 +408,16 @@ function RecommendationsBlock({
                   : "Complementary service"
             const tagColor =
               kind === "adjacent"
-                ? "text-[#f0abfc]"
+                ? "text-[#a855f7]"
                 : kind === "service"
-                  ? "text-[#86efac]"
-                  : "text-[var(--purple-light)]"
+                  ? "text-[#16a34a]"
+                  : "text-[var(--purple-primary)]"
             return (
               <button
                 key={sol.key}
                 type="button"
                 onClick={() => onOpenSolution(sol.key)}
-                className={`w-full text-left rounded-2xl px-4 py-3 text-body-sm border transition-transform hover:-translate-y-0.5 ${baseCard}`}
-                style={
-                  dark
-                    ? { backgroundColor: "rgba(255,255,255,0.08)" }
-                    : undefined
-                }
+                className={`w-full text-left rounded-2xl px-4 py-3 text-body-sm border transition-all hover:-translate-y-0.5 hover:border-[var(--purple-light)] hover:shadow-whisper ${baseCard}`}
               >
                 <div
                   className={`text-[10px] uppercase tracking-wider font-semibold ${tagColor} mb-1`}
@@ -484,10 +425,10 @@ function RecommendationsBlock({
                   {tagText}
                 </div>
                 <div className="font-semibold mb-1">{sol.title}</div>
-                <p className="text-[12.5px] opacity-80 leading-relaxed">
+                <p className="text-[12.5px] text-[var(--color-text-secondary)] leading-relaxed">
                   {reasonFor(sol, kind, answers)} {sol.desc}
                 </p>
-                <div className="text-[11px] uppercase tracking-wider font-semibold mt-2 opacity-80">
+                <div className="text-[11px] uppercase tracking-wider font-semibold mt-2 text-[var(--purple-primary)]">
                   Open full detail →
                 </div>
               </button>
@@ -503,11 +444,8 @@ function RecommendationsBlock({
             if (adj) parts.push(`Layer **${adj.sol.title}** as Phase 2.`)
             if (svc.length) parts.push(`Run ${svc.map((s) => `**${s}**`).join(" and ")} in parallel.`)
             return (
-              <div
-                className={`rounded-2xl px-4 py-3 text-body-sm border ${baseCard}`}
-                style={dark ? { backgroundColor: "rgba(255,255,255,0.08)" } : undefined}
-              >
-                <div className="text-[10px] uppercase tracking-wider font-semibold opacity-70 mb-1">
+              <div className={`rounded-2xl px-4 py-3 text-body-sm border ${baseCard}`}>
+                <div className="text-[10px] uppercase tracking-wider font-semibold text-[var(--purple-primary)] mb-1">
                   Bundle recommendation
                 </div>
                 <span dangerouslySetInnerHTML={{ __html: renderInline(parts.join(" ")) }} />
@@ -515,11 +453,8 @@ function RecommendationsBlock({
             )
           })()}
 
-          <div
-            className={`rounded-2xl px-4 py-3 text-body-sm border ${baseCard}`}
-            style={dark ? { backgroundColor: "rgba(255,255,255,0.08)" } : undefined}
-          >
-            <div className="text-[10px] uppercase tracking-wider font-semibold opacity-70 mb-1">
+          <div className={`rounded-2xl px-4 py-3 text-body-sm border ${baseCard}`}>
+            <div className="text-[10px] uppercase tracking-wider font-semibold text-[var(--purple-primary)] mb-1">
               Next step
             </div>
             Book a 30-minute discovery call and we will walk through a live demo of your primary
@@ -532,11 +467,7 @@ function RecommendationsBlock({
       <button
         type="button"
         onClick={onReset}
-        className={
-          dark
-            ? "self-start text-caption text-white/70 hover:text-white border border-white/20 rounded-full px-4 py-1.5 mt-1"
-            : "self-start text-caption text-[var(--purple-primary)] hover:text-[var(--purple-dark)] border border-[var(--color-border)] rounded-full px-4 py-1.5 mt-1"
-        }
+        className="self-start text-caption text-[var(--purple-primary)] hover:text-[var(--purple-dark)] border border-[var(--color-border)] rounded-full px-4 py-1.5 mt-1"
       >
         Start over
       </button>

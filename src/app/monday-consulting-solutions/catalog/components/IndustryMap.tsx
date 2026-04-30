@@ -1,4 +1,76 @@
-import { INDUSTRY_ENTRIES } from "../data/industry-map"
+import { INDUSTRY_ENTRIES, type IndustryIconKey } from "../data/industry-map"
+
+const ICON_PATHS: Record<IndustryIconKey, React.ReactNode> = {
+  // Hard hat — construction & trades
+  construction: (
+    <>
+      <path d="M3 18h18" />
+      <path d="M5 18a7 7 0 0 1 14 0" />
+      <path d="M12 5v6" />
+      <path d="M9 11V7a3 3 0 0 1 6 0v4" />
+    </>
+  ),
+  // Factory — manufacturing & operations
+  manufacturing: (
+    <>
+      <path d="M3 21V11l5 3V11l5 3V8l8 6v7Z" />
+      <path d="M7 17h2" />
+      <path d="M12 17h2" />
+      <path d="M17 17h2" />
+    </>
+  ),
+  // Trending up arrow — sales & CRM
+  sales: (
+    <>
+      <path d="M3 17 9 11l4 4 8-8" />
+      <path d="M14 4h7v7" />
+    </>
+  ),
+  // Users — professional & people ops
+  "people-ops": (
+    <>
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </>
+  ),
+  // Wrench — field service & property
+  "field-service": (
+    <>
+      <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-7 7a1.5 1.5 0 0 0 2.1 2.1l7-7a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.1-2.1Z" />
+    </>
+  ),
+  // Network nodes — integrations & platform
+  platform: (
+    <>
+      <circle cx="12" cy="5" r="2" />
+      <circle cx="5" cy="19" r="2" />
+      <circle cx="19" cy="19" r="2" />
+      <path d="M12 7v4" />
+      <path d="m6.5 17.5 5-6" />
+      <path d="m17.5 17.5-5-6" />
+    </>
+  ),
+}
+
+function IndustryIcon({ name }: { name: IndustryIconKey }) {
+  return (
+    <svg
+      aria-hidden
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {ICON_PATHS[name]}
+    </svg>
+  )
+}
 
 export default function IndustryMap() {
   return (
@@ -22,8 +94,8 @@ export default function IndustryMap() {
               className="ui-surface-panel-strong p-6 transition-transform duration-200 hover:-translate-y-0.5"
             >
               <h3 className="flex items-center gap-3 text-card-title text-[var(--text-dark)] mb-4">
-                <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-[rgba(128,21,232,0.08)] text-[var(--purple-primary)] font-bold">
-                  {ind.icon}
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[rgba(128,21,232,0.08)] text-[var(--purple-primary)]">
+                  <IndustryIcon name={ind.icon} />
                 </span>
                 {ind.title}
               </h3>

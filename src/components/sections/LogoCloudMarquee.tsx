@@ -47,7 +47,7 @@ export default function LogoCloudMarquee({
             {description}
           </p>
         )}
-        <div className="w-full overflow-visible">
+        <div className="w-full overflow-hidden">
           <div className="flex items-center gap-[65px] animate-marquee" style={{ width: "max-content" }}>
             {duplicatedLogos.map((logo, i) => (
               <div key={`${logo.key}-${i}`} className="flex items-center justify-center shrink-0 h-[65px] overflow-hidden">

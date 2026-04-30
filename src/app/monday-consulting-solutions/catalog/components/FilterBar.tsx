@@ -95,8 +95,8 @@ function PillRow<T extends string>({
   onSelect,
 }: PillRowProps<T>) {
   return (
-    <div className="flex items-center gap-2 flex-nowrap overflow-x-auto py-1 -mx-1 px-1 scrollbar-thin">
-      <span className="text-caption text-[var(--color-text-secondary)] font-semibold whitespace-nowrap pr-1 sticky left-0 bg-white">
+    <div className="flex items-start gap-2 flex-wrap py-1">
+      <span className="text-caption text-[var(--color-text-secondary)] font-semibold whitespace-nowrap pr-1 pt-1.5 min-w-[88px]">
         {label}
       </span>
       {pills.map((p) => {

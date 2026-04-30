@@ -1,15 +1,23 @@
 // Six industry buckets that map to where Fruition's implementations actually
 // concentrate by vertical, independent of product-type categorization.
 
+export type IndustryIconKey =
+  | "construction"
+  | "manufacturing"
+  | "sales"
+  | "people-ops"
+  | "field-service"
+  | "platform"
+
 export interface IndustryEntry {
-  icon: string
+  icon: IndustryIconKey
   title: string
   solutions: string[]
 }
 
 export const INDUSTRY_ENTRIES: IndustryEntry[] = [
   {
-    icon: "C",
+    icon: "construction",
     title: "Construction & Trades",
     solutions: [
       "Commercial PPM",
@@ -23,7 +31,7 @@ export const INDUSTRY_ENTRIES: IndustryEntry[] = [
     ],
   },
   {
-    icon: "M",
+    icon: "manufacturing",
     title: "Manufacturing & Operations",
     solutions: [
       "Project Build Tracker",
@@ -35,7 +43,7 @@ export const INDUSTRY_ENTRIES: IndustryEntry[] = [
     ],
   },
   {
-    icon: "S",
+    icon: "sales",
     title: "Sales & CRM",
     solutions: [
       "Dream CRM",
@@ -50,7 +58,7 @@ export const INDUSTRY_ENTRIES: IndustryEntry[] = [
     ],
   },
   {
-    icon: "P",
+    icon: "people-ops",
     title: "Professional & People Ops",
     solutions: [
       "Fruition PPM",
@@ -64,7 +72,7 @@ export const INDUSTRY_ENTRIES: IndustryEntry[] = [
     ],
   },
   {
-    icon: "F",
+    icon: "field-service",
     title: "Field Service & Property",
     solutions: [
       "Customer Service Ticketing",
@@ -75,7 +83,7 @@ export const INDUSTRY_ENTRIES: IndustryEntry[] = [
     ],
   },
   {
-    icon: "I",
+    icon: "platform",
     title: "Integrations & Platform",
     solutions: [
       "NetSuite",

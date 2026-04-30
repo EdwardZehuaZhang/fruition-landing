@@ -275,12 +275,14 @@ export default function SolutionsGrid({ onOpen }: SolutionsGridProps) {
                   className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-[#faf7ff] transition-colors"
                 >
                   <span
-                    className={`inline-block transition-transform duration-200 text-[var(--purple-primary)] text-lg ${
+                    className={`inline-flex items-center justify-center w-6 h-6 transition-transform duration-200 text-[var(--purple-primary)] ${
                       expanded ? "rotate-0" : "-rotate-90"
                     }`}
                     aria-hidden
                   >
-                    ▾
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
                   </span>
                   <span className="text-card-title text-[var(--text-dark)]">{meta.title}</span>
                   <span className="text-caption text-[var(--color-text-secondary)] hidden sm:inline">

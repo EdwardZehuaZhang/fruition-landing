@@ -442,7 +442,7 @@ export default function MondayTrainingContent({
             <span className="text-[#8015e8]">{logoCloudAccent}</span>
           </p>
           {duplicatedLogos.length > 0 && (
-            <div className="w-full overflow-visible">
+            <div className="w-full overflow-hidden">
               <div
                 className="flex items-center gap-[65px] animate-marquee"
                 style={{ width: "max-content" }}

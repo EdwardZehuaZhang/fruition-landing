@@ -3,10 +3,10 @@
 import { useMemo, useState } from "react"
 import { CLIENTS, type Region } from "../data/clients"
 
-const REGIONS: { key: Region; label: string; flag: string }[] = [
-  { key: "us", label: "United States", flag: "US" },
-  { key: "apac", label: "Australia & APAC", flag: "AU" },
-  { key: "uk", label: "United Kingdom", flag: "UK" },
+const REGIONS: { key: Region; label: string; flag: string; emoji: string }[] = [
+  { key: "us", label: "United States", flag: "US", emoji: "🇺🇸" },
+  { key: "apac", label: "Australia & APAC", flag: "AU", emoji: "🇦🇺" },
+  { key: "uk", label: "United Kingdom", flag: "UK", emoji: "🇬🇧" },
 ]
 
 export default function ProjectBuildsIndex() {
@@ -46,16 +46,18 @@ export default function ProjectBuildsIndex() {
             className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-[#faf7ff] transition-colors"
           >
             <span
-              className={`inline-block transition-transform duration-200 text-[var(--purple-primary)] ${
+              className={`inline-flex items-center justify-center w-6 h-6 transition-transform duration-200 text-[var(--purple-primary)] ${
                 open ? "rotate-0" : "-rotate-90"
               }`}
               aria-hidden
             >
-              ▾
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
             </span>
             <span className="text-card-title text-[var(--text-dark)]">Fruition Clients</span>
             <span className="text-body-sm text-[var(--color-text-secondary)] hidden sm:inline">
-              <strong>{total}</strong> delivered implementations across US, APAC &amp; UK
+              <strong>{total}</strong>{" "}delivered implementations across US, APAC &amp; UK
             </span>
             <span className="ml-auto text-caption text-[var(--purple-primary)]">
               {open ? "Hide" : "Click to expand"}
@@ -67,8 +69,11 @@ export default function ProjectBuildsIndex() {
               {grouped.map((g) => (
                 <div key={g.key} className="mt-6">
                   <h3 className="flex items-center gap-3 text-card-title text-[var(--text-dark)] mb-4">
-                    <span className="inline-flex items-center justify-center w-8 h-6 rounded text-[10px] font-bold tracking-wider bg-[var(--purple-primary)] text-white">
-                      {g.flag}
+                    <span
+                      className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-[rgba(128,21,232,0.08)] text-lg leading-none"
+                      aria-label={g.label}
+                    >
+                      {g.emoji}
                     </span>
                     {g.label}
                     <span className="text-caption text-[var(--color-text-secondary)] font-normal">

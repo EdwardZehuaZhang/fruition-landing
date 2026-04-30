@@ -421,7 +421,7 @@ export default function ImplementationPackagesContent({
             </p>
 
             {/* Horizontal marquee logo strip */}
-            <div className="w-full overflow-visible">
+            <div className="w-full overflow-hidden">
               <div
                 className="flex items-center gap-[65px] animate-marquee"
                 style={{ width: "max-content" }}
