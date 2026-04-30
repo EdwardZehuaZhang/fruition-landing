@@ -74,6 +74,13 @@ export default {
                           fields: [
                             { name: 'label', title: 'Label', type: 'string' },
                             { name: 'href', title: 'Href', type: 'string' },
+                            { name: 'description', title: 'Description', type: 'string' },
+                            {
+                              name: 'icon',
+                              title: 'Icon (key)',
+                              type: 'string',
+                              description: 'Icon key — see Navbar nav-icons set',
+                            },
                           ],
                         },
                       ],

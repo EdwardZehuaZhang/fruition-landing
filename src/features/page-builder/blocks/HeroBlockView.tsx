@@ -80,7 +80,7 @@ export default function HeroBlockView({
   heroLocalVideoSrc,
   siteSettings,
 }: HeroBlockProps) {
-  const heroVideoSrc = heroLocalVideoSrc
+  const heroVideoSrc = heroLocalVideoSrc || '/videos/home-hero.mp4'
 
   const sanityBadges = siteSettings?.navbarPartnerBadges?.slice(0, 3) ?? []
   const partnerBadges = sanityBadges

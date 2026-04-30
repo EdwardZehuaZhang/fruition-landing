@@ -5,10 +5,13 @@ import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { urlFor } from '@/sanity/image'
 import PaperPlaneIcon from '@/components/common/icons/PaperPlaneIcon'
+import { NavIcon } from '@/components/common/icons/NavIcons'
 
 interface NavLink {
   label?: string
   href?: string
+  description?: string
+  icon?: string
 }
 
 interface NavSubSection {
@@ -182,20 +185,35 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                         {section.heading}
                       </p>
                     )}
-                    {section.items?.map((sub) => (
-                      <Link
-                        key={sub.href}
-                        href={sub.href || '#'}
-                        className={`block px-2 py-1.5 text-sm transition-colors ${
-                          sub.href && pathname === sub.href
-                            ? 'text-[#8015e8] font-medium'
-                            : 'text-[#242323] hover:text-[#8015e8]'
-                        }`}
-                        onClick={() => setMobileOpen(false)}
-                      >
-                        {sub.label}
-                      </Link>
-                    ))}
+                    {section.items?.map((sub) => {
+                      const isActive = sub.href && pathname === sub.href
+                      return (
+                        <Link
+                          key={sub.href}
+                          href={sub.href || '#'}
+                          className={`flex items-start gap-3 px-2 py-2 rounded-md transition-colors ${
+                            isActive ? 'bg-[#f5edfd]' : 'hover:bg-gray-50'
+                          }`}
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {sub.icon && (
+                            <div className={`shrink-0 mt-0.5 w-7 h-7 rounded-md ring-1 ring-gray-200 bg-white flex items-center justify-center ${isActive ? 'text-[#8015e8]' : 'text-[#242323]'}`}>
+                              <NavIcon iconKey={sub.icon} className="h-4 w-4" />
+                            </div>
+                          )}
+                          <div className="min-w-0">
+                            <div className={`text-sm font-medium ${isActive ? 'text-[#8015e8]' : 'text-[#242323]'}`}>
+                              {sub.label}
+                            </div>
+                            {sub.description && (
+                              <div className="mt-0.5 text-xs text-[#686b82] leading-snug">
+                                {sub.description}
+                              </div>
+                            )}
+                          </div>
+                        </Link>
+                      )
+                    })}
                   </div>
                 ))}
               </div>
@@ -240,60 +258,66 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
       {openMenu && (() => {
         const activeItem = navItems.find((item) => item.label === openMenu)
         if (!activeItem?.sections?.length) return null
-        const sectionCount = activeItem.sections.length
-        const hasMultipleSections = sectionCount > 1
         return (
           <div className="hidden lg:block absolute left-0 right-0 top-full border-t border-gray-200 bg-white shadow-lg z-50">
             <div className="max-w-[1348px] mx-auto px-4 xl:px-0 py-8">
-              <div className="flex gap-16">
+              <div className="flex flex-col gap-6">
                 {activeItem.sections.map((section, sIdx) => {
-                  const itemCount = section.items?.length ?? 0
-                  /* Auto-compute columns when not explicitly set */
-                  let cols = section.columns
-                  if (!cols) {
-                    if (hasMultipleSections) {
-                      cols = itemCount >= 6 ? 3 : 1
-                    } else {
-                      cols = itemCount >= 7 ? 4 : itemCount >= 6 ? 3 : itemCount >= 4 ? 2 : 1
-                    }
-                  }
-                  const isNarrow = cols <= 1
+                  const cols = section.columns ?? 3
                   return (
-                    <div
-                      key={`${section.heading}-${sIdx}`}
-                      className={
-                        hasMultipleSections && isNarrow
-                          ? 'min-w-[240px] shrink-0'
-                          : 'flex-1'
-                      }
-                    >
+                    <div key={`${section.heading}-${sIdx}`} className="min-w-0">
                       {section.heading && (
-                        <p className="text-base font-medium text-[#686b82] pb-3 border-b border-gray-200 mb-5">
+                        <p className="text-xs font-medium text-[#686b82] pb-3 border-b border-gray-200 mb-3">
                           {section.heading}
                         </p>
                       )}
                       <div
-                        className={
-                          cols > 1
-                            ? 'grid gap-y-5'
-                            : 'flex flex-col gap-5'
-                        }
-                        style={cols > 1 ? { gridTemplateColumns: `repeat(${cols}, 1fr)`, columnGap: '3rem' } : undefined}
+                        className="grid gap-x-6 gap-y-1"
+                        style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
                       >
-                        {section.items?.map((sub) => (
-                          <Link
-                            key={sub.href}
-                            href={sub.href || '#'}
-                            className={`text-sm transition-colors whitespace-nowrap ${
-                              sub.href && pathname === sub.href
-                                ? 'text-[#8015e8] font-medium'
-                                : 'text-[#242323] hover:text-[#8015e8]'
-                            }`}
-                            onClick={() => setOpenMenu(null)}
-                          >
-                            {sub.label}
-                          </Link>
-                        ))}
+                        {section.items?.map((sub) => {
+                          const isActive = sub.href && pathname === sub.href
+                          return (
+                            <Link
+                              key={sub.href}
+                              href={sub.href || '#'}
+                              className={`group flex items-start gap-3 rounded-lg p-3 transition-colors ${
+                                isActive ? 'bg-[#f5edfd]' : 'hover:bg-gray-50'
+                              }`}
+                              onClick={() => setOpenMenu(null)}
+                            >
+                              <div
+                                className={`shrink-0 mt-0.5 w-8 h-8 rounded-md ring-1 ring-gray-200 bg-white flex items-center justify-center transition-colors ${
+                                  isActive
+                                    ? 'text-[#8015e8]'
+                                    : 'text-[#242323] group-hover:text-[#8015e8] group-hover:ring-[#d9bff5]'
+                                }`}
+                              >
+                                {sub.icon ? (
+                                  <NavIcon iconKey={sub.icon} className="h-[18px] w-[18px]" />
+                                ) : (
+                                  <span className="block h-2 w-2 rounded-full bg-gray-300" />
+                                )}
+                              </div>
+                              <div className="min-w-0">
+                                <div
+                                  className={`text-sm font-semibold leading-tight ${
+                                    isActive
+                                      ? 'text-[#8015e8]'
+                                      : 'text-[#242323] group-hover:text-[#8015e8]'
+                                  }`}
+                                >
+                                  {sub.label}
+                                </div>
+                                {sub.description && (
+                                  <div className="mt-1 text-xs text-[#686b82] leading-snug">
+                                    {sub.description}
+                                  </div>
+                                )}
+                              </div>
+                            </Link>
+                          )
+                        })}
                       </div>
                     </div>
                   )
