@@ -2,6 +2,7 @@
 
 import { urlFor } from "@/sanity/image"
 import type { SanityImageRef } from "./types"
+import YouTubeEmbed from "@/components/YouTubeEmbed"
 
 interface CaseStudyCard {
   _key?: string
@@ -60,14 +61,7 @@ export default function CaseStudyCardsSection({
                 {/* Media: video or image */}
                 {embedUrl ? (
                   <div style={{ aspectRatio: "16 / 9" }}>
-                    <iframe
-                      src={embedUrl}
-                      title={card.title || "Case study video"}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="w-full h-full"
-                      style={{ border: 0 }}
-                    />
+                    <YouTubeEmbed url={embedUrl} title={card.title || "Case study video"} />
                   </div>
                 ) : imageSrc ? (
                   <div style={{ aspectRatio: "16 / 9" }}>

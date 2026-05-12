@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useMemo, useState } from "react"
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
 import type { CaseStudy, SanityImageRef } from "./types"
@@ -13,6 +14,8 @@ interface TestimonialCtaBannerProps {
   secondaryCtaLabel?: string
   secondaryCtaUrl?: string
   testimonial?: CaseStudy
+  testimonials?: CaseStudy[]
+  autoScrollMs?: number
 }
 
 function safeImageUrl(ref?: SanityImageRef): string | null {
@@ -21,17 +24,36 @@ function safeImageUrl(ref?: SanityImageRef): string | null {
 }
 
 export default function TestimonialCtaBanner({
-  headingPart1,
-  headingAccent,
-  headingPart2,
+  headingPart1 = "Join ",
+  headingAccent = "500+ organisations",
+  headingPart2 = " that have maximised their workflows with our monday.com expert support",
   primaryCtaLabel,
   primaryCtaUrl,
   secondaryCtaLabel,
   secondaryCtaUrl,
   testimonial,
+  testimonials,
+  autoScrollMs = 6000,
 }: TestimonialCtaBannerProps) {
-  const photoSrc = safeImageUrl(testimonial?.profilePhoto)
-  const role = testimonial?.clientCompany || testimonial?.clientRole || ""
+  const slides = useMemo(() => {
+    const list = (testimonials && testimonials.length > 0 ? testimonials : (testimonial ? [testimonial] : []))
+      .filter((t) => t?.quote)
+    return list
+  }, [testimonials, testimonial])
+
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    if (slides.length <= 1) return
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % slides.length)
+    }, autoScrollMs)
+    return () => clearInterval(id)
+  }, [slides.length, autoScrollMs])
+
+  const active = slides[index]
+  const photoSrc = safeImageUrl(active?.profilePhoto)
+  const role = active?.clientCompany || active?.clientRole || ""
 
   return (
     <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6">
@@ -80,35 +102,66 @@ export default function TestimonialCtaBanner({
               </div>
             </div>
 
-            {/* Right: testimonial card */}
-            <div className="bg-white text-black rounded-[18px] px-8 py-9 md:px-10 md:py-10 shadow-2xl shadow-black/30 max-w-[500px] justify-self-end">
-              {testimonial?.quote && (
-                <p className="text-[1.08rem] md:text-[1.15rem] leading-[1.5] font-semibold tracking-[-0.02em] text-black/90">
-                  {testimonial.quote}
-                </p>
-              )}
+            {/* Right: testimonial card (auto-rotating) */}
+            {active && (
+              <div
+                key={active._id || index}
+                className="bg-white text-black rounded-[18px] px-8 py-9 md:px-10 md:py-10 shadow-2xl shadow-black/30 max-w-[500px] justify-self-end animate-fade-in flex flex-col"
+                style={{ height: 420 }}
+              >
+                {active.quote && (
+                  <p
+                    className="text-[1.08rem] md:text-[1.15rem] leading-[1.5] font-semibold tracking-[-0.02em] text-black/90 overflow-hidden"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: 6,
+                      WebkitBoxOrient: "vertical",
+                    }}
+                  >
+                    {active.quote}
+                  </p>
+                )}
 
-              <div className="mt-10 flex items-end gap-5">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={photoSrc || "/images/default-avatar.svg"}
-                  alt={testimonial?.clientName || ""}
-                  className="h-24 w-24 shrink-0 rounded-full object-cover"
-                  style={{ backgroundColor: "#ddd" }}
-                />
-                <div className="pb-1">
-                  <div className="mb-3 flex h-9 w-9 items-center justify-center bg-[#6c35c8] text-white text-2xl font-bold rounded-sm">
-                    &ldquo;
+                <div className="mt-auto flex items-end gap-5">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={photoSrc || "/images/default-avatar.svg"}
+                    alt={active.clientName || ""}
+                    className="h-24 w-24 shrink-0 rounded-full object-cover"
+                    style={{ backgroundColor: "#ddd" }}
+                  />
+                  <div className="pb-1">
+                    <div className="mb-3 flex h-9 w-9 items-center justify-center bg-[#6c35c8] text-white text-2xl font-bold rounded-sm">
+                      &ldquo;
+                    </div>
+                    <div className="text-[1.05rem] font-semibold">
+                      {active.clientName ?? ""}
+                    </div>
+                    {role && (
+                      <div className="text-[0.95rem] text-black/60">{role}</div>
+                    )}
                   </div>
-                  <div className="text-[1.05rem] font-semibold">
-                    {testimonial?.clientName ?? ""}
-                  </div>
-                  {role && (
-                    <div className="text-[0.95rem] text-black/60">{role}</div>
-                  )}
                 </div>
+
+                {slides.length > 1 && (
+                  <div className="mt-6 flex gap-2">
+                    {slides.map((_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setIndex(i)}
+                        aria-label={`Show testimonial ${i + 1}`}
+                        className="h-2 rounded-full transition-all"
+                        style={{
+                          width: i === index ? 22 : 8,
+                          backgroundColor: i === index ? "#6c35c8" : "#d6cfe6",
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

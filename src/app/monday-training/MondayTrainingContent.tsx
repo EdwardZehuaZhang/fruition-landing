@@ -361,7 +361,7 @@ export default function MondayTrainingContent({
             <div style={{ marginTop: 40 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={heroMondayPartnersImageSrc}
+                src="https://static.wixstatic.com/media/39b8ef_abd15c5dcf7c4d16a392b5693a6f7923~mv2.png/v1/fill/w_415,h_103,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/39b8ef_abd15c5dcf7c4d16a392b5693a6f7923~mv2.png"
                 alt="Monday.com Partners"
                 width={924}
                 height={0}
@@ -679,27 +679,6 @@ export default function MondayTrainingContent({
           imageUrl(service.image) || "/images/monday-training-customization.avif"
         return (
           <LeftRightSection
-            beforeRow={
-              <div className="flex justify-center mb-[60px]">
-                <span
-                  className="inline-flex items-center"
-                  style={{
-                    gap: 8,
-                    paddingLeft: 20,
-                    paddingRight: 20,
-                    height: 39,
-                    borderRadius: 99,
-                    backgroundColor: "#f0ecfe",
-                    color: "#8015e8",
-                    fontSize: 16,
-                    fontWeight: 600,
-                  }}
-                >
-                  <span style={{ fontSize: 18 }}>👩🏽‍💼👨🏻‍💼</span>
-                  Our Training Services
-                </span>
-              </div>
-            }
             image={
               // eslint-disable-next-line @next/next/no-img-element
               <img

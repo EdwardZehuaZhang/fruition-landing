@@ -38,9 +38,19 @@ export default async function PartnershipPage({
     getCaseStudies(),
     getFaqItemsForPage(`partnerships/${slug}`),
   ])
+  // Testimonials are monday-specific; force-hide on non-monday partnership pages.
+  const isMondayThemed = slug.includes("monday")
+  const adjustedPage = page
+    ? {
+        ...page,
+        hideTestimonialsSection: isMondayThemed
+          ? page.hideTestimonialsSection
+          : true,
+      }
+    : page
   return (
     <UniversalPageTemplate
-      page={page}
+      page={adjustedPage}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
       faqTabs={groupFaqsIntoTabs(centralFaqs)}

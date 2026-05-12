@@ -49,15 +49,12 @@ export default function TabSectionBlockView({
     <section className="bg-white pt-[80px] pb-[120px] px-4 relative">
       {/* Decorative squiggle bg — only for the "Implement monday.com for any team" section */}
       {isImplementSection && (
-        <div
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
           aria-hidden
-          className="pointer-events-none absolute left-0 right-0 top-[180px] h-[400px] opacity-50"
-          style={{
-            backgroundImage: "url(/images/bg-squiggle.avif)",
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-          }}
+          src="/images/bg-squiggle.avif"
+          alt=""
+          className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-[180px] w-auto max-w-none opacity-50"
         />
       )}
       <div className="relative mx-auto max-w-[959px] flex flex-col items-center gap-[24px]">

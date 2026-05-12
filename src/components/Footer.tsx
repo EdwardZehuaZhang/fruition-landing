@@ -88,9 +88,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
   const ctaLabel = siteSettings?.footerCtaLabel || ''
 
   const contactEmail = siteSettings?.contactEmail
-  const logoSrc = siteSettings?.logoWhite
-    ? urlFor(siteSettings.logoWhite).height(56).fit('max').url()
-    : null
+  const logoSrc = '/images/logo-fruition-white.avif'
 
   return (
     <footer className="flex flex-col lg:flex-row w-full">

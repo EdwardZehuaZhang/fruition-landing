@@ -5,6 +5,8 @@ import type { FeatureNumberItem, SectionTheme } from "./types"
 interface FeatureNumberListProps {
   heading?: string
   headingAccent?: string
+  /** Force the purple accent to render on its own line. */
+  accentBlock?: boolean
   subheading?: string
   items?: FeatureNumberItem[]
   theme?: SectionTheme
@@ -19,6 +21,7 @@ const NUMBER_COLOR_LIGHT = "#8015e8"
 export default function FeatureNumberList({
   heading,
   headingAccent,
+  accentBlock = false,
   subheading,
   items = [],
   theme = "dark",
@@ -52,7 +55,14 @@ export default function FeatureNumberList({
           >
             {heading}
             {headingAccent && (
-              <span style={{ color: NUMBER_COLOR_DARK }}>{headingAccent}</span>
+              <span
+                style={{
+                  color: NUMBER_COLOR_DARK,
+                  display: accentBlock ? "block" : undefined,
+                }}
+              >
+                {headingAccent}
+              </span>
             )}
           </h2>
         )}

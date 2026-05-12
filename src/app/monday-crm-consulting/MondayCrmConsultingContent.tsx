@@ -12,6 +12,7 @@ import {
   SecurityBadgeSection,
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData, FaqTab } from "@/components/sections/types"
+import YouTubeEmbed from "@/components/YouTubeEmbed"
 
 interface MondayCrmConsultingContentProps {
   page: any
@@ -96,7 +97,7 @@ const CRM_CAPABILITY_CARDS: {
 const CERTIFICATE_BADGES = [
   { src: "/images/partner-platinum.png", alt: "Monday.com Platinum Partner" },
   { src: "/images/partner-advanced-delivery.png", alt: "Advanced Delivery Partner" },
-  { src: "/images/partner-gold-solution.png", alt: "Gold Solution Partner" },
+  { src: "/images/crm-hero-3.avif", alt: "monday Partner" },
 ]
 
 export default function MondayCrmConsultingContent({
@@ -288,14 +289,7 @@ export default function MondayCrmConsultingContent({
               className="rounded-card overflow-hidden"
               style={{ aspectRatio: "16 / 9" }}
             >
-              <iframe
-                src={heroVideoEmbedSrc}
-                title={page.heroVideoTitle || "Video"}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-                style={{ border: 0 }}
-              />
+              <YouTubeEmbed url={heroVideoEmbedSrc} title={page.heroVideoTitle || "Video"} />
             </div>
           </div>
         </section>
@@ -406,14 +400,7 @@ export default function MondayCrmConsultingContent({
                 className="rounded-card overflow-hidden"
                 style={{ aspectRatio: "16 / 9", marginTop: 48 }}
               >
-                <iframe
-                  src="https://www.youtube.com/embed/EPxa_uYJy3w"
-                  title="monday CRM overview"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full"
-                  style={{ border: 0 }}
-                />
+                <YouTubeEmbed videoId="EPxa_uYJy3w" title="monday CRM overview" />
               </div>
             </div>
           </section>
@@ -427,23 +414,12 @@ export default function MondayCrmConsultingContent({
               className="rounded-card overflow-hidden"
               style={{ aspectRatio: "16 / 9" }}
             >
-              <iframe
-                src={bottomVideoEmbedSrc}
-                title={page.bottomVideoTitle || "Video"}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-                style={{ border: 0 }}
-              />
+              <YouTubeEmbed url={bottomVideoEmbedSrc} title={page.bottomVideoTitle || "Video"} />
             </div>
           </div>
         </section>
       )}
 
-      {/* 10. Security Badge */}
-      {!page.hideSecurityBadgeSection && (
-        <SecurityBadgeSection badge={siteSettings?.badgeSecurity} />
-      )}
     </div>
   )
 }

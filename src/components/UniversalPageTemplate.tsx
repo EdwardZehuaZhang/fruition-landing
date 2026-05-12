@@ -24,6 +24,7 @@ import {
   TextContentSection,
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData } from "@/components/sections/types"
+import YouTubeEmbed from "@/components/YouTubeEmbed"
 
 import type { FaqTab } from "@/components/sections/types"
 
@@ -122,6 +123,7 @@ export default function UniversalPageTemplate({
         eyebrow={page.heroEyebrow}
         headingPart1={page.heroHeading || page.title || ""}
         headingAccent=""
+        accentBlock={page.heroAccentBlock === true}
         subheading={page.hideHeroSubheading ? undefined : page.heroSubheading}
         heroImage={page.heroImage}
         heroVideoSrc={page.heroLocalVideoSrc}
@@ -138,6 +140,15 @@ export default function UniversalPageTemplate({
         secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
       />
 
+      {/* 1b. Calendly (top position) — opt-in via Sanity field calendlyPosition === "top" */}
+      {page.calendlyPosition === "top" && (
+        <CalendlySection
+          heading={page.calendlyHeading}
+          subheading={page.calendlySubheading}
+          calendlyUrl={calendlyUrl}
+        />
+      )}
+
       {/* 2. Logo Cloud */}
       <LogoCloudMarquee
         headingPart1={page.logoCloudHeadingPart1 || "Clients who have used our "}
@@ -151,14 +162,7 @@ export default function UniversalPageTemplate({
         <section className="bg-white" style={{ paddingBottom: 80 }}>
           <div className="mx-auto" style={{ maxWidth: 1042 }}>
             <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
-              <iframe
-                src={heroVideoEmbedSrc}
-                title={page.heroVideoTitle || "Video"}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-                style={{ border: 0 }}
-              />
+              <YouTubeEmbed url={heroVideoEmbedSrc} title={page.heroVideoTitle || "Video"} />
             </div>
           </div>
         </section>
@@ -203,6 +207,7 @@ export default function UniversalPageTemplate({
         <FeatureNumberList
           heading={page.featureListHeading}
           headingAccent={page.featureListHeadingAccent}
+          accentBlock={page.featureListAccentBlock !== false}
           subheading={page.featureListSubheading}
           theme={page.featureListTheme || "dark"}
           columns={page.featureListColumns === 3 ? 3 : 2}
@@ -234,15 +239,18 @@ export default function UniversalPageTemplate({
           tabs={mergedComparisonTabs}
           theme={page.comparisonTheme || "light"}
           layout={page.comparisonLayout === "sideBySide" ? "sideBySide" : "tabs"}
+          withPurpleCircle={page.comparisonWithPurpleCircle ?? true}
         />
       )}
 
-      {/* 4. Calendly (Book Your Personalised Demo) */}
-      <CalendlySection
-        heading={page.calendlyHeading}
-        subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
-      />
+      {/* 4. Calendly (Book Your Personalised Demo) — skip when shown at top */}
+      {page.calendlyPosition !== "top" && (
+        <CalendlySection
+          heading={page.calendlyHeading}
+          subheading={page.calendlySubheading}
+          calendlyUrl={calendlyUrl}
+        />
+      )}
 
       {/* 4a. Long-form text content sections (e.g. About Us narrative) */}
       {page.textContentSections?.length > 0 &&
@@ -314,14 +322,7 @@ export default function UniversalPageTemplate({
               className="rounded-card overflow-hidden"
               style={{ aspectRatio: "16 / 9" }}
             >
-              <iframe
-                src={bottomVideoEmbedSrc}
-                title={page.bottomVideoTitle || "Video"}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-                style={{ border: 0 }}
-              />
+              <YouTubeEmbed url={bottomVideoEmbedSrc} title={page.bottomVideoTitle || "Video"} />
             </div>
           </div>
         </section>
@@ -370,6 +371,7 @@ export default function UniversalPageTemplate({
           primaryCtaUrl={calendlyUrl}
           secondaryCtaUrl={calendlyUrl}
           testimonial={featuredTestimonial}
+          testimonials={caseStudies}
         />
       )}
 

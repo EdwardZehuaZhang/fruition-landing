@@ -3,6 +3,7 @@ import { PortableText } from "@portabletext/react"
 import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
+import YouTubeEmbed from "@/components/YouTubeEmbed"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -304,14 +305,7 @@ function VideoEmbeds({ urls }: { urls: string[] }) {
     <div className="w-full flex flex-col gap-[24px] pt-[27.5px]">
       {embeds.map((v, i) => (
         <div key={i} className="aspect-video w-full overflow-hidden rounded-card">
-          <iframe
-            src={v.embed}
-            title={`Video ${i + 1}`}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="w-full h-full"
-            style={{ border: 0 }}
-          />
+          <YouTubeEmbed url={v.embed} title={`Video ${i + 1}`} />
         </div>
       ))}
     </div>

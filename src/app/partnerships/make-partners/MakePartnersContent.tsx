@@ -3,7 +3,6 @@
 import {
   LogoCloudMarquee,
   ComparisonTabsSection,
-  TestimonialsGrid,
   CalendlySection,
   DiscoverCtaSection,
   JoinStatsSection,
@@ -408,18 +407,6 @@ export default function MakePartnersContent({
         siteSettings={siteSettings || undefined}
       />
 
-      {/* 9. Testimonials */}
-      <TestimonialsGrid
-        caseStudies={caseStudies}
-        heading={pageData?.testimonialsHeading ?? undefined}
-        ctaLabel={pageData?.testimonialsCtaLabel ?? undefined}
-        ctaUrl={pageData?.testimonialsCtaUrl ?? undefined}
-        statCardValue={pageData?.statCardValue ?? undefined}
-        statCardSubtitle={pageData?.statCardSubtitle ?? undefined}
-        statCardCtaLabel={pageData?.statCardCtaLabel ?? undefined}
-        statCardCtaUrl={pageData?.statCardCtaUrl ?? undefined}
-      />
-
       {/* 10. Discover CTA */}
       {pageData?.discoverHeading && (
         <DiscoverCtaSection
@@ -438,6 +425,7 @@ export default function MakePartnersContent({
         secondaryCtaLabel={pageData?.testimonialBannerSecondaryCtaLabel}
         secondaryCtaUrl={pageData?.testimonialBannerSecondaryCtaUrl || calendlyUrl}
         testimonial={featuredTestimonial}
+        testimonials={caseStudies}
       />
 
       {/* 12. Security */}

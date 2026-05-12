@@ -491,20 +491,6 @@ export default function ImplementationPackagesContent({
             </p>
           </div>
 
-          {/* Services intro image */}
-          {servicesIntroImageSrc && (
-            <div style={{ marginTop: 40 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={servicesIntroImageSrc}
-                alt="Monday.com Partners"
-                width={924}
-                height={0}
-                className="w-full max-w-[924px] h-auto object-contain"
-              />
-            </div>
-          )}
-
           {/* 4b: Two feature cards */}
           {featureCards.length > 0 && (
           <div

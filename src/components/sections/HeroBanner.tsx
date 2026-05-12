@@ -8,6 +8,8 @@ interface HeroBannerProps {
   eyebrow?: string
   headingPart1?: string
   headingAccent?: string
+  /** When true, render the purple accent on its own line (forces a break before it). */
+  accentBlock?: boolean
   headingPart2?: string
   subheading?: string
   heroImage?: SanityImageRef
@@ -30,7 +32,12 @@ interface HeroBannerProps {
 
 function safeImageUrl(ref: SanityImageRef): string | null {
   if (!ref?.asset?._ref) return null
-  try { return urlFor(ref).url() } catch { return null }
+  try { return urlFor(ref).auto("format").url() } catch { return null }
+}
+
+function heroImgFromRef(ref: SanityImageRef): string | null {
+  if (!ref?.asset?._ref) return null
+  try { return urlFor(ref).width(2084).auto("format").url() } catch { return null }
 }
 
 /** Override specific partner badges with local dark variants */
@@ -51,6 +58,7 @@ export default function HeroBanner({
   eyebrow,
   headingPart1 = "",
   headingAccent = "",
+  accentBlock = false,
   headingPart2 = "",
   subheading,
   heroImage,
@@ -66,7 +74,7 @@ export default function HeroBanner({
   secondaryCtaLabel,
   secondaryCtaUrl,
 }: HeroBannerProps) {
-  const heroImageSrc = heroImageUrl || safeImageUrl(heroImage)
+  const heroImageSrc = heroImageUrl || heroImgFromRef(heroImage)
   const certBadgeSrc = safeImageUrl(certificationBadge)
   const partnerImageUrl = typeof partnerImageSrc === "string"
     ? partnerImageSrc
@@ -122,7 +130,16 @@ export default function HeroBanner({
           style={{ marginTop: eyebrow ? 16 : 42, maxWidth: 924 }}
         >
           <span className="text-black">{headingPart1}</span>
-          {headingAccent && <span style={{ color: "var(--purple-primary)" }}>{headingAccent}</span>}
+          {headingAccent && (
+            <span
+              style={{
+                color: "var(--purple-primary)",
+                display: accentBlock ? "block" : undefined,
+              }}
+            >
+              {headingAccent}
+            </span>
+          )}
           {headingPart2 && <span className="text-black">{headingPart2}</span>}
         </h1>
 

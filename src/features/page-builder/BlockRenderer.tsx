@@ -14,6 +14,7 @@ import TabSectionBlockView from './blocks/TabSectionBlockView'
 import TeamsTransformedSection from './blocks/TeamsTransformedSection'
 import { urlFor } from '@/sanity/image'
 import type { SiteSettings } from './types'
+import YouTubeEmbed from '@/components/YouTubeEmbed'
 
 interface Logo {
   _key?: string
@@ -57,13 +58,9 @@ function VideoSection() {
     <section className="bg-white py-[80px] px-[10px]">
       <div className="mx-auto flex flex-col items-center justify-center">
         <div className="w-full max-w-[979px] aspect-video rounded-card overflow-hidden">
-          <iframe
-            src="https://www.youtube.com/embed/7vtrtlfC1Zg"
+          <YouTubeEmbed
+            videoId="7vtrtlfC1Zg"
             title="monday CRM Success Story - Star Aviation | Powered by Fruition"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="w-full h-full"
-            style={{ border: 0 }}
           />
         </div>
       </div>

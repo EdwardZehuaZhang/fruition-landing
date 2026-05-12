@@ -38,9 +38,19 @@ export default async function SolutionPage({
     getCaseStudies(),
     getFaqItemsForPage(`monday-consulting-solutions/${slug}`),
   ])
+  // Per-slug overrides
+  const slugsWithCalendlyTop = new Set(["solar-crm-solution"])
+  const adjustedPage = page
+    ? {
+        ...page,
+        calendlyPosition: slugsWithCalendlyTop.has(slug)
+          ? "top"
+          : page.calendlyPosition,
+      }
+    : page
   return (
     <UniversalPageTemplate
-      page={page}
+      page={adjustedPage}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
       faqTabs={groupFaqsIntoTabs(centralFaqs)}

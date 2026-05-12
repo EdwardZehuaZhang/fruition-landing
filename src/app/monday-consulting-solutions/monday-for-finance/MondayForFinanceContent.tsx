@@ -11,6 +11,7 @@ import {
   TestimonialCtaBanner,
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData, FaqTab, PartnerBadge, SanityImageRef } from "@/components/sections/types"
+import YouTubeEmbed from "@/components/YouTubeEmbed"
 
 interface Props {
   page: any
@@ -397,23 +398,16 @@ export default function MondayForFinanceContent({
             )}
           </div>
 
-          {/* Hero image — only show if NOT the small 179x28 monday text logo */}
-          {(() => {
-            const src = safeImageUrl(page.heroImage)
-            if (!src) return null
-            if (src.includes("e69b4156af7ede871484c1ee217c99c87bd289e7")) return null
-            return (
-              <div style={{ marginTop: 40 }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={src}
-                  alt="Hero"
-                  className="rounded-card"
-                  style={{ width: 1042, height: "auto" }}
-                />
-              </div>
-            )
-          })()}
+          {/* Hero image */}
+          <div style={{ marginTop: 40 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/finance-hero.png"
+              alt="Hero"
+              className="rounded-card"
+              style={{ width: "100%", maxWidth: 1042, height: "auto" }}
+            />
+          </div>
         </div>
       </section>
 
@@ -428,25 +422,16 @@ export default function MondayForFinanceContent({
       />
 
       {/* 3. Video (underneath logo scroll) */}
-      {heroVideoEmbedSrc && (
-        <section className="bg-white" style={{ paddingBottom: 80 }}>
-          <div className="mx-auto" style={{ maxWidth: 1042 }}>
-            <div
-              className="rounded-card overflow-hidden"
-              style={{ aspectRatio: "16 / 9" }}
-            >
-              <iframe
-                src={heroVideoEmbedSrc}
-                title={page.heroVideoTitle || "Video"}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-                style={{ border: 0 }}
-              />
-            </div>
+      <section className="bg-white" style={{ paddingBottom: 80 }}>
+        <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
+          <div
+            className="rounded-card overflow-hidden"
+            style={{ aspectRatio: "16 / 9" }}
+          >
+            <YouTubeEmbed videoId="7vtrtlfC1Zg" title="monday for Finance & Accounting" />
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* 4. Tab selector section */}
       <FinanceTabsSection />
@@ -462,7 +447,7 @@ export default function MondayForFinanceContent({
       />
 
       {/* 6. FAQ */}
-      <FaqAccordion tabs={faqTabs && faqTabs.length > 0 ? faqTabs : HARDCODED_FAQ_TABS} />
+      <FaqAccordion heading="Frequently asked questions" tabs={faqTabs && faqTabs.length > 0 ? faqTabs : HARDCODED_FAQ_TABS} />
 
       {/* 7. Feature cards section */}
       <BottomFeatureSection />
@@ -470,12 +455,9 @@ export default function MondayForFinanceContent({
       {/* 8. Join 500+ CTA */}
       <TestimonialCtaBanner
         testimonial={caseStudies?.[0]}
+        testimonials={caseStudies}
       />
 
-      {/* 9. Security Badge */}
-      {!page.hideSecurityBadgeSection && (
-        <SecurityBadgeSection badge={siteSettings?.badgeSecurity} />
-      )}
     </div>
   )
 }
@@ -490,8 +472,12 @@ function FinanceTabsSection() {
 
   return (
     <section
-      className="bg-white px-4"
-      style={{ paddingTop: 80, paddingBottom: 80 }}
+      className="px-4"
+      style={{
+        paddingTop: 80,
+        paddingBottom: 80,
+        background: "linear-gradient(180deg,#f5f0ff 0%,#ffffff 60%)",
+      }}
     >
       <div
         className="mx-auto flex flex-col items-center"
@@ -508,13 +494,13 @@ function FinanceTabsSection() {
         {/* Tab buttons */}
         <div
           className="flex justify-center flex-wrap"
-          style={{ gap: 12, marginTop: 40, width: "100%" }}
+          style={{ gap: 12, marginTop: 40, width: "max-content", maxWidth: "100vw", overflow: "visible" }}
         >
           {COMPARISON_TABS.map((tab, i) => (
             <button
               key={tab.label}
               onClick={() => setActiveTab(i)}
-              className="cursor-pointer transition-all"
+              className="cursor-pointer transition-all whitespace-nowrap shrink-0"
               style={{
                 padding: "10px 32px",
                 borderRadius: 99,
@@ -561,7 +547,7 @@ function FinanceTabsSection() {
           {active.items.map((item, i) => (
             <div
               key={item.title}
-              className="flex items-start"
+              className="ui-step-row"
               style={{
                 padding: "24px 40px",
                 borderBottom:
@@ -571,10 +557,10 @@ function FinanceTabsSection() {
               }}
             >
               <span
+                className="ui-step-number"
                 style={{
                   fontSize: 40,
                   fontWeight: 200,
-                  color: "#8015e8",
                   lineHeight: 1,
                   minWidth: 56,
                   flexShrink: 0,
@@ -664,6 +650,17 @@ function BottomFeatureSection() {
               </p>
             </div>
           ))}
+        </div>
+
+        {/* YouTube video below the feature grid */}
+        <div
+          className="w-full rounded-card overflow-hidden"
+          style={{ marginTop: 56, aspectRatio: "16 / 9" }}
+        >
+          <YouTubeEmbed
+            videoId="g83dt0bCG4I"
+            title="Why monday.com is loved by Finance Teams"
+          />
         </div>
       </div>
     </section>

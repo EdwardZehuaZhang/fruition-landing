@@ -27,9 +27,23 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
   const platinumBadgeSrc = platinumBadgeImage?.asset
     ? urlFor(platinumBadgeImage).height(90).url()
     : null
-  const isIndustryGrid = variant === 'industries'
-  const isChallenges = variant === 'challenges' || _key === 'challenges-01'
-  const isStepsBlock = !isChallenges && variant === 'steps'
+
+  // Auto-detect variant when CMS field is missing/default — home page content
+  // lacks the variant flag but should render as Steps or Industries.
+  const resolvedVariant = (() => {
+    if (variant && variant !== 'default') return variant
+    const hasIndustryKey = features?.some((f) => f._key?.startsWith('ind-'))
+    const looksLikeIndustryLink = features?.some((f) => f.description?.startsWith('/monday-for-') || f.description?.startsWith('/monday-consulting-solutions/'))
+    if (hasIndustryKey || looksLikeIndustryLink) return 'industries'
+    const lowerHead = (heading ?? '').toLowerCase()
+    const lowerSub = (subheading ?? '').toLowerCase()
+    if (lowerHead.includes('get set up right') || lowerSub.includes('measure twice')) return 'steps'
+    return variant
+  })()
+
+  const isIndustryGrid = resolvedVariant === 'industries'
+  const isChallenges = resolvedVariant === 'challenges' || _key === 'challenges-01'
+  const isStepsBlock = !isChallenges && resolvedVariant === 'steps'
 
   // ── Challenges variant ──────────────────────────────────────────────
   // Matches Figma: white bg, heading + subheading, bordered card with vertical numbered items
@@ -58,6 +72,25 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
 
   // ── Industries variant ──────────────────────────────────────────────
   if (isIndustryGrid) {
+    const industryFallback = (titleOrKey?: string): string | null => {
+      if (!titleOrKey) return null
+      const slug = titleOrKey.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+      const map: Record<string, string> = {
+        'construction': '/images/industry-construction.png',
+        'customer-service': '/images/industry-customer-service.png',
+        'retail': '/images/industry-retail.png',
+        'government': '/images/industry-government.png',
+        'manufacturing': '/images/industry-manufacturing.png',
+        'marketing-and-creative': '/images/industry-marketing.png',
+        'marketing': '/images/industry-marketing.png',
+        'creative': '/images/industry-creative.png',
+        'professional-services': '/images/industry-professional-services.png',
+        'real-estate': '/images/industry-real-estate.png',
+        'finance': '/images/industry-finance.png',
+      }
+      return map[slug] ?? null
+    }
+    const resolvedSubheading = subheading || 'Our monday.com consultants have expertise across various industries. As a Platinum monday.com partner, we guarantee delivery of the right solution and training to optimise your team’s efficiency.'
     return (
       <section className="bg-[#ecf1fc] py-[80px] px-4">
         <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[36px]">
@@ -81,9 +114,7 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
                 ) : heading}
               </h2>
             )}
-            {subheading && (
-              <p className="text-[20px] text-black text-center">{subheading}</p>
-            )}
+            <p className="text-[20px] text-black text-center">{resolvedSubheading}</p>
           </div>
 
           {/* Partner badge */}
@@ -94,27 +125,31 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
 
           {/* Industry cards grid */}
           <div className="flex flex-wrap justify-center gap-0 w-full max-w-[1020px]">
-            {features?.map((f, i) => (
-              <Link
-                key={f._key ?? i}
-                href={f.description ?? '#'}
-                className="group flex flex-col items-center p-[20px] w-[234px]"
-              >
-                <div className="w-[178px] h-[174px] rounded-full overflow-hidden mb-3">
-                  {f.image?.asset ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={urlFor(f.image).width(300).height(300).url()}
-                      alt={f.title ?? ''}
-                      className="w-full h-full object-cover group-hover:scale-105 transition"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-[#d9d9d9]" />
-                  )}
-                </div>
-                <p className="text-[16px] font-medium text-[#10003a] text-center">{f.title}</p>
-              </Link>
-            ))}
+            {features?.map((f, i) => {
+              const fallbackSrc = industryFallback(f.title)
+              const imgSrc = f.image?.asset ? urlFor(f.image).width(300).height(300).url() : fallbackSrc
+              return (
+                <Link
+                  key={f._key ?? i}
+                  href={f.description ?? '#'}
+                  className="group flex flex-col items-center p-[20px] w-[234px]"
+                >
+                  <div className="w-[178px] h-[174px] rounded-full overflow-hidden mb-3">
+                    {imgSrc ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={imgSrc}
+                        alt={f.title ?? ''}
+                        className="w-full h-full object-cover group-hover:scale-105 transition"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-[#d9d9d9]" />
+                    )}
+                  </div>
+                  <p className="text-[16px] font-medium text-[#10003a] text-center">{f.title}</p>
+                </Link>
+              )
+            })}
           </div>
         </div>
       </section>

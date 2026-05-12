@@ -8,6 +8,7 @@ import CalendlySection from "@/components/sections/CalendlySection"
 import StatsBlockView from "@/features/page-builder/blocks/StatsBlockView"
 import ComparisonTabsSection from "@/components/sections/ComparisonTabsSection"
 import FaqAccordion from "@/components/sections/FaqAccordion"
+import YouTubeEmbed from "@/components/YouTubeEmbed"
 import type { ComparisonTab as SharedComparisonTab, FaqTab as SharedFaqTab } from "@/components/sections/types"
 
 /* ------------------------------------------------------------------ */
@@ -416,18 +417,17 @@ export default function MondayImplementationConsultantsContent({
           )}
 
           {/* Monday Partners image */}
-          {heroMondayPartnersImageSrc && (
-            <div style={{ marginTop: 40 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={heroMondayPartnersImageSrc}
-                alt="Monday.com Partners"
-                width={924}
-                height={0}
-                className="w-full max-w-[924px] h-auto object-contain"
-              />
-            </div>
-          )}
+          <div style={{ marginTop: 40 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://static.wixstatic.com/media/39b8ef_abd15c5dcf7c4d16a392b5693a6f7923~mv2.png/v1/fill/w_534,h_133,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/MONDAY%20PARTNERS.png"
+              alt="Monday.com Partners"
+              width={534}
+              height={133}
+              className="h-auto object-contain"
+              style={{ maxWidth: 415 }}
+            />
+          </div>
 
           {/* Dual CTA */}
           {(heroPrimaryCtaUrl || heroSecondaryCtaUrl) && (
@@ -502,6 +502,35 @@ export default function MondayImplementationConsultantsContent({
       </section>
 
       {/* ============================================================ */}
+      {/* SECTION 1b — monday product logos strip                       */}
+      {/* ============================================================ */}
+      <section
+        className="px-4"
+        style={{
+          background: "linear-gradient(to bottom, #ffffff 0%, #e9e1ff 100%)",
+          paddingTop: 40,
+          paddingBottom: 40,
+        }}
+      >
+        <div className="mx-auto flex flex-wrap items-center justify-center gap-x-[56px] gap-y-6 max-w-[1100px]">
+          {[
+            { src: "/images/monday-crm-logo.avif", alt: "monday CRM" },
+            { src: "/images/monday-wm-logo.avif", alt: "monday work management" },
+            { src: "/images/monday-svc-logo.avif", alt: "monday service" },
+            { src: "/images/monday-dev-logo.avif", alt: "monday dev" },
+          ].map((logo) => (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              key={logo.src}
+              src={logo.src}
+              alt={logo.alt}
+              className="h-[40px] w-auto object-contain"
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* ============================================================ */}
       {/* SECTION 2 — Logo cloud marquee                               */}
       {/* ============================================================ */}
       <section className="bg-white py-[80px] px-4">
@@ -543,14 +572,7 @@ export default function MondayImplementationConsultantsContent({
         <section className="bg-white" style={{ paddingBottom: 80 }}>
           <div className="mx-auto" style={{ maxWidth: 1042 }}>
             <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
-              <iframe
-                src={videoEmbedUrl}
-                title={videoTitle}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-                style={{ border: 0 }}
-              />
+              <YouTubeEmbed url={videoEmbedUrl} title={videoTitle} />
             </div>
           </div>
         </section>
@@ -747,6 +769,22 @@ export default function MondayImplementationConsultantsContent({
         siteSettings={siteSettings || undefined}
         showMondayPartnersBadge={false}
       />
+
+      {/* ============================================================ */}
+      {/* SECTION 12 — Security badge                                   */}
+      {/* ============================================================ */}
+      <section className="bg-white px-4" style={{ paddingTop: 40, paddingBottom: 80 }}>
+        <div className="mx-auto" style={{ maxWidth: 976 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://static.wixstatic.com/media/d6e205_dd894a9db73241b2a6b8e6bdb4ee7585~mv2.png/v1/fill/w_976,h_94,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Security.png"
+            alt="Security partners"
+            width={976}
+            height={94}
+            className="w-full h-auto"
+          />
+        </div>
+      </section>
     </div>
   )
 }

@@ -6,7 +6,7 @@ import {
   LogoCloudMarquee,
   CalendlySection,
   JoinStatsSection,
-  SecurityBadgeSection,
+  TestimonialCtaBanner,
 } from "@/components/sections"
 import type { SiteSettingsData, PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
@@ -121,7 +121,7 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
           {partnerBadges.length > 0 && (
             <div className="flex items-center" style={{ gap: 22 }}>
               {partnerBadges.map((badge, i) => {
-                const src = safeImageUrl(badge.image)
+                const src = i === 2 ? "/images/monday-svc-logo.avif" : safeImageUrl(badge.image)
                 if (!src) return null
                 return (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -232,13 +232,14 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
       )}
 
       {/* 5. Calendly */}
-      {(page?.calendlyHeading || page?.calendlySubheading) && (
-        <CalendlySection
-          heading={page?.calendlyHeading}
-          subheading={page?.calendlySubheading}
-          calendlyUrl={calendlyUrl}
-        />
-      )}
+      <CalendlySection
+        heading={page?.calendlyHeading || "Schedule A 30-Min Consultation"}
+        subheading={
+          page?.calendlySubheading ||
+          "Ready to transform your service management process?\n\nOur certified monday.com consultants offer complimentary consultations to help you assess your current IT service management challenges, design custom monday.com workflows, develop an implementation roadmap and identify integration opportunities with existing tools."
+        }
+        calendlyUrl={calendlyUrl}
+      />
 
       {/* 6. FAQ */}
       {page?.faqFlatItems && page.faqFlatItems.length > 0 && (
@@ -271,8 +272,14 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
         siteSettings={siteSettings || undefined}
       />
 
-      {/* 9. Security Badge */}
-      <SecurityBadgeSection badge={siteSettings?.badgeSecurity} />
+      {/* 9. Testimonial CTA banner — Join 500+ organisations */}
+      <TestimonialCtaBanner
+        headingPart1="Join "
+        headingAccent="500+ organisations"
+        headingPart2=" that have maximised their workflows with our monday.com expert support"
+        primaryCtaUrl={calendlyUrl}
+        secondaryCtaUrl={calendlyUrl}
+      />
     </div>
   )
 }
@@ -421,7 +428,7 @@ function FourCardSection({
   cards: FourCard[]
 }) {
   return (
-    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, backgroundColor: "#f7f7f7" }}>
+    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, backgroundColor: "white" }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1100 }}>
         {(headingPart1 || headingAccent) && (
           <h2

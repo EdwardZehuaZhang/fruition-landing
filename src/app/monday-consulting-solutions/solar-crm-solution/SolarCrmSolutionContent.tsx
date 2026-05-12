@@ -24,28 +24,28 @@ interface Props {
 }
 
 // Hardcoded content scraped from
-// https://www.fruitionservices.io/monday-consulting-solutions/monday-for-cabinetry-renovation
+// https://www.fruitionservices.io/monday-consulting-solutions/solar-crm-solution
 
 const KEY_FEATURES: Array<{ title: string; body: string }> = [
   {
-    title: "Project Scheduling",
-    body: "Visual timelines and automated task assignments keep cabinetry projects on track from design through final installation.",
+    title: "Sales Acceleration",
+    body: "Streamlined CPQ process with real-time inventory visibility and automated proposal generation",
   },
   {
-    title: "Inventory Management",
-    body: "Real-time material tracking with low-stock alerts and supplier coordination prevents costly shortages or delays.",
+    title: "Operational Efficiency",
+    body: "Automated project board creation from accepted proposals with standardised installation workflows",
   },
   {
-    title: "Client Communication",
-    body: "Centralized approvals, automated updates, and shared dashboards simplify collaboration and reduce miscommunication.",
+    title: "Resource Optimisation",
+    body: "Integrated inventory management with supplier connections and automated reordering",
   },
   {
-    title: "Cost & Profitability Tracking",
-    body: "Budget dashboards, time-tracking, and change order management ensure projects stay profitable and on budget.",
+    title: "Portfolio Management",
+    body: "Real-time visibility across all projects with performance tracking and resource allocation tools",
   },
   {
-    title: "Quality Control",
-    body: "Standardized checklists, inspection workflows, and escalation automations improve project consistency and client satisfaction.",
+    title: "Customer Lifecycle",
+    body: "Complete customer journey management from lead acquisition through installation and scheduled maintenance",
   },
 ]
 
@@ -88,28 +88,30 @@ const BEFORE_AFTER_TABS: ComparisonTab[] = [
     _key: "before",
     label: "Before",
     items: [
-      { _key: "b1", number: "❌", title: "No inventory link", description: "Cabinet quotes created with no link to inventory" },
-      { _key: "b2", number: "❌", title: "Manual re-entry", description: "Job details manually re-entered between sales, design, and installation teams" },
-      { _key: "b3", number: "❌", title: "Siloed data", description: "Project data siloed across spreadsheets, emails, and paper files" },
-      { _key: "b4", number: "❌", title: "Limited visibility", description: "Limited visibility into project timelines and delays" },
-      { _key: "b5", number: "❌", title: "Miscommunication", description: "Frequent miscommunication during handoffs between design, fabrication, and installers" },
-      { _key: "b6", number: "❌", title: "Admin overload", description: "Overwhelming admin time spent tracking orders, invoices, and schedules" },
-      { _key: "b7", number: "❌", title: "Slow revenue", description: "Long quote-to-cash cycles slowing revenue" },
+      { _key: "b1", number: "❌", title: "No inventory visibility", description: "Sales team creates quotes with no visibility into inventory" },
+      { _key: "b2", number: "❌", title: "Manual re-entry", description: "Info manually re-entered between sales and operations" },
+      { _key: "b3", number: "❌", title: "Siloed project data", description: "Project data siloed within departments" },
+      { _key: "b4", number: "❌", title: "Limited visibility", description: "Limited visibility into project status for management" },
     ],
   },
   {
     _key: "after",
     label: "After",
     items: [
-      { _key: "a1", number: "✅", title: "Unified workflow", description: "Unified workflow from client inquiry to final installation" },
-      { _key: "a2", number: "✅", title: "Real-time visibility", description: "Real-time visibility across design, fabrication, and installation phases" },
-      { _key: "a3", number: "✅", title: "Standardized templates", description: "Standardized templates ensuring consistent project delivery and quality control" },
-      { _key: "a4", number: "✅", title: "Centralized dashboards", description: "Centralized dashboards for accurate scheduling and proactive decision-making" },
-      { _key: "a5", number: "✅", title: "Automated handoffs", description: "Automated task assignments and seamless handoffs between departments" },
-      { _key: "a6", number: "✅", title: "50% admin reduction", description: "50% reduction in admin work and faster project turnaround times" },
-      { _key: "a7", number: "✅", title: "60% quicker quote-to-cash", description: "60% quicker quote-to-cash with connected workflows" },
+      { _key: "a1", number: "✅", title: "Unified flow", description: "Unified flow from lead through installation and maintenance" },
+      { _key: "a2", number: "✅", title: "Real-time visibility", description: "Real-time visibility across all project phases" },
+      { _key: "a3", number: "✅", title: "Standardised templates", description: "Standardised templates ensuring consistent quality" },
+      { _key: "a4", number: "✅", title: "Centralised data", description: "Centralised data for strategic decision-making" },
+      { _key: "a5", number: "✅", title: "Automated handoffs", description: "Automated handoffs between teams" },
     ],
   },
+]
+
+const FINAL_STATS: Array<{ value: string; label: string }> = [
+  { value: "50% reduction", label: "in repetitive admin tasks" },
+  { value: "60% quicker", label: "quote-to-cash" },
+  { value: "30% increase", label: "in on-time delivery" },
+  { value: "20% reduction", label: "in carrying costs" },
 ]
 
 /* -------- Key Features + Services -------- */
@@ -169,7 +171,7 @@ function ReturnsBannerSection({ calendlyUrl }: { calendlyUrl: string }) {
           We bring real returns on investment.
         </h2>
         <p className="text-center" style={{ color: "rgba(255,255,255,0.8)", fontSize: 18, marginBottom: 48 }}>
-          Join 500+ organisations that have implemented with us.
+          Join 300+ organisations that have implemented with us.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>
@@ -237,26 +239,36 @@ function ReturnsBannerSection({ calendlyUrl }: { calendlyUrl: string }) {
   )
 }
 
-export default function MondayForCabinetryRenovationContent({ page, siteSettings }: Props) {
+/* -------- Final 4-stat grid -------- */
+function FinalStatsSection() {
+  return (
+    <section className="bg-white px-4" style={{ paddingTop: 60, paddingBottom: 100 }}>
+      <div
+        className="mx-auto grid grid-cols-2 md:grid-cols-4 text-center"
+        style={{ maxWidth: 1100, gap: 24 }}
+      >
+        {FINAL_STATS.map((s) => (
+          <div key={s.label}>
+            <p className="font-bold" style={{ color: "#8015e8", fontSize: 28, lineHeight: "34px" }}>
+              {s.value}
+            </p>
+            <p style={{ color: "#10003a", fontSize: 14, marginTop: 6 }}>{s.label}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+export default function SolarCrmSolutionContent({ page, siteSettings }: Props) {
   if (!page) return null
 
   const calendlyUrl =
     siteSettings?.calendlyLink ||
     "https://calendly.com/global-calendar-fruitionservices"
 
-  // CapabilitiesCards holds the challenges set for this page.
-  const challengeCards = page.capabilitiesCards ?? []
-  const CARD_IMAGE_MAP: Record<string, string> = {
-    "PROJECT SCHEDULING": "/images/cabinetry-project-scheduling.avif",
-    "INVENTORY TRACKING": "/images/cabinetry-inventory-tracking.avif",
-    "CLIENT COMMUNICATION": "/images/cabinetry-client-communication.avif",
-    "CHANGE ORDER MANAGEMENT": "/images/cabinetry-change-order.avif",
-  }
-  const solutionCards = (page.solutionCards ?? []).map((card: any) => {
-    const key = (card.eyebrow ?? "").toUpperCase().trim()
-    const imageSrc = CARD_IMAGE_MAP[key]
-    return imageSrc ? { ...card, imageSrc } : card
-  })
+  const secondaryCards = page.secondaryCapabilitiesCards ?? []
+  const solutionCards = page.solutionCards ?? []
   const solutionTop = solutionCards.slice(0, 2)
   const solutionBottom = solutionCards.slice(2)
 
@@ -269,7 +281,6 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
         headingAccent=""
         subheading={page.hideHeroSubheading ? undefined : page.heroSubheading}
         heroImage={page.heroImage}
-        heroImageUrl="/images/cabinetry-hero.png"
         heroVideoSrc={page.heroLocalVideoSrc}
         certificationBadge={siteSettings?.badgeCertifications}
         partnerBadges={
@@ -283,55 +294,57 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
         secondaryCtaUrl={page.secondaryCtaUrl || "https://monday.com"}
       />
 
-      {/* Trusted-by caption */}
+      {/* "Trusted by 300+ businesses worldwide" caption */}
       <section className="bg-white px-4" style={{ paddingTop: 0, paddingBottom: 24 }}>
         <p className="text-center" style={{ color: "#10003a", fontSize: 14, fontWeight: 600 }}>
-          🔨  Trusted by 500+ businesses worldwide
+          Trusted by 300+ businesses worldwide
         </p>
       </section>
 
-      {/* 2. Logo cloud */}
+      {/* 2. Logo cloud — heading: "500+ clients globally use Fruition's monday.com expert consultants" */}
       <LogoCloudMarquee
         headingPart1="500+ clients globally use Fruition's "
-        headingAccent="monday.com consultants"
+        headingAccent="monday.com expert consultants"
         description={page.logoCloudDescription}
         logos={siteSettings?.carouselLogos || []}
       />
 
       {/* 3. Facing these challenges? */}
-      {challengeCards.length > 0 && (
+      {secondaryCards.length > 0 && (
         <CapabilitiesGrid
-          heading={"Facing these "}
-          headingAccent={"challenges?"}
+          eyebrow={page.secondaryCapabilitiesEyebrow}
+          heading={page.secondaryCapabilitiesHeading || "Facing these "}
+          headingAccent={page.secondaryCapabilitiesHeadingAccent || "challenges?"}
+          subheading={page.secondaryCapabilitiesSubheading}
           theme="light"
           columns={3}
-          cards={challengeCards}
+          cards={secondaryCards}
         />
       )}
 
-      {/* 4. Key Features + Services */}
+      {/* 4. Key Features + Services 2-column section */}
       <KeyFeaturesSection />
 
-      {/* 5. Solution cards — top pair (PROJECT SCHEDULING + INVENTORY TRACKING) */}
-      {solutionTop.length > 0 && <SolutionCardsSection cards={solutionTop} />}
-
-      {/* 6. Calendly */}
+      {/* 5. Calendly */}
       <CalendlySection
         heading={page.calendlyHeading || "Schedule Your Personalised Demo with A monday.com Expert"}
         subheading={
           page.calendlySubheading ||
-          "Book a time with one of our certified monday.com consultants to see how monday.com can be customized for your cabinetry renovation and installation business and start your free 4-week extended trial."
+          "Book a time with one of our monday consultants to see how monday CRM can be tailored to your specific business needs and start your 4-week extended trial."
         }
         calendlyUrl={calendlyUrl}
       />
 
-      {/* 7. Solution cards — bottom pair (CLIENT COMMUNICATION + CHANGE ORDER MANAGEMENT) */}
-      {solutionBottom.length > 0 && <SolutionCardsSection cards={solutionBottom} />}
+      {/* 6. Solution cards — top pair (FASTER INVOICING + PORTFOLIO MANAGEMENT) */}
+      {solutionTop.length > 0 && <SolutionCardsSection cards={solutionTop} />}
 
-      {/* 8. Returns banner + testimonials carousel */}
+      {/* 7. Returns banner with testimonials + CTAs */}
       <ReturnsBannerSection calendlyUrl={calendlyUrl} />
 
-      {/* 9. Before vs After (sideBySide, both columns) */}
+      {/* 8. Solution cards — bottom pair (INVENTORY TRACKING + FINANCIAL FORECASTING) */}
+      {solutionBottom.length > 0 && <SolutionCardsSection cards={solutionBottom} />}
+
+      {/* 9. Before vs After comparison (sideBySide) — hardcoded both columns */}
       <ComparisonTabsSection
         heading="Before vs After"
         tabs={BEFORE_AFTER_TABS}
@@ -339,6 +352,9 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
         layout="sideBySide"
         withPurpleCircle={false}
       />
+
+      {/* 10. Final 4-stat grid */}
+      <FinalStatsSection />
     </div>
   )
 }

@@ -12,6 +12,8 @@ interface SolutionCard {
   ctaLabel?: string
   ctaUrl?: string
   image?: SanityImageRef
+  /** Local image path override (takes precedence over Sanity image). */
+  imageSrc?: string
 }
 
 interface SolutionCardsSectionProps {
@@ -33,12 +35,12 @@ export default function SolutionCardsSection({
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         <div className="flex flex-col" style={{ gap: 60 }}>
           {cards.map((card, i) => {
-            const imageSrc = safeImageUrl(card.image)
+            const imageSrc = card.imageSrc || safeImageUrl(card.image)
             const isEven = i % 2 === 0
             return (
               <div
                 key={card._key || i}
-                className="flex items-start"
+                className="flex items-center"
                 style={{
                   gap: 48,
                   flexDirection: isEven ? "row" : "row-reverse",
@@ -103,14 +105,14 @@ export default function SolutionCardsSection({
                 </div>
                 {imageSrc && (
                   <div
-                    className="rounded-card overflow-hidden shadow-whisper"
+                    className="rounded-card overflow-hidden shadow-whisper bg-white flex items-center justify-center"
                     style={{ flex: 1, aspectRatio: "16 / 10" }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={imageSrc}
                       alt={card.heading || ""}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   </div>
                 )}

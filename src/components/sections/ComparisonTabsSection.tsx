@@ -116,6 +116,7 @@ export default function ComparisonTabsSection({
 
     return (
       <section
+        id="our-process"
         className="py-[80px] px-4"
         style={{ backgroundColor: sectionBg }}
       >
@@ -183,6 +184,7 @@ export default function ComparisonTabsSection({
 
   return (
     <section
+      id="our-process"
       className="py-[80px] px-4 relative overflow-visible"
       style={{ backgroundColor: sectionBg }}
     >
@@ -221,8 +223,8 @@ export default function ComparisonTabsSection({
 
         {/* Tab pills + content card */}
         <div className="flex flex-col gap-[24px] items-center w-full max-w-[816px]">
-          {/* Tab buttons */}
-          <div className="flex justify-center gap-[12px] flex-wrap w-full">
+          {/* Tab buttons — allow overflow beyond the 816px content card */}
+          <div className="flex justify-center gap-[12px] flex-wrap" style={{ overflow: "visible", width: "max-content", maxWidth: "100vw" }}>
             {tabs.map((tab, i) => {
               const isActive = i === activeIndex
               const inactiveClass = isDark
@@ -232,7 +234,7 @@ export default function ComparisonTabsSection({
                 <button
                   key={tab._key || tab.label || i}
                   onClick={() => setActiveIndex(i)}
-                  className={`relative inline-flex items-center justify-center rounded-[99px] px-[31px] py-[7px] text-[16px] leading-[1.2] transition-all cursor-pointer ${
+                  className={`relative inline-flex items-center justify-center rounded-[99px] px-[31px] py-[7px] text-[16px] leading-[1.2] transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     isActive
                       ? "bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]"
                       : inactiveClass

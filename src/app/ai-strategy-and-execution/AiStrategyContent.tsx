@@ -8,7 +8,6 @@ import {
   FaqAccordion,
   ServicesCardsGrid,
   CapabilitiesGrid,
-  SecurityBadgeSection,
 } from "@/components/sections"
 import type { CaseStudy, FaqTab, SiteSettingsData } from "@/components/sections/types"
 
@@ -41,6 +40,7 @@ export default function AiStrategyContent({
         headingAccent=""
         subheading={page.hideHeroSubheading ? undefined : page.heroSubheading}
         heroImage={page.heroImage}
+        heroImageUrl="/images/ai-strategy-hero.gif"
         heroImageContain
         heroImageMaxHeight={520}
         certificationBadge={siteSettings?.badgeCertifications}
@@ -109,7 +109,6 @@ export default function AiStrategyContent({
         />
       )}
 
-      <SecurityBadgeSection badge={siteSettings?.badgeSecurity} />
     </div>
   )
 }

@@ -390,11 +390,20 @@ export async function getFaqItems() {
  * schema's `pages` dropdown). The /faqs page uses `"faqs"`.
  */
 export async function getFaqItemsForPage(pageKey: string) {
-  return client.fetch(
+  const specific = await client.fetch(
     `*[_type == "faqItem" && $pageKey in pages] | order(coalesce(categoryOrder, 99) asc, order asc) {
       _id, question, answer, category, categoryOrder, order
     }`,
     { pageKey }
+  )
+  if (specific && specific.length > 0) return specific
+  // Fallback: when a page has no specific FAQ entries, surface the curated /faqs set
+  // so visitors aren't dropped into a missing-section state. Pages that should stay
+  // FAQ-less can opt out via `hideFaqSection: true` on the page document.
+  return client.fetch(
+    `*[_type == "faqItem" && "faqs" in pages] | order(coalesce(categoryOrder, 99) asc, order asc) {
+      _id, question, answer, category, categoryOrder, order
+    }`
   )
 }
 
