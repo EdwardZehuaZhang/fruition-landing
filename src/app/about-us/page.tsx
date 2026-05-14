@@ -29,7 +29,7 @@ export default async function Page() {
 
   const centralTabs = groupFaqsIntoTabs(centralFaqs)
   const faqTabs =
-    centralTabs.length > 0 ? centralTabs : page.faqTabs ?? []
+    page.faqTabs?.length > 0 ? page.faqTabs : centralTabs
 
   return (
     <AboutModern
