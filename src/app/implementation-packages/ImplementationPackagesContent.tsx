@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { PortableText, type PortableTextBlock } from "@portabletext/react"
@@ -236,12 +236,96 @@ export default function ImplementationPackagesContent({
   const socialProofCtaUrl = data?.socialProofCtaUrl
 
   const pricingHeading = data?.pricingHeading
-  const packageTiers: PackageTier[] = data?.packageTiers ?? []
 
-  const tabKeys = packageTiers.map((t) => t.tabKey ?? "")
-  const [activeTab, setActiveTab] = useState<string>(tabKeys[0] ?? "")
-  const pkg =
-    packageTiers.find((t) => t.tabKey === activeTab) ?? packageTiers[0]
+  /* ------------- Pricing cards (new) ------------- */
+  type CurrencyCode = "USD" | "SGD" | "GBP" | "AUD" | "EUR"
+  type RegionCode = "US" | "UK" | "APAC"
+
+  const CURRENCIES: Record<CurrencyCode, { symbol: string; rate: number; locale: string; label: string }> = {
+    USD: { symbol: "$", rate: 1, locale: "en-US", label: "USD" },
+    SGD: { symbol: "S$", rate: 1.34, locale: "en-SG", label: "SGD" },
+    GBP: { symbol: "£", rate: 0.79, locale: "en-GB", label: "GBP" },
+    AUD: { symbol: "A$", rate: 1.52, locale: "en-AU", label: "AUD" },
+    EUR: { symbol: "€", rate: 0.92, locale: "de-DE", label: "EUR" },
+  }
+  const REGIONS: Record<RegionCode, { label: string; multiplier: number }> = {
+    US: { label: "US", multiplier: 1.0 },
+    UK: { label: "UK", multiplier: 0.95 },
+    APAC: { label: "APAC", multiplier: 0.85 },
+  }
+  type PricingTier = {
+    name: string
+    hours: string
+    basePrice: number
+    pricePrefix?: string
+    features: string[]
+    featured?: boolean
+  }
+  const PRICING_TIERS: PricingTier[] = [
+    {
+      name: "Guided",
+      hours: "20 hrs",
+      basePrice: 4900,
+      features: [
+        "1 use case",
+        "Requirements shared",
+        "Template configuration",
+        "Native automation",
+        "Handover documentation",
+      ],
+    },
+    {
+      name: "Lock-Step",
+      hours: "40 hrs",
+      basePrice: 9500,
+      featured: true,
+      features: [
+        "Process mapping for 1–2 use cases",
+        "Solution design",
+        "Build support",
+        "Native automation",
+        "Handover documentation",
+      ],
+    },
+    {
+      name: "Bespoke",
+      hours: "50+ hrs",
+      basePrice: 10000,
+      pricePrefix: "From ",
+      features: [
+        "Multi-team process mapping",
+        "Custom integrations",
+        "Custom solution build",
+        "Training & adoption support",
+        "Handover documentation",
+      ],
+    },
+  ]
+  const [currency, setCurrency] = useState<CurrencyCode>("USD")
+  const [region, setRegion] = useState<RegionCode>("US")
+  const [currencyOpen, setCurrencyOpen] = useState(false)
+  const [regionOpen, setRegionOpen] = useState(false)
+  const currencyRef = useRef<HTMLDivElement | null>(null)
+  const regionRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      const t = e.target as Node
+      if (currencyRef.current && !currencyRef.current.contains(t)) setCurrencyOpen(false)
+      if (regionRef.current && !regionRef.current.contains(t)) setRegionOpen(false)
+    }
+    document.addEventListener("mousedown", onDocClick)
+    return () => document.removeEventListener("mousedown", onDocClick)
+  }, [])
+
+  const formatPrice = (base: number): string => {
+    const { rate, locale, symbol } = CURRENCIES[currency]
+    const adjusted = base * REGIONS[region].multiplier * rate
+    const rounded = Math.round(adjusted / 100) * 100
+    const formatted = new Intl.NumberFormat(locale, {
+      maximumFractionDigits: 0,
+    }).format(rounded)
+    return `${symbol}${formatted}`
+  }
 
   const testimonialsHeading = data?.testimonialsHeading
   const testimonialsCtaLabel = data?.testimonialsCtaLabel
@@ -608,166 +692,399 @@ export default function ImplementationPackagesContent({
             </div>
           )}
 
-          {/* 4d: Pricing Packages */}
-          {packageTiers.length > 0 && (
+          {/* 4d: Pricing Cards (Guided / Lock-Step / Bespoke) */}
           <div
-            className="flex flex-col items-center"
-            style={{ marginTop: 60 }}
+            className="flex flex-col items-center w-full"
+            style={{ marginTop: 60, maxWidth: 1200, paddingLeft: 16, paddingRight: 16 }}
           >
+            {/* Eyebrow */}
+            <span
+              className="font-semibold uppercase tracking-[0.18em]"
+              style={{
+                color: "#8015e8",
+                fontSize: 12,
+                background: "rgba(128,21,232,0.08)",
+                padding: "6px 14px",
+                borderRadius: 999,
+              }}
+            >
+              Implementation
+            </span>
+
+            {/* Heading */}
             <h2
               className="text-section-h2 text-center text-black"
+              style={{ marginTop: 18 }}
             >
-              {pricingHeading}
+              {pricingHeading || "Implementation"}
             </h2>
-
-            {/* Tabs */}
-            <div
-              className="flex items-center"
-              style={{ gap: 12, marginTop: 28 }}
+            <p
+              className="text-center"
+              style={{
+                marginTop: 14,
+                fontSize: 18,
+                color: "#4a4a4a",
+                maxWidth: 640,
+                lineHeight: 1.5,
+              }}
             >
-              {tabKeys.map((tab) => {
-                const isActive = tab === activeTab
-                return (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className="flex items-center justify-center font-bold"
+              Hit the ground running and drive lasting impact with hands-on support
+            </p>
+
+            {/* Toggles */}
+            <div
+              className="flex flex-wrap items-center justify-center"
+              style={{ gap: 16, marginTop: 32 }}
+            >
+              {/* Currency dropdown */}
+              <div ref={currencyRef} style={{ position: "relative" }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrencyOpen((o) => !o)
+                    setRegionOpen(false)
+                  }}
+                  className="flex items-center font-semibold"
+                  style={{
+                    height: 44,
+                    paddingLeft: 18,
+                    paddingRight: 14,
+                    borderRadius: 99,
+                    backgroundColor: "white",
+                    border: "1px solid #e0d4f5",
+                    color: "#2b074d",
+                    fontSize: 14,
+                    gap: 10,
+                    boxShadow: "0px 1px 2px rgba(43,7,77,0.04)",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span style={{ color: "#8015e8", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}>
+                    CURRENCY
+                  </span>
+                  <span>{CURRENCIES[currency].label}</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: currencyOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>
+                    <path d="M2 4l4 4 4-4" stroke="#8015e8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+                {currencyOpen && (
+                  <div
                     style={{
-                      height: 39,
-                      paddingLeft: 28,
-                      paddingRight: 28,
-                      borderRadius: 99,
-                      fontSize: 16,
-                      cursor: "pointer",
-                      ...(isActive
+                      position: "absolute",
+                      top: "calc(100% + 8px)",
+                      left: 0,
+                      minWidth: 180,
+                      backgroundColor: "white",
+                      border: "1px solid #e8e6e6",
+                      borderRadius: 16,
+                      padding: 6,
+                      boxShadow: "0px 12px 32px rgba(43,7,77,0.12)",
+                      zIndex: 20,
+                    }}
+                  >
+                    {(Object.keys(CURRENCIES) as CurrencyCode[]).map((code) => {
+                      const active = code === currency
+                      return (
+                        <button
+                          key={code}
+                          type="button"
+                          onClick={() => {
+                            setCurrency(code)
+                            setCurrencyOpen(false)
+                          }}
+                          className="flex items-center justify-between w-full"
+                          style={{
+                            padding: "10px 14px",
+                            borderRadius: 10,
+                            fontSize: 14,
+                            fontWeight: active ? 600 : 500,
+                            color: active ? "#8015e8" : "#2b074d",
+                            backgroundColor: active ? "rgba(128,21,232,0.08)" : "transparent",
+                            cursor: "pointer",
+                            textAlign: "left",
+                          }}
+                        >
+                          <span>{CURRENCIES[code].label}</span>
+                          <span style={{ color: "#8a8a8a", fontWeight: 400 }}>{CURRENCIES[code].symbol}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Region dropdown */}
+              <div ref={regionRef} style={{ position: "relative" }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRegionOpen((o) => !o)
+                    setCurrencyOpen(false)
+                  }}
+                  className="flex items-center font-semibold"
+                  style={{
+                    height: 44,
+                    paddingLeft: 18,
+                    paddingRight: 14,
+                    borderRadius: 99,
+                    backgroundColor: "white",
+                    border: "1px solid #e0d4f5",
+                    color: "#2b074d",
+                    fontSize: 14,
+                    gap: 10,
+                    boxShadow: "0px 1px 2px rgba(43,7,77,0.04)",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span style={{ color: "#8015e8", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}>
+                    TEAM
+                  </span>
+                  <span>{REGIONS[region].label}</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: regionOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>
+                    <path d="M2 4l4 4 4-4" stroke="#8015e8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+                {regionOpen && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "calc(100% + 8px)",
+                      left: 0,
+                      minWidth: 180,
+                      backgroundColor: "white",
+                      border: "1px solid #e8e6e6",
+                      borderRadius: 16,
+                      padding: 6,
+                      boxShadow: "0px 12px 32px rgba(43,7,77,0.12)",
+                      zIndex: 20,
+                    }}
+                  >
+                    {(Object.keys(REGIONS) as RegionCode[]).map((code) => {
+                      const active = code === region
+                      return (
+                        <button
+                          key={code}
+                          type="button"
+                          onClick={() => {
+                            setRegion(code)
+                            setRegionOpen(false)
+                          }}
+                          className="flex items-center justify-between w-full"
+                          style={{
+                            padding: "10px 14px",
+                            borderRadius: 10,
+                            fontSize: 14,
+                            fontWeight: active ? 600 : 500,
+                            color: active ? "#8015e8" : "#2b074d",
+                            backgroundColor: active ? "rgba(128,21,232,0.08)" : "transparent",
+                            cursor: "pointer",
+                            textAlign: "left",
+                          }}
+                        >
+                          <span>{REGIONS[code].label}</span>
+                          <span style={{ color: "#8a8a8a", fontWeight: 400, fontSize: 12 }}>
+                            {code === "US" ? "Americas" : code === "UK" ? "EMEA" : "Asia-Pacific"}
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Cards */}
+            <div
+              className="grid grid-cols-1 md:grid-cols-3 w-full"
+              style={{ gap: 24, marginTop: 44 }}
+            >
+              {PRICING_TIERS.map((tier) => {
+                const featured = !!tier.featured
+                return (
+                  <div
+                    key={tier.name}
+                    className="flex flex-col"
+                    style={{
+                      borderRadius: 28,
+                      padding: 32,
+                      position: "relative",
+                      ...(featured
                         ? {
-                            background:
-                              "linear-gradient(to right, #8015e8, #ba83f0)",
+                            background: "linear-gradient(160deg, #7d14e3 0%, #5a0eb0 100%)",
                             color: "white",
-                            boxShadow: "0px 2px 8px rgba(128,21,232,0.35)",
+                            boxShadow: "0px 24px 60px rgba(125,20,227,0.35), 0px 0px 0px 1px rgba(125,20,227,0.4)",
+                            transform: "translateY(-12px)",
                           }
                         : {
                             backgroundColor: "white",
-                            border: "1px solid #e8e6e6",
-                            color: "black",
+                            border: "1px solid #ece6fc",
+                            color: "#2b074d",
+                            boxShadow: "0px 8px 24px rgba(43,7,77,0.06)",
                           }),
                     }}
                   >
-                    {tab}
-                  </button>
+                    {featured && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          top: 18,
+                          right: 18,
+                          fontSize: 11,
+                          fontWeight: 700,
+                          letterSpacing: "0.14em",
+                          textTransform: "uppercase",
+                          color: "#2b074d",
+                          backgroundColor: "#ffffff",
+                          padding: "6px 12px",
+                          borderRadius: 999,
+                        }}
+                      >
+                        Most Popular
+                      </span>
+                    )}
+
+                    {/* Name */}
+                    <h3
+                      style={{
+                        fontSize: 22,
+                        fontWeight: 700,
+                        color: featured ? "white" : "#2b074d",
+                      }}
+                    >
+                      {tier.name}
+                    </h3>
+
+                    {/* Hours */}
+                    <p
+                      style={{
+                        fontSize: 14,
+                        marginTop: 4,
+                        color: featured ? "rgba(255,255,255,0.78)" : "#7a7a87",
+                        fontWeight: 500,
+                      }}
+                    >
+                      {tier.hours}
+                    </p>
+
+                    {/* Price */}
+                    <div style={{ marginTop: 18, display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: 6 }}>
+                      {tier.pricePrefix && (
+                        <span
+                          style={{
+                            fontSize: 18,
+                            fontWeight: 500,
+                            color: featured ? "rgba(255,255,255,0.85)" : "#4a4a4a",
+                          }}
+                        >
+                          {tier.pricePrefix}
+                        </span>
+                      )}
+                      <span
+                        className="font-bold"
+                        style={{
+                          fontSize: 40,
+                          lineHeight: 1,
+                          color: featured ? "white" : "#2b074d",
+                          letterSpacing: "-0.02em",
+                        }}
+                      >
+                        {formatPrice(tier.basePrice)}
+                      </span>
+                    </div>
+                    <p
+                      style={{
+                        marginTop: 6,
+                        fontSize: 12,
+                        color: featured ? "rgba(255,255,255,0.7)" : "#8a8a8a",
+                      }}
+                    >
+                      {CURRENCIES[currency].label} · {REGIONS[region].label} team rate
+                    </p>
+
+                    {/* Divider */}
+                    <div
+                      style={{
+                        marginTop: 24,
+                        marginBottom: 20,
+                        height: 1,
+                        backgroundColor: featured ? "rgba(255,255,255,0.18)" : "#ece6fc",
+                      }}
+                    />
+
+                    {/* Features */}
+                    <ul className="flex flex-col" style={{ gap: 12 }}>
+                      {tier.features.map((f) => (
+                        <li
+                          key={f}
+                          className="flex items-start"
+                          style={{ gap: 10, fontSize: 14, lineHeight: 1.5 }}
+                        >
+                          <span
+                            className="flex items-center justify-center shrink-0"
+                            style={{
+                              width: 20,
+                              height: 20,
+                              borderRadius: 999,
+                              backgroundColor: featured ? "rgba(255,255,255,0.18)" : "rgba(128,21,232,0.1)",
+                              marginTop: 1,
+                            }}
+                          >
+                            <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                              <path
+                                d="M1.5 5.6l2.6 2.6L9.5 2.8"
+                                stroke={featured ? "white" : "#8015e8"}
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </span>
+                          <span style={{ color: featured ? "rgba(255,255,255,0.95)" : "#2b074d" }}>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* CTA */}
+                    <Link
+                      href={heroPrimaryCtaUrl || "#"}
+                      className="flex items-center justify-center font-bold"
+                      style={{
+                        marginTop: 28,
+                        height: 48,
+                        borderRadius: 100,
+                        fontSize: 14,
+                        ...(featured
+                          ? {
+                              backgroundColor: "white",
+                              color: "#8015e8",
+                            }
+                          : {
+                              background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                              color: "white",
+                            }),
+                      }}
+                    >
+                      Get started
+                    </Link>
+                  </div>
                 )
               })}
             </div>
 
-            {/* Package card */}
-            <div
+            {/* Footnote */}
+            <p
+              className="text-center"
               style={{
-                width: 816,
-                backgroundColor: "white",
-                border: "1px solid #e8e6e6",
-                borderRadius: "var(--radius-card)",
-                padding: 28,
                 marginTop: 28,
+                fontSize: 12,
+                color: "#7a7a87",
+                fontStyle: "italic",
               }}
             >
-              {/* Header row */}
-              <div
-                className="flex items-center"
-                style={{ gap: 16 }}
-              >
-                <h3
-                  style={{
-                    fontSize: 24,
-                    fontWeight: 500,
-                    color: "#2b074d",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {pkg?.name}
-                </h3>
-                <span
-                  className="flex items-center justify-center shrink-0"
-                  style={{
-                    border: "1px solid #8015e8",
-                    borderRadius: 12,
-                    paddingLeft: 25,
-                    paddingRight: 25,
-                    paddingTop: 6,
-                    paddingBottom: 6,
-                    color: "#8015e8",
-                    fontSize: 16,
-                    fontWeight: 600,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {pkg?.badge}
-                </span>
-              </div>
-
-              {/* Description */}
-              <div
-                style={{
-                  fontSize: 16,
-                  fontWeight: 400,
-                  lineHeight: "22.4px",
-                  color: "black",
-                  marginTop: 24,
-                }}
-              >
-                {pkg?.description?.split("\n").map((line, i) => (
-                  <p key={i} style={{ marginTop: i > 0 ? 16 : 0 }}>
-                    {line}
-                  </p>
-                ))}
-              </div>
-
-              {/* Support label */}
-              <p
-                style={{
-                  fontSize: 20,
-                  fontWeight: 400,
-                  color: "#8015e8",
-                  marginTop: 24,
-                }}
-              >
-                {pkg?.supportLabel}
-              </p>
-
-              {/* Features grid */}
-              <div
-                className="grid grid-cols-3"
-                style={{ gap: 24, marginTop: 16 }}
-              >
-                {(pkg?.features ?? []).map((feat, fi) => (
-                  <div
-                    key={feat._key ?? `${feat.label}-${fi}`}
-                    className="flex items-center"
-                    style={{ gap: 12 }}
-                  >
-                    <span
-                      style={{
-                        fontSize: 24,
-                        fontWeight: 600,
-                        color: "#7a14e1",
-                      }}
-                    >
-                      {feat.emoji}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: 14,
-                        fontWeight: 400,
-                        color: "black",
-                      }}
-                    >
-                      {feat.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
+              *Please note: you must purchase one package per product. Prices shown are estimates and may vary by scope.
+            </p>
           </div>
-          )}
+
         </div>
       </section>
 

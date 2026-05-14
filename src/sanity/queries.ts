@@ -83,6 +83,8 @@ const PAGE_FIELDS = `
   heroPartnerBadges[]{ name, image, width, height },
   heroStats,
   hideHeroSubheading,
+  heroSplitLayout,
+  hideHeroPartnerBadges,
   primaryCtaLabel,
   primaryCtaUrl,
   secondaryCtaLabel,
@@ -125,6 +127,7 @@ const PAGE_FIELDS = `
   capabilitiesCtaUrl,
   capabilitiesCtaSecondaryLabel,
   capabilitiesCtaSecondaryUrl,
+  capabilitiesPosition,
 
   // Secondary capabilities
   secondaryCapabilitiesEyebrow,

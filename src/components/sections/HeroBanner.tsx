@@ -28,6 +28,10 @@ interface HeroBannerProps {
   primaryCtaUrl?: string
   secondaryCtaLabel?: string
   secondaryCtaUrl?: string
+  /** When true, render text on the left and the hero image on the right (single row). */
+  splitLayout?: boolean
+  /** When true, suppress the partner-badges row at the top of the hero. */
+  hidePartnerBadges?: boolean
 }
 
 function safeImageUrl(ref: SanityImageRef): string | null {
@@ -73,12 +77,122 @@ export default function HeroBanner({
   primaryCtaUrl,
   secondaryCtaLabel,
   secondaryCtaUrl,
+  splitLayout = false,
+  hidePartnerBadges = false,
 }: HeroBannerProps) {
   const heroImageSrc = heroImageUrl || heroImgFromRef(heroImage)
   const certBadgeSrc = safeImageUrl(certificationBadge)
   const partnerImageUrl = typeof partnerImageSrc === "string"
     ? partnerImageSrc
     : safeImageUrl(partnerImageSrc as SanityImageRef)
+  const showPartnerBadges = !hidePartnerBadges && !partnerImageUrl && partnerBadges.length > 0
+
+  if (splitLayout) {
+    return (
+      <section className="bg-white">
+        <div
+          className="mx-auto px-4 sm:px-8 md:px-16 lg:px-24 xl:px-[120px] 2xl:px-[273px] max-w-[1588px] w-full"
+          style={{ paddingTop: 80, paddingBottom: 80 }}
+        >
+          <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+            {/* Left: text */}
+            <div className="flex-1 flex flex-col items-start text-left max-w-[640px] w-full">
+              {showPartnerBadges && (
+                <div className="flex items-center flex-wrap" style={{ gap: 22, marginBottom: 32 }}>
+                  {partnerBadges.map((badge, i) => {
+                    const cmsSrc = safeImageUrl(badge.image)
+                    const src = getDarkBadgeSrc(badge.name, cmsSrc)
+                    if (!src) return null
+                    return (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        key={badge._key || `badge-${i}`}
+                        src={src}
+                        alt={badge.name || "Partner badge"}
+                        width={120}
+                        height={44}
+                        className="h-[44px] w-auto rounded-[5px]"
+                      />
+                    )
+                  })}
+                </div>
+              )}
+              {eyebrow && (
+                <div
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 700,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: "var(--purple-primary)",
+                    marginBottom: 16,
+                  }}
+                >
+                  {eyebrow}
+                </div>
+              )}
+              <h1 className="text-display" style={{ marginTop: 0 }}>
+                <span className="text-black">{headingPart1}</span>
+                {headingAccent && (
+                  <span style={{ color: "var(--purple-primary)", display: accentBlock ? "block" : undefined }}>
+                    {headingAccent}
+                  </span>
+                )}
+                {headingPart2 && <span className="text-black">{headingPart2}</span>}
+              </h1>
+              {subheading && (
+                <p className="text-body-lead text-black" style={{ marginTop: 24, whiteSpace: "pre-line" }}>
+                  {subheading}
+                </p>
+              )}
+              <div className="flex flex-col items-stretch w-full max-w-[330px]" style={{ gap: 16, marginTop: 32 }}>
+                {primaryCtaLabel && primaryCtaUrl && (
+                  <CtaButton
+                    href={primaryCtaUrl}
+                    label={primaryCtaLabel}
+                    variant={secondaryCtaLabel ? "outline" : "primary"}
+                    className="w-full"
+                  />
+                )}
+                {secondaryCtaLabel && secondaryCtaUrl && (
+                  <CtaButton
+                    href={secondaryCtaUrl}
+                    label={secondaryCtaLabel}
+                    variant="primary"
+                    className="w-full"
+                  />
+                )}
+              </div>
+            </div>
+            {/* Right: image */}
+            <div className="flex-1 w-full flex justify-center lg:justify-end">
+              {heroVideoSrc ? (
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  className="rounded-card object-contain bg-white w-full"
+                  style={{ maxWidth: 560, height: "auto" }}
+                >
+                  <source src={heroVideoSrc} type="video/mp4" />
+                </video>
+              ) : heroImageSrc ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={heroImageSrc}
+                  alt="Hero"
+                  className="rounded-card bg-white w-full"
+                  style={{ maxWidth: 560, height: "auto", objectFit: "contain" }}
+                />
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="bg-white">
@@ -86,8 +200,8 @@ export default function HeroBanner({
         className="mx-auto flex flex-col items-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-[120px] 2xl:px-[273px] max-w-[1588px] w-full"
         style={{ paddingTop: 80, paddingBottom: 80 }}
       >
-        {/* Partner badges — hidden when a single partnerImageUrl is used */}
-        {!partnerImageUrl && partnerBadges.length > 0 && (
+        {/* Partner badges — hidden when a single partnerImageUrl is used or hidePartnerBadges flag is set */}
+        {showPartnerBadges && (
           <div className="flex items-center" style={{ gap: 22 }}>
             {partnerBadges.map((badge, i) => {
               const cmsSrc = safeImageUrl(badge.image)
@@ -112,7 +226,7 @@ export default function HeroBanner({
         {eyebrow && (
           <div
             style={{
-              marginTop: partnerBadges.length > 0 ? 32 : 0,
+              marginTop: showPartnerBadges ? 32 : 0,
               fontSize: 14,
               fontWeight: 700,
               letterSpacing: "0.12em",

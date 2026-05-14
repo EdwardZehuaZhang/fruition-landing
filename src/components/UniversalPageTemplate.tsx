@@ -138,6 +138,8 @@ export default function UniversalPageTemplate({
         primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
         secondaryCtaLabel={page.secondaryCtaLabel}
         secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        splitLayout={page.heroSplitLayout === true}
+        hidePartnerBadges={page.hideHeroPartnerBadges === true}
       />
 
       {/* 1b. Calendly (top position) — opt-in via Sanity field calendlyPosition === "top" */}
@@ -166,6 +168,23 @@ export default function UniversalPageTemplate({
             </div>
           </div>
         </section>
+      )}
+
+      {/* 3. Capabilities Grid ("Why X choose monday.com") — render here unless capabilitiesPosition === 'afterFaq' */}
+      {!page.hideCapabilitiesSection && page.capabilitiesCards?.length > 0 && page.capabilitiesPosition !== "afterFaq" && (
+        <CapabilitiesGrid
+          eyebrow={page.capabilitiesEyebrow}
+          heading={page.capabilitiesHeading}
+          headingAccent={page.capabilitiesHeadingAccent}
+          subheading={page.capabilitiesSubheading}
+          theme={page.capabilitiesTheme || "light"}
+          columns={capabilitiesColumns}
+          cards={page.capabilitiesCards}
+          ctaLabel={page.capabilitiesCtaLabel}
+          ctaUrl={page.capabilitiesCtaUrl}
+          ctaSecondaryLabel={page.capabilitiesCtaSecondaryLabel}
+          ctaSecondaryUrl={page.capabilitiesCtaSecondaryUrl}
+        />
       )}
 
       {/* 7b. Secondary Capabilities Grid (e.g. "What We're Looking For") */}
@@ -226,11 +245,6 @@ export default function UniversalPageTemplate({
         />
       )}
 
-      {/* 8. Solution Cards - left/right (if populated) — render before comparison */}
-      {!page.hideSolutionCardsSection && page.solutionCards?.length > 0 && (
-        <SolutionCardsSection cards={page.solutionCards} />
-      )}
-
       {/* 3. Comparison Tabs (if populated) */}
       {mergedComparisonTabs.length > 0 && (
         <ComparisonTabsSection
@@ -240,6 +254,14 @@ export default function UniversalPageTemplate({
           theme={page.comparisonTheme || "light"}
           layout={page.comparisonLayout === "sideBySide" ? "sideBySide" : "tabs"}
           withPurpleCircle={page.comparisonWithPurpleCircle ?? true}
+        />
+      )}
+
+      {/* 3b. Methodology — moved before Calendly to match prod sequence */}
+      {!shouldMergeMethodology && methodologySteps.length > 0 && (
+        <MethodologySection
+          heading={page.methodologyHeading}
+          steps={methodologySteps}
         />
       )}
 
@@ -268,21 +290,13 @@ export default function UniversalPageTemplate({
           back to the page's embedded faqTabs when the page hasn't been
           migrated yet. */}
       {!page.hideFaqSection && ((faqTabs && faqTabs.length > 0) ? (
-        <FaqAccordion tabs={faqTabs} />
+        <FaqAccordion heading={page.faqHeading || "Frequently asked questions"} tabs={faqTabs} />
       ) : page.faqTabs?.length > 0 ? (
-        <FaqAccordion tabs={page.faqTabs} />
+        <FaqAccordion heading={page.faqHeading || "Frequently asked questions"} tabs={page.faqTabs} />
       ) : null)}
 
-      {/* 6. Case Study Cards (if populated) */}
-      {!page.hideCaseStudyCardsSection && page.caseStudyCards?.length > 0 && (
-        <CaseStudyCardsSection
-          heading={page.caseStudySectionHeading}
-          cards={page.caseStudyCards}
-        />
-      )}
-
-      {/* 7. Capabilities Grid (if populated) - after case studies */}
-      {!page.hideCapabilitiesSection && page.capabilitiesCards?.length > 0 && (
+      {/* 5b. Capabilities Grid (after FAQ) — opt-in via capabilitiesPosition === 'afterFaq' */}
+      {!page.hideCapabilitiesSection && page.capabilitiesCards?.length > 0 && page.capabilitiesPosition === "afterFaq" && (
         <CapabilitiesGrid
           eyebrow={page.capabilitiesEyebrow}
           heading={page.capabilitiesHeading}
@@ -298,19 +312,24 @@ export default function UniversalPageTemplate({
         />
       )}
 
+      {/* 6. Case Study Cards (if populated) */}
+      {!page.hideCaseStudyCardsSection && page.caseStudyCards?.length > 0 && (
+        <CaseStudyCardsSection
+          heading={page.caseStudySectionHeading}
+          cards={page.caseStudyCards}
+        />
+      )}
+
+      {/* 6b. Solution Cards - left/right (if populated) — render after case studies to match prod */}
+      {!page.hideSolutionCardsSection && page.solutionCards?.length > 0 && (
+        <SolutionCardsSection cards={page.solutionCards} />
+      )}
+
       {/* 9. Industry Tabs (if populated) */}
       {page.industryTabs?.length > 0 && (
         <IndustryTabsSection
           heading={page.industryHeading}
           tabs={page.industryTabs}
-        />
-      )}
-
-      {/* 10. Methodology (if populated and not merged into comparison tabs) */}
-      {!shouldMergeMethodology && methodologySteps.length > 0 && (
-        <MethodologySection
-          heading={page.methodologyHeading}
-          steps={methodologySteps}
         />
       )}
 
@@ -359,15 +378,14 @@ export default function UniversalPageTemplate({
         />
       )}
 
-      {/* 15. Testimonial CTA Banner (bottom) */}
+      {/* 15. Testimonial CTA Banner (bottom) — defaults to "Join 500+ organisations …"
+           but a page may override the copy via joinHeading* (most useful when
+           hideJoinStatsSection is true so there's no duplicate banner). */}
       {!page.hideTestimonialBanner && (
         <TestimonialCtaBanner
           headingPart1={page.joinHeadingPart1 || "Join "}
           headingAccent={page.joinHeadingAccent || "500+ organisations"}
-          headingPart2={
-            page.joinHeadingPart2 ||
-            " that have maximised their workflows with our monday.com expert support"
-          }
+          headingPart2={page.joinHeadingPart2 || " that have maximised their workflows with our monday.com expert support"}
           primaryCtaUrl={calendlyUrl}
           secondaryCtaUrl={calendlyUrl}
           testimonial={featuredTestimonial}

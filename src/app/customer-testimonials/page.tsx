@@ -59,7 +59,77 @@ export default async function CustomerTestimonialsPage() {
   const logoCloudPart1 = page?.logoCloudHeadingPart1
   const logoCloudAccent = page?.logoCloudHeadingAccent
 
-  const caseStudyCards: CaseStudyCard[] = page?.caseStudyCards || []
+  const caseStudyCards: CaseStudyCard[] = [
+    {
+      _key: "cs-r2s",
+      title: "Risk 2 Solution Case Study",
+      product: "monday CRM & Project Management",
+      services: "monday CRM implementation & migration from Microsoft Dynamics",
+      timeline: "4 weeks",
+      image: "/case-studies/r2s.avif",
+    },
+    {
+      _key: "cs-givergy",
+      title: "Givergy Case Study",
+      product: "monday Dev",
+      services: "Development project management implementation with GitHub integration",
+      timeline: "4 weeks",
+      image: "/case-studies/givergy.avif",
+    },
+    {
+      _key: "cs-bl-air",
+      title: "BL Air Case Study",
+      product: "monday.com Work Management",
+      services:
+        "Project management implementation, automated checklist management and industrial quality assurance (on-site workflows)",
+      timeline: "3 weeks",
+      image: "/case-studies/bl-air.avif",
+    },
+    {
+      _key: "cs-popology",
+      title: "Popology Case Study",
+      product: "monday CRM",
+      services: "Project management implementation with production workflow automation",
+      timeline: "4 weeks",
+      image: "/case-studies/popology.avif",
+    },
+    {
+      _key: "cs-promotify",
+      title: "Promotify Canada Case Study",
+      product: "monday CRM",
+      services:
+        "Project management implementation, sales pipeline automation, automated workflow templates",
+      timeline: "3 weeks",
+      image: "/case-studies/promotify.avif",
+    },
+    {
+      _key: "cs-hvac",
+      title: "HVAC Case Study",
+      product: "monday Work Management",
+      services:
+        "Project tracking and workflow management, automated task dependencies and date calculations, inventory management",
+      timeline: "4 weeks",
+      image: "/case-studies/hvac.avif",
+    },
+    {
+      _key: "cs-tourism-nt",
+      title: "Tourism NT Case Study",
+      product: "monday.com Work Management",
+      services:
+        "Project management implementation, automated project approval management and reporting processes",
+      timeline: "9 weeks",
+      image: "/case-studies/tourism-nt.avif",
+    },
+    {
+      _key: "cs-clsq",
+      title: "CLSQ Case Study",
+      product: "monday Work Management",
+      services:
+        "Project portfolio management implementation, automated approval workflow management, and cross-departmental resource allocation (group-wide visibility)",
+      timeline: "8 weeks",
+      image: "/case-studies/clsq.avif",
+    },
+  ]
 
   const calendlyHeading = page?.calendlyHeading
   const calendlySubheading = page?.calendlySubheading

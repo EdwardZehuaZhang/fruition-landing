@@ -16,9 +16,11 @@ export default {
       of: [{ type: 'string' }],
       options: {
         list: [
-          { title: 'Australia 🇦🇺', value: 'AU' },
+          { title: 'APAC 🌏', value: 'APAC' },
+          { title: 'India 🇮🇳', value: 'IN' },
           { title: 'United Kingdom 🇬🇧', value: 'UK' },
           { title: 'United States 🇺🇸', value: 'US' },
+          { title: 'Australia 🇦🇺 (legacy)', value: 'AU' },
         ],
       },
     },

@@ -1,6 +1,20 @@
 import type { TeamMember } from "@/components/TeamGridSection"
 import { TEAM_ROSTER } from "@/data/teamRoster"
 
+function normName(s?: string): string {
+  return (s ?? "")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .trim()
+}
+
+// Sanity team docs that should never render — overrides Sanity even when
+// the doc still exists (e.g. former teammates).
+const EXCLUDED_NAMES = new Set(
+  ["Aquib Zafar", "Natalia Mishenina"].map((n) => normName(n)),
+)
+
 /**
  * Merge Sanity team members with the canonical monday-board roster.
  *
@@ -10,49 +24,11 @@ import { TEAM_ROSTER } from "@/data/teamRoster"
  * appear on /fruition-team and the location-specific pages.
  */
 export function mergeTeamMembers(sanityMembers: TeamMember[]): TeamMember[] {
-  const sanityByName = new Map<string, TeamMember>()
-  for (const m of sanityMembers) {
-    if (m?.name) sanityByName.set(m.name.toLowerCase().trim(), m)
-  }
-
-  const merged: TeamMember[] = []
-  const seen = new Set<string>()
-
-  for (const r of TEAM_ROSTER) {
-    const key = r.name.toLowerCase().trim()
-    const existing = sanityByName.get(key)
-    if (existing) {
-      // Sanity has this member — keep Sanity fields but trust the monday-
-      // derived roster for region tags + role + photoUrl/bio/linkedin
-      // fallback so stale Sanity data doesn't bleed across tabs.
-      const photoUrl = existing.photo?.asset?._ref ? existing.photoUrl : (existing.photoUrl ?? r.photoUrl)
-      merged.push({
-        ...existing,
-        role: r.role || existing.role,
-        regions: r.regions,
-        photoUrl,
-        bio: existing.bio || r.bio,
-        linkedinUrl: existing.linkedinUrl || r.linkedinUrl,
-      })
-    } else {
-      merged.push({
-        _id: r.id,
-        name: r.name,
-        role: r.role,
-        emoji: r.emoji,
-        regions: r.regions,
-        photoUrl: r.photoUrl,
-        bio: r.bio,
-        linkedinUrl: r.linkedinUrl,
-      })
-    }
-    seen.add(key)
-  }
-
-  // Keep any extra Sanity-only members that weren't in the roster.
-  for (const m of sanityMembers) {
-    if (!seen.has(m.name.toLowerCase().trim())) merged.push(m)
-  }
-
-  return merged
+  // Sanity is now the single source of truth for /fruition-team and the
+  // location-specific monday-partner-* pages. The roster file is kept
+  // around as a one-way upstream that periodically backfills Sanity (see
+  // scripts/sync-roster-to-sanity.mjs) but does not run at request time.
+  // All we do here is drop the excluded former-teammate docs.
+  void TEAM_ROSTER
+  return sanityMembers.filter((m) => !EXCLUDED_NAMES.has(normName(m.name)))
 }

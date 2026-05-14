@@ -31,7 +31,12 @@ const PREFERRED_TAB_ORDER = [
  * here with paragraph breaks so existing markup keeps working without
  * upgrading the accordion to full Portable Text.
  */
-export function groupFaqsIntoTabs(items: CentralFaqItem[]): FaqTab[] {
+export function groupFaqsIntoTabs(
+  items: CentralFaqItem[],
+  /** Category to surface as the very first tab (case-insensitive). Use for
+   * industry/solution pages where the page-specific category should lead. */
+  preferredFirstCategory?: string,
+): FaqTab[] {
   if (!items?.length) return []
 
   const byCategory = new Map<string, { order: number; items: CentralFaqItem[] }>()
@@ -46,8 +51,16 @@ export function groupFaqsIntoTabs(items: CentralFaqItem[]): FaqTab[] {
     byCategory.get(category)!.items.push(item)
   }
 
+  const firstLc = preferredFirstCategory?.toLowerCase()
+
   return Array.from(byCategory.entries())
     .sort(([labelA, a], [labelB, b]) => {
+      if (firstLc) {
+        const aFirst = labelA.toLowerCase() === firstLc
+        const bFirst = labelB.toLowerCase() === firstLc
+        if (aFirst && !bFirst) return -1
+        if (bFirst && !aFirst) return 1
+      }
       const idxA = PREFERRED_TAB_ORDER.indexOf(labelA)
       const idxB = PREFERRED_TAB_ORDER.indexOf(labelB)
       // Both in preferred list → use preferred order

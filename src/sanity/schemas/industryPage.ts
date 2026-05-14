@@ -47,6 +47,8 @@ export default {
       }],
     },
     { name: 'hideHeroSubheading', title: 'Hide Hero Subheading', type: 'boolean', initialValue: false },
+    { name: 'heroSplitLayout', title: 'Hero: Split Layout (text left / image right)', type: 'boolean', initialValue: false },
+    { name: 'hideHeroPartnerBadges', title: 'Hero: Hide Partner Badges Row', type: 'boolean', initialValue: false },
 
     // CTA buttons
     { name: 'primaryCtaLabel', title: 'Primary CTA Label', type: 'string' },
@@ -205,6 +207,13 @@ export default {
     },
     { name: 'capabilitiesCtaLabel', title: 'Capabilities CTA Label', type: 'string' },
     { name: 'capabilitiesCtaUrl', title: 'Capabilities CTA URL', type: 'string' },
+    {
+      name: 'capabilitiesPosition',
+      title: 'Capabilities Section Position',
+      type: 'string',
+      options: { list: [{ title: 'Before Comparison (default)', value: 'beforeComparison' }, { title: 'After FAQ', value: 'afterFaq' }] },
+      initialValue: 'beforeComparison',
+    },
 
     // Secondary capabilities grid
     { name: 'secondaryCapabilitiesEyebrow', title: 'Secondary Capabilities Eyebrow', type: 'string' },

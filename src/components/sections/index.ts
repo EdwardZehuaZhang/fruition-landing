@@ -20,5 +20,6 @@ export { default as ApplicationFormSection } from "./ApplicationFormSection"
 export { default as TextContentSection } from "./TextContentSection"
 export { default as PartnerEcosystemSection } from "./PartnerEcosystemSection"
 export { default as IndustryCaseStudy } from "./IndustryCaseStudy"
+export { default as ServicesWorkflowTabs } from "./ServicesWorkflowTabs"
 
 export type * from "./types"

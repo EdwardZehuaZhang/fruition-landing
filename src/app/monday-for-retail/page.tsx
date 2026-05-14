@@ -27,7 +27,7 @@ export default async function Page() {
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
-      faqTabs={groupFaqsIntoTabs(centralFaqs)}
+      faqTabs={groupFaqsIntoTabs(centralFaqs, "Retail")}
     />
   )
 }
