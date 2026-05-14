@@ -1,17 +1,264 @@
 "use client"
 
+import { useState } from "react"
 import {
   LogoCloudMarquee,
-  ComparisonTabsSection,
   CalendlySection,
-  DiscoverCtaSection,
   JoinStatsSection,
-  SecurityBadgeSection,
-  TestimonialCtaBanner,
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData, ComparisonTab } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
+
+/* ------------------------------------------------------------------ */
+/*  Make Feature Tabs — hardcoded content                              */
+/* ------------------------------------------------------------------ */
+
+type MakeFeatureGroup = {
+  number: string
+  title?: string
+  bullets: { emoji: string; text: string }[]
+}
+
+type MakeFeatureTab = {
+  key: string
+  label: string
+  heading: string
+  intro?: string
+  groups: MakeFeatureGroup[]
+  outro?: string
+}
+
+const MAKE_FEATURE_TABS: MakeFeatureTab[] = [
+  {
+    key: "features",
+    label: "make.com Features",
+    heading: "Transform Your Business with make Automations",
+    groups: [
+      {
+        number: "01",
+        title: "As a Gold Partner, we leverage make's features to transform your operations:",
+        bullets: [
+          { emoji: "🔗", text: "Unlimited Integration Possibilities: Connect seamlessly with 1000+ apps and services" },
+          { emoji: "⚡", text: "Real-Time Execution: Experience immediate process automation that responds instantly to triggers" },
+          { emoji: "🔒", text: "Enterprise-Grade Security: Trust in our SOC 2 Type II certified platform for maximum protection" },
+          { emoji: "📈", text: "Scalable Architecture: Effortlessly handle millions of operations as your business grows" },
+        ],
+      },
+      {
+        number: "02",
+        title: "Streamline operations and eliminate workflow friction:",
+        bullets: [
+          { emoji: "🤖", text: "Automate repetitive tasks that drain your team's productivity and consume valuable working hours" },
+          { emoji: "✋", text: "Reduce manual data entry errors while saving time and improving overall operational accuracy" },
+          { emoji: "🎯", text: "Enhance process accuracy with consistent, reliable automation that delivers predictable results every time" },
+          { emoji: "🚀", text: "Accelerate workflow execution across all departments to boost team performance and output" },
+        ],
+      },
+      {
+        number: "03",
+        title: "Improve efficiency and maximise your operational potential:",
+        bullets: [
+          { emoji: "🔄", text: "Connect disparate systems into one cohesive ecosystem that works harmoniously across platforms" },
+          { emoji: "📊", text: "Synchronise data in real-time across all platforms to ensure information consistency and accessibility" },
+          { emoji: "🚧", text: "Eliminate process bottlenecks that slow down your business and create operational inefficiencies" },
+          { emoji: "📏", text: "Scale operations seamlessly without adding complexity or requiring additional manual oversight" },
+        ],
+      },
+      {
+        number: "04",
+        title: "Drive innovation and stay ahead of the competition:",
+        bullets: [
+          { emoji: "🛠️", text: "Create custom automation solutions tailored to your unique business needs and specific requirements" },
+          { emoji: "🔧", text: "Implement advanced integrations that unlock new possibilities and enhance your existing systems" },
+          { emoji: "🧠", text: "Deploy intelligent workflows that adapt to your business requirements and evolving operational demands" },
+          { emoji: "⚙️", text: "Optimise business processes for maximum efficiency, growth, and long-term competitive advantage" },
+        ],
+      },
+    ],
+  },
+  {
+    key: "why-fruition",
+    label: "Why Choose Fruition?",
+    heading: "Why Partner with Fruition for make Automations?",
+    groups: [
+      {
+        number: "01",
+        title: "Our Gold Partner status demonstrates our expertise in:",
+        bullets: [
+          { emoji: "🔧", text: "Advanced automation capabilities to handle complex business requirements" },
+          { emoji: "🎯", text: "Complex multi-step workflow design for sophisticated process automation" },
+          { emoji: "🔄", text: "Real-time data synchronisation across all your connected systems" },
+          { emoji: "🛡️", text: "Error handling and monitoring systems for reliable operation" },
+          { emoji: "🔗", text: "Custom API integration development tailored to your needs" },
+        ],
+      },
+      {
+        number: "02",
+        title: "Enterprise integration solutions that connect your entire business ecosystem:",
+        bullets: [
+          { emoji: "📊", text: "Cross-platform data management for seamless information flow" },
+          { emoji: "🏢", text: "Legacy system connectivity to modernise existing infrastructure" },
+          { emoji: "☁️", text: "Cloud service orchestration for optimal performance" },
+          { emoji: "🔒", text: "Secure data transfer protocols ensuring complete protection" },
+          { emoji: "⚙️", text: "Scalable architecture design that grows with your business" },
+        ],
+      },
+      {
+        number: "03",
+        title: "Professional services that guide you from concept to completion:",
+        bullets: [
+          { emoji: "👨‍💼", text: "Expert implementation guidance throughout your automation journey" },
+          { emoji: "🛠️", text: "Custom scenario development aligned with your business goals" },
+          { emoji: "🎓", text: "Team training and enablement for long-term success" },
+          { emoji: "🤝", text: "Ongoing support and optimisation for continuous improvement" },
+          { emoji: "📈", text: "Strategic consulting to maximize your automation ROI" },
+        ],
+      },
+      {
+        number: "04",
+        title: "Drive Innovation and transform your operational capabilities:",
+        bullets: [
+          { emoji: "💡", text: "Create custom automation solutions that solve unique challenges" },
+          { emoji: "🔧", text: "Implement advanced integrations for enhanced functionality" },
+          { emoji: "🧠", text: "Deploy intelligent workflows that adapt to changing needs" },
+          { emoji: "⚙️", text: "Optimise business processes for maximum efficiency" },
+          { emoji: "🚀", text: "Future-proof your operations with cutting-edge technology" },
+        ],
+      },
+      {
+        number: "05",
+        title: "Partner-Led Implementation Advantages that ensure your success:",
+        bullets: [
+          { emoji: "🎯", text: "Expert scenario development from certified make specialists" },
+          { emoji: "📋", text: "Best practices implementation based on proven methodologies" },
+          { emoji: "⚡", text: "Performance optimisation for maximum speed and reliability" },
+          { emoji: "🛟", text: "Comprehensive support throughout implementation and beyond" },
+          { emoji: "🔮", text: "Future-proof solutions designed to evolve with your business" },
+        ],
+      },
+    ],
+  },
+  {
+    key: "how-we-help",
+    label: "How We Can Help",
+    heading: "Transform your business operations with Fruition's make Gold Partner expertise.",
+    groups: [
+      {
+        number: "01",
+        title: "Our certified team will guide you through:",
+        bullets: [
+          { emoji: "📋", text: "Automation strategy development" },
+          { emoji: "🎨", text: "Workflow design and implementation" },
+          { emoji: "🔗", text: "System integration and testing" },
+          { emoji: "🔧", text: "Ongoing optimisation and support" },
+        ],
+      },
+      {
+        number: "02",
+        title: "As your dedicated make Gold Partner, we specialise in:",
+        bullets: [
+          { emoji: "⚙️", text: "Advanced Workflow Design" },
+          { emoji: "🔌", text: "System Integration Development" },
+          { emoji: "🛠️", text: "Custom Automation Solutions" },
+          { emoji: "📈", text: "Enterprise Scaling Support" },
+        ],
+      },
+    ],
+    outro:
+      "Contact Fruition's Make automation experts to begin your digital transformation journey. As a certified Gold Partner, we deliver enterprise-grade automation solutions that drive efficiency and growth. Transform your business operations and bring your workflows to Fruition.",
+  },
+]
+
+function MakeFeatureTabsSection() {
+  const [activeIdx, setActiveIdx] = useState(0)
+  const active = MAKE_FEATURE_TABS[activeIdx]
+  return (
+    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+      <div className="mx-auto" style={{ maxWidth: 1100 }}>
+        <h2 className="text-center font-bold" style={{ color: "#10003a", fontSize: 32, lineHeight: "40px", marginBottom: 32 }}>
+          {active.heading}
+        </h2>
+
+        {/* Tab buttons */}
+        <div className="flex flex-wrap justify-center" style={{ gap: 12, marginBottom: 40 }}>
+          {MAKE_FEATURE_TABS.map((tab, i) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveIdx(i)}
+              className="cursor-pointer transition-all whitespace-nowrap"
+              style={{
+                padding: "10px 26px",
+                borderRadius: 999,
+                fontSize: 14,
+                fontWeight: 600,
+                ...(i === activeIdx
+                  ? { background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", border: "none", boxShadow: "0 10px 22px -12px rgba(128,21,232,0.55)" }
+                  : { background: "white", color: "#2b074d", border: "1px solid #e8e6e6" }),
+              }}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Groups */}
+        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 24 }}>
+          {active.groups.map((g) => (
+            <div
+              key={g.number}
+              className="bg-white"
+              style={{
+                padding: 24,
+                borderRadius: 18,
+                border: "1px solid rgba(128,21,232,0.08)",
+                boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)",
+                display: "flex",
+                flexDirection: "column",
+                gap: 14,
+              }}
+            >
+              <div className="flex items-center" style={{ gap: 14 }}>
+                <span
+                  className="flex items-center justify-center font-bold"
+                  style={{
+                    width: 38,
+                    height: 38,
+                    borderRadius: 12,
+                    background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)",
+                    color: "white",
+                    fontSize: 13,
+                  }}
+                >
+                  {g.number}
+                </span>
+                {g.title && (
+                  <p className="font-bold" style={{ color: "#10003a", fontSize: 15, lineHeight: "22px" }}>
+                    {g.title}
+                  </p>
+                )}
+              </div>
+              <ul className="flex flex-col" style={{ gap: 10 }}>
+                {g.bullets.map((b) => (
+                  <li key={b.text} className="flex items-start" style={{ gap: 10 }}>
+                    <span style={{ fontSize: 18, lineHeight: "22px", flexShrink: 0 }}>{b.emoji}</span>
+                    <span style={{ color: "#444", fontSize: 13, lineHeight: "20px" }}>{b.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {active.outro && (
+          <p className="text-center mx-auto" style={{ color: "#444", fontSize: 14, lineHeight: "24px", maxWidth: 880, marginTop: 36 }}>
+            {active.outro}
+          </p>
+        )}
+      </div>
+    </section>
+  )
+}
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                               */
@@ -114,7 +361,7 @@ export default function MakePartnersContent({
   const calendlyUrl = siteSettings?.calendlyLink || ""
   const partnerBadges = siteSettings?.navbarPartnerBadges || []
 
-  const featuredTestimonial = caseStudies[0]
+  void caseStudies
 
   const heroImageSrc = safeSrc(pageData?.heroImage)
   const announcementImageSrc = safeSrc(pageData?.announcementImage)
@@ -127,14 +374,22 @@ export default function MakePartnersContent({
     mediaSrc: string
   }
 
+  const SHOWCASE_OVERRIDES: Record<string, { mediaType: "video" | "image"; mediaSrc: string }> = {
+    "solve finance complexities": { mediaType: "image", mediaSrc: "/images/make-finance.avif" },
+    "automation you can see, flex, and scale": { mediaType: "video", mediaSrc: "/videos/make-automation.mp4" },
+  }
+
   const resolvedShowcaseCards: ResolvedCard[] = (pageData?.showcaseCards ?? [])
     .map((card): ResolvedCard | null => {
       const heading = card.heading ?? ""
       const body = card.body ?? ""
       const imageRight = card.imageRight ?? true
-      const mediaType = card.mediaType ?? "image"
+      const override = SHOWCASE_OVERRIDES[heading.toLowerCase().trim()]
+      const mediaType = override?.mediaType ?? card.mediaType ?? "image"
       let mediaSrc = ""
-      if (mediaType === "video") {
+      if (override) {
+        mediaSrc = override.mediaSrc
+      } else if (mediaType === "video") {
         mediaSrc = card.videoUrl ?? ""
       } else {
         mediaSrc = safeSrc(card.image) ?? ""
@@ -269,63 +524,9 @@ export default function MakePartnersContent({
         />
       )}
 
-      {/* 4. Feature Tabs */}
-      {pageData?.comparisonTabs && pageData.comparisonTabs.length > 0 && (
-        <ComparisonTabsSection
-          heading={pageData.comparisonHeading}
-          tabs={pageData.comparisonTabs}
-        />
-      )}
+      {/* 4. Make Feature Tabs — hardcoded content with nested bullets */}
+      <MakeFeatureTabsSection />
 
-      {/* 5. Feature Lists */}
-      {(pageData?.featureListLeft?.length || pageData?.featureListRight?.length) && (
-        <section className="py-[80px] px-4" style={{ backgroundColor: "#2b074d" }}>
-          <div className="mx-auto" style={{ maxWidth: 1100 }}>
-            <div className="flex flex-col items-center text-center" style={{ marginBottom: 48 }}>
-              {pageData?.featureListsHeading && (
-                <h2 className="text-section-h2 text-white" style={{ maxWidth: 900 }}>
-                  {pageData.featureListsHeading}
-                </h2>
-              )}
-              {pageData?.featureListsSubheading && (
-                <p style={{ fontSize: 18, lineHeight: "28.8px", color: "rgba(255,255,255,0.85)", marginTop: 16, maxWidth: 760 }}>
-                  {pageData.featureListsSubheading}
-                </p>
-              )}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mx-auto" style={{ maxWidth: 900 }}>
-              <div className="flex flex-col gap-5">
-                {pageData?.featureListLeft?.map((item, i) => (
-                  <div key={item._key || `fl1-${i}`} className="flex items-start gap-3">
-                    <span className="text-[1.25rem] shrink-0">{item.emoji}</span>
-                    <span style={{ fontSize: 16, lineHeight: "25.6px", color: "white" }}>{item.text}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="flex flex-col gap-5">
-                {pageData?.featureListsRightEyebrow && (
-                  <p style={{ fontSize: 14, lineHeight: "22px", color: "rgba(255,255,255,0.7)", marginBottom: 4 }}>
-                    {pageData.featureListsRightEyebrow}
-                  </p>
-                )}
-                {pageData?.featureListRight?.map((item, i) => (
-                  <div key={item._key || `fl2-${i}`} className="flex items-start gap-3">
-                    <span className="text-[1.25rem] shrink-0">{item.emoji}</span>
-                    <span className="font-semibold" style={{ fontSize: 16, lineHeight: "25.6px", color: "white" }}>{item.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {pageData?.featureListsFooter && (
-              <p className="text-center mx-auto" style={{ fontSize: 16, lineHeight: "25.6px", color: "rgba(255,255,255,0.85)", marginTop: 48, maxWidth: 760 }}>
-                {pageData.featureListsFooter}
-              </p>
-            )}
-          </div>
-        </section>
-      )}
 
       {/* 6. Calendly */}
       {(pageData?.calendlyHeading || pageData?.calendlySubheading) && (
@@ -369,7 +570,7 @@ export default function MakePartnersContent({
                   </div>
                   <div
                     className="rounded-card overflow-hidden w-full"
-                    style={{ flex: 1, aspectRatio: "16 / 10", background: "#ffffff" }}
+                    style={{ flex: 1, aspectRatio: "16 / 10" }}
                   >
                     {card.mediaType === "video" ? (
                       <video
@@ -378,7 +579,7 @@ export default function MakePartnersContent({
                         loop
                         muted
                         playsInline
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                       />
                     ) : (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -407,29 +608,6 @@ export default function MakePartnersContent({
         siteSettings={siteSettings || undefined}
       />
 
-      {/* 10. Discover CTA */}
-      {pageData?.discoverHeading && (
-        <DiscoverCtaSection
-          badge={siteSettings?.badgeCertifications}
-          heading={pageData.discoverHeading}
-        />
-      )}
-
-      {/* 11. Testimonial CTA Banner */}
-      <TestimonialCtaBanner
-        headingPart1={pageData?.testimonialBannerHeadingPart1}
-        headingAccent={pageData?.testimonialBannerHeadingAccent}
-        headingPart2={pageData?.testimonialBannerHeadingPart2}
-        primaryCtaLabel={pageData?.testimonialBannerPrimaryCtaLabel}
-        primaryCtaUrl={pageData?.testimonialBannerPrimaryCtaUrl || calendlyUrl}
-        secondaryCtaLabel={pageData?.testimonialBannerSecondaryCtaLabel}
-        secondaryCtaUrl={pageData?.testimonialBannerSecondaryCtaUrl || calendlyUrl}
-        testimonial={featuredTestimonial}
-        testimonials={caseStudies}
-      />
-
-      {/* 12. Security */}
-      <SecurityBadgeSection badge={siteSettings?.badgeSecurity} />
     </div>
   )
 }

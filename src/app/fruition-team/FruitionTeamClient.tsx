@@ -11,6 +11,7 @@ export interface TeamMember {
   role?: string
   emoji?: string
   photo?: SanityImageRef
+  photoUrl?: string
   bio?: string
   linkedinUrl?: string
   regions?: string[]
@@ -29,6 +30,8 @@ const REGIONS = [
   { value: "AU", label: "Meet the Australia Team", flag: "🇦🇺" },
   { value: "UK", label: "Meet the UK Team", flag: "🇬🇧" },
   { value: "US", label: "Meet the US Team", flag: "🇺🇸" },
+  { value: "SG", label: "Meet the APAC Team", flag: "🌏" },
+  { value: "IN", label: "Meet the India Team", flag: "🇮🇳" },
 ] as const
 
 function safeImageUrl(ref: SanityImageRef): string | null {
@@ -38,6 +41,17 @@ function safeImageUrl(ref: SanityImageRef): string | null {
   } catch {
     return null
   }
+}
+
+function roleRank(role?: string): number {
+  const r = (role ?? "").toLowerCase()
+  if (!r) return 5
+  if (r.includes("founder") || r.includes("ceo") || r.includes("chief")) return 0
+  if (r.includes("director") || r.includes("head of") || r.includes(" vp ") || r.startsWith("vp")) return 1
+  if (r.includes("lead") || r.includes("manager") || r.includes("principal")) return 2
+  if (r.includes("engineer") || r.includes("developer") || r.includes("architect")) return 3
+  if (r.includes("senior")) return 3
+  return 4
 }
 
 function safeBadgeUrl(ref: SanityImageRef): string | null {
@@ -58,7 +72,15 @@ export default function FruitionTeamClient({
   const [region, setRegion] = useState<string>("AU")
 
   const filteredMembers = useMemo(() => {
-    return members.filter((m) => Array.isArray(m.regions) && m.regions.includes(region))
+    return members
+      .filter((m) => Array.isArray(m.regions) && m.regions.includes(region))
+      .sort((a, b) => {
+        if (a.name === "Josh Jebathilak") return -1
+        if (b.name === "Josh Jebathilak") return 1
+        if (a.name === "Edward Zehua Zhang") return 1
+        if (b.name === "Edward Zehua Zhang") return -1
+        return roleRank(a.role) - roleRank(b.role) || a.name.localeCompare(b.name)
+      })
   }, [members, region])
 
   return (
@@ -210,7 +232,7 @@ export default function FruitionTeamClient({
               style={{ gap: 28 }}
             >
               {filteredMembers.map((m) => {
-                const photo = safeImageUrl(m.photo)
+                const photo = safeImageUrl(m.photo) || m.photoUrl
                 return (
                   <article
                     key={m._id}

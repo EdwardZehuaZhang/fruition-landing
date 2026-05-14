@@ -1,31 +1,31 @@
 import {
-  getIndustryPageBySlug,
+  getPartnershipPageBySlug,
   getSiteSettings,
   getCaseStudies,
   getFaqItemsForPage,
 } from "@/sanity/queries"
 import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
-import MondayForConstructionContent from "./MondayForConstructionContent"
+import HootsuiteDeliveryPartnerContent from "./HootsuiteDeliveryPartnerContent"
 
-const SLUG = "monday-for-construction"
+const SLUG = "hootsuite-delivery-partner"
 
 export async function generateMetadata() {
-  const page = await getIndustryPageBySlug(SLUG)
+  const page = await getPartnershipPageBySlug(SLUG)
   return {
-    title: page?.seoTitle,
+    title: page?.seoTitle || page?.title || SLUG,
     description: page?.seoDescription,
   }
 }
 
 export default async function Page() {
   const [page, siteSettings, caseStudies, centralFaqs] = await Promise.all([
-    getIndustryPageBySlug(SLUG),
+    getPartnershipPageBySlug(SLUG),
     getSiteSettings(),
     getCaseStudies(),
-    getFaqItemsForPage(SLUG),
+    getFaqItemsForPage(`partnerships/${SLUG}`),
   ])
   return (
-    <MondayForConstructionContent
+    <HootsuiteDeliveryPartnerContent
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}

@@ -231,6 +231,24 @@ const PAGE_FIELDS = `
   strategicColumnsSubheading,
   strategicColumns,
 
+  // Cabinetry / industry-vertical
+  trustedByCaption,
+  keyFeaturesHeadingPart1,
+  keyFeaturesHeadingAccent,
+  keyFeatures,
+  servicesListHeadingPart1,
+  servicesListHeadingAccent,
+  servicesListItems,
+  inlineTestimonials[]{ quote, name, role, company, photo },
+  returnsBannerHeading,
+  returnsBannerSubheading,
+  returnsBannerPrimaryLabel,
+  returnsBannerPrimaryUrl,
+  returnsBannerSecondaryLabel,
+  returnsBannerSecondaryUrl,
+  beforeAfterTabs,
+  heroImageUrl,
+
   // Section visibility toggles
   hideDiscoverSection,
   hideJoinStatsSection,

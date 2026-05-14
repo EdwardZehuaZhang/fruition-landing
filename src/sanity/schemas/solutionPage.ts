@@ -420,6 +420,92 @@ export default {
     // Feature tabs intro copy (above tab pills)
     { name: 'featureTabsIntroSubheading', title: 'Feature Tabs Intro Subheading', type: 'text' },
 
+    // ── Cabinetry / industry-vertical sections ────────────────────────
+    // Trusted-by caption (under hero)
+    { name: 'trustedByCaption', title: 'Trusted-By Caption', type: 'string' },
+
+    // Key Features + Services dual-column section
+    { name: 'keyFeaturesHeadingPart1', title: 'Key Features Heading (prefix)', type: 'string' },
+    { name: 'keyFeaturesHeadingAccent', title: 'Key Features Heading (accent)', type: 'string' },
+    {
+      name: 'keyFeatures',
+      title: 'Key Features',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'keyFeatureItem',
+        fields: [
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'body', title: 'Body', type: 'text' },
+        ],
+      }],
+    },
+    { name: 'servicesListHeadingPart1', title: 'Services List Heading (prefix)', type: 'string' },
+    { name: 'servicesListHeadingAccent', title: 'Services List Heading (accent)', type: 'string' },
+    {
+      name: 'servicesListItems',
+      title: 'Services List Items',
+      type: 'array',
+      of: [{ type: 'string' }],
+    },
+
+    // Inline testimonials (3-up testimonial cards on dark gradient)
+    {
+      name: 'inlineTestimonials',
+      title: 'Inline Testimonials',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'inlineTestimonial',
+        fields: [
+          { name: 'quote', title: 'Quote', type: 'text' },
+          { name: 'name', title: 'Name', type: 'string' },
+          { name: 'role', title: 'Role', type: 'string' },
+          { name: 'company', title: 'Company', type: 'string' },
+          { name: 'photo', title: 'Photo', type: 'image', options: { hotspot: true } },
+        ],
+      }],
+    },
+
+    // Returns banner (purple gradient stats + dual CTA)
+    { name: 'returnsBannerHeading', title: 'Returns Banner Heading', type: 'string' },
+    { name: 'returnsBannerSubheading', title: 'Returns Banner Subheading', type: 'text' },
+    { name: 'returnsBannerPrimaryLabel', title: 'Returns Banner Primary CTA Label', type: 'string' },
+    { name: 'returnsBannerPrimaryUrl', title: 'Returns Banner Primary CTA URL', type: 'string' },
+    { name: 'returnsBannerSecondaryLabel', title: 'Returns Banner Secondary CTA Label', type: 'string' },
+    { name: 'returnsBannerSecondaryUrl', title: 'Returns Banner Secondary CTA URL', type: 'string' },
+
+    // Before/After comparison (separate from comparisonTabs)
+    {
+      name: 'beforeAfterTabs',
+      title: 'Before/After Tabs',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'beforeAfterTab',
+        fields: [
+          { name: 'label', title: 'Tab Label', type: 'string' },
+          {
+            name: 'items',
+            title: 'Items',
+            type: 'array',
+            of: [{
+              type: 'object',
+              name: 'beforeAfterItem',
+              fields: [
+                { name: 'number', title: 'Number/Emoji', type: 'string' },
+                { name: 'title', title: 'Title', type: 'string' },
+                { name: 'description', title: 'Description', type: 'text' },
+              ],
+            }],
+          },
+        ],
+      }],
+    },
+
+    // Hero image URL fallback (if upload not used)
+    { name: 'heroImageUrl', title: 'Hero Image URL (fallback)', type: 'string' },
+
     // Section visibility toggles
     { name: 'hideDiscoverSection', title: 'Hide Discover CTA Section', type: 'boolean', initialValue: false },
     { name: 'hideJoinStatsSection', title: 'Hide Join Stats Section', type: 'boolean', initialValue: false },

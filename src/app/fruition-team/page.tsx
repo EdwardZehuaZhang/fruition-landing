@@ -1,6 +1,7 @@
 import { getTeamMembers, getPageBySlug, getSiteSettings } from "@/sanity/queries"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import FruitionTeamClient, { type TeamMember } from "./FruitionTeamClient"
+import { mergeTeamMembers } from "@/lib/mergeTeamMembers"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("fruition-team")
@@ -21,9 +22,11 @@ export default async function TeamPage() {
   const partnerBadges: PartnerBadge[] = (siteSettings?.navbarPartnerBadges as PartnerBadge[]) || []
   const certificationBadge = siteSettings?.badgeCertifications as SanityImageRef
 
+  const mergedMembers = mergeTeamMembers(members)
+
   return (
     <FruitionTeamClient
-      members={members}
+      members={mergedMembers}
       heroHeading={page?.heroHeading}
       calendlyUrl={calendlyUrl}
       partnerBadges={partnerBadges}
