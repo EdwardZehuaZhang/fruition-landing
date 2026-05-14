@@ -333,7 +333,7 @@ export default function MondayPartnerAustraliaContent({
         ctaLabel="Learn More About Us"
         ctaUrl="/fruition-team"
         members={teamMembers}
-        region="AU"
+        region="APAC"
       />
 
       {/* Calendly */}

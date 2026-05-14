@@ -27,10 +27,9 @@ interface Props {
 }
 
 const REGIONS = [
-  { value: "AU", label: "Meet the Australia Team", flag: "🇦🇺" },
+  { value: "APAC", label: "Meet the APAC Team", flag: "🌏" },
   { value: "UK", label: "Meet the UK Team", flag: "🇬🇧" },
   { value: "US", label: "Meet the US Team", flag: "🇺🇸" },
-  { value: "SG", label: "Meet the APAC Team", flag: "🌏" },
   { value: "IN", label: "Meet the India Team", flag: "🇮🇳" },
 ] as const
 
@@ -69,7 +68,7 @@ export default function FruitionTeamClient({
   calendlyUrl,
   partnerBadges,
 }: Props) {
-  const [region, setRegion] = useState<string>("AU")
+  const [region, setRegion] = useState<string>("APAC")
 
   const filteredMembers = useMemo(() => {
     return members

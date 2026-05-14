@@ -292,7 +292,7 @@ export default function MondayPartnerSingaporeContent({
         ctaLabel="Learn More About Us"
         ctaUrl="/fruition-team"
         members={teamMembers}
-        region="SG"
+        region="APAC"
       />
 
       {/* Calendly */}
