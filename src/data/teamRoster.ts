@@ -35,7 +35,6 @@ export interface TeamRosterMember {
 export const TEAM_ROSTER: TeamRosterMember[] = [
   // ---------- AU (Australia: Sydney / Melbourne) ----------
   { id: "1879225505", name: "Josh Jebathilak", role: "Founder & CEO, ex-monday.com", regions: ["APAC", "UK", "US", "IN"], emoji: "🥭", photoUrl: "https://avatars.slack-edge.com/2023-11-27/6263149572353_c61c7bebd59907d8ec96_512.png" },
-  { id: "1879224167", name: "Natalia Mishenina", role: "Implementation Lead", regions: ["APAC"], emoji: "🍎", photoUrl: "https://avatars.slack-edge.com/2024-05-27/7199406591696_7f8004d4051099110510_512.jpg" },
   { id: "1998171996", name: "Branson McMahon", role: "Sales Engineer Associate", regions: ["APAC"], photoUrl: "https://avatars.slack-edge.com/2026-04-02/10833300331986_368b5867e1068f2482bd_512.jpg" },
   { id: "5024831399", name: "Sarah Wealleans", role: "Project Manager", regions: ["APAC"], emoji: "🥝", photoUrl: "https://avatars.slack-edge.com/2025-10-13/9712137442384_798afc8d24a6d84c17dd_512.png" },
   { id: "5024831847", name: "Swapna Singh", role: "Implementation Consultant", regions: ["APAC"], photoUrl: "https://avatars.slack-edge.com/2025-01-21/8335572173521_36d9f325e1860470297b_512.jpg" },
@@ -67,15 +66,13 @@ export const TEAM_ROSTER: TeamRosterMember[] = [
 
   // ---------- IN (India: New Delhi / Kolkata / Bengaluru) ----------
   { id: "1912473823", name: "Nikhil Tiwari", role: "Automation Engineer", regions: ["IN"], emoji: "🍉", photoUrl: "https://avatars.slack-edge.com/2024-09-03/7654133382087_5713a25b99c947c9b0a4_512.jpg" },
-  // Aquib Zafar is in Sanity but not on monday — keep here so India page renders him.
-  { id: "sanity-aquib", name: "Aquib Zafar", role: "Director of Product Engineering", regions: ["IN"] },
   { id: "1998172668", name: "Prakriti Chaubey", role: "Associate Automation Consultant", regions: ["IN"], photoUrl: "https://avatars.slack-edge.com/2026-03-03/10649754211856_29ac90a32ed507f142dc_512.png" },
   { id: "5024398401", name: "Yuzia Haque", role: "Implementation Consultant", regions: ["IN"], photoUrl: "https://avatars.slack-edge.com/2026-04-27/11005912596082_a6bedf7a0d66b04a8a01_512.jpg" },
   { id: "5024398386", name: "Tejas Singh", role: "Implementation Consultant", regions: ["IN"], photoUrl: "https://avatars.slack-edge.com/2025-10-15/9703426262498_670bdc75e23b315c9e66_512.jpg" },
   { id: "5024398368", name: "Dev", role: "Implementation Consultant", regions: ["IN"], photoUrl: "https://avatars.slack-edge.com/2026-03-29/10794975507667_e67b1b72b14505c3681b_512.jpg" },
   { id: "5024398472", name: "Nishkarsh Hela", role: "Sales Engineer (Asia)", regions: ["IN"], photoUrl: "https://avatars.slack-edge.com/2025-09-26/9573514980583_79e60c9fc45fe09e72f3_512.png" },
   { id: "5024832911", name: "Ishani Dhar Chowdhury", role: "Head of Content", regions: ["IN"], photoUrl: "https://avatars.slack-edge.com/2025-03-11/8586736062564_fa134d8b2af9d98a0339_512.jpg" },
-  { id: "2637824216", name: "Swathi I J Singh", role: "Implementation Consultant", regions: ["IN"], photoUrl: "https://secure.gravatar.com/avatar/e453ddfadf78a3ab5b2f176b0be447f3.jpg?s=512&d=https%3A%2F%2Fa.slack-edge.com%2Fdf10d%2Fimg%2Favatars%2Fava_0001-512.png" },
+  { id: "2637824216", name: "Swathi I J Singh", role: "Implementation Consultant", regions: ["IN"], photoUrl: "/images/team-swathi.jpg" },
 
   // ---------- UK / EMEA ----------
   { id: "1879226535", name: "Kevin Zhao", role: "UK Lead", regions: ["UK"], photoUrl: "https://avatars.slack-edge.com/2024-06-18/7294792037844_1fd3b83a90b519835f15_512.jpg" },
@@ -91,7 +88,7 @@ export const TEAM_ROSTER: TeamRosterMember[] = [
   { id: "2657254963", name: "Robson Rosa", role: "Implementation Consultant", regions: ["UK"], photoUrl: "https://avatars.slack-edge.com/2026-04-13/10900335656773_e51fe5335e80c2b2454a_512.jpg" },
   { id: "2657265445", name: "Nevena Gravin", role: "Implementation Consultant", regions: ["UK"], photoUrl: "https://avatars.slack-edge.com/2026-04-13/10901996683218_93f261f7d8eaa9b5584a_512.jpg" },
   { id: "2657228614", name: "Harshit Singh", role: "Implementation Consultant", regions: ["UK"], photoUrl: "https://avatars.slack-edge.com/2026-04-13/10901631657154_b69de97a4edd9a49a621_512.png" },
-  { id: "2701305395", name: "Declan Stewart", role: "Implementation Consultant", regions: ["UK"] },
+  { id: "2701305395", name: "Declan Stewart", role: "Implementation Consultant", regions: ["UK"], photoUrl: "/images/team-declan.png" },
 
   // ---------- US / North America / LATAM delivery ----------
   { id: "1879225759", name: "Zach Weller", role: "Director of North America", regions: ["US"], photoUrl: "https://avatars.slack-edge.com/2025-06-15/9053311496148_b2c1f5b8b147f7017318_512.png" },
