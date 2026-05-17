@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import {
   downloadAsset,
   getItemForWebhook,
+  type MondayAsset,
   type MondayColumnValue,
 } from "@/lib/mondayClient"
 import { upsertTeamMember, uploadImageAsset } from "@/lib/sanityWriteClient"
@@ -94,7 +95,7 @@ export async function POST(req: Request) {
     const regions = mapRegions(snapshot.columns[COL_REGION])
 
     let photoAssetId: string | undefined
-    const photoUrl = snapshot.columns[COL_PHOTO]?.files?.[0]?.url
+    const photoUrl = findPhotoUrl(snapshot.columns[COL_PHOTO], snapshot.assets)
     if (photoUrl) {
       try {
         const { bytes, mime } = await downloadAsset(photoUrl)
@@ -117,8 +118,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true, pulseId })
   } catch (err) {
-    console.error(`[monday-webhook] processing failed: ${errMsg(err)}`)
-    // Swallow errors with 200 so monday doesn't retry indefinitely on bad inputs.
+    // Log the full message so it surfaces in Vercel runtime logs.
+    console.error("[monday-webhook] processing failed", errMsg(err))
     return NextResponse.json({ ok: false, error: errMsg(err) })
   }
 }
@@ -130,7 +131,6 @@ function colText(c: MondayColumnValue | undefined): string | undefined {
 
 function colLinkUrl(c: MondayColumnValue | undefined): string | undefined {
   if (!c) return undefined
-  if (c.url) return c.url
   // LinkValue raw value JSON is `{ "url": "...", "text": "..." }`.
   if (c.value) {
     try {
@@ -142,13 +142,28 @@ function colLinkUrl(c: MondayColumnValue | undefined): string | undefined {
 }
 
 function mapRegions(c: MondayColumnValue | undefined): string[] {
-  if (!c?.values) return []
+  // Dropdown column `text` is a comma-separated list of selected labels.
+  if (!c?.text) return []
   const mapped: string[] = []
-  for (const v of c.values) {
-    const m = MONDAY_TO_SANITY_REGION[v.label]
+  for (const raw of c.text.split(",")) {
+    const label = raw.trim()
+    const m = MONDAY_TO_SANITY_REGION[label]
     if (m && !mapped.includes(m)) mapped.push(m)
   }
   return mapped
+}
+
+function findPhotoUrl(c: MondayColumnValue | undefined, assets: MondayAsset[]): string | undefined {
+  if (!c?.value) return undefined
+  try {
+    const parsed = JSON.parse(c.value) as { files?: { assetId?: number | string }[] }
+    const assetId = parsed.files?.[0]?.assetId
+    if (assetId == null) return undefined
+    const match = assets.find((a) => String(a.id) === String(assetId))
+    return match?.url
+  } catch {
+    return undefined
+  }
 }
 
 function errMsg(err: unknown): string {

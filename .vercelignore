@@ -1,0 +1,6 @@
+.next
+node_modules
+backups
+*.tar.gz
+*.zip
+.DS_Store

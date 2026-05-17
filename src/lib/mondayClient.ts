@@ -58,45 +58,38 @@ export interface MondayColumnValue {
   type: string
   text: string | null
   value: string | null
-  files?: { name: string; url: string }[]
-  values?: { label: string }[]
-  url?: string
-  linkText?: string
+}
+
+export interface MondayAsset {
+  id: string
+  url: string
+  name: string | null
 }
 
 export interface MondayItemSnapshot {
   name: string
   columns: Record<string, MondayColumnValue>
+  assets: MondayAsset[]
 }
 
 export async function getItemForWebhook(itemId: string): Promise<MondayItemSnapshot | null> {
   const data = await gql<{
     items: Array<{
       name: string
+      assets: Array<{ id: string; url: string; name: string | null }> | null
       column_values: Array<{
         id: string
         type: string
         text: string | null
         value: string | null
-        files?: { name: string; url: string }[]
-        values?: { label: string }[]
-        url?: string
-        // LinkValue exposes `text` as the link label — already covered by `text` above.
       }>
     }>
   }>(
     `query ($id: [ID!]!) {
       items(ids: $id) {
         name
-        column_values {
-          id
-          type
-          text
-          value
-          ... on FileValue { files { name url } }
-          ... on DropdownValue { values { label } }
-          ... on LinkValue { url }
-        }
+        assets { id url name }
+        column_values { id type text value }
       }
     }`,
     { id: [String(itemId)] },
@@ -105,17 +98,9 @@ export async function getItemForWebhook(itemId: string): Promise<MondayItemSnaps
   if (!item) return null
   const columns: Record<string, MondayColumnValue> = {}
   for (const c of item.column_values) {
-    columns[c.id] = {
-      id: c.id,
-      type: c.type,
-      text: c.text ?? null,
-      value: c.value ?? null,
-      files: c.files,
-      values: c.values,
-      url: c.url,
-    }
+    columns[c.id] = { id: c.id, type: c.type, text: c.text ?? null, value: c.value ?? null }
   }
-  return { name: item.name, columns }
+  return { name: item.name, columns, assets: item.assets ?? [] }
 }
 
 export async function downloadAsset(url: string): Promise<{ bytes: Buffer; mime: string }> {
