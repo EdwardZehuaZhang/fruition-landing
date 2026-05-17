@@ -37,21 +37,24 @@ if (!url || !/^https?:\/\//i.test(url)) {
 const BOARD_ID = 1879224155
 const MONDAY_GQL = "https://api.monday.com/v2"
 
+// monday `create_item` event does not accept a `config.authorization`.
+// Carry the shared secret as a URL query param instead — the route validates it.
+const sep = url.includes("?") ? "&" : "?"
+const fullUrl = `${url}${sep}key=${encodeURIComponent(SECRET)}`
+
 const query = `
-  mutation ($board: ID!, $url: String!, $config: JSON!) {
+  mutation ($board: ID!, $url: String!) {
     create_webhook(
       board_id: $board,
       url: $url,
-      event: create_pulse,
-      config: $config
+      event: create_item
     ) { id board_id }
   }
 `
 
 const variables = {
   board: String(BOARD_ID),
-  url,
-  config: JSON.stringify({ authorization: SECRET }),
+  url: fullUrl,
 }
 
 const r = await fetch(MONDAY_GQL, {

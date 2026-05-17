@@ -56,12 +56,20 @@ export async function POST(req: Request) {
     console.error("[monday-webhook] MONDAY_WEBHOOK_SECRET missing")
     return unauthorized()
   }
-  if (req.headers.get("authorization") !== expected) {
+  // monday's create_item webhook does not support a custom Authorization
+  // header, so the shared secret is passed as a `key` query param.
+  // Accept either an Authorization header (for manual / forward-compat) or
+  // the query param.
+  const headerAuth = req.headers.get("authorization")
+  const queryAuth = new URL(req.url).searchParams.get("key")
+  if (headerAuth !== expected && queryAuth !== expected) {
     return unauthorized()
   }
 
   const event = body.event
-  if (!event || event.type !== "create_pulse" || Number(event.boardId) !== BOARD_ID) {
+  // monday renamed `create_pulse` to `create_item` but payloads may use either.
+  const okType = event?.type === "create_item" || event?.type === "create_pulse"
+  if (!event || !okType || Number(event.boardId) !== BOARD_ID) {
     return NextResponse.json({ ok: true, skipped: "irrelevant event" })
   }
   const pulseId = event.pulseId != null ? String(event.pulseId) : ""
