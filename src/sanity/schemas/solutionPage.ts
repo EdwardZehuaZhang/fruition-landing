@@ -18,6 +18,7 @@ export default {
 
     // Comparison / tabbed section
     { name: 'comparisonHeading', title: 'Comparison Section Heading', type: 'string' },
+    { name: 'comparisonHeadingAccent', title: 'Comparison Section Heading (accent)', type: 'string' },
     { name: 'comparisonSubheading', title: 'Comparison Section Subheading', type: 'text' },
     {
       name: 'comparisonTabs',
@@ -28,6 +29,7 @@ export default {
         name: 'comparisonTab',
         fields: [
           { name: 'label', title: 'Tab Label', type: 'string' },
+          { name: 'subheading', title: 'Sub-heading (under tab pills)', type: 'string' },
           {
             name: 'items',
             title: 'Items',
@@ -37,6 +39,7 @@ export default {
               name: 'comparisonItem',
               fields: [
                 { name: 'number', title: 'Number', type: 'string' },
+                { name: 'icon', title: 'Icon / Emoji', type: 'string' },
                 { name: 'title', title: 'Title', type: 'string' },
                 { name: 'description', title: 'Description', type: 'text' },
                 {
@@ -347,7 +350,6 @@ export default {
     { name: 'serviceHeroImage', title: 'Service Hero Image', type: 'image', options: { hotspot: true } },
 
     // Comparison/feature tabs eyebrow ("Why monday.com for customer service?")
-    { name: 'comparisonHeadingAccent', title: 'Comparison Heading Accent', type: 'string' },
     { name: 'comparisonEyebrow', title: 'Comparison Eyebrow', type: 'string' },
 
     // Four image cards section (alternating image/text rows)
@@ -505,6 +507,12 @@ export default {
 
     // Hero image URL fallback (if upload not used)
     { name: 'heroImageUrl', title: 'Hero Image URL (fallback)', type: 'string' },
+
+    // ── Bottom feature-cards section (finance et al) ─────────────────
+    { name: 'bottomFeatureSectionHeadingPart1', title: 'Bottom Feature Section Heading (prefix)', type: 'string' },
+    { name: 'bottomFeatureSectionHeadingAccent', title: 'Bottom Feature Section Heading (accent)', type: 'string' },
+    { name: 'bottomVideoUrl', title: 'Bottom Video URL', type: 'string' },
+    { name: 'bottomVideoTitle', title: 'Bottom Video Title', type: 'string' },
 
     // Section visibility toggles
     { name: 'hideDiscoverSection', title: 'Hide Discover CTA Section', type: 'boolean', initialValue: false },

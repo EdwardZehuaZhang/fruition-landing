@@ -22,7 +22,7 @@ export default async function TeamPage() {
   const partnerBadges: PartnerBadge[] = (siteSettings?.navbarPartnerBadges as PartnerBadge[]) || []
   const certificationBadge = siteSettings?.badgeCertifications as SanityImageRef
 
-  const mergedMembers = mergeTeamMembers(members)
+  const mergedMembers = mergeTeamMembers(members, siteSettings?.excludedTeamMemberNames || [])
 
   return (
     <FruitionTeamClient

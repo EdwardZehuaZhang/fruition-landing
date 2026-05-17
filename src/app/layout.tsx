@@ -18,9 +18,12 @@ const montserrat = Montserrat({
   weight: ["400", "500", "600", "700"],
 })
 
-export const metadata: Metadata = {
-  title: "Fruition Services | monday.com Platinum Partners",
-  description: "Expert monday.com implementation, consulting, and training. Fruition is your trusted monday.com Platinum Partner.",
+export async function generateMetadata(): Promise<Metadata> {
+  const s = await getSiteSettings()
+  return {
+    title: s?.defaultSeoTitle,
+    description: s?.defaultSeoDescription,
+  }
 }
 
 export default async function RootLayout({

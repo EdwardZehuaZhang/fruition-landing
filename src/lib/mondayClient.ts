@@ -63,6 +63,7 @@ export interface MondayColumnValue {
 export interface MondayAsset {
   id: string
   url: string
+  publicUrl: string | null
   name: string | null
 }
 
@@ -76,7 +77,7 @@ export async function getItemForWebhook(itemId: string): Promise<MondayItemSnaps
   const data = await gql<{
     items: Array<{
       name: string
-      assets: Array<{ id: string; url: string; name: string | null }> | null
+      assets: Array<{ id: string; url: string; public_url: string | null; name: string | null }> | null
       column_values: Array<{
         id: string
         type: string
@@ -88,7 +89,7 @@ export async function getItemForWebhook(itemId: string): Promise<MondayItemSnaps
     `query ($id: [ID!]!) {
       items(ids: $id) {
         name
-        assets { id url name }
+        assets { id url public_url name }
         column_values { id type text value }
       }
     }`,
@@ -100,11 +101,24 @@ export async function getItemForWebhook(itemId: string): Promise<MondayItemSnaps
   for (const c of item.column_values) {
     columns[c.id] = { id: c.id, type: c.type, text: c.text ?? null, value: c.value ?? null }
   }
-  return { name: item.name, columns, assets: item.assets ?? [] }
+  const assets: MondayAsset[] = (item.assets ?? []).map((a) => ({
+    id: a.id,
+    url: a.url,
+    publicUrl: a.public_url ?? null,
+    name: a.name,
+  }))
+  return { name: item.name, columns, assets }
 }
 
-export async function downloadAsset(url: string): Promise<{ bytes: Buffer; mime: string }> {
-  const r = await fetch(url, { headers: { Authorization: getToken() } })
+export async function downloadAsset(
+  url: string,
+  opts: { authenticated?: boolean } = {},
+): Promise<{ bytes: Buffer; mime: string }> {
+  // `public_url` is a short-lived signed URL — do not send Authorization
+  // (some signed URLs reject mixed auth). The standard `url` requires the
+  // monday API token.
+  const headers = opts.authenticated ? { Authorization: getToken() } : undefined
+  const r = await fetch(url, headers ? { headers } : undefined)
   if (!r.ok) throw new Error(`monday asset download ${r.status} ${await r.text().catch(() => "")}`)
   const mime = r.headers.get("content-type")?.split(";")[0]?.trim() || "image/jpeg"
   const ab = await r.arrayBuffer()

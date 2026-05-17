@@ -7,6 +7,21 @@ export default {
     { name: 'phone', title: 'Phone', type: 'string' },
     { name: 'calendlyLink', title: 'Calendly Link', type: 'string' },
 
+    // Default site-wide SEO (root <title> + <meta description>, used by
+    // any page that doesn't override).
+    { name: 'defaultSeoTitle', title: 'Default SEO Title', type: 'string' },
+    { name: 'defaultSeoDescription', title: 'Default SEO Description', type: 'text' },
+
+    // Names of former teammates whose Sanity docs should not render
+    // publicly. Compared case-insensitively. Lets editors hide an alum
+    // without deleting their record.
+    {
+      name: 'excludedTeamMemberNames',
+      title: 'Excluded Team Member Names',
+      type: 'array',
+      of: [{ type: 'string' }],
+    },
+
     // Reusable button labels
     { name: 'navbarCtaLabel', title: 'Navbar CTA Label', type: 'string' },
     { name: 'footerCtaLabel', title: 'Footer CTA Label', type: 'string' },

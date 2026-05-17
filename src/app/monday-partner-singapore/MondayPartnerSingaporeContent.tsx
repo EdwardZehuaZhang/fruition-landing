@@ -26,56 +26,6 @@ interface Props {
   teamMembers: TeamMember[]
 }
 
-const SG_TABS: ComparisonTab[] = [
-  {
-    _key: "leadership",
-    label: "Top Leadership Challenges",
-    items: [
-      { _key: "l1", number: "01", title: "Hybrid Work & ASEAN Compliance", description: "Navigate diverse Southeast Asian employment regulations and hybrid work policies across Singapore, Malaysia, Thailand, Indonesia, Philippines, and Vietnam. Seamlessly integrate remote and office workflows while ensuring compliance with local labor laws and data localisation requirements." },
-      { _key: "l2", number: "02", title: "Digital Transformation Training for ASEAN Teams", description: "Accelerate digital adoption with comprehensive training programs designed for Southeast Asian businesses. Our regional experts minimise productivity disruptions while ensuring teams master new technologies, while maintaining a competitive advantage in the workplace." },
-      { _key: "l3", number: "03", title: "Work-Life Balance & Regional Wellness", description: "Enhance work-life integration through intelligent automation that supports Southeast Asian workplace wellness standards and cultural expectations. Automate routine administrative tasks, enabling focus on high-value strategic work while respecting regional work-life balance traditions." },
-      { _key: "l4", number: "04", title: "Professional Development & Skills Enhancement", description: "Empower ASEAN teams with process optimisation skills that drive continuous improvement. Support regional upskilling initiatives by enabling employees to identify operational inefficiencies and implement enhanced systems that boost productivity across diverse cultural contexts." },
-      { _key: "l5", number: "05", title: "Multi-Country Team Coordination", description: "Strengthen collaboration across ASEAN time zones and diverse cultural backgrounds from Singapore to Manila to Bangkok. Maintain transparency and foster strong connections regardless of location, supporting seamless operations across Southeast Asian markets." },
-    ],
-  },
-  {
-    _key: "features",
-    label: "monday.com Features",
-    items: [
-      { _key: "f1", number: "01", title: "Save Time with Automations", description: "Automated workflows on monday.com function as your dedicated process manager, continuously operating behind the scenes to guarantee that your initiatives progress seamlessly and productively." },
-      { _key: "f2", number: "02", title: "Centralised Documentation", description: "You can create rich documents directly within monday and embed real-time project information from any of your boards within those docs." },
-      { _key: "f3", number: "03", title: "Business Intelligence for ASEAN Markets", description: "Transform operational data into actionable insights for Southeast Asian businesses. Present KPIs aligned with local accounting standards (Singapore FRS, Malaysian MFRS, Thai TFRS) and regional reporting requirements." },
-      { _key: "f4", number: "04", title: "Agile Project Organisation", description: "Organise projects using methodologies popular across ASEAN innovation hubs including Singapore's fintech sector, Kuala Lumpur's digital economy, Bangkok's startup ecosystem, and Jakarta's e-commerce corridor." },
-      { _key: "f5", number: "05", title: "Integrate with Other Tools", description: "Consolidate all your information within monday to boost team synchronisation and enhance organisational efficiency. Eliminate switching between isolated applications and ensure nothing gets overlooked." },
-    ],
-  },
-  {
-    _key: "how-help",
-    label: "How We Can Help",
-    items: [
-      { _key: "h1", number: "01", title: "Process Discovery → Business Process Audit", description: "Our SEA-based certified consultants meticulously map existing workflows against Southeast Asian industry benchmarks. Analyse operational bottlenecks specific to ASEAN regulatory requirements and competitive pressures in Asia-Pacific markets." },
-      { _key: "h2", number: "02", title: "Technical Architecture → System Integration Scope", description: "Our technical assessment reveals the hidden potential in your current tech stack, identifying precise automated solution design to visualise where monday.com can transform fragmented processes into seamless workflows." },
-      { _key: "h3", number: "03", title: "Solution Design → Implementation", description: "Implement balanced automation systems optimised for Southeast Asian business practices and multicultural user adoption. Our solutions scale with your team's expertise while respecting diverse regional workplace cultures and communication styles." },
-      { _key: "h4", number: "04", title: "Efficiency Impact → ROI Opportunity Analysis", description: "By quantifying potential efficiency gains across your operations, we pinpoint exactly where automation and optimisation will deliver the highest return on your investment." },
-      { _key: "h5", number: "05", title: "Change Readiness → Adoption & Training Strategies", description: "Our proven framework measures organisational readiness within diverse ASEAN workplace cultures. Craft adoption strategies that work across different cultural contexts, transforming resistance into enthusiastic system adoption while respecting local business practices." },
-    ],
-  },
-]
-
-
-const FEATURE_BLOCKS = [
-  { title: "Build a high-level roll-up of all your boards", body: "Give directors a general overview of the team's progress with calendars, Gantt charts, and dashboards. So, even if you have 10+ boards, senior management can see what someone is working on, how projects are doing, and why tasks are delayed–all with just a few clicks.", ctaLabel: "📊 Our Project Management Solutions", ctaUrl: "/monday-consulting-solutions/monday-project-management", image: "/images/au-rollup.avif" },
-  { title: "Create a CRM or project management tool that fits you", body: "Have a monday.com partner build a system designed to support the way you want your business to run. That means you start with the \"meat and potatoes\" of your platform in place. So later, if you need to adapt to new requirements, you can easily piggyback off of the original set-up.", ctaLabel: "📈 Our CRM Solutions", ctaUrl: "/monday-crm-consulting", image: "/images/au-create-crm.avif" },
-  { title: "Training & managed services", body: "Get the entire team monday.com training. Make sure all of your team members get the onboarding they need to feel comfortable using the platform day in and day out. So when you actually start using the platform, it becomes your single source of truth.", ctaLabel: "👩🏽‍💼👨🏻‍💼 Our Training Services", ctaUrl: "/monday-training", image: "/images/au-training.avif" },
-  { title: "Integrate your email and all external tools", body: "Eliminate manual work with automation. Seamlessly integrate Gmail, Outlook, Sharepoint, Teams, accounting software, ChatGPT, and dozens of other tools with the software's open API.", ctaLabel: "⚡️ See Our Solutions", ctaUrl: "/monday-consulting-solutions", image: "/images/au-integrate.avif" },
-]
-
-const ROI_STATS = [
-  { value: "288%", label: "ROI" },
-  { value: "15,600", label: "Hours Saved" },
-  { value: "50%", label: "Meeting reduction" },
-  { value: "489,794", label: "Net Value" },
-]
 
 type FeatureBlock = { title?: string; body?: string; ctaLabel?: string; ctaUrl?: string; image?: string }
 type RoiStat = { value?: string; label?: string }
@@ -203,29 +153,22 @@ export default function MondayPartnerSingaporeContent({
   teamMembers,
 }: Props) {
   if (!page) return null
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = siteSettings?.calendlyLink ?? ""
 
   const resolvedFaqTabs = faqTabs ?? []
   const partnerCaseStudies = caseStudies
-  const resolvedComparisonTabs: ComparisonTab[] = (page.comparisonTabs && page.comparisonTabs.length > 0) ? page.comparisonTabs : SG_TABS
-  const resolvedFeatureBlocks: FeatureBlock[] = (page.featureBlocks && page.featureBlocks.length > 0) ? page.featureBlocks : FEATURE_BLOCKS
-  const resolvedRoiStats: RoiStat[] = (page.roiStats && page.roiStats.length > 0) ? page.roiStats : ROI_STATS
+  const resolvedComparisonTabs: ComparisonTab[] = page.comparisonTabs ?? []
+  const resolvedFeatureBlocks: FeatureBlock[] = page.featureBlocks ?? []
+  const resolvedRoiStats: RoiStat[] = page.roiStats ?? []
 
   return (
     <div>
       {/* Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow}
-        headingPart1={page.heroHeading || "monday.com Partner Singapore"}
+        headingPart1={page.heroHeading}
         headingAccent=""
-        subheading={
-          page.hideHeroSubheading
-            ? undefined
-            : page.heroSubheading ||
-              "Work with an accredited monday.com consultant to develop the essential systems and operational blueprint for your business. Based in Singapore, our monday.com specialists serve companies across Southeast Asia including Singapore, the Philippines, Thailand, Malaysia, Indonesia, and Vietnam. Begin working productively right away–without dedicating valuable time and effort to self-guided configuration."
-        }
+        subheading={page.hideHeroSubheading ? undefined : page.heroSubheading}
         heroImage={page.heroImage}
         heroVideoSrc={page.heroLocalVideoSrc}
         certificationBadge={siteSettings?.badgeCertifications}
@@ -234,10 +177,10 @@ export default function MondayPartnerSingaporeContent({
             ? page.heroPartnerBadges
             : siteSettings?.navbarPartnerBadges || []
         }
-        primaryCtaLabel={page.primaryCtaLabel || "🚀  Book a Consultation"}
+        primaryCtaLabel={page.primaryCtaLabel}
         primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
-        secondaryCtaLabel={page.secondaryCtaLabel || "▶️  Get Started with monday.com"}
-        secondaryCtaUrl={page.secondaryCtaUrl || "https://monday.com"}
+        secondaryCtaLabel={page.secondaryCtaLabel}
+        secondaryCtaUrl={page.secondaryCtaUrl}
       />
 
       {/* Logo cloud */}

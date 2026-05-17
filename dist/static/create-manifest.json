@@ -1,5 +1,5 @@
 {
-  "createdAt": "2026-03-27T10:28:54.002Z",
+  "createdAt": "2026-05-17T08:17:41.720Z",
   "studioVersion": "5.18.0",
   "version": 3,
   "workspaces": [
@@ -13,7 +13,7 @@
       },
       "name": "fruition-landing",
       "projectId": "bt6nb58h",
-      "schema": "bc68f490.create-schema.json",
+      "schema": "e4116224.create-schema.json",
       "title": "Fruition",
       "tools": "ef87c8fe.create-tools.json"
     }

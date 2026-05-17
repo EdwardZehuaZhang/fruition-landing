@@ -245,9 +245,11 @@ const PAGE_FIELDS = `
   caseStudySectionHeading,
   caseStudyCards,
 
-  // Bottom video
+  // Bottom video + bottom feature-cards section
   bottomVideoUrl,
   bottomVideoTitle,
+  bottomFeatureSectionHeadingPart1,
+  bottomFeatureSectionHeadingAccent,
 
   // Text content
   textContentSections,
@@ -328,7 +330,7 @@ export async function getPartnershipPageBySlug(slug: string) {
 
 export async function getLocationPageBySlug(slug: string) {
   return client.fetch(
-    `*[_type == "locationPage" && slug.current == $slug][0]{${PAGE_FIELDS}, country, region}`,
+    `*[_type == "locationPage" && slug.current == $slug][0]{${PAGE_FIELDS}, country, region, teamMemberNames}`,
     { slug }
   )
 }
@@ -400,6 +402,9 @@ export async function getSiteSettings() {
     contactEmail,
     phone,
     calendlyLink,
+    defaultSeoTitle,
+    defaultSeoDescription,
+    excludedTeamMemberNames,
     mondayAffiliateLink,
     logo,
     logoWhite,

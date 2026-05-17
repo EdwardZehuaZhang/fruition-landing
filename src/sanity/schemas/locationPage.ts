@@ -256,5 +256,16 @@ export default {
     // Logo cloud overrides
     { name: 'logoCloudHeadingPart1', title: 'Logo Cloud Heading (prefix)', type: 'string' },
     { name: 'logoCloudHeadingAccent', title: 'Logo Cloud Heading (accent)', type: 'string' },
+
+    // Explicit team-member roster filter (by name) when region-tag lookup
+    // is insufficient (e.g. India members lack an "IN" region tag on the
+    // teamMember docs). When set, only these names appear in the page's
+    // team grid; falls back to region-based filter otherwise.
+    {
+      name: 'teamMemberNames',
+      title: 'Team Member Names (optional roster filter)',
+      type: 'array',
+      of: [{ type: 'string' }],
+    },
   ],
 }

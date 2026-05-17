@@ -25,64 +25,6 @@ interface Props {
   teamMembers: TeamMember[]
 }
 
-const INDIA_TEAM_NAMES = [
-  "Josh Jebathilak",
-  "Prakriti Chaubey",
-  "Aquib Zafar",
-  "Nikhil Tiwari",
-  "Yuzia Haque",
-  "Tejas Singh",
-]
-
-const IN_TABS: ComparisonTab[] = [
-  {
-    _key: "leadership",
-    label: "Top Leadership Challenges",
-    items: [
-      { _key: "l1", number: "01", title: "Financial Uncertainty", description: "Improving reporting visibility of business performance to make better decisions and to quickly correct course on strategic initiatives." },
-      { _key: "l2", number: "02", title: "AI & Automation", description: "Team enablement and implementation of AI & Automation technologies to improve workforce efficiency and unlock hidden inefficiencies." },
-      { _key: "l3", number: "03", title: "Hybrid Work Management", description: "Optimising productivity and culture across distributed teams while maintaining operational excellence." },
-      { _key: "l4", number: "04", title: "Talent Retention & Personal Development", description: "Attracting and keeping key talent in a competitive market while upskilling for future needs." },
-      { _key: "l5", number: "05", title: "Cybersecurity & Digital Risk", description: "Protecting against evolving threats while ensuring data privacy and regulatory compliance." },
-    ],
-  },
-  {
-    _key: "features",
-    label: "monday.com Features",
-    items: [
-      { _key: "f1", number: "01", title: "Save Time with Automations", description: "Automated workflows on monday.com function as your dedicated process manager, continuously operating behind the scenes to guarantee that your initiatives progress seamlessly and productively." },
-      { _key: "f2", number: "02", title: "Centralised Documentation", description: "You can create rich documents directly within monday and embed real-time project information from any of your boards within those docs." },
-      { _key: "f3", number: "03", title: "Visualise with Dashboards and Charts", description: "Turn project data into visually engaging and easily digestible information. This not only simplifies data analysis but also improves decision-making by presenting data in a more clear and actionable format." },
-      { _key: "f4", number: "04", title: "Flexible Organisation", description: "Organise projects using Agile or traditional methodologies popular across India's tech hubs in Bengaluru, Hyderabad, Pune, and Mumbai." },
-      { _key: "f5", number: "05", title: "Integrate with other tools", description: "Keep all your data in monday.com and integrate with Tally, Zoho, Razorpay, Aircall, and more to increase team alignment and improve business organisation. Avoid juggling disconnected apps and make sure nothing falls between the cracks." },
-    ],
-  },
-  {
-    _key: "how-help",
-    label: "How We Can Help",
-    items: [
-      { _key: "h1", number: "01", title: "Process Discovery → Business Process Audit", description: "We meticulously map your existing workflows against industry benchmarks, analysing bottlenecks and efficiency gaps that hold your team back from scaling." },
-      { _key: "h2", number: "02", title: "Technical Architecture → System Integration Scope", description: "Our technical assessment reveals the hidden potential in your current tech stack, identifying precise automated solution design to visualise where monday.com can transform fragmented processes into seamless workflows." },
-      { _key: "h3", number: "03", title: "Solution Design → Implementation", description: "Through in-depth process analysis, we build your system with perfect balance between automated sophistication and user adoption, ensuring you see faster set up and team usage." },
-      { _key: "h4", number: "04", title: "Efficiency Impact → ROI Opportunity Analysis", description: "By quantifying potential efficiency gains across your operations, we pinpoint exactly where automation and optimisation will deliver the highest return on your investment." },
-      { _key: "h5", number: "05", title: "Change Readiness → Adoption & Training Strategies", description: "Our proven change impact framework measures organisational readiness and crafts a tailored adoption and training strategy, turning potential resistance into enthusiastic system adoption." },
-    ],
-  },
-]
-
-const FEATURE_BLOCKS = [
-  { title: "Build a high-level roll-up of all your boards", body: "Give directors a general overview of the team's progress with calendars, Gantt charts, and dashboards. So, even if you have 10+ boards, senior management can see what someone is working on, how projects are doing, and why tasks are delayed–all with just a few clicks.", ctaLabel: "📊 Our Project Management Solutions", ctaUrl: "/monday-consulting-solutions/monday-project-management", image: "/images/au-rollup.avif" },
-  { title: "Create a CRM or project management tool that fits you", body: "Have a monday.com consultation partner build a system designed to support the way you want your business to run. That means you start with the \"meat and potatoes\" of your platform in place. So later, if you need to adapt to new requirements, you can easily piggyback off of the original set-up.", ctaLabel: "📈 Our CRM Solutions", ctaUrl: "/monday-crm-consulting", image: "/images/au-create-crm.avif" },
-  { title: "Training & managed services", body: "Get the entire team monday.com training. Make sure all of your team members get the onboarding they need to feel comfortable using the platform day in and day out. So when you actually start using the platform, it becomes your single source of truth.", ctaLabel: "👩🏽‍💼👨🏻‍💼 Our Training Services", ctaUrl: "/monday-training", image: "/images/au-training.avif" },
-  { title: "Integrate your email and all external tools", body: "Eliminate manual work with automation. Seamlessly integrate Gmail, Outlook, Sharepoint, Teams, accounting software, ChatGPT, and dozens of other tools with the software's open API.", ctaLabel: "⚡️ See Our Solutions", ctaUrl: "/monday-consulting-solutions", image: "/images/au-integrate.avif" },
-]
-
-const ROI_STATS = [
-  { value: "288%", label: "ROI" },
-  { value: "15,600", label: "Hours Saved" },
-  { value: "50%", label: "Meeting reduction" },
-  { value: "489,794", label: "Net Value" },
-]
 
 function TeamsTransformedStrip() {
   return (
@@ -231,28 +173,25 @@ export default function MondayPartnerIndiaContent({
   teamMembers,
 }: Props) {
   if (!page) return null
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = siteSettings?.calendlyLink ?? ""
 
   const partnerCaseStudies = caseStudies
-  const resolvedComparisonTabs: ComparisonTab[] = (page.comparisonTabs && page.comparisonTabs.length > 0) ? page.comparisonTabs : IN_TABS
-  const resolvedFeatureBlocks: FeatureBlock[] = (page.featureBlocks && page.featureBlocks.length > 0) ? page.featureBlocks : FEATURE_BLOCKS
-  const resolvedRoiStats: RoiStat[] = (page.roiStats && page.roiStats.length > 0) ? page.roiStats : ROI_STATS
+  const resolvedComparisonTabs: ComparisonTab[] = page.comparisonTabs ?? []
+  const resolvedFeatureBlocks: FeatureBlock[] = page.featureBlocks ?? []
+  const resolvedRoiStats: RoiStat[] = page.roiStats ?? []
+  const indiaTeamNames: string[] = page.teamMemberNames ?? []
+  const indiaTeamMembers = indiaTeamNames
+    .map((name) => teamMembers.find((m) => m.name === name))
+    .filter((m): m is TeamMember => !!m)
 
   return (
     <div>
       {/* Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow}
-        headingPart1={page.heroHeading || "monday.com Partner Consultants & Implementation Experts India"}
+        headingPart1={page.heroHeading}
         headingAccent=""
-        subheading={
-          page.hideHeroSubheading
-            ? undefined
-            : page.heroSubheading ||
-              "Get certified monday.com partner consultants & implementation experts to build robust infrastructure and architecture for your business. Our expert implementation services get your team operational immediately, eliminating the time and resources spent on trial-and-error setup."
-        }
+        subheading={page.hideHeroSubheading ? undefined : page.heroSubheading}
         heroImage={page.heroImage}
         heroVideoSrc={page.heroLocalVideoSrc}
         certificationBadge={siteSettings?.badgeCertifications}
@@ -261,10 +200,10 @@ export default function MondayPartnerIndiaContent({
             ? page.heroPartnerBadges
             : siteSettings?.navbarPartnerBadges || []
         }
-        primaryCtaLabel={page.primaryCtaLabel || "🚀  Book a Consultation"}
+        primaryCtaLabel={page.primaryCtaLabel}
         primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
-        secondaryCtaLabel={page.secondaryCtaLabel || "▶️  Get Started with monday.com"}
-        secondaryCtaUrl={page.secondaryCtaUrl || "https://monday.com"}
+        secondaryCtaLabel={page.secondaryCtaLabel}
+        secondaryCtaUrl={page.secondaryCtaUrl}
       />
 
       {/* Logo cloud */}
@@ -293,7 +232,7 @@ export default function MondayPartnerIndiaContent({
         subheading="Our monday.com consultants have expertise across various industries. As a certified monday.com partner, we guarantee the delivery of the right solution and training to optimise your team's efficiency."
         ctaLabel="Learn More About Us"
         ctaUrl="/fruition-team"
-        members={INDIA_TEAM_NAMES.map((name) => teamMembers.find((m) => m.name === name)).filter((m): m is TeamMember => !!m)}
+        members={indiaTeamMembers}
       />
 
       {/* Calendly */}

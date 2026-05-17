@@ -26,57 +26,6 @@ interface Props {
   teamMembers: TeamMember[]
 }
 
-const UK_TABS: ComparisonTab[] = [
-  {
-    _key: "leadership",
-    label: "Top Leadership Challenges",
-    items: [
-      { _key: "l1", number: "01", title: "Hybrid Working Rights Compliance", description: "Navigate UK Employment Rights Act and hybrid working legislation with strategic technology solutions. Seamlessly integrate remote and office workflows while ensuring compliance with statutory flexible working rights across London, Manchester, Birmingham, and regional UK offices." },
-      { _key: "l2", number: "02", title: "Digital Skills Training for UK Teams", description: "Accelerate digital transformation with comprehensive training programmes for UK businesses. Our local experts minimise productivity disruptions while ensuring teams master new technologies, supporting your digital strategy objectives." },
-      { _key: "l3", number: "03", title: "Work-Life Balance & Right to Disconnect", description: "Enhance work-life integration through intelligent automation supporting UK workplace wellness regulations. Automate routine administrative tasks, enabling focus on high-value work while maintaining healthy boundaries." },
-      { _key: "l4", number: "04", title: "Professional Development & Upskilling", description: "Empower UK teams with process optimisation skills that drive continuous improvement. Support the government's Lifetime Skills Guarantee by enabling staff to identify inefficiencies and implement enhanced systems." },
-      { _key: "l5", number: "05", title: "Cross-Regional Team Cohesion", description: "Strengthen collaboration across England, Scotland, Wales, and Northern Ireland through unified communication platforms, maintaining transparency regardless of location." },
-    ],
-  },
-  {
-    _key: "features",
-    label: "monday.com Features",
-    items: [
-      { _key: "f1", number: "01", title: "Save Time with Automations", description: "Automated workflows on monday.com function as your dedicated process manager, continuously operating behind the scenes to guarantee that your initiatives progress seamlessly and productively." },
-      { _key: "f2", number: "02", title: "Document Management & Data Sovereignty", description: "Create comprehensive business documents with real-time project data integration. Maintain UK data residency requirements and support Companies House filing obligations with organised digital documentation." },
-      { _key: "f3", number: "03", title: "Business Intelligence Dashboards", description: "Transform operational data into insights that support strategic decision-making for UK businesses. Present KPIs aligned with UK GAAP accounting standards and regulatory reporting requirements." },
-      { _key: "f4", number: "04", title: "Agile Project Organisation", description: "Organise projects using methodologies popular across UK tech hubs including London's Silicon Roundabout, Manchester's digital corridor, and Edinburgh's fintech sector. Customise views according to preferred UK business frameworks." },
-      { _key: "f5", number: "05", title: "UK Software Integration", description: "Integrate seamlessly with popular UK business tools including Sage and Xero. Connect with UK accounting software to maintain centralised workflows that support your business operations." },
-    ],
-  },
-  {
-    _key: "how-help",
-    label: "How We Can Help",
-    items: [
-      { _key: "h1", number: "01", title: "Process Discovery → Business Process Audit", description: "We meticulously map your existing workflows against industry benchmarks, analysing bottlenecks and efficiency gaps that hold your team back from scaling." },
-      { _key: "h2", number: "02", title: "Technical Architecture → System Integration Scope", description: "Our technical assessment reveals the hidden potential in your current tech stack, identifying precise automated solution design to visualise where monday.com can transform fragmented processes into seamless workflows." },
-      { _key: "h3", number: "03", title: "Solution Design → Implementation", description: "Through in-depth process analysis, we build your system with perfect balance between automated sophistication and user adoption, ensuring you see faster set up and team usage." },
-      { _key: "h4", number: "04", title: "Efficiency Impact → ROI Opportunity Analysis", description: "By quantifying potential efficiency gains across your operations, we pinpoint exactly where automation and optimisation will deliver the highest return on your investment." },
-      { _key: "h5", number: "05", title: "Change Readiness → Adoption & Training Strategies", description: "Our proven change impact framework measures organisational readiness and crafts a tailored adoption and training strategy, turning potential resistance into enthusiastic system adoption." },
-    ],
-  },
-]
-
-
-const FEATURE_BLOCKS = [
-  { title: "Build a high-level roll-up of all your boards", body: "Give directors a general overview of the team's progress with calendars, Gantt charts, and dashboards. So, even if you have 10+ boards, senior management can see what someone is working on, how projects are doing, and why tasks are delayed–all with just a few clicks.", ctaLabel: "📊 Our Project Management Solutions", ctaUrl: "/monday-consulting-solutions/monday-project-management", image: "/images/au-rollup.avif" },
-  { title: "Create a CRM or project management tool that fits you", body: "Have a monday.com partner build a system designed to support the way you want your business to run. That means you start with the \"meat and potatoes\" of your platform in place. So later, if you need to adapt to new requirements, you can easily piggyback off of the original set-up.", ctaLabel: "📈 Our CRM Solutions", ctaUrl: "/monday-crm-consulting", image: "/images/au-create-crm.avif" },
-  { title: "Training & managed services", body: "Get the entire team monday.com training. Make sure all of your team members get the onboarding they need to feel comfortable using the platform day in and day out. So when you actually start using the platform, it becomes your single source of truth.", ctaLabel: "👩🏽‍💼👨🏻‍💼 Our Training Services", ctaUrl: "/monday-training", image: "/images/au-training.avif" },
-  { title: "Integrate your email and all external tools", body: "Eliminate manual work with automation. Seamlessly integrate Gmail, Outlook, Sharepoint, Teams, accounting software, ChatGPT, and dozens of other tools with the software's open API.", ctaLabel: "⚡️ See Our Solutions", ctaUrl: "/monday-consulting-solutions", image: "/images/au-integrate.avif" },
-]
-
-const ROI_STATS = [
-  { value: "288%", label: "ROI" },
-  { value: "15,600", label: "Hours Saved" },
-  { value: "50%", label: "Meeting reduction" },
-  { value: "489,794", label: "Net Value" },
-]
-
 type FeatureBlock = { title?: string; body?: string; ctaLabel?: string; ctaUrl?: string; image?: string }
 type RoiStat = { value?: string; label?: string }
 
@@ -210,29 +159,22 @@ export default function MondayPartnerUkContent({
   teamMembers,
 }: Props) {
   if (!page) return null
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = siteSettings?.calendlyLink ?? ""
 
   const resolvedFaqTabs = faqTabs ?? []
   const partnerCaseStudies = caseStudies
-  const resolvedComparisonTabs: ComparisonTab[] = (page.comparisonTabs && page.comparisonTabs.length > 0) ? page.comparisonTabs : UK_TABS
-  const resolvedFeatureBlocks: FeatureBlock[] = (page.featureBlocks && page.featureBlocks.length > 0) ? page.featureBlocks : FEATURE_BLOCKS
-  const resolvedRoiStats: RoiStat[] = (page.roiStats && page.roiStats.length > 0) ? page.roiStats : ROI_STATS
+  const resolvedComparisonTabs: ComparisonTab[] = page.comparisonTabs ?? []
+  const resolvedFeatureBlocks: FeatureBlock[] = page.featureBlocks ?? []
+  const resolvedRoiStats: RoiStat[] = page.roiStats ?? []
 
   return (
     <div>
       {/* Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow}
-        headingPart1={page.heroHeading || "monday.com Certified Partner UK"}
+        headingPart1={page.heroHeading}
         headingAccent=""
-        subheading={
-          page.hideHeroSubheading
-            ? undefined
-            : page.heroSubheading ||
-              "Partner with certified monday.com Partner consultants to build robust infrastructure and architecture for your business account. Our expert implementation services get your team operational immediately, eliminating the time and resources typically spent on trial-and-error setup."
-        }
+        subheading={page.hideHeroSubheading ? undefined : page.heroSubheading}
         heroImage={page.heroImage}
         heroVideoSrc={page.heroLocalVideoSrc}
         certificationBadge={siteSettings?.badgeCertifications}
@@ -241,10 +183,10 @@ export default function MondayPartnerUkContent({
             ? page.heroPartnerBadges
             : siteSettings?.navbarPartnerBadges || []
         }
-        primaryCtaLabel={page.primaryCtaLabel || "🚀  Book a Consultation"}
+        primaryCtaLabel={page.primaryCtaLabel}
         primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
-        secondaryCtaLabel={page.secondaryCtaLabel || "▶️  Get Started with monday.com"}
-        secondaryCtaUrl={page.secondaryCtaUrl || "https://monday.com"}
+        secondaryCtaLabel={page.secondaryCtaLabel}
+        secondaryCtaUrl={page.secondaryCtaUrl}
       />
 
       {/* Logo cloud */}

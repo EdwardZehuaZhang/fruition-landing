@@ -23,9 +23,7 @@ export default async function Page() {
 
   if (!page) return null
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = siteSettings?.calendlyLink ?? ""
 
   const centralTabs = groupFaqsIntoTabs(centralFaqs)
   const faqTabs =

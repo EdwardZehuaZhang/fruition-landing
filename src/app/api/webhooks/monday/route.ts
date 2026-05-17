@@ -160,7 +160,9 @@ function findPhotoUrl(c: MondayColumnValue | undefined, assets: MondayAsset[]): 
     const assetId = parsed.files?.[0]?.assetId
     if (assetId == null) return undefined
     const match = assets.find((a) => String(a.id) === String(assetId))
-    return match?.url
+    // Prefer the signed `public_url` — monday's `url` returns a protected_static
+    // page that needs a session cookie. public_url is a short-lived signed link.
+    return match?.publicUrl ?? match?.url
   } catch {
     return undefined
   }
