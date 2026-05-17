@@ -58,25 +58,6 @@ const COMPARISON_TABS: ComparisonTab[] = [
   },
 ]
 
-const CONSTRUCTION_FAQ_TABS: FaqTab[] = [
-  {
-    _key: "construction",
-    label: "Construction",
-    items: [
-      { _key: "c1", question: "Can Monday com be used for construction projects?", answer: "Absolutely! No matter the size of your build or project, construction project management requires a lot of coordination, usually best handled with construction project management software like monday.com — which can serve you on-the-go with a simple to use but sophisticated mobile app." },
-      { _key: "c2", question: "Does Monday com have project templates?", answer: "Yes. There are a number of monday.com project templates for construction project management in the Template Center. They allow you to:\n\nKeep your construction projects on track and manage budget, timelines, ownership, and view project progress.\nStay on top of your teammates' workloads and deliverables, and keep all stakeholders, and clients in the loop to make sure that each construction project and task is scheduled and completed on time.\nUnderstand your project scope better.\nDocument and determine your different project goals, deliverables, and tasks." },
-    ],
-  },
-  { _key: "professional", label: "Professional Services", items: [
-    { _key: "p1", question: "Does monday com have a CRM?", answer: "Yes, monday has a dedicated CRM product. monday.com CRM is a flexible and highly customizable cloud-based CRM platform intended for businesses of all sizes." },
-  ] },
-  { _key: "wm", label: "monday Work Management", items: [
-    { _key: "wm1", question: "What is monday Work Management?", answer: "monday Work Management is the flexible Work OS that helps teams plan, run, and track projects in one shared workspace." },
-  ] },
-  { _key: "general", label: "General Questions", items: [
-    { _key: "g1", question: "Where is Fruition based?", answer: "Australia, Canada, Singapore, United States, and United Kingdom." },
-  ] },
-]
 
 const LIFECYCLE_STAGES = [
   { n: "01", title: "Bidding & Pre-Construction 🎯", body: "Centralise bid documents and RFPs in collaborative workspaces. Track deadlines, assign team members to proposals, and maintain databases of past bids with automated notifications." },
@@ -101,14 +82,6 @@ const CONSTRUCTION_TESTIMONIALS = [
     role: "Operations Manager, Falkbuilt",
     image: "https://static.wixstatic.com/media/a280a5_255d68b57fbb41e887966dff78f71019~mv2.png/v1/fill/w_720,h_282,al_c,lg_1,q_85,enc_avif,quality_auto/a280a5_255d68b57fbb41e887966dff78f71019~mv2.png",
   },
-]
-
-const PARTNER_CASE_STUDIES_FALLBACK: CaseStudy[] = [
-  { _id: "p1", clientName: "Jade Wood", clientRole: "Managing Director", clientCompany: "Popology", quote: "We are now utilising monday.com to its full potential, from lead through design and production teams - everyone knows what stage our projects are in, what's next and what our process is." },
-  { _id: "p2", clientName: "Mairhead McKinley", clientRole: "Delivery Manager", clientCompany: "Givergy", quote: "We found Monday to be more customisable and transparent for both internal and external stakeholders. It reduced double handling of issues, as the Monday boards provide clear, accessible information—eliminating the need to email around for updates." },
-  { _id: "p3", clientName: "Brandon-Lee Horridge", clientRole: "Managing Director", clientCompany: "BL Air Conditioning", quote: "This system will save hundreds of thousands of dollars a year guaranteed." },
-  { _id: "p4", clientName: "Ron Amaram", clientRole: "General Manager", clientCompany: "Risk 2 Solutions", quote: "Fruition have been instrumental in moving us to a 'single source of truth' system for managing sales and projects." },
-  { _id: "p5", clientName: "Lorenzo Tejada-Orrell", clientRole: "Chief Innovation Officer", clientCompany: "CLSQ", quote: "Since implementing monday.com, CLSQ has experienced a significant transformation in operational efficiency." },
 ]
 
 /* ----------------- Sections ----------------- */
@@ -150,7 +123,10 @@ function KeyFeaturesHeader() {
   )
 }
 
-function LifecycleSection() {
+type LifecycleStage = { n?: string; title?: string; body?: string }
+type ConstructionTestimonial = { title?: string; quote?: string; name?: string; role?: string; image?: string }
+
+function LifecycleSection({ stages }: { stages: LifecycleStage[] }) {
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -158,8 +134,8 @@ function LifecycleSection() {
           Support Each Stage of Your Project Life Cycle with a <span style={{ color: "#8015e8" }}>monday.com Expert</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 28 }}>
-          {LIFECYCLE_STAGES.map((s) => (
-            <div key={s.n} className="flex flex-col" style={{ gap: 10, padding: 24, borderRadius: 16, border: "1px solid #ece7fb", background: "white", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)" }}>
+          {stages.map((s, i) => (
+            <div key={s.n || i} className="flex flex-col" style={{ gap: 10, padding: 24, borderRadius: 16, border: "1px solid #ece7fb", background: "white", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)" }}>
               <p style={{ color: "#8015e8", fontSize: 36, fontWeight: 300, lineHeight: 1 }}>{s.n}</p>
               <p className="font-bold" style={{ color: "#10003a", fontSize: 18 }}>{s.title}</p>
               <p style={{ color: "#444", fontSize: 14, lineHeight: "22px" }}>{s.body}</p>
@@ -171,7 +147,7 @@ function LifecycleSection() {
   )
 }
 
-function ConstructionTestimonialsSection() {
+function ConstructionTestimonialsSection({ testimonials }: { testimonials: ConstructionTestimonial[] }) {
   return (
     <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(180deg, #faf6ff 0%, #ebd9ff 100%)" }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -179,8 +155,8 @@ function ConstructionTestimonialsSection() {
           Construction <span style={{ color: "#8015e8" }}>Testimonials</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 24 }}>
-          {CONSTRUCTION_TESTIMONIALS.map((t) => (
-            <figure key={t.title} className="bg-white overflow-hidden flex flex-col" style={{ borderRadius: 20, border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.22)" }}>
+          {testimonials.map((t, i) => (
+            <figure key={t.title || i} className="bg-white overflow-hidden flex flex-col" style={{ borderRadius: 20, border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.22)" }}>
               <div style={{ aspectRatio: "16 / 10", overflow: "hidden", background: "#f5f0ff" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={t.image} alt={t.title} className="w-full h-full object-cover" />
@@ -202,9 +178,9 @@ function ConstructionTestimonialsSection() {
 }
 
 /* Custom split tabs: first 3 tabs use "Why Construction Leaders Choose" header; second tab swaps to "Key Construction Management Features" header. */
-function ConstructionTabs() {
+function ConstructionTabs({ tabs }: { tabs: ComparisonTab[] }) {
   const [activeIdx, setActiveIdx] = useState(0)
-  const active = COMPARISON_TABS[activeIdx]
+  const active = tabs[activeIdx]
   const heading =
     activeIdx === 0
       ? "Why Construction Leaders Choose monday.com"
@@ -217,7 +193,7 @@ function ConstructionTabs() {
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         {/* Tab buttons */}
         <div className="flex flex-wrap justify-center" style={{ gap: 12, marginBottom: 32 }}>
-          {COMPARISON_TABS.map((tab, i) => (
+          {tabs.map((tab, i) => (
             <button
               key={tab._key}
               onClick={() => setActiveIdx(i)}
@@ -272,8 +248,11 @@ export default function MondayForConstructionContent({
     siteSettings?.calendlyLink ||
     "https://calendly.com/global-calendar-fruitionservices"
 
-  const resolvedFaqTabs = (faqTabs && faqTabs.length > 0) ? faqTabs : CONSTRUCTION_FAQ_TABS
-  const partnerCaseStudies = caseStudies.length > 0 ? caseStudies : PARTNER_CASE_STUDIES_FALLBACK
+  const resolvedFaqTabs = faqTabs ?? []
+  const resolvedComparisonTabs: ComparisonTab[] = (page.comparisonTabs && page.comparisonTabs.length > 0) ? page.comparisonTabs : COMPARISON_TABS
+  const resolvedLifecycleStages: LifecycleStage[] = (page.lifecycleStages && page.lifecycleStages.length > 0) ? page.lifecycleStages : LIFECYCLE_STAGES
+  const resolvedConstructionTestimonials: ConstructionTestimonial[] = (page.industryTestimonials && page.industryTestimonials.length > 0) ? page.industryTestimonials : CONSTRUCTION_TESTIMONIALS
+  const partnerCaseStudies = caseStudies
   // Reference helpers so unused-var lint doesn't fire when we expose more granular
   // headers via separate small components.
   void ConstructionLeadersHeader
@@ -313,7 +292,7 @@ export default function MondayForConstructionContent({
       />
 
       {/* Tab section — heading rotates with active tab */}
-      <ConstructionTabs />
+      <ConstructionTabs tabs={resolvedComparisonTabs} />
 
       {/* Calendly */}
       <CalendlySection
@@ -329,10 +308,10 @@ export default function MondayForConstructionContent({
       <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
 
       {/* Project Life Cycle stages */}
-      <LifecycleSection />
+      <LifecycleSection stages={resolvedLifecycleStages} />
 
       {/* Construction-specific testimonials */}
-      <ConstructionTestimonialsSection />
+      <ConstructionTestimonialsSection testimonials={resolvedConstructionTestimonials} />
 
       {/* General customers say testimonials */}
       <TestimonialsGrid

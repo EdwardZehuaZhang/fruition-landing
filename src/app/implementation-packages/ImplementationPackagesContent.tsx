@@ -21,20 +21,14 @@ type SanityImage = {
   asset?: { _ref?: string; _id?: string } | null
 } | null | undefined
 
-interface PackageFeature {
-  _key?: string
-  emoji?: string
-  label?: string
-}
-
 interface PackageTier {
   _key?: string
-  tabKey?: string
   name?: string
-  badge?: string
-  description?: string
-  supportLabel?: string
-  features?: PackageFeature[]
+  hours?: string
+  basePrice?: number
+  pricePrefix?: string
+  featured?: boolean
+  features?: string[]
 }
 
 interface FeatureCard {
@@ -99,6 +93,8 @@ export interface ImplementationPackagesData {
   socialProofCtaUrl?: string
 
   pricingHeading?: string
+  pricingSubheading?: string
+  pricingFootnote?: string
   packageTiers?: PackageTier[]
 
   testimonialsHeading?: string
@@ -261,50 +257,23 @@ export default function ImplementationPackagesContent({
     features: string[]
     featured?: boolean
   }
-  const PRICING_TIERS: PricingTier[] = [
-    {
-      name: "Guided",
-      hours: "20 hrs",
-      basePrice: 4900,
-      features: [
-        "1 use case",
-        "Requirements shared",
-        "Template configuration",
-        "Native automation",
-        "Handover documentation",
-      ],
-    },
-    {
-      name: "Lock-Step",
-      hours: "40 hrs",
-      basePrice: 9500,
-      featured: true,
-      features: [
-        "Process mapping for 1–2 use cases",
-        "Solution design",
-        "Build support",
-        "Native automation",
-        "Handover documentation",
-      ],
-    },
-    {
-      name: "Bespoke",
-      hours: "50+ hrs",
-      basePrice: 10000,
-      pricePrefix: "From ",
-      features: [
-        "Multi-team process mapping",
-        "Custom integrations",
-        "Custom solution build",
-        "Training & adoption support",
-        "Handover documentation",
-      ],
-    },
-  ]
+  const PRICING_TIERS: PricingTier[] = (data?.packageTiers ?? [])
+    .filter((t): t is PackageTier => !!t && typeof t.name === "string" && typeof t.basePrice === "number")
+    .map((t) => ({
+      name: t.name as string,
+      hours: t.hours ?? "",
+      basePrice: t.basePrice as number,
+      pricePrefix: t.pricePrefix,
+      features: (t.features ?? []).filter((f): f is string => typeof f === "string"),
+      featured: !!t.featured,
+    }))
   const [currency, setCurrency] = useState<CurrencyCode>("USD")
   const [region, setRegion] = useState<RegionCode>("US")
   const [currencyOpen, setCurrencyOpen] = useState(false)
   const [regionOpen, setRegionOpen] = useState(false)
+  const [hoveredTier, setHoveredTier] = useState<string | null>(null)
+  const [currencyHover, setCurrencyHover] = useState(false)
+  const [regionHover, setRegionHover] = useState(false)
   const currencyRef = useRef<HTMLDivElement | null>(null)
   const regionRef = useRef<HTMLDivElement | null>(null)
   useEffect(() => {
@@ -692,49 +661,43 @@ export default function ImplementationPackagesContent({
             </div>
           )}
 
-          {/* 4d: Pricing Cards (Guided / Lock-Step / Bespoke) */}
-          <div
-            className="flex flex-col items-center w-full"
-            style={{ marginTop: 60, maxWidth: 1200, paddingLeft: 16, paddingRight: 16 }}
-          >
-            {/* Eyebrow */}
-            <span
-              className="font-semibold uppercase tracking-[0.18em]"
-              style={{
-                color: "#8015e8",
-                fontSize: 12,
-                background: "rgba(128,21,232,0.08)",
-                padding: "6px 14px",
-                borderRadius: 999,
-              }}
-            >
-              Implementation
-            </span>
+        </div>
+      </section>
 
-            {/* Heading */}
-            <h2
-              className="text-section-h2 text-center text-black"
-              style={{ marginTop: 18 }}
-            >
-              {pricingHeading || "Implementation"}
-            </h2>
-            <p
-              className="text-center"
-              style={{
-                marginTop: 14,
-                fontSize: 18,
-                color: "#4a4a4a",
-                maxWidth: 640,
-                lineHeight: 1.5,
-              }}
-            >
-              Hit the ground running and drive lasting impact with hands-on support
-            </p>
+      {/* ============================================================ */}
+      {/* SECTION 4.5 -- Pricing Packages                              */}
+      {/* ============================================================ */}
+      <section style={{ backgroundColor: "white" }}>
+        <div
+          className="mx-auto flex flex-col w-full"
+          style={{ paddingTop: 80, paddingBottom: 80, maxWidth: 1200, paddingLeft: 16, paddingRight: 16 }}
+        >
+          {/* Header row: heading left, dropdowns right */}
+          <div
+            className="flex flex-col md:flex-row md:items-end md:justify-between w-full"
+            style={{ gap: 24 }}
+          >
+            <div className="flex flex-col" style={{ maxWidth: 640 }}>
+              <h2 className="text-section-h2 text-black" style={{ textAlign: "left" }}>
+                {pricingHeading || "Pricing Packages"}
+              </h2>
+              <p
+                style={{
+                  marginTop: 14,
+                  fontSize: 18,
+                  color: "#4a4a4a",
+                  lineHeight: 1.5,
+                  textAlign: "left",
+                }}
+              >
+                {data?.pricingSubheading || "Hit the ground running and drive lasting impact with hands-on support"}
+              </p>
+            </div>
 
             {/* Toggles */}
             <div
-              className="flex flex-wrap items-center justify-center"
-              style={{ gap: 16, marginTop: 32 }}
+              className="flex flex-wrap items-center"
+              style={{ gap: 16 }}
             >
               {/* Currency dropdown */}
               <div ref={currencyRef} style={{ position: "relative" }}>
@@ -744,6 +707,8 @@ export default function ImplementationPackagesContent({
                     setCurrencyOpen((o) => !o)
                     setRegionOpen(false)
                   }}
+                  onMouseEnter={() => setCurrencyHover(true)}
+                  onMouseLeave={() => setCurrencyHover(false)}
                   className="flex items-center font-semibold"
                   style={{
                     height: 44,
@@ -751,18 +716,22 @@ export default function ImplementationPackagesContent({
                     paddingRight: 14,
                     borderRadius: 99,
                     backgroundColor: "white",
-                    border: "1px solid #e0d4f5",
+                    border: `1px solid ${currencyHover || currencyOpen ? "#8015e8" : "#e0d4f5"}`,
                     color: "#2b074d",
                     fontSize: 14,
                     gap: 10,
-                    boxShadow: "0px 1px 2px rgba(43,7,77,0.04)",
+                    boxShadow: currencyHover
+                      ? "0px 4px 12px rgba(128,21,232,0.12)"
+                      : "0px 1px 2px rgba(43,7,77,0.04)",
+                    transform: currencyHover ? "translateY(-1px)" : "translateY(0)",
+                    transition: "border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease",
                     cursor: "pointer",
                   }}
                 >
                   <span style={{ color: "#8015e8", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}>
                     CURRENCY
                   </span>
-                  <span>{CURRENCIES[currency].label}</span>
+                  <span>{CURRENCIES[currency].symbol} {CURRENCIES[currency].label}</span>
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: currencyOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>
                     <path d="M2 4l4 4 4-4" stroke="#8015e8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
@@ -821,6 +790,8 @@ export default function ImplementationPackagesContent({
                     setRegionOpen((o) => !o)
                     setCurrencyOpen(false)
                   }}
+                  onMouseEnter={() => setRegionHover(true)}
+                  onMouseLeave={() => setRegionHover(false)}
                   className="flex items-center font-semibold"
                   style={{
                     height: 44,
@@ -828,11 +799,15 @@ export default function ImplementationPackagesContent({
                     paddingRight: 14,
                     borderRadius: 99,
                     backgroundColor: "white",
-                    border: "1px solid #e0d4f5",
+                    border: `1px solid ${regionHover || regionOpen ? "#8015e8" : "#e0d4f5"}`,
                     color: "#2b074d",
                     fontSize: 14,
                     gap: 10,
-                    boxShadow: "0px 1px 2px rgba(43,7,77,0.04)",
+                    boxShadow: regionHover
+                      ? "0px 4px 12px rgba(128,21,232,0.12)"
+                      : "0px 1px 2px rgba(43,7,77,0.04)",
+                    transform: regionHover ? "translateY(-1px)" : "translateY(0)",
+                    transition: "border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease",
                     cursor: "pointer",
                   }}
                 >
@@ -892,6 +867,7 @@ export default function ImplementationPackagesContent({
                 )}
               </div>
             </div>
+          </div>
 
             {/* Cards */}
             <div
@@ -900,49 +876,39 @@ export default function ImplementationPackagesContent({
             >
               {PRICING_TIERS.map((tier) => {
                 const featured = !!tier.featured
+                const hovered = hoveredTier === tier.name
+                const baseTranslate = featured ? -12 : 0
+                const hoverLift = hovered ? -4 : 0
                 return (
                   <div
                     key={tier.name}
                     className="flex flex-col"
+                    onMouseEnter={() => setHoveredTier(tier.name)}
+                    onMouseLeave={() => setHoveredTier(null)}
                     style={{
                       borderRadius: 28,
                       padding: 32,
                       position: "relative",
+                      transition: "transform 200ms ease, box-shadow 200ms ease",
+                      transform: `translateY(${baseTranslate + hoverLift}px)`,
                       ...(featured
                         ? {
                             background: "linear-gradient(160deg, #7d14e3 0%, #5a0eb0 100%)",
                             color: "white",
-                            boxShadow: "0px 24px 60px rgba(125,20,227,0.35), 0px 0px 0px 1px rgba(125,20,227,0.4)",
-                            transform: "translateY(-12px)",
+                            boxShadow: hovered
+                              ? "0px 32px 72px rgba(125,20,227,0.45), 0px 0px 0px 1px rgba(125,20,227,0.4)"
+                              : "0px 24px 60px rgba(125,20,227,0.35), 0px 0px 0px 1px rgba(125,20,227,0.4)",
                           }
                         : {
                             backgroundColor: "white",
                             border: "1px solid #ece6fc",
                             color: "#2b074d",
-                            boxShadow: "0px 8px 24px rgba(43,7,77,0.06)",
+                            boxShadow: hovered
+                              ? "0px 16px 36px rgba(43,7,77,0.12)"
+                              : "0px 8px 24px rgba(43,7,77,0.06)",
                           }),
                     }}
                   >
-                    {featured && (
-                      <span
-                        style={{
-                          position: "absolute",
-                          top: 18,
-                          right: 18,
-                          fontSize: 11,
-                          fontWeight: 700,
-                          letterSpacing: "0.14em",
-                          textTransform: "uppercase",
-                          color: "#2b074d",
-                          backgroundColor: "#ffffff",
-                          padding: "6px 12px",
-                          borderRadius: 999,
-                        }}
-                      >
-                        Most Popular
-                      </span>
-                    )}
-
                     {/* Name */}
                     <h3
                       style={{
@@ -980,9 +946,9 @@ export default function ImplementationPackagesContent({
                         </span>
                       )}
                       <span
-                        className="font-bold"
                         style={{
                           fontSize: 40,
+                          fontWeight: 600,
                           lineHeight: 1,
                           color: featured ? "white" : "#2b074d",
                           letterSpacing: "-0.02em",
@@ -1019,26 +985,22 @@ export default function ImplementationPackagesContent({
                           className="flex items-start"
                           style={{ gap: 10, fontSize: 14, lineHeight: 1.5 }}
                         >
-                          <span
-                            className="flex items-center justify-center shrink-0"
-                            style={{
-                              width: 20,
-                              height: 20,
-                              borderRadius: 999,
-                              backgroundColor: featured ? "rgba(255,255,255,0.18)" : "rgba(128,21,232,0.1)",
-                              marginTop: 1,
-                            }}
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 11 11"
+                            fill="none"
+                            className="shrink-0"
+                            style={{ marginTop: 4 }}
                           >
-                            <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                              <path
-                                d="M1.5 5.6l2.6 2.6L9.5 2.8"
-                                stroke={featured ? "white" : "#8015e8"}
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </span>
+                            <path
+                              d="M1.5 5.6l2.6 2.6L9.5 2.8"
+                              stroke={featured ? "white" : "#8015e8"}
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
                           <span style={{ color: featured ? "rgba(255,255,255,0.95)" : "#2b074d" }}>{f}</span>
                         </li>
                       ))}
@@ -1081,11 +1043,10 @@ export default function ImplementationPackagesContent({
                 fontStyle: "italic",
               }}
             >
-              *Please note: you must purchase one package per product. Prices shown are estimates and may vary by scope.
+              {data?.pricingFootnote || "*Please note: you must purchase one package per product. Prices shown are estimates and may vary by scope."}
             </p>
           </div>
 
-        </div>
       </section>
 
       {/* ============================================================ */}

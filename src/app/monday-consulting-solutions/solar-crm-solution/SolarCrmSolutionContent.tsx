@@ -115,7 +115,9 @@ const FINAL_STATS: Array<{ value: string; label: string }> = [
 ]
 
 /* -------- Key Features + Services -------- */
-function KeyFeaturesSection() {
+type SolarTestimonial = { quote?: string; name?: string; role?: string; company?: string; photo?: string }
+
+function KeyFeaturesSection({ services }: { services: string[] }) {
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto grid grid-cols-1 md:grid-cols-2" style={{ maxWidth: 1100, gap: 48 }}>
@@ -139,8 +141,8 @@ function KeyFeaturesSection() {
             Our <span style={{ color: "#8015e8" }}>Services</span>
           </h2>
           <ul className="flex flex-col" style={{ gap: 14 }}>
-            {SERVICES.map((s) => (
-              <li key={s} className="flex items-start" style={{ gap: 10 }}>
+            {services.map((s, i) => (
+              <li key={s || i} className="flex items-start" style={{ gap: 10 }}>
                 <span style={{ color: "#8015e8", fontSize: 16, lineHeight: "24px", flexShrink: 0 }}>✓</span>
                 <p style={{ fontSize: 15, lineHeight: "24px", color: "#222" }}>{s}</p>
               </li>
@@ -153,7 +155,7 @@ function KeyFeaturesSection() {
 }
 
 /* -------- Stats banner with rotating testimonials -------- */
-function ReturnsBannerSection({ calendlyUrl }: { calendlyUrl: string }) {
+function ReturnsBannerSection({ calendlyUrl, testimonials }: { calendlyUrl: string; testimonials: SolarTestimonial[] }) {
   return (
     <section
       className="px-4 relative overflow-hidden"
@@ -175,9 +177,9 @@ function ReturnsBannerSection({ calendlyUrl }: { calendlyUrl: string }) {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>
-          {SOLAR_TESTIMONIALS.map((t) => (
+          {testimonials.map((t, i) => (
             <figure
-              key={t.name}
+              key={t.name || i}
               className="bg-white"
               style={{ borderRadius: 16, padding: 24, display: "flex", flexDirection: "column", gap: 16 }}
             >
@@ -323,7 +325,7 @@ export default function SolarCrmSolutionContent({ page, siteSettings }: Props) {
       )}
 
       {/* 4. Key Features + Services 2-column section */}
-      <KeyFeaturesSection />
+      <KeyFeaturesSection services={(page.servicesList && page.servicesList.length > 0) ? page.servicesList : SERVICES} />
 
       {/* 5. Calendly */}
       <CalendlySection
@@ -339,7 +341,7 @@ export default function SolarCrmSolutionContent({ page, siteSettings }: Props) {
       {solutionTop.length > 0 && <SolutionCardsSection cards={solutionTop} />}
 
       {/* 7. Returns banner with testimonials + CTAs */}
-      <ReturnsBannerSection calendlyUrl={calendlyUrl} />
+      <ReturnsBannerSection calendlyUrl={calendlyUrl} testimonials={(page.solarTestimonials && page.solarTestimonials.length > 0) ? page.solarTestimonials : SOLAR_TESTIMONIALS} />
 
       {/* 8. Solution cards — bottom pair (INVENTORY TRACKING + FINANCIAL FORECASTING) */}
       {solutionBottom.length > 0 && <SolutionCardsSection cards={solutionBottom} />}
@@ -347,7 +349,7 @@ export default function SolarCrmSolutionContent({ page, siteSettings }: Props) {
       {/* 9. Before vs After comparison (sideBySide) — hardcoded both columns */}
       <ComparisonTabsSection
         heading="Before vs After"
-        tabs={BEFORE_AFTER_TABS}
+        tabs={(page.beforeAfterTabs && page.beforeAfterTabs.length > 0) ? page.beforeAfterTabs : BEFORE_AFTER_TABS}
         theme="light"
         layout="sideBySide"
         withPurpleCircle={false}

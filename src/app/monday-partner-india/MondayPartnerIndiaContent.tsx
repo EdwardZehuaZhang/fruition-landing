@@ -70,14 +70,6 @@ const IN_TABS: ComparisonTab[] = [
   },
 ]
 
-const PARTNER_CASE_STUDIES_FALLBACK: CaseStudy[] = [
-  { _id: "p1", clientName: "Jade Wood", clientRole: "Managing Director", clientCompany: "Popology", quote: "We are now utilising monday.com to its full potential, from lead through design and production teams - everyone knows what stage our projects are in, what's next and what our process is." },
-  { _id: "p2", clientName: "Mairhead McKinley", clientRole: "Delivery Manager", clientCompany: "Givergy", quote: "We found Monday to be more customisable and transparent for both internal and external stakeholders. It reduced double handling of issues, as the Monday boards provide clear, accessible information—eliminating the need to email around for updates." },
-  { _id: "p3", clientName: "Brandon-Lee Horridge", clientRole: "Managing Director", clientCompany: "BL Air Conditioning", quote: "This system will save hundreds of thousands of dollars a year guaranteed." },
-  { _id: "p4", clientName: "Ron Amaram", clientRole: "General Manager", clientCompany: "Risk 2 Solutions", quote: "Fruition have been instrumental in moving us to a 'single source of truth' system for managing sales and projects." },
-  { _id: "p5", clientName: "Lorenzo Tejada-Orrell", clientRole: "Chief Innovation Officer", clientCompany: "CLSQ", quote: "Since implementing monday.com, CLSQ has experienced a significant transformation in operational efficiency." },
-]
-
 const FEATURE_BLOCKS = [
   { title: "Build a high-level roll-up of all your boards", body: "Give directors a general overview of the team's progress with calendars, Gantt charts, and dashboards. So, even if you have 10+ boards, senior management can see what someone is working on, how projects are doing, and why tasks are delayed–all with just a few clicks.", ctaLabel: "📊 Our Project Management Solutions", ctaUrl: "/monday-consulting-solutions/monday-project-management", image: "/images/au-rollup.avif" },
   { title: "Create a CRM or project management tool that fits you", body: "Have a monday.com consultation partner build a system designed to support the way you want your business to run. That means you start with the \"meat and potatoes\" of your platform in place. So later, if you need to adapt to new requirements, you can easily piggyback off of the original set-up.", ctaLabel: "📈 Our CRM Solutions", ctaUrl: "/monday-crm-consulting", image: "/images/au-create-crm.avif" },
@@ -105,12 +97,15 @@ function TeamsTransformedStrip() {
   )
 }
 
-function FeatureBlocksSection() {
+type FeatureBlock = { title?: string; body?: string; ctaLabel?: string; ctaUrl?: string; image?: string }
+type RoiStat = { value?: string; label?: string }
+
+function FeatureBlocksSection({ blocks }: { blocks: FeatureBlock[] }) {
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <div className="flex flex-col" style={{ gap: 56 }}>
-          {FEATURE_BLOCKS.map((b, i) => (
+          {blocks.map((b, i) => (
             <div
               key={b.title}
               className="flex flex-col items-center"
@@ -120,7 +115,7 @@ function FeatureBlocksSection() {
                 <h3 className="font-bold" style={{ color: "#10003a", fontSize: 26, lineHeight: "34px", marginBottom: 14 }}>{b.title}</h3>
                 <p style={{ color: "#444", fontSize: 15, lineHeight: "24px", whiteSpace: "pre-line" }}>{b.body}</p>
                 <Link
-                  href={b.ctaUrl}
+                  href={b.ctaUrl || "#"}
                   className="inline-flex items-center font-semibold"
                   style={{ marginTop: 18, color: "#8015e8", fontSize: 14 }}
                 >
@@ -170,7 +165,7 @@ function PartnerSectionCta({ calendlyUrl }: { calendlyUrl: string }) {
   )
 }
 
-function EconomicImpactSection({ calendlyUrl }: { calendlyUrl: string }) {
+function EconomicImpactSection({ calendlyUrl, stats }: { calendlyUrl: string; stats: RoiStat[] }) {
   return (
     <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(160deg, #2b074d 0%, #10003a 100%)" }}>
       <div className="mx-auto text-center" style={{ maxWidth: 1100 }}>
@@ -179,8 +174,8 @@ function EconomicImpactSection({ calendlyUrl }: { calendlyUrl: string }) {
         </h2>
         <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 15, marginBottom: 36 }}>The economic impact of</p>
         <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 20, marginBottom: 40 }}>
-          {ROI_STATS.map((s) => (
-            <div key={s.label}>
+          {stats.map((s, i) => (
+            <div key={s.label || i}>
               <p className="font-bold" style={{ color: "white", fontSize: 36, lineHeight: 1 }}>{s.value}</p>
               <p style={{ color: "rgba(255,255,255,0.78)", fontSize: 13, marginTop: 8 }}>{s.label}</p>
             </div>
@@ -240,7 +235,10 @@ export default function MondayPartnerIndiaContent({
     siteSettings?.calendlyLink ||
     "https://calendly.com/global-calendar-fruitionservices"
 
-  const partnerCaseStudies = caseStudies.length > 0 ? caseStudies : PARTNER_CASE_STUDIES_FALLBACK
+  const partnerCaseStudies = caseStudies
+  const resolvedComparisonTabs: ComparisonTab[] = (page.comparisonTabs && page.comparisonTabs.length > 0) ? page.comparisonTabs : IN_TABS
+  const resolvedFeatureBlocks: FeatureBlock[] = (page.featureBlocks && page.featureBlocks.length > 0) ? page.featureBlocks : FEATURE_BLOCKS
+  const resolvedRoiStats: RoiStat[] = (page.roiStats && page.roiStats.length > 0) ? page.roiStats : ROI_STATS
 
   return (
     <div>
@@ -284,7 +282,7 @@ export default function MondayPartnerIndiaContent({
       <ComparisonTabsSection
         heading={page.comparisonHeading || "Streamline Operations & Maximise Efficiency with Our monday.com Consultants"}
         subheading="Our expert consultants empower you to adopt workflow automation & AI systems"
-        tabs={IN_TABS}
+        tabs={resolvedComparisonTabs}
         theme="light"
         withPurpleCircle={false}
       />
@@ -318,7 +316,7 @@ export default function MondayPartnerIndiaContent({
       />
 
       {/* Feature blocks */}
-      <FeatureBlocksSection />
+      <FeatureBlocksSection blocks={resolvedFeatureBlocks} />
 
       {/* Work with partner CTA */}
       <PartnerSectionCta calendlyUrl={calendlyUrl} />
@@ -327,7 +325,7 @@ export default function MondayPartnerIndiaContent({
       <CrmTutorialCta calendlyUrl={calendlyUrl} />
 
       {/* Economic impact */}
-      <EconomicImpactSection calendlyUrl={calendlyUrl} />
+      <EconomicImpactSection calendlyUrl={calendlyUrl} stats={resolvedRoiStats} />
     </div>
   )
 }

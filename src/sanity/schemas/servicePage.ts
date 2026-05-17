@@ -221,5 +221,20 @@ export default {
     // Logo cloud overrides
     { name: 'logoCloudHeadingPart1', title: 'Logo Cloud Heading (prefix)', type: 'string' },
     { name: 'logoCloudHeadingAccent', title: 'Logo Cloud Heading (accent)', type: 'string' },
+
+    // Per-page hardcoded data migrated from Content.tsx files
+    {
+      name: 'certificateBadges',
+      title: 'Certificate Badges',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'certificateBadge',
+        fields: [
+          { name: 'src', title: 'Image URL (or /path)', type: 'string' },
+          { name: 'alt', title: 'Alt Text', type: 'string' },
+        ],
+      }],
+    },
   ],
 }

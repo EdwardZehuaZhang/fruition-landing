@@ -236,7 +236,7 @@ const HR_FIT_REASONS = [
   },
 ]
 
-function HrLifecycleSection() {
+function HrLifecycleSection({ stages: resolvedLifecycleStages }: { stages: { n?: string; title?: string; body?: string }[] }) {
   return (
     <section
       className="bg-white px-4 relative overflow-hidden"
@@ -250,8 +250,8 @@ function HrLifecycleSection() {
           Supporting Each Stage of Your HR Life Cycle
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 32, columnGap: 56 }}>
-          {HR_LIFECYCLE_STAGES.map((stage) => (
-            <div key={stage.n} className="flex flex-col" style={{ gap: 12 }}>
+          {resolvedLifecycleStages.map((stage: { n?: string; title?: string; body?: string }, i: number) => (
+            <div key={stage.n || i} className="flex flex-col" style={{ gap: 12 }}>
               <p style={{ color: "#8015e8", fontSize: 40, fontWeight: 300, lineHeight: 1 }}>{stage.n}</p>
               <p style={{ color: "#10003a", fontSize: 18, fontWeight: 700 }}>{stage.title}</p>
               <p style={{ color: "#4a4a4a", fontSize: 14, lineHeight: "22px" }}>{stage.body}</p>
@@ -342,7 +342,7 @@ function HrExpertiseSection() {
   )
 }
 
-function HrFitSection({ calendlyUrl }: { calendlyUrl: string }) {
+function HrFitSection({ calendlyUrl, reasons: resolvedFitReasons }: { calendlyUrl: string; reasons: { title?: string; body?: string }[] }) {
   return (
     <section className="px-4 relative overflow-hidden" style={{ paddingTop: 96, paddingBottom: 96, backgroundColor: "#ebd9ff" }}>
       {/* Decorative orbs */}
@@ -409,9 +409,9 @@ function HrFitSection({ calendlyUrl }: { calendlyUrl: string }) {
 
         {/* Card grid */}
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
-          {HR_FIT_REASONS.map((r, i) => (
+          {resolvedFitReasons.map((r: { title?: string; body?: string }, i: number) => (
             <div
-              key={r.title}
+              key={r.title || i}
               className="relative bg-white transition-transform hover:-translate-y-[2px]"
               style={{
                 borderRadius: 20,
@@ -480,6 +480,8 @@ export default function MondayForHrContent({
       : HR_COMPARISON_TABS
 
   const featuredTestimonial = caseStudies[0]
+  const resolvedLifecycleStages = (page.lifecycleStages && page.lifecycleStages.length > 0) ? page.lifecycleStages : HR_LIFECYCLE_STAGES
+  const resolvedFitReasons = (page.fitReasons && page.fitReasons.length > 0) ? page.fitReasons : HR_FIT_REASONS
 
   return (
     <div>
@@ -538,9 +540,9 @@ export default function MondayForHrContent({
       ) : null)}
 
       {/* Sections below FAQ (per screenshot) */}
-      <HrLifecycleSection />
+      <HrLifecycleSection stages={resolvedLifecycleStages} />
       <HrExpertiseSection />
-      <HrFitSection calendlyUrl={calendlyUrl} />
+      <HrFitSection calendlyUrl={calendlyUrl} reasons={resolvedFitReasons} />
       <HrVideoSection />
 
       {/* Closing sections */}

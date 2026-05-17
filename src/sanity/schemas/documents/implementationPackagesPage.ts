@@ -91,6 +91,8 @@ export default defineType({
 
     // Pricing packages
     defineField({ name: 'pricingHeading', title: 'Pricing Heading', type: 'string' }),
+    defineField({ name: 'pricingSubheading', title: 'Pricing Subheading', type: 'text' }),
+    defineField({ name: 'pricingFootnote', title: 'Pricing Footnote', type: 'text' }),
     defineField({
       name: 'packageTiers',
       title: 'Package Tiers',
@@ -100,27 +102,21 @@ export default defineType({
           type: 'object',
           name: 'packageTier',
           fields: [
-            { name: 'tabKey', title: 'Tab Key (Guided / Lock-step / Bespoke)', type: 'string' },
             { name: 'name', title: 'Name', type: 'string' },
-            { name: 'badge', title: 'Badge (timeline)', type: 'string' },
-            { name: 'description', title: 'Description', type: 'text' },
-            { name: 'supportLabel', title: 'Support Label (e.g. "Quick Start Plus:")', type: 'string' },
+            { name: 'hours', title: 'Hours (e.g. "20 hrs", "40+ hrs")', type: 'string' },
+            { name: 'basePrice', title: 'Base Price (USD, integer)', type: 'number' },
+            { name: 'pricePrefix', title: 'Price Prefix (e.g. "From ")', type: 'string' },
+            { name: 'featured', title: 'Featured (highlighted card)', type: 'boolean' },
             {
               name: 'features',
               title: 'Features',
               type: 'array',
-              of: [
-                {
-                  type: 'object',
-                  name: 'packageFeature',
-                  fields: [
-                    { name: 'emoji', title: 'Emoji', type: 'string' },
-                    { name: 'label', title: 'Label', type: 'string' },
-                  ],
-                },
-              ],
+              of: [{ type: 'string' }],
             },
           ],
+          preview: {
+            select: { title: 'name', subtitle: 'hours' },
+          },
         }),
       ],
     }),

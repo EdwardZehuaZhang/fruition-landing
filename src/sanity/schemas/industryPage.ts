@@ -49,6 +49,10 @@ export default {
     { name: 'hideHeroSubheading', title: 'Hide Hero Subheading', type: 'boolean', initialValue: false },
     { name: 'heroSplitLayout', title: 'Hero: Split Layout (text left / image right)', type: 'boolean', initialValue: false },
     { name: 'hideHeroPartnerBadges', title: 'Hero: Hide Partner Badges Row', type: 'boolean', initialValue: false },
+    { name: 'heroPartnerImagePath', title: 'Hero Partner Image (public path, e.g. /monday-marketing-partner.avif)', type: 'string' },
+
+    // Testimonial banner overrides
+    { name: 'testimonialBannerPrimaryCtaLabel', title: 'Testimonial Banner Primary CTA Label', type: 'string' },
 
     // CTA buttons
     { name: 'primaryCtaLabel', title: 'Primary CTA Label', type: 'string' },
@@ -468,6 +472,130 @@ export default {
       }],
     },
     { name: 'joinFootnote', title: 'Join Footnote', type: 'string' },
+
+    // Marketing-page case studies (title/description/videoUrl)
+    {
+      name: 'marketingCaseStudyCards',
+      title: 'Marketing Case Study Cards',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'marketingCaseStudyCard',
+        fields: [
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'description', title: 'Description', type: 'text' },
+          { name: 'videoUrl', title: 'Video URL', type: 'string' },
+        ],
+      }],
+    },
+
+    // Lifecycle stages (n/title/body) — used by construction + HR
+    {
+      name: 'lifecycleStages',
+      title: 'Lifecycle Stages',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'lifecycleStage',
+        fields: [
+          { name: 'n', title: 'Number', type: 'string' },
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'body', title: 'Body', type: 'text' },
+        ],
+      }],
+    },
+
+    // Fit reasons (title/body) — used by HR
+    {
+      name: 'fitReasons',
+      title: 'Fit Reasons',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'fitReason',
+        fields: [
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'body', title: 'Body', type: 'text' },
+        ],
+      }],
+    },
+
+    // Why-best cards (emoji/title/description) — Marketing
+    {
+      name: 'whyBestCards',
+      title: 'Why Best Cards (emoji/title/description)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'whyBestCard',
+        fields: [
+          { name: 'emoji', title: 'Emoji', type: 'string' },
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'description', title: 'Description', type: 'text' },
+        ],
+      }],
+    },
+
+    // Construction-style testimonials (title/quote/name/role/image)
+    {
+      name: 'industryTestimonials',
+      title: 'Industry Testimonials (title/quote/name/role/image)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'industryTestimonial',
+        fields: [
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'quote', title: 'Quote', type: 'text' },
+          { name: 'name', title: 'Name', type: 'string' },
+          { name: 'role', title: 'Role', type: 'string' },
+          { name: 'image', title: 'Image URL (or /path)', type: 'string' },
+        ],
+      }],
+    },
+
+    // Per-page hardcoded data migrated from Content.tsx files
+    {
+      name: 'bottomStats',
+      title: 'Bottom Stats (years experience / projects completed)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'bottomStat',
+        fields: [
+          { name: 'value', title: 'Value', type: 'string' },
+          { name: 'label', title: 'Label', type: 'string' },
+        ],
+      }],
+    },
+    {
+      name: 'workflowTabs',
+      title: 'Workflow Tabs (Professional Services style)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'workflowTab',
+        fields: [
+          { name: 'key', title: 'Key', type: 'string' },
+          { name: 'label', title: 'Tab Label', type: 'string' },
+          { name: 'heading', title: 'Heading', type: 'string' },
+          { name: 'description', title: 'Description', type: 'text' },
+          {
+            name: 'benefits',
+            title: 'Benefits',
+            type: 'array',
+            of: [{
+              type: 'object',
+              name: 'workflowBenefit',
+              fields: [
+                { name: 'emoji', title: 'Emoji', type: 'string' },
+                { name: 'label', title: 'Label', type: 'string' },
+              ],
+            }],
+          },
+        ],
+      }],
+    },
 
     // Section visibility toggles
     { name: 'hideDiscoverSection', title: 'Hide Discover CTA Section', type: 'boolean', initialValue: false },

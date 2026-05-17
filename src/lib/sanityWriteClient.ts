@@ -42,7 +42,7 @@ export async function uploadImageAsset(
   return id
 }
 
-interface CreateTeamMemberInput {
+export interface CreateTeamMemberInput {
   docId: string
   name: string
   role: string
@@ -54,7 +54,7 @@ interface CreateTeamMemberInput {
   order?: number
 }
 
-export async function createTeamMember(input: CreateTeamMemberInput): Promise<{ id: string }> {
+function buildTeamMemberDoc(input: CreateTeamMemberInput): Record<string, unknown> {
   const doc: Record<string, unknown> = {
     _id: input.docId,
     _type: "teamMember",
@@ -69,14 +69,27 @@ export async function createTeamMember(input: CreateTeamMemberInput): Promise<{ 
   if (input.photoAssetId) {
     doc.photo = { _type: "image", asset: { _type: "reference", _ref: input.photoAssetId } }
   }
+  return doc
+}
+
+async function mutate(mutations: unknown[]): Promise<void> {
   const r = await fetch(`${base()}/data/mutate/${DATASET}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${getToken()}`,
     },
-    body: JSON.stringify({ mutations: [{ create: doc }] }),
+    body: JSON.stringify({ mutations }),
   })
   if (!r.ok) throw new Error(`sanity mutate ${r.status} ${await r.text()}`)
+}
+
+export async function createTeamMember(input: CreateTeamMemberInput): Promise<{ id: string }> {
+  await mutate([{ create: buildTeamMemberDoc(input) }])
+  return { id: input.docId }
+}
+
+export async function upsertTeamMember(input: CreateTeamMemberInput): Promise<{ id: string }> {
+  await mutate([{ createOrReplace: buildTeamMemberDoc(input) }])
   return { id: input.docId }
 }

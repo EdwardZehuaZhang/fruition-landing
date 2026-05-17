@@ -134,22 +134,6 @@ const AIRCALL_TABS: Tab[] = [
   },
 ]
 
-const AIRCALL_FAQ_TABS: FaqTab[] = [
-  {
-    _key: "aircall",
-    label: "Aircall FAQs",
-    items: [
-      { _key: "f1", question: "What is Aircall and how does it work?", answer: "Aircall is a cloud-based phone system designed to replace traditional phone systems and provide businesses with a flexible and scalable communication solution. Instead of relying on physical phone lines, Aircall leverages the internet to transmit voice data, allowing users to make and receive calls through software applications on their devices." },
-      { _key: "f2", question: "What is Aircall workspace?", answer: "Aircall Workspace is designed to help end users navigate customer conversations with greater clarity and confidence. We've introduced more room for moving effortlessly between inboxes, conversations, and customer context, all in one place." },
-      { _key: "f3", question: "How is Aircall different than other customer communication and intelligence platforms?", answer: "Aircall is different than other customer communication and intelligence platforms because it is extremely easy to set up, only taking a few minutes, with no hardware and no headaches. Another reason is because Aircall syncs information between CRM systems, Helpdesk solutions, and many other essential tools. Lastly, Aircall has clear analytics, which gets rid of the guesswork and allows you to monitor team performance in real time." },
-      { _key: "f4", question: "What is the Aircall and monday.com integration?", answer: "The Aircall and monday.com integration connects your phone system with your work management platform, enabling teams to automatically log calls, track conversations, and manage customer interactions directly within monday.com." },
-      { _key: "f5", question: "How does Aircall integrate with monday.com?", answer: "Once connected, every incoming and outgoing call from Aircall can be automatically recorded in Monday.com as an item or activity. This allows sales and support teams to centralize communication, assign follow-up tasks, and view call history without switching tools." },
-      { _key: "f6", question: "What are the benefits of using Aircall with Monday.com?", answer: "Key benefits include:\n\nAutomatic call logging in Monday.com boards\nCentralized view of customer communications\nStreamlined sales and support workflows\nIncreased accountability with call tracking\nReduced manual data entry for teams" },
-      { _key: "f7", question: "Does the integration support automation?", answer: "Yes. You can create automations in monday.com to trigger actions based on Aircall events. For example, when a missed call is logged, monday.com can automatically notify the responsible team member or create a follow-up task." },
-      { _key: "f8", question: "Is call data secure with the Aircall-monday.com integration?", answer: "Absolutely. Both Aircall and Monday.com use advanced security protocols, including data encryption and GDPR compliance, to ensure your call logs and customer information remain protected." },
-    ],
-  },
-]
 
 /* ----------------- Sections ----------------- */
 
@@ -166,9 +150,11 @@ function IntroSection() {
   )
 }
 
-function AircallTabsSection() {
+type AircallTabShape = { _key?: string; key?: string; label?: string; items?: Array<{ _key?: string; number?: string; title?: string; description?: string; bullets?: string[] }> }
+
+function AircallTabsSection({ tabs }: { tabs: AircallTabShape[] }) {
   const [activeIdx, setActiveIdx] = useState(0)
-  const active = AIRCALL_TABS[activeIdx]
+  const active = tabs[activeIdx]
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -181,7 +167,7 @@ function AircallTabsSection() {
           </p>
         </div>
         <div className="flex flex-wrap justify-center" style={{ gap: 12, marginBottom: 40 }}>
-          {AIRCALL_TABS.map((tab, i) => (
+          {tabs.map((tab, i) => (
             <button
               key={tab.key}
               onClick={() => setActiveIdx(i)}
@@ -201,8 +187,8 @@ function AircallTabsSection() {
           ))}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
-          {active.items.map((g) => (
-            <div key={g.number} className="bg-white" style={{ padding: 24, borderRadius: 18, border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 12 }}>
+          {(active.items ?? []).map((g, idx) => (
+            <div key={g.number || idx} className="bg-white" style={{ padding: 24, borderRadius: 18, border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 12 }}>
               <div className="flex items-center" style={{ gap: 14 }}>
                 <span className="flex items-center justify-center font-bold" style={{ width: 38, height: 38, borderRadius: 12, background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)", color: "white", fontSize: 13 }}>
                   {g.number}
@@ -214,7 +200,7 @@ function AircallTabsSection() {
               )}
               {g.bullets && (
                 <ul className="flex flex-col" style={{ gap: 8 }}>
-                  {g.bullets.map((b) => (
+                  {g.bullets.map((b: string) => (
                     <li key={b} className="flex items-start" style={{ gap: 8, color: "#444", fontSize: 13, lineHeight: "20px" }}>
                       <span style={{ color: "#8015e8" }}>✓</span>
                       <span>{b}</span>
@@ -230,21 +216,23 @@ function AircallTabsSection() {
   )
 }
 
-function AIConversationsSection({ calendlyUrl }: { calendlyUrl: string }) {
-  const features = [
-    {
-      title: "Set up in seconds",
-      body: "Easily claim numbers, set up integrations, and manage your phone system with just a few clicks. Enhance every customer interaction with AI Voice Agents, instant insights, WhatsApp Messaging, and more.",
-      image: "/images/aircall-reporting.avif",
-      imageRight: true,
-    },
-    {
-      title: "For Sales and Customer Support",
-      body: "Achieve better resolution rates. Powerful shared inbox features keep cross-channel conversations under control, all in one place. Agents know exactly what to do next instead of asking customers to repeat themselves.",
-      image: "/images/aircall-mobile-app.avif",
-      imageRight: false,
-    },
-  ]
+type AircallFeature = { title?: string; body?: string; image?: string; imageRight?: boolean }
+const AIRCALL_FEATURES_FALLBACK: AircallFeature[] = [
+  {
+    title: "Set up in seconds",
+    body: "Easily claim numbers, set up integrations, and manage your phone system with just a few clicks. Enhance every customer interaction with AI Voice Agents, instant insights, WhatsApp Messaging, and more.",
+    image: "/images/aircall-reporting.avif",
+    imageRight: true,
+  },
+  {
+    title: "For Sales and Customer Support",
+    body: "Achieve better resolution rates. Powerful shared inbox features keep cross-channel conversations under control, all in one place. Agents know exactly what to do next instead of asking customers to repeat themselves.",
+    image: "/images/aircall-mobile-app.avif",
+    imageRight: false,
+  },
+]
+
+function AIConversationsSection({ calendlyUrl, features }: { calendlyUrl: string; features: AircallFeature[] }) {
   return (
     <section className="bg-white px-4" style={{ paddingTop: 64, paddingBottom: 64 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -262,9 +250,9 @@ function AIConversationsSection({ calendlyUrl }: { calendlyUrl: string }) {
         </div>
 
         <div className="flex flex-col" style={{ gap: 60 }}>
-          {features.map((f) => (
+          {features.map((f, i) => (
             <div
-              key={f.title}
+              key={f.title || i}
               className="flex flex-col items-center"
               style={{ gap: 40, flexDirection: f.imageRight ? "row" : "row-reverse" }}
             >
@@ -297,7 +285,8 @@ export default function AircallPartnerContent({ page, siteSettings, faqTabs }: P
     siteSettings?.calendlyLink ||
     "https://calendly.com/global-calendar-fruitionservices"
 
-  const resolvedFaqTabs = (faqTabs && faqTabs.length > 0) ? faqTabs : AIRCALL_FAQ_TABS
+  const resolvedFaqTabs = faqTabs ?? []
+  const resolvedAircallFeatures: AircallFeature[] = (page.aircallFeatures && page.aircallFeatures.length > 0) ? page.aircallFeatures : AIRCALL_FEATURES_FALLBACK
 
   return (
     <div>
@@ -336,7 +325,7 @@ export default function AircallPartnerContent({ page, siteSettings, faqTabs }: P
         logos={siteSettings?.carouselLogos || []}
       />
 
-      <AircallTabsSection />
+      <AircallTabsSection tabs={(page.aircallTabs && page.aircallTabs.length > 0) ? page.aircallTabs : AIRCALL_TABS} />
 
       {/* Calendly */}
       <CalendlySection
@@ -345,7 +334,7 @@ export default function AircallPartnerContent({ page, siteSettings, faqTabs }: P
         calendlyUrl={calendlyUrl}
       />
 
-      <AIConversationsSection calendlyUrl={calendlyUrl} />
+      <AIConversationsSection calendlyUrl={calendlyUrl} features={resolvedAircallFeatures} />
 
       <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
 

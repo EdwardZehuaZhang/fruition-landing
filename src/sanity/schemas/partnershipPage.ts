@@ -339,5 +339,21 @@ export default {
     // Logo cloud overrides
     { name: 'logoCloudHeadingPart1', title: 'Logo Cloud Heading (prefix)', type: 'string' },
     { name: 'logoCloudHeadingAccent', title: 'Logo Cloud Heading (accent)', type: 'string' },
+
+    // Per-page hardcoded data migrated from Content.tsx files
+    {
+      name: 'provenStats',
+      title: 'Proven Stats (emoji / value / body)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'provenStat',
+        fields: [
+          { name: 'emoji', title: 'Emoji', type: 'string' },
+          { name: 'value', title: 'Value', type: 'string' },
+          { name: 'body', title: 'Body Text', type: 'text' },
+        ],
+      }],
+    },
   ],
 }

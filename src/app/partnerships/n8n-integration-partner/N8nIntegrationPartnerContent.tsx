@@ -99,7 +99,8 @@ const PROVEN_STATS = [
   { emoji: "⏱️", value: "85%", body: "average time savings on manual tasks and workflows" },
 ]
 
-function ProvenResultsSection() {
+type ProvenStat = { emoji?: string; value?: string; body?: string }
+function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -107,9 +108,9 @@ function ProvenResultsSection() {
           Proven <span style={{ color: "#8015e8" }}>n8n Automation</span> Results
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>
-          {PROVEN_STATS.map((s) => (
+          {stats.map((s, i) => (
             <div
-              key={s.value}
+              key={s.value || i}
               className="text-center"
               style={{
                 padding: 32,
@@ -155,6 +156,7 @@ export default function N8nIntegrationPartnerContent({
   const calendlyUrl =
     siteSettings?.calendlyLink ||
     "https://calendly.com/global-calendar-fruitionservices"
+  const resolvedProvenStats: ProvenStat[] = (page.provenStats && page.provenStats.length > 0) ? page.provenStats : PROVEN_STATS
 
   return (
     <div>
@@ -212,7 +214,7 @@ export default function N8nIntegrationPartnerContent({
       ) : null)}
 
       {/* Proven Results */}
-      <ProvenResultsSection />
+      <ProvenResultsSection stats={resolvedProvenStats} />
 
       {/* Two-tab comparison: Top Challenges / n8n Solutions */}
       <ComparisonTabsSection

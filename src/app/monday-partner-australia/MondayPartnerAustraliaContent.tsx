@@ -62,46 +62,6 @@ const AU_TABS: ComparisonTab[] = [
   },
 ]
 
-const AU_FAQ_TABS: FaqTab[] = [
-  {
-    _key: "professional",
-    label: "Professional Services",
-    items: [
-      { _key: "p1", question: "Does monday com have a CRM?", answer: "Yes, monday has a dedicated CRM product. monday.com CRM is a flexible and highly customizable cloud-based CRM platform intended for businesses of all sizes." },
-      { _key: "p2", question: "Does monday com have task management?", answer: "Yes, monday.com has task management. Take a trial of monday work management and discover just how efficiently you can manage your teams' to-do list." },
-      { _key: "p3", question: "Why is monday.com so successful?", answer: "Highly customizable, easy adoption, visual + agile + scalable. monday.com can be used to manage anything you want." },
-      { _key: "p4", question: "What exactly does monday.com do?", answer: "monday.com is the most versatile project management software on the market. Manage projects, CRM, ad campaigns, bug tracking, video production, and more." },
-    ],
-  },
-  {
-    _key: "wm",
-    label: "monday Work Management",
-    items: [
-      { _key: "wm1", question: "What is monday Work Management?", answer: "monday Work Management is the flexible Work OS that helps teams plan, run, and track projects in one shared workspace." },
-    ],
-  },
-  {
-    _key: "crm",
-    label: "monday CRM",
-    items: [
-      { _key: "crm1", question: "How does monday CRM compare to other CRMs?", answer: "monday CRM is fully customisable, visual, and integrates with the rest of the monday Work OS — ideal for teams that want CRM + delivery in one place." },
-    ],
-  },
-  { _key: "expert", label: "Expert Consultant Guide", items: [
-    { _key: "ec1", question: "What does a monday.com consultant do?", answer: "A certified monday.com consultant scopes business processes, designs an automated solution, implements it, trains your team, and provides ongoing support." },
-  ] },
-  { _key: "general", label: "General Questions", items: [
-    { _key: "g1", question: "Where is Fruition based?", answer: "Australia, Canada, Singapore, United States, and United Kingdom." },
-  ] },
-]
-
-const PARTNER_CASE_STUDIES_FALLBACK: CaseStudy[] = [
-  { _id: "p1", clientName: "Jade Wood", clientRole: "Managing Director", clientCompany: "Popology", quote: "We are now utilising monday.com to its full potential, from lead through design and production teams - everyone knows what stage our projects are in, what's next and what our process is." },
-  { _id: "p2", clientName: "Mairhead McKinley", clientRole: "Delivery Manager", clientCompany: "Givergy", quote: "We found Monday to be more customisable and transparent for both internal and external stakeholders. It reduced double handling of issues, as the Monday boards provide clear, accessible information—eliminating the need to email around for updates." },
-  { _id: "p3", clientName: "Brandon-Lee Horridge", clientRole: "Managing Director", clientCompany: "BL Air Conditioning", quote: "This system will save hundreds of thousands of dollars a year guaranteed." },
-  { _id: "p4", clientName: "Ron Amaram", clientRole: "General Manager", clientCompany: "Risk 2 Solutions", quote: "Fruition have been instrumental in moving us to a 'single source of truth' system for managing sales and projects." },
-  { _id: "p5", clientName: "Lorenzo Tejada-Orrell", clientRole: "Chief Innovation Officer", clientCompany: "CLSQ", quote: "Since implementing monday.com, CLSQ has experienced a significant transformation in operational efficiency." },
-]
 
 const FEATURE_BLOCKS = [
   { title: "Build a high-level roll-up of all your boards", body: "Give directors a general overview of the team's progress with calendars, Gantt charts, and dashboards. So, even if you have 10+ boards, senior management can see what someone is working on, how projects are doing, and why tasks are delayed–all with just a few clicks.", ctaLabel: "📊 Our Project Management Solutions", ctaUrl: "/monday-consulting-solutions/monday-project-management", image: "/images/au-rollup.avif" },
@@ -117,12 +77,15 @@ const ROI_STATS = [
   { value: "489,794", label: "Net Value" },
 ]
 
-function FeatureBlocksSection() {
+type FeatureBlock = { title?: string; body?: string; ctaLabel?: string; ctaUrl?: string; image?: string }
+type RoiStat = { value?: string; label?: string }
+
+function FeatureBlocksSection({ blocks }: { blocks: FeatureBlock[] }) {
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <div className="flex flex-col" style={{ gap: 56 }}>
-          {FEATURE_BLOCKS.map((b, i) => (
+          {blocks.map((b, i) => (
             <div
               key={b.title}
               className="flex flex-col items-center"
@@ -132,7 +95,7 @@ function FeatureBlocksSection() {
                 <h3 className="font-bold" style={{ color: "#10003a", fontSize: 26, lineHeight: "34px", marginBottom: 14 }}>{b.title}</h3>
                 <p style={{ color: "#444", fontSize: 15, lineHeight: "24px", whiteSpace: "pre-line" }}>{b.body}</p>
                 <Link
-                  href={b.ctaUrl}
+                  href={b.ctaUrl || "#"}
                   className="inline-flex items-center font-semibold"
                   style={{ marginTop: 18, color: "#8015e8", fontSize: 14 }}
                 >
@@ -247,7 +210,7 @@ function SydneyMapSection() {
   )
 }
 
-function EconomicImpactSection() {
+function EconomicImpactSection({ stats }: { stats: RoiStat[] }) {
   return (
     <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(160deg, #2b074d 0%, #10003a 100%)" }}>
       <div className="mx-auto text-center" style={{ maxWidth: 1100 }}>
@@ -256,8 +219,8 @@ function EconomicImpactSection() {
         </h2>
         <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 15, marginBottom: 36 }}>The economic impact of</p>
         <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 20 }}>
-          {ROI_STATS.map((s) => (
-            <div key={s.label}>
+          {stats.map((s, i) => (
+            <div key={s.label || i}>
               <p className="font-bold" style={{ color: "white", fontSize: 36, lineHeight: 1 }}>{s.value}</p>
               <p style={{ color: "rgba(255,255,255,0.78)", fontSize: 13, marginTop: 8 }}>{s.label}</p>
             </div>
@@ -280,8 +243,11 @@ export default function MondayPartnerAustraliaContent({
     siteSettings?.calendlyLink ||
     "https://calendly.com/global-calendar-fruitionservices"
 
-  const resolvedFaqTabs = (faqTabs && faqTabs.length > 0) ? faqTabs : AU_FAQ_TABS
-  const partnerCaseStudies = caseStudies.length > 0 ? caseStudies : PARTNER_CASE_STUDIES_FALLBACK
+  const resolvedFaqTabs = faqTabs ?? []
+  const partnerCaseStudies = caseStudies
+  const resolvedComparisonTabs: ComparisonTab[] = (page.comparisonTabs && page.comparisonTabs.length > 0) ? page.comparisonTabs : AU_TABS
+  const resolvedFeatureBlocks: FeatureBlock[] = (page.featureBlocks && page.featureBlocks.length > 0) ? page.featureBlocks : FEATURE_BLOCKS
+  const resolvedRoiStats: RoiStat[] = (page.roiStats && page.roiStats.length > 0) ? page.roiStats : ROI_STATS
 
   return (
     <div>
@@ -322,7 +288,7 @@ export default function MondayPartnerAustraliaContent({
       <ComparisonTabsSection
         heading="Streamline Operations & Maximise Efficiency with Our monday.com Consultants"
         subheading="Our expert consultants empower you to adopt workflow automation & AI systems"
-        tabs={AU_TABS}
+        tabs={resolvedComparisonTabs}
         theme="light"
         withPurpleCircle={false}
       />
@@ -362,7 +328,7 @@ export default function MondayPartnerAustraliaContent({
       <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
 
       {/* Feature blocks */}
-      <FeatureBlocksSection />
+      <FeatureBlocksSection blocks={resolvedFeatureBlocks} />
 
       {/* Work with partner CTA */}
       <PartnerSectionCta calendlyUrl={calendlyUrl} />
@@ -374,7 +340,7 @@ export default function MondayPartnerAustraliaContent({
       <SydneyMapSection />
 
       {/* Economic impact */}
-      <EconomicImpactSection />
+      <EconomicImpactSection stats={resolvedRoiStats} />
     </div>
   )
 }

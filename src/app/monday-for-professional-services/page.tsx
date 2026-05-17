@@ -189,7 +189,7 @@ export default async function Page() {
       {/* 4. NEW — Six-tab services workflow section */}
       <ServicesWorkflowTabs
         heading="Capabilities for every services workflow"
-        tabs={WORKFLOW_TABS}
+        tabs={(page.workflowTabs && page.workflowTabs.length > 0) ? page.workflowTabs : WORKFLOW_TABS}
       />
 
       {/* 5. Existing comparison tabs (Sanity) */}

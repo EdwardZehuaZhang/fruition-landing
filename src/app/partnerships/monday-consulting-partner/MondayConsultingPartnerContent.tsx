@@ -155,50 +155,6 @@ const WHY_FRUITION = [
   "Custom Integration Services",
 ]
 
-const PARTNER_FAQ_TABS: FaqTab[] = [
-  {
-    _key: "professional",
-    label: "Professional Services",
-    items: [
-      { _key: "p1", question: "Does monday com have a CRM?", answer: "Yes, monday has a dedicated CRM product. monday.com CRM is a flexible and highly customizable cloud-based CRM platform intended for businesses of all sizes." },
-      { _key: "p2", question: "Does monday com have task management?", answer: "Yes, monday.com has task management. Take a trial of monday work management and discover just how efficiently you can manage your teams' to-do list." },
-      { _key: "p3", question: "Why is monday.com so successful?", answer: "Highly customizable nature, easy adoption, visual + agile + scalable. monday.com can be used to manage anything you want." },
-      { _key: "p4", question: "What exactly does monday.com do?", answer: "monday.com is the most versatile project management software you'll find on the market. You can use the platform to manage all of your projects, and also use it as a CRM, to manage your ad campaigns, track bugs, and manage video production." },
-    ],
-  },
-  {
-    _key: "wm",
-    label: "monday Work Management",
-    items: [
-      { _key: "wm1", question: "What is monday Work Management?", answer: "monday Work Management is the flexible Work OS that helps teams plan, run, and track projects in one shared workspace." },
-      { _key: "wm2", question: "How does monday Work Management improve efficiency?", answer: "Through automations, dashboards, integrations, and configurable views that consolidate work, status, and reporting in one place." },
-    ],
-  },
-  {
-    _key: "crm",
-    label: "monday CRM",
-    items: [
-      { _key: "crm1", question: "How does monday CRM compare to other CRMs?", answer: "monday CRM is fully customisable, visual, and integrates with the rest of the monday Work OS — making it ideal for teams that want CRM + delivery in one place." },
-      { _key: "crm2", question: "Can monday CRM be customised for our sales process?", answer: "Yes. Custom pipelines, automations, integrations, and dashboards are built around your specific sales workflow." },
-    ],
-  },
-  {
-    _key: "expert",
-    label: "Expert Consultant Guide",
-    items: [
-      { _key: "ec1", question: "What does a monday.com consultant do?", answer: "A certified monday.com consultant scopes your business processes, designs an automated solution, implements it, trains your team, and provides ongoing support." },
-      { _key: "ec2", question: "Why work with a monday Platinum Partner?", answer: "Platinum Partners have proven success rates, advanced certifications, and direct vendor support for complex implementations." },
-    ],
-  },
-  {
-    _key: "general",
-    label: "General Questions",
-    items: [
-      { _key: "g1", question: "Which industries does Fruition serve?", answer: "We serve clients across construction, manufacturing, service, marketing, product development, project & portfolio management, and executive leadership use cases." },
-      { _key: "g2", question: "Where is Fruition based?", answer: "Australia, Canada, Singapore, United States, and United Kingdom." },
-    ],
-  },
-]
 
 const PARTNER_TESTIMONIALS = [
   { name: "Jade Wood", role: "Managing Director, Popology", quote: "We are now utilising monday.com to its full potential, from lead through design and production teams - everyone knows what stage our projects are in, what's next and what our process is.", photo: "/images/solar-testimonial-popology.avif" },
@@ -240,6 +196,12 @@ const FRUITION_ADVANTAGES = [
   "Ongoing support — maximise your investment",
 ]
 
+type WhyFruitionItem = string
+type TestimonialItem = { name: string; role: string; quote: string; photo?: string }
+type ImplementationServiceItem = { emoji: string; title: string; body: string }
+type IconLabelItem = { emoji: string; label: string }
+type FruitionAdvantageItem = string
+
 function CertifiedExcellenceSection({ calendlyUrl }: { calendlyUrl: string }) {
   return (
     <section
@@ -278,7 +240,7 @@ function CertifiedExcellenceSection({ calendlyUrl }: { calendlyUrl: string }) {
   )
 }
 
-function WhyFruitionSection() {
+function WhyFruitionSection({ items }: { items: WhyFruitionItem[] }) {
   return (
     <section className="bg-white px-4" style={{ paddingTop: 64, paddingBottom: 64 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -286,9 +248,9 @@ function WhyFruitionSection() {
           Why Choose Fruition for <span style={{ color: "#8015e8" }}>monday.com?</span>
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4" style={{ gap: 16 }}>
-          {WHY_FRUITION.map((reason) => (
+          {items.map((reason: WhyFruitionItem, i: number) => (
             <div
-              key={reason}
+              key={reason || i}
               className="flex items-center bg-white rounded-card"
               style={{ gap: 12, padding: 20, border: "1px solid #ece7fb" }}
             >
@@ -302,7 +264,7 @@ function WhyFruitionSection() {
   )
 }
 
-function ImplementationServicesSection() {
+function ImplementationServicesSection({ items }: { items: ImplementationServiceItem[] }) {
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 64 }}>
       <div className="mx-auto" style={{ maxWidth: 1000 }}>
@@ -310,9 +272,9 @@ function ImplementationServicesSection() {
           Our monday.com Expert <span style={{ color: "#8015e8" }}>Implementation Services</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
-          {IMPLEMENTATION_SERVICES.map((s) => (
+          {items.map((s: ImplementationServiceItem, i: number) => (
             <div
-              key={s.title}
+              key={s.title || i}
               className="bg-white"
               style={{
                 padding: 24,
@@ -336,7 +298,17 @@ function ImplementationServicesSection() {
 }
 
 /* Combined section: CRM eyebrow + Industry & Global 2-col + Fruition Advantage banner */
-function PartnerWrapUpSection({ calendlyUrl }: { calendlyUrl: string }) {
+function PartnerWrapUpSection({
+  calendlyUrl,
+  industrySolutions,
+  countries,
+  fruitionAdvantages,
+}: {
+  calendlyUrl: string
+  industrySolutions: IconLabelItem[]
+  countries: IconLabelItem[]
+  fruitionAdvantages: FruitionAdvantageItem[]
+}) {
   return (
     <section
       className="px-4"
@@ -369,8 +341,8 @@ function PartnerWrapUpSection({ calendlyUrl }: { calendlyUrl: string }) {
               Industry Solutions
             </p>
             <ul className="flex flex-col" style={{ gap: 10 }}>
-              {INDUSTRY_SOLUTIONS.map((s) => (
-                <li key={s.label} className="flex items-center" style={{ gap: 10 }}>
+              {industrySolutions.map((s: IconLabelItem, i: number) => (
+                <li key={s.label || i} className="flex items-center" style={{ gap: 10 }}>
                   <span style={{ fontSize: 18 }}>{s.emoji}</span>
                   <span style={{ color: "#10003a", fontSize: 13 }}>{s.label}</span>
                 </li>
@@ -393,8 +365,8 @@ function PartnerWrapUpSection({ calendlyUrl }: { calendlyUrl: string }) {
             </p>
             <p style={{ color: "#666", fontSize: 12, marginBottom: 14 }}>Serving clients across:</p>
             <ul className="flex flex-col" style={{ gap: 10 }}>
-              {COUNTRIES.map((c) => (
-                <li key={c.label} className="flex items-center" style={{ gap: 10 }}>
+              {countries.map((c: IconLabelItem, i: number) => (
+                <li key={c.label || i} className="flex items-center" style={{ gap: 10 }}>
                   <span style={{ fontSize: 18 }}>{c.emoji}</span>
                   <span style={{ color: "#10003a", fontSize: 13 }}>{c.label}</span>
                 </li>
@@ -417,8 +389,8 @@ function PartnerWrapUpSection({ calendlyUrl }: { calendlyUrl: string }) {
             <div>
               <p className="font-bold" style={{ color: "white", fontSize: 18, marginBottom: 14 }}>The Fruition Advantage</p>
               <ul className="flex flex-col" style={{ gap: 10 }}>
-                {FRUITION_ADVANTAGES.map((adv, i) => (
-                  <li key={adv} className="flex items-start" style={{ gap: 10, color: "rgba(255,255,255,0.92)" }}>
+                {fruitionAdvantages.map((adv: FruitionAdvantageItem, i: number) => (
+                  <li key={adv || i} className="flex items-start" style={{ gap: 10, color: "rgba(255,255,255,0.92)" }}>
                     <span
                       style={{
                         flexShrink: 0,
@@ -474,12 +446,26 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
     "https://calendly.com/global-calendar-fruitionservices"
 
   const partnerTabs: ComparisonTab[] = [LEADERSHIP_CHALLENGES, TEAM_CHALLENGES, HOW_WE_HELP]
-  const resolvedFaqTabs = (faqTabs && faqTabs.length > 0) ? faqTabs : PARTNER_FAQ_TABS
+  const resolvedFaqTabs = faqTabs ?? []
 
-  // Build CaseStudy[] from hardcoded partner testimonials; fall back to Sanity
-  // caseStudies when none are hardcoded.
-  const partnerCaseStudies: CaseStudy[] = PARTNER_TESTIMONIALS.length > 0
-    ? PARTNER_TESTIMONIALS.map((t, i) => ({
+  // Resolve Sanity-first, fall back to hardcoded constants for visual continuity.
+  const resolvedWhyFruition: WhyFruitionItem[] =
+    (page.whyFruition && page.whyFruition.length > 0) ? page.whyFruition : WHY_FRUITION
+  const resolvedPartnerTestimonials: TestimonialItem[] =
+    (page.partnerTestimonials && page.partnerTestimonials.length > 0) ? page.partnerTestimonials : PARTNER_TESTIMONIALS
+  const resolvedImplementationServices: ImplementationServiceItem[] =
+    (page.implementationServices && page.implementationServices.length > 0) ? page.implementationServices : IMPLEMENTATION_SERVICES
+  const resolvedIndustrySolutions: IconLabelItem[] =
+    (page.industrySolutions && page.industrySolutions.length > 0) ? page.industrySolutions : INDUSTRY_SOLUTIONS
+  const resolvedCountries: IconLabelItem[] =
+    (page.countries && page.countries.length > 0) ? page.countries : COUNTRIES
+  const resolvedFruitionAdvantages: FruitionAdvantageItem[] =
+    (page.fruitionAdvantages && page.fruitionAdvantages.length > 0) ? page.fruitionAdvantages : FRUITION_ADVANTAGES
+
+  // Build CaseStudy[] from resolved partner testimonials; fall back to Sanity
+  // caseStudies when none are present.
+  const partnerCaseStudies: CaseStudy[] = resolvedPartnerTestimonials.length > 0
+    ? resolvedPartnerTestimonials.map((t: TestimonialItem, i: number) => ({
         _id: `partner-${i}`,
         clientName: t.name,
         clientRole: t.role.split(",")[0]?.trim() ?? t.role,
@@ -536,7 +522,7 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
       <CertifiedExcellenceSection calendlyUrl={calendlyUrl} />
 
       {/* 5. Why Choose Fruition */}
-      <WhyFruitionSection />
+      <WhyFruitionSection items={resolvedWhyFruition} />
 
       {/* 6. FAQ */}
       <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
@@ -573,10 +559,15 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
       />
 
       {/* 9. Implementation Services (2×2) */}
-      <ImplementationServicesSection />
+      <ImplementationServicesSection items={resolvedImplementationServices} />
 
       {/* 10. Combined: CRM expertise + Industry/Global cards + Fruition Advantage banner */}
-      <PartnerWrapUpSection calendlyUrl={calendlyUrl} />
+      <PartnerWrapUpSection
+        calendlyUrl={calendlyUrl}
+        industrySolutions={resolvedIndustrySolutions}
+        countries={resolvedCountries}
+        fruitionAdvantages={resolvedFruitionAdvantages}
+      />
     </div>
   )
 }

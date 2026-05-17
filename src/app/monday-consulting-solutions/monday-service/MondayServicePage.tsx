@@ -84,12 +84,25 @@ interface SolutionPageData {
   joinStats?: Array<{ _key?: string; value?: string; label?: string }>
   joinCtaLabel?: string
   joinCtaUrl?: string
+  testimonialBannerHeadingPart1?: string
+  testimonialBannerHeadingAccent?: string
+  testimonialBannerHeadingPart2?: string
 }
 
 interface Props {
   page: SolutionPageData | null
   siteSettings?: SiteSettingsData | null
 }
+
+// Hardcoded fallbacks — used only when Sanity field is empty so the page
+// stays visually identical if the doc is not yet migrated.
+const MS_CALENDLY_HEADING = "Schedule A 30-Min Consultation"
+const MS_CALENDLY_SUBHEADING =
+  "Ready to transform your service management process?\n\nOur certified monday.com consultants offer complimentary consultations to help you assess your current IT service management challenges, design custom monday.com workflows, develop an implementation roadmap and identify integration opportunities with existing tools."
+const MS_TB_HEADING_PART1 = "Join "
+const MS_TB_HEADING_ACCENT = "500+ organisations"
+const MS_TB_HEADING_PART2 =
+  " that have maximised their workflows with our monday.com expert support"
 
 function safeImageUrl(ref?: SanityImageRef): string | null {
   if (!ref?.asset?._ref) return null
@@ -233,11 +246,8 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
 
       {/* 5. Calendly */}
       <CalendlySection
-        heading={page?.calendlyHeading || "Schedule A 30-Min Consultation"}
-        subheading={
-          page?.calendlySubheading ||
-          "Ready to transform your service management process?\n\nOur certified monday.com consultants offer complimentary consultations to help you assess your current IT service management challenges, design custom monday.com workflows, develop an implementation roadmap and identify integration opportunities with existing tools."
-        }
+        heading={page?.calendlyHeading || MS_CALENDLY_HEADING}
+        subheading={page?.calendlySubheading || MS_CALENDLY_SUBHEADING}
         calendlyUrl={calendlyUrl}
       />
 
@@ -274,9 +284,9 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
 
       {/* 9. Testimonial CTA banner — Join 500+ organisations */}
       <TestimonialCtaBanner
-        headingPart1="Join "
-        headingAccent="500+ organisations"
-        headingPart2=" that have maximised their workflows with our monday.com expert support"
+        headingPart1={page?.testimonialBannerHeadingPart1 || MS_TB_HEADING_PART1}
+        headingAccent={page?.testimonialBannerHeadingAccent || MS_TB_HEADING_ACCENT}
+        headingPart2={page?.testimonialBannerHeadingPart2 || MS_TB_HEADING_PART2}
         primaryCtaUrl={calendlyUrl}
         secondaryCtaUrl={calendlyUrl}
       />

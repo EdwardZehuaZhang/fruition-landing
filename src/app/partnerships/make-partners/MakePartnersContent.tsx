@@ -170,9 +170,10 @@ const MAKE_FEATURE_TABS: MakeFeatureTab[] = [
   },
 ]
 
-function MakeFeatureTabsSection() {
+function MakeFeatureTabsSection({ tabs }: { tabs: MakeFeatureTab[] }) {
   const [activeIdx, setActiveIdx] = useState(0)
-  const active = MAKE_FEATURE_TABS[activeIdx]
+  const active = tabs[activeIdx]
+  if (!active) return null
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -182,7 +183,7 @@ function MakeFeatureTabsSection() {
 
         {/* Tab buttons */}
         <div className="flex flex-wrap justify-center" style={{ gap: 12, marginBottom: 40 }}>
-          {MAKE_FEATURE_TABS.map((tab, i) => (
+          {tabs.map((tab, i) => (
             <button
               key={tab.key}
               onClick={() => setActiveIdx(i)}
@@ -204,7 +205,7 @@ function MakeFeatureTabsSection() {
 
         {/* Groups */}
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 24 }}>
-          {active.groups.map((g) => (
+          {active.groups.map((g: MakeFeatureGroup) => (
             <div
               key={g.number}
               className="bg-white"
@@ -239,7 +240,7 @@ function MakeFeatureTabsSection() {
                 )}
               </div>
               <ul className="flex flex-col" style={{ gap: 10 }}>
-                {g.bullets.map((b) => (
+                {g.bullets.map((b: { emoji: string; text: string }) => (
                   <li key={b.text} className="flex items-start" style={{ gap: 10 }}>
                     <span style={{ fontSize: 18, lineHeight: "22px", flexShrink: 0 }}>{b.emoji}</span>
                     <span style={{ color: "#444", fontSize: 13, lineHeight: "20px" }}>{b.text}</span>
@@ -332,6 +333,14 @@ interface MakePartnersPageData {
   testimonialBannerSecondaryCtaLabel?: string
   testimonialBannerSecondaryCtaUrl?: string
   discoverHeading?: string
+  makeFeatureTabs?: MakeFeatureTab[]
+  // Sanity stores this as an array of `{ key, mediaType, mediaSrc }` objects
+  // (Sanity attribute names can't contain spaces, and the keys are
+  // showcase headings). The FE normalises this back to a Record before
+  // merging with the hardcoded fallback. A plain Record is also accepted.
+  showcaseOverrides?:
+    | Record<string, { mediaType: "video" | "image"; mediaSrc: string }>
+    | Array<{ _key?: string; key?: string; mediaType?: "video" | "image"; mediaSrc?: string }>
 }
 
 interface Props {
@@ -379,12 +388,36 @@ export default function MakePartnersContent({
     "automation you can see, flex, and scale": { mediaType: "video", mediaSrc: "/videos/make-automation.mp4" },
   }
 
+  // Normalise Sanity's array shape (or Record shape) into a Record keyed by
+  // the lowercased heading, then merge with the hardcoded fallback so
+  // Sanity-supplied keys win and untouched keys fall back.
+  const sanityOverrides = pageData?.showcaseOverrides
+  const sanityOverridesAsRecord: Record<string, { mediaType: "video" | "image"; mediaSrc: string }> =
+    Array.isArray(sanityOverrides)
+      ? sanityOverrides.reduce<Record<string, { mediaType: "video" | "image"; mediaSrc: string }>>(
+          (acc, item) => {
+            if (item?.key && item.mediaSrc) {
+              acc[item.key.toLowerCase().trim()] = {
+                mediaType: item.mediaType ?? "image",
+                mediaSrc: item.mediaSrc,
+              }
+            }
+            return acc
+          },
+          {}
+        )
+      : (sanityOverrides ?? {})
+  const mergedShowcaseOverrides: Record<string, { mediaType: "video" | "image"; mediaSrc: string }> = {
+    ...SHOWCASE_OVERRIDES,
+    ...sanityOverridesAsRecord,
+  }
+
   const resolvedShowcaseCards: ResolvedCard[] = (pageData?.showcaseCards ?? [])
     .map((card): ResolvedCard | null => {
       const heading = card.heading ?? ""
       const body = card.body ?? ""
       const imageRight = card.imageRight ?? true
-      const override = SHOWCASE_OVERRIDES[heading.toLowerCase().trim()]
+      const override = mergedShowcaseOverrides[heading.toLowerCase().trim()]
       const mediaType = override?.mediaType ?? card.mediaType ?? "image"
       let mediaSrc = ""
       if (override) {
@@ -524,8 +557,10 @@ export default function MakePartnersContent({
         />
       )}
 
-      {/* 4. Make Feature Tabs — hardcoded content with nested bullets */}
-      <MakeFeatureTabsSection />
+      {/* 4. Make Feature Tabs — Sanity-driven with hardcoded fallback */}
+      <MakeFeatureTabsSection
+        tabs={(pageData?.makeFeatureTabs && pageData.makeFeatureTabs.length > 0) ? pageData.makeFeatureTabs : MAKE_FEATURE_TABS}
+      />
 
 
       {/* 6. Calendly */}

@@ -156,7 +156,7 @@ export default function MondayCrmConsultingContent({
         >
           {/* Three certificate badges */}
           <div className="flex items-center" style={{ gap: 22 }}>
-            {CERTIFICATE_BADGES.map((badge, i) => (
+            {((page.certificateBadges && page.certificateBadges.length > 0) ? page.certificateBadges : CERTIFICATE_BADGES).map((badge: { src?: string; alt?: string }, i: number) => (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 key={i}

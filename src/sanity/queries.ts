@@ -85,6 +85,8 @@ const PAGE_FIELDS = `
   hideHeroSubheading,
   heroSplitLayout,
   hideHeroPartnerBadges,
+  heroPartnerImagePath,
+  testimonialBannerPrimaryCtaLabel,
   primaryCtaLabel,
   primaryCtaUrl,
   secondaryCtaLabel,
@@ -114,6 +116,52 @@ const PAGE_FIELDS = `
 
   // FAQ
   faqTabs,
+
+  // Partner-page feature blocks + ROI stats
+  featureBlocks,
+  roiStats,
+
+  // Industry/service/partnership page extras (per-page hardcoded data)
+  bottomStats,
+  workflowTabs,
+  certificateBadges,
+  provenStats,
+  marketingCaseStudyCards,
+  lifecycleStages,
+  fitReasons,
+  industryTestimonials,
+  whyBestCards,
+  // Finance / solution-page specifics
+  whyMondayItems,
+  featuresItems,
+  howWeHelpItems,
+  generalFaqs,
+  financeFaqs,
+  financeFeatureCards,
+  servicesList,
+  solarTestimonials,
+  // Partnership-page specifics
+  everythingAppCards,
+  servicesTabs,
+  industryTabsPartnership,
+  everythingAppFeatures,
+  whyFruition,
+  partnerTestimonials,
+  implementationServices,
+  industrySolutions,
+  countries,
+  fruitionAdvantages,
+  aircallTabs,
+  aircallFeatures,
+  atlassianTabs,
+  serviceCards,
+  expertCards,
+  // ClickUp
+  clickupFaqTabs,
+  // Make-partners + impl-consultants (custom doc queries also use these)
+  makeFeatureTabs,
+  showcaseOverrides,
+  orderedSolutionCards,
 
   // Capabilities
   capabilitiesEyebrow,
@@ -523,7 +571,16 @@ export async function getImplementationPackagesPage() {
     featureCards,
     socialProofBannerHtml, socialProofCtaLabel, socialProofCtaUrl,
     pricingHeading,
-    packageTiers,
+    pricingSubheading,
+    pricingFootnote,
+    packageTiers[]{
+      name,
+      hours,
+      basePrice,
+      pricePrefix,
+      featured,
+      features
+    },
     testimonialsHeading, testimonialsCtaLabel, testimonialsCtaUrl,
     statCardValue, statCardSubtitle, statCardCtaLabel, statCardCtaUrl,
     calendlyHeading, calendlyUrl,
@@ -592,7 +649,8 @@ export async function getMondayImplementationConsultantsPage() {
     discoverSecondaryCtaLabel, discoverSecondaryCtaUrl,
     joinSectionHeadingPart1, joinSectionHeadingAccent, joinSectionHeadingPart2,
     joinSectionSubheading, joinSectionStats, joinSectionFootnote, joinSectionBadge,
-    securityBadge
+    securityBadge,
+    orderedSolutionCards
   }`)
 }
 
@@ -618,7 +676,9 @@ export async function getMakePartnersPage() {
     announcementHeading, announcementBody, announcementImage,
     featureListsHeading, featureListsSubheading, featureListsRightEyebrow, featureListsFooter,
     featureListLeft, featureListRight,
-    discoverHeading
+    discoverHeading,
+    makeFeatureTabs,
+    showcaseOverrides
   }`)
 }
 

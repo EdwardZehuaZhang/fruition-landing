@@ -109,6 +109,39 @@ export default {
       }],
     },
 
+    // Partner-page feature blocks (left/right alternating row)
+    {
+      name: 'featureBlocks',
+      title: 'Feature Blocks',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'featureBlock',
+        fields: [
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'body', title: 'Body', type: 'text' },
+          { name: 'ctaLabel', title: 'CTA Label', type: 'string' },
+          { name: 'ctaUrl', title: 'CTA URL', type: 'string' },
+          { name: 'image', title: 'Image URL (or /path)', type: 'string' },
+        ],
+      }],
+    },
+
+    // Partner-page ROI stats (economic impact row)
+    {
+      name: 'roiStats',
+      title: 'ROI Stats',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'roiStat',
+        fields: [
+          { name: 'value', title: 'Value', type: 'string' },
+          { name: 'label', title: 'Label', type: 'string' },
+        ],
+      }],
+    },
+
     // Join 500+ stats section
     { name: 'joinHeadingPart1', title: 'Join Heading Part 1', type: 'string' },
     { name: 'joinHeadingAccent', title: 'Join Heading Accent', type: 'string' },

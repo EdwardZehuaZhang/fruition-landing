@@ -197,20 +197,6 @@ const INDUSTRY_TABS: IndustryTab[] = [
   ] },
 ]
 
-const CLICKUP_FAQ_TABS: FaqTab[] = [
-  {
-    _key: "clickup",
-    label: "ClickUp FAQs",
-    items: [
-      { _key: "f1", question: "How long does a typical ClickUp implementation take?", answer: "Implementation timelines vary based on organization size and complexity. Small teams (10-50 users) typically complete implementation in 3-6 weeks. Mid-size organizations (50-200 users) usually require 6-10 weeks. Enterprise implementations (200+ users) generally take 10-16 weeks with phased rollouts." },
-      { _key: "f2", question: "What training options are available?", answer: "We provide comprehensive training programs including live virtual sessions, recorded modules, custom documentation, hands-on workshops, admin certification courses, and ongoing office hours. Training is tailored to different roles including executives, admins, power users, and end users." },
-      { _key: "f3", question: "Can ClickUp replace all our current tools?", answer: "Many organizations successfully consolidate 5-15 tools into ClickUp, replacing project management, docs, goals, time tracking, chat, and more. During discovery, we'll assess which tools ClickUp can replace and which integrations to maintain based on your specific requirements." },
-      { _key: "f4", question: "Do you offer post-implementation support?", answer: "Absolutely. We provide ongoing optimisation services, feature adoption assistance, workspace audits, automation development, and dedicated support channels. We're invested in your long-term success with ClickUp." },
-      { _key: "f5", question: "Is ClickUp secure enough for enterprise use?", answer: "Yes. ClickUp maintains SOC 2 Type II certification, GDPR compliance, and offers enterprise security features including SSO, 2FA, advanced permissions, audit logs, data residency options, and 99.99% uptime SLA." },
-      { _key: "f6", question: "How do you ensure successful adoption?", answer: "Our change management approach includes executive alignment, champion programs, phased rollouts, targeted training, quick wins identification, adoption tracking, and ongoing engagement. We focus on building momentum and celebrating successes to drive sustainable adoption." },
-    ],
-  },
-]
 
 const PROVEN_STATS = [
   { emoji: "📊", value: "1 day per week", body: "average time saved by teams after switching to ClickUp" },
@@ -251,7 +237,8 @@ function PartnershipIntroSection() {
   )
 }
 
-function EverythingAppSection() {
+type EverythingAppCard = { emoji?: string; title?: string; body?: string }
+function EverythingAppSection({ cards }: { cards: EverythingAppCard[] }) {
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -267,8 +254,8 @@ function EverythingAppSection() {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
-          {EVERYTHING_APP_CARDS.map((c) => (
-            <div key={c.title} className="bg-white" style={{ padding: 24, borderRadius: 18, border: "1px solid #ece7fb", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 10 }}>
+          {cards.map((c, i) => (
+            <div key={c.title || i} className="bg-white" style={{ padding: 24, borderRadius: 18, border: "1px solid #ece7fb", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 10 }}>
               <span style={{ fontSize: 28 }}>{c.emoji}</span>
               <p className="font-bold" style={{ color: "#10003a", fontSize: 18 }}>{c.title}</p>
               <p style={{ color: "#444", fontSize: 14, lineHeight: "22px" }}>{c.body}</p>
@@ -280,16 +267,17 @@ function EverythingAppSection() {
   )
 }
 
-function ServicesTabsSection() {
+function ServicesTabsSection({ tabs }: { tabs: FeatureTab[] }) {
   const [activeIdx, setActiveIdx] = useState(0)
-  const active = SERVICES_TABS[activeIdx]
+  const active = tabs[activeIdx]
+  if (!active) return null
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <div className="flex flex-wrap justify-center" style={{ gap: 12, marginBottom: 40 }}>
-          {SERVICES_TABS.map((tab, i) => (
+          {tabs.map((tab, i) => (
             <button
-              key={tab.key}
+              key={tab.key || tab.label || i}
               onClick={() => setActiveIdx(i)}
               style={{
                 padding: "10px 26px",
@@ -310,8 +298,8 @@ function ServicesTabsSection() {
           {active.heading}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
-          {active.groups.map((g) => (
-            <div key={g.number} className="bg-white" style={{ padding: 24, borderRadius: 18, border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 14 }}>
+          {(active.groups || []).map((g: FeatureGroup, gi: number) => (
+            <div key={g.number || gi} className="bg-white" style={{ padding: 24, borderRadius: 18, border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 14 }}>
               <div className="flex items-center" style={{ gap: 14 }}>
                 <span className="flex items-center justify-center font-bold" style={{ width: 38, height: 38, borderRadius: 12, background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)", color: "white", fontSize: 13 }}>
                   {g.number}
@@ -319,8 +307,8 @@ function ServicesTabsSection() {
                 <p className="font-bold" style={{ color: "#10003a", fontSize: 15, lineHeight: "22px" }}>{g.title}</p>
               </div>
               <ul className="flex flex-col" style={{ gap: 10 }}>
-                {g.bullets.map((b) => (
-                  <li key={b.text} className="flex items-start" style={{ gap: 10 }}>
+                {(g.bullets || []).map((b: { emoji: string; text: string }, bi: number) => (
+                  <li key={b.text || bi} className="flex items-start" style={{ gap: 10 }}>
                     <span style={{ fontSize: 18, lineHeight: "22px", flexShrink: 0 }}>{b.emoji}</span>
                     <span style={{ color: "#444", fontSize: 13, lineHeight: "20px" }}>{b.text}</span>
                   </li>
@@ -334,9 +322,10 @@ function ServicesTabsSection() {
   )
 }
 
-function IndustryTabsSection() {
+function IndustryTabsSection({ tabs }: { tabs: IndustryTab[] }) {
   const [activeIdx, setActiveIdx] = useState(0)
-  const active = INDUSTRY_TABS[activeIdx]
+  const active = tabs[activeIdx]
+  if (!active) return null
   return (
     <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(180deg, #faf6ff 0%, #ebd9ff 100%)" }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -344,9 +333,9 @@ function IndustryTabsSection() {
           Implement ClickUp for <span style={{ color: "#8015e8" }}>any team</span>
         </h2>
         <div className="flex flex-wrap justify-center" style={{ gap: 12, marginBottom: 32 }}>
-          {INDUSTRY_TABS.map((tab, i) => (
+          {tabs.map((tab, i) => (
             <button
-              key={tab.label}
+              key={tab.label || i}
               onClick={() => setActiveIdx(i)}
               style={{
                 padding: "10px 22px",
@@ -368,8 +357,8 @@ function IndustryTabsSection() {
           <p style={{ color: "#444", fontSize: 15, lineHeight: "24px", marginBottom: 22 }}>{active.description}</p>
           <p className="font-bold" style={{ color: "#8015e8", fontSize: 13, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 12 }}>Key Features</p>
           <ul className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 10 }}>
-            {active.features.map((f) => (
-              <li key={f.text} className="flex items-start" style={{ gap: 10 }}>
+            {(active.features || []).map((f: { emoji: string; text: string }, fi: number) => (
+              <li key={f.text || fi} className="flex items-start" style={{ gap: 10 }}>
                 <span style={{ fontSize: 18, lineHeight: "22px", flexShrink: 0 }}>{f.emoji}</span>
                 <span style={{ color: "#444", fontSize: 14, lineHeight: "22px" }}>{f.text}</span>
               </li>
@@ -381,7 +370,8 @@ function IndustryTabsSection() {
   )
 }
 
-function ProvenResultsSection() {
+type ProvenStat = { emoji?: string; value?: string; body?: string }
+function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -389,8 +379,8 @@ function ProvenResultsSection() {
           Proven <span style={{ color: "#8015e8" }}>ClickUp</span> Results
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: 20 }}>
-          {PROVEN_STATS.map((s) => (
-            <div key={s.value} className="text-center" style={{ padding: 28, borderRadius: 18, background: "linear-gradient(180deg, #f6efff 0%, #ebd9ff 100%)", border: "1px solid rgba(128,21,232,0.1)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+          {stats.map((s, i) => (
+            <div key={s.value || i} className="text-center" style={{ padding: 28, borderRadius: 18, background: "linear-gradient(180deg, #f6efff 0%, #ebd9ff 100%)", border: "1px solid rgba(128,21,232,0.1)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
               <span className="flex items-center justify-center" style={{ width: 52, height: 52, borderRadius: 999, background: "white", fontSize: 22, boxShadow: "0 4px 14px -8px rgba(64,12,140,0.25)" }}>{s.emoji}</span>
               <p className="font-bold" style={{ color: "#8015e8", fontSize: 22, lineHeight: 1.1 }}>{s.value}</p>
               <p style={{ color: "#444", fontSize: 13, lineHeight: "20px", maxWidth: 220 }}>{s.body}</p>
@@ -402,7 +392,8 @@ function ProvenResultsSection() {
   )
 }
 
-function EverythingAppFeaturesSection() {
+type EverythingAppFeature = { number?: string; title?: string; body?: string }
+function EverythingAppFeaturesSection({ features }: { features: EverythingAppFeature[] }) {
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -410,8 +401,8 @@ function EverythingAppFeaturesSection() {
           The Everything App for Work
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
-          {EVERYTHING_APP_FEATURES.map((f) => (
-            <div key={f.number} className="bg-white" style={{ padding: 24, borderRadius: 16, border: "1px solid #ece7fb", display: "flex", gap: 16, alignItems: "flex-start" }}>
+          {features.map((f, i) => (
+            <div key={f.number || i} className="bg-white" style={{ padding: 24, borderRadius: 16, border: "1px solid #ece7fb", display: "flex", gap: 16, alignItems: "flex-start" }}>
               <span className="flex items-center justify-center font-bold" style={{ width: 40, height: 40, borderRadius: 10, background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)", color: "white", fontSize: 13, flexShrink: 0 }}>
                 {f.number}
               </span>
@@ -435,7 +426,12 @@ export default function CertifiedClickupPartnerContent({ page, siteSettings, faq
     siteSettings?.calendlyLink ||
     "https://calendly.com/global-calendar-fruitionservices"
 
-  const resolvedFaqTabs = (faqTabs && faqTabs.length > 0) ? faqTabs : CLICKUP_FAQ_TABS
+  const resolvedFaqTabs = faqTabs ?? []
+  const resolvedEverythingAppCards = (page.everythingAppCards && page.everythingAppCards.length > 0) ? page.everythingAppCards : EVERYTHING_APP_CARDS
+  const resolvedServicesTabs: FeatureTab[] = (page.servicesTabs && page.servicesTabs.length > 0) ? page.servicesTabs : SERVICES_TABS
+  const resolvedIndustryTabs: IndustryTab[] = (page.industryTabsPartnership && page.industryTabsPartnership.length > 0) ? page.industryTabsPartnership : INDUSTRY_TABS
+  const resolvedProvenStats = (page.provenStats && page.provenStats.length > 0) ? page.provenStats : PROVEN_STATS
+  const resolvedEverythingAppFeatures = (page.everythingAppFeatures && page.everythingAppFeatures.length > 0) ? page.everythingAppFeatures : EVERYTHING_APP_FEATURES
 
   return (
     <div>
@@ -474,9 +470,9 @@ export default function CertifiedClickupPartnerContent({ page, siteSettings, faq
         logos={siteSettings?.carouselLogos || []}
       />
 
-      <EverythingAppSection />
-      <ServicesTabsSection />
-      <IndustryTabsSection />
+      <EverythingAppSection cards={resolvedEverythingAppCards} />
+      <ServicesTabsSection tabs={resolvedServicesTabs} />
+      <IndustryTabsSection tabs={resolvedIndustryTabs} />
 
       {/* Calendly */}
       <CalendlySection
@@ -490,8 +486,8 @@ export default function CertifiedClickupPartnerContent({ page, siteSettings, faq
 
       <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
 
-      <ProvenResultsSection />
-      <EverythingAppFeaturesSection />
+      <ProvenResultsSection stats={resolvedProvenStats} />
+      <EverythingAppFeaturesSection features={resolvedEverythingAppFeatures} />
     </div>
   )
 }

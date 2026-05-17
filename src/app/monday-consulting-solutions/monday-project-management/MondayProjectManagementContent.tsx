@@ -24,56 +24,16 @@ interface Props {
   faqTabs?: FaqTab[]
 }
 
-const PM_FAQ_TABS: FaqTab[] = [
-  {
-    _key: "pm",
-    label: "Project Management",
-    items: [
-      {
-        _key: "q1",
-        question: "Is monday.com used for project management?",
-        answer:
-          "Yes, monday.com is a project management software that helps teams plan, track, and deliver projects. With tools like Gantt charts, dashboards, automations, and workload tracking, it supports everything from simple task lists to complex project portfolios.",
-      },
-      {
-        _key: "q2",
-        question: "Is monday better than Trello for project management?",
-        answer:
-          "monday.com is often considered better for teams needing advanced features. While Trello is great for simple task management with its Kanban board, monday.com offers Gantt charts, workload tracking, dashboards, automations, and integrations that support complex project planning and project portfolio management. monday.com provides more flexibility, scalability, and reporting, making it the stronger choice for organizations managing multiple projects, resources, and deadlines.",
-      },
-      {
-        _key: "q3",
-        question: "Is monday better than Asana for project management?",
-        answer:
-          "While Asana is strong in task management and team collaboration, monday.com offers advanced features like Gantt charts, workload tracking, dashboards, automations, and robust integrations. monday.com also supports project portfolio management, resource allocation, and real-time reporting, making it a better fit for organizations managing multiple projects and complex workflows.",
-      },
-      {
-        _key: "q4",
-        question: "Does monday.com integrate with other tools?",
-        answer:
-          "Yes. Monday.com integrates with Slack, Microsoft Teams, Gmail, Outlook, Google Drive, Jira, Salesforce, HubSpot, and more—keeping all project data connected.",
-      },
-      {
-        _key: "q5",
-        question: "What project management features does monday.com offer?",
-        answer:
-          "Key features include Gantt charts, Kanban boards, task dependencies, workload management, dashboards, time tracking, and project reporting to ensure on-time and on-budget delivery.",
-      },
-      {
-        _key: "q6",
-        question: "Can monday.com handle both small and large projects?",
-        answer:
-          "Yes. monday.com is scalable for individuals, small teams, and enterprise organizations managing complex project portfolios. It works for everything from simple task lists to advanced project portfolio management.",
-      },
-      {
-        _key: "q7",
-        question: "Can monday.com support project portfolio management?",
-        answer:
-          "Yes. monday.com is built for project portfolio management. Teams can group projects under portfolios, monitor performance, allocate resources, and report progress with dashboards and high-level views.",
-      },
-    ],
-  },
-]
+// Hardcoded fallbacks — kept as defaults so the page renders correctly
+// while Sanity is being migrated. When the corresponding field is populated
+// on the solutionPage doc, the FE prefers Sanity.
+const PM_LOGO_CLOUD_PART1 = "Clients who have used our "
+const PM_LOGO_CLOUD_ACCENT = "monday.com consulting services"
+const PM_TB_HEADING_PART1 = "Join "
+const PM_TB_HEADING_ACCENT = "500+ organisations"
+const PM_TB_HEADING_PART2 =
+  " that have maximised their workflows with our monday.com expert support"
+
 
 export default function MondayProjectManagementContent({
   page,
@@ -95,12 +55,15 @@ export default function MondayProjectManagementContent({
 
   const featuredTestimonial = caseStudies[0]
 
-  const calendlyHeading =
+  const PM_CALENDLY_HEADING =
     "Book Your Personalised Demo With a monday.com Project Management Expert"
-  const calendlySubheading =
+  const PM_CALENDLY_SUBHEADING =
     "Schedule a demo with our certified monday.com consultants to explore how Monday.com can streamline your project management workflows. Discover custom solutions for planning, tracking, and reporting projects, and receive a 4-week extended trial."
 
-  const resolvedFaqTabs = (faqTabs && faqTabs.length > 0 ? faqTabs : PM_FAQ_TABS)
+  const calendlyHeading = page.calendlyHeading || PM_CALENDLY_HEADING
+  const calendlySubheading = page.calendlySubheading || PM_CALENDLY_SUBHEADING
+
+  const resolvedFaqTabs = faqTabs ?? []
 
   return (
     <div>
@@ -126,8 +89,8 @@ export default function MondayProjectManagementContent({
 
       {/* Logo cloud */}
       <LogoCloudMarquee
-        headingPart1={page.logoCloudHeadingPart1 || "Clients who have used our "}
-        headingAccent={page.logoCloudHeadingAccent ?? "monday.com consulting services"}
+        headingPart1={page.logoCloudHeadingPart1 || PM_LOGO_CLOUD_PART1}
+        headingAccent={page.logoCloudHeadingAccent ?? PM_LOGO_CLOUD_ACCENT}
         description={page.logoCloudDescription}
         logos={siteSettings?.carouselLogos || []}
       />
@@ -212,11 +175,20 @@ export default function MondayProjectManagementContent({
       )}
       {!page.hideTestimonialBanner && (
         <TestimonialCtaBanner
-          headingPart1={page.joinHeadingPart1 || "Join "}
-          headingAccent={page.joinHeadingAccent || "500+ organisations"}
+          headingPart1={
+            page.testimonialBannerHeadingPart1 ||
+            page.joinHeadingPart1 ||
+            PM_TB_HEADING_PART1
+          }
+          headingAccent={
+            page.testimonialBannerHeadingAccent ||
+            page.joinHeadingAccent ||
+            PM_TB_HEADING_ACCENT
+          }
           headingPart2={
+            page.testimonialBannerHeadingPart2 ||
             page.joinHeadingPart2 ||
-            " that have maximised their workflows with our monday.com expert support"
+            PM_TB_HEADING_PART2
           }
           primaryCtaUrl={calendlyUrl}
           secondaryCtaUrl={calendlyUrl}

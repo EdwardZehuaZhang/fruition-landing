@@ -211,7 +211,7 @@ export default async function Page() {
       {/* 3. Three-tab section */}
       <ComparisonTabsSection
         heading="Local monday.com consultants for Real Estate in Australia, United States, and United Kingdom"
-        tabs={RE_TABS}
+        tabs={(page.comparisonTabs && page.comparisonTabs.length > 0) ? page.comparisonTabs : RE_TABS}
         theme="light"
         layout="tabs"
         withPurpleCircle={false}
@@ -342,7 +342,7 @@ export default async function Page() {
         headingPart1=""
         headingAccent=""
         headingPart2=""
-        stats={RE_STATS_BOTTOM}
+        stats={(page.bottomStats && page.bottomStats.length > 0) ? page.bottomStats : RE_STATS_BOTTOM}
         siteSettings={siteSettings || undefined}
       />
     </div>

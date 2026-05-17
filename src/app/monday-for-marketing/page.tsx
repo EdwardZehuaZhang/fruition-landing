@@ -230,7 +230,7 @@ export default async function Page() {
       {/* 3. Three-tab "Why monday.com for Marketing & Creative?" */}
       <ComparisonTabsSection
         heading="Why monday.com for Marketing & Creative?"
-        tabs={WHY_TABS}
+        tabs={(page.comparisonTabs && page.comparisonTabs.length > 0) ? page.comparisonTabs : WHY_TABS}
         theme="light"
         layout="tabs"
         withPurpleCircle={false}
@@ -249,7 +249,7 @@ export default async function Page() {
       {/* 6. Marketing Case Studies (with video) */}
       <CaseStudyCardsSection
         heading="Marketing Case Studies"
-        cards={MARKETING_CASE_STUDY_CARDS}
+        cards={(page.marketingCaseStudyCards && page.marketingCaseStudyCards.length > 0) ? page.marketingCaseStudyCards : MARKETING_CASE_STUDY_CARDS}
       />
 
       {/* 7. Streamline content creation */}
@@ -278,7 +278,7 @@ export default async function Page() {
             Why the best use monday.com to manage their Marketing &amp; Creative teams
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: 24 }}>
-            {WHY_BEST_CARDS.map((card) => (
+            {((page.whyBestCards && page.whyBestCards.length > 0) ? page.whyBestCards : WHY_BEST_CARDS).map((card: { _key?: string; emoji?: string; title?: string; description?: string }) => (
               <div
                 key={card._key}
                 className="bg-white rounded-card border border-[#e8e6e6]"

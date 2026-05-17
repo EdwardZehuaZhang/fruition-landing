@@ -53,6 +53,79 @@ export async function changeColumnValues(
   )
 }
 
+export interface MondayColumnValue {
+  id: string
+  type: string
+  text: string | null
+  value: string | null
+  files?: { name: string; url: string }[]
+  values?: { label: string }[]
+  url?: string
+  linkText?: string
+}
+
+export interface MondayItemSnapshot {
+  name: string
+  columns: Record<string, MondayColumnValue>
+}
+
+export async function getItemForWebhook(itemId: string): Promise<MondayItemSnapshot | null> {
+  const data = await gql<{
+    items: Array<{
+      name: string
+      column_values: Array<{
+        id: string
+        type: string
+        text: string | null
+        value: string | null
+        files?: { name: string; url: string }[]
+        values?: { label: string }[]
+        url?: string
+        // LinkValue exposes `text` as the link label — already covered by `text` above.
+      }>
+    }>
+  }>(
+    `query ($id: [ID!]!) {
+      items(ids: $id) {
+        name
+        column_values {
+          id
+          type
+          text
+          value
+          ... on FileValue { files { name url } }
+          ... on DropdownValue { values { label } }
+          ... on LinkValue { url }
+        }
+      }
+    }`,
+    { id: [String(itemId)] },
+  )
+  const item = data.items?.[0]
+  if (!item) return null
+  const columns: Record<string, MondayColumnValue> = {}
+  for (const c of item.column_values) {
+    columns[c.id] = {
+      id: c.id,
+      type: c.type,
+      text: c.text ?? null,
+      value: c.value ?? null,
+      files: c.files,
+      values: c.values,
+      url: c.url,
+    }
+  }
+  return { name: item.name, columns }
+}
+
+export async function downloadAsset(url: string): Promise<{ bytes: Buffer; mime: string }> {
+  const r = await fetch(url, { headers: { Authorization: getToken() } })
+  if (!r.ok) throw new Error(`monday asset download ${r.status} ${await r.text().catch(() => "")}`)
+  const mime = r.headers.get("content-type")?.split(";")[0]?.trim() || "image/jpeg"
+  const ab = await r.arrayBuffer()
+  return { bytes: Buffer.from(ab), mime }
+}
+
 export async function uploadFileToColumn(
   itemId: string,
   columnId: string,

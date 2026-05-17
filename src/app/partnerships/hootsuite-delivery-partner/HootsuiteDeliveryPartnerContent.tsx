@@ -75,7 +75,11 @@ export default function HootsuiteDeliveryPartnerContent({
       <section className="bg-white px-4" style={{ paddingTop: 24, paddingBottom: 80 }}>
         <div className="mx-auto" style={{ maxWidth: 980 }}>
           <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
-            <YouTubeEmbed videoId="7zC5uxk0lc8" title="Hootsuite overview" />
+            <YouTubeEmbed
+              url={page.bottomVideoUrl || undefined}
+              videoId={page.bottomVideoUrl ? undefined : "7zC5uxk0lc8"}
+              title={page.bottomVideoTitle || "Hootsuite overview"}
+            />
           </div>
         </div>
       </section>

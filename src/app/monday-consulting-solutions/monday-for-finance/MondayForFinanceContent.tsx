@@ -232,13 +232,6 @@ const FINANCE_FAQS = [
   },
 ]
 
-const HARDCODED_FAQ_TABS: FaqTab[] = [
-  { _key: "professional-services", label: "Professional Services", items: GENERAL_FAQS },
-  { _key: "finance-accounting", label: "Finance & Accounting", items: FINANCE_FAQS },
-  { _key: "project-management", label: "Project Management", items: GENERAL_FAQS },
-  { _key: "monday-crm", label: "monday CRM", items: GENERAL_FAQS },
-]
-
 /* ------------------------------------------------------------------ */
 /*  Bottom section: video + feature cards (from screenshot)            */
 /* ------------------------------------------------------------------ */
@@ -273,6 +266,8 @@ export default function MondayForFinanceContent({
 
   const partnerBadges: PartnerBadge[] = siteSettings?.navbarPartnerBadges || []
   const heroVideoEmbedSrc = youtubeEmbedUrl(page.heroVideoUrl)
+  const resolvedFinanceTabs: FinanceComparisonTab[] = (page.comparisonTabs && page.comparisonTabs.length > 0) ? page.comparisonTabs : COMPARISON_TABS
+  const resolvedFinanceFeatureCards: FinanceFeatureCard[] = (page.financeFeatureCards && page.financeFeatureCards.length > 0) ? page.financeFeatureCards : FINANCE_FEATURE_CARDS
 
   return (
     <div>
@@ -434,7 +429,7 @@ export default function MondayForFinanceContent({
       </section>
 
       {/* 4. Tab selector section */}
-      <FinanceTabsSection />
+      <FinanceTabsSection tabs={resolvedFinanceTabs} />
 
       {/* 5. Calendly */}
       <CalendlySection
@@ -447,10 +442,10 @@ export default function MondayForFinanceContent({
       />
 
       {/* 6. FAQ */}
-      <FaqAccordion heading="Frequently asked questions" tabs={faqTabs && faqTabs.length > 0 ? faqTabs : HARDCODED_FAQ_TABS} />
+      <FaqAccordion heading="Frequently asked questions" tabs={faqTabs ?? []} />
 
       {/* 7. Feature cards section */}
-      <BottomFeatureSection />
+      <BottomFeatureSection cards={resolvedFinanceFeatureCards} />
 
       {/* 8. Join 500+ CTA */}
       <TestimonialCtaBanner
@@ -466,9 +461,12 @@ export default function MondayForFinanceContent({
 /*  Finance Tabs Section                                               */
 /* ------------------------------------------------------------------ */
 
-function FinanceTabsSection() {
+type FinanceComparisonTab = { label?: string; items?: Array<{ icon?: string; title?: string; description?: string }> }
+type FinanceFeatureCard = { emoji?: string; title?: string; description?: string }
+
+function FinanceTabsSection({ tabs }: { tabs: FinanceComparisonTab[] }) {
   const [activeTab, setActiveTab] = useState(0)
-  const active = COMPARISON_TABS[activeTab]
+  const active = tabs[activeTab]
 
   return (
     <section
@@ -496,7 +494,7 @@ function FinanceTabsSection() {
           className="flex justify-center flex-wrap"
           style={{ gap: 12, marginTop: 40, width: "max-content", maxWidth: "100vw", overflow: "visible" }}
         >
-          {COMPARISON_TABS.map((tab, i) => (
+          {tabs.map((tab, i) => (
             <button
               key={tab.label}
               onClick={() => setActiveTab(i)}
@@ -544,14 +542,14 @@ function FinanceTabsSection() {
           className="w-full rounded-card border border-[#e8e6e6]"
           style={{ marginTop: 24, padding: "12px 0" }}
         >
-          {active.items.map((item, i) => (
+          {(active.items ?? []).map((item, i) => (
             <div
-              key={item.title}
+              key={item.title || i}
               className="ui-step-row"
               style={{
                 padding: "24px 40px",
                 borderBottom:
-                  i < active.items.length - 1
+                  i < (active.items?.length ?? 0) - 1
                     ? "1px solid #f0f0f0"
                     : "none",
               }}
@@ -602,7 +600,7 @@ function FinanceTabsSection() {
 /*  Bottom Feature Cards Section                                       */
 /* ------------------------------------------------------------------ */
 
-function BottomFeatureSection() {
+function BottomFeatureSection({ cards }: { cards: FinanceFeatureCard[] }) {
   return (
     <section style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(180deg, #f5f0ff 0%, #ffffff 100%)" }}>
       <div className="mx-auto px-4" style={{ maxWidth: 1100 }}>
@@ -620,9 +618,9 @@ function BottomFeatureSection() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
           style={{ gap: 24, marginTop: 40 }}
         >
-          {FINANCE_FEATURE_CARDS.map((card) => (
+          {cards.map((card, i) => (
             <div
-              key={card.title}
+              key={card.title || i}
               className="flex flex-col items-center text-center bg-white rounded-card border border-[#ece7fb]"
               style={{
                 padding: 28,

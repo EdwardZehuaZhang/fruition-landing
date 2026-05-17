@@ -84,18 +84,6 @@ const ATLASSIAN_TABS: ComparisonTab[] = [
   },
 ]
 
-const ATLASSIAN_FAQ_TABS: FaqTab[] = [
-  {
-    _key: "atlassian",
-    label: "Atlassian FAQs",
-    items: [
-      { _key: "f1", question: "What is Atlassian used for?", answer: "Atlassian Cloud is a suite of cloud-based software and collaboration tools. It includes a range of products designed to help teams and organizations with software development, project management, and team collaboration tasks." },
-      { _key: "f2", question: "What does the company Atlassian do?", answer: "Atlassian Corporation is an Australian-American proprietary software company that specializes in collaboration tools designed primarily for software development and project management." },
-      { _key: "f3", question: "What is Atlassian best known for?", answer: "Atlassian's most popular products include Jira, Confluence, Trello, and Bitbucket. Jira is a project management tool, Confluence is a collaboration and knowledge base platform, Trello is a visual project management tool, and Bitbucket is a code hosting and collaboration platform." },
-      { _key: "f4", question: "Who uses Atlassian?", answer: "Atlassian products are used by a wide variety of teams and organizations across many industries. Notable companies using Atlassian include Citigroup, eBay, Netflix, NASA, Coca-Cola, and United Airlines. In fact, 80% of Fortune 500 companies are Atlassian customers." },
-    ],
-  },
-]
 
 const PROVEN_STATS = [
   { emoji: "📈", value: "20%", body: "ticket deflection with Jira Service Management" },
@@ -120,7 +108,11 @@ const EXPERT_CARDS = [
 
 /* ----------------- Sections ----------------- */
 
-function ProvenResultsSection() {
+type ProvenStat = { _key?: string; emoji?: string; value?: string; body?: string }
+type ServiceCard = { _key?: string; emoji?: string; title?: string; body?: string; bullets?: string[] }
+type ExpertCard = { _key?: string; title?: string; body?: string; image?: string }
+
+function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -128,8 +120,8 @@ function ProvenResultsSection() {
           Proven <span style={{ color: "#8015e8" }}>Atlassian Cloud</span> Results
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>
-          {PROVEN_STATS.map((s) => (
-            <div key={s.value} className="text-center" style={{ padding: 32, borderRadius: 18, background: "linear-gradient(180deg, #f6efff 0%, #ebd9ff 100%)", border: "1px solid rgba(128,21,232,0.10)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
+          {stats.map((s: ProvenStat, i: number) => (
+            <div key={s._key || s.value || i} className="text-center" style={{ padding: 32, borderRadius: 18, background: "linear-gradient(180deg, #f6efff 0%, #ebd9ff 100%)", border: "1px solid rgba(128,21,232,0.10)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
               <span className="flex items-center justify-center" style={{ width: 56, height: 56, borderRadius: 999, background: "white", fontSize: 26, boxShadow: "0 4px 14px -8px rgba(64,12,140,0.25)" }}>{s.emoji}</span>
               <p className="font-bold" style={{ color: "#8015e8", fontSize: 32, lineHeight: 1 }}>{s.value}</p>
               <p style={{ color: "#444", fontSize: 13, lineHeight: "20px", maxWidth: 240 }}>{s.body}</p>
@@ -141,7 +133,7 @@ function ProvenResultsSection() {
   )
 }
 
-function ComprehensiveServicesSection() {
+function ComprehensiveServicesSection({ cards }: { cards: ServiceCard[] }) {
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -149,15 +141,15 @@ function ComprehensiveServicesSection() {
           Our Comprehensive <span style={{ color: "#8015e8" }}>Atlassian</span> Services
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 20 }}>
-          {SERVICE_CARDS.map((c) => (
-            <div key={c.title} className="bg-white" style={{ padding: 24, borderRadius: 16, border: "1px solid #ece7fb", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 12 }}>
+          {cards.map((c: ServiceCard, i: number) => (
+            <div key={c._key || c.title || i} className="bg-white" style={{ padding: 24, borderRadius: 16, border: "1px solid #ece7fb", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 12 }}>
               <span style={{ fontSize: 28 }}>{c.emoji}</span>
               <p className="font-bold" style={{ color: "#10003a", fontSize: 16 }}>{c.title}</p>
               <p style={{ color: "#444", fontSize: 13, lineHeight: "20px" }}>{c.body}</p>
-              {c.bullets.length > 0 && (
+              {c.bullets && c.bullets.length > 0 && (
                 <ul className="flex flex-col" style={{ gap: 6, marginTop: 4 }}>
-                  {c.bullets.map((b) => (
-                    <li key={b} className="flex items-start" style={{ gap: 8, color: "#444", fontSize: 12, lineHeight: "18px" }}>
+                  {c.bullets.map((b: string, j: number) => (
+                    <li key={b || j} className="flex items-start" style={{ gap: 8, color: "#444", fontSize: 12, lineHeight: "18px" }}>
                       <span style={{ color: "#8015e8" }}>✓</span>
                       <span>{b}</span>
                     </li>
@@ -172,7 +164,7 @@ function ComprehensiveServicesSection() {
   )
 }
 
-function AtlassianExpertsSection({ calendlyUrl }: { calendlyUrl: string }) {
+function AtlassianExpertsSection({ calendlyUrl, cards }: { calendlyUrl: string; cards: ExpertCard[] }) {
   return (
     <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(180deg, #faf6ff 0%, #ebd9ff 100%)" }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
@@ -190,9 +182,9 @@ function AtlassianExpertsSection({ calendlyUrl }: { calendlyUrl: string }) {
         </div>
 
         <div className="flex flex-col" style={{ gap: 60 }}>
-          {EXPERT_CARDS.map((c, i) => (
+          {cards.map((c: ExpertCard, i: number) => (
             <div
-              key={c.title}
+              key={c._key || c.title || i}
               className="flex flex-col items-center"
               style={{ gap: 40, flexDirection: i % 2 === 0 ? "row" : "row-reverse" }}
             >
@@ -225,7 +217,15 @@ export default function CertifiedAtlassianPartnerContent({ page, siteSettings, f
     siteSettings?.calendlyLink ||
     "https://calendly.com/global-calendar-fruitionservices"
 
-  const resolvedFaqTabs = (faqTabs && faqTabs.length > 0) ? faqTabs : ATLASSIAN_FAQ_TABS
+  const resolvedFaqTabs = faqTabs ?? []
+  const resolvedAtlassianTabs: ComparisonTab[] =
+    (page.atlassianTabs && page.atlassianTabs.length > 0) ? page.atlassianTabs : ATLASSIAN_TABS
+  const resolvedProvenStats: ProvenStat[] =
+    (page.provenStats && page.provenStats.length > 0) ? page.provenStats : PROVEN_STATS
+  const resolvedServiceCards: ServiceCard[] =
+    (page.serviceCards && page.serviceCards.length > 0) ? page.serviceCards : SERVICE_CARDS
+  const resolvedExpertCards: ExpertCard[] =
+    (page.expertCards && page.expertCards.length > 0) ? page.expertCards : EXPERT_CARDS
 
   return (
     <div>
@@ -269,7 +269,7 @@ export default function CertifiedAtlassianPartnerContent({ page, siteSettings, f
           page.comparisonSubheading ||
           "We modernise your business with intelligent Atlassian solutions, streamlined services, and expert migration that deliver measurable ROI across your entire organization."
         }
-        tabs={ATLASSIAN_TABS}
+        tabs={resolvedAtlassianTabs}
         theme="light"
         withPurpleCircle={false}
       />
@@ -288,14 +288,14 @@ export default function CertifiedAtlassianPartnerContent({ page, siteSettings, f
       <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
 
       {/* Proven Atlassian Cloud Results */}
-      <ProvenResultsSection />
+      <ProvenResultsSection stats={resolvedProvenStats} />
 
       {/* Our Comprehensive Atlassian Services */}
       <div id="atlassian-process" />
-      <ComprehensiveServicesSection />
+      <ComprehensiveServicesSection cards={resolvedServiceCards} />
 
       {/* Your Atlassian Experts */}
-      <AtlassianExpertsSection calendlyUrl={calendlyUrl} />
+      <AtlassianExpertsSection calendlyUrl={calendlyUrl} cards={resolvedExpertCards} />
     </div>
   )
 }

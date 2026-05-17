@@ -40,3 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# Sanity dataset backups (large binaries, not for git)
+backups/
+
+# QA screenshot/diff artifacts (regenerated locally)
+qa/

@@ -559,9 +559,7 @@ export default function MondayProductManagementContent({
           tabs={
             faqTabs && faqTabs.length > 0
               ? faqTabs
-              : page.faqTabs?.length > 0
-                ? page.faqTabs
-                : PM_FAQ_TABS
+              : page.faqTabs ?? []
           }
         />
       )}
@@ -593,110 +591,6 @@ export default function MondayProductManagementContent({
 /*  Product Management FAQ                                              */
 /* ------------------------------------------------------------------ */
 
-const PM_FAQ_TABS: FaqTab[] = [
-  {
-    _key: "monday-dev",
-    label: "monday Dev",
-    items: [
-      {
-        _key: "pm-dev-1",
-        question: "What are the 5 C's of product management?",
-        answer:
-          "The 5 C's of product management are a framework used to guide product managers in their decision-making processes and strategic planning. They are Customers, Competition, Company, Collaborators, Context.",
-      },
-      {
-        _key: "pm-dev-2",
-        question: "What software is used for product management?",
-        answer:
-          "monday.com/Jira — for stories, tasks etc\nFigma/Figjam/Miro (much preferred vs figjam) — for wireframing, research presentations on competitors, mockups\nGoogle Docs — all other documentation\nData.ai — competitor research on metrics in mobile games space\nChatGPT premium (less as of late, seems worse with outputs) — proofing, research, generating dod but I always write first passes and do editing on outputs\nAmplitude / Tableau / DeltaDNA / Google Analytics — analytics visualizations and dashboards",
-      },
-      {
-        _key: "pm-dev-3",
-        question: "The 7 stages of new product development",
-        answer:
-          "Generating ideas\nScreening ideas\nCreating a product strategy\nBuilding a product roadmap\nPrototyping\nTesting\nProduct launch",
-      },
-      {
-        _key: "pm-dev-4",
-        question: "Why do teams switch from ProductPlan to monday.com?",
-        answer:
-          "ProductPlan users frequently migrate to Monday.com for several compelling reasons:\n\nEnhanced Collaboration: While ProductPlan focuses primarily on roadmap visualization, Monday.com provides end-to-end product workflow management, enabling seamless collaboration between product managers, developers, designers, and stakeholders.\n\nCost Efficiency: Monday.com's pricing structure often provides better value for growing product teams, especially when replacing multiple tools with a single platform.\n\nCustomization Flexibility: Unlike ProductPlan's rigid roadmap templates, Monday.com's customizable boards adapt to any product methodology, from Scrum to Kanban to hybrid approaches.\n\nIntegration Ecosystem: Monday.com's extensive integration library connects with development tools, customer feedback platforms, and analytics systems that product teams already use.",
-      },
-      {
-        _key: "pm-dev-5",
-        question: "Why do teams switch from Roadmunk to monday.com?",
-        answer:
-          "Product teams considering alternatives to Roadmunk find Monday.com offers superior:\n\nReal-time Collaboration: Monday.com's collaborative features enable instant updates and team communication, while Roadmunk's collaboration feels more static.\n\nWorkflow Automation: Automated status updates, notifications, and task assignments reduce manual work that typically consumes product managers' time.\n\nScalability: Monday.com grows with organizations, supporting everything from startup product teams to enterprise-level product portfolios.\n\nData-Driven Decisions: Advanced reporting and analytics provide insights into product performance that inform strategic decisions.",
-      },
-      {
-        _key: "pm-dev-6",
-        question: "Why are teams switching from Agile to monday.com?",
-        answer:
-          "Many product teams are transitioning from traditional agile project management tools to Monday.com's comprehensive product management platform. Here's why this shift is accelerating:\n\nBeyond Basic Sprint Management: Traditional agile tools like Jira focus primarily on development task tracking, while Monday.com provides end-to-end product lifecycle management from ideation to launch and beyond.\n\nVisual Product Planning: Unlike text-heavy agile tools, Monday.com's visual interface makes product roadmaps and sprint progress immediately comprehensible to all stakeholders, not just technical teams.\n\nCross-Functional Integration: Agile tools typically serve development teams in isolation. Monday.com breaks down silos by connecting product, marketing, sales, and customer success teams in unified workflows.\n\nStakeholder Communication: Traditional agile reporting requires interpretation for business stakeholders. Monday.com's dashboards and automation provide clear, real-time visibility that executives and clients can understand without translation.\n\nReduced Tool Sprawl: Teams using separate tools for roadmapping, sprint planning, bug tracking, and stakeholder communication find Monday.com consolidates these functions, reducing complexity and improving data consistency.\n\nModern User Experience: Legacy agile tools often feel dated and complex. Monday.com's intuitive interface reduces training time and increases team adoption rates across all departments.",
-      },
-    ],
-  },
-  {
-    _key: "expert-consultant",
-    label: "Expert Consultant Guide",
-    items: [
-      {
-        _key: "ec-1",
-        question: "What's the best monday.com CRM implementation strategy?",
-        answer:
-          "When implementing monday.com CRM, we recommend starting with a carefully planned phased rollout guided by certified monday.com consultants.\n\nOur experience shows that successful implementations begin by customizing your CRM setup to match your unique sales processes.\n\nWe typically start by implementing proven sales workflows with powerful automation features, which transforms your entire sales process. The key is scaling the implementation department by department, ensuring each team is comfortable before moving forward.",
-      },
-      {
-        _key: "ec-2",
-        question: "How do monday.com Partners handle user adoption?",
-        answer:
-          "The secret to successful user adoption lies in demonstrating immediate wins that matter to your team. As monday.com consultants, we focus on showing tangible improvements in daily workflows.\n\nWe've developed change management best practices that ensure smooth transitions, especially when implementing CRM solutions tailored to your existing sales processes.\n\nOur expert-led training programs drive adoption naturally, and we continuously monitor success metrics to adjust our approach as needed.",
-      },
-      {
-        _key: "ec-3",
-        question: "What monday.com training do Partners recommend?",
-        answer:
-          "Our training approach combines consultant-led CRM sessions with practical, hands-on learning. We've found that custom implementation guides, created specifically for your organization, work best.\n\nWe provide role-specific coaching and support, ensuring everyone from sales reps to administrators gets exactly what they need.\n\nRegular check-in sessions with your dedicated implementation consultant help reinforce learning, and you'll have full access to our comprehensive Partner knowledge base and resources.",
-      },
-      {
-        _key: "ec-4",
-        question: "How do monday.com consultants handle data migration?",
-        answer:
-          "Data migration is a crucial step that requires careful planning and execution. Our Partner team provides expert guidance throughout the CRM data transfer process, using proven templates that ensure data integrity.\n\nWe develop strategic implementation plans that minimize disruption while maximizing efficiency. Our approach includes creating custom workflows that match your sales process, with thorough quality checks at every step to ensure accuracy.",
-      },
-      {
-        _key: "ec-5",
-        question: "What success metrics do monday.com Partners track?",
-        answer:
-          "We focus on meaningful metrics that demonstrate real business impact. This includes monitoring CRM adoption rates with detailed Partner guidance, measuring improvements in sales efficiency, and tracking concrete ROI metrics.\n\nOur consultants regularly assess CRM performance and collect customer success stories, helping you understand the tangible benefits of your monday.com implementation. We've found that tracking these metrics helps organizations optimize their usage and maximize their return on investment.",
-      },
-    ],
-  },
-  {
-    _key: "general-questions",
-    label: "General Questions",
-    items: [
-      {
-        _key: "gq-1",
-        question: "Do big companies use monday.com?",
-        answer:
-          "Yes, many large companies use monday.com for their work management needs. monday.com claims that over 180,000 companies globally use the platform, including well-known brands like Nissan, Elal, Zippo, Canva, Coca-Cola, Wix, and Uber.",
-      },
-      {
-        _key: "gq-2",
-        question: "Why is monday.com so popular?",
-        answer:
-          "Monday.com's popularity stems from its user-friendly interface, visual appeal, and powerful features that cater to various work management needs. It's known for its flexibility, customizable workflows, and ability to integrate with numerous third-party apps. The platform also offers a visually appealing, intuitive design, which makes it easy for teams to collaborate and manage projects.",
-      },
-      {
-        _key: "gq-3",
-        question: "What companies use monday.com?",
-        answer:
-          "monday.com is used across industries by companies of all sizes — from startups to Fortune 500 enterprises. Notable users include Canva, Coca-Cola, Universal Music Group, Wix, Hubspot, Genpact, BD, Lionsgate, Discovery Channel, and Uber.",
-      },
-    ],
-  },
-]
 
 /* ------------------------------------------------------------------ */
 /*  How to Manage Products — Strategic Approach Cards                  */

@@ -180,18 +180,21 @@ export default function OnboardingForm({ regionOptions }: Props) {
         />
       </Field>
       <Field label="Primary region" required>
-        <select
-          required
-          value={region}
-          onChange={(e) => setRegion(e.target.value)}
-          className={inputClass}
-        >
-          {regionOptions.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
+        <div className="relative">
+          <select
+            required
+            value={region}
+            onChange={(e) => setRegion(e.target.value)}
+            className={`${inputClass} appearance-none pr-11`}
+          >
+            {regionOptions.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+          <ChevronIcon className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" />
+        </div>
       </Field>
       <Field label="Photo" hint="Square headshot works best. Max 8 MB." required>
         <label
@@ -272,12 +275,15 @@ export default function OnboardingForm({ regionOptions }: Props) {
           />
         </Field>
         <Field label="Work anniversary">
-          <input
-            type="date"
-            value={workAnniversary}
-            onChange={(e) => setWorkAnniversary(e.target.value)}
-            className={inputClass}
-          />
+          <div className="relative">
+            <input
+              type="date"
+              value={workAnniversary}
+              onChange={(e) => setWorkAnniversary(e.target.value)}
+              className={`${inputClass} pr-11 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0`}
+            />
+            <CalendarIcon className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" />
+          </div>
         </Field>
         <Field label="Favourite movie">
           <input
@@ -318,7 +324,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
 }
 
 const inputClass =
-  "block w-full rounded-chip border bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--purple-primary)] focus:ring-2 focus:ring-[rgba(128,21,232,0.18)]"
+  "block w-full rounded-chip border border-[var(--color-border)] bg-white px-4 py-3 text-sm text-[#10003a] placeholder:text-[#9ca3af] outline-none transition hover:border-[var(--purple-light)] focus:border-[var(--purple-primary)] focus:ring-2 focus:ring-[rgba(128,21,232,0.18)]"
 
 function Field({
   label,
@@ -333,17 +339,55 @@ function Field({
 }) {
   return (
     <div>
-      <label
-        className="mb-1 flex items-baseline justify-between text-sm font-medium text-[#10003a]"
-        style={{ borderColor: "var(--color-border)" }}
-      >
+      <label className="mb-1.5 flex items-baseline justify-between gap-3 text-sm font-medium text-[#10003a]">
         <span>
           {label}
           {required && <span className="ml-1 text-[var(--purple-primary)]">*</span>}
         </span>
-        {hint && <span className="text-xs font-normal text-[var(--color-text-secondary)]">{hint}</span>}
+        {hint && (
+          <span className="text-xs font-normal text-[var(--color-text-secondary)]">{hint}</span>
+        )}
       </label>
-      <div style={{ borderColor: "var(--color-border)" }}>{children}</div>
+      {children}
     </div>
+  )
+}
+
+function ChevronIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  )
+}
+
+function CalendarIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <rect x="3" y="4.5" width="18" height="16" rx="2" />
+      <path d="M16 3v3M8 3v3M3 9.5h18" />
+    </svg>
   )
 }

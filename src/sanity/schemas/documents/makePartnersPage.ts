@@ -181,5 +181,78 @@ export default defineType({
 
     // Discover CTA
     defineField({ name: 'discoverHeading', title: 'Discover Section Heading', type: 'string' }),
+
+    // Make Feature Tabs (nested groups + bullets) — mirrors MAKE_FEATURE_TABS
+    // in MakePartnersContent.tsx. Editing here replaces the hardcoded fallback.
+    defineField({
+      name: 'makeFeatureTabs',
+      title: 'Make Feature Tabs',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'makeFeatureTab',
+          fields: [
+            { name: 'key', title: 'Key (stable id)', type: 'string' },
+            { name: 'label', title: 'Label (button)', type: 'string' },
+            { name: 'heading', title: 'Heading (above grid)', type: 'string' },
+            { name: 'intro', title: 'Intro (optional)', type: 'text' },
+            { name: 'outro', title: 'Outro (optional)', type: 'text' },
+            {
+              name: 'groups',
+              title: 'Groups',
+              type: 'array',
+              of: [{
+                type: 'object',
+                name: 'makeFeatureGroup',
+                fields: [
+                  { name: 'number', title: 'Number (e.g. "01")', type: 'string' },
+                  { name: 'title', title: 'Title', type: 'text' },
+                  {
+                    name: 'bullets',
+                    title: 'Bullets',
+                    type: 'array',
+                    of: [{
+                      type: 'object',
+                      name: 'makeFeatureBullet',
+                      fields: [
+                        { name: 'emoji', title: 'Emoji', type: 'string' },
+                        { name: 'text', title: 'Text', type: 'text' },
+                      ],
+                    }],
+                  },
+                ],
+              }],
+            },
+          ],
+        }),
+      ],
+    }),
+
+    // Showcase media overrides — keyed by lowercased showcase heading. Stored
+    // as an array (Sanity attribute names can't contain spaces); the FE
+    // reduces this back to a Record before merging with the hardcoded
+    // fallback in MakePartnersContent.tsx.
+    defineField({
+      name: 'showcaseOverrides',
+      title: 'Showcase Media Overrides',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'showcaseOverride',
+          fields: [
+            { name: 'key', title: 'Key (lowercased showcase heading)', type: 'string' },
+            {
+              name: 'mediaType',
+              title: 'Media Type',
+              type: 'string',
+              options: { list: [{ title: 'Image', value: 'image' }, { title: 'Video', value: 'video' }] },
+            },
+            { name: 'mediaSrc', title: 'Media Source (public URL or /path)', type: 'string' },
+          ],
+        }),
+      ],
+    }),
   ],
 })
