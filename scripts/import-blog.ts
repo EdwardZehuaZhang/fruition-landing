@@ -175,7 +175,7 @@ async function processBodyNodes(nodes: PTNode[], slug: string): Promise<any[]> {
   return result
 }
 
-async function importBlogPost(entry: SitemapEntry): Promise<boolean> {
+export async function importBlogPost(entry: SitemapEntry): Promise<boolean> {
   try {
     const urlPath = new URL(entry.url).pathname
     const slugMatch = urlPath.match(/\/post\/([^/?#]+)/)
@@ -313,4 +313,11 @@ async function main() {
   console.log(`  Categories: ${BLOG_CATEGORIES.length}`)
 }
 
-main().catch(console.error)
+// Only run main() when invoked directly, not when imported as a module
+const invokedDirectly =
+  import.meta.url === `file://${process.argv[1]}` ||
+  process.argv[1]?.endsWith('import-blog.ts') ||
+  process.argv[1]?.endsWith('import-blog.js')
+if (invokedDirectly) {
+  main().catch(console.error)
+}
