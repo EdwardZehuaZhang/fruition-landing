@@ -193,11 +193,8 @@ export default function MondayPartnerSingaporeContent({
 
       {/* 3-tab comparison */}
       <ComparisonTabsSection
-        heading={page.comparisonHeading || "Streamline Operations & Maximise Efficiency with a monday.com Expert"}
-        subheading={
-          page.comparisonSubheading ||
-          "We transform fragmented business processes into cohesive, automated systems that enhance team collaboration and deliver measurable ROI across your entire organisation."
-        }
+        heading={page.comparisonHeading}
+        subheading={page.comparisonSubheading}
         tabs={resolvedComparisonTabs}
         theme="light"
         withPurpleCircle={false}
@@ -205,9 +202,10 @@ export default function MondayPartnerSingaporeContent({
 
       {/* Meet the team — SG region */}
       <TeamGridSection
-        heading="Meet the Fruition Singapore team"
-        ctaLabel="Learn More About Us"
-        ctaUrl="/fruition-team"
+        heading={page.teamGridHeading}
+        subheading={page.teamGridSubheading}
+        ctaLabel={page.teamGridCtaLabel}
+        ctaUrl={page.teamGridCtaUrl}
         members={teamMembers}
         region="APAC"
       />
@@ -224,18 +222,18 @@ export default function MondayPartnerSingaporeContent({
 
       {/* Customer testimonials */}
       <TestimonialsGrid
-        heading="What our customers say about us 🙌"
-        ctaLabel="🚀  Start Your Transformation"
+        heading={page.testimonialsGridHeading}
+        ctaLabel={page.testimonialsGridCtaLabel}
         ctaUrl={calendlyUrl}
-        statCardValue="500+"
-        statCardSubtitle="have maximised their workflows with our monday.com expert support"
-        statCardCtaLabel="Read our case studies"
-        statCardCtaUrl="/customer-testimonials"
+        statCardValue={page.testimonialsGridStatValue}
+        statCardSubtitle={page.testimonialsGridStatSubtitle}
+        statCardCtaLabel={page.testimonialsGridStatCtaLabel}
+        statCardCtaUrl={page.testimonialsGridStatCtaUrl}
         caseStudies={partnerCaseStudies}
       />
 
       {/* FAQ */}
-      <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
+      <FaqAccordion heading={page.faqHeading} tabs={resolvedFaqTabs} />
 
       {/* Feature blocks */}
       <FeatureBlocksSection blocks={resolvedFeatureBlocks} />

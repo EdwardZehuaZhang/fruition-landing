@@ -13,7 +13,7 @@ import {
   TestimonialCtaBanner,
 } from "@/components/sections"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
-import type { CaseStudy, SiteSettingsData, FaqTab, ComparisonTab } from "@/components/sections/types"
+import type { CaseStudy, SiteSettingsData, FaqTab } from "@/components/sections/types"
 
 interface Props {
   page: any
@@ -21,160 +21,6 @@ interface Props {
   caseStudies?: CaseStudy[]
   faqTabs?: FaqTab[]
 }
-
-const HR_COMPARISON_TABS: ComparisonTab[] = [
-  {
-    _key: "hr-leadership",
-    label: "HR Leadership Challenges",
-    items: [
-      {
-        _key: "lead-1",
-        number: "01",
-        title: "Streamlined Talent Management",
-        description:
-          "Track entire employee lifecycle through customised boards — from recruitment pipelines and automated interview scheduling to onboarding journeys, skills development, and retention metrics. Integrate performance reviews and career development plans in one visible platform.",
-      },
-      {
-        _key: "lead-2",
-        number: "02",
-        title: "Employee Experience & Wellbeing",
-        description:
-          "Monitor workplace satisfaction through automated pulse surveys, manage flexible work arrangements, and track wellbeing initiatives. Create dashboards for workload distribution, time-off management, and anonymous feedback collection, ensuring no team member gets overwhelmed.",
-      },
-      {
-        _key: "lead-3",
-        number: "03",
-        title: "Strategic HR Operations",
-        description:
-          "Transform compliance, budget tracking, and resource allocation with automated reminders for certifications, policy reviews, and training deadlines. Create approval workflows for expenses and monitor ROI of HR initiatives through integrated financial dashboards.",
-      },
-      {
-        _key: "lead-4",
-        number: "04",
-        title: "Data-Driven Decision Making",
-        description:
-          "Leverage real-time analytics dashboards to track key HR metrics across recruitment, retention, engagement, and DEI initiatives. Consolidate data from various HR systems to identify trends and make informed decisions about workforce planning and program effectiveness.",
-      },
-      {
-        _key: "lead-5",
-        number: "05",
-        title: "Change Management & Communication",
-        description:
-          "Design structured project boards for organisational changes, breaking initiatives into clear phases with stakeholder mapping and progress tracking. Create centralised communication hubs for policies, announcements, and feedback collection, ensuring transparency across hybrid teams.",
-      },
-    ],
-  },
-  {
-    _key: "hr-team",
-    label: "HR Team Challenges",
-    items: [
-      {
-        _key: "team-1",
-        number: "01",
-        title: "HR Technology & Employee Experience Management",
-        description:
-          "Hybrid workforce management requires strategic HRIS integration and digital workplace solutions that support remote work policies, employee engagement platforms, and inclusive team dynamics while ensuring compliance and equitable experiences across all work arrangements and employment classifications.",
-      },
-      {
-        _key: "team-2",
-        number: "02",
-        title: "HR Digital Transformation & Training Solutions",
-        description:
-          "Successful workforce digitisation depends on comprehensive change management consulting, employee training programs, and learning management systems (LMS) that include skills gap analysis, personalised development pathways, and continuous learning support to maintain productivity during technology adoption and organisational change.",
-      },
-      {
-        _key: "team-3",
-        number: "03",
-        title: "Employee Wellbeing Programs & HR Automation",
-        description:
-          "Work-life balance initiatives improve through intelligent HR process automation, employee self-service portals, and streamlined administrative workflows that reduce burnout, support mental health programs, and enable focus on strategic talent management while enhancing employee satisfaction and retention rates.",
-      },
-      {
-        _key: "team-4",
-        number: "04",
-        title: "Talent Development & Performance Management",
-        description:
-          "Professional growth strategies emphasise leadership development programs, performance optimisation training, and succession planning initiatives that build analytical capabilities, empower employees to drive continuous improvement, and prepare high-potential talent for career advancement opportunities.",
-      },
-      {
-        _key: "team-5",
-        number: "05",
-        title: "Organisational Culture & Internal Communications",
-        description:
-          "Team collaboration strengthens through unified HR communication platforms, employee feedback systems, and transparent performance management tools that build organisational trust, facilitate knowledge management, support diversity and inclusion initiatives, and maintain strong company culture across distributed teams and remote work environments.",
-      },
-    ],
-  },
-  {
-    _key: "how-we-help",
-    label: "How We Can Help",
-    items: [
-      {
-        _key: "help-1",
-        number: "01",
-        title: "HR Process Assessment → Workforce Operations Audit",
-        description:
-          "We comprehensively map your existing HR workflows and talent management processes against industry best practices, analysing bottlenecks in recruitment, onboarding, performance management, and employee lifecycle stages that prevent your organisation from scaling effectively and maintaining competitive talent acquisition.",
-      },
-      {
-        _key: "help-2",
-        number: "02",
-        title: "HRIS Evaluation → HR Technology Integration Analysis",
-        description:
-          "Our technical assessment uncovers optimisation opportunities within your current HR technology stack, identifying precise automation solutions and system integrations that transform disconnected HR processes into unified employee experience platforms while ensuring data security and compliance requirements.",
-      },
-      {
-        _key: "help-3",
-        number: "03",
-        title: "HR Solution Design → Workflow Automation Implementation",
-        description:
-          "Through comprehensive HR systems analysis, we implement the optimal balance between sophisticated automation capabilities and user-friendly interfaces, ensuring your HRIS solution scales with organisational growth while supporting employee self-service, manager effectiveness, and HR team productivity.",
-      },
-      {
-        _key: "help-4",
-        number: "04",
-        title: "Productivity Impact → HR ROI Measurement Analysis",
-        description:
-          "By quantifying potential efficiency gains across talent acquisition, employee engagement, performance management, and administrative processes, we identify where HR automation and workforce optimisation deliver measurable returns on investment through reduced time-to-hire, improved retention rates, and enhanced employee satisfaction scores.",
-      },
-      {
-        _key: "help-5",
-        number: "05",
-        title: "Change Management → HR Adoption Strategy Development",
-        description:
-          "Our proven organisational change framework assesses workforce readiness for new HR technologies and develops tailored employee training programs, communication strategies, and support systems that transform potential resistance into enthusiastic adoption of new people management processes and digital workplace tools.",
-      },
-    ],
-  },
-]
-
-const HR_LIFECYCLE_STAGES = [
-  {
-    n: "01",
-    title: "Needs Assessment 🎯",
-    body: "Assess your HR needs and goals to understand what you want to achieve with an HRIS. By clearly understanding your requirements, we can align the system's features with your specific needs.",
-  },
-  {
-    n: "02",
-    title: "Thorough Research 🔍",
-    body: "Conduct comprehensive research to compare different HRIS options. Consider factors like pricing, features, and integrations, ensuring that the chosen system is the ideal fit for your HR needs.",
-  },
-  {
-    n: "03",
-    title: "Seamless Configuration ⚙️",
-    body: "Once the HRIS is selected, configure the system to match your unique requirements. Set up custom workflows, automations, and permissions to ensure the HRIS aligns perfectly with your HR processes.",
-  },
-  {
-    n: "04",
-    title: "System Rollout 🚀",
-    body: "Once configured and tested, it's time to roll out the HRIS to your team.",
-  },
-  {
-    n: "05",
-    title: "Post-Construction Support 🤝",
-    body: "Maintain client relationships with warranty tracking and maintenance scheduling. Material project status improves, future estimates and business processes.",
-  },
-]
 
 const HR_HIRING_ITEMS: Array<{ emoji: string; text: string }> = [
   { emoji: "📝", text: "ATS recruitment workflows including Forms" },
@@ -191,49 +37,6 @@ const HR_OPERATIONS_ITEMS: Array<{ emoji: string; text: string }> = [
   { emoji: "🏖️", text: "Leave Management" },
   { emoji: "📅", text: "Scheduling" },
   { emoji: "🏢", text: "Organisational Charts" },
-]
-
-const HR_FIT_REASONS = [
-  {
-    title: "Streamlined Employee Onboarding",
-    body: "Create a centralised workflow to ensure a smooth transition for new hires, track tasks, and monitor progress.",
-  },
-  {
-    title: "HR Document Management",
-    body: "Securely store, access, and share important HR documents.",
-  },
-  {
-    title: "Vacation and Leave Tracking",
-    body: "Keep track of employee vacations, leaves, and time off effortlessly.",
-  },
-  {
-    title: "Performance Management",
-    body: "Set objectives, monitor progress, and facilitate constructive conversations to support employee growth and development.",
-  },
-  {
-    title: "Employee Database",
-    body: "Consolidate all employee information in one place.",
-  },
-  {
-    title: "Training and Development",
-    body: "Manage employee training programs and professional development initiatives.",
-  },
-  {
-    title: "Employee Surveys and Feedback",
-    body: "Utilise custom forms and surveys to collect valuable insights and improve the employee experience.",
-  },
-  {
-    title: "Employee Recognition and Rewards",
-    body: "Create a culture of appreciation and recognition within your organisation.",
-  },
-  {
-    title: "Compliance and Policy Management",
-    body: "Stay organised, track policy updates, and ensure adherence to regulations.",
-  },
-  {
-    title: "Integration Power",
-    body: "Seamlessly integrate your HR tools and software to sync data and streamline HR processes.",
-  },
 ]
 
 function HrLifecycleSection({ stages: resolvedLifecycleStages }: { stages: { n?: string; title?: string; body?: string }[] }) {
@@ -470,18 +273,9 @@ export default function MondayForHrContent({
 }: Props) {
   if (!page) return null
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
-
-  const comparisonTabs: ComparisonTab[] =
-    (page.comparisonTabs && page.comparisonTabs.length > 0 && page.comparisonTabs[0]?.items?.length > 0)
-      ? page.comparisonTabs
-      : HR_COMPARISON_TABS
+  const calendlyUrl = siteSettings?.calendlyLink ?? ""
 
   const featuredTestimonial = caseStudies[0]
-  const resolvedLifecycleStages = (page.lifecycleStages && page.lifecycleStages.length > 0) ? page.lifecycleStages : HR_LIFECYCLE_STAGES
-  const resolvedFitReasons = (page.fitReasons && page.fitReasons.length > 0) ? page.fitReasons : HR_FIT_REASONS
 
   return (
     <div>
@@ -507,20 +301,17 @@ export default function MondayForHrContent({
 
       {/* Logo cloud */}
       <LogoCloudMarquee
-        headingPart1={page.logoCloudHeadingPart1 || "Clients who have used our "}
-        headingAccent={page.logoCloudHeadingAccent ?? "monday.com consulting services"}
+        headingPart1={page.logoCloudHeadingPart1}
+        headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}
         logos={siteSettings?.carouselLogos || []}
       />
 
       {/* 3-tab section */}
       <ComparisonTabsSection
-        heading={page.comparisonHeading || "Streamline HR Operations with a monday.com Expert"}
-        subheading={
-          page.comparisonSubheading ||
-          "We transform fragmented HR processes into seamless, automated workflows that enhance cross-functional collaboration and deliver quantifiable value to your people operations. Our specialised consultants partner with HR leaders to implement workflow automation and AI solutions that streamline talent management, improve employee experience, and drive strategic workforce outcomes."
-        }
-        tabs={comparisonTabs}
+        heading={page.comparisonHeading}
+        subheading={page.comparisonSubheading}
+        tabs={page.comparisonTabs ?? []}
         theme={page.comparisonTheme || "light"}
         withPurpleCircle={page.comparisonWithPurpleCircle ?? true}
       />
@@ -540,9 +331,9 @@ export default function MondayForHrContent({
       ) : null)}
 
       {/* Sections below FAQ (per screenshot) */}
-      <HrLifecycleSection stages={resolvedLifecycleStages} />
+      <HrLifecycleSection stages={page.lifecycleStages ?? []} />
       <HrExpertiseSection />
-      <HrFitSection calendlyUrl={calendlyUrl} reasons={resolvedFitReasons} />
+      <HrFitSection calendlyUrl={calendlyUrl} reasons={page.fitReasons ?? []} />
       <HrVideoSection />
 
       {/* Closing sections */}

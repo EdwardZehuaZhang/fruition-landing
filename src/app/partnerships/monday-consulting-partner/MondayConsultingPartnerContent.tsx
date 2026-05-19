@@ -148,54 +148,6 @@ const HOW_WE_HELP: ComparisonTab = {
   ],
 }
 
-const WHY_FRUITION = [
-  "Certified Monday.com Partner",
-  "Global Implementation Expertise",
-  "End-to-End Solution Design",
-  "Custom Integration Services",
-]
-
-
-const PARTNER_TESTIMONIALS = [
-  { name: "Jade Wood", role: "Managing Director, Popology", quote: "We are now utilising monday.com to its full potential, from lead through design and production teams - everyone knows what stage our projects are in, what's next and what our process is.", photo: "/images/solar-testimonial-popology.avif" },
-  { name: "Mairhead McKinley", role: "Delivery Manager, Givergy", quote: "We found Monday to be more customisable and transparent for both internal and external stakeholders. It reduced double handling of issues, as the Monday boards provide clear, accessible information—eliminating the need to email around for updates.", photo: "/images/solar-testimonial-givergy.avif" },
-  { name: "Brandon-Lee Horridge", role: "Managing Director, BL Air Conditioning", quote: "This system will save hundreds of thousands of dollars a year guaranteed.", photo: "" },
-  { name: "Ron Amaram", role: "General Manager, Risk 2 Solutions", quote: "Fruition have been instrumental in moving us to a 'single source of truth' system for managing sales and projects.", photo: "" },
-  { name: "Lorenzo Tejada-Orrell", role: "Chief Innovation Officer, CLSQ", quote: "Since implementing monday.com, CLSQ has experienced a significant transformation in operational efficiency.", photo: "" },
-]
-
-const IMPLEMENTATION_SERVICES = [
-  { emoji: "💼", title: "Business Process Consulting", body: "We help take a snapshot of your current business process and design an automated solution." },
-  { emoji: "🔄", title: "Implementation Optimisation", body: "We help bring your solution design to fruition from scratch or can optimise your existing workflows within monday.com." },
-  { emoji: "🔌", title: "Integration & Custom Development", body: "Developer support to build business-critical system integrations & automation with monday.com." },
-  { emoji: "👥", title: "Training & Managed Services", body: "Basic to advanced 1:1 and team training. We can also lend you one of our resources for long-term and ad-hoc projects!" },
-]
-
-const INDUSTRY_SOLUTIONS = [
-  { emoji: "🛠️", label: "Construction" },
-  { emoji: "🏭", label: "Manufacturing" },
-  { emoji: "🧰", label: "Service Industry" },
-  { emoji: "🎨", label: "Marketing & Creative" },
-  { emoji: "💡", label: "Product Development" },
-  { emoji: "📊", label: "Project & Portfolio Management" },
-  { emoji: "🎯", label: "Executive Leadership (OKRs)" },
-]
-
-const COUNTRIES = [
-  { emoji: "🇦🇺", label: "Australia" },
-  { emoji: "🇨🇦", label: "Canada" },
-  { emoji: "🇸🇬", label: "Singapore" },
-  { emoji: "🇺🇸", label: "United States (US)" },
-  { emoji: "🇬🇧", label: "United Kingdom (UK)" },
-]
-
-const FRUITION_ADVANTAGES = [
-  "Expert consultation — understand your unique needs",
-  "Custom implementation — tailored solutions that work",
-  "Team training — ensure successful adoption",
-  "Ongoing support — maximise your investment",
-]
-
 type WhyFruitionItem = string
 type TestimonialItem = { name: string; role: string; quote: string; photo?: string }
 type ImplementationServiceItem = { emoji: string; title: string; body: string }
@@ -448,19 +400,13 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
   const partnerTabs: ComparisonTab[] = [LEADERSHIP_CHALLENGES, TEAM_CHALLENGES, HOW_WE_HELP]
   const resolvedFaqTabs = faqTabs ?? []
 
-  // Resolve Sanity-first, fall back to hardcoded constants for visual continuity.
-  const resolvedWhyFruition: WhyFruitionItem[] =
-    (page.whyFruition && page.whyFruition.length > 0) ? page.whyFruition : WHY_FRUITION
-  const resolvedPartnerTestimonials: TestimonialItem[] =
-    (page.partnerTestimonials && page.partnerTestimonials.length > 0) ? page.partnerTestimonials : PARTNER_TESTIMONIALS
-  const resolvedImplementationServices: ImplementationServiceItem[] =
-    (page.implementationServices && page.implementationServices.length > 0) ? page.implementationServices : IMPLEMENTATION_SERVICES
-  const resolvedIndustrySolutions: IconLabelItem[] =
-    (page.industrySolutions && page.industrySolutions.length > 0) ? page.industrySolutions : INDUSTRY_SOLUTIONS
-  const resolvedCountries: IconLabelItem[] =
-    (page.countries && page.countries.length > 0) ? page.countries : COUNTRIES
-  const resolvedFruitionAdvantages: FruitionAdvantageItem[] =
-    (page.fruitionAdvantages && page.fruitionAdvantages.length > 0) ? page.fruitionAdvantages : FRUITION_ADVANTAGES
+  // Sanity-driven content (populated via scripts/sanity-migrate/monday-consulting-partner.ts).
+  const resolvedWhyFruition: WhyFruitionItem[] = page.whyFruition ?? []
+  const resolvedPartnerTestimonials: TestimonialItem[] = page.partnerTestimonials ?? []
+  const resolvedImplementationServices: ImplementationServiceItem[] = page.implementationServices ?? []
+  const resolvedIndustrySolutions: IconLabelItem[] = page.industrySolutions ?? []
+  const resolvedCountries: IconLabelItem[] = page.countries ?? []
+  const resolvedFruitionAdvantages: FruitionAdvantageItem[] = page.fruitionAdvantages ?? []
 
   // Build CaseStudy[] from resolved partner testimonials; fall back to Sanity
   // caseStudies when none are present.

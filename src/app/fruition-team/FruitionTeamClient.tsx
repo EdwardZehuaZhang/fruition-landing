@@ -18,20 +18,27 @@ export interface TeamMember {
   order?: number
 }
 
+export interface TeamRegion {
+  code: string
+  label: string
+  emoji: string
+}
+
+export interface HeroDescriptionBlock {
+  style?: "paragraph" | "bold"
+  text: string
+}
+
 interface Props {
   members: TeamMember[]
   heroHeading: string
+  heroCtaLabel: string
   calendlyUrl: string
   partnerBadges: PartnerBadge[]
   certificationBadge?: SanityImageRef
+  regions: TeamRegion[]
+  heroDescriptionBlocks?: HeroDescriptionBlock[]
 }
-
-const REGIONS = [
-  { value: "APAC", label: "Meet the APAC Team", flag: "🌏" },
-  { value: "UK", label: "Meet the UK Team", flag: "🇬🇧" },
-  { value: "US", label: "Meet the US Team", flag: "🇺🇸" },
-  { value: "IN", label: "Meet the India Team", flag: "🇮🇳" },
-] as const
 
 function safeImageUrl(ref: SanityImageRef): string | null {
   if (!ref?.asset?._ref) return null
@@ -65,10 +72,13 @@ function safeBadgeUrl(ref: SanityImageRef): string | null {
 export default function FruitionTeamClient({
   members,
   heroHeading,
+  heroCtaLabel,
   calendlyUrl,
   partnerBadges,
+  regions,
+  heroDescriptionBlocks,
 }: Props) {
-  const [region, setRegion] = useState<string>("APAC")
+  const [region, setRegion] = useState<string>(regions[0]?.code ?? "APAC")
 
   const filteredMembers = useMemo(() => {
     return members
@@ -141,39 +151,35 @@ export default function FruitionTeamClient({
               fontSize: 16,
             }}
           >
-            {"\uD83D\uDE80 Book a Meeting"}
+            {heroCtaLabel}
           </Link>
 
           {/* Description */}
-          <div
-            className="flex flex-col text-center"
-            style={{ gap: 20, marginTop: 48, maxWidth: 880 }}
-          >
-            <p style={{ fontSize: 17, lineHeight: "28px", color: "#222" }}>
-              The Fruition team consists of 37 highly talented consultants that are fully certified
-              in disciplines such as monday.com, Atlassian, Make, n8n, and Hootsuite.
-            </p>
-            <p style={{ fontSize: 17, lineHeight: "28px", color: "#222" }}>
-              We are globally certified and insured in all regions with the tools we partner proudly
-              partner and understand the importance of IP and data security as our core.
-            </p>
-            <p style={{ fontSize: 17, lineHeight: "28px", color: "#222" }}>
-              The Fruition team comes from all walks of life. Our managing director, Josh is an
-              ex-monday.com employee with 15 years of experience in software transformation and
-              change management, bringing over four years of direct experience from monday.com.
-            </p>
-            <p
-              className="font-bold"
-              style={{ fontSize: 22, lineHeight: "30px", color: "#2b074d", marginTop: 8 }}
+          {heroDescriptionBlocks && heroDescriptionBlocks.length > 0 && (
+            <div
+              className="flex flex-col text-center"
+              style={{ gap: 20, marginTop: 48, maxWidth: 880 }}
             >
-              The Fruition team&apos;s vision is simple
-            </p>
-            <p style={{ fontSize: 17, lineHeight: "28px", color: "#222" }}>
-              Implement software differently by making the process enjoyable, fast, and transparent.
-              We thrive on understanding how your business ticks and finding ways to help you
-              streamline and thrive in any business climate.
-            </p>
-          </div>
+              {heroDescriptionBlocks.map((block, i) =>
+                block.style === "bold" ? (
+                  <p
+                    key={`hero-desc-${i}`}
+                    className="font-bold"
+                    style={{ fontSize: 22, lineHeight: "30px", color: "#2b074d", marginTop: 8 }}
+                  >
+                    {block.text}
+                  </p>
+                ) : (
+                  <p
+                    key={`hero-desc-${i}`}
+                    style={{ fontSize: 17, lineHeight: "28px", color: "#222" }}
+                  >
+                    {block.text}
+                  </p>
+                )
+              )}
+            </div>
+          )}
         </div>
       </section>
 
@@ -184,12 +190,12 @@ export default function FruitionTeamClient({
             className="flex items-center justify-center flex-wrap"
             style={{ gap: 16, paddingTop: 8, paddingBottom: 8 }}
           >
-            {REGIONS.map((r) => {
-              const active = region === r.value
+            {regions.map((r) => {
+              const active = region === r.code
               return (
                 <button
-                  key={r.value}
-                  onClick={() => setRegion(r.value)}
+                  key={r.code}
+                  onClick={() => setRegion(r.code)}
                   className="cursor-pointer transition-all"
                   style={{
                     padding: "12px 28px",
@@ -210,7 +216,7 @@ export default function FruitionTeamClient({
                         }),
                   }}
                 >
-                  {r.label} {r.flag}
+                  {r.label} {r.emoji}
                 </button>
               )
             })}

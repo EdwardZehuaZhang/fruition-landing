@@ -62,6 +62,23 @@ export default defineType({
     defineField({ name: 'heroSecondaryCtaLabel', title: 'Hero Secondary CTA Label', type: 'string' }),
     defineField({ name: 'heroSecondaryCtaUrl', title: 'Hero Secondary CTA URL', type: 'string' }),
 
+    // monday product logos strip (between hero and logo cloud)
+    defineField({
+      name: 'mondayProductLogos',
+      title: 'monday Product Logos Strip (gradient band under hero)',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'productLogo',
+          fields: [
+            { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
+            { name: 'alt', title: 'Alt text', type: 'string' },
+          ],
+        }),
+      ],
+    }),
+
     // Logo Cloud
     defineField({ name: 'logoCloudHeadingPart1', title: 'Logo Cloud Heading (prefix)', type: 'string' }),
     defineField({ name: 'logoCloudHeadingAccent', title: 'Logo Cloud Heading (accent)', type: 'string' }),
@@ -142,6 +159,7 @@ export default defineType({
     defineField({ name: 'solutionsHeadingAccent', title: 'Solutions Heading (accent)', type: 'string' }),
     defineField({ name: 'solutionsHeadingPart2', title: 'Solutions Heading (suffix)', type: 'string' }),
     defineField({ name: 'solutionsIntro', title: 'Solutions Intro', type: 'text' }),
+    defineField({ name: 'crmCardCtaUrl', title: 'Synthesised CRM Card — CTA URL', type: 'string' }),
     defineField({
       name: 'solutionCards',
       title: 'Solution Cards',

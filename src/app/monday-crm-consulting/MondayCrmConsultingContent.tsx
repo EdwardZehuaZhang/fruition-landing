@@ -9,7 +9,6 @@ import {
   CalendlySection,
   FaqAccordion,
   CapabilitiesGrid,
-  SecurityBadgeSection,
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData, FaqTab } from "@/components/sections/types"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
@@ -51,55 +50,6 @@ function safeImageUrl(ref: SanityImageRef): string | null {
   }
 }
 
-const CRM_CAPABILITY_CARDS: {
-  title: string
-  emoji: string
-  description: string
-}[] = [
-  {
-    title: "Forms, Emails & Leads",
-    emoji: "📋",
-    description:
-      "As official monday.com Partners, Fruition offers professional CRM data migration and integration solutions to help businesses better manage and streamline their customer data.",
-  },
-  {
-    title: "Opportunity, Contracts & Tender",
-    emoji: "🎯",
-    description:
-      "Our monday.com CRM consulting team provides fully customisable opportunity, contracts, and tender management solutions that streamline business processes for companies of all sizes.",
-  },
-  {
-    title: "PM & Client Onboarding",
-    emoji: "📁",
-    description:
-      "Once your deal closes, our monday.com CRM implementation specialists seamlessly integrate comprehensive project management and client delivery systems for optimal results.",
-  },
-  {
-    title: "Dashboards & Reporting",
-    emoji: "📊",
-    description:
-      "We deliver advanced monday.com CRM consulting solutions featuring dynamic dashboards, comprehensive reporting, and powerful analytics to drive informed business decisions.",
-  },
-  {
-    title: "Marketing & Finance",
-    emoji: "💰",
-    description:
-      "Our monday.com CRM implementation services provide tailored marketing and finance automation solutions designed to maximise efficiency, reduce costs, and accelerate business growth.",
-  },
-  {
-    title: "Data Migration & Integration",
-    emoji: "🔗",
-    description:
-      "We offer professional monday.com CRM consulting for seamless data migration, system optimisation, and integration solutions that streamline your customer relationship management.",
-  },
-]
-
-const CERTIFICATE_BADGES = [
-  { src: "/images/partner-platinum.png", alt: "Monday.com Platinum Partner" },
-  { src: "/images/partner-advanced-delivery.png", alt: "Advanced Delivery Partner" },
-  { src: "/images/crm-hero-3.avif", alt: "monday Partner" },
-]
-
 export default function MondayCrmConsultingContent({
   page,
   siteSettings,
@@ -113,8 +63,7 @@ export default function MondayCrmConsultingContent({
     "https://calendly.com/global-calendar-fruitionservices"
 
   const heroImageSrc = safeImageUrl(page.heroImage)
-  const FALLBACK_VIDEO_EMBED = "https://www.youtube.com/embed/7vtrtlfC1Zg"
-  const heroVideoEmbedSrc = youtubeEmbedUrl(page.heroVideoUrl) || FALLBACK_VIDEO_EMBED
+  const heroVideoEmbedSrc = youtubeEmbedUrl(page.heroVideoUrl)
   const bottomVideoEmbedSrc = youtubeEmbedUrl(page.bottomVideoUrl)
 
   const comparisonTabs = page.comparisonTabs ?? []
@@ -155,19 +104,23 @@ export default function MondayCrmConsultingContent({
           style={{ paddingTop: 80, paddingBottom: 80 }}
         >
           {/* Three certificate badges */}
-          <div className="flex items-center" style={{ gap: 22 }}>
-            {((page.certificateBadges && page.certificateBadges.length > 0) ? page.certificateBadges : CERTIFICATE_BADGES).map((badge: { src?: string; alt?: string }, i: number) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={i}
-                src={badge.src}
-                alt={badge.alt}
-                width={120}
-                height={44}
-                className="h-[44px] w-auto rounded-[5px]"
-              />
-            ))}
-          </div>
+          {page.certificateBadges?.length > 0 && (
+            <div className="flex items-center" style={{ gap: 22 }}>
+              {page.certificateBadges.map(
+                (badge: { src?: string; alt?: string; _key?: string }, i: number) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={badge._key || i}
+                    src={badge.src}
+                    alt={badge.alt}
+                    width={120}
+                    height={44}
+                    className="h-[44px] w-auto rounded-[5px]"
+                  />
+                ),
+              )}
+            </div>
+          )}
 
           {/* Eyebrow */}
           {page.heroEyebrow && (
@@ -271,12 +224,8 @@ export default function MondayCrmConsultingContent({
 
       {/* 2. Logo Cloud */}
       <LogoCloudMarquee
-        headingPart1={
-          page.logoCloudHeadingPart1 || "Clients who have used our "
-        }
-        headingAccent={
-          page.logoCloudHeadingAccent ?? "monday.com consulting services"
-        }
+        headingPart1={page.logoCloudHeadingPart1}
+        headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}
         logos={siteSettings?.carouselLogos || []}
       />
@@ -325,89 +274,22 @@ export default function MondayCrmConsultingContent({
         ) : null)}
 
       {/* 8. CRM Management Capabilities (bottom section) */}
-      {!page.hideCapabilitiesSection &&
-        (page.capabilitiesCards?.length > 0 ? (
-          <CapabilitiesGrid
-            eyebrow={page.capabilitiesEyebrow}
-            heading={page.capabilitiesHeading}
-            headingAccent={page.capabilitiesHeadingAccent}
-            subheading={page.capabilitiesSubheading}
-            theme={page.capabilitiesTheme || "light"}
-            columns={capabilitiesColumns}
-            cards={page.capabilitiesCards}
-            ctaLabel={page.capabilitiesCtaLabel}
-            ctaUrl={page.capabilitiesCtaUrl}
-          />
-        ) : (
-          <section
-            style={{
-              backgroundColor: "#f7f5ff",
-              paddingTop: 80,
-              paddingBottom: 80,
-            }}
-          >
-            <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
-              <h2
-                className="text-section-h2 text-center"
-                style={{ marginBottom: 48 }}
-              >
-                <span style={{ color: "#8015e8" }}>monday CRM</span>{" "}
-                <span style={{ color: "#000" }}>Management Capabilities</span>
-              </h2>
-              <div
-                className="grid grid-cols-1 sm:grid-cols-2"
-                style={{ gap: 24 }}
-              >
-                {CRM_CAPABILITY_CARDS.map((card) => (
-                  <div
-                    key={card.title}
-                    className="bg-white rounded-card border border-[#ece7fb]"
-                    style={{
-                      padding: 28,
-                      boxShadow: "var(--shadow-whisper)",
-                    }}
-                  >
-                    <div
-                      className="flex items-start justify-between"
-                      style={{ gap: 16, marginBottom: 12 }}
-                    >
-                      <h3
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 700,
-                          color: "#8015e8",
-                        }}
-                      >
-                        {card.title}
-                      </h3>
-                      <span style={{ fontSize: 28, lineHeight: 1 }}>
-                        {card.emoji}
-                      </span>
-                    </div>
-                    <p
-                      style={{
-                        fontSize: 14,
-                        lineHeight: 1.55,
-                        color: "#111",
-                      }}
-                    >
-                      {card.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-              <div
-                className="rounded-card overflow-hidden"
-                style={{ aspectRatio: "16 / 9", marginTop: 48 }}
-              >
-                <YouTubeEmbed videoId="EPxa_uYJy3w" title="monday CRM overview" />
-              </div>
-            </div>
-          </section>
-        ))}
+      {!page.hideCapabilitiesSection && page.capabilitiesCards?.length > 0 && (
+        <CapabilitiesGrid
+          eyebrow={page.capabilitiesEyebrow}
+          heading={page.capabilitiesHeading}
+          headingAccent={page.capabilitiesHeadingAccent}
+          subheading={page.capabilitiesSubheading}
+          theme={page.capabilitiesTheme || "light"}
+          columns={capabilitiesColumns}
+          cards={page.capabilitiesCards}
+          ctaLabel={page.capabilitiesCtaLabel}
+          ctaUrl={page.capabilitiesCtaUrl}
+        />
+      )}
 
-      {/* 9. Bottom video (under capabilities) — only when Sanity-driven capabilities exist */}
-      {bottomVideoEmbedSrc && page.capabilitiesCards?.length > 0 && (
+      {/* 9. Bottom video (under capabilities) */}
+      {bottomVideoEmbedSrc && (
         <section className="bg-white" style={{ paddingBottom: 80 }}>
           <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
             <div

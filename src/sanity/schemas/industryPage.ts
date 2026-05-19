@@ -86,6 +86,7 @@ export default {
         name: 'comparisonTab',
         fields: [
           { name: 'label', title: 'Tab Label', type: 'string' },
+          { name: 'subheading', title: 'Sub-heading (under tab pills)', type: 'string' },
           {
             name: 'items',
             title: 'Items',
@@ -520,6 +521,31 @@ export default {
       }],
     },
 
+    // Why-best section heading (Marketing / Real Estate)
+    { name: 'whyBestHeading', title: 'Why-Best Section Heading', type: 'string' },
+
+    // Featured case-study block (video + stats + quote)
+    { name: 'caseStudyBlockHeading', title: 'Case Study Block Heading', type: 'string' },
+    { name: 'caseStudyVideoUrl', title: 'Case Study Video URL', type: 'url' },
+    { name: 'caseStudyVideoTitle', title: 'Case Study Video Title', type: 'string' },
+    {
+      name: 'caseStudyStats',
+      title: 'Case Study Stats',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'caseStudyStat',
+        fields: [
+          { name: 'value', title: 'Value', type: 'string' },
+          { name: 'label', title: 'Label', type: 'string' },
+        ],
+      }],
+    },
+    { name: 'caseStudyQuote', title: 'Case Study Quote', type: 'text' },
+    { name: 'caseStudyQuoteAuthor', title: 'Case Study Quote Author', type: 'string' },
+    { name: 'caseStudyCtaLabel', title: 'Case Study CTA Label', type: 'string' },
+    { name: 'caseStudyCtaUrl', title: 'Case Study CTA URL', type: 'string' },
+
     // Why-best cards (emoji/title/description) — Marketing
     {
       name: 'whyBestCards',
@@ -568,6 +594,7 @@ export default {
         ],
       }],
     },
+    { name: 'workflowTabsHeading', title: 'Workflow Tabs Heading', type: 'string' },
     {
       name: 'workflowTabs',
       title: 'Workflow Tabs (Professional Services style)',
@@ -596,6 +623,22 @@ export default {
         ],
       }],
     },
+
+    // ── Inline copy migrated from per-page Content.tsx ───────────────
+    { name: 'faqHeading', title: 'FAQ Heading', type: 'string' },
+    { name: 'introStripBody', title: 'Intro Strip Body (under hero)', type: 'text' },
+    { name: 'lifecycleSectionHeading', title: 'Lifecycle Section Heading', type: 'string' },
+    { name: 'lifecycleSectionHeadingAccent', title: 'Lifecycle Section Heading Accent', type: 'string' },
+    { name: 'industryTestimonialsHeading', title: 'Industry Testimonials Heading', type: 'string' },
+    { name: 'industryTestimonialsHeadingAccent', title: 'Industry Testimonials Heading Accent', type: 'string' },
+
+    // Testimonials grid (bottom CTA carousel) props
+    { name: 'testimonialsGridHeading', title: 'Testimonials Grid Heading', type: 'string' },
+    { name: 'testimonialsGridCtaLabel', title: 'Testimonials Grid CTA Label', type: 'string' },
+    { name: 'testimonialsGridStatValue', title: 'Testimonials Grid Stat Value', type: 'string' },
+    { name: 'testimonialsGridStatSubtitle', title: 'Testimonials Grid Stat Subtitle', type: 'text' },
+    { name: 'testimonialsGridStatCtaLabel', title: 'Testimonials Grid Stat CTA Label', type: 'string' },
+    { name: 'testimonialsGridStatCtaUrl', title: 'Testimonials Grid Stat CTA URL', type: 'string' },
 
     // Section visibility toggles
     { name: 'hideDiscoverSection', title: 'Hide Discover CTA Section', type: 'boolean', initialValue: false },

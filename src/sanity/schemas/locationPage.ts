@@ -30,6 +30,7 @@ export default {
         name: 'comparisonTab',
         fields: [
           { name: 'label', title: 'Tab Label', type: 'string' },
+          { name: 'subheading', title: 'Tab Subheading (optional)', type: 'string' },
           {
             name: 'items',
             title: 'Items',
@@ -256,6 +257,23 @@ export default {
     // Logo cloud overrides
     { name: 'logoCloudHeadingPart1', title: 'Logo Cloud Heading (prefix)', type: 'string' },
     { name: 'logoCloudHeadingAccent', title: 'Logo Cloud Heading (accent)', type: 'string' },
+
+    // Team Grid section copy
+    { name: 'teamGridHeading', title: 'Team Grid Heading', type: 'string' },
+    { name: 'teamGridSubheading', title: 'Team Grid Subheading (optional)', type: 'text' },
+    { name: 'teamGridCtaLabel', title: 'Team Grid CTA Label', type: 'string' },
+    { name: 'teamGridCtaUrl', title: 'Team Grid CTA URL', type: 'string' },
+
+    // Testimonials Grid section copy
+    { name: 'testimonialsGridHeading', title: 'Testimonials Grid Heading', type: 'string' },
+    { name: 'testimonialsGridCtaLabel', title: 'Testimonials Grid CTA Label', type: 'string' },
+    { name: 'testimonialsGridStatValue', title: 'Testimonials Grid Stat Value', type: 'string' },
+    { name: 'testimonialsGridStatSubtitle', title: 'Testimonials Grid Stat Subtitle', type: 'text' },
+    { name: 'testimonialsGridStatCtaLabel', title: 'Testimonials Grid Stat CTA Label', type: 'string' },
+    { name: 'testimonialsGridStatCtaUrl', title: 'Testimonials Grid Stat CTA URL', type: 'string' },
+
+    // FAQ section heading
+    { name: 'faqHeading', title: 'FAQ Heading', type: 'string' },
 
     // Explicit team-member roster filter (by name) when region-tag lookup
     // is insufficient (e.g. India members lack an "IN" region tag on the

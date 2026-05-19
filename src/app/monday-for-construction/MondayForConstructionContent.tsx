@@ -4,7 +4,6 @@ import { useState } from "react"
 import {
   HeroBanner,
   LogoCloudMarquee,
-  ComparisonTabsSection,
   CalendlySection,
   FaqAccordion,
   TestimonialsGrid,
@@ -23,67 +22,6 @@ interface Props {
   faqTabs?: FaqTab[]
 }
 
-/* ----------------- Data ----------------- */
-
-const COMPARISON_TABS: ComparisonTab[] = [
-  {
-    _key: "why-construction",
-    label: "Why monday.com for Construction?",
-    items: [
-      { _key: "w1", number: "01", title: "Pre-construction CRM & Estimating", description: "Streamline lead management, contact tracking, and tender bids in one centralised platform. Our monday.com consultants help you build efficient pre-construction workflows that increase win rates and improve project planning." },
-      { _key: "w2", number: "02", title: "Advanced Project Management", description: "Take control of your construction projects with powerful scheduling tools, resource allocation, and progress tracking. monday.com's construction and subcontract management features ensure projects stay on track and within budget." },
-      { _key: "w3", number: "03", title: "Mobile-First Construction Management", description: "Keep your on-site teams connected with real-time access to project details, documents, and checklists through the monday.com mobile app. Enable seamless collaboration between office and field teams." },
-    ],
-  },
-  {
-    _key: "features",
-    label: "Construction Management Features",
-    items: [
-      { _key: "f1", number: "01", title: "Finance Control & Integration", description: "🔗 Seamless integration with popular accounting software\n📊 Real-time budget tracking and cost management\n⚡ Automated invoice processing and payment tracking\n📈 Custom financial reporting dashboards" },
-      { _key: "f2", number: "02", title: "Document & Drawing Management", description: "🗂️ Centralised storage for all construction documents\n🔄 Version control for drawings and specifications\n✏️ Collaborative annotation tools\n📱 Mobile access to all project files" },
-      { _key: "f3", number: "03", title: "Safety & Compliance", description: "✅ Digital safety inspection checklists\n📋 Incident reporting and tracking\n📁 Compliance documentation management\n👷🏼 Automated safety report generation" },
-      { _key: "f4", number: "04", title: "Resource & Equipment Management", description: "⚖️ Optimise resource allocation across projects\n🔧 Track equipment maintenance schedules\n📍 Monitor asset utilization and location\n🤝 Manage subcontractor relationships effectively" },
-    ],
-  },
-  {
-    _key: "how-help",
-    label: "How We Can Help",
-    items: [
-      { _key: "h1", number: "01", title: "Process Discovery → Business Process Audit", description: "We meticulously map your existing workflows against industry benchmarks, analysing bottlenecks and efficiency gaps that hold your team back from scaling." },
-      { _key: "h2", number: "02", title: "Technical Architecture → System Integration Scope", description: "Our technical assessment reveals the hidden potential in your current tech stack, identifying precise automated solution design to visualise where monday.com can transform fragmented processes into seamless workflows." },
-      { _key: "h3", number: "03", title: "Solution Design → Implementation", description: "Through in-depth process analysis, we build your system with perfect balance between automated sophistication and user adoption, ensuring you see faster set up and team usage." },
-      { _key: "h4", number: "04", title: "Efficiency Impact → ROI Opportunity Analysis", description: "By quantifying potential efficiency gains across your operations, we pinpoint exactly where automation and optimisation will deliver the highest return on your investment." },
-      { _key: "h5", number: "05", title: "Change Readiness → Adoption & Training Strategies", description: "Our proven change impact framework measures organisational readiness and crafts a tailored adoption and training strategy, turning potential resistance into enthusiastic system adoption." },
-    ],
-  },
-]
-
-
-const LIFECYCLE_STAGES = [
-  { n: "01", title: "Bidding & Pre-Construction 🎯", body: "Centralise bid documents and RFPs in collaborative workspaces. Track deadlines, assign team members to proposals, and maintain databases of past bids with automated notifications." },
-  { n: "02", title: "Planning & Design 📋", body: "Transform schedules into visual timelines with dependencies and critical path tracking. Coordinate stakeholders with shared boards that automatically update on design changes and milestone achievements." },
-  { n: "03", title: "Execution & Construction 🏗️", body: "Monitor progress, track labor hours, and manage deliveries through mobile dashboards. Field teams update tasks and upload photos while managers maintain oversight through automated progress and budget reports." },
-  { n: "04", title: "Handover & Closeout 📁", body: "Organise punch lists, warranties, and inspections in structured workflows. Track outstanding items and coordinate final walkthroughs with automated reminders for efficient project closeout." },
-  { n: "05", title: "Post-Construction Support 🔧", body: "Maintain client relationships with warranty tracking and maintenance scheduling. Historical project data improves future estimates and business processes." },
-]
-
-const CONSTRUCTION_TESTIMONIALS = [
-  {
-    title: "HOLT CAT Case Study",
-    quote: "monday.com has given us the visibility we need to get everyone on the same page and keep track of all the moving parts.",
-    name: "Jason Doan",
-    role: "VP of Heavy Rental & Sales, HOLT CAT",
-    image: "https://static.wixstatic.com/media/a280a5_b5814c3ff80d4a0abe055653e3d85006~mv2.png/v1/fill/w_720,h_557,al_c,lg_1,q_90,enc_avif,quality_auto/a280a5_b5814c3ff80d4a0abe055653e3d85006~mv2.png",
-  },
-  {
-    title: "Falkbuilt Case Study",
-    quote: "The monday.com mobile app gives our technicians on raw construction sites instant access to the project information they need and makes connecting with the team at HQ easy.",
-    name: "Allie Swindlehurst",
-    role: "Operations Manager, Falkbuilt",
-    image: "https://static.wixstatic.com/media/a280a5_255d68b57fbb41e887966dff78f71019~mv2.png/v1/fill/w_720,h_282,al_c,lg_1,q_85,enc_avif,quality_auto/a280a5_255d68b57fbb41e887966dff78f71019~mv2.png",
-  },
-]
-
 /* ----------------- Sections ----------------- */
 
 function ConstructionIntroStrip() {
@@ -94,30 +32,6 @@ function ConstructionIntroStrip() {
           With monday.com <span className="font-bold" style={{ color: "#8015e8" }}>CRM</span> and{" "}
           <span className="font-bold" style={{ color: "#8015e8" }}>Work Management</span> as your Construction software, your teams will experience simplified and streamlined communication with mobile access and improved automated workflow efficiency.
         </p>
-      </div>
-    </section>
-  )
-}
-
-function ConstructionLeadersHeader() {
-  return (
-    <section className="bg-white px-4" style={{ paddingTop: 60, paddingBottom: 0 }}>
-      <div className="mx-auto text-center" style={{ maxWidth: 920 }}>
-        <h2 className="font-bold" style={{ color: "#10003a", fontSize: 32, lineHeight: "42px", marginBottom: 0 }}>
-          Why Construction Leaders Choose <span style={{ color: "#8015e8" }}>monday.com</span>
-        </h2>
-      </div>
-    </section>
-  )
-}
-
-function KeyFeaturesHeader() {
-  return (
-    <section className="bg-white px-4" style={{ paddingTop: 60, paddingBottom: 0 }}>
-      <div className="mx-auto text-center" style={{ maxWidth: 920 }}>
-        <h2 className="font-bold" style={{ color: "#10003a", fontSize: 32, lineHeight: "42px" }}>
-          Key Construction Management <span style={{ color: "#8015e8" }}>Features</span>
-        </h2>
       </div>
     </section>
   )
@@ -249,21 +163,17 @@ export default function MondayForConstructionContent({
     "https://calendly.com/global-calendar-fruitionservices"
 
   const resolvedFaqTabs = faqTabs ?? []
-  const resolvedComparisonTabs: ComparisonTab[] = (page.comparisonTabs && page.comparisonTabs.length > 0) ? page.comparisonTabs : COMPARISON_TABS
-  const resolvedLifecycleStages: LifecycleStage[] = (page.lifecycleStages && page.lifecycleStages.length > 0) ? page.lifecycleStages : LIFECYCLE_STAGES
-  const resolvedConstructionTestimonials: ConstructionTestimonial[] = (page.industryTestimonials && page.industryTestimonials.length > 0) ? page.industryTestimonials : CONSTRUCTION_TESTIMONIALS
+  const resolvedComparisonTabs: ComparisonTab[] = page.comparisonTabs ?? []
+  const resolvedLifecycleStages: LifecycleStage[] = page.lifecycleStages ?? []
+  const resolvedConstructionTestimonials: ConstructionTestimonial[] = page.industryTestimonials ?? []
   const partnerCaseStudies = caseStudies
-  // Reference helpers so unused-var lint doesn't fire when we expose more granular
-  // headers via separate small components.
-  void ConstructionLeadersHeader
-  void KeyFeaturesHeader
 
   return (
     <div>
       {/* Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow}
-        headingPart1={page.heroHeading || "monday.com Construction Implementation Partner"}
+        headingPart1={page.heroHeading}
         headingAccent=""
         subheading={page.hideHeroSubheading ? undefined : page.heroSubheading}
         heroImage={page.heroImage}
@@ -274,10 +184,10 @@ export default function MondayForConstructionContent({
             ? page.heroPartnerBadges
             : siteSettings?.navbarPartnerBadges || []
         }
-        primaryCtaLabel={page.primaryCtaLabel || "🚀  Book a Consultation"}
+        primaryCtaLabel={page.primaryCtaLabel}
         primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
-        secondaryCtaLabel={page.secondaryCtaLabel || "▶️  Get Started with monday.com"}
-        secondaryCtaUrl={page.secondaryCtaUrl || "https://monday.com"}
+        secondaryCtaLabel={page.secondaryCtaLabel}
+        secondaryCtaUrl={page.secondaryCtaUrl}
       />
 
       {/* Intro strip */}
@@ -285,8 +195,8 @@ export default function MondayForConstructionContent({
 
       {/* Logo cloud */}
       <LogoCloudMarquee
-        headingPart1={page.logoCloudHeadingPart1 || "Clients who have used our "}
-        headingAccent={page.logoCloudHeadingAccent ?? "monday.com consulting services"}
+        headingPart1={page.logoCloudHeadingPart1}
+        headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}
         logos={siteSettings?.carouselLogos || []}
       />
@@ -296,16 +206,13 @@ export default function MondayForConstructionContent({
 
       {/* Calendly */}
       <CalendlySection
-        heading={page.calendlyHeading || "Schedule a 30-minute call with one of our monday.com consultants today"}
-        subheading={
-          page.calendlySubheading ||
-          "From initial process discovery to full system adoption for your monday.com construction solution, our proven methodology ensures seamless digital transformation that empowers your team and drives sustainable operational efficiency."
-        }
+        heading={page.calendlyHeading}
+        subheading={page.calendlySubheading}
         calendlyUrl={calendlyUrl}
       />
 
       {/* FAQ */}
-      <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
+      <FaqAccordion heading={page.faqHeading} tabs={resolvedFaqTabs} />
 
       {/* Project Life Cycle stages */}
       <LifecycleSection stages={resolvedLifecycleStages} />

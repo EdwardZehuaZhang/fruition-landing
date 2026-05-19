@@ -355,5 +355,285 @@ export default {
         ],
       }],
     },
+
+    // FAQ section heading (was hardcoded in *Content.tsx)
+    { name: 'faqHeading', title: 'FAQ Heading', type: 'string' },
+    { name: 'comparisonHeadingAccent', title: 'Comparison Heading (accent)', type: 'string' },
+
+    // ── monday-consulting-partner specific ───────────────────────────
+    {
+      name: 'whyFruition',
+      title: 'Why Fruition (string list)',
+      type: 'array',
+      of: [{ type: 'string' }],
+    },
+    {
+      name: 'partnerTestimonials',
+      title: 'Partner Testimonials',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'partnerTestimonial',
+        fields: [
+          { name: 'name', title: 'Name', type: 'string' },
+          { name: 'role', title: 'Role', type: 'string' },
+          { name: 'quote', title: 'Quote', type: 'text' },
+          { name: 'photo', title: 'Photo URL (or /path)', type: 'string' },
+        ],
+      }],
+    },
+    {
+      name: 'implementationServices',
+      title: 'Implementation Services',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'implementationService',
+        fields: [
+          { name: 'emoji', title: 'Emoji', type: 'string' },
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'body', title: 'Body', type: 'text' },
+        ],
+      }],
+    },
+    {
+      name: 'industrySolutions',
+      title: 'Industry Solutions (emoji + label)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'industrySolution',
+        fields: [
+          { name: 'emoji', title: 'Emoji', type: 'string' },
+          { name: 'label', title: 'Label', type: 'string' },
+        ],
+      }],
+    },
+    {
+      name: 'countries',
+      title: 'Countries (flag + label)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'country',
+        fields: [
+          { name: 'emoji', title: 'Flag Emoji', type: 'string' },
+          { name: 'label', title: 'Label', type: 'string' },
+        ],
+      }],
+    },
+    {
+      name: 'fruitionAdvantages',
+      title: 'Fruition Advantages (string list)',
+      type: 'array',
+      of: [{ type: 'string' }],
+    },
+
+    // ── certified-clickup-partner specific ───────────────────────────
+    {
+      name: 'everythingAppCards',
+      title: 'Everything App Cards',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'everythingAppCard',
+        fields: [
+          { name: 'emoji', title: 'Emoji', type: 'string' },
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'body', title: 'Body', type: 'text' },
+        ],
+      }],
+    },
+    {
+      name: 'everythingAppFeatures',
+      title: 'Everything App Features',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'everythingAppFeature',
+        fields: [
+          { name: 'number', title: 'Number', type: 'string' },
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'body', title: 'Body', type: 'text' },
+        ],
+      }],
+    },
+    {
+      name: 'industryTabsPartnership',
+      title: 'Industry Tabs (partnership-page variant)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'industryTabPartnership',
+        fields: [
+          { name: 'label', title: 'Tab Label', type: 'string' },
+          { name: 'description', title: 'Description', type: 'text' },
+          {
+            name: 'features',
+            title: 'Features',
+            type: 'array',
+            of: [{
+              type: 'object',
+              name: 'industryFeature',
+              fields: [
+                { name: 'emoji', title: 'Emoji', type: 'string' },
+                { name: 'text', title: 'Text', type: 'string' },
+              ],
+            }],
+          },
+        ],
+      }],
+    },
+    {
+      name: 'servicesTabs',
+      title: 'Services Tabs',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'serviceTab',
+        fields: [
+          { name: 'key', title: 'Key', type: 'string' },
+          { name: 'label', title: 'Tab Label', type: 'string' },
+          { name: 'heading', title: 'Tab Heading', type: 'string' },
+          {
+            name: 'groups',
+            title: 'Groups',
+            type: 'array',
+            of: [{
+              type: 'object',
+              name: 'serviceGroup',
+              fields: [
+                { name: 'number', title: 'Number', type: 'string' },
+                { name: 'title', title: 'Title', type: 'string' },
+                {
+                  name: 'bullets',
+                  title: 'Bullets',
+                  type: 'array',
+                  of: [{
+                    type: 'object',
+                    name: 'serviceBullet',
+                    fields: [
+                      { name: 'emoji', title: 'Emoji', type: 'string' },
+                      { name: 'text', title: 'Text', type: 'string' },
+                    ],
+                  }],
+                },
+              ],
+            }],
+          },
+        ],
+      }],
+    },
+
+    // ── certified-atlassian-partner specific ─────────────────────────
+    {
+      name: 'atlassianTabs',
+      title: 'Atlassian Tabs (reuses comparisonTab shape)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'atlassianTab',
+        fields: [
+          { name: 'label', title: 'Tab Label', type: 'string' },
+          {
+            name: 'items',
+            title: 'Items',
+            type: 'array',
+            of: [{
+              type: 'object',
+              name: 'atlassianItem',
+              fields: [
+                { name: 'number', title: 'Number', type: 'string' },
+                { name: 'title', title: 'Title', type: 'string' },
+                { name: 'description', title: 'Description', type: 'text' },
+              ],
+            }],
+          },
+        ],
+      }],
+    },
+    {
+      name: 'serviceCards',
+      title: 'Service Cards',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'atlassianServiceCard',
+        fields: [
+          { name: 'emoji', title: 'Emoji', type: 'string' },
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'body', title: 'Body', type: 'text' },
+          {
+            name: 'bullets',
+            title: 'Bullets',
+            type: 'array',
+            of: [{ type: 'string' }],
+          },
+        ],
+      }],
+    },
+    {
+      name: 'expertCards',
+      title: 'Expert Cards',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'atlassianExpertCard',
+        fields: [
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'body', title: 'Body', type: 'text' },
+          { name: 'image', title: 'Image URL (or /path)', type: 'string' },
+        ],
+      }],
+    },
+
+    // ── aircall-partner specific ─────────────────────────────────────
+    {
+      name: 'aircallTabs',
+      title: 'Aircall Tabs',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'aircallTab',
+        fields: [
+          { name: 'key', title: 'Key', type: 'string' },
+          { name: 'label', title: 'Tab Label', type: 'string' },
+          {
+            name: 'items',
+            title: 'Items',
+            type: 'array',
+            of: [{
+              type: 'object',
+              name: 'aircallTabItem',
+              fields: [
+                { name: 'number', title: 'Number', type: 'string' },
+                { name: 'title', title: 'Title', type: 'string' },
+                { name: 'description', title: 'Description', type: 'text' },
+                { name: 'bullets', title: 'Bullets', type: 'array', of: [{ type: 'string' }] },
+              ],
+            }],
+          },
+        ],
+      }],
+    },
+    {
+      name: 'aircallFeatures',
+      title: 'Aircall Features (alternating image rows)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'aircallFeature',
+        fields: [
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'body', title: 'Body', type: 'text' },
+          { name: 'image', title: 'Image path (e.g. /images/foo.avif)', type: 'string' },
+          { name: 'imageRight', title: 'Image on Right', type: 'boolean' },
+        ],
+      }],
+    },
+
+    // ── Join stats CTA overrides ─────────────────────────────────────
+    { name: 'joinCtaLabel', title: 'Join CTA Label', type: 'string' },
+    { name: 'joinCtaUrl', title: 'Join CTA URL', type: 'string' },
   ],
 }

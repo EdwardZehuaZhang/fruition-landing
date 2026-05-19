@@ -96,231 +96,6 @@ function youtubeEmbedUrl(url?: string): string | null {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Why Product Teams Choose monday.com                                */
-/* ------------------------------------------------------------------ */
-
-const WHY_PRODUCT_TEAMS_CARDS = [
-  {
-    emoji: "\uD83D\uDDFA\uFE0F",
-    title: "Visual Product Roadmaps",
-    description:
-      "Aligning stakeholders and communicate product vision.",
-  },
-  {
-    emoji: "\uD83C\uDFAF",
-    title: "Milestone Tracking",
-    description:
-      "Milestone tracking with automated progress updates and notifications.",
-  },
-  {
-    emoji: "\uD83D\uDC69\u200D\uD83D\uDCBB\uD83D\uDC68\u200D\uD83D\uDCBB",
-    title: "Cross-functional Collaboration",
-    description:
-      "Enhancing communication between product, engineering, and marketing teams.",
-  },
-  {
-    emoji: "\uD83D\uDCCA",
-    title: "Real-time Reporting",
-    description:
-      "Real-time reporting and updates regarding product development progress and bottlenecks.",
-  },
-]
-
-/* ------------------------------------------------------------------ */
-/*  How to Manage Products — strategic approach tabs                   */
-/* ------------------------------------------------------------------ */
-
-const STRATEGY_ITEMS = [
-  { emoji: "\uD83D\uDCCA", text: "Define product goals and key performance indicators" },
-  { emoji: "\uD83E\uDD1D", text: "Create stakeholder alignment through shared monday.com dashboards" },
-  { emoji: "\u2705", text: "Establish product metrics and success criteria" },
-]
-
-const BACKLOG_ITEMS = [
-  { emoji: "\uD83D\uDD04", text: "Manage sprint planning and backlog grooming" },
-  { emoji: "\u2B50", text: "Prioritise features using monday.com's ranking and scoring capabilities" },
-  { emoji: "\uD83D\uDCDD", text: "Track user stories and acceptance criteria" },
-]
-
-const COORDINATION_ITEMS = [
-  { emoji: "\uD83D\uDD17", text: "Integrate development, design, and marketing workflows" },
-  { emoji: "\uD83D\uDCAC", text: "Ensure consistent communication across all product stakeholders" },
-  { emoji: "\u26A1", text: "Automate handoffs between teams" },
-]
-
-const APPROACH_TABS = [
-  { label: "Product Strategy & Vision Setting", items: STRATEGY_ITEMS },
-  { label: "Product Backlog Management", items: BACKLOG_ITEMS },
-  { label: "Cross-Team Coordination", items: COORDINATION_ITEMS },
-]
-
-/* ------------------------------------------------------------------ */
-/*  Industry-Specific Product Management Solutions                     */
-/* ------------------------------------------------------------------ */
-
-const SAAS_SECTIONS = [
-  {
-    number: "01",
-    title: "Feature Development Tracking",
-    bullets: [
-      { emoji: "\uD83C\uDFC3\u200D\u2642\uFE0F", text: "Manage development sprints across multiple product areas" },
-      { emoji: "\u2705", text: "Track feature completion rates and deployment schedules" },
-      { emoji: "\uD83D\uDC65", text: "Monitor customer feedback and feature adoption metrics" },
-      { emoji: "\uD83D\uDE80", text: "Coordinate product launches with marketing and sales teams" },
-    ],
-  },
-  {
-    number: "02",
-    title: "Product-Market Fit Analysis",
-    bullets: [
-      { emoji: "\uD83D\uDCC8", text: "Collect and analyse customer usage data" },
-      { emoji: "\uD83D\uDCCA", text: "Track product metrics and key performance indicators" },
-      { emoji: "\uD83D\uDCA1", text: "Identify improvement opportunities through customer feedback" },
-      { emoji: "\uD83D\uDD0D", text: "Optimise product features based on user behaviour analytics" },
-    ],
-  },
-  {
-    number: "03",
-    title: "SaaS Product Launch Coordination",
-    bullets: [
-      { emoji: "\uD83D\uDC69\u200D\uD83D\uDCBB", text: "Orchestrate cross-functional product launches" },
-      { emoji: "\uD83E\uDEB2", text: "Manage beta testing programs and user feedback collection" },
-      { emoji: "\uD83D\uDCE2", text: "Coordinate marketing campaigns with product releases" },
-      { emoji: "\uD83D\uDCC8", text: "Track go-to-market success metrics" },
-    ],
-  },
-]
-
-const MANUFACTURING_SECTIONS = [
-  {
-    number: "01",
-    title: "New Product Development (NPD)",
-    bullets: [
-      { emoji: "\uD83D\uDCD0", text: "Manage product design and engineering workflows" },
-      { emoji: "\u2705", text: "Track regulatory compliance and certification requirements" },
-      { emoji: "\uD83E\uDD1D", text: "Coordinate with suppliers and manufacturing partners" },
-      { emoji: "\uD83D\uDCB0", text: "Monitor product cost and margin analysis" },
-    ],
-  },
-  {
-    number: "02",
-    title: "Quality Management Integration",
-    bullets: [
-      { emoji: "\uD83D\uDD17", text: "Link product specifications with quality control processes" },
-      { emoji: "\uD83D\uDCC9", text: "Track defect rates and improvement initiatives" },
-      { emoji: "\uD83D\uDD04", text: "Manage corrective and preventive action (CAPA) processes" },
-      { emoji: "\uD83D\uDD0D", text: "Ensure traceability from design to production" },
-    ],
-  },
-  {
-    number: "03",
-    title: "Supply Chain Coordination",
-    bullets: [
-      { emoji: "\uD83D\uDCCB", text: "Manage bill of materials (BOM) and component sourcing" },
-      { emoji: "\uD83D\uDCC5", text: "Incident reporting and tracking" },
-      { emoji: "\u2696\uFE0F", text: "Coordinate product launches with production capacity" },
-      { emoji: "\uD83D\uDCCA", text: "Monitor inventory levels and demand forecasting" },
-    ],
-  },
-]
-
-const RETAIL_SECTIONS = [
-  {
-    number: "01",
-    title: "Merchandise Planning and Buying",
-    bullets: [
-      { emoji: "\uD83D\uDECD\uFE0F", text: "Plan seasonal product collections and inventory purchases" },
-      { emoji: "\uD83D\uDCCA", text: "Track product performance and sales analytics" },
-      { emoji: "\uD83E\uDD1D", text: "Manage vendor relationships and procurement processes" },
-      { emoji: "\uD83D\uDCDD", text: "Coordinate pricing strategies and promotional campaigns" },
-    ],
-  },
-  {
-    number: "02",
-    title: "Private Label Product Development",
-    bullets: [
-      { emoji: "\uD83D\uDCCB", text: "Manage product specifications and quality requirements" },
-      { emoji: "\u23F0", text: "Track sample approvals and production timelines" },
-      { emoji: "\uD83E\uDD1D", text: "Coordinate with manufacturers and quality control teams" },
-      { emoji: "\uD83D\uDCC8", text: "Monitor product launch success and market performance" },
-    ],
-  },
-  {
-    number: "03",
-    title: "Omnichannel Product Management",
-    bullets: [
-      { emoji: "\uD83D\uDD04", text: "Synchronise product information across all sales channels" },
-      { emoji: "\uD83D\uDCC1", text: "Manage product content and digital asset workflows" },
-      { emoji: "\uD83D\uDCCD", text: "Track inventory levels and availability across locations" },
-      { emoji: "\uD83C\uDFAF", text: "Coordinate marketing campaigns with product launches" },
-    ],
-  },
-]
-
-const INDUSTRY_TABS = [
-  { label: "SaaS Product Management", description: "SaaS companies leverage Monday.com\u2019s product management capabilities for:", sections: SAAS_SECTIONS },
-  { label: "Manufacturing Product Management", description: "Manufacturing companies use Monday.com to streamline complex product development processes:", sections: MANUFACTURING_SECTIONS },
-  { label: "Retail Product Management", description: "Retail organisations leverage monday.com for comprehensive product lifecycle management:", sections: RETAIL_SECTIONS },
-]
-
-/* ------------------------------------------------------------------ */
-/*  Local consultants — Product Development tabs                       */
-/* ------------------------------------------------------------------ */
-
-const PRODUCT_DEVELOPMENT_TABS = [
-  {
-    label: "Epic & Feature Management",
-    description:
-      "monday.com's hierarchical board structure enables sophisticated product planning. Teams can break down product initiatives into manageable components:",
-    bullets: [
-      { emoji: "\uD83C\uDFAF", text: "High-level epics linked to strategic objectives" },
-      { emoji: "\uD83D\uDDFA\uFE0F", text: "User story mapping with acceptance criteria" },
-      { emoji: "\uD83D\uDCCB", text: "Feature specifications with detailed requirements" },
-      { emoji: "\uD83D\uDD17", text: "Dependency tracking across multiple product areas" },
-    ],
-    image: "/images/product-management/sprint-planning.avif",
-    imageAlt: "Sprint planning board in monday.com",
-  },
-  {
-    label: "Roadmap Visualisation",
-    description:
-      "The platform's timeline and Gantt chart views provide powerful roadmap visualisation:",
-    bullets: [
-      { emoji: "\uD83C\uDFC1", text: "Multi-quarter product planning with milestone markers" },
-      { emoji: "\uD83D\uDCAC", text: "Stakeholder communication through automated roadmap updates" },
-      { emoji: "\u2696\uFE0F", text: "Resource allocation and capacity planning" },
-      { emoji: "\uD83D\uDD2E", text: "Scenario planning for different product launch timelines" },
-    ],
-    image: "/images/product-management/regular-board.avif",
-    imageAlt: "Roadmap board in monday.com",
-  },
-  {
-    label: "Agile Approach",
-    description: "monday.com seamlessly supports agile methodologies with:",
-    bullets: [
-      { emoji: "\uD83D\uDCC5", text: "Sprint planning and backlog management" },
-      { emoji: "\uD83D\uDD04", text: "Daily standup automation and progress reports" },
-      { emoji: "\uD83D\uDCCA", text: "Burndown charts and velocity tracking" },
-      { emoji: "\uD83D\uDD0D", text: "Retrospective planning and action item tracking" },
-    ],
-    image: "/images/product-management/sprint-retrospective.avif",
-    imageAlt: "Sprint retrospective board in monday.com",
-  },
-  {
-    label: "Feature Request Management",
-    description: "Centralise and prioritise feature requests with:",
-    bullets: [
-      { emoji: "\uD83D\uDCE5", text: "Customer feedback integration from multiple channels" },
-      { emoji: "\uD83D\uDDF3\uFE0F", text: "Stakeholder voting and prioritisation" },
-      { emoji: "\uD83D\uDCCA", text: "Impact vs. effort scoring matrices" },
-      { emoji: "\uD83D\uDE80", text: "Automated feature request routing to product teams" },
-    ],
-    image: "/images/product-management/bugs-queue.avif",
-    imageAlt: "Bugs queue board in monday.com",
-  },
-]
-
-/* ------------------------------------------------------------------ */
 /*  Main component                                                     */
 /* ------------------------------------------------------------------ */
 
@@ -471,14 +246,14 @@ export default function MondayProductManagementContent({
 
           {/* Hero image */}
           {(() => {
-            const heroSrc =
-              safeImageUrl(page.heroImage) || "/images/product-management/hero.png"
+            const heroSrc = safeImageUrl(page.heroImage)
+            if (!heroSrc) return null
             return (
               <div style={{ marginTop: 40, width: "100%", maxWidth: 1042 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={heroSrc}
-                  alt="monday.com product management boards"
+                  alt={page.heroHeading || "monday.com product management boards"}
                   className="rounded-card"
                   style={{ width: "100%", height: "auto" }}
                 />
@@ -490,10 +265,8 @@ export default function MondayProductManagementContent({
 
       {/* 2. Logo Cloud */}
       <LogoCloudMarquee
-        headingPart1={page.logoCloudHeadingPart1 || "Clients who have used our "}
-        headingAccent={
-          page.logoCloudHeadingAccent ?? "monday.com consulting services"
-        }
+        headingPart1={page.logoCloudHeadingPart1}
+        headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}
         logos={siteSettings?.carouselLogos || []}
       />
@@ -538,10 +311,7 @@ export default function MondayProductManagementContent({
 
       {/* 6. Calendly */}
       <CalendlySection
-        heading={
-          page.calendlyHeading ||
-          "Schedule A 30-Min Consultation With One of Our monday.com Consultants"
-        }
+        heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
         calendlyUrl={calendlyUrl}
       />
@@ -565,17 +335,19 @@ export default function MondayProductManagementContent({
       )}
 
       {/* 9. How to Manage Products — 3-card strategic approach */}
-      <StrategicApproachCardsSection />
+      <StrategicApproachCardsSection
+        headingPart1={page.strategicApproachHeadingPart1}
+        headingAccent={page.strategicApproachHeadingAccent}
+        subheading={page.strategicApproachSubheading}
+        tabs={page.strategicApproachTabs}
+      />
 
       {/* 10. Testimonial CTA Banner */}
       {!page.hideTestimonialBanner && (
         <TestimonialCtaBanner
-          headingPart1={page.joinHeadingPart1 || "Join "}
-          headingAccent={page.joinHeadingAccent || "500+ organisations"}
-          headingPart2={
-            page.joinHeadingPart2 ||
-            " that have maximised their workflows with our monday.com expert support"
-          }
+          headingPart1={page.joinHeadingPart1}
+          headingAccent={page.joinHeadingAccent}
+          headingPart2={page.joinHeadingPart2}
           primaryCtaUrl={calendlyUrl}
           secondaryCtaUrl={calendlyUrl}
           testimonial={featuredTestimonial}
@@ -588,78 +360,57 @@ export default function MondayProductManagementContent({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Product Management FAQ                                              */
-/* ------------------------------------------------------------------ */
-
-
-/* ------------------------------------------------------------------ */
 /*  How to Manage Products — Strategic Approach Cards                  */
 /* ------------------------------------------------------------------ */
 
-const STRATEGIC_APPROACH_CARDS: Array<{
-  title: string
-  items: Array<{ emoji: string; text: string }>
-}> = [
-  {
-    title: "Product Strategy & Vision Setting",
-    items: [
-      { emoji: "📊", text: "Define product goals and key performance indicators" },
-      { emoji: "🤝", text: "Create stakeholder alignment through shared monday.com dashboards" },
-      { emoji: "✅", text: "Establish product metrics and success criteria" },
-    ],
-  },
-  {
-    title: "Product Backlog Management",
-    items: [
-      { emoji: "🔄", text: "Manage sprint planning and backlog grooming" },
-      { emoji: "⭐", text: "Prioritise features using monday.com's ranking and scoring capabilities" },
-      { emoji: "📝", text: "Track user stories and acceptance criteria" },
-    ],
-  },
-  {
-    title: "Cross-Team Coordination",
-    items: [
-      { emoji: "🔗", text: "Integrate development, design, and marketing workflows" },
-      { emoji: "💬", text: "Ensure consistent communication across all product stakeholders" },
-      { emoji: "⚡", text: "Automate handoffs between teams" },
-    ],
-  },
-]
+interface StrategicApproachCardsSectionProps {
+  headingPart1?: string
+  headingAccent?: string
+  subheading?: string
+  tabs?: ApproachTab[]
+}
 
-function StrategicApproachCardsSection() {
+function StrategicApproachCardsSection({
+  headingPart1,
+  headingAccent,
+  subheading,
+  tabs,
+}: StrategicApproachCardsSectionProps) {
+  if (!tabs || tabs.length === 0) return null
+
   return (
     <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1100 }}>
         <h2 className="text-section-h2 text-center text-black" style={{ maxWidth: 900 }}>
-          How to Manage Products with monday.com:{" "}
-          <span style={{ color: "#8015e8" }}>A Strategic Approach</span>
+          {headingPart1}
+          <span style={{ color: "#8015e8" }}>{headingAccent}</span>
         </h2>
-        <p
-          className="text-body text-center mx-auto"
-          style={{ color: "#4a4a4a", maxWidth: 820, marginTop: 16 }}
-        >
-          Managing products effectively with monday.com requires understanding both the
-          platform&apos;s capabilities and proven product management methodologies. Our
-          monday.com expert consultants guide teams through:
-        </p>
+        {subheading && (
+          <p
+            className="text-body text-center mx-auto"
+            style={{ color: "#4a4a4a", maxWidth: 820, marginTop: 16 }}
+          >
+            {subheading}
+          </p>
+        )}
 
         <div
           className="grid grid-cols-1 md:grid-cols-3 w-full"
           style={{ gap: 24, marginTop: 48 }}
         >
-          {STRATEGIC_APPROACH_CARDS.map((card) => (
+          {tabs.map((card, i) => (
             <div
-              key={card.title}
+              key={card._key || card.label || `strat-card-${i}`}
               className="flex flex-col bg-[#f7f5fc] rounded-card border border-[#ece7fb]"
               style={{ padding: 28 }}
             >
               <h3 className="font-bold" style={{ fontSize: 18, color: "#8015e8", marginBottom: 16 }}>
-                {card.title}
+                {card.label}
               </h3>
               <ul className="flex flex-col" style={{ gap: 12 }}>
-                {card.items.map((item) => (
+                {(card.items ?? []).map((item, ii) => (
                   <li
-                    key={item.text}
+                    key={item._key || item.text || `strat-item-${i}-${ii}`}
                     className="flex items-start"
                     style={{ fontSize: 14, lineHeight: "22px", color: "#444", gap: 10 }}
                   >
@@ -693,16 +444,7 @@ function WhyProductTeamsSection({
   subheading,
   cards,
 }: WhyProductTeamsSectionProps) {
-  const resolvedHeadingPart1 =
-    headingPart1 ?? "Why Product Teams Choose monday.com for "
-  const resolvedHeadingAccent = headingAccent ?? "Product Management"
-  const resolvedSubheading =
-    subheading ??
-    "monday.com's product roadmap software capabilities transform how teams plan, track, and execute product strategies. Unlike traditional product management tools, monday.com provides:"
-  const resolvedCards: EmojiCard[] =
-    cards && cards.length > 0
-      ? cards
-      : (WHY_PRODUCT_TEAMS_CARDS as EmojiCard[])
+  if (!cards || cards.length === 0) return null
 
   return (
     <section
@@ -717,25 +459,27 @@ function WhyProductTeamsSection({
           className="text-section-h2 text-center"
           style={{ color: "#000", marginBottom: 16 }}
         >
-          {resolvedHeadingPart1}
-          <span style={{ color: "#8015e8", display: "block" }}>{resolvedHeadingAccent}</span>
+          {headingPart1}
+          <span style={{ color: "#8015e8", display: "block" }}>{headingAccent}</span>
         </h2>
-        <p
-          className="text-body text-center mx-auto"
-          style={{
-            color: "#4a4a4a",
-            maxWidth: 820,
-            marginBottom: 48,
-          }}
-        >
-          {resolvedSubheading}
-        </p>
+        {subheading && (
+          <p
+            className="text-body text-center mx-auto"
+            style={{
+              color: "#4a4a4a",
+              maxWidth: 820,
+              marginBottom: 48,
+            }}
+          >
+            {subheading}
+          </p>
+        )}
 
         <div
           className="grid grid-cols-1 sm:grid-cols-2"
           style={{ gap: 24 }}
         >
-          {resolvedCards.map((card, i) => (
+          {cards.map((card, i) => (
             <div
               key={card._key || card.title || `why-card-${i}`}
               className="flex flex-col items-center text-center bg-white rounded-card border border-[#ece7fb] ui-hover-card"
@@ -786,17 +530,9 @@ function StrategicApproachSection({
   subheading,
   tabs,
 }: StrategicApproachSectionProps) {
-  const resolvedHeadingPart1 =
-    headingPart1 ?? "How to Manage Products with monday.com: "
-  const resolvedHeadingAccent = headingAccent ?? "A Strategic Approach"
-  const resolvedSubheading =
-    subheading ??
-    "Managing products effectively with monday.com requires understanding both the platform's capabilities and proven product management methodologies. Our monday.com expert consultants guide teams through:"
-  const resolvedTabs: ApproachTab[] =
-    tabs && tabs.length > 0 ? tabs : (APPROACH_TABS as unknown as ApproachTab[])
-
   const [activeTab, setActiveTab] = useState(0)
-  const active = resolvedTabs[activeTab] ?? resolvedTabs[0]
+  if (!tabs || tabs.length === 0) return null
+  const active = tabs[activeTab] ?? tabs[0]
 
   return (
     <section
@@ -811,27 +547,29 @@ function StrategicApproachSection({
           className="text-section-h2 text-center text-black"
           style={{ maxWidth: 900 }}
         >
-          {resolvedHeadingPart1}
-          <span style={{ color: "#8015e8" }}>{resolvedHeadingAccent}</span>
+          {headingPart1}
+          <span style={{ color: "#8015e8" }}>{headingAccent}</span>
         </h2>
-        <p
-          className="text-body text-center mx-auto"
-          style={{
-            color: "#4a4a4a",
-            maxWidth: 820,
-            marginTop: 16,
-            marginBottom: 40,
-          }}
-        >
-          {resolvedSubheading}
-        </p>
+        {subheading && (
+          <p
+            className="text-body text-center mx-auto"
+            style={{
+              color: "#4a4a4a",
+              maxWidth: 820,
+              marginTop: 16,
+              marginBottom: 40,
+            }}
+          >
+            {subheading}
+          </p>
+        )}
 
         {/* Tab buttons */}
         <div
           className="flex justify-center flex-wrap"
           style={{ gap: 12 }}
         >
-          {resolvedTabs.map((tab, i) => (
+          {tabs.map((tab, i) => (
             <button
               key={tab._key || tab.label || `approach-tab-${i}`}
               onClick={() => setActiveTab(i)}
@@ -920,14 +658,9 @@ function IndustrySpecificSection({
   heading,
   tabs,
 }: IndustrySpecificSectionProps) {
-  const resolvedHeading = heading ?? "Industry-Specific Product Management Solutions"
-  const resolvedTabs: IndustryTab[] =
-    tabs && tabs.length > 0
-      ? tabs
-      : (INDUSTRY_TABS as unknown as IndustryTab[])
-
   const [activeTab, setActiveTab] = useState(0)
-  const active = resolvedTabs[activeTab] ?? resolvedTabs[0]
+  if (!tabs || tabs.length === 0) return null
+  const active = tabs[activeTab] ?? tabs[0]
 
   return (
     <section
@@ -938,19 +671,21 @@ function IndustrySpecificSection({
       }}
     >
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
-        <h2
-          className="text-section-h2 text-center text-white"
-          style={{ marginBottom: 40 }}
-        >
-          {resolvedHeading}
-        </h2>
+        {heading && (
+          <h2
+            className="text-section-h2 text-center text-white"
+            style={{ marginBottom: 40 }}
+          >
+            {heading}
+          </h2>
+        )}
 
         {/* Tab pills */}
         <div
           className="flex items-center justify-center flex-wrap"
           style={{ gap: 12, marginBottom: 40 }}
         >
-          {resolvedTabs.map((tab, idx) => {
+          {tabs.map((tab, idx) => {
             const isActive = idx === activeTab
             return (
               <button
@@ -984,18 +719,20 @@ function IndustrySpecificSection({
         </div>
 
         {/* Tab description */}
-        <p
-          className="text-center mx-auto"
-          style={{
-            fontSize: 16,
-            lineHeight: "25.6px",
-            color: "#e8dcfb",
-            maxWidth: 800,
-            marginBottom: 32,
-          }}
-        >
-          {active?.description}
-        </p>
+        {active?.description && (
+          <p
+            className="text-center mx-auto"
+            style={{
+              fontSize: 16,
+              lineHeight: "25.6px",
+              color: "#e8dcfb",
+              maxWidth: 800,
+              marginBottom: 32,
+            }}
+          >
+            {active.description}
+          </p>
+        )}
 
         {/* Numbered sub-sections */}
         <div
@@ -1080,17 +817,9 @@ function ProductDevelopmentSection({
   headingPart2,
   tabs,
 }: ProductDevelopmentSectionProps) {
-  const resolvedHeadingPart1 = headingPart1 ?? "Local monday.com consultants for "
-  const resolvedHeadingAccent = headingAccent ?? "Product Development"
-  const resolvedHeadingPart2 =
-    headingPart2 ?? " in Australia, United States, and United Kingdom"
-  const resolvedTabs: ProductDevTab[] =
-    tabs && tabs.length > 0
-      ? tabs
-      : (PRODUCT_DEVELOPMENT_TABS as unknown as ProductDevTab[])
-
   const [activeTab, setActiveTab] = useState(0)
-  const active = resolvedTabs[activeTab] ?? resolvedTabs[0]
+  if (!tabs || tabs.length === 0) return null
+  const active = tabs[activeTab] ?? tabs[0]
   const activeImageSrc =
     typeof active?.image === "string"
       ? active.image
@@ -1109,9 +838,9 @@ function ProductDevelopmentSection({
           className="text-section-h2 text-center"
           style={{ color: "#000", marginBottom: 40, maxWidth: 1000, marginLeft: "auto", marginRight: "auto" }}
         >
-          {resolvedHeadingPart1}
-          <span style={{ color: "#8015e8" }}>{resolvedHeadingAccent}</span>
-          {resolvedHeadingPart2}
+          {headingPart1}
+          <span style={{ color: "#8015e8" }}>{headingAccent}</span>
+          {headingPart2}
         </h2>
 
         {/* Tab pills */}
@@ -1119,7 +848,7 @@ function ProductDevelopmentSection({
           className="flex items-center justify-center flex-wrap"
           style={{ gap: 12, marginBottom: 40 }}
         >
-          {resolvedTabs.map((tab, i) => {
+          {tabs.map((tab, i) => {
             const isActive = i === activeTab
             return (
               <button

@@ -361,7 +361,7 @@ export default function MondayTrainingContent({
             <div style={{ marginTop: 40 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://static.wixstatic.com/media/39b8ef_abd15c5dcf7c4d16a392b5693a6f7923~mv2.png/v1/fill/w_415,h_103,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/39b8ef_abd15c5dcf7c4d16a392b5693a6f7923~mv2.png"
+                src={heroMondayPartnersImageSrc}
                 alt="Monday.com Partners"
                 width={924}
                 height={0}
@@ -639,13 +639,15 @@ export default function MondayTrainingContent({
       <LeftRightSection
         imageOnLeft
         image={
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={empowerImageSrc || "/images/empower-monday-training.avif"}
-            alt="monday.com users training"
-            width={490}
-            className="w-full h-auto"
-          />
+          empowerImageSrc ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={empowerImageSrc}
+              alt="monday.com users training"
+              width={490}
+              className="w-full h-auto"
+            />
+          ) : null
         }
       >
         {empowerEyebrow && (
@@ -675,18 +677,19 @@ export default function MondayTrainingContent({
       {/* ============================================================ */}
       {trainingServices.length > 0 && (() => {
         const service = trainingServices[0]
-        const serviceImageSrc =
-          imageUrl(service.image) || "/images/monday-training-customization.avif"
+        const serviceImageSrc = imageUrl(service.image)
         return (
           <LeftRightSection
             image={
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={serviceImageSrc}
-                alt={service.title ?? ""}
-                width={490}
-                className="w-full h-auto"
-              />
+              serviceImageSrc ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={serviceImageSrc}
+                  alt={service.title ?? ""}
+                  width={490}
+                  className="w-full h-auto"
+                />
+              ) : null
             }
           >
             {service.title && (

@@ -1,6 +1,10 @@
 import { getTeamMembers, getPageBySlug, getSiteSettings } from "@/sanity/queries"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
-import FruitionTeamClient, { type TeamMember } from "./FruitionTeamClient"
+import FruitionTeamClient, {
+  type TeamMember,
+  type TeamRegion,
+  type HeroDescriptionBlock,
+} from "./FruitionTeamClient"
 import { mergeTeamMembers } from "@/lib/mergeTeamMembers"
 
 export async function generateMetadata() {
@@ -24,13 +28,26 @@ export default async function TeamPage() {
 
   const mergedMembers = mergeTeamMembers(members, siteSettings?.excludedTeamMemberNames || [])
 
+  const regions: TeamRegion[] = Array.isArray(page?.teamRegions)
+    ? (page.teamRegions as TeamRegion[])
+    : []
+
+  const heroDescriptionBlocks: HeroDescriptionBlock[] = Array.isArray(
+    page?.heroDescriptionBlocks
+  )
+    ? (page.heroDescriptionBlocks as HeroDescriptionBlock[])
+    : []
+
   return (
     <FruitionTeamClient
       members={mergedMembers}
       heroHeading={page?.heroHeading}
+      heroCtaLabel={page?.primaryCtaLabel}
       calendlyUrl={calendlyUrl}
       partnerBadges={partnerBadges}
       certificationBadge={certificationBadge}
+      regions={regions}
+      heroDescriptionBlocks={heroDescriptionBlocks}
     />
   )
 }

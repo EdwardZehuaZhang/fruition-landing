@@ -199,8 +199,8 @@ export default function MondayPartnerUkContent({
 
       {/* 3-tab comparison */}
       <ComparisonTabsSection
-        heading={page.comparisonHeading || "Streamline Operations & Maximise Efficiency with Our monday.com Consultants"}
-        subheading="Our expert consultants empower you to adopt workflow automation & AI systems"
+        heading={page.comparisonHeading}
+        subheading={page.comparisonSubheading}
         tabs={resolvedComparisonTabs}
         theme="light"
         withPurpleCircle={false}
@@ -208,9 +208,10 @@ export default function MondayPartnerUkContent({
 
       {/* Meet the team — UK region */}
       <TeamGridSection
-        heading="Meet the Fruition UK team"
-        ctaLabel="Learn More About Us"
-        ctaUrl="/fruition-team"
+        heading={page.teamGridHeading}
+        subheading={page.teamGridSubheading}
+        ctaLabel={page.teamGridCtaLabel}
+        ctaUrl={page.teamGridCtaUrl}
         members={teamMembers}
         region="UK"
       />
@@ -227,18 +228,18 @@ export default function MondayPartnerUkContent({
 
       {/* Customer testimonials carousel */}
       <TestimonialsGrid
-        heading="What our customers say about us 🙌"
-        ctaLabel="🚀  Start Your Transformation"
+        heading={page.testimonialsGridHeading}
+        ctaLabel={page.testimonialsGridCtaLabel}
         ctaUrl={calendlyUrl}
-        statCardValue="500+"
-        statCardSubtitle="have maximised their workflows with our monday.com expert support"
-        statCardCtaLabel="Read our case studies"
-        statCardCtaUrl="/customer-testimonials"
+        statCardValue={page.testimonialsGridStatValue}
+        statCardSubtitle={page.testimonialsGridStatSubtitle}
+        statCardCtaLabel={page.testimonialsGridStatCtaLabel}
+        statCardCtaUrl={page.testimonialsGridStatCtaUrl}
         caseStudies={partnerCaseStudies}
       />
 
       {/* FAQ */}
-      <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
+      <FaqAccordion heading={page.faqHeading} tabs={resolvedFaqTabs} />
 
       {/* Feature blocks */}
       <FeatureBlocksSection blocks={resolvedFeatureBlocks} />

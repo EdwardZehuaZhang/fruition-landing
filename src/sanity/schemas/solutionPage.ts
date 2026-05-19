@@ -514,6 +514,62 @@ export default {
     { name: 'bottomVideoUrl', title: 'Bottom Video URL', type: 'string' },
     { name: 'bottomVideoTitle', title: 'Bottom Video Title', type: 'string' },
 
+    // ── Schemaless fields the frontend already reads via GROQ ────────
+    { name: 'heroEyebrow', title: 'Hero Eyebrow', type: 'string' },
+    { name: 'hideHeroSubheading', title: 'Hide Hero Subheading', type: 'boolean', initialValue: false },
+    { name: 'heroLocalVideoSrc', title: 'Hero Local Video Src', type: 'string' },
+    { name: 'heroVideoUrl', title: 'Hero Video URL', type: 'url' },
+    { name: 'heroVideoTitle', title: 'Hero Video Title', type: 'string' },
+    {
+      name: 'heroPartnerBadges',
+      title: 'Hero Partner Badges',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'partnerBadge',
+        fields: [
+          { name: 'name', title: 'Name', type: 'string' },
+          { name: 'image', title: 'Image', type: 'image' },
+          { name: 'width', title: 'Width', type: 'number' },
+          { name: 'height', title: 'Height', type: 'number' },
+        ],
+      }],
+    },
+    { name: 'comparisonTheme', title: 'Comparison Section Theme', type: 'string',
+      options: { list: [{ title: 'Light', value: 'light' }, { title: 'Dark', value: 'dark' }] } },
+    { name: 'comparisonWithPurpleCircle', title: 'Comparison: With Purple Circle', type: 'boolean', initialValue: false },
+    { name: 'hideFaqSection', title: 'Hide FAQ Section', type: 'boolean', initialValue: false },
+    { name: 'beforeAfterHeading', title: 'Before/After Section Heading', type: 'string' },
+
+    // HR-specific: life-cycle stages + reasons it's a fit
+    {
+      name: 'lifecycleStages',
+      title: 'Lifecycle Stages',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'lifecycleStage',
+        fields: [
+          { name: 'n', title: 'Number', type: 'string' },
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'body', title: 'Body', type: 'text' },
+        ],
+      }],
+    },
+    {
+      name: 'fitReasons',
+      title: 'Why It Fits (cards)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'fitReason',
+        fields: [
+          { name: 'title', title: 'Title', type: 'string' },
+          { name: 'body', title: 'Body', type: 'text' },
+        ],
+      }],
+    },
+
     // Section visibility toggles
     { name: 'hideDiscoverSection', title: 'Hide Discover CTA Section', type: 'boolean', initialValue: false },
     { name: 'hideJoinStatsSection', title: 'Hide Join Stats Section', type: 'boolean', initialValue: false },

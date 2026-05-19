@@ -17,106 +17,6 @@ import {
   ServicesWorkflowTabs,
 } from "@/components/sections"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
-import type { ServicesWorkflowTab } from "@/components/sections/ServicesWorkflowTabs"
-
-const WORKFLOW_TABS: ServicesWorkflowTab[] = [
-  {
-    key: "crm",
-    label: "CRM Sales Process",
-    heading: "CRM Sales Process for Professional Services Businesses",
-    description:
-      "Transform your agency's pipeline into a revenue-generating engine with monday.com's CRM. Track leads, opportunities, and client relationships in one intuitive platform. Customisable workflows match your unique sales process, while automation eliminates manual data entry, giving your team more time to build valuable client relationships.",
-    benefits: [
-      { emoji: "📊", label: "Visual pipeline management" },
-      { emoji: "📋", label: "Custom deal stages" },
-      { emoji: "📧", label: "Email integration" },
-      { emoji: "🤝", label: "Client relationship tracking" },
-      { emoji: "⚡", label: "Automated lead scoring" },
-      { emoji: "📈", label: "Sales forecasting" },
-      { emoji: "🎯", label: "Performance analytics" },
-    ],
-  },
-  {
-    key: "quoting",
-    label: "Quoting & Ticketing",
-    heading: "Quoting & Ticketing",
-    description:
-      "Speed up your quote-to-cash cycle with automated quoting and ticketing. Generate professional proposals instantly while managing client requests efficiently. monday.com ensures consistent response times and seamless communication tracking, helping you win more business and maintain strong client relationships.",
-    benefits: [
-      { emoji: "🤖", label: "Quote automation" },
-      { emoji: "⏱️", label: "SLA tracking" },
-      { emoji: "⬆️", label: "Request prioritization" },
-      { emoji: "🔐", label: "Client portal access" },
-      { emoji: "📚", label: "Template library" },
-      { emoji: "📧", label: "Email integration" },
-      { emoji: "💬", label: "Communication history" },
-    ],
-  },
-  {
-    key: "finance",
-    label: "Finance Workflows",
-    heading: "Finance Workflows",
-    description:
-      "Streamline your agency's financial operations with end-to-end automation. From contract generation to payment tracking, monday.com transforms complex financial processes into smooth, error-free workflows. Connect with your accounting tools for complete financial visibility and control.",
-    benefits: [
-      { emoji: "📝", label: "Contract automation" },
-      { emoji: "💳", label: "Payment tracking" },
-      { emoji: "💼", label: "Budget management" },
-      { emoji: "📈", label: "Profitability analysis" },
-      { emoji: "🧾", label: "Invoice generation" },
-      { emoji: "📊", label: "Finance reporting" },
-      { emoji: "🧮", label: "Expense tracking" },
-    ],
-  },
-  {
-    key: "project",
-    label: "Project Management",
-    heading: "Project Management",
-    description:
-      "Deliver exceptional client projects on time and within budget. monday.com's visual project management tools give you complete control over timelines, resources, and deliverables. Keep clients informed while ensuring your team stays focused on high-priority tasks.",
-    benefits: [
-      { emoji: "📅", label: "Timeline visualisation" },
-      { emoji: "🔗", label: "Task dependencies" },
-      { emoji: "📊", label: "Project tracking" },
-      { emoji: "🤝", label: "Collaboration tools" },
-      { emoji: "⚖️", label: "Resource allocation" },
-      { emoji: "🏁", label: "Client milestones" },
-      { emoji: "📁", label: "File sharing" },
-    ],
-  },
-  {
-    key: "time",
-    label: "Time & Resources",
-    heading: "Time & Resources",
-    description:
-      "Optimise your team's productivity with intelligent resource management. Track billable hours, monitor utilisation rates, and ensure optimal resource distribution across client projects. Real-time insights help you maximise profitability while preventing burnout.",
-    benefits: [
-      { emoji: "⏱️", label: "Time tracking" },
-      { emoji: "📊", label: "Capacity management" },
-      { emoji: "📌", label: "Project allocation" },
-      { emoji: "⚖️", label: "Workload balance" },
-      { emoji: "📋", label: "Resource planning" },
-      { emoji: "📈", label: "Utilisation reports" },
-      { emoji: "🎯", label: "Skills matching" },
-    ],
-  },
-  {
-    key: "analytics",
-    label: "Analytics & Reports",
-    heading: "Analytics & Reports",
-    description:
-      "Make data-driven decisions with powerful analytics and reporting tools. Create custom dashboards to track KPIs, monitor service delivery metrics, and generate professional client reports. Get real-time insights into business performance and client satisfaction.",
-    benefits: [
-      { emoji: "📊", label: "Custom dashboards" },
-      { emoji: "📋", label: "Client reporting" },
-      { emoji: "📈", label: "Revenue analytics" },
-      { emoji: "💹", label: "ROI measurement" },
-      { emoji: "⚡", label: "Real-time metrics" },
-      { emoji: "🎯", label: "Performance tracking" },
-      { emoji: "🔍", label: "Trend analysis" },
-    ],
-  },
-]
 
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-professional-services")
@@ -187,10 +87,12 @@ export default async function Page() {
       )}
 
       {/* 4. NEW — Six-tab services workflow section */}
-      <ServicesWorkflowTabs
-        heading="Capabilities for every services workflow"
-        tabs={(page.workflowTabs && page.workflowTabs.length > 0) ? page.workflowTabs : WORKFLOW_TABS}
-      />
+      {page.workflowTabs?.length > 0 && (
+        <ServicesWorkflowTabs
+          heading={page.workflowTabsHeading}
+          tabs={page.workflowTabs}
+        />
+      )}
 
       {/* 5. Existing comparison tabs (Sanity) */}
       {page.comparisonTabs?.length > 0 && (
@@ -228,7 +130,7 @@ export default async function Page() {
             >
               <YouTubeEmbed
                 url={page.bottomVideoUrl}
-                title={page.bottomVideoTitle || "monday.com for Professional Services"}
+                title={page.bottomVideoTitle}
               />
             </div>
           </div>
@@ -237,13 +139,10 @@ export default async function Page() {
 
       {/* 10. Join 500+ banner (replaces removed "What our customers say" grid) */}
       <TestimonialCtaBanner
-        headingPart1={page.joinHeadingPart1 || "Join "}
-        headingAccent={page.joinHeadingAccent || "500+ organisations"}
-        headingPart2={
-          page.joinHeadingPart2 ||
-          " that have maximised their workflows with our monday.com expert support"
-        }
-        primaryCtaLabel="🚀 Start Your Transformation"
+        headingPart1={page.joinHeadingPart1}
+        headingAccent={page.joinHeadingAccent}
+        headingPart2={page.joinHeadingPart2}
+        primaryCtaLabel={page.testimonialBannerPrimaryCtaLabel}
         primaryCtaUrl={calendlyUrl}
         secondaryCtaLabel={page.secondaryCtaLabel}
         secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}

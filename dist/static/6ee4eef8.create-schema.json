@@ -14,6 +14,25 @@
         "type": "string"
       },
       {
+        "name": "defaultSeoTitle",
+        "type": "string",
+        "title": "Default SEO Title"
+      },
+      {
+        "name": "defaultSeoDescription",
+        "type": "text",
+        "title": "Default SEO Description"
+      },
+      {
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "excludedTeamMemberNames",
+        "type": "array"
+      },
+      {
         "name": "navbarCtaLabel",
         "type": "string",
         "title": "Navbar CTA Label"
@@ -883,6 +902,11 @@
         "title": "Comparison Section Heading"
       },
       {
+        "name": "comparisonHeadingAccent",
+        "type": "string",
+        "title": "Comparison Section Heading (accent)"
+      },
+      {
         "name": "comparisonSubheading",
         "type": "text",
         "title": "Comparison Section Subheading"
@@ -897,12 +921,22 @@
                 "title": "Tab Label"
               },
               {
+                "name": "subheading",
+                "type": "string",
+                "title": "Sub-heading (under tab pills)"
+              },
+              {
                 "of": [
                   {
                     "fields": [
                       {
                         "name": "number",
                         "type": "string"
+                      },
+                      {
+                        "name": "icon",
+                        "type": "string",
+                        "title": "Icon / Emoji"
                       },
                       {
                         "name": "title",
@@ -1491,10 +1525,6 @@
         "type": "image"
       },
       {
-        "name": "comparisonHeadingAccent",
-        "type": "string"
-      },
-      {
         "name": "comparisonEyebrow",
         "type": "string"
       },
@@ -1795,6 +1825,176 @@
         "name": "heroImageUrl",
         "type": "string",
         "title": "Hero Image URL (fallback)"
+      },
+      {
+        "name": "bottomFeatureSectionHeadingPart1",
+        "type": "string",
+        "title": "Bottom Feature Section Heading (prefix)"
+      },
+      {
+        "name": "bottomFeatureSectionHeadingAccent",
+        "type": "string",
+        "title": "Bottom Feature Section Heading (accent)"
+      },
+      {
+        "name": "bottomVideoUrl",
+        "type": "string",
+        "title": "Bottom Video URL"
+      },
+      {
+        "name": "bottomVideoTitle",
+        "type": "string"
+      },
+      {
+        "name": "heroEyebrow",
+        "type": "string"
+      },
+      {
+        "initialValue": false,
+        "name": "hideHeroSubheading",
+        "type": "boolean"
+      },
+      {
+        "name": "heroLocalVideoSrc",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "name": "heroVideoUrl",
+        "type": "url",
+        "title": "Hero Video URL"
+      },
+      {
+        "name": "heroVideoTitle",
+        "type": "string"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "name": "image",
+                "type": "image"
+              },
+              {
+                "name": "width",
+                "type": "number"
+              },
+              {
+                "name": "height",
+                "type": "number"
+              }
+            ],
+            "type": "object",
+            "name": "partnerBadge"
+          }
+        ],
+        "name": "heroPartnerBadges",
+        "type": "array"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light",
+              "value": "light"
+            },
+            {
+              "title": "Dark",
+              "value": "dark"
+            }
+          ]
+        },
+        "name": "comparisonTheme",
+        "type": "string",
+        "title": "Comparison Section Theme"
+      },
+      {
+        "initialValue": false,
+        "name": "comparisonWithPurpleCircle",
+        "type": "boolean",
+        "title": "Comparison: With Purple Circle"
+      },
+      {
+        "initialValue": false,
+        "name": "hideFaqSection",
+        "type": "boolean",
+        "title": "Hide FAQ Section"
+      },
+      {
+        "name": "beforeAfterHeading",
+        "type": "string",
+        "title": "Before/After Section Heading"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "n",
+                "type": "string",
+                "title": "Number"
+              },
+              {
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "type": "text"
+              }
+            ],
+            "type": "object",
+            "name": "lifecycleStage"
+          }
+        ],
+        "name": "lifecycleStages",
+        "type": "array"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "type": "text"
+              }
+            ],
+            "type": "object",
+            "name": "fitReason"
+          }
+        ],
+        "name": "fitReasons",
+        "type": "array",
+        "title": "Why It Fits (cards)"
       },
       {
         "initialValue": false,
@@ -2738,6 +2938,483 @@
         "name": "provenStats",
         "type": "array",
         "title": "Proven Stats (emoji / value / body)"
+      },
+      {
+        "name": "faqHeading",
+        "type": "string",
+        "title": "FAQ Heading"
+      },
+      {
+        "name": "comparisonHeadingAccent",
+        "type": "string",
+        "title": "Comparison Heading (accent)"
+      },
+      {
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "whyFruition",
+        "type": "array",
+        "title": "Why Fruition (string list)"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "name": "role",
+                "type": "string"
+              },
+              {
+                "name": "quote",
+                "type": "text"
+              },
+              {
+                "name": "photo",
+                "type": "string",
+                "title": "Photo URL (or /path)"
+              }
+            ],
+            "type": "object",
+            "name": "partnerTestimonial"
+          }
+        ],
+        "name": "partnerTestimonials",
+        "type": "array"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "emoji",
+                "type": "string"
+              },
+              {
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "type": "text"
+              }
+            ],
+            "type": "object",
+            "name": "implementationService"
+          }
+        ],
+        "name": "implementationServices",
+        "type": "array"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "emoji",
+                "type": "string"
+              },
+              {
+                "name": "label",
+                "type": "string"
+              }
+            ],
+            "type": "object",
+            "name": "industrySolution"
+          }
+        ],
+        "name": "industrySolutions",
+        "type": "array",
+        "title": "Industry Solutions (emoji + label)"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "emoji",
+                "type": "string",
+                "title": "Flag Emoji"
+              },
+              {
+                "name": "label",
+                "type": "string"
+              }
+            ],
+            "type": "object",
+            "name": "country"
+          }
+        ],
+        "name": "countries",
+        "type": "array",
+        "title": "Countries (flag + label)"
+      },
+      {
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "fruitionAdvantages",
+        "type": "array",
+        "title": "Fruition Advantages (string list)"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "emoji",
+                "type": "string"
+              },
+              {
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "type": "text"
+              }
+            ],
+            "type": "object",
+            "name": "everythingAppCard"
+          }
+        ],
+        "name": "everythingAppCards",
+        "type": "array"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "number",
+                "type": "string"
+              },
+              {
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "type": "text"
+              }
+            ],
+            "type": "object",
+            "name": "everythingAppFeature"
+          }
+        ],
+        "name": "everythingAppFeatures",
+        "type": "array"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "label",
+                "type": "string",
+                "title": "Tab Label"
+              },
+              {
+                "name": "description",
+                "type": "text"
+              },
+              {
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "name": "emoji",
+                        "type": "string"
+                      },
+                      {
+                        "name": "text",
+                        "type": "string"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "industryFeature"
+                  }
+                ],
+                "name": "features",
+                "type": "array"
+              }
+            ],
+            "type": "object",
+            "name": "industryTabPartnership"
+          }
+        ],
+        "name": "industryTabsPartnership",
+        "type": "array",
+        "title": "Industry Tabs (partnership-page variant)"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "key",
+                "type": "string"
+              },
+              {
+                "name": "label",
+                "type": "string",
+                "title": "Tab Label"
+              },
+              {
+                "name": "heading",
+                "type": "string",
+                "title": "Tab Heading"
+              },
+              {
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "name": "number",
+                        "type": "string"
+                      },
+                      {
+                        "name": "title",
+                        "type": "string"
+                      },
+                      {
+                        "of": [
+                          {
+                            "fields": [
+                              {
+                                "name": "emoji",
+                                "type": "string"
+                              },
+                              {
+                                "name": "text",
+                                "type": "string"
+                              }
+                            ],
+                            "type": "object",
+                            "name": "serviceBullet"
+                          }
+                        ],
+                        "name": "bullets",
+                        "type": "array"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "serviceGroup"
+                  }
+                ],
+                "name": "groups",
+                "type": "array"
+              }
+            ],
+            "type": "object",
+            "name": "serviceTab"
+          }
+        ],
+        "name": "servicesTabs",
+        "type": "array"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "label",
+                "type": "string",
+                "title": "Tab Label"
+              },
+              {
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "name": "number",
+                        "type": "string"
+                      },
+                      {
+                        "name": "title",
+                        "type": "string"
+                      },
+                      {
+                        "name": "description",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "atlassianItem"
+                  }
+                ],
+                "name": "items",
+                "type": "array"
+              }
+            ],
+            "type": "object",
+            "name": "atlassianTab"
+          }
+        ],
+        "name": "atlassianTabs",
+        "type": "array",
+        "title": "Atlassian Tabs (reuses comparisonTab shape)"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "emoji",
+                "type": "string"
+              },
+              {
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "type": "text"
+              },
+              {
+                "of": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "name": "bullets",
+                "type": "array"
+              }
+            ],
+            "type": "object",
+            "name": "atlassianServiceCard"
+          }
+        ],
+        "name": "serviceCards",
+        "type": "array"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "type": "text"
+              },
+              {
+                "name": "image",
+                "type": "string",
+                "title": "Image URL (or /path)"
+              }
+            ],
+            "type": "object",
+            "name": "atlassianExpertCard"
+          }
+        ],
+        "name": "expertCards",
+        "type": "array"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "key",
+                "type": "string"
+              },
+              {
+                "name": "label",
+                "type": "string",
+                "title": "Tab Label"
+              },
+              {
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "name": "number",
+                        "type": "string"
+                      },
+                      {
+                        "name": "title",
+                        "type": "string"
+                      },
+                      {
+                        "name": "description",
+                        "type": "text"
+                      },
+                      {
+                        "of": [
+                          {
+                            "type": "string"
+                          }
+                        ],
+                        "name": "bullets",
+                        "type": "array"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "aircallTabItem"
+                  }
+                ],
+                "name": "items",
+                "type": "array"
+              }
+            ],
+            "type": "object",
+            "name": "aircallTab"
+          }
+        ],
+        "name": "aircallTabs",
+        "type": "array"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "type": "text"
+              },
+              {
+                "name": "image",
+                "type": "string",
+                "title": "Image path (e.g. /images/foo.avif)"
+              },
+              {
+                "name": "imageRight",
+                "type": "boolean",
+                "title": "Image on Right"
+              }
+            ],
+            "type": "object",
+            "name": "aircallFeature"
+          }
+        ],
+        "name": "aircallFeatures",
+        "type": "array",
+        "title": "Aircall Features (alternating image rows)"
+      },
+      {
+        "name": "joinCtaLabel",
+        "type": "string",
+        "title": "Join CTA Label"
+      },
+      {
+        "name": "joinCtaUrl",
+        "type": "string",
+        "title": "Join CTA URL"
       }
     ],
     "name": "partnershipPage",
@@ -2958,6 +3635,11 @@
                 "name": "label",
                 "type": "string",
                 "title": "Tab Label"
+              },
+              {
+                "name": "subheading",
+                "type": "string",
+                "title": "Tab Subheading (optional)"
               },
               {
                 "of": [
@@ -3409,6 +4091,67 @@
         "name": "logoCloudHeadingAccent",
         "type": "string",
         "title": "Logo Cloud Heading (accent)"
+      },
+      {
+        "name": "teamGridHeading",
+        "type": "string"
+      },
+      {
+        "name": "teamGridSubheading",
+        "type": "text",
+        "title": "Team Grid Subheading (optional)"
+      },
+      {
+        "name": "teamGridCtaLabel",
+        "type": "string",
+        "title": "Team Grid CTA Label"
+      },
+      {
+        "name": "teamGridCtaUrl",
+        "type": "string",
+        "title": "Team Grid CTA URL"
+      },
+      {
+        "name": "testimonialsGridHeading",
+        "type": "string"
+      },
+      {
+        "name": "testimonialsGridCtaLabel",
+        "type": "string",
+        "title": "Testimonials Grid CTA Label"
+      },
+      {
+        "name": "testimonialsGridStatValue",
+        "type": "string"
+      },
+      {
+        "name": "testimonialsGridStatSubtitle",
+        "type": "text"
+      },
+      {
+        "name": "testimonialsGridStatCtaLabel",
+        "type": "string",
+        "title": "Testimonials Grid Stat CTA Label"
+      },
+      {
+        "name": "testimonialsGridStatCtaUrl",
+        "type": "string",
+        "title": "Testimonials Grid Stat CTA URL"
+      },
+      {
+        "name": "faqHeading",
+        "type": "string",
+        "title": "FAQ Heading"
+      },
+      {
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "teamMemberNames",
+        "type": "array",
+        "title": "Team Member Names (optional roster filter)"
       }
     ],
     "name": "locationPage",
@@ -3780,6 +4523,11 @@
                 "name": "label",
                 "type": "string",
                 "title": "Tab Label"
+              },
+              {
+                "name": "subheading",
+                "type": "string",
+                "title": "Sub-heading (under tab pills)"
               },
               {
                 "of": [
@@ -4672,6 +5420,83 @@
         "type": "array"
       },
       {
+        "name": "whyBestHeading",
+        "type": "string",
+        "title": "Why-Best Section Heading"
+      },
+      {
+        "name": "caseStudyBlockHeading",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "name": "caseStudyVideoUrl",
+        "type": "url",
+        "title": "Case Study Video URL"
+      },
+      {
+        "name": "caseStudyVideoTitle",
+        "type": "string"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "value",
+                "type": "string"
+              },
+              {
+                "name": "label",
+                "type": "string"
+              }
+            ],
+            "type": "object",
+            "name": "caseStudyStat"
+          }
+        ],
+        "name": "caseStudyStats",
+        "type": "array"
+      },
+      {
+        "name": "caseStudyQuote",
+        "type": "text"
+      },
+      {
+        "name": "caseStudyQuoteAuthor",
+        "type": "string"
+      },
+      {
+        "name": "caseStudyCtaLabel",
+        "type": "string",
+        "title": "Case Study CTA Label"
+      },
+      {
+        "name": "caseStudyCtaUrl",
+        "type": "string",
+        "title": "Case Study CTA URL"
+      },
+      {
         "of": [
           {
             "fields": [
@@ -4752,6 +5577,10 @@
         "title": "Bottom Stats (years experience / projects completed)"
       },
       {
+        "name": "workflowTabsHeading",
+        "type": "string"
+      },
+      {
         "of": [
           {
             "fields": [
@@ -4800,6 +5629,59 @@
         "name": "workflowTabs",
         "type": "array",
         "title": "Workflow Tabs (Professional Services style)"
+      },
+      {
+        "name": "faqHeading",
+        "type": "string",
+        "title": "FAQ Heading"
+      },
+      {
+        "name": "introStripBody",
+        "type": "text",
+        "title": "Intro Strip Body (under hero)"
+      },
+      {
+        "name": "lifecycleSectionHeading",
+        "type": "string"
+      },
+      {
+        "name": "lifecycleSectionHeadingAccent",
+        "type": "string"
+      },
+      {
+        "name": "industryTestimonialsHeading",
+        "type": "string"
+      },
+      {
+        "name": "industryTestimonialsHeadingAccent",
+        "type": "string"
+      },
+      {
+        "name": "testimonialsGridHeading",
+        "type": "string"
+      },
+      {
+        "name": "testimonialsGridCtaLabel",
+        "type": "string",
+        "title": "Testimonials Grid CTA Label"
+      },
+      {
+        "name": "testimonialsGridStatValue",
+        "type": "string"
+      },
+      {
+        "name": "testimonialsGridStatSubtitle",
+        "type": "text"
+      },
+      {
+        "name": "testimonialsGridStatCtaLabel",
+        "type": "string",
+        "title": "Testimonials Grid Stat CTA Label"
+      },
+      {
+        "name": "testimonialsGridStatCtaUrl",
+        "type": "string",
+        "title": "Testimonials Grid Stat CTA URL"
       },
       {
         "initialValue": false,
@@ -5480,6 +6362,124 @@
         ],
         "name": "certificateBadges",
         "type": "array"
+      },
+      {
+        "name": "heroEyebrow",
+        "type": "string"
+      },
+      {
+        "initialValue": false,
+        "name": "hideHeroSubheading",
+        "type": "boolean"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "name": "heroVideoUrl",
+        "type": "url",
+        "title": "Hero Video URL"
+      },
+      {
+        "name": "heroVideoTitle",
+        "type": "string"
+      },
+      {
+        "name": "logoCloudDescription",
+        "type": "text"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light",
+              "value": "light"
+            },
+            {
+              "title": "Dark",
+              "value": "dark"
+            }
+          ]
+        },
+        "name": "comparisonTheme",
+        "type": "string",
+        "title": "Comparison Section Theme"
+      },
+      {
+        "initialValue": false,
+        "name": "hideFaqSection",
+        "type": "boolean",
+        "title": "Hide FAQ Section"
+      },
+      {
+        "initialValue": false,
+        "name": "hideCapabilitiesSection",
+        "type": "boolean"
+      },
+      {
+        "name": "capabilitiesEyebrow",
+        "type": "string"
+      },
+      {
+        "name": "capabilitiesHeadingAccent",
+        "type": "string"
+      },
+      {
+        "name": "capabilitiesSubheading",
+        "type": "text"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light",
+              "value": "light"
+            },
+            {
+              "title": "Dark",
+              "value": "dark"
+            }
+          ]
+        },
+        "name": "capabilitiesTheme",
+        "type": "string"
+      },
+      {
+        "name": "capabilitiesColumns",
+        "type": "number"
+      },
+      {
+        "name": "capabilitiesCtaLabel",
+        "type": "string",
+        "title": "Capabilities CTA Label"
+      },
+      {
+        "name": "capabilitiesCtaUrl",
+        "type": "string",
+        "title": "Capabilities CTA URL"
+      },
+      {
+        "name": "heroImageUrl",
+        "type": "string",
+        "title": "Hero Image URL (local fallback, overrides Hero Image when set)"
       }
     ],
     "name": "servicePage",
@@ -5882,6 +6882,35 @@
         "name": "heroHeadingAccent",
         "type": "string",
         "title": "Hero Heading Accent (rendered purple inside heading)"
+      },
+      {
+        "name": "heroHeadingPart1",
+        "type": "string",
+        "title": "Hero Heading Part 1 (before accent)"
+      },
+      {
+        "name": "heroHeadingPart2",
+        "type": "string",
+        "title": "Hero Heading Part 2 (after accent)"
+      },
+      {
+        "name": "heroPartnerBadgesLabel",
+        "type": "string",
+        "title": "Hero Partner Badges Label (e.g. \"Certified partners\")"
+      },
+      {
+        "name": "heroCalloutBadgeLabel",
+        "type": "string",
+        "title": "Hero Callout Badge Label (small uppercase label)"
+      },
+      {
+        "name": "heroCalloutBadgeText",
+        "type": "string"
+      },
+      {
+        "name": "heroCalloutOfficesText",
+        "type": "string",
+        "title": "Hero Callout Offices Text (e.g. \"5 offices · 5 timezones\")"
       },
       {
         "name": "heroSubheading",
@@ -6475,8 +7504,129 @@
         "type": "array"
       },
       {
+        "name": "storyEyebrow",
+        "type": "string",
+        "title": "Story Eyebrow (e.g. \"Our story\")"
+      },
+      {
+        "name": "storyHeading",
+        "type": "string"
+      },
+      {
+        "name": "storyHeadingAccent",
+        "type": "string",
+        "title": "Story Heading Accent (purple)"
+      },
+      {
+        "name": "storyCardEyebrowPrefix",
+        "type": "string",
+        "title": "Story Card Eyebrow Prefix (e.g. \"Why Fruition\")"
+      },
+      {
+        "name": "methodologyEyebrow",
+        "type": "string",
+        "title": "Methodology Eyebrow (e.g. \"Methodology\")"
+      },
+      {
+        "name": "methodologyStepLabel",
+        "type": "string",
+        "title": "Methodology Step Label (e.g. \"STEP\")"
+      },
+      {
         "name": "methodologyHeading",
         "type": "string"
+      },
+      {
+        "name": "approachEyebrow",
+        "type": "string",
+        "title": "Approach Eyebrow (e.g. \"Proven Approach\")"
+      },
+      {
+        "name": "approachHeading",
+        "type": "string"
+      },
+      {
+        "name": "approachHeadingAccent",
+        "type": "string",
+        "title": "Approach Heading Accent (purple)"
+      },
+      {
+        "name": "globalPresenceEyebrow",
+        "type": "string"
+      },
+      {
+        "name": "globalPresenceHeading",
+        "type": "string"
+      },
+      {
+        "name": "globalPresenceHeadingAccent",
+        "type": "string",
+        "title": "Global Presence Heading Accent (purple)"
+      },
+      {
+        "name": "globalPresenceBody",
+        "type": "text"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "city",
+                "type": "string"
+              },
+              {
+                "name": "country",
+                "type": "string"
+              },
+              {
+                "name": "flag",
+                "type": "string",
+                "title": "Flag Emoji"
+              },
+              {
+                "name": "note",
+                "type": "string",
+                "title": "Note (e.g. \"Head office\")"
+              }
+            ],
+            "type": "object",
+            "name": "officeEntry"
+          }
+        ],
+        "name": "offices",
+        "type": "array",
+        "title": "Offices (about-us)"
+      },
+      {
+        "name": "partnerStackEyebrow",
+        "type": "string",
+        "title": "Partner Stack Eyebrow (e.g. \"Our partner ecosystem\")"
+      },
+      {
+        "name": "closingCtaHeading",
+        "type": "string",
+        "title": "Closing CTA Heading"
+      },
+      {
+        "name": "closingCtaBody",
+        "type": "text",
+        "title": "Closing CTA Body"
+      },
+      {
+        "name": "closingCtaPrimaryLabel",
+        "type": "string",
+        "title": "Closing CTA Primary Label"
+      },
+      {
+        "name": "closingCtaSecondaryLabel",
+        "type": "string",
+        "title": "Closing CTA Secondary Label"
+      },
+      {
+        "name": "closingCtaSecondaryUrl",
+        "type": "string",
+        "title": "Closing CTA Secondary URL"
       },
       {
         "of": [
@@ -6805,6 +7955,66 @@
         "initialValue": false,
         "name": "hideHeroSubheading",
         "type": "boolean"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "code",
+                "type": "string",
+                "title": "Region Code"
+              },
+              {
+                "name": "label",
+                "type": "string",
+                "title": "Display Label"
+              },
+              {
+                "name": "emoji",
+                "type": "string"
+              }
+            ],
+            "type": "object",
+            "name": "teamRegion"
+          }
+        ],
+        "name": "teamRegions",
+        "type": "array",
+        "title": "Team Regions (filter chips)"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Paragraph",
+                      "value": "paragraph"
+                    },
+                    {
+                      "title": "Bold",
+                      "value": "bold"
+                    }
+                  ]
+                },
+                "name": "style",
+                "type": "string"
+              },
+              {
+                "name": "text",
+                "type": "text"
+              }
+            ],
+            "type": "object",
+            "name": "heroDescriptionBlock"
+          }
+        ],
+        "name": "heroDescriptionBlocks",
+        "type": "array",
+        "title": "Hero Description Blocks (paragraphs under hero CTA)"
       },
       {
         "options": {
@@ -8834,6 +10044,31 @@
         "title": "Hero Secondary CTA URL"
       },
       {
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "name": "image",
+                "type": "image"
+              },
+              {
+                "name": "alt",
+                "type": "string",
+                "title": "Alt text"
+              }
+            ],
+            "type": "object",
+            "name": "productLogo"
+          }
+        ],
+        "name": "mondayProductLogos",
+        "type": "array",
+        "title": "monday Product Logos Strip (gradient band under hero)"
+      },
+      {
         "name": "logoCloudHeadingPart1",
         "type": "string",
         "title": "Logo Cloud Heading (prefix)"
@@ -9081,6 +10316,11 @@
       {
         "name": "solutionsIntro",
         "type": "text"
+      },
+      {
+        "name": "crmCardCtaUrl",
+        "type": "string",
+        "title": "Synthesised CRM Card — CTA URL"
       },
       {
         "of": [

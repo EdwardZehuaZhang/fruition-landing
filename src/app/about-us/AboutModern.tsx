@@ -25,11 +25,25 @@ interface TextSection {
   body?: string
 }
 
+interface OfficeEntry {
+  _key?: string
+  city?: string
+  country?: string
+  flag?: string
+  note?: string
+}
+
 interface AboutModernProps {
   heroEyebrow?: string
-  heroHeading?: string
+  heroHeadingPart1?: string
+  heroHeadingAccent?: string
+  heroHeadingPart2?: string
   heroSubheading?: string
   heroImage?: SanityImageRef
+  heroPartnerBadgesLabel?: string
+  heroCalloutBadgeLabel?: string
+  heroCalloutBadgeText?: string
+  heroCalloutOfficesText?: string
   primaryCtaLabel?: string
   primaryCtaUrl?: string
   secondaryCtaLabel?: string
@@ -37,27 +51,39 @@ interface AboutModernProps {
   partnerBadges?: PartnerBadge[]
   stats?: StatItem[]
   textSections?: TextSection[]
+  storyEyebrow?: string
+  storyHeading?: string
+  storyHeadingAccent?: string
+  storyCardEyebrowPrefix?: string
   capabilitiesEyebrow?: string
   capabilitiesHeading?: string
   capabilityCards?: CapabilityCard[]
+  methodologyEyebrow?: string
+  methodologyStepLabel?: string
   methodologyHeading?: string
   methodologySteps?: MethodologyStep[]
+  approachEyebrow?: string
+  approachHeading?: string
+  approachHeadingAccent?: string
   comparisonTabs?: ComparisonTab[]
+  globalPresenceEyebrow?: string
+  globalPresenceHeading?: string
+  globalPresenceHeadingAccent?: string
+  globalPresenceBody?: string
+  offices?: OfficeEntry[]
+  partnerStackEyebrow?: string
   faqHeading?: string
   faqTabs?: FaqTab[]
   calendlyHeading?: string
   calendlySubheading?: string
   calendlyUrl: string
+  closingCtaHeading?: string
+  closingCtaBody?: string
+  closingCtaPrimaryLabel?: string
+  closingCtaSecondaryLabel?: string
+  closingCtaSecondaryUrl?: string
   siteSettings?: SiteSettingsData | null
 }
-
-const OFFICES = [
-  { city: "Sydney", country: "Australia", flag: "🇦🇺", note: "Head office" },
-  { city: "New York", country: "United States", flag: "🇺🇸" },
-  { city: "London", country: "United Kingdom", flag: "🇬🇧" },
-  { city: "Singapore", country: "Singapore", flag: "🇸🇬" },
-  { city: "Bengaluru", country: "India", flag: "🇮🇳" },
-]
 
 function safeUrl(ref: SanityImageRef, width = 1600): string | null {
   if (!ref?.asset?._ref) return null
@@ -74,7 +100,9 @@ function badgeUrl(b: PartnerBadge): string | null {
 
 function HeroSection({
   eyebrow,
-  heading,
+  headingPart1,
+  headingAccent,
+  headingPart2,
   subheading,
   heroImage,
   primaryCtaLabel,
@@ -82,17 +110,27 @@ function HeroSection({
   secondaryCtaLabel,
   secondaryCtaUrl,
   partnerBadges = [],
-}: Pick<
-  AboutModernProps,
-  | "heroEyebrow"
-  | "heroSubheading"
-  | "heroImage"
-  | "primaryCtaLabel"
-  | "primaryCtaUrl"
-  | "secondaryCtaLabel"
-  | "secondaryCtaUrl"
-  | "partnerBadges"
-> & { heading?: string; eyebrow?: string; subheading?: string }) {
+  partnerBadgesLabel,
+  calloutBadgeLabel,
+  calloutBadgeText,
+  calloutOfficesText,
+}: {
+  eyebrow?: string
+  headingPart1?: string
+  headingAccent?: string
+  headingPart2?: string
+  subheading?: string
+  heroImage?: SanityImageRef
+  primaryCtaLabel?: string
+  primaryCtaUrl?: string
+  secondaryCtaLabel?: string
+  secondaryCtaUrl?: string
+  partnerBadges?: PartnerBadge[]
+  partnerBadgesLabel?: string
+  calloutBadgeLabel?: string
+  calloutBadgeText?: string
+  calloutOfficesText?: string
+}) {
   const imgUrl = safeUrl(heroImage, 1800)
   const featured = partnerBadges.slice(0, 4)
 
@@ -153,18 +191,23 @@ function HeroSection({
                 color: "var(--dark-bg)",
               }}
             >
-              The team behind{" "}
-              <span
-                style={{
-                  background: "linear-gradient(135deg, #8015e8 0%, #4674FB 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                500+ monday.com
-              </span>{" "}
-              transformations.
+              {headingPart1}
+              {headingAccent && (
+                <>
+                  {" "}
+                  <span
+                    style={{
+                      background: "linear-gradient(135deg, #8015e8 0%, #4674FB 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    {headingAccent}
+                  </span>
+                </>
+              )}
+              {headingPart2 && <> {headingPart2}</>}
             </h1>
 
             {subheading && (
@@ -186,9 +229,11 @@ function HeroSection({
             </div>
 
             <div className="flex flex-wrap items-center" style={{ marginTop: 36, gap: 28 }}>
-              <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: 0.8, textTransform: "uppercase", color: "#686b82" }}>
-                Certified partners
-              </span>
+              {partnerBadgesLabel && (
+                <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: 0.8, textTransform: "uppercase", color: "#686b82" }}>
+                  {partnerBadgesLabel}
+                </span>
+              )}
               <div className="flex flex-wrap items-center" style={{ gap: 22 }}>
                 {featured.map((b, i) => {
                   const u = badgeUrl(b)
@@ -252,71 +297,79 @@ function HeroSection({
                 )}
               </div>
 
-              <div
-                className="absolute"
-                style={{
-                  right: -16,
-                  bottom: -22,
-                  background: "#ffffff",
-                  borderRadius: 18,
-                  padding: "14px 18px",
-                  boxShadow: "0 18px 40px -12px rgba(16, 0, 58, 0.25)",
-                  border: "1px solid rgba(128, 21, 232, 0.18)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                }}
-              >
+              {(calloutBadgeLabel || calloutBadgeText) && (
                 <div
+                  className="absolute"
                   style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: 9999,
-                    background: "#10b981",
-                    boxShadow: "0 0 0 4px rgba(16, 185, 129, 0.16)",
+                    right: -16,
+                    bottom: -22,
+                    background: "#ffffff",
+                    borderRadius: 18,
+                    padding: "14px 18px",
+                    boxShadow: "0 18px 40px -12px rgba(16, 0, 58, 0.25)",
+                    border: "1px solid rgba(128, 21, 232, 0.18)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
                   }}
-                />
-                <div>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: "#686b82", letterSpacing: 0.6, textTransform: "uppercase" }}>
-                    Platinum partner
-                  </div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: "var(--dark-bg)" }}>
-                    monday.com · since 2015
+                >
+                  <div
+                    style={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: 9999,
+                      background: "#10b981",
+                      boxShadow: "0 0 0 4px rgba(16, 185, 129, 0.16)",
+                    }}
+                  />
+                  <div>
+                    {calloutBadgeLabel && (
+                      <div style={{ fontSize: 11, fontWeight: 600, color: "#686b82", letterSpacing: 0.6, textTransform: "uppercase" }}>
+                        {calloutBadgeLabel}
+                      </div>
+                    )}
+                    {calloutBadgeText && (
+                      <div style={{ fontSize: 14, fontWeight: 600, color: "var(--dark-bg)" }}>
+                        {calloutBadgeText}
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
+              )}
 
-              <div
-                className="absolute hidden md:flex"
-                style={{
-                  left: -22,
-                  top: 28,
-                  background: "#ffffff",
-                  borderRadius: 16,
-                  padding: "10px 14px",
-                  boxShadow: "0 18px 40px -12px rgba(16, 0, 58, 0.2)",
-                  border: "1px solid rgba(0,0,0,0.06)",
-                  alignItems: "center",
-                  gap: 10,
-                }}
-              >
-                <div style={{ display: "flex", marginRight: 2 }}>
-                  {["#8015e8", "#4674FB", "#ec4899"].map((c, i) => (
-                    <span
-                      key={i}
-                      style={{
-                        width: 24,
-                        height: 24,
-                        borderRadius: 9999,
-                        background: c,
-                        border: "2px solid #fff",
-                        marginLeft: i ? -8 : 0,
-                      }}
-                    />
-                  ))}
+              {calloutOfficesText && (
+                <div
+                  className="absolute hidden md:flex"
+                  style={{
+                    left: -22,
+                    top: 28,
+                    background: "#ffffff",
+                    borderRadius: 16,
+                    padding: "10px 14px",
+                    boxShadow: "0 18px 40px -12px rgba(16, 0, 58, 0.2)",
+                    border: "1px solid rgba(0,0,0,0.06)",
+                    alignItems: "center",
+                    gap: 10,
+                  }}
+                >
+                  <div style={{ display: "flex", marginRight: 2 }}>
+                    {["#8015e8", "#4674FB", "#ec4899"].map((c, i) => (
+                      <span
+                        key={i}
+                        style={{
+                          width: 24,
+                          height: 24,
+                          borderRadius: 9999,
+                          background: c,
+                          border: "2px solid #fff",
+                          marginLeft: i ? -8 : 0,
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "var(--dark-bg)" }}>{calloutOfficesText}</div>
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: "var(--dark-bg)" }}>5 offices · 5 timezones</div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -394,31 +447,52 @@ function StatsBand({ stats }: { stats: StatItem[] }) {
   )
 }
 
-function StorySection({ sections }: { sections: TextSection[] }) {
+function StorySection({
+  sections,
+  eyebrow,
+  heading,
+  headingAccent,
+  cardEyebrowPrefix,
+}: {
+  sections: TextSection[]
+  eyebrow?: string
+  heading?: string
+  headingAccent?: string
+  cardEyebrowPrefix?: string
+}) {
   if (!sections?.length) return null
   return (
     <section style={{ paddingTop: 72, paddingBottom: 72, background: "#fff" }}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1100 }}>
         <div className="text-center" style={{ marginBottom: 56 }}>
-          <span
-            className="inline-flex items-center"
-            style={{
-              padding: "4px 12px",
-              borderRadius: 9999,
-              background: "rgba(128, 21, 232, 0.08)",
-              color: "var(--purple-dark)",
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: 0.8,
-              textTransform: "uppercase",
-            }}
-          >
-            Our story
-          </span>
-          <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--dark-bg)" }}>
-            Built to make complex business operations{" "}
-            <span style={{ color: "var(--purple-primary)" }}>actually run smoothly.</span>
-          </h2>
+          {eyebrow && (
+            <span
+              className="inline-flex items-center"
+              style={{
+                padding: "4px 12px",
+                borderRadius: 9999,
+                background: "rgba(128, 21, 232, 0.08)",
+                color: "var(--purple-dark)",
+                fontSize: 12,
+                fontWeight: 700,
+                letterSpacing: 0.8,
+                textTransform: "uppercase",
+              }}
+            >
+              {eyebrow}
+            </span>
+          )}
+          {(heading || headingAccent) && (
+            <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--dark-bg)" }}>
+              {heading}
+              {headingAccent && (
+                <>
+                  {" "}
+                  <span style={{ color: "var(--purple-primary)" }}>{headingAccent}</span>
+                </>
+              )}
+            </h2>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 32 }}>
@@ -457,7 +531,8 @@ function StorySection({ sections }: { sections: TextSection[] }) {
                   marginBottom: 14,
                 }}
               >
-                0{i + 1} · Why Fruition
+                0{i + 1}
+                {cardEyebrowPrefix && <> · {cardEyebrowPrefix}</>}
               </div>
               <h3 className="text-section-h3" style={{ color: "var(--dark-bg)" }}>
                 {s.heading}
@@ -526,7 +601,7 @@ function ChallengesBento({
                 textTransform: "uppercase",
               }}
             >
-              {eyebrow || "What we solve"}
+              {eyebrow}
             </span>
           )}
           <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--dark-bg)" }}>
@@ -625,9 +700,13 @@ function ChallengesBento({
 }
 
 function MethodologyTimeline({
+  eyebrow,
+  stepLabel,
   heading,
   steps,
 }: {
+  eyebrow?: string
+  stepLabel?: string
   heading?: string
   steps: MethodologyStep[]
 }) {
@@ -654,20 +733,22 @@ function MethodologyTimeline({
       />
       <div className="relative mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1100 }}>
         <div className="text-center" style={{ marginBottom: 64 }}>
-          <span
-            style={{
-              padding: "4px 12px",
-              borderRadius: 9999,
-              background: "rgba(255,255,255,0.1)",
-              color: "#ba83f0",
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: 0.8,
-              textTransform: "uppercase",
-            }}
-          >
-            Methodology
-          </span>
+          {eyebrow && (
+            <span
+              style={{
+                padding: "4px 12px",
+                borderRadius: 9999,
+                background: "rgba(255,255,255,0.1)",
+                color: "#ba83f0",
+                fontSize: 12,
+                fontWeight: 700,
+                letterSpacing: 0.8,
+                textTransform: "uppercase",
+              }}
+            >
+              {eyebrow}
+            </span>
+          )}
           <h2 className="text-section-h2" style={{ marginTop: 16 }}>
             {heading}
           </h2>
@@ -718,7 +799,7 @@ function MethodologyTimeline({
                         color: "#ba83f0",
                       }}
                     >
-                      STEP {step.number}
+                      {stepLabel} {step.number}
                     </div>
                     <h3
                       className="text-card-title"
@@ -770,7 +851,17 @@ function MethodologyTimeline({
   )
 }
 
-function ApproachTabs({ tabs }: { tabs: ComparisonTab[] }) {
+function ApproachTabs({
+  tabs,
+  eyebrow,
+  heading,
+  headingAccent,
+}: {
+  tabs: ComparisonTab[]
+  eyebrow?: string
+  heading?: string
+  headingAccent?: string
+}) {
   const [active, setActive] = useState(0)
   if (!tabs?.length) return null
   const current = tabs[active]
@@ -778,24 +869,33 @@ function ApproachTabs({ tabs }: { tabs: ComparisonTab[] }) {
     <section style={{ paddingTop: 96, paddingBottom: 96, background: "#fff" }}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
         <div className="text-center" style={{ marginBottom: 40 }}>
-          <span
-            style={{
-              padding: "4px 12px",
-              borderRadius: 9999,
-              background: "rgba(128, 21, 232, 0.08)",
-              color: "var(--purple-dark)",
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: 0.8,
-              textTransform: "uppercase",
-            }}
-          >
-            Proven Approach
-          </span>
-          <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--dark-bg)" }}>
-            500+ teams transformed.{" "}
-            <span style={{ color: "var(--purple-primary)" }}>Proven efficiency gains.</span>
-          </h2>
+          {eyebrow && (
+            <span
+              style={{
+                padding: "4px 12px",
+                borderRadius: 9999,
+                background: "rgba(128, 21, 232, 0.08)",
+                color: "var(--purple-dark)",
+                fontSize: 12,
+                fontWeight: 700,
+                letterSpacing: 0.8,
+                textTransform: "uppercase",
+              }}
+            >
+              {eyebrow}
+            </span>
+          )}
+          {(heading || headingAccent) && (
+            <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--dark-bg)" }}>
+              {heading}
+              {headingAccent && (
+                <>
+                  {" "}
+                  <span style={{ color: "var(--purple-primary)" }}>{headingAccent}</span>
+                </>
+              )}
+            </h2>
+          )}
         </div>
 
         <div
@@ -882,41 +982,65 @@ function ApproachTabs({ tabs }: { tabs: ComparisonTab[] }) {
   )
 }
 
-function GlobalPresence() {
+function GlobalPresence({
+  eyebrow,
+  heading,
+  headingAccent,
+  body,
+  offices,
+}: {
+  eyebrow?: string
+  heading?: string
+  headingAccent?: string
+  body?: string
+  offices: OfficeEntry[]
+}) {
+  if (!offices?.length) return null
   return (
     <section style={{ paddingTop: 96, paddingBottom: 96, background: "linear-gradient(180deg, #ecf1fc 0%, #ffffff 100%)" }}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
         <div className="text-center" style={{ marginBottom: 56 }}>
-          <span
-            style={{
-              padding: "4px 12px",
-              borderRadius: 9999,
-              background: "rgba(128, 21, 232, 0.08)",
-              color: "var(--purple-dark)",
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: 0.8,
-              textTransform: "uppercase",
-            }}
-          >
-            Global presence
-          </span>
-          <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--dark-bg)" }}>
-            Five offices.{" "}
-            <span style={{ color: "var(--purple-primary)" }}>One delivery standard.</span>
-          </h2>
-          <p
-            className="text-body-lead"
-            style={{ marginTop: 12, color: "#52556b", maxWidth: 640, marginLeft: "auto", marginRight: "auto" }}
-          >
-            Local consultants across Australia, the UK, the US, Southeast Asia and India — sharing a single playbook so every rollout feels first-class.
-          </p>
+          {eyebrow && (
+            <span
+              style={{
+                padding: "4px 12px",
+                borderRadius: 9999,
+                background: "rgba(128, 21, 232, 0.08)",
+                color: "var(--purple-dark)",
+                fontSize: 12,
+                fontWeight: 700,
+                letterSpacing: 0.8,
+                textTransform: "uppercase",
+              }}
+            >
+              {eyebrow}
+            </span>
+          )}
+          {(heading || headingAccent) && (
+            <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--dark-bg)" }}>
+              {heading}
+              {headingAccent && (
+                <>
+                  {" "}
+                  <span style={{ color: "var(--purple-primary)" }}>{headingAccent}</span>
+                </>
+              )}
+            </h2>
+          )}
+          {body && (
+            <p
+              className="text-body-lead"
+              style={{ marginTop: 12, color: "#52556b", maxWidth: 640, marginLeft: "auto", marginRight: "auto" }}
+            >
+              {body}
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-5" style={{ gap: 16 }}>
-          {OFFICES.map((o) => (
+          {offices.map((o, i) => (
             <div
-              key={o.city}
+              key={o._key || o.city || i}
               style={{
                 padding: 22,
                 borderRadius: 18,
@@ -966,24 +1090,26 @@ function GlobalPresence() {
   )
 }
 
-function PartnerStack({ badges }: { badges: PartnerBadge[] }) {
+function PartnerStack({ badges, eyebrow }: { badges: PartnerBadge[]; eyebrow?: string }) {
   if (!badges?.length) return null
   return (
     <section style={{ paddingTop: 64, paddingBottom: 64, background: "#fff" }}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
-        <div className="text-center" style={{ marginBottom: 32 }}>
-          <div
-            style={{
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: 1,
-              textTransform: "uppercase",
-              color: "#686b82",
-            }}
-          >
-            Our partner ecosystem
+        {eyebrow && (
+          <div className="text-center" style={{ marginBottom: 32 }}>
+            <div
+              style={{
+                fontSize: 12,
+                fontWeight: 700,
+                letterSpacing: 1,
+                textTransform: "uppercase",
+                color: "#686b82",
+              }}
+            >
+              {eyebrow}
+            </div>
           </div>
-        </div>
+        )}
         <div
           className="flex flex-wrap items-center justify-center"
           style={{
@@ -1019,7 +1145,21 @@ function PartnerStack({ badges }: { badges: PartnerBadge[] }) {
   )
 }
 
-function ClosingCta({ calendlyUrl }: { calendlyUrl: string }) {
+function ClosingCta({
+  calendlyUrl,
+  heading,
+  body,
+  primaryLabel,
+  secondaryLabel,
+  secondaryUrl,
+}: {
+  calendlyUrl: string
+  heading?: string
+  body?: string
+  primaryLabel?: string
+  secondaryLabel?: string
+  secondaryUrl?: string
+}) {
   return (
     <section style={{ paddingTop: 96, paddingBottom: 96, background: "#fff" }}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1100 }}>
@@ -1045,39 +1185,47 @@ function ClosingCta({ calendlyUrl }: { calendlyUrl: string }) {
             }}
           />
           <div className="relative">
-            <h2
-              className="text-section-h2"
-              style={{ color: "#fff", maxWidth: 720, margin: "0 auto" }}
-            >
-              Ready to put a Platinum partner on your team?
-            </h2>
-            <p
-              className="text-body-lead"
-              style={{
-                marginTop: 16,
-                color: "rgba(255,255,255,0.88)",
-                maxWidth: 560,
-                marginLeft: "auto",
-                marginRight: "auto",
-              }}
-            >
-              Book a 30-min consultation with a Fruition consultant. Walk away with a clear scope, timeline and ROI estimate.
-            </p>
-            <div className="flex flex-wrap justify-center" style={{ marginTop: 28, gap: 14 }}>
-              <CtaButton
-                href={calendlyUrl}
-                label="Schedule a consultation"
-                variant="onDarkPrimary"
-              />
-              <Link
-                href="/customer-testimonials"
-                className="cta-btn cta-btn-on-dark-outline"
+            {heading && (
+              <h2
+                className="text-section-h2"
+                style={{ color: "#fff", maxWidth: 720, margin: "0 auto" }}
               >
-                <span className="cta-btn-icon" aria-hidden>
-                  ▶️
-                </span>
-                <span className="cta-btn-label">See client stories</span>
-              </Link>
+                {heading}
+              </h2>
+            )}
+            {body && (
+              <p
+                className="text-body-lead"
+                style={{
+                  marginTop: 16,
+                  color: "rgba(255,255,255,0.88)",
+                  maxWidth: 560,
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+              >
+                {body}
+              </p>
+            )}
+            <div className="flex flex-wrap justify-center" style={{ marginTop: 28, gap: 14 }}>
+              {primaryLabel && (
+                <CtaButton
+                  href={calendlyUrl}
+                  label={primaryLabel}
+                  variant="onDarkPrimary"
+                />
+              )}
+              {secondaryLabel && secondaryUrl && (
+                <Link
+                  href={secondaryUrl}
+                  className="cta-btn cta-btn-on-dark-outline"
+                >
+                  <span className="cta-btn-icon" aria-hidden>
+                    ▶️
+                  </span>
+                  <span className="cta-btn-label">{secondaryLabel}</span>
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -1089,9 +1237,15 @@ function ClosingCta({ calendlyUrl }: { calendlyUrl: string }) {
 export default function AboutModern(props: AboutModernProps) {
   const {
     heroEyebrow,
-    heroHeading,
+    heroHeadingPart1,
+    heroHeadingAccent,
+    heroHeadingPart2,
     heroSubheading,
     heroImage,
+    heroPartnerBadgesLabel,
+    heroCalloutBadgeLabel,
+    heroCalloutBadgeText,
+    heroCalloutOfficesText,
     primaryCtaLabel,
     primaryCtaUrl,
     secondaryCtaLabel,
@@ -1099,17 +1253,37 @@ export default function AboutModern(props: AboutModernProps) {
     partnerBadges = [],
     stats = [],
     textSections = [],
+    storyEyebrow,
+    storyHeading,
+    storyHeadingAccent,
+    storyCardEyebrowPrefix,
     capabilitiesEyebrow,
     capabilitiesHeading,
     capabilityCards = [],
+    methodologyEyebrow,
+    methodologyStepLabel,
     methodologyHeading,
     methodologySteps = [],
+    approachEyebrow,
+    approachHeading,
+    approachHeadingAccent,
     comparisonTabs = [],
+    globalPresenceEyebrow,
+    globalPresenceHeading,
+    globalPresenceHeadingAccent,
+    globalPresenceBody,
+    offices = [],
+    partnerStackEyebrow,
     faqHeading,
     faqTabs = [],
     calendlyHeading,
     calendlySubheading,
     calendlyUrl,
+    closingCtaHeading,
+    closingCtaBody,
+    closingCtaPrimaryLabel,
+    closingCtaSecondaryLabel,
+    closingCtaSecondaryUrl,
     siteSettings,
   } = props
 
@@ -1121,30 +1295,58 @@ export default function AboutModern(props: AboutModernProps) {
   return (
     <div>
       <HeroSection
-        eyebrow={heroEyebrow || "About Fruition"}
-        heading={heroHeading}
+        eyebrow={heroEyebrow}
+        headingPart1={heroHeadingPart1}
+        headingAccent={heroHeadingAccent}
+        headingPart2={heroHeadingPart2}
         subheading={heroSubheading}
         heroImage={heroImage}
-        primaryCtaLabel={primaryCtaLabel || "🚀 Schedule a Consultation"}
+        primaryCtaLabel={primaryCtaLabel}
         primaryCtaUrl={primaryCtaUrl || calendlyUrl}
-        secondaryCtaLabel={secondaryCtaLabel || "▶️ Meet the team"}
-        secondaryCtaUrl={secondaryCtaUrl || "/fruition-team"}
+        secondaryCtaLabel={secondaryCtaLabel}
+        secondaryCtaUrl={secondaryCtaUrl}
         partnerBadges={allBadges}
+        partnerBadgesLabel={heroPartnerBadgesLabel}
+        calloutBadgeLabel={heroCalloutBadgeLabel}
+        calloutBadgeText={heroCalloutBadgeText}
+        calloutOfficesText={heroCalloutOfficesText}
       />
       <StatsBand stats={stats} />
-      <StorySection sections={textSections} />
+      <StorySection
+        sections={textSections}
+        eyebrow={storyEyebrow}
+        heading={storyHeading}
+        headingAccent={storyHeadingAccent}
+        cardEyebrowPrefix={storyCardEyebrowPrefix}
+      />
       <ChallengesBento
-        eyebrow={capabilitiesEyebrow || "What we solve"}
+        eyebrow={capabilitiesEyebrow}
         heading={capabilitiesHeading}
         cards={capabilityCards}
       />
-      <MethodologyTimeline heading={methodologyHeading} steps={methodologySteps} />
-      <ApproachTabs tabs={comparisonTabs} />
-      <GlobalPresence />
-      <PartnerStack badges={allBadges} />
-      {faqTabs.length > 0 && (
+      <MethodologyTimeline
+        eyebrow={methodologyEyebrow}
+        stepLabel={methodologyStepLabel}
+        heading={methodologyHeading}
+        steps={methodologySteps}
+      />
+      <ApproachTabs
+        tabs={comparisonTabs}
+        eyebrow={approachEyebrow}
+        heading={approachHeading}
+        headingAccent={approachHeadingAccent}
+      />
+      <GlobalPresence
+        eyebrow={globalPresenceEyebrow}
+        heading={globalPresenceHeading}
+        headingAccent={globalPresenceHeadingAccent}
+        body={globalPresenceBody}
+        offices={offices}
+      />
+      <PartnerStack badges={allBadges} eyebrow={partnerStackEyebrow} />
+      {faqTabs.length > 0 && faqHeading && (
         <FaqAccordion
-          heading={faqHeading || "About Fruition · FAQ"}
+          heading={faqHeading}
           tabs={faqTabs}
         />
       )}
@@ -1153,7 +1355,14 @@ export default function AboutModern(props: AboutModernProps) {
         subheading={calendlySubheading}
         calendlyUrl={calendlyUrl}
       />
-      <ClosingCta calendlyUrl={calendlyUrl} />
+      <ClosingCta
+        calendlyUrl={calendlyUrl}
+        heading={closingCtaHeading}
+        body={closingCtaBody}
+        primaryLabel={closingCtaPrimaryLabel}
+        secondaryLabel={closingCtaSecondaryLabel}
+        secondaryUrl={closingCtaSecondaryUrl}
+      />
     </div>
   )
 }

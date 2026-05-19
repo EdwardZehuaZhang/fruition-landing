@@ -41,6 +41,12 @@ async function main() {
   const discoverBadge = heroCertificationBadge
   const joinSectionBadge = await uploadLocalImage('/images/badge-forrester.png')
 
+  // Hero "Monday Partners" row image (shown below subheading)
+  const heroMondayPartnersImage = await uploadLocalImage('/images/monday-partners.avif')
+
+  // Empower section image (image-left layout)
+  const empowerImage = await uploadLocalImage('/images/empower-monday-training.avif')
+
   console.log('— Downloading training service card images from live site…')
   const customizationImage = await uploadImageFromUrl(
     SERVICE_IMAGE_URLS.customization,
@@ -366,6 +372,7 @@ async function main() {
       'Expert Workflow Training delivered by a certified monday partner.\nOur training and adoption programs helps you onboard and and adopt monday.com up to 10x faster.',
     heroImage: undefined,
     heroCertificationBadge,
+    heroMondayPartnersImage,
     heroPrimaryCtaLabel: '\ud83d\ude80 Book a monday.com training consultation',
     heroPrimaryCtaUrl: CALENDLY_URL,
     heroSecondaryCtaLabel: undefined,
@@ -391,6 +398,7 @@ async function main() {
     empowerHeading: 'Empower with monday.com training',
     empowerBody:
       'Make sure all key stakeholders get the onboarding they need to feel comfortable using and building on the platform day in and day out.\n\nSo no one is so overwhelmed they decide not to touch it\u2013or worse, revert to a combination of spreadsheets.',
+    empowerImage,
 
     // Training services
     servicesHeading:

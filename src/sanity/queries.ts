@@ -123,6 +123,7 @@ const PAGE_FIELDS = `
 
   // Industry/service/partnership page extras (per-page hardcoded data)
   bottomStats,
+  workflowTabsHeading,
   workflowTabs,
   certificateBadges,
   provenStats,
@@ -130,7 +131,16 @@ const PAGE_FIELDS = `
   lifecycleStages,
   fitReasons,
   industryTestimonials,
+  whyBestHeading,
   whyBestCards,
+  caseStudyBlockHeading,
+  caseStudyVideoUrl,
+  caseStudyVideoTitle,
+  caseStudyStats,
+  caseStudyQuote,
+  caseStudyQuoteAuthor,
+  caseStudyCtaLabel,
+  caseStudyCtaUrl,
   // Finance / solution-page specifics
   whyMondayItems,
   featuresItems,
@@ -250,6 +260,30 @@ const PAGE_FIELDS = `
   bottomVideoTitle,
   bottomFeatureSectionHeadingPart1,
   bottomFeatureSectionHeadingAccent,
+  beforeAfterHeading,
+
+  // Inline section copy (industry pages mostly)
+  introStripBody,
+  lifecycleSectionHeading,
+  lifecycleSectionHeadingAccent,
+  industryTestimonialsHeading,
+  industryTestimonialsHeadingAccent,
+  testimonialsGridHeading,
+  testimonialsGridCtaLabel,
+  testimonialsGridStatValue,
+  testimonialsGridStatSubtitle,
+  testimonialsGridStatCtaLabel,
+  testimonialsGridStatCtaUrl,
+
+  // Team Grid section
+  teamGridHeading,
+  teamGridSubheading,
+  teamGridCtaLabel,
+  teamGridCtaUrl,
+
+  // /fruition-team region filter chips
+  teamRegions,
+  heroDescriptionBlocks,
 
   // Text content
   textContentSections,
@@ -311,7 +345,11 @@ const PAGE_FIELDS = `
   hideFaqSection,
   hideCapabilitiesSection,
   hideCaseStudyCardsSection,
-  hideSolutionCardsSection
+  hideSolutionCardsSection,
+
+  // Partnership-page join CTA (button under joinStats)
+  joinCtaLabel,
+  joinCtaUrl
 `
 
 export async function getSolutionPageBySlug(slug: string) {
@@ -485,13 +523,39 @@ export async function getPageBySlug(slug: string) {
   return client.fetch(
     `*[_type == "page" && slug.current == $slug][0]{
       _id, title, "slug": slug.current, seoTitle, seoDescription,
-      heroEyebrow, heroHeading, heroHeadingAccent, heroSubheading, heroBody, heroImage,
+      heroEyebrow, heroHeading, heroHeadingAccent,
+      heroHeadingPart1, heroHeadingPart2,
+      heroPartnerBadgesLabel,
+      heroCalloutBadgeLabel, heroCalloutBadgeText, heroCalloutOfficesText,
+      heroSubheading, heroBody, heroImage,
       heroLocalVideoSrc,
       heroStats,
       primaryCtaLabel, primaryCtaUrl,
       secondaryCtaLabel, secondaryCtaUrl,
       heroVideoUrl, heroVideoTitle,
       body, pageType,
+
+      // Story section (about-us)
+      storyEyebrow, storyHeading, storyHeadingAccent, storyCardEyebrowPrefix,
+
+      // Approach tabs (about-us)
+      approachEyebrow, approachHeading, approachHeadingAccent,
+
+      // Methodology extras
+      methodologyEyebrow, methodologyStepLabel,
+
+      // Global presence (about-us)
+      globalPresenceEyebrow, globalPresenceHeading, globalPresenceHeadingAccent,
+      globalPresenceBody,
+      offices[]{ _key, city, country, flag, note },
+
+      // Partner stack (about-us)
+      partnerStackEyebrow,
+
+      // Closing CTA (about-us)
+      closingCtaHeading, closingCtaBody,
+      closingCtaPrimaryLabel,
+      closingCtaSecondaryLabel, closingCtaSecondaryUrl,
 
       // Capabilities grid
       capabilitiesEyebrow, capabilitiesHeading, capabilitiesHeadingAccent,
@@ -520,7 +584,9 @@ export async function getPageBySlug(slug: string) {
       comparisonHeading, comparisonSubheading, comparisonTabs,
       methodologyHeading, methodologySteps,
       calendlyHeading, calendlySubheading,
-      faqTabs,
+      faqHeading, faqTabs,
+      teamRegions[]{ _key, code, label, emoji },
+      heroDescriptionBlocks[]{ _key, style, text },
       joinHeadingPart1, joinHeadingAccent, joinHeadingPart2,
       joinSubheading, joinStats, joinFootnote,
       logoCloudHeadingPart1, logoCloudHeadingAccent, logoCloudDescription,

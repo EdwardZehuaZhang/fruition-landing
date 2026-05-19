@@ -33,7 +33,7 @@ export default async function Page() {
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
       faqTabs={groupFaqsIntoTabs(centralFaqs)}
-      teamMembers={mergeTeamMembers(teamMembers || [])}
+      teamMembers={mergeTeamMembers(teamMembers || [], siteSettings?.excludedTeamMemberNames || [])}
     />
   )
 }

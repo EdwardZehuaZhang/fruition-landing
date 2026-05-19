@@ -236,5 +236,29 @@ export default {
         ],
       }],
     },
+
+    // ── Schemaless fields the frontend reads via GROQ but were not
+    //    declared on servicePage. Surfaced via Studio so editors can
+    //    fill / override values.
+    { name: 'heroEyebrow', title: 'Hero Eyebrow', type: 'string' },
+    { name: 'hideHeroSubheading', title: 'Hide Hero Subheading', type: 'boolean', initialValue: false },
+    { name: 'heroVideoUrl', title: 'Hero Video URL', type: 'url' },
+    { name: 'heroVideoTitle', title: 'Hero Video Title', type: 'string' },
+    { name: 'logoCloudDescription', title: 'Logo Cloud Description', type: 'text' },
+    { name: 'comparisonTheme', title: 'Comparison Section Theme', type: 'string',
+      options: { list: [{ title: 'Light', value: 'light' }, { title: 'Dark', value: 'dark' }] } },
+    { name: 'hideFaqSection', title: 'Hide FAQ Section', type: 'boolean', initialValue: false },
+    { name: 'hideCapabilitiesSection', title: 'Hide Capabilities Section', type: 'boolean', initialValue: false },
+    { name: 'capabilitiesEyebrow', title: 'Capabilities Eyebrow', type: 'string' },
+    { name: 'capabilitiesHeadingAccent', title: 'Capabilities Heading Accent', type: 'string' },
+    { name: 'capabilitiesSubheading', title: 'Capabilities Subheading', type: 'text' },
+    { name: 'capabilitiesTheme', title: 'Capabilities Theme', type: 'string',
+      options: { list: [{ title: 'Light', value: 'light' }, { title: 'Dark', value: 'dark' }] } },
+    { name: 'capabilitiesColumns', title: 'Capabilities Columns', type: 'number' },
+    { name: 'capabilitiesCtaLabel', title: 'Capabilities CTA Label', type: 'string' },
+    { name: 'capabilitiesCtaUrl', title: 'Capabilities CTA URL', type: 'string' },
+
+    // Hero image local fallback (preserves GIF animation; image pipeline can strip it)
+    { name: 'heroImageUrl', title: 'Hero Image URL (local fallback, overrides Hero Image when set)', type: 'string' },
   ],
 }

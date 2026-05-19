@@ -18,11 +18,6 @@ interface AiStrategyContentProps {
   faqTabs?: FaqTab[]
 }
 
-// Hardcoded fallbacks — used only if Sanity field is empty so the page
-// renders identically before/after migration.
-const AI_LOGO_CLOUD_PART1 = "Clients who have used our "
-const AI_LOGO_CLOUD_ACCENT = "monday.com consulting services"
-
 export default function AiStrategyContent({
   page,
   siteSettings,
@@ -45,7 +40,7 @@ export default function AiStrategyContent({
         headingAccent=""
         subheading={page.hideHeroSubheading ? undefined : page.heroSubheading}
         heroImage={page.heroImage}
-        heroImageUrl="/images/ai-strategy-hero.gif"
+        heroImageUrl={page.heroImageUrl}
         heroImageContain
         heroImageMaxHeight={520}
         certificationBadge={siteSettings?.badgeCertifications}
@@ -61,8 +56,8 @@ export default function AiStrategyContent({
       />
 
       <LogoCloudMarquee
-        headingPart1={page.logoCloudHeadingPart1 || AI_LOGO_CLOUD_PART1}
-        headingAccent={page.logoCloudHeadingAccent ?? AI_LOGO_CLOUD_ACCENT}
+        headingPart1={page.logoCloudHeadingPart1}
+        headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}
         logos={siteSettings?.carouselLogos || []}
       />

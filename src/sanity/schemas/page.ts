@@ -10,6 +10,12 @@ export default {
     { name: 'heroEyebrow', title: 'Hero Eyebrow (small label above heading, e.g. "Careers")', type: 'string' },
     { name: 'heroHeading', title: 'Hero Heading', type: 'string' },
     { name: 'heroHeadingAccent', title: 'Hero Heading Accent (rendered purple inside heading)', type: 'string' },
+    { name: 'heroHeadingPart1', title: 'Hero Heading Part 1 (before accent)', type: 'string' },
+    { name: 'heroHeadingPart2', title: 'Hero Heading Part 2 (after accent)', type: 'string' },
+    { name: 'heroPartnerBadgesLabel', title: 'Hero Partner Badges Label (e.g. "Certified partners")', type: 'string' },
+    { name: 'heroCalloutBadgeLabel', title: 'Hero Callout Badge Label (small uppercase label)', type: 'string' },
+    { name: 'heroCalloutBadgeText', title: 'Hero Callout Badge Text', type: 'string' },
+    { name: 'heroCalloutOfficesText', title: 'Hero Callout Offices Text (e.g. "5 offices · 5 timezones")', type: 'string' },
     { name: 'heroSubheading', title: 'Hero Subheading', type: 'text' },
     { name: 'heroImage', title: 'Hero Image', type: 'image', options: { hotspot: true } },
     {
@@ -216,8 +222,52 @@ export default {
       }],
     },
 
+    // Story section (about-us)
+    { name: 'storyEyebrow', title: 'Story Eyebrow (e.g. "Our story")', type: 'string' },
+    { name: 'storyHeading', title: 'Story Heading', type: 'string' },
+    { name: 'storyHeadingAccent', title: 'Story Heading Accent (purple)', type: 'string' },
+    { name: 'storyCardEyebrowPrefix', title: 'Story Card Eyebrow Prefix (e.g. "Why Fruition")', type: 'string' },
+
     // Methodology section
+    { name: 'methodologyEyebrow', title: 'Methodology Eyebrow (e.g. "Methodology")', type: 'string' },
+    { name: 'methodologyStepLabel', title: 'Methodology Step Label (e.g. "STEP")', type: 'string' },
     { name: 'methodologyHeading', title: 'Methodology Heading', type: 'string' },
+
+    // Approach tabs section (about-us)
+    { name: 'approachEyebrow', title: 'Approach Eyebrow (e.g. "Proven Approach")', type: 'string' },
+    { name: 'approachHeading', title: 'Approach Heading', type: 'string' },
+    { name: 'approachHeadingAccent', title: 'Approach Heading Accent (purple)', type: 'string' },
+
+    // Global presence section (about-us)
+    { name: 'globalPresenceEyebrow', title: 'Global Presence Eyebrow', type: 'string' },
+    { name: 'globalPresenceHeading', title: 'Global Presence Heading', type: 'string' },
+    { name: 'globalPresenceHeadingAccent', title: 'Global Presence Heading Accent (purple)', type: 'string' },
+    { name: 'globalPresenceBody', title: 'Global Presence Body', type: 'text' },
+    {
+      name: 'offices',
+      title: 'Offices (about-us)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'officeEntry',
+        fields: [
+          { name: 'city', title: 'City', type: 'string' },
+          { name: 'country', title: 'Country', type: 'string' },
+          { name: 'flag', title: 'Flag Emoji', type: 'string' },
+          { name: 'note', title: 'Note (e.g. "Head office")', type: 'string' },
+        ],
+      }],
+    },
+
+    // Partner stack section (about-us)
+    { name: 'partnerStackEyebrow', title: 'Partner Stack Eyebrow (e.g. "Our partner ecosystem")', type: 'string' },
+
+    // Closing CTA section (about-us)
+    { name: 'closingCtaHeading', title: 'Closing CTA Heading', type: 'string' },
+    { name: 'closingCtaBody', title: 'Closing CTA Body', type: 'text' },
+    { name: 'closingCtaPrimaryLabel', title: 'Closing CTA Primary Label', type: 'string' },
+    { name: 'closingCtaSecondaryLabel', title: 'Closing CTA Secondary Label', type: 'string' },
+    { name: 'closingCtaSecondaryUrl', title: 'Closing CTA Secondary URL', type: 'string' },
     {
       name: 'methodologySteps',
       title: 'Methodology Steps',
@@ -360,6 +410,42 @@ export default {
     { name: 'hideCaseStudyCardsSection', title: 'Hide Case Study Cards', type: 'boolean', initialValue: false },
     { name: 'hideSolutionCardsSection', title: 'Hide Solution Cards', type: 'boolean', initialValue: false },
     { name: 'hideHeroSubheading', title: 'Hide Hero Subheading', type: 'boolean', initialValue: false },
+
+    // Team-region filter chips on /fruition-team
+    {
+      name: 'teamRegions',
+      title: 'Team Regions (filter chips)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'teamRegion',
+        fields: [
+          { name: 'code', title: 'Region Code', type: 'string' },
+          { name: 'label', title: 'Display Label', type: 'string' },
+          { name: 'emoji', title: 'Emoji', type: 'string' },
+        ],
+      }],
+    },
+
+    // Hero description blocks (e.g. /fruition-team intro paragraphs under the CTA)
+    {
+      name: 'heroDescriptionBlocks',
+      title: 'Hero Description Blocks (paragraphs under hero CTA)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'heroDescriptionBlock',
+        fields: [
+          {
+            name: 'style',
+            title: 'Style',
+            type: 'string',
+            options: { list: [{ title: 'Paragraph', value: 'paragraph' }, { title: 'Bold', value: 'bold' }] },
+          },
+          { name: 'text', title: 'Text', type: 'text' },
+        ],
+      }],
+    },
 
     {
       name: 'pageType',
