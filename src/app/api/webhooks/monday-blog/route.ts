@@ -192,5 +192,24 @@ async function publishToSanity(pulseId: string): Promise<NextResponse> {
     [COL_STAGE]: { label: STAGE_PUBLISHED },
   })
 
+  await notifySlack(`:rocket: Marketa published: *${title}* — ${publishedUrl}`)
+
   return NextResponse.json({ ok: true, docId: id, slug, publishedUrl })
+}
+
+async function notifySlack(text: string): Promise<void> {
+  const token = process.env.SLACK_BOT_TOKEN
+  if (!token) return // soft-fail if Slack not configured
+  try {
+    await fetch("https://slack.com/api/chat.postMessage", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ channel: "C0B4NFVDJKY", text }),
+    })
+  } catch (err) {
+    console.warn("[monday-blog] slack notify failed:", errMsg(err))
+  }
 }

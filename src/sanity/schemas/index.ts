@@ -10,6 +10,7 @@ import teamMember from './teamMember'
 import caseStudy from './caseStudy'
 import faqItem from './faqItem'
 import page from './page'
+import voiceGuide from './voiceGuide'
 
 // Block objects
 import heroBlock from './objects/heroBlock'
@@ -46,6 +47,7 @@ export const schemaTypes = [
   caseStudy,
   faqItem,
   page,
+  voiceGuide,
 
   // Block objects
   heroBlock,
