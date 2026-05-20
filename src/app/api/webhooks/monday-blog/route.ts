@@ -105,6 +105,7 @@ export async function POST(req: Request) {
     event.type === "update_column_value" ||
     event.type === "change_column_value" ||
     event.type === "change_specific_column_value"
+  console.log(`[monday-blog] dispatch check: type=${event.type} col=${event.columnId} expectedCol=${COL_STAGE}`)
   if (!isColEvent || event.columnId !== COL_STAGE) {
     return NextResponse.json({
       ok: true,
