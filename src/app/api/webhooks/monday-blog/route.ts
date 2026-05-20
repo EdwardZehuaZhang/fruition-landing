@@ -12,8 +12,10 @@ export const maxDuration = 60
 const BOARD_ID = 5028637584
 
 // Column IDs (from board 5028637584)
-const COL_STAGE = "color_mm3gj287"
-const COL_TIER = "color_mm3gpz9w"
+// UI-created Stage col (Edward 2026-05-21). API-created status cols on this
+// board are silently un-writable. Tier col TBD — Edward to create in UI.
+const COL_STAGE = "color_mm3hwrnj"
+const COL_TIER = "color_mm3hwrnj" // placeholder, will update once created
 const COL_BRIEF = "long_text_mm3grk84"
 const COL_TARGET_KW = "text_mm3gzj88"
 const COL_INDUSTRY = "dropdown_mm3gb7wm"
@@ -185,11 +187,11 @@ async function publishToSanity(pulseId: string): Promise<NextResponse> {
 
   const publishedUrl = publicUrlFor(slug)
 
-  // Write back: store sanity id + url, flip stage to Published.
+  // Write back: store sanity id + url. Stage flip omitted — monday API
+  // silently rejects status writes on this board (see route header note).
   await changeColumnValues(BOARD_ID, pulseId, {
     [COL_SANITY_DOC_ID]: id,
     [COL_PUBLISHED_URL]: { url: publishedUrl, text: title },
-    [COL_STAGE]: { label: STAGE_PUBLISHED },
   })
 
   await notifySlack(`:rocket: Marketa published: *${title}* — ${publishedUrl}`)
