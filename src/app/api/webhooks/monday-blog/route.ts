@@ -12,10 +12,10 @@ export const maxDuration = 60
 const BOARD_ID = 5028637584
 
 // Column IDs (from board 5028637584)
-// UI-created Stage col (Edward 2026-05-21). API-created status cols on this
-// board are silently un-writable. Tier col TBD — Edward to create in UI.
+// UI-created Stage + Tier cols (Edward 2026-05-21). API-created status cols
+// on this board are silently un-writable, so all status flips are human-driven.
 const COL_STAGE = "color_mm3hwrnj"
-const COL_TIER = "color_mm3hwrnj" // placeholder, will update once created
+const COL_TIER = "color_mm3hm0mm"
 const COL_BRIEF = "long_text_mm3grk84"
 const COL_TARGET_KW = "text_mm3gzj88"
 const COL_INDUSTRY = "dropdown_mm3gb7wm"
