@@ -1,0 +1,244 @@
+{
+  "name": "Marketa — draft blog (webhook from monday stage change)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "marketa-draft",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook: /marketa-draft",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300],
+      "webhookId": "marketa-draft"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.monday.com/v2",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "API-Version", "value": "2024-01" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"query\": \"query ($id: [ID!]!) { items(ids: $id) { name column_values { id type text value } } }\",\n  \"variables\": { \"id\": [{{ JSON.stringify(String($json.body.pulseId)) }}] }\n}",
+        "options": {}
+      },
+      "id": "monday-fetch",
+      "name": "monday: fetch item",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [420, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "{{ MONDAY_CREDENTIAL_ID }}",
+          "name": "monday.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Flatten monday item into a friendly object.\nconst item = $input.first().json.data?.items?.[0];\nif (!item) throw new Error('item not found');\nconst col = (id) => item.column_values.find(c => c.id === id);\nconst text = (c) => c?.text?.trim() || '';\nconst pulseId = $('Webhook: /marketa-draft').first().json.body.pulseId;\nreturn [{\n  json: {\n    pulseId: String(pulseId),\n    title: item.name,\n    brief: text(col('long_text_mm3grk84')),\n    target_keyword: text(col('text_mm3gzj88')),\n    industry: text(col('dropdown_mm3gb7wm')) || 'general'\n  }\n}];"
+      },
+      "id": "normalize",
+      "name": "Normalize item",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [640, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.voyageai.com/v1/embeddings",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"input\": [{{ JSON.stringify($json.title + ' — ' + $json.brief + ' — ' + $json.target_keyword) }}],\n  \"model\": \"voyage-3\",\n  \"input_type\": \"query\"\n}",
+        "options": {}
+      },
+      "id": "embed-query",
+      "name": "Voyage: embed query",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [860, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "{{ VOYAGE_CREDENTIAL_ID }}",
+          "name": "Voyage AI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- TODO Yash: confirm table name, embedding col, metadata col shape.\n-- Returns top 8 chunks filtered by industry (if set) ordered by cosine distance.\nSELECT body, source_id, source_path, metadata\nFROM {{ SUPABASE_BRAIN_TABLE }}\nWHERE (metadata->>'industry' = $2 OR $2 = 'general')\nORDER BY embedding <=> $1\nLIMIT 8;",
+        "additionalFields": {
+          "queryParams": "={{ JSON.stringify($('Voyage: embed query').first().json.data[0].embedding) }}, {{ JSON.stringify($('Normalize item').first().json.industry.toLowerCase()) }}"
+        }
+      },
+      "id": "rag-retrieve",
+      "name": "Supabase: retrieve chunks",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1080, 300],
+      "credentials": {
+        "postgres": {
+          "id": "{{ SUPABASE_CREDENTIAL_ID }}",
+          "name": "Supabase brain"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- TODO Yash: replace with the actual voice guide source. If voice guide\n-- lives in Sanity per Brief §2.3, swap this for a GROQ fetch via HTTP node.\nSELECT body FROM {{ SUPABASE_BRAIN_TABLE }} WHERE source_type = 'voice_guide' LIMIT 1;"
+      },
+      "id": "voice-guide",
+      "name": "Fetch voice guide",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1080, 480],
+      "credentials": {
+        "postgres": {
+          "id": "{{ SUPABASE_CREDENTIAL_ID }}",
+          "name": "Supabase brain"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "id": "merge",
+      "name": "Merge RAG + voice",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1300, 380]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build the Claude prompt: voice guide + brief + retrieved chunks.\nconst meta = $('Normalize item').first().json;\nconst chunks = $('Supabase: retrieve chunks').all().map(i => i.json);\nconst voice = $('Fetch voice guide').first()?.json?.body || '(no voice guide)';\nconst context = chunks.map((c, i) => `--- Source ${i+1} (id: ${c.source_id}) ---\\n${c.body}`).join('\\n\\n');\nreturn [{\n  json: {\n    ...meta,\n    voice,\n    context,\n    source_ids: chunks.map(c => c.source_id)\n  }\n}];"
+      },
+      "id": "build-prompt",
+      "name": "Build draft prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1520, 380]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "anthropicApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-opus-4-7\",\n  \"max_tokens\": 4000,\n  \"system\": {{ JSON.stringify('You are Marketa, Fruition\\'s marketing agent. Write AEO-optimised long-form blogs (2000+ words). Industry-focused over product-pitchy. Use the provided sources and cite them inline with [Source N] markers. Follow the Fruition voice guide strictly. Output markdown with H2/H3 headings, short paragraphs, no horizontal separators, no em-dash overuse, no AI-sounding boilerplate.\\n\\nVOICE GUIDE:\\n' + $json.voice) }},\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": {{ JSON.stringify('Title: ' + $json.title + '\\n\\nBrief: ' + $json.brief + '\\n\\nTarget keyword: ' + $json.target_keyword + '\\n\\nIndustry: ' + $json.industry + '\\n\\nRetrieved sources to draw from and cite:\\n' + $json.context + '\\n\\nWrite the full blog post now. Markdown format. Start with H1 then body.') }}\n  }]\n}",
+        "options": {}
+      },
+      "id": "claude-write",
+      "name": "Claude: write draft",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1740, 380],
+      "credentials": {
+        "anthropicApi": {
+          "id": "{{ CLAUDE_CREDENTIAL_ID }}",
+          "name": "Anthropic Claude"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const draft = $input.first().json.content?.[0]?.text || '';\nconst meta = $('Normalize item').first().json;\nreturn [{ json: { pulseId: meta.pulseId, draft } }];"
+      },
+      "id": "extract-draft",
+      "name": "Extract draft text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1960, 380]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.monday.com/v2",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "API-Version", "value": "2024-01" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"query\": \"mutation ($board: ID!, $item: ID!, $vals: JSON!) { change_multiple_column_values(board_id: $board, item_id: $item, column_values: $vals) { id } }\",\n  \"variables\": {\n    \"board\": \"5028637584\",\n    \"item\": {{ JSON.stringify($json.pulseId) }},\n    \"vals\": {{ JSON.stringify(JSON.stringify({\n      \"long_text_mm3gj0s8\": { \"text\": $json.draft },\n      \"color_mm3gj287\": { \"label\": \"Draft ready\" }\n    })) }}\n  }\n}",
+        "options": {}
+      },
+      "id": "monday-patch",
+      "name": "monday: patch draft + stage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2180, 380],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "{{ MONDAY_CREDENTIAL_ID }}",
+          "name": "monday.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"ok\": true, \"pulseId\": {{ JSON.stringify($('Extract draft text').first().json.pulseId) }} }",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond 200",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [2400, 380]
+    }
+  ],
+  "connections": {
+    "Webhook: /marketa-draft": { "main": [[{ "node": "monday: fetch item", "type": "main", "index": 0 }]] },
+    "monday: fetch item": { "main": [[{ "node": "Normalize item", "type": "main", "index": 0 }]] },
+    "Normalize item": { "main": [[{ "node": "Voyage: embed query", "type": "main", "index": 0 }]] },
+    "Voyage: embed query": { "main": [[{ "node": "Supabase: retrieve chunks", "type": "main", "index": 0 }]] },
+    "Supabase: retrieve chunks": { "main": [[{ "node": "Merge RAG + voice", "type": "main", "index": 0 }]] },
+    "Fetch voice guide": { "main": [[{ "node": "Merge RAG + voice", "type": "main", "index": 1 }]] },
+    "Merge RAG + voice": { "main": [[{ "node": "Build draft prompt", "type": "main", "index": 0 }]] },
+    "Build draft prompt": { "main": [[{ "node": "Claude: write draft", "type": "main", "index": 0 }]] },
+    "Claude: write draft": { "main": [[{ "node": "Extract draft text", "type": "main", "index": 0 }]] },
+    "Extract draft text": { "main": [[{ "node": "monday: patch draft + stage", "type": "main", "index": 0 }]] },
+    "monday: patch draft + stage": { "main": [[{ "node": "Respond 200", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "meta": { "templateCredsSetupCompleted": false }
+}

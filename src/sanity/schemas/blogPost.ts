@@ -39,5 +39,29 @@ export default {
     },
     { name: "seoTitle", title: "SEO Title", type: "string" },
     { name: "seoDescription", title: "SEO Description", type: "text" },
+    {
+      name: "industry",
+      title: "Industry",
+      type: "string",
+      options: {
+        list: [
+          { title: "Construction", value: "construction" },
+          { title: "HR", value: "hr" },
+          { title: "Real Estate", value: "real-estate" },
+          { title: "Marketing", value: "marketing" },
+          { title: "SaaS", value: "saas" },
+          { title: "Professional Services", value: "professional-services" },
+          { title: "Manufacturing", value: "manufacturing" },
+          { title: "Product", value: "product" },
+        ],
+      },
+    },
+    {
+      name: "mondayItemId",
+      title: "monday.com Item ID",
+      type: "string",
+      description: "Round-trip link to the Blogs board item that produced this post",
+      readOnly: true,
+    },
   ],
 }

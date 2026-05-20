@@ -252,3 +252,173 @@ Sits comfortably within brief's $50/mo Voyage line item.
 - Sanity webhooks — https://www.sanity.io/docs/webhooks
 - Voyage AI embeddings — https://docs.voyageai.com/
 - Supabase pgvector — https://supabase.com/docs/guides/database/extensions/pgvector
+
+---
+
+# Part B — Marketa Blog Pipeline (monday board → Sanity)
+
+Sibling to Part A. Part A pulls Sanity into the brain (read side). Part B drives blog production through a monday board with two human checkpoints and writes the approved post back to Sanity (write side).
+
+## B1. Flow
+
+```
+Marketa cron (5 ideas/wk)
+   │
+   ▼ POST monday API: create_item × N, Stage = "Idea proposed"
+┌─────────────────────────────────────────────────┐
+│ monday board: "Blogs" (id 5028637584)          │
+│ Group: Active pipeline                          │
+└──────┬──────────────────────────────────────────┘
+       │ Stage change webhook
+       ▼
+/api/webhooks/monday-blog?key=SECRET (this repo)
+       │ dispatches by new Stage value
+       ├── "Idea approved"     → POST n8n marketa-draft webhook
+       ├── "Edits requested"   → POST n8n marketa-revise webhook
+       └── "Approved to publish" → upsertBlogPost (Sanity) + write back to monday
+                                          │
+                                          ▼
+                                  Sanity webhook (Part A)
+                                          │
+                                          ▼
+                                  Brain re-embed + website auto-revalidate
+```
+
+## B2. monday board state (live)
+
+Board: **Blogs** (`5028637584`), workspace Fruition Marketing.
+
+**Groups**
+
+| ID | Title | Purpose |
+|---|---|---|
+| `topics` | Active pipeline | In-flight items |
+| `group_mm3gm3rn` | Archive | Auto-move target for Published |
+
+**Columns** (created by setup, IDs are stable)
+
+| Column | ID | Type | Purpose |
+|---|---|---|---|
+| Name | `name` | name | Working title |
+| People | `person` | people | Reviewer (Nikhil default, Josh fallback per §7) |
+| Status | `status` | status | (legacy — leave for back-compat, not used by pipeline) |
+| **Stage** | `color_mm3gj287` | status | **Drives webhooks** |
+| Tier | `color_mm3gpz9w` | status | Approval tier per §5.1 |
+| Brief | `long_text_mm3grk84` | long_text | Marketa's idea/angle |
+| Target keyword | `text_mm3gzj88` | text | SEO/AEO target |
+| Industry | `dropdown_mm3gb7wm` | dropdown | RAG filter tag |
+| Draft body | `long_text_mm3gj0s8` | long_text | Marketa writes here |
+| Edit notes | `long_text_mm3g2bp9` | long_text | Reviewer writes here |
+| Sanity doc ID | `text_mm3g4ab9` | text | Set on publish, enables in-place re-publish |
+| Published URL | `link_mm3gpqq1` | link | Live URL after publish |
+
+**Stage labels** (driver column `color_mm3gj287`)
+
+| ID | Label | Index | When set | Set by |
+|---|---|---|---|---|
+| 12 | Idea proposed | 0 | At creation | Marketa cron |
+| 6 | Idea approved | 1 | Reviewer picks | Human → fires draft webhook |
+| 7 | Drafting | 2 | Marketa starts | Marketa (after draft webhook ack) |
+| 1 | Draft ready | 3 | Marketa finishes | Marketa |
+| 8 | Edits requested | 4 | Reviewer asks for changes | Human → fires revise webhook |
+| 3 | Approved to publish | 5 | Reviewer final OK | Human → fires publish |
+| 9 | Published | 6 | Sanity write confirmed | This route |
+| 2 | Stuck | 7 | Blocked | Either |
+
+**Tier labels** (`color_mm3gpz9w`): Auto / Light-touch / Explicit / Dual-approval.
+
+**Industry labels** (`dropdown_mm3gb7wm`): Construction, HR, Real Estate, Marketing, SaaS, Professional Services, Manufacturing, Product.
+
+## B3. monday webhook config (set up in monday UI — post-deploy)
+
+Three subscriptions, **all on the `Stage` column, all to the same endpoint**:
+
+1. When Stage changes to `Idea approved` → `POST https://<site>/api/webhooks/monday-blog?key=<MONDAY_WEBHOOK_SECRET>`
+2. When Stage changes to `Edits requested` → same URL
+3. When Stage changes to `Approved to publish` → same URL
+
+Auth: shared secret as `?key=` query param (existing pattern — see `src/app/api/webhooks/monday/route.ts`). monday's `change_column_value` event does not support custom Authorization headers.
+
+**Why not API-created:** monday verifies the URL is reachable when creating a webhook via API. Endpoint must be deployed first. Tried and confirmed via MCP — returns 500 until live.
+
+## B4. monday native automations (no code)
+
+| Trigger | Action |
+|---|---|
+| Stage → `Draft ready` | Notify `People` col + post to Slack `#fruition-blogs` (`C0B4NFVDJKY`) |
+| Stage → `Edits requested` | Notify Marketa system user |
+| Stage → `Approved to publish` | Notify reviewer "publishing started" |
+| Stage → `Published` | Move item to `Archive` group |
+
+Configure in monday board → Automations. Native Slack integration handles the notifications; no code needed from this repo. monday's API does not expose `create_automation`, so these must be set up in the UI.
+
+## B5. Repo code
+
+**Webhook route** — `src/app/api/webhooks/monday-blog/route.ts`
+- Mirrors `monday/route.ts` (same auth, same shape).
+- Dispatches by new Stage value.
+- For `Approved to publish`: calls `upsertBlogPost`, writes Sanity doc id + published URL back to monday, flips Stage to `Published`.
+- For `Idea approved` / `Edits requested`: forwards to n8n (Marketa-side work).
+
+**Sanity write helper** — `src/lib/sanityWriteClient.ts` → `upsertBlogPost(input)`
+- Stable `docId` (`blog-monday-<pulseId>`) so re-publish updates in place.
+- Cheap markdown → PortableText (handles `#`/`##`/`###` headings + paragraphs).
+- Stores `mondayItemId` on the Sanity doc for round-trip linking.
+
+**Sanity schema** — `src/sanity/schemas/blogPost.ts`
+- Added `industry` (matched to monday dropdown values) and `mondayItemId` (read-only round-trip link).
+
+## B6. Required env vars
+
+| Var | Purpose | Notes |
+|---|---|---|
+| `MONDAY_WEBHOOK_SECRET` | Shared secret for `?key=` query auth | Reuse existing |
+| `MONDAY_API_TOKEN` | Server-side monday GraphQL auth (for write-back) | Reuse existing |
+| `SANITY_WRITE_TOKEN` | Sanity dataset write | Reuse existing |
+| `N8N_MARKETA_DRAFT_WEBHOOK_URL` | n8n entry for drafting | **New** — get from Yash |
+| `N8N_MARKETA_REVISE_WEBHOOK_URL` | n8n entry for revisions | **New** — get from Yash |
+| `NEXT_PUBLIC_SITE_URL` | Used to build `Published URL` written back to monday | Reuse existing |
+
+## B7. n8n workflows (versioned in this repo)
+
+Workflow JSON lives in `/n8n/`. Import via n8n UI → Workflows → Import from File. See `n8n/README.md` for credential setup and placeholder substitutions.
+
+| Workflow | Trigger | What it does |
+|---|---|---|
+| `marketa-generate-ideas.json` | Cron Mon 09:00 Australia/Sydney, 5 items/wk | Postgres query recent blogs → Claude generates 5 idea objects → creates monday items with Stage `Idea proposed` → Slack notify |
+| `marketa-draft-blog.json` | Webhook `POST /webhook/marketa-draft` | Fetch monday item → embed query (Voyage) → pgvector retrieve top-8 chunks filtered by Industry → fetch voice guide → Claude writes 2000+ word draft → PATCH monday `Draft body` + Stage `Draft ready` |
+| `marketa-revise-blog.json` | Webhook `POST /webhook/marketa-revise` | Fetch monday item draft + notes → fetch voice guide → Claude revises → PATCH monday, clear edit notes, Stage → `Draft ready` |
+
+Placeholders inside the JSON files marked `{{ SUPABASE_BRAIN_TABLE }}`, `{{ CLAUDE_CREDENTIAL_ID }}`, etc. — Yash fills these in n8n when importing (his brain schema, his credentials).
+
+This repo never calls Claude or Voyage directly. n8n owns Marketa's reasoning side.
+
+## B8. Settings locked
+
+| Decision | Value |
+|---|---|
+| Reviewer | Single `People` col, same person both stages |
+| Revision cap | None |
+| Idea cadence | 5/week |
+| Slack notifs | monday native automation |
+| Board | Existing `5028637584` ("Blogs"), modified in place |
+
+## B9. Flywheel (closes Part A)
+
+```
+Marketa generates blog
+  → monday draft → human approve
+    → publish to Sanity (this route)
+      → Sanity webhook (Part A) re-embeds into brain
+        → next Marketa generation can cite this blog
+```
+
+Each cycle adds to the retrievable corpus. Compounds.
+
+## B10. Open items
+
+- **Slack channel name** for `#marketa-blog` — confirm or replace.
+- **Author byline** on Sanity post — currently hardcoded `"Marketa / Fruition Editorial"`. Brief §10.2 still has this as open question.
+- **n8n webhook URLs** — get from Yash and add to Doppler.
+- **Cover image** — Marketa-generated or human-uploaded? Schema supports both; pipeline currently leaves it null.
+- **Subitem usage** — board has Subitems column; not used by pipeline. Could be repurposed for revision history if useful later.

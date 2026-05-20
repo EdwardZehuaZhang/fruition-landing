@@ -21,14 +21,20 @@
         "migrate:service-pages": "tsx scripts/sanity-migrate/service-pages.ts",
         "migrate:homepage": "tsx scripts/sanity-migrate/homepage.ts",
         "migrate:case-studies": "tsx scripts/sanity-migrate/case-studies.ts",
-        "migrate:all": "tsx scripts/sanity-migrate/run-all.ts"
+        "migrate:all": "tsx scripts/sanity-migrate/run-all.ts",
+        "marketa:ideas": "tsx scripts/marketa-harness/generate-ideas.ts",
+        "marketa:draft": "tsx scripts/marketa-harness/draft.ts",
+        "marketa:revise": "tsx scripts/marketa-harness/revise.ts",
+        "marketa:listen": "tsx scripts/marketa-harness/server.ts"
     },
     "dependencies": {
+        "@anthropic-ai/sdk": "^0.97.0",
         "@portabletext/react": "^6.0.3",
         "@sanity/client": "^7.20.0",
         "@sanity/image-url": "^2.0.3",
         "@sanity/vision": "^5.18.0",
         "dotenv": "^17.3.1",
+        "express": "^5.2.1",
         "mermaid": "^10.9.5",
         "next": "16.2.1",
         "next-sanity": "^12.1.6",
@@ -42,6 +48,7 @@
     },
     "devDependencies": {
         "@tailwindcss/postcss": "^4",
+        "@types/express": "^5.0.6",
         "@types/node": "^20",
         "@types/react": "^19",
         "@types/react-dom": "^19",
