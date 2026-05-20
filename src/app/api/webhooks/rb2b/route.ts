@@ -145,8 +145,8 @@ export async function POST(req: Request) {
       if (website) values[RB2B_COLUMNS.website] = { url: website, text: website }
       const industry = (payload.Industry ?? "").trim()
       if (industry) values[RB2B_COLUMNS.industry] = industry
-      const empCount = payload["Employee Count"]
-      if (empCount != null && empCount !== "") values[RB2B_COLUMNS.employees] = String(empCount)
+      const empCount = parseEmployeeCount(payload["Employee Count"])
+      if (empCount != null) values[RB2B_COLUMNS.employees] = empCount
       const revenue = (payload["Estimate Revenue"] ?? "").trim()
       if (revenue) values[RB2B_COLUMNS.revenue] = revenue
       const loc = [payload.City, payload.State, payload.Zipcode]
@@ -215,6 +215,21 @@ function textOf(c: MondayColumnValue | undefined): string | null {
 
 function errMsg(err: unknown): string {
   return err instanceof Error ? err.message : String(err)
+}
+
+// RB2B sends Employee Count as a number, numeric string, OR a range like
+// "1-10" / "501-1000" / "10000+". Take the upper bound for sorting/filtering
+// (lets "≥50 employees" views work). Returns null if unparseable.
+function parseEmployeeCount(raw: number | string | null | undefined): number | null {
+  if (raw == null || raw === "") return null
+  if (typeof raw === "number" && Number.isFinite(raw)) return raw
+  const s = String(raw).trim()
+  if (!s) return null
+  const matches = s.match(/\d[\d,]*/g)
+  if (!matches?.length) return null
+  const nums = matches.map((m) => Number(m.replace(/,/g, "")))
+  const upper = Math.max(...nums.filter((n) => Number.isFinite(n)))
+  return Number.isFinite(upper) ? upper : null
 }
 
 function buildSlackBlocks(args: {
