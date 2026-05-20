@@ -11,11 +11,12 @@ export const maxDuration = 60
 
 const BOARD_ID = 5028637584
 
-// Column IDs (from board 5028637584)
-// UI-created Stage + Tier cols (Edward 2026-05-21). API-created status cols
-// on this board are silently un-writable, so all status flips are human-driven.
-const COL_STAGE = "color_mm3hwrnj"
-const COL_TIER = "color_mm3hm0mm"
+// Column IDs (from board 5028637584).
+// Stage is a DROPDOWN, not status — the Fruition Marketing workspace
+// flags all status cols as is_rollup_column:true, which silently blocks
+// reads/writes/webhooks. Dropdowns avoid the rollup wrapper entirely.
+const COL_STAGE = "dropdown_mm3hrn75"
+const COL_TIER = "color_mm3hm0mm" // still status-typed; not webhook-driven so OK
 const COL_BRIEF = "long_text_mm3grk84"
 const COL_TARGET_KW = "text_mm3gzj88"
 const COL_INDUSTRY = "dropdown_mm3gb7wm"
@@ -37,8 +38,12 @@ interface MondayChangeEvent {
   boardId?: number
   pulseId?: number | string
   columnId?: string
-  value?: { label?: { text?: string } | null } | null
-  previousValue?: { label?: { text?: string } | null } | null
+  // status payload: { label: { text } }; dropdown payload: { chosenValues: [{ name }] }
+  value?: {
+    label?: { text?: string } | null
+    chosenValues?: Array<{ id?: number; name?: string }> | null
+  } | null
+  previousValue?: unknown
 }
 
 interface MondayWebhookBody {
@@ -96,7 +101,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, skipped: "irrelevant event" })
   }
 
-  const newStage = event.value?.label?.text?.trim()
+  const newStage =
+    event.value?.chosenValues?.[0]?.name?.trim() ?? event.value?.label?.text?.trim()
   const pulseId = event.pulseId != null ? String(event.pulseId) : ""
   if (!pulseId || !newStage) {
     return NextResponse.json({ ok: true, skipped: "missing pulseId or stage" })
