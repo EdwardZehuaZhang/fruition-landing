@@ -53,6 +53,81 @@ export async function changeColumnValues(
   )
 }
 
+export interface MondayItemMatch {
+  id: string
+  name: string
+  columns: Record<string, MondayColumnValue>
+}
+
+export async function findItemByColumnValue(
+  boardId: number,
+  columnId: string,
+  value: string,
+): Promise<MondayItemMatch | null> {
+  const data = await gql<{
+    items_page_by_column_values: {
+      items: Array<{
+        id: string
+        name: string
+        column_values: Array<{ id: string; type: string; text: string | null; value: string | null }>
+      }>
+    }
+  }>(
+    `query ($board: ID!, $columns: [ItemsPageByColumnValuesQuery!]!) {
+      items_page_by_column_values(board_id: $board, columns: $columns, limit: 1) {
+        items {
+          id
+          name
+          column_values { id type text value }
+        }
+      }
+    }`,
+    {
+      board: String(boardId),
+      columns: [{ column_id: columnId, column_values: [value] }],
+    },
+  )
+  const hit = data.items_page_by_column_values.items?.[0]
+  if (!hit) return null
+  const columns: Record<string, MondayColumnValue> = {}
+  for (const c of hit.column_values) {
+    columns[c.id] = { id: c.id, type: c.type, text: c.text ?? null, value: c.value ?? null }
+  }
+  return { id: hit.id, name: hit.name, columns }
+}
+
+export async function createColumn(
+  boardId: number,
+  title: string,
+  columnType: string,
+  defaults?: Record<string, unknown>,
+): Promise<string> {
+  const data = await gql<{ create_column: { id: string } }>(
+    `mutation ($board: ID!, $title: String!, $type: ColumnType!, $defaults: JSON) {
+      create_column(board_id: $board, title: $title, column_type: $type, defaults: $defaults) { id }
+    }`,
+    {
+      board: String(boardId),
+      title,
+      type: columnType,
+      defaults: defaults ? JSON.stringify(defaults) : null,
+    },
+  )
+  return data.create_column.id
+}
+
+export async function listBoardColumns(
+  boardId: number,
+): Promise<Array<{ id: string; title: string; type: string }>> {
+  const data = await gql<{ boards: Array<{ columns: Array<{ id: string; title: string; type: string }> }> }>(
+    `query ($board: [ID!]!) {
+      boards(ids: $board) { columns { id title type } }
+    }`,
+    { board: [String(boardId)] },
+  )
+  return data.boards?.[0]?.columns ?? []
+}
+
 export interface MondayColumnValue {
   id: string
   type: string
