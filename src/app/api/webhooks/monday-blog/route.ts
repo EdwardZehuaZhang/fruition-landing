@@ -93,8 +93,9 @@ export async function POST(req: Request) {
     return unauthorized()
   }
 
+  console.log("[monday-blog] FULL BODY", JSON.stringify(body).slice(0, 1500))
   const event = body.event
-  console.log("[monday-blog] event", JSON.stringify(event))
+  console.log("[monday-blog] event extracted", JSON.stringify(event))
   if (!event || Number(event.boardId) !== BOARD_ID) {
     return NextResponse.json({ ok: true, skipped: "irrelevant board" })
   }
