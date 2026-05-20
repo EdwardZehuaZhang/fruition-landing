@@ -94,11 +94,18 @@ export async function POST(req: Request) {
   }
 
   const event = body.event
+  console.log("[monday-blog] event", JSON.stringify(event))
   if (!event || Number(event.boardId) !== BOARD_ID) {
     return NextResponse.json({ ok: true, skipped: "irrelevant board" })
   }
-  if (event.type !== "change_column_value" || event.columnId !== COL_STAGE) {
-    return NextResponse.json({ ok: true, skipped: "irrelevant event" })
+  // Accept both "change_column_value" and "change_specific_column_value" event types.
+  const isColEvent =
+    event.type === "change_column_value" || event.type === "change_specific_column_value"
+  if (!isColEvent || event.columnId !== COL_STAGE) {
+    return NextResponse.json({
+      ok: true,
+      skipped: `irrelevant event: type=${event.type} col=${event.columnId}`,
+    })
   }
 
   const newStage =
