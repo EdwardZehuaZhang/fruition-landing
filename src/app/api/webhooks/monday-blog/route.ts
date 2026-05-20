@@ -99,9 +99,12 @@ export async function POST(req: Request) {
   if (!event || Number(event.boardId) !== BOARD_ID) {
     return NextResponse.json({ ok: true, skipped: "irrelevant board" })
   }
-  // Accept both "change_column_value" and "change_specific_column_value" event types.
+  // monday delivers `update_column_value` for status/dropdown changes regardless
+  // of which webhook event type you subscribed with. Accept the variants.
   const isColEvent =
-    event.type === "change_column_value" || event.type === "change_specific_column_value"
+    event.type === "update_column_value" ||
+    event.type === "change_column_value" ||
+    event.type === "change_specific_column_value"
   if (!isColEvent || event.columnId !== COL_STAGE) {
     return NextResponse.json({
       ok: true,
