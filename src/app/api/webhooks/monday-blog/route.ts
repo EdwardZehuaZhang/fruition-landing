@@ -93,9 +93,7 @@ export async function POST(req: Request) {
     return unauthorized()
   }
 
-  console.log("[monday-blog] FULL BODY", JSON.stringify(body).slice(0, 1500))
   const event = body.event
-  console.log("[monday-blog] event extracted", JSON.stringify(event))
   if (!event || Number(event.boardId) !== BOARD_ID) {
     return NextResponse.json({ ok: true, skipped: "irrelevant board" })
   }
@@ -105,7 +103,7 @@ export async function POST(req: Request) {
     event.type === "update_column_value" ||
     event.type === "change_column_value" ||
     event.type === "change_specific_column_value"
-  console.log(`[monday-blog] dispatch check: type=${event.type} col=${event.columnId} expectedCol=${COL_STAGE}`)
+  console.log(`[monday-blog] DBG type=${event.type} col=${event.columnId} expected=${COL_STAGE} match=${event.columnId === COL_STAGE} isCol=${isColEvent} body=${JSON.stringify(body).slice(0, 1200)}`)
   if (!isColEvent || event.columnId !== COL_STAGE) {
     return NextResponse.json({
       ok: true,
