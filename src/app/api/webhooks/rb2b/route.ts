@@ -279,7 +279,9 @@ function buildSlackBlocks(args: {
   }
   if (args.email) lines.push(`:email: <mailto:${args.email}|${args.email}>`)
   if (args.linkedin) lines.push(`:linkedin: <${args.linkedin}|LinkedIn>`)
-  if (args.capturedUrl) lines.push(`:link: <${args.capturedUrl}|${args.capturedUrl}>`)
+  // Backticks suppress Slack auto-unfurl. The captured URL is always one of
+  // our own pages, and we don't want our homepage previewing on every alert.
+  if (args.capturedUrl) lines.push(`:link: \`${args.capturedUrl}\``)
   lines.push(
     `${intentEmoji} *${args.intent}* intent • <https://fruitionservices.monday.com/boards/${RB2B_BOARD_ID}/pulses/${args.itemId}|Open in Monday>`,
   )

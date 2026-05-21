@@ -56,8 +56,13 @@ export function buildCompanySlackBlocks(args: {
   if (args.employees != null && String(args.employees).trim()) meta.push(`${args.employees} employees`)
   if (args.location) meta.push(args.location)
   if (meta.length) lines.push(meta.join(" • "))
+  // Company website gets a normal mrkdwn link so Slack auto-unfurls it
+  // (gives an embed preview of the visitor's company). The captured URL is
+  // wrapped in backticks so Slack treats it as inline code and does NOT
+  // unfurl — every captured URL is on our own site, and we don't want our
+  // own homepage previewing on every lead alert.
   if (args.website) lines.push(`:globe_with_meridians: <${args.website}|${args.website}>`)
-  if (args.capturedUrl) lines.push(`:link: <${args.capturedUrl}|${args.capturedUrl}>`)
+  if (args.capturedUrl) lines.push(`:link: \`${args.capturedUrl}\``)
   lines.push(
     `${intentEmoji} *${args.intent}* intent • _anonymous (company-only)_${args.isRepeat ? " • returning" : ""}`,
   )
