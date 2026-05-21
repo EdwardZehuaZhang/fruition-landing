@@ -25,12 +25,16 @@ const COL_SANITY_DOC_ID = "text_mm3g4ab9"
 const COL_PUBLISHED_URL = "link_mm3gpqq1"
 
 // Stage values that trigger downstream action. Anything else is ignored.
+const STAGE_IDEA_PROPOSED = "Idea proposed"
 const STAGE_IDEA_APPROVED = "Idea approved"
 const STAGE_DRAFTING = "Drafting"
 const STAGE_DRAFT_READY = "Draft ready"
 const STAGE_EDITS_REQUESTED = "Edits requested"
 const STAGE_APPROVED_PUBLISH = "Approved to publish"
 const STAGE_PUBLISHED = "Published"
+
+const SLACK_CHANNEL = "C0B4NFVDJKY" // #fruition-blogs
+const MONDAY_BOARD_URL = `https://fruitionservices.monday.com/boards/${BOARD_ID}`
 
 interface MondayChangeEvent {
   type?: string
@@ -118,14 +122,17 @@ export async function POST(req: Request) {
 
   try {
     switch (newStage) {
+      case STAGE_IDEA_PROPOSED:
+        return await pingHumanInLoop(pulseId, "idea-proposed")
       case STAGE_IDEA_APPROVED:
         return await forwardToMarketa("draft", pulseId)
+      case STAGE_DRAFT_READY:
+        return await pingHumanInLoop(pulseId, "draft-ready")
       case STAGE_EDITS_REQUESTED:
         return await forwardToMarketa("revise", pulseId)
       case STAGE_APPROVED_PUBLISH:
         return await publishToSanity(pulseId)
       case STAGE_DRAFTING:
-      case STAGE_DRAFT_READY:
       case STAGE_PUBLISHED:
         // Marketa or this route set these — nothing to do.
         return NextResponse.json({ ok: true, skipped: `internal stage: ${newStage}` })
@@ -223,9 +230,29 @@ async function notifySlack(text: string): Promise<void> {
         "Content-Type": "application/json; charset=utf-8",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ channel: "C0B4NFVDJKY", text }),
+      body: JSON.stringify({ channel: SLACK_CHANNEL, text }),
     })
   } catch (err) {
     console.warn("[monday-blog] slack notify failed:", errMsg(err))
   }
+}
+
+/**
+ * Notify Slack when a stage needs human attention.
+ * Routes that need a click in monday: Idea proposed (approve/reject),
+ * Draft ready (review). Published handled separately in publishToSanity.
+ */
+async function pingHumanInLoop(
+  pulseId: string,
+  kind: "idea-proposed" | "draft-ready",
+): Promise<NextResponse> {
+  const snapshot = await getItemForWebhook(pulseId)
+  const title = snapshot?.name?.trim() || "(untitled)"
+  const itemUrl = `${MONDAY_BOARD_URL}/pulses/${pulseId}`
+  const text =
+    kind === "idea-proposed"
+      ? `:bulb: New blog idea ready for approval: *${title}* — ${itemUrl}`
+      : `:memo: Draft ready for review: *${title}* — ${itemUrl}`
+  await notifySlack(text)
+  return NextResponse.json({ ok: true, stage: kind, pulseId })
 }

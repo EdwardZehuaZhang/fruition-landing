@@ -110,7 +110,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"query\": \"mutation ($board: ID!, $item: ID!, $vals: JSON!) { change_multiple_column_values(board_id: $board, item_id: $item, column_values: $vals) { id } }\",\n  \"variables\": {\n    \"board\": \"5028637584\",\n    \"item\": {{ JSON.stringify($json.pulseId) }},\n    \"vals\": {{ JSON.stringify(JSON.stringify({\n      \"long_text_mm3gj0s8\": { \"text\": $json.revised },\n      \"long_text_mm3g2bp9\": { \"text\": \"\" },\n      \"color_mm3gj287\": { \"label\": \"Draft ready\" }\n    })) }}\n  }\n}",
+        "jsonBody": "={\n  \"query\": \"mutation ($board: ID!, $item: ID!, $vals: JSON!) { change_multiple_column_values(board_id: $board, item_id: $item, column_values: $vals) { id } }\",\n  \"variables\": {\n    \"board\": \"5028637584\",\n    \"item\": {{ JSON.stringify($json.pulseId) }},\n    \"vals\": {{ JSON.stringify(JSON.stringify({\n      \"long_text_mm3gj0s8\": { \"text\": $json.revised },\n      \"long_text_mm3g2bp9\": { \"text\": \"\" },\n      \"dropdown_mm3jh58b\": { \"labels\": [\"Draft ready\"] }\n    })) }}\n  }\n}",
         "options": {}
       },
       "id": "monday-patch",

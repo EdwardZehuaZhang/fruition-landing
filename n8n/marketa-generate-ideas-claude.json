@@ -43,7 +43,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"query\": \"query { boards(ids: [5028637584]) { items_page(limit: 100) { items { name column_values(ids: [\\\"color_mm3gj287\\\"]) { id text } } } } }\"\n}",
+        "jsonBody": "={\n  \"query\": \"query { boards(ids: [5028637584]) { items_page(limit: 100) { items { name column_values(ids: [\\\"dropdown_mm3jh58b\\\"]) { id text } } } } }\"\n}",
         "options": {}
       },
       "id": "monday-recent",
@@ -63,7 +63,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Extract Published titles only — those are real recent blogs to avoid dupes.\nconst items = $input.first().json.data?.boards?.[0]?.items_page?.items || [];\nconst published = items.filter(it => {\n  const stage = it.column_values?.find(c => c.id === 'color_mm3gj287')?.text;\n  return stage === 'Published';\n});\nconst context = published.length\n  ? published.map(p => `- ${p.name}`).join('\\n')\n  : '(no previously published blogs)';\nreturn [{ json: { recent_context: context } }];"
+        "jsCode": "// Extract Published titles only — those are real recent blogs to avoid dupes.\nconst items = $input.first().json.data?.boards?.[0]?.items_page?.items || [];\nconst published = items.filter(it => {\n  const stage = it.column_values?.find(c => c.id === 'dropdown_mm3jh58b')?.text;\n  return stage === 'Published';\n});\nconst context = published.length\n  ? published.map(p => `- ${p.name}`).join('\\n')\n  : '(no previously published blogs)';\nreturn [{ json: { recent_context: context } }];"
       },
       "id": "build-context",
       "name": "Build context string",
@@ -147,7 +147,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"query\": \"mutation ($board: ID!, $group: String!, $name: String!, $vals: JSON!) { create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $vals) { id } }\",\n  \"variables\": {\n    \"board\": \"5028637584\",\n    \"group\": \"topics\",\n    \"name\": {{ JSON.stringify($json.title) }},\n    \"vals\": {{ JSON.stringify(JSON.stringify({\n      \"long_text_mm3grk84\": { \"text\": $json.brief },\n      \"text_mm3gzj88\": $json.target_keyword,\n      \"dropdown_mm3gb7wm\": { \"labels\": [$json.industry] },\n      \"color_mm3gj287\": { \"label\": \"Idea proposed\" },\n      \"color_mm3gpz9w\": { \"label\": \"Explicit\" }\n    })) }}\n  }\n}",
+        "jsonBody": "={\n  \"query\": \"mutation ($board: ID!, $group: String!, $name: String!, $vals: JSON!) { create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $vals) { id } }\",\n  \"variables\": {\n    \"board\": \"5028637584\",\n    \"group\": \"topics\",\n    \"name\": {{ JSON.stringify($json.title) }},\n    \"vals\": {{ JSON.stringify(JSON.stringify({\n      \"long_text_mm3grk84\": { \"text\": $json.brief },\n      \"text_mm3gzj88\": $json.target_keyword,\n      \"dropdown_mm3gb7wm\": { \"labels\": [$json.industry] },\n      \"dropdown_mm3jh58b\": { \"labels\": [\"Idea proposed\"] }\n    })) }}\n  }\n}",
         "options": {}
       },
       "id": "create-item",
@@ -162,41 +162,6 @@
         "httpHeaderAuth": {
           "id": "{{ MONDAY_CREDENTIAL_ID }}",
           "name": "monday.com"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://slack.com/api/chat.postMessage",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "httpHeaderAuth",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json; charset=utf-8"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"channel\": \"C0B4NFVDJKY\",\n  \"text\": \":bulb: Marketa proposed 5 new blog ideas. Review queue → https://fruitionservices.monday.com/boards/5028637584\"\n}",
-        "options": {}
-      },
-      "id": "slack-notify",
-      "name": "Slack: notify #fruition-blogs",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1560,
-        300
-      ],
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "{{ SLACK_CREDENTIAL_ID }}",
-          "name": "Slack Bot HTTP"
         }
       }
     }
@@ -259,13 +224,7 @@
     },
     "monday: create item": {
       "main": [
-        [
-          {
-            "node": "Slack: notify #fruition-blogs",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     }
   },

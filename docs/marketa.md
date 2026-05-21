@@ -286,7 +286,7 @@ Marketa cron (5 ideas/wk)
 
 ## B2. monday board state (live)
 
-Board: **Blogs** (`5028637584`), workspace Fruition Marketing.
+Board: **Website Blogs** (`5028637584`), workspace Fruition Marketing.
 
 **Groups**
 
@@ -301,9 +301,9 @@ Board: **Blogs** (`5028637584`), workspace Fruition Marketing.
 |---|---|---|---|
 | Name | `name` | name | Working title |
 | People | `person` | people | Reviewer (Nikhil default, Josh fallback per §7) |
-| Status | `status` | status | (legacy — leave for back-compat, not used by pipeline) |
-| **Stage** | `color_mm3gj287` | status | **Drives webhooks** |
-| Tier | `color_mm3gpz9w` | status | Approval tier per §5.1 |
+| Subitems | `subtasks_mkpsr9vr` | subtasks | Unused by pipeline |
+| Timeline | `timerange_mkypnbnr` | timeline | Unused by pipeline |
+| **Stage** | `dropdown_mm3jh58b` | dropdown | **Drives webhooks.** Single-select dropdown — status cols are workspace-rollup-wrapped so API-blocked; dropdown is the only working type. |
 | Brief | `long_text_mm3grk84` | long_text | Marketa's idea/angle |
 | Target keyword | `text_mm3gzj88` | text | SEO/AEO target |
 | Industry | `dropdown_mm3gb7wm` | dropdown | RAG filter tag |
@@ -312,45 +312,42 @@ Board: **Blogs** (`5028637584`), workspace Fruition Marketing.
 | Sanity doc ID | `text_mm3g4ab9` | text | Set on publish, enables in-place re-publish |
 | Published URL | `link_mm3gpqq1` | link | Live URL after publish |
 
-**Stage labels** (driver column `color_mm3gj287`)
+**Stage labels** (driver column `dropdown_mm3jh58b`). Patch via API with `{ "labels": ["<label>"] }`.
 
-| ID | Label | Index | When set | Set by |
-|---|---|---|---|---|
-| 12 | Idea proposed | 0 | At creation | Marketa cron |
-| 6 | Idea approved | 1 | Reviewer picks | Human → fires draft webhook |
-| 7 | Drafting | 2 | Marketa starts | Marketa (after draft webhook ack) |
-| 1 | Draft ready | 3 | Marketa finishes | Marketa |
-| 8 | Edits requested | 4 | Reviewer asks for changes | Human → fires revise webhook |
-| 3 | Approved to publish | 5 | Reviewer final OK | Human → fires publish |
-| 9 | Published | 6 | Sanity write confirmed | This route |
-| 2 | Stuck | 7 | Blocked | Either |
-
-**Tier labels** (`color_mm3gpz9w`): Auto / Light-touch / Explicit / Dual-approval.
+| Label | When set | Set by | Fires webhook? |
+|---|---|---|---|
+| Idea proposed | At creation | Marketa cron (n8n) | yes → Slack ping |
+| Idea approved | Reviewer picks | Human | yes → n8n draft webhook |
+| Drafting | Marketa starts | Marketa (after draft ack) | no (internal) |
+| Draft ready | Marketa finishes | Marketa | yes → Slack ping |
+| Edits requested | Reviewer asks for changes | Human | yes → n8n revise webhook |
+| Approved to publish | Reviewer final OK | Human | yes → publish route |
+| Published | Sanity write confirmed | This route | no (internal; route already pinged) |
+| Stuck | Blocked | Either | no |
 
 **Industry labels** (`dropdown_mm3gb7wm`): Construction, HR, Real Estate, Marketing, SaaS, Professional Services, Manufacturing, Product.
 
 ## B3. monday webhook config (set up in monday UI — post-deploy)
 
-Three subscriptions, **all on the `Stage` column, all to the same endpoint**:
+**One subscription** covers all stage transitions:
 
-1. When Stage changes to `Idea approved` → `POST https://<site>/api/webhooks/monday-blog?key=<MONDAY_WEBHOOK_SECRET>`
-2. When Stage changes to `Edits requested` → same URL
-3. When Stage changes to `Approved to publish` → same URL
+- Event: `When a column changes` (any column) → `POST https://<site>/api/webhooks/monday-blog?key=<MONDAY_WEBHOOK_SECRET>`
+
+Route filters by `columnId === "dropdown_mm3jh58b"` and dispatches by new Stage label. Single webhook is simpler than per-label subscriptions and covers `Idea proposed` (which fires on create_item too — monday emits `change_column_value` for columns set at creation).
 
 Auth: shared secret as `?key=` query param (existing pattern — see `src/app/api/webhooks/monday/route.ts`). monday's `change_column_value` event does not support custom Authorization headers.
 
-**Why not API-created:** monday verifies the URL is reachable when creating a webhook via API. Endpoint must be deployed first. Tried and confirmed via MCP — returns 500 until live.
+**Why not API-created:** monday verifies the URL is reachable when creating a webhook via API. Endpoint must be deployed first.
 
-## B4. monday native automations (no code)
+## B4. monday native automations
+
+Keep monday native automations to **non-Slack** behaviour only. Slack is owned by `/api/webhooks/monday-blog` (single source of truth).
 
 | Trigger | Action |
 |---|---|
-| Stage → `Draft ready` | Notify `People` col + post to Slack `#fruition-blogs` (`C0B4NFVDJKY`) |
-| Stage → `Edits requested` | Notify Marketa system user |
-| Stage → `Approved to publish` | Notify reviewer "publishing started" |
 | Stage → `Published` | Move item to `Archive` group |
 
-Configure in monday board → Automations. Native Slack integration handles the notifications; no code needed from this repo. monday's API does not expose `create_automation`, so these must be set up in the UI.
+If any legacy native Slack automation exists on this board → **delete it** to avoid double-pinging. The route handles Slack pings for `Idea proposed`, `Draft ready`, `Published` (see route.ts `pingHumanInLoop` + `publishToSanity`).
 
 ## B5. Repo code
 

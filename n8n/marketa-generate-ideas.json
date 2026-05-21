@@ -102,7 +102,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"query\": \"mutation ($board: ID!, $group: String!, $name: String!, $vals: JSON!) { create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $vals) { id } }\",\n  \"variables\": {\n    \"board\": \"5028637584\",\n    \"group\": \"topics\",\n    \"name\": {{ JSON.stringify($json.title) }},\n    \"vals\": {{ JSON.stringify(JSON.stringify({\n      \"long_text_mm3grk84\": { \"text\": $json.brief },\n      \"text_mm3gzj88\": $json.target_keyword,\n      \"dropdown_mm3gb7wm\": { \"labels\": [$json.industry] },\n      \"color_mm3gj287\": { \"label\": \"Idea proposed\" },\n      \"color_mm3gpz9w\": { \"label\": \"Explicit\" }\n    })) }}\n  }\n}",
+        "jsonBody": "={\n  \"query\": \"mutation ($board: ID!, $group: String!, $name: String!, $vals: JSON!) { create_item(board_id: $board, group_id: $group, item_name: $name, column_values: $vals) { id } }\",\n  \"variables\": {\n    \"board\": \"5028637584\",\n    \"group\": \"topics\",\n    \"name\": {{ JSON.stringify($json.title) }},\n    \"vals\": {{ JSON.stringify(JSON.stringify({\n      \"long_text_mm3grk84\": { \"text\": $json.brief },\n      \"text_mm3gzj88\": $json.target_keyword,\n      \"dropdown_mm3gb7wm\": { \"labels\": [$json.industry] },\n      \"dropdown_mm3jh58b\": { \"labels\": [\"Idea proposed\"] }\n    })) }}\n  }\n}",
         "options": {}
       },
       "id": "create-monday-item",
@@ -116,24 +116,6 @@
           "name": "monday.com"
         }
       }
-    },
-    {
-      "parameters": {
-        "channel": "C0B4NFVDJKY",
-        "text": "=:bulb: Marketa proposed 5 new blog ideas. Review queue → https://fruitionservices.monday.com/boards/5028637584",
-        "otherOptions": {}
-      },
-      "id": "slack-notify",
-      "name": "Slack: notify #fruition-blogs",
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.2,
-      "position": [1560, 300],
-      "credentials": {
-        "slackApi": {
-          "id": "{{ SLACK_CREDENTIAL_ID }}",
-          "name": "Slack #fruition-blogs"
-        }
-      }
     }
   ],
   "connections": {
@@ -142,7 +124,7 @@
     "Build prompt context": { "main": [[{ "node": "Claude: generate 5 ideas", "type": "main", "index": 0 }]] },
     "Claude: generate 5 ideas": { "main": [[{ "node": "Parse ideas array", "type": "main", "index": 0 }]] },
     "Parse ideas array": { "main": [[{ "node": "monday: create item", "type": "main", "index": 0 }]] },
-    "monday: create item": { "main": [[{ "node": "Slack: notify #fruition-blogs", "type": "main", "index": 0 }]] }
+    "monday: create item": { "main": [[]] }
   },
   "settings": { "executionOrder": "v1" },
   "meta": { "templateCredsSetupCompleted": false }

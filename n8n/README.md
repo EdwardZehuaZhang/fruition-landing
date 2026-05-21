@@ -49,37 +49,25 @@ N8N_MARKETA_REVISE_WEBHOOK_URL=https://n8n.<railway>.app/webhook/marketa-revise
 
 ## Board reference
 
-monday board: `5028637584` ("Blogs")
+monday board: `5028637584` ("Website Blogs")
 
 Column IDs hardcoded in the workflows (match `route.ts`):
 
-| Col | ID |
-|---|---|
-| Stage (driver) | `color_mm3gj287` |
-| Tier | `color_mm3gpz9w` |
-| Brief | `long_text_mm3grk84` |
-| Target keyword | `text_mm3gzj88` |
-| Industry | `dropdown_mm3gb7wm` |
-| Draft body | `long_text_mm3gj0s8` |
-| Edit notes | `long_text_mm3g2bp9` |
-| Sanity doc ID | `text_mm3g4ab9` |
-| Published URL | `link_mm3gpqq1` |
+| Col | ID | Type |
+|---|---|---|
+| Stage (driver) | `dropdown_mm3jh58b` | dropdown |
+| Brief | `long_text_mm3grk84` | long_text |
+| Target keyword | `text_mm3gzj88` | text |
+| Industry | `dropdown_mm3gb7wm` | dropdown |
+| Draft body | `long_text_mm3gj0s8` | long_text |
+| Edit notes | `long_text_mm3g2bp9` | long_text |
+| Sanity doc ID | `text_mm3g4ab9` | text |
+| Published URL | `link_mm3gpqq1` | link |
 
-Stage label IDs (status column uses internal numeric ids):
-
-| Stage | Label ID |
-|---|---|
-| Idea proposed | 12 |
-| Idea approved | 6 |
-| Drafting | 7 |
-| Draft ready | 1 |
-| Edits requested | 8 |
-| Approved to publish | 3 |
-| Published | 9 |
-| Stuck | 2 |
-
-When patching stage via monday API, use either `{"label":"Drafting"}` (string) or `{"index":7}` (label id). String form is more readable; workflows use that.
+Stage is a single-select **dropdown** (not a status col). Patch with `{ "labels": ["Draft ready"] }`, not `{ "label": ... }`. Stage labels: `Idea proposed`, `Idea approved`, `Drafting`, `Draft ready`, `Edits requested`, `Approved to publish`, `Published`, `Stuck`.
 
 ## Slack channel
 
-`#fruition-blogs` — channel id `C0B4NFVDJKY`. Native monday automation handles notifications on stage changes. n8n workflows post a confirmation message after their work finishes (optional, but useful for debugging).
+`#fruition-blogs` — channel id `C0B4NFVDJKY`. **All Slack pings come from `/api/webhooks/monday-blog`** (single source of truth). n8n workflows do **not** post to Slack. Disable any monday native Slack automations to avoid double-pings.
+
+Pings fire on the three human-in-loop stages: `Idea proposed` (review queue), `Draft ready` (review draft), `Published` (announce).
