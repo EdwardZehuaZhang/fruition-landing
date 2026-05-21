@@ -50,10 +50,21 @@ function bareDomain(url: string): string {
   }
 }
 
-async function probeOk(url: string): Promise<boolean> {
+// Slack-style user agent. Brandfetch's hotlink protection 302s requests
+// that look like browsers (their docs page), but allows Slackbot through —
+// and Slack itself sends this UA when it expands our image accessory, so
+// the probe gives the same answer Slack will see.
+const SLACK_UA = "Slackbot-LinkExpanding 1.0 (+https://api.slack.com/robots)"
+
+async function probeImage(url: string): Promise<boolean> {
   try {
-    const r = await fetch(url, { method: "HEAD", signal: AbortSignal.timeout(2500) })
-    return r.ok
+    const r = await fetch(url, {
+      method: "HEAD",
+      headers: { "User-Agent": SLACK_UA },
+      signal: AbortSignal.timeout(2500),
+    })
+    if (!r.ok) return false
+    return (r.headers.get("content-type") ?? "").startsWith("image/")
   } catch {
     return false
   }
@@ -77,7 +88,7 @@ export async function resolveCompanyLogo(website: string): Promise<string | null
   const bfKey = process.env.BRANDFETCH_CLIENT_ID
   if (bfKey) {
     const brandfetch = `https://cdn.brandfetch.io/${domain}?c=${bfKey}`
-    if (await probeOk(brandfetch)) return brandfetch
+    if (await probeImage(brandfetch)) return brandfetch
   }
 
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`
