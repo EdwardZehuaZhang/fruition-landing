@@ -222,9 +222,12 @@ async function publishToSanity(pulseId: string): Promise<NextResponse> {
 
 async function notifySlack(text: string): Promise<void> {
   const token = process.env.SLACK_BOT_TOKEN
-  if (!token) return // soft-fail if Slack not configured
+  if (!token) {
+    console.warn("[monday-blog] SLACK_BOT_TOKEN missing, skipping notify")
+    return
+  }
   try {
-    await fetch("https://slack.com/api/chat.postMessage", {
+    const r = await fetch("https://slack.com/api/chat.postMessage", {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
@@ -232,8 +235,14 @@ async function notifySlack(text: string): Promise<void> {
       },
       body: JSON.stringify({ channel: SLACK_CHANNEL, text }),
     })
+    const body = (await r.json().catch(() => ({}))) as { ok?: boolean; error?: string }
+    if (!body.ok) {
+      console.warn(
+        `[monday-blog] slack chat.postMessage not ok: error=${body.error ?? "unknown"} http=${r.status} text=${text.slice(0, 80)}`,
+      )
+    }
   } catch (err) {
-    console.warn("[monday-blog] slack notify failed:", errMsg(err))
+    console.warn("[monday-blog] slack notify threw:", errMsg(err))
   }
 }
 
