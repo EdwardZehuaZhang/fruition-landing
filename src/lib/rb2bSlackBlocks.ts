@@ -82,8 +82,6 @@ export function buildCompanySlackBlocks(args: {
   isRepeat: boolean
 }): Record<string, unknown>[] {
   const blocks: Record<string, unknown>[] = []
-  const intentEmoji =
-    args.intent === "High" ? ":fire:" : args.intent === "Medium" ? ":warning:" : ":eyes:"
 
   blocks.push({
     type: "header",
@@ -166,16 +164,6 @@ export function buildCompanySlackBlocks(args: {
   if (fields.length) {
     blocks.push({ type: "section", fields })
   }
-
-  blocks.push({
-    type: "context",
-    elements: [
-      {
-        type: "mrkdwn",
-        text: `${intentEmoji} *${args.intent}* intent${args.isRepeat ? " • returning visit" : ""}`,
-      },
-    ],
-  })
 
   return blocks
 }
