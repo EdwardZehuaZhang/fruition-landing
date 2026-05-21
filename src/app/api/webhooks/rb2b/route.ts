@@ -118,13 +118,17 @@ export async function POST(req: Request) {
             website,
             industry: (payload.Industry ?? "").trim(),
             employees: payload["Employee Count"] ?? null,
+            revenue: (payload["Estimate Revenue"] ?? "").trim(),
             location: [payload.City, payload.State]
               .map((s) => (s ?? "").trim())
               .filter(Boolean)
               .join(", "),
+            linkedin: rawLinkedin,
+            seenAt: seenAt,
             isRepeat: Boolean(payload.is_repeat_visit),
           }),
           `Anonymous company visit: ${companyName} → ${capturedUrl}`,
+          { unfurlLinks: false, unfurlMedia: false },
         )
       } catch (err) {
         console.error("[rb2b-webhook] company slack post failed", errMsg(err))

@@ -142,7 +142,10 @@ async function main(): Promise<void> {
       website: website.trim(),
       industry: row["Industry"] ?? "",
       employees: row["EstimatedEmployeeCount"] ?? null,
+      revenue: row["EstimateRevenue"] ?? "",
       location,
+      linkedin,
+      seenAt: row["LastSeenAt"] ?? "",
       isRepeat: (row["NewProfile"] ?? "").toLowerCase() !== "true",
     })
     const text = `Anonymous company visit (backfill): ${companyName} → ${capturedUrl}`
@@ -151,7 +154,7 @@ async function main(): Promise<void> {
       console.log(`[backfill] DRY would post: ${text}`)
     } else {
       try {
-        await postSlackMessage(channel!, blocks, text)
+        await postSlackMessage(channel!, blocks, text, { unfurlLinks: false, unfurlMedia: false })
         sent++
         console.log(`[backfill] sent: ${companyName} (${intent})`)
       } catch (err) {
