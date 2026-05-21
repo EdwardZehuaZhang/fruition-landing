@@ -50,6 +50,39 @@ function bareDomain(url: string): string {
   }
 }
 
+async function probeOk(url: string): Promise<boolean> {
+  try {
+    const r = await fetch(url, { method: "HEAD", signal: AbortSignal.timeout(2500) })
+    return r.ok
+  } catch {
+    return false
+  }
+}
+
+// Resolve the best logo URL for a company. Tries Brandfetch first when a
+// free-tier client id is configured (full-color brand logo, ~85% coverage
+// for B2B), then falls back to Google's favicon service (near-universal
+// coverage but often just a generic globe).
+//
+// Clearbit Logo API used to sit at the top of this chain but HubSpot
+// sunset it in late 2025 — `logo.clearbit.com` no longer has a usable
+// DNS record. Don't add it back.
+//
+// Returns null when there's no usable domain so the builder can omit the
+// image block entirely.
+export async function resolveCompanyLogo(website: string): Promise<string | null> {
+  const domain = bareDomain(website)
+  if (!domain) return null
+
+  const bfKey = process.env.BRANDFETCH_CLIENT_ID
+  if (bfKey) {
+    const brandfetch = `https://cdn.brandfetch.io/${domain}?c=${bfKey}`
+    if (await probeOk(brandfetch)) return brandfetch
+  }
+
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`
+}
+
 function formatVisitDate(iso: string): string {
   const d = new Date(iso)
   if (Number.isNaN(d.getTime())) return iso
@@ -80,6 +113,9 @@ export function buildCompanySlackBlocks(args: {
   linkedin?: string
   seenAt?: string
   isRepeat: boolean
+  // Pre-resolved logo URL (call resolveCompanyLogo first). When omitted,
+  // derives a Google favicon from the website domain.
+  logoUrl?: string | null
 }): Record<string, unknown>[] {
   const blocks: Record<string, unknown>[] = []
 
@@ -100,13 +136,15 @@ export function buildCompanySlackBlocks(args: {
     type: "section",
     text: { type: "mrkdwn", text: infoLines.join("\n") },
   }
-  if (domain) {
-    // Google's favicon service has near-universal coverage and returns a
-    // generic globe icon for domains without favicons, so the image block
-    // never 404s the way Clearbit/logo APIs do for long-tail companies.
+  // Prefer a pre-resolved logo URL (caller can chain Clearbit → Brandfetch
+  // → favicon). When the caller didn't resolve and we still have a domain,
+  // fall back to Google's favicon service so the image block never 404s.
+  const accessoryUrl =
+    args.logoUrl ?? (domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=128` : null)
+  if (accessoryUrl) {
     infoBlock.accessory = {
       type: "image",
-      image_url: `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
+      image_url: accessoryUrl,
       alt_text: `${args.companyName} logo`,
     }
   }

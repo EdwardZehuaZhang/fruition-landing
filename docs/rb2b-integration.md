@@ -24,12 +24,16 @@ EU traffic skips the script entirely — `src/app/layout.tsx` reads
 ## Environment
 
 ```
-SLACK_BOT_TOKEN=xoxb-…          # existing
-MONDAY_API_TOKEN=…               # existing
-RB2B_WEBHOOK_SECRET=…            # shared secret in webhook URL ?key=
+SLACK_BOT_TOKEN=xoxb-…           # existing
+MONDAY_API_TOKEN=…                # existing
+RB2B_WEBHOOK_SECRET=…             # shared secret in webhook URL ?key=
 RB2B_MONDAY_BOARD_ID=5028658425
 SLACK_LEADS_CHANNEL_ID=C0B4HBBHR35
-# REACHLY_API_KEY=…              # TODO: see "Reachly" below
+BRANDFETCH_CLIENT_ID=…            # optional: free key from developers.brandfetch.com
+                                  # When set, anonymous-visit Slack alerts
+                                  # use Brandfetch's brand logo CDN before
+                                  # falling back to Google's favicon.
+# REACHLY_API_KEY=…               # TODO: see "Reachly" below
 # REACHLY_CAMPAIGN_ID=…
 ```
 

@@ -17,6 +17,7 @@ import {
   buildCompanySlackBlocks,
   deriveIntent,
   isFruitionSelfTraffic,
+  resolveCompanyLogo,
   type Intent,
 } from "../src/lib/rb2bSlackBlocks"
 import { postSlackMessage } from "../src/lib/slackClient"
@@ -135,6 +136,7 @@ async function main(): Promise<void> {
     const capturedUrl = firstUrl(row["RecentPageUrls"] ?? "")
     const intent: Intent = deriveIntent([capturedUrl])
     const location = [row["City"], row["State"]].filter(Boolean).join(", ")
+    const logoUrl = await resolveCompanyLogo(website.trim())
     const blocks = buildCompanySlackBlocks({
       companyName,
       capturedUrl,
@@ -147,6 +149,7 @@ async function main(): Promise<void> {
       linkedin,
       seenAt: row["LastSeenAt"] ?? "",
       isRepeat: (row["NewProfile"] ?? "").toLowerCase() !== "true",
+      logoUrl,
     })
     const text = `Anonymous company visit (backfill): ${companyName} → ${capturedUrl}`
 

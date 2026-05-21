@@ -13,6 +13,7 @@ import {
   isCompanyLinkedin,
   isFruitionSelfTraffic,
   pathOf,
+  resolveCompanyLogo,
   type Intent,
 } from "@/lib/rb2bSlackBlocks"
 
@@ -108,6 +109,7 @@ export async function POST(req: Request) {
     // person identity, so we skip Monday (no dedupe key) and just post Slack.
     if (companyName && process.env.SLACK_LEADS_CHANNEL_ID) {
       const intentNow = deriveIntent([pathOf(capturedUrl)])
+      const logoUrl = await resolveCompanyLogo(website)
       try {
         await postSlackMessage(
           process.env.SLACK_LEADS_CHANNEL_ID,
@@ -126,6 +128,7 @@ export async function POST(req: Request) {
             linkedin: rawLinkedin,
             seenAt: seenAt,
             isRepeat: Boolean(payload.is_repeat_visit),
+            logoUrl,
           }),
           `Anonymous company visit: ${companyName} → ${capturedUrl}`,
           { unfurlLinks: false, unfurlMedia: false },
