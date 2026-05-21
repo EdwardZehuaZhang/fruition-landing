@@ -112,6 +112,126 @@ function formatVisitDate(iso: string): string {
   return fmt.format(d).replace(/,\s*(\d{2}:)/, " at $1")
 }
 
+export function buildPersonSlackBlocks(args: {
+  firstName: string
+  lastName: string
+  title: string
+  companyName: string
+  email: string
+  linkedin: string
+  capturedUrl: string
+  intent: Intent
+  website: string
+  industry: string
+  employees: number | string | null
+  revenue?: string
+  location: string
+  seenAt?: string
+  isRepeat: boolean
+  isNew: boolean
+  mondayItemId?: string
+  mondayBoardId?: string | number
+  // Pre-resolved logo URL (call resolveCompanyLogo first). When omitted,
+  // derives a Google favicon from the website domain.
+  logoUrl?: string | null
+}): Record<string, unknown>[] {
+  const fullName = [args.firstName, args.lastName].filter(Boolean).join(" ").trim() || "Unknown visitor"
+  const headerText = args.companyName ? `${fullName} from ${args.companyName}` : fullName
+  const blocks: Record<string, unknown>[] = []
+
+  blocks.push({
+    type: "header",
+    text: { type: "plain_text", text: headerText, emoji: true },
+  })
+
+  const infoLines: string[] = []
+  infoLines.push(`*Name:* ${fullName}`)
+  if (args.title) infoLines.push(`*Title:* ${args.title}`)
+  if (args.companyName) infoLines.push(`*Company:* ${args.companyName}`)
+  if (args.email) infoLines.push(`*Email:* <mailto:${args.email}|${args.email}>`)
+  if (args.linkedin) infoLines.push(`*LinkedIn:* <${args.linkedin}|${args.linkedin}>`)
+  if (args.location) infoLines.push(`*Location:* ${args.location}`)
+
+  const domain = bareDomain(args.website)
+  const infoBlock: Record<string, unknown> = {
+    type: "section",
+    text: { type: "mrkdwn", text: infoLines.join("\n") },
+  }
+  const accessoryUrl =
+    args.logoUrl ?? (domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=128` : null)
+  if (accessoryUrl) {
+    infoBlock.accessory = {
+      type: "image",
+      image_url: accessoryUrl,
+      alt_text: `${args.companyName || fullName} logo`,
+    }
+  }
+  blocks.push(infoBlock)
+
+  if (args.capturedUrl) {
+    const when = args.seenAt ? ` on ${formatVisitDate(args.seenAt)}` : ""
+    blocks.push({
+      type: "context",
+      elements: [
+        {
+          type: "mrkdwn",
+          text: `First identified visiting *<${args.capturedUrl}|${args.capturedUrl}>*${when}`,
+        },
+      ],
+    })
+  }
+
+  const buttons: Record<string, unknown>[] = []
+  if (args.linkedin) {
+    buttons.push({
+      type: "button",
+      text: { type: "plain_text", text: "Connect on LinkedIn :linkedin:", emoji: true },
+      url: args.linkedin,
+    })
+  }
+  if (args.website) {
+    buttons.push({
+      type: "button",
+      text: { type: "plain_text", text: "More Details :globe_with_meridians:", emoji: true },
+      url: args.website,
+    })
+  }
+  if (args.mondayItemId && args.mondayBoardId != null) {
+    buttons.push({
+      type: "button",
+      text: { type: "plain_text", text: "Open in Monday :clipboard:", emoji: true },
+      url: `https://fruitionservices.monday.com/boards/${args.mondayBoardId}/pulses/${args.mondayItemId}`,
+    })
+  }
+  if (buttons.length) {
+    blocks.push({ type: "actions", elements: buttons })
+  }
+
+  if (args.companyName) {
+    blocks.push({ type: "divider" })
+    const aboutTitle = args.website
+      ? `*About <${args.website}|${args.companyName}>*`
+      : `*About ${args.companyName}*`
+    blocks.push({
+      type: "section",
+      text: { type: "mrkdwn", text: aboutTitle },
+    })
+
+    const fields: Record<string, unknown>[] = []
+    if (args.website) fields.push({ type: "mrkdwn", text: `*Website:* <${args.website}|${args.website}>` })
+    if (args.employees != null && String(args.employees).trim()) {
+      fields.push({ type: "mrkdwn", text: `*Est. Employees:* ${args.employees}` })
+    }
+    if (args.industry) fields.push({ type: "mrkdwn", text: `*Industry:* ${args.industry}` })
+    if (args.revenue) fields.push({ type: "mrkdwn", text: `*Est. Revenue:* ${args.revenue}` })
+    if (fields.length) {
+      blocks.push({ type: "section", fields })
+    }
+  }
+
+  return blocks
+}
+
 export function buildCompanySlackBlocks(args: {
   companyName: string
   capturedUrl: string

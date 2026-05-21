@@ -9,6 +9,7 @@ import { RB2B_BOARD_ID, RB2B_COLUMNS } from "@/lib/rb2bColumns"
 import { postSlackMessage } from "@/lib/slackClient"
 import {
   buildCompanySlackBlocks,
+  buildPersonSlackBlocks,
   deriveIntent,
   isCompanyLinkedin,
   isFruitionSelfTraffic,
@@ -247,21 +248,36 @@ export async function POST(req: Request) {
       : null
     const shouldNotify = isNew || (intentNow === "High" && previousIntent !== "High")
     if (shouldNotify && process.env.SLACK_LEADS_CHANNEL_ID) {
+      const personLogoUrl = await resolveCompanyLogo(website)
       try {
         await postSlackMessage(
           process.env.SLACK_LEADS_CHANNEL_ID,
-          buildSlackBlocks({
-            itemId,
-            itemName,
+          buildPersonSlackBlocks({
+            firstName,
+            lastName,
             title: (payload.Title ?? "").trim(),
+            companyName,
             email,
             linkedin,
-            company: companyName,
             capturedUrl,
             intent: intentNow,
+            website,
+            industry: (payload.Industry ?? "").trim(),
+            employees: payload["Employee Count"] ?? null,
+            revenue: (payload["Estimate Revenue"] ?? "").trim(),
+            location: [payload.City, payload.State]
+              .map((s) => (s ?? "").trim())
+              .filter(Boolean)
+              .join(", "),
+            seenAt,
+            isRepeat: Boolean(payload.is_repeat_visit),
             isNew,
+            mondayItemId: itemId,
+            mondayBoardId: RB2B_BOARD_ID,
+            logoUrl: personLogoUrl,
           }),
           `${isNew ? "New" : "Hot"} lead: ${itemName} → ${capturedUrl}`,
+          { unfurlLinks: false, unfurlMedia: false },
         )
       } catch (err) {
         console.error("[rb2b-webhook] slack post failed", errMsg(err))
@@ -307,38 +323,3 @@ function parseEmployeeCount(raw: number | string | null | undefined): number | n
   return Number.isFinite(upper) ? upper : null
 }
 
-function buildSlackBlocks(args: {
-  itemId: string
-  itemName: string
-  title: string
-  email: string
-  linkedin: string
-  company: string
-  capturedUrl: string
-  intent: Intent
-  isNew: boolean
-}): Record<string, unknown>[] {
-  const intentEmoji = args.intent === "High" ? ":fire:" : args.intent === "Medium" ? ":warning:" : ":eyes:"
-  const lines: string[] = []
-  if (args.title || args.company) {
-    lines.push(`${args.title || "—"}${args.company ? ` @ *${args.company}*` : ""}`)
-  }
-  if (args.email) lines.push(`:email: <mailto:${args.email}|${args.email}>`)
-  if (args.linkedin) lines.push(`:linkedin: <${args.linkedin}|LinkedIn>`)
-  // Backticks suppress Slack auto-unfurl. The captured URL is always one of
-  // our own pages, and we don't want our homepage previewing on every alert.
-  if (args.capturedUrl) lines.push(`:link: \`${args.capturedUrl}\``)
-  lines.push(
-    `${intentEmoji} *${args.intent}* intent • <https://fruitionservices.monday.com/boards/${RB2B_BOARD_ID}/pulses/${args.itemId}|Open in Monday>`,
-  )
-  return [
-    {
-      type: "header",
-      text: { type: "plain_text", text: `${args.isNew ? "New" : "Returning"} lead — ${args.itemName}` },
-    },
-    {
-      type: "section",
-      text: { type: "mrkdwn", text: lines.join("\n") },
-    },
-  ]
-}
