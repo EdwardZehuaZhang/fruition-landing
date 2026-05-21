@@ -1,5 +1,6 @@
 import { getPageBySlug } from "@/sanity/queries"
 import { PortableText } from "@portabletext/react"
+import VisitorTrackingDisclosure from "@/components/VisitorTrackingDisclosure"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("terms-and-conditions")
@@ -33,6 +34,8 @@ export default async function TermsPage() {
           <PortableText value={page?.body} />
         </div>
       )}
+
+      <VisitorTrackingDisclosure />
 
       {docs.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">

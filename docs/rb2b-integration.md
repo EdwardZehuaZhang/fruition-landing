@@ -18,8 +18,12 @@ Visitor (US) ─► <script> in layout ─► RB2B servers
                        (board 5028658425)
 ```
 
-EU traffic skips the script entirely — `src/app/layout.tsx` reads
-`x-vercel-ip-country` and short-circuits the loader for 31 EU/EEA + UK codes.
+The RB2B loader runs for every visitor regardless of country (US, UK,
+EU/EEA, and the rest of the world). Region-level suppression — if you
+want it — lives in the RB2B dashboard's compliance settings, not in
+this codebase. Disclosure about the identification + opt-out path is
+rendered by `src/components/VisitorTrackingDisclosure.tsx` and
+embedded on both `/data-privacy` and `/terms-and-conditions`.
 
 ## Environment
 
@@ -115,11 +119,8 @@ curl -X POST 'http://localhost:3000/api/webhooks/rb2b?key=…' \
 Expected: `200 {"ok":true,"itemId":"…","isNew":true,"intent":"High"}` plus a
 Slack notification.
 
-EU block (preview deploy):
+Loader present on every page (no country gating):
 ```
-curl -sIL -H 'x-vercel-ip-country: DE' <preview-url> | grep -c ddwl4m2hdecbv
-# expect 0
-
-curl -sIL -H 'x-vercel-ip-country: US' <preview-url> | grep -c ddwl4m2hdecbv
+curl -sL <preview-url> | grep -c ddwl4m2hdecbv
 # expect > 0  (the cloudfront URL in the inline script)
 ```

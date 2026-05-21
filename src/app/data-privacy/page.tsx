@@ -1,5 +1,6 @@
 import { getPageBySlug } from "@/sanity/queries"
 import { PortableText } from "@portabletext/react"
+import VisitorTrackingDisclosure from "@/components/VisitorTrackingDisclosure"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("data-privacy")
@@ -24,6 +25,7 @@ export default async function PrivacyPage() {
           <PortableText value={page.body} />
         </div>
       )}
+      <VisitorTrackingDisclosure />
     </div>
   )
 }
