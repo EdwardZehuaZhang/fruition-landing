@@ -16,6 +16,7 @@ import {
   resolveCompanyLogo,
   type Intent,
 } from "@/lib/rb2bSlackBlocks"
+import { upsertCompanyMondayItem } from "@/lib/rb2bMondayCompany"
 
 export const runtime = "nodejs"
 export const maxDuration = 30
@@ -106,9 +107,43 @@ export async function POST(req: Request) {
   const dedupeValue = email || linkedin
   if (!dedupeValue) {
     // Company-only event (anonymous visitor — RB2B Companies stream). No
-    // person identity, so we skip Monday (no dedupe key) and just post Slack.
-    if (companyName && process.env.SLACK_LEADS_CHANNEL_ID) {
-      const intentNow = deriveIntent([pathOf(capturedUrl)])
+    // person identity, but we still write to Monday so anonymous-company
+    // history shows up on the board next to identified leads. Dedupe by
+    // the company LinkedIn URL (preferred — stable per company) or the
+    // company's website domain when LinkedIn is missing.
+    if (!companyName) {
+      console.warn("[rb2b-webhook] missing identity and company; skipping")
+      return NextResponse.json({ ok: true, skipped: "no identity" })
+    }
+
+    const intentNow = deriveIntent([pathOf(capturedUrl)])
+    let itemId: string | undefined
+    let isNewCompany = false
+    try {
+      const r = await upsertCompanyMondayItem({
+        companyName,
+        linkedin: rawLinkedin,
+        website,
+        industry: (payload.Industry ?? "").trim(),
+        employees: payload["Employee Count"] ?? null,
+        revenue: (payload["Estimate Revenue"] ?? "").trim(),
+        location: [payload.City, payload.State, payload.Zipcode]
+          .map((s) => (s ?? "").trim())
+          .filter(Boolean)
+          .join(", "),
+        referrer: (payload.Referrer ?? "").trim(),
+        tags: (payload.Tags ?? "").trim(),
+        capturedUrl,
+        seenAt,
+        isRepeat: Boolean(payload.is_repeat_visit),
+      })
+      itemId = r.itemId
+      isNewCompany = r.isNew
+    } catch (err) {
+      console.error("[rb2b-webhook] company monday write failed", errMsg(err))
+    }
+
+    if (process.env.SLACK_LEADS_CHANNEL_ID) {
       const logoUrl = await resolveCompanyLogo(website)
       try {
         await postSlackMessage(
@@ -136,10 +171,14 @@ export async function POST(req: Request) {
       } catch (err) {
         console.error("[rb2b-webhook] company slack post failed", errMsg(err))
       }
-      return NextResponse.json({ ok: true, companyOnly: true, intent: intentNow })
     }
-    console.warn("[rb2b-webhook] missing identity and company; skipping")
-    return NextResponse.json({ ok: true, skipped: "no identity" })
+    return NextResponse.json({
+      ok: true,
+      companyOnly: true,
+      intent: intentNow,
+      itemId,
+      isNew: isNewCompany,
+    })
   }
 
   try {

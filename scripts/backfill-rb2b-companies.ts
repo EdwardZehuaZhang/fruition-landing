@@ -7,9 +7,14 @@
 // (ProfileType=Person) since those land via the realtime webhook already.
 //
 // Usage:
-//   pnpm tsx scripts/backfill-rb2b-companies.ts <path-to-csv> [--dry]
+//   pnpm tsx scripts/backfill-rb2b-companies.ts <path-to-csv> [--dry] [--no-slack]
 //
-// Requires .env.local with SLACK_BOT_TOKEN + SLACK_LEADS_CHANNEL_ID.
+// --dry         print intended actions without writing anything
+// --no-slack    Monday-only re-run (skip Slack posts to avoid duplicate
+//               #website-leads messages when backfilling historical CSV
+//               data that's already been Slack-notified)
+//
+// Requires .env.local with MONDAY_API_TOKEN, SLACK_BOT_TOKEN, SLACK_LEADS_CHANNEL_ID.
 
 import { readFileSync } from "node:fs"
 import { config as loadEnv } from "dotenv"
@@ -20,6 +25,7 @@ import {
   resolveCompanyLogo,
   type Intent,
 } from "../src/lib/rb2bSlackBlocks"
+import { upsertCompanyMondayItem } from "../src/lib/rb2bMondayCompany"
 import { postSlackMessage } from "../src/lib/slackClient"
 
 loadEnv({ path: ".env.local" })
@@ -95,12 +101,13 @@ async function sleep(ms: number): Promise<void> {
 async function main(): Promise<void> {
   const csvPath = process.argv[2]
   const dry = process.argv.includes("--dry")
+  const skipSlack = process.argv.includes("--no-slack")
   if (!csvPath) {
-    console.error("usage: tsx scripts/backfill-rb2b-companies.ts <csv> [--dry]")
+    console.error("usage: tsx scripts/backfill-rb2b-companies.ts <csv> [--dry] [--no-slack]")
     process.exit(1)
   }
   const channel = process.env.SLACK_LEADS_CHANNEL_ID
-  if (!channel && !dry) {
+  if (!channel && !dry && !skipSlack) {
     console.error("SLACK_LEADS_CHANNEL_ID missing in env")
     process.exit(1)
   }
@@ -136,6 +143,22 @@ async function main(): Promise<void> {
     const capturedUrl = firstUrl(row["RecentPageUrls"] ?? "")
     const intent: Intent = deriveIntent([capturedUrl])
     const location = [row["City"], row["State"]].filter(Boolean).join(", ")
+    const isRepeat = (row["NewProfile"] ?? "").toLowerCase() !== "true"
+    const seenAt = row["LastSeenAt"] ?? ""
+    const upsertArgs = {
+      companyName,
+      linkedin,
+      website: website.trim(),
+      industry: row["Industry"] ?? "",
+      employees: row["EstimatedEmployeeCount"] ?? null,
+      revenue: row["EstimateRevenue"] ?? "",
+      location: [row["City"], row["State"], row["Zipcode"]].filter(Boolean).join(", "),
+      referrer: row["MostRecentReferrer"] ?? "",
+      tags: row["Tags"] ?? "",
+      capturedUrl,
+      seenAt,
+      isRepeat,
+    }
     const logoUrl = await resolveCompanyLogo(website.trim())
     const blocks = buildCompanySlackBlocks({
       companyName,
@@ -147,23 +170,31 @@ async function main(): Promise<void> {
       revenue: row["EstimateRevenue"] ?? "",
       location,
       linkedin,
-      seenAt: row["LastSeenAt"] ?? "",
-      isRepeat: (row["NewProfile"] ?? "").toLowerCase() !== "true",
+      seenAt,
+      isRepeat,
       logoUrl,
     })
     const text = `Anonymous company visit (backfill): ${companyName} → ${capturedUrl}`
 
     if (dry) {
-      console.log(`[backfill] DRY would post: ${text}`)
+      console.log(`[backfill] DRY would upsert+post: ${text}`)
     } else {
       try {
-        await postSlackMessage(channel!, blocks, text, { unfurlLinks: false, unfurlMedia: false })
-        sent++
-        console.log(`[backfill] sent: ${companyName} (${intent})`)
+        const monday = await upsertCompanyMondayItem(upsertArgs)
+        console.log(`[backfill] monday: ${companyName} -> ${monday.itemId ?? "skip"} (new=${monday.isNew})`)
       } catch (err) {
-        console.error(`[backfill] failed: ${companyName}`, err)
+        console.error(`[backfill] monday failed: ${companyName}`, err)
       }
-      await sleep(SLEEP_MS)
+      if (!skipSlack) {
+        try {
+          await postSlackMessage(channel!, blocks, text, { unfurlLinks: false, unfurlMedia: false })
+          sent++
+          console.log(`[backfill] sent: ${companyName} (${intent})`)
+        } catch (err) {
+          console.error(`[backfill] failed: ${companyName}`, err)
+        }
+        await sleep(SLEEP_MS)
+      }
     }
   }
 
