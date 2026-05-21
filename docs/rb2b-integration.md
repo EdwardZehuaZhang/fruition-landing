@@ -63,9 +63,15 @@ for sales pipeline state and is *not* touched by the webhook.
 
 Posts to channel `C0B4HBBHR35` (#website0leads). Sent on:
 - first sighting of an email/LinkedIn, OR
-- when accumulated pages bump intent to High.
+- when accumulated pages bump intent to High, OR
+- **company-only events** (anonymous visitor with Company Name but no
+  email/LinkedIn) — posts a separate "Anonymous visit — {Company}" block.
+  No Monday write (no dedupe key); every company-only payload posts.
 
-Repeat low/medium visits are silent to keep the channel signal-rich.
+Repeat low/medium person visits are silent to keep the channel
+signal-rich. Company-only events depend on RB2B routing its Companies
+stream to this webhook URL — if RB2B only sends Contacts via webhook,
+enable RB2B's native Slack destination for the Companies feed instead.
 
 ## Reachly
 

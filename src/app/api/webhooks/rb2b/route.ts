@@ -101,7 +101,34 @@ export async function POST(req: Request) {
   const dedupeColumn = email ? RB2B_COLUMNS.email : RB2B_COLUMNS.linkedin
   const dedupeValue = email || linkedin
   if (!dedupeValue) {
-    console.warn("[rb2b-webhook] missing both email and linkedin; skipping")
+    // Company-only event (anonymous visitor — RB2B Companies stream). No
+    // person identity, so we skip Monday (no dedupe key) and just post Slack.
+    if (companyName && process.env.SLACK_LEADS_CHANNEL_ID) {
+      const intentNow = deriveIntent([pathOf(capturedUrl)])
+      try {
+        await postSlackMessage(
+          process.env.SLACK_LEADS_CHANNEL_ID,
+          buildCompanySlackBlocks({
+            companyName,
+            capturedUrl,
+            intent: intentNow,
+            website: (payload.Website ?? "").trim(),
+            industry: (payload.Industry ?? "").trim(),
+            employees: payload["Employee Count"] ?? null,
+            location: [payload.City, payload.State]
+              .map((s) => (s ?? "").trim())
+              .filter(Boolean)
+              .join(", "),
+            isRepeat: Boolean(payload.is_repeat_visit),
+          }),
+          `Anonymous company visit: ${companyName} → ${capturedUrl}`,
+        )
+      } catch (err) {
+        console.error("[rb2b-webhook] company slack post failed", errMsg(err))
+      }
+      return NextResponse.json({ ok: true, companyOnly: true, intent: intentNow })
+    }
+    console.warn("[rb2b-webhook] missing identity and company; skipping")
     return NextResponse.json({ ok: true, skipped: "no identity" })
   }
 
@@ -230,6 +257,40 @@ function parseEmployeeCount(raw: number | string | null | undefined): number | n
   const nums = matches.map((m) => Number(m.replace(/,/g, "")))
   const upper = Math.max(...nums.filter((n) => Number.isFinite(n)))
   return Number.isFinite(upper) ? upper : null
+}
+
+function buildCompanySlackBlocks(args: {
+  companyName: string
+  capturedUrl: string
+  intent: Intent
+  website: string
+  industry: string
+  employees: number | string | null
+  location: string
+  isRepeat: boolean
+}): Record<string, unknown>[] {
+  const intentEmoji = args.intent === "High" ? ":fire:" : args.intent === "Medium" ? ":warning:" : ":eyes:"
+  const lines: string[] = []
+  const meta: string[] = []
+  if (args.industry) meta.push(args.industry)
+  if (args.employees != null && String(args.employees).trim()) meta.push(`${args.employees} employees`)
+  if (args.location) meta.push(args.location)
+  if (meta.length) lines.push(meta.join(" • "))
+  if (args.website) lines.push(`:globe_with_meridians: <${args.website}|${args.website}>`)
+  if (args.capturedUrl) lines.push(`:link: <${args.capturedUrl}|${args.capturedUrl}>`)
+  lines.push(
+    `${intentEmoji} *${args.intent}* intent • _anonymous (company-only)_${args.isRepeat ? " • returning" : ""}`,
+  )
+  return [
+    {
+      type: "header",
+      text: { type: "plain_text", text: `Anonymous visit — ${args.companyName}` },
+    },
+    {
+      type: "section",
+      text: { type: "mrkdwn", text: lines.join("\n") },
+    },
+  ]
 }
 
 function buildSlackBlocks(args: {
