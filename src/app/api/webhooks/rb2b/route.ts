@@ -7,6 +7,14 @@ import {
 } from "@/lib/mondayClient"
 import { RB2B_BOARD_ID, RB2B_COLUMNS } from "@/lib/rb2bColumns"
 import { postSlackMessage } from "@/lib/slackClient"
+import {
+  buildCompanySlackBlocks,
+  deriveIntent,
+  isCompanyLinkedin,
+  isFruitionSelfTraffic,
+  pathOf,
+  type Intent,
+} from "@/lib/rb2bSlackBlocks"
 
 export const runtime = "nodejs"
 export const maxDuration = 30
@@ -32,23 +40,6 @@ interface Rb2bPayload {
   "Captured URL"?: string | null
   Tags?: string | null
   is_repeat_visit?: boolean | null
-}
-
-type Intent = "Low" | "Medium" | "High"
-
-function deriveIntent(urls: string[]): Intent {
-  const list = urls.map((u) => u.toLowerCase())
-  if (list.some((u) => /\/service/.test(u))) return "High"
-  if (list.some((u) => /\/(contact|pricing)/.test(u))) return "Medium"
-  return "Low"
-}
-
-function pathOf(url: string): string {
-  try {
-    return new URL(url).pathname || url
-  } catch {
-    return url
-  }
 }
 
 function appendPage(existing: string | null, capturedUrl: string, seenAt: string): string {
@@ -91,7 +82,19 @@ export async function POST(req: Request) {
   const firstName = (payload["First Name"] ?? "").trim()
   const lastName = (payload["Last Name"] ?? "").trim()
   const companyName = (payload["Company Name"] ?? "").trim()
-  const linkedin = (payload["LinkedIn URL"] ?? "").trim()
+  const rawLinkedin = (payload["LinkedIn URL"] ?? "").trim()
+  const website = (payload.Website ?? "").trim()
+
+  // Skip our own staff/test traffic — RB2B picks up Fruition team members
+  // browsing the site, which would otherwise spam #website-leads.
+  if (isFruitionSelfTraffic({ companyName, website, linkedin: rawLinkedin })) {
+    return NextResponse.json({ ok: true, skipped: "self-traffic" })
+  }
+
+  // RB2B Companies stream uses `linkedin.com/company/*` URLs; that's not a
+  // person identity, so don't use it as a dedupe key (would create bogus
+  // person rows in Monday). Treat as company-only.
+  const linkedin = isCompanyLinkedin(rawLinkedin) ? "" : rawLinkedin
   const capturedUrl = (payload["Captured URL"] ?? "").trim()
   const seenAt = (payload["Seen At"] ?? "").trim() || new Date().toISOString()
   const intentKey = RB2B_COLUMNS.intent
@@ -112,7 +115,7 @@ export async function POST(req: Request) {
             companyName,
             capturedUrl,
             intent: intentNow,
-            website: (payload.Website ?? "").trim(),
+            website,
             industry: (payload.Industry ?? "").trim(),
             employees: payload["Employee Count"] ?? null,
             location: [payload.City, payload.State]
@@ -168,7 +171,6 @@ export async function POST(req: Request) {
       const title = (payload.Title ?? "").trim()
       if (title) values[RB2B_COLUMNS.title] = title
       if (companyName) values[RB2B_COLUMNS.company] = companyName
-      const website = (payload.Website ?? "").trim()
       if (website) values[RB2B_COLUMNS.website] = { url: website, text: website }
       const industry = (payload.Industry ?? "").trim()
       if (industry) values[RB2B_COLUMNS.industry] = industry
@@ -257,40 +259,6 @@ function parseEmployeeCount(raw: number | string | null | undefined): number | n
   const nums = matches.map((m) => Number(m.replace(/,/g, "")))
   const upper = Math.max(...nums.filter((n) => Number.isFinite(n)))
   return Number.isFinite(upper) ? upper : null
-}
-
-function buildCompanySlackBlocks(args: {
-  companyName: string
-  capturedUrl: string
-  intent: Intent
-  website: string
-  industry: string
-  employees: number | string | null
-  location: string
-  isRepeat: boolean
-}): Record<string, unknown>[] {
-  const intentEmoji = args.intent === "High" ? ":fire:" : args.intent === "Medium" ? ":warning:" : ":eyes:"
-  const lines: string[] = []
-  const meta: string[] = []
-  if (args.industry) meta.push(args.industry)
-  if (args.employees != null && String(args.employees).trim()) meta.push(`${args.employees} employees`)
-  if (args.location) meta.push(args.location)
-  if (meta.length) lines.push(meta.join(" • "))
-  if (args.website) lines.push(`:globe_with_meridians: <${args.website}|${args.website}>`)
-  if (args.capturedUrl) lines.push(`:link: <${args.capturedUrl}|${args.capturedUrl}>`)
-  lines.push(
-    `${intentEmoji} *${args.intent}* intent • _anonymous (company-only)_${args.isRepeat ? " • returning" : ""}`,
-  )
-  return [
-    {
-      type: "header",
-      text: { type: "plain_text", text: `Anonymous visit — ${args.companyName}` },
-    },
-    {
-      type: "section",
-      text: { type: "mrkdwn", text: lines.join("\n") },
-    },
-  ]
 }
 
 function buildSlackBlocks(args: {
