@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server"
 import {
+  buildDraftReadyBlocks,
+  buildIdeaProposedBlocks,
+  buildPublishedBlocks,
+} from "@/lib/blogSlackBlocks"
+import {
   changeColumnValues,
   getItemForWebhook,
   type MondayColumnValue,
+  type MondayItemSnapshot,
 } from "@/lib/mondayClient"
 import { upsertBlogPost } from "@/lib/sanityWriteClient"
 
@@ -34,7 +40,6 @@ const STAGE_APPROVED_PUBLISH = "Approved to publish"
 const STAGE_PUBLISHED = "Published"
 
 const SLACK_CHANNEL = "C0B4NFVDJKY" // #fruition-blogs
-const MONDAY_BOARD_URL = `https://fruitionservices.monday.com/boards/${BOARD_ID}`
 
 interface MondayChangeEvent {
   type?: string
@@ -215,12 +220,23 @@ async function publishToSanity(pulseId: string): Promise<NextResponse> {
     [COL_STAGE]: { labels: [STAGE_PUBLISHED] },
   })
 
-  await notifySlack(`:rocket: Marketa published: *${title}* — ${publishedUrl}`)
+  const { fallbackText, blocks } = buildPublishedBlocks({
+    pulseId,
+    title,
+    excerpt,
+    industry,
+    targetKeyword: seoKeyword,
+    publishedUrl,
+  })
+  await notifySlack({ text: fallbackText, blocks })
 
   return NextResponse.json({ ok: true, docId: id, slug, publishedUrl })
 }
 
-async function notifySlack(text: string): Promise<void> {
+async function notifySlack(args: {
+  text: string
+  blocks?: Record<string, unknown>[]
+}): Promise<void> {
   const token = process.env.SLACK_BOT_TOKEN
   if (!token) {
     console.warn("[monday-blog] SLACK_BOT_TOKEN missing, skipping notify")
@@ -233,12 +249,16 @@ async function notifySlack(text: string): Promise<void> {
         "Content-Type": "application/json; charset=utf-8",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ channel: SLACK_CHANNEL, text }),
+      body: JSON.stringify({
+        channel: SLACK_CHANNEL,
+        text: args.text, // fallback for notifications
+        ...(args.blocks ? { blocks: args.blocks } : {}),
+      }),
     })
     const body = (await r.json().catch(() => ({}))) as { ok?: boolean; error?: string }
     if (!body.ok) {
       console.warn(
-        `[monday-blog] slack chat.postMessage not ok: error=${body.error ?? "unknown"} http=${r.status} text=${text.slice(0, 80)}`,
+        `[monday-blog] slack chat.postMessage not ok: error=${body.error ?? "unknown"} http=${r.status} text=${args.text.slice(0, 80)}`,
       )
     }
   } catch (err) {
@@ -257,11 +277,39 @@ async function pingHumanInLoop(
 ): Promise<NextResponse> {
   const snapshot = await getItemForWebhook(pulseId)
   const title = snapshot?.name?.trim() || "(untitled)"
-  const itemUrl = `${MONDAY_BOARD_URL}/pulses/${pulseId}`
-  const text =
+  const ctx = extractContext(snapshot)
+  const built =
     kind === "idea-proposed"
-      ? `:bulb: New blog idea ready for approval: *${title}* — ${itemUrl}`
-      : `:memo: Draft ready for review: *${title}* — ${itemUrl}`
-  await notifySlack(text)
+      ? buildIdeaProposedBlocks({
+          pulseId,
+          title,
+          brief: ctx.brief,
+          industry: ctx.industry,
+          targetKeyword: ctx.targetKeyword,
+        })
+      : buildDraftReadyBlocks({
+          pulseId,
+          title,
+          brief: ctx.brief,
+          industry: ctx.industry,
+          targetKeyword: ctx.targetKeyword,
+          draftBody: ctx.draftBody,
+        })
+  await notifySlack({ text: built.fallbackText, blocks: built.blocks })
   return NextResponse.json({ ok: true, stage: kind, pulseId })
+}
+
+function extractContext(snapshot: MondayItemSnapshot | null): {
+  brief?: string
+  industry?: string
+  targetKeyword?: string
+  draftBody?: string
+} {
+  if (!snapshot) return {}
+  return {
+    brief: colText(snapshot.columns[COL_BRIEF]),
+    industry: colText(snapshot.columns[COL_INDUSTRY]),
+    targetKeyword: colText(snapshot.columns[COL_TARGET_KW]),
+    draftBody: colText(snapshot.columns[COL_DRAFT_BODY]),
+  }
 }
