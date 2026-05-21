@@ -38,8 +38,8 @@ export function isCompanyLinkedin(url: string): boolean {
   return /linkedin\.com\/company\//i.test(url)
 }
 
-// Strip protocol/path so we can hit Clearbit's logo service (which keys on
-// the bare domain). Falls back to empty when the URL is unparseable.
+// Strip protocol/path so we can hit a domain-keyed logo service. Falls back
+// to empty when the URL is unparseable.
 function bareDomain(url: string): string {
   if (!url) return ""
   try {
@@ -103,9 +103,12 @@ export function buildCompanySlackBlocks(args: {
     text: { type: "mrkdwn", text: infoLines.join("\n") },
   }
   if (domain) {
+    // Google's favicon service has near-universal coverage and returns a
+    // generic globe icon for domains without favicons, so the image block
+    // never 404s the way Clearbit/logo APIs do for long-tail companies.
     infoBlock.accessory = {
       type: "image",
-      image_url: `https://logo.clearbit.com/${domain}`,
+      image_url: `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
       alt_text: `${args.companyName} logo`,
     }
   }
@@ -114,11 +117,13 @@ export function buildCompanySlackBlocks(args: {
   if (args.capturedUrl) {
     const when = args.seenAt ? ` on ${formatVisitDate(args.seenAt)}` : ""
     blocks.push({
-      type: "section",
-      text: {
-        type: "mrkdwn",
-        text: `First identified visiting *<${args.capturedUrl}|${args.capturedUrl}>*${when}`,
-      },
+      type: "context",
+      elements: [
+        {
+          type: "mrkdwn",
+          text: `First identified visiting *<${args.capturedUrl}|${args.capturedUrl}>*${when}`,
+        },
+      ],
     })
   }
 
@@ -152,12 +157,12 @@ export function buildCompanySlackBlocks(args: {
   })
 
   const fields: Record<string, unknown>[] = []
-  if (args.website) fields.push({ type: "mrkdwn", text: `*Website:*\n<${args.website}|${args.website}>` })
+  if (args.website) fields.push({ type: "mrkdwn", text: `*Website:* <${args.website}|${args.website}>` })
   if (args.employees != null && String(args.employees).trim()) {
-    fields.push({ type: "mrkdwn", text: `*Est. Employees:*\n${args.employees}` })
+    fields.push({ type: "mrkdwn", text: `*Est. Employees:* ${args.employees}` })
   }
-  if (args.industry) fields.push({ type: "mrkdwn", text: `*Industry:*\n${args.industry}` })
-  if (args.revenue) fields.push({ type: "mrkdwn", text: `*Est. Revenue:*\n${args.revenue}` })
+  if (args.industry) fields.push({ type: "mrkdwn", text: `*Industry:* ${args.industry}` })
+  if (args.revenue) fields.push({ type: "mrkdwn", text: `*Est. Revenue:* ${args.revenue}` })
   if (fields.length) {
     blocks.push({ type: "section", fields })
   }
