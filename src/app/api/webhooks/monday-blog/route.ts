@@ -12,11 +12,10 @@ export const maxDuration = 60
 const BOARD_ID = 5028637584
 
 // Column IDs (from board 5028637584).
-// Stage is a DROPDOWN, not status — the Fruition Marketing workspace
-// flags all status cols as is_rollup_column:true, which silently blocks
-// reads/writes/webhooks. Dropdowns avoid the rollup wrapper entirely.
-const COL_STAGE = "dropdown_mm3hrn75"
-const COL_TIER = "color_mm3hm0mm" // still status-typed; not webhook-driven so OK
+// Stage is a single-select DROPDOWN (limit_select:true). Status cols on this
+// board are rollup-wrapped by the Fruition Marketing workspace which blocks
+// API reads/writes/webhooks, so dropdown is the only option that works.
+const COL_STAGE = "dropdown_mm3jh58b"
 const COL_BRIEF = "long_text_mm3grk84"
 const COL_TARGET_KW = "text_mm3gzj88"
 const COL_INDUSTRY = "dropdown_mm3gb7wm"
@@ -103,7 +102,6 @@ export async function POST(req: Request) {
     event.type === "update_column_value" ||
     event.type === "change_column_value" ||
     event.type === "change_specific_column_value"
-  console.log(`[monday-blog] DBG type=${event.type} col=${event.columnId} expected=${COL_STAGE} match=${event.columnId === COL_STAGE} isCol=${isColEvent} body=${JSON.stringify(body).slice(0, 1200)}`)
   if (!isColEvent || event.columnId !== COL_STAGE) {
     return NextResponse.json({
       ok: true,
@@ -203,11 +201,11 @@ async function publishToSanity(pulseId: string): Promise<NextResponse> {
 
   const publishedUrl = publicUrlFor(slug)
 
-  // Write back: store sanity id + url. Stage flip omitted — monday API
-  // silently rejects status writes on this board (see route header note).
+  // Write back: store sanity id + url, flip Stage to Published.
   await changeColumnValues(BOARD_ID, pulseId, {
     [COL_SANITY_DOC_ID]: id,
     [COL_PUBLISHED_URL]: { url: publishedUrl, text: title },
+    [COL_STAGE]: { labels: [STAGE_PUBLISHED] },
   })
 
   await notifySlack(`:rocket: Marketa published: *${title}* — ${publishedUrl}`)

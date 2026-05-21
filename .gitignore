@@ -46,3 +46,6 @@ backups/
 
 # QA screenshot/diff artifacts (regenerated locally)
 qa/
+
+# Codex local config (may contain API tokens)
+.codex/config.toml
