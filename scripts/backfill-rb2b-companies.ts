@@ -27,6 +27,7 @@ import {
 } from "../src/lib/rb2bSlackBlocks"
 import { upsertCompanyMondayItem } from "../src/lib/rb2bMondayCompany"
 import { postSlackMessage } from "../src/lib/slackClient"
+import { RB2B_BOARD_ID } from "../src/lib/rb2bColumns"
 
 loadEnv({ path: ".env.local" })
 
@@ -160,32 +161,36 @@ async function main(): Promise<void> {
       isRepeat,
     }
     const logoUrl = await resolveCompanyLogo(website.trim())
-    const blocks = buildCompanySlackBlocks({
-      companyName,
-      capturedUrl,
-      intent,
-      website: website.trim(),
-      industry: row["Industry"] ?? "",
-      employees: row["EstimatedEmployeeCount"] ?? null,
-      revenue: row["EstimateRevenue"] ?? "",
-      location,
-      linkedin,
-      seenAt,
-      isRepeat,
-      logoUrl,
-    })
     const text = `Anonymous company visit (backfill): ${companyName} → ${capturedUrl}`
 
     if (dry) {
       console.log(`[backfill] DRY would upsert+post: ${text}`)
     } else {
+      let mondayItemId: string | undefined
       try {
         const monday = await upsertCompanyMondayItem(upsertArgs)
+        mondayItemId = monday.itemId
         console.log(`[backfill] monday: ${companyName} -> ${monday.itemId ?? "skip"} (new=${monday.isNew})`)
       } catch (err) {
         console.error(`[backfill] monday failed: ${companyName}`, err)
       }
       if (!skipSlack) {
+        const blocks = buildCompanySlackBlocks({
+          companyName,
+          capturedUrl,
+          intent,
+          website: website.trim(),
+          industry: row["Industry"] ?? "",
+          employees: row["EstimatedEmployeeCount"] ?? null,
+          revenue: row["EstimateRevenue"] ?? "",
+          location,
+          linkedin,
+          seenAt,
+          isRepeat,
+          mondayItemId,
+          mondayBoardId: RB2B_BOARD_ID,
+          logoUrl,
+        })
         try {
           await postSlackMessage(channel!, blocks, text, { unfurlLinks: false, unfurlMedia: false })
           sent++

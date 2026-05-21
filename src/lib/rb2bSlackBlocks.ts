@@ -244,6 +244,8 @@ export function buildCompanySlackBlocks(args: {
   linkedin?: string
   seenAt?: string
   isRepeat: boolean
+  mondayItemId?: string
+  mondayBoardId?: string | number
   // Pre-resolved logo URL (call resolveCompanyLogo first). When omitted,
   // derives a Google favicon from the website domain.
   logoUrl?: string | null
@@ -307,6 +309,13 @@ export function buildCompanySlackBlocks(args: {
       type: "button",
       text: { type: "plain_text", text: "More Details :globe_with_meridians:", emoji: true },
       url: args.website,
+    })
+  }
+  if (args.mondayItemId && args.mondayBoardId != null) {
+    buttons.push({
+      type: "button",
+      text: { type: "plain_text", text: "Open in Monday :clipboard:", emoji: true },
+      url: `https://fruitionservices.monday.com/boards/${args.mondayBoardId}/pulses/${args.mondayItemId}`,
     })
   }
   if (buttons.length) {

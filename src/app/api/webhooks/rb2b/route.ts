@@ -164,6 +164,8 @@ export async function POST(req: Request) {
             linkedin: rawLinkedin,
             seenAt: seenAt,
             isRepeat: Boolean(payload.is_repeat_visit),
+            mondayItemId: itemId,
+            mondayBoardId: RB2B_BOARD_ID,
             logoUrl,
           }),
           `Anonymous company visit: ${companyName} → ${capturedUrl}`,
