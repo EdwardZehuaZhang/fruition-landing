@@ -1,11 +1,11 @@
 import Anthropic from "@anthropic-ai/sdk"
 
-// claude-sonnet-4-6 is the right default for Slack chat: ~3x faster than
-// Opus and ~5x cheaper, with quality more than fine for short conversational
-// replies. The Marketa harness uses Opus because it's writing 2000-word
-// drafts where quality > latency. Override via CLAUDE_BOT_MODEL env if you
-// want to escalate a specific bot to Opus.
-const MODEL = process.env.CLAUDE_BOT_MODEL ?? "claude-sonnet-4-6"
+// claude-haiku-4-5 is the default for Slack chat: cheapest tier, fastest
+// time-to-first-token, and the response quality bar for one-to-three
+// paragraph conversational replies is well within Haiku's reach. The
+// Marketa harness stays on Opus because it's writing 2000-word drafts
+// where quality > latency + cost. Set CLAUDE_BOT_MODEL to escalate.
+const MODEL = process.env.CLAUDE_BOT_MODEL ?? "claude-haiku-4-5-20251001"
 
 function getClient(): Anthropic {
   const key = process.env.CLAUDE_API_KEY
