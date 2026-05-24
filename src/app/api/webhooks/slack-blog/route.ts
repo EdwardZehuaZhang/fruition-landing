@@ -117,6 +117,27 @@ function allowedBlogUsers(): Set<string> {
   )
 }
 
+// Module-scoped dedup cache for Slack event_ids. Slack retries delivery up to
+// 3 times if our 200 isn't received in time, and on 2026-05-24 we saw 4
+// invocations of this route for a single blog request (some likely retries,
+// some likely message.channels + message.groups dupes). Each retry currently
+// creates a fresh monday item and triggers n8n again. This cache prevents
+// that within a warm lambda container. Cold starts reset it, but that's an
+// acceptable tradeoff vs. setting up Vercel KV for a 5-minute lookback.
+const SEEN_EVENT_IDS = new Map<string, number>()
+const SEEN_EVENT_TTL_MS = 5 * 60 * 1000
+
+function isDuplicateEventId(eventId: string | undefined): boolean {
+  if (!eventId) return false
+  const now = Date.now()
+  for (const [id, ts] of SEEN_EVENT_IDS) {
+    if (now - ts > SEEN_EVENT_TTL_MS) SEEN_EVENT_IDS.delete(id)
+  }
+  if (SEEN_EVENT_IDS.has(eventId)) return true
+  SEEN_EVENT_IDS.set(eventId, now)
+  return false
+}
+
 function verifySlackSignature(req: Request, rawBody: string): boolean {
   const signingSecret = process.env.SLACK_SIGNING_SECRET
   if (!signingSecret) {
@@ -159,6 +180,10 @@ export async function POST(req: Request) {
 
   if (body.type !== "event_callback") {
     return NextResponse.json({ ok: true, skipped: "unsupported payload" })
+  }
+
+  if (isDuplicateEventId(body.event_id)) {
+    return NextResponse.json({ ok: true, skipped: "duplicate event_id" })
   }
 
   const event = body.event
@@ -243,9 +268,10 @@ async function handleBotMention(event: SlackMessageEvent): Promise<void> {
     })
   } catch (err) {
     console.error("[slack-blog] mention reply failed", errMsg(err))
+    console.error("[slack-blog] mention reply error detail", err)
     await postSlackText(
       channel,
-      "Brain hiccup over here. Try me again in a minute?",
+      ":rotating_light: *I'm broken.* Please DM <@U0AK0M7JHD2> immediately so he can fix me.",
       { threadTs: replyThreadTs, unfurlLinks: false, unfurlMedia: false },
     ).catch((postErr) => {
       console.error("[slack-blog] failed to post fallback mention reply", errMsg(postErr))
@@ -367,7 +393,7 @@ async function queueBlogFromSlack(
       [COL_STAGE]: { labels: [STAGE_DRAFTING] },
     })
 
-    await forwardToMarketaDraft(itemId)
+    await forwardToMarketaDraft(itemId, idea)
     await postSlackConfirmation(event, idea, itemId)
   } catch (err) {
     console.error("[slack-blog] failed to queue blog", errMsg(err))
@@ -445,14 +471,26 @@ function inferIndustry(text: string): Industry {
   return "Marketing"
 }
 
-async function forwardToMarketaDraft(pulseId: string): Promise<void> {
+async function forwardToMarketaDraft(pulseId: string, idea: ParsedIdea): Promise<void> {
   const url = process.env.N8N_MARKETA_DRAFT_WEBHOOK_URL
   if (!url) throw new Error("N8N_MARKETA_DRAFT_WEBHOOK_URL missing")
 
+  // Push parsed fields in the body so the n8n workflow doesn't need to round-trip
+  // back to monday for them. Avoids the eventual-consistency race that produced
+  // the "title undefined" draft on 2026-05-24 (pulse 2714465661).
   const r = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action: "draft", pulseId, boardId: BOARD_ID, source: "slack-blog" }),
+    body: JSON.stringify({
+      action: "draft",
+      pulseId,
+      boardId: BOARD_ID,
+      source: "slack-blog",
+      title: idea.title,
+      brief: idea.brief,
+      target_keyword: idea.targetKeyword,
+      industry: idea.industry,
+    }),
   })
   if (!r.ok) {
     const text = await r.text().catch(() => "")
