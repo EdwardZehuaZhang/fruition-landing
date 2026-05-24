@@ -200,6 +200,100 @@ export async function downloadAsset(
   return { bytes: Buffer.from(ab), mime }
 }
 
+export interface MondayItemSummary {
+  id: string
+  name: string
+  group: { id: string; title: string }
+  columns: Record<string, MondayColumnValue>
+}
+
+function toItemSummary(raw: {
+  id: string
+  name: string
+  group: { id: string; title: string } | null
+  column_values: Array<{ id: string; type: string; text: string | null; value: string | null }>
+}): MondayItemSummary {
+  const columns: Record<string, MondayColumnValue> = {}
+  for (const c of raw.column_values) {
+    columns[c.id] = { id: c.id, type: c.type, text: c.text ?? null, value: c.value ?? null }
+  }
+  return {
+    id: raw.id,
+    name: raw.name,
+    group: raw.group ?? { id: "", title: "" },
+    columns,
+  }
+}
+
+export async function listBoardItems(
+  boardId: number,
+  opts: { groupId?: string; limit?: number } = {},
+): Promise<MondayItemSummary[]> {
+  const limit = Math.min(Math.max(opts.limit ?? 20, 1), 100)
+  if (opts.groupId) {
+    const data = await gql<{
+      boards: Array<{
+        groups: Array<{
+          items_page: {
+            items: Array<{
+              id: string
+              name: string
+              group: { id: string; title: string } | null
+              column_values: Array<{ id: string; type: string; text: string | null; value: string | null }>
+            }>
+          }
+        }> | null
+      }>
+    }>(
+      `query ($board: ID!, $group: [String!], $limit: Int!) {
+        boards(ids: [$board]) {
+          groups(ids: $group) {
+            items_page(limit: $limit) {
+              items {
+                id
+                name
+                group { id title }
+                column_values { id type text value }
+              }
+            }
+          }
+        }
+      }`,
+      { board: String(boardId), group: [opts.groupId], limit },
+    )
+    const items = data.boards?.[0]?.groups?.[0]?.items_page?.items ?? []
+    return items.map(toItemSummary)
+  }
+  const data = await gql<{
+    boards: Array<{
+      items_page: {
+        items: Array<{
+          id: string
+          name: string
+          group: { id: string; title: string } | null
+          column_values: Array<{ id: string; type: string; text: string | null; value: string | null }>
+        }>
+      }
+    }>
+  }>(
+    `query ($board: ID!, $limit: Int!) {
+      boards(ids: [$board]) {
+        items_page(limit: $limit) {
+          items {
+            id
+            name
+            group { id title }
+            column_values { id type text value }
+          }
+        }
+      }
+    }`,
+    { board: String(boardId), limit },
+  )
+  const items = data.boards?.[0]?.items_page?.items ?? []
+  return items.map(toItemSummary)
+}
+
 export async function uploadFileToColumn(
   itemId: string,
   columnId: string,

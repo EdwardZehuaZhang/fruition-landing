@@ -94,6 +94,38 @@ export async function getSlackThreadReplies(
   return j.messages ?? []
 }
 
+export interface SlackChannelMessage {
+  user?: string
+  text?: string
+  ts?: string
+  thread_ts?: string
+  bot_id?: string
+  subtype?: string
+}
+
+export async function getRecentChannelMessages(
+  channelId: string,
+  limit = 30,
+): Promise<SlackChannelMessage[]> {
+  const params = new URLSearchParams({
+    channel: channelId,
+    limit: String(Math.min(Math.max(limit, 1), 100)),
+  })
+  const r = await fetch(`${SLACK_API}/conversations.history?${params.toString()}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${getToken()}` },
+  })
+  const j = (await r.json()) as {
+    ok?: boolean
+    error?: string
+    messages?: SlackChannelMessage[]
+  }
+  if (!j.ok) {
+    throw new Error(`slack conversations.history failed: ${j.error ?? "unknown"}`)
+  }
+  return j.messages ?? []
+}
+
 export async function lookupSlackUserName(userId: string): Promise<string | undefined> {
   const params = new URLSearchParams({ user: userId })
   const r = await fetch(`${SLACK_API}/users.info?${params.toString()}`, {
