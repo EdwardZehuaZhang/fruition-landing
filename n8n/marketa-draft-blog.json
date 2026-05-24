@@ -47,7 +47,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Flatten monday item into a friendly object.\nconst item = $input.first().json.data?.items?.[0];\nif (!item) throw new Error('item not found');\nconst col = (id) => item.column_values.find(c => c.id === id);\nconst text = (c) => c?.text?.trim() || '';\nconst pulseId = $('Webhook: /marketa-draft').first().json.body.pulseId;\nreturn [{\n  json: {\n    pulseId: String(pulseId),\n    title: item.name,\n    brief: text(col('long_text_mm3grk84')),\n    target_keyword: text(col('text_mm3gzj88')),\n    industry: text(col('dropdown_mm3gb7wm')) || 'general'\n  }\n}];"
+        "jsCode": "// Flatten monday item into a friendly object.\n// Prefer values pushed in the webhook body by the caller (e.g. the\n// /api/webhooks/slack-blog route on Vercel). Fall back to the monday\n// fetch for callers that only send pulseId. Sidesteps the eventual-\n// consistency race that produced the 'title undefined' draft for pulse\n// 2714465661 on 2026-05-24.\nconst wh = $('Webhook: /marketa-draft').first().json.body || {};\nconst item = $input.first().json.data?.items?.[0];\nconst col = (id) => item?.column_values?.find(c => c.id === id);\nconst text = (c) => c?.text?.trim() || '';\nconst pulseId = wh.pulseId;\nif (!pulseId) throw new Error('pulseId missing from webhook body');\nreturn [{\n  json: {\n    pulseId: String(pulseId),\n    title: wh.title || item?.name || '',\n    brief: wh.brief || text(col('long_text_mm3grk84')),\n    target_keyword: wh.target_keyword || text(col('text_mm3gzj88')),\n    industry: wh.industry || text(col('dropdown_mm3gb7wm')) || 'general'\n  }\n}];"
       },
       "id": "normalize",
       "name": "Normalize item",

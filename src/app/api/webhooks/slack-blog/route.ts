@@ -130,9 +130,9 @@ const SEEN_EVENT_TTL_MS = 5 * 60 * 1000
 function isDuplicateEventId(eventId: string | undefined): boolean {
   if (!eventId) return false
   const now = Date.now()
-  for (const [id, ts] of SEEN_EVENT_IDS) {
+  SEEN_EVENT_IDS.forEach((ts, id) => {
     if (now - ts > SEEN_EVENT_TTL_MS) SEEN_EVENT_IDS.delete(id)
-  }
+  })
   if (SEEN_EVENT_IDS.has(eventId)) return true
   SEEN_EVENT_IDS.set(eventId, now)
   return false

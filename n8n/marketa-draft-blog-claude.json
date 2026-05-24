@@ -47,7 +47,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const item = $input.first().json.data?.items?.[0];\nif (!item) throw new Error('item not found');\nconst col = (id) => item.column_values.find(c => c.id === id);\nconst text = (c) => c?.text?.trim() || '';\nconst pulseId = $('Webhook: /marketa-draft').first().json.body.pulseId;\nconst brief = text(col('long_text_mm3grk84'));\nif (!brief) throw new Error('Brief column is empty');\nreturn [{ json: {\n  pulseId: String(pulseId),\n  title: item.name,\n  brief,\n  target_keyword: text(col('text_mm3gzj88')),\n  industry: text(col('dropdown_mm3gb7wm')) || 'general'\n} }];"
+        "jsCode": "// Prefer values pushed in the webhook body by the caller (e.g. the\n// /api/webhooks/slack-blog route on Vercel). Fall back to the monday\n// fetch result for callers that only send pulseId. Sidesteps the\n// eventual-consistency race that produced the 'title undefined' draft\n// for pulse 2714465661 on 2026-05-24.\nconst wh = $('Webhook: /marketa-draft').first().json.body || {};\nconst item = $input.first().json.data?.items?.[0];\nconst col = (id) => item?.column_values?.find(c => c.id === id);\nconst text = (c) => c?.text?.trim() || '';\nconst pulseId = wh.pulseId;\nif (!pulseId) throw new Error('pulseId missing from webhook body');\nconst title = wh.title || item?.name || '';\nconst brief = wh.brief || text(col('long_text_mm3grk84'));\nif (!brief) throw new Error('Brief is empty in both payload and monday item');\nreturn [{ json: {\n  pulseId: String(pulseId),\n  title,\n  brief,\n  target_keyword: wh.target_keyword || text(col('text_mm3gzj88')),\n  industry: wh.industry || text(col('dropdown_mm3gb7wm')) || 'general'\n} }];"
       },
       "id": "normalize",
       "name": "Normalize item",
