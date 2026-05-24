@@ -13,12 +13,29 @@ function getToken(): string {
   return t
 }
 
-async function gql<T = unknown>(query: string, variables: Record<string, unknown> = {}): Promise<T> {
+/**
+ * Read-only monday token. The slack-blog bot's find_monday_items tool uses
+ * this in preference to MONDAY_API_TOKEN, so the bot's effective permission
+ * is bounded by whatever account the read token belongs to. Recommended
+ * setup: create a viewer-tier user in monday with access only to the boards
+ * the bot needs (e.g. board 5028637584), generate a personal API token from
+ * that user, set as MONDAY_READ_TOKEN in Vercel. Falls back to
+ * MONDAY_API_TOKEN if not set so existing deployments don't break.
+ */
+function getReadToken(): string {
+  return process.env.MONDAY_READ_TOKEN || getToken()
+}
+
+async function gql<T = unknown>(
+  query: string,
+  variables: Record<string, unknown> = {},
+  opts: { readOnly?: boolean } = {},
+): Promise<T> {
   const r = await fetch(MONDAY_GQL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: getToken(),
+      Authorization: opts.readOnly ? getReadToken() : getToken(),
       "API-Version": "2024-01",
     },
     body: JSON.stringify({ query, variables }),
@@ -260,6 +277,7 @@ export async function listBoardItems(
         }
       }`,
       { board: String(boardId), group: [opts.groupId], limit },
+      { readOnly: true },
     )
     const items = data.boards?.[0]?.groups?.[0]?.items_page?.items ?? []
     return items.map(toItemSummary)
@@ -289,6 +307,7 @@ export async function listBoardItems(
       }
     }`,
     { board: String(boardId), limit },
+    { readOnly: true },
   )
   const items = data.boards?.[0]?.items_page?.items ?? []
   return items.map(toItemSummary)

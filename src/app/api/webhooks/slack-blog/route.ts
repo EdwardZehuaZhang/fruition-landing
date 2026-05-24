@@ -2,6 +2,12 @@ import { createHmac, timingSafeEqual } from "node:crypto"
 import { after, NextResponse } from "next/server"
 import { generateBotReply, type ChatTurn } from "@/lib/claudeClient"
 import { BOT_TOOLS, botToolExecutor } from "@/lib/botTools"
+import {
+  buildRevisionInstruction,
+  detectBannedPhrases,
+  isCapabilityQuestion,
+  SAFE_CAPABILITY_FALLBACK,
+} from "@/lib/replyGuards"
 import { changeColumnValues, createItem } from "@/lib/mondayClient"
 import {
   getSlackThreadReplies,
@@ -25,6 +31,10 @@ const COL_STAGE = "dropdown_mm3jh58b"
 const COL_BRIEF = "long_text_mm3grk84"
 const COL_TARGET_KW = "text_mm3gzj88"
 const COL_INDUSTRY = "dropdown_mm3gb7wm"
+// Added 2026-05-24 for the Marketa auto-docs flow. monday-blog reads this on
+// STAGE_DRAFT_READY and branches into the auto-docs path when populated. See
+// docs/marketa-auto-docs-plan.md (Phase 3d).
+const COL_SLACK_ORIGIN = "long_text_mm3nthd2"
 
 const STAGE_DRAFTING = "Drafting"
 
@@ -74,8 +84,16 @@ const DEFAULT_PERSONALITY = [
   "- Do not announce that you are going to call a tool. Just call it. The user does not need a play-by-play.",
   "- If you call a tool and it errors, say what failed in one short sentence. Do not retry the same tool with the same arguments.",
   "- If someone asks for something outside your capabilities, say so in one plain sentence and stop. Do not offer adjacent things you also cannot do.",
+  "",
+  "READ-ONLY rule (this is a hard rule, no exceptions):",
+  "- You are read-only. You have no ability to delete, modify, archive, move, assign, send, post, create, email, notify, update, edit, or change anything in monday, Slack, HubSpot, or any other system.",
+  "- The four tools you have (find_monday_items, read_channel_history, fetch_url_content, web_search) are ALL read-only. None of them write.",
+  "- If asked to delete an item, change a stage, move a card, send a message, assign someone, archive a thread, create a record, email someone, or perform any other write action: refuse plainly in one sentence and stop. Do not pretend you did it. Do not say 'I would' or 'I'll try'. Just say you cannot.",
+  "- NEVER claim to have performed a write action. Banned even when feels natural: 'I've deleted', 'I removed', 'I sent', 'I created', 'I assigned', 'I archived', 'I updated', 'I'll send', 'I'll post', etc. The only thing you can claim to have done is read information via tools.",
+  "- Example: If the user says 'delete that blog idea', the correct reply is: 'I can't delete monday items, I'm read-only. You'll need to do that in monday directly.' Not 'Done' or 'Deleted' or 'I'll take care of it'.",
+  "",
   "- Wrong (a real reply the bot generated before tools existed): 'I can answer questions about Fruition, look up details from monday.com or HubSpot if I have access to your workspace, help with writing, and confirm actions in Slack.' Wrong because it claimed HubSpot access (none), conditional access (no), and 'confirm actions in Slack' (vague nonsense).",
-  "- Right (with tools): 'I can answer questions about Fruition, query the monday.com blog board, read recent messages from Slack channels I'm in, fetch a URL, and search the web for current info. I don't have HubSpot access or Slack search across all channels.'",
+  "- Right (with tools): 'I can answer questions about Fruition, query the monday.com blog board (read-only), read recent messages from Slack channels I'm in, fetch a URL, and search the web for current info. I cannot delete, modify, or send anything. I don't have HubSpot or Slack search across all channels.'",
   "",
   "Operational context, only relevant if someone actually asks:",
   "- The team also runs the Marketa pipeline: top-level messages in #fruition-digital from approved users get queued as blog ideas on monday board 5028637584 and drafted automatically.",
@@ -330,6 +348,20 @@ async function handleBotMention(event: SlackMessageEvent): Promise<void> {
 
   const replyThreadTs = event.thread_ts ?? event.ts
   try {
+    // Short-circuit capability questions. This is the single most common
+    // hallucination shape ("what can you do" yields a wish-list reply with
+    // imaginary HubSpot/calendar access). Bypass the LLM entirely with a
+    // canonical answer generated from BOT_TOOLS.
+    const userQuery = stripBotMention(cleanSlackText(event.text ?? ""))
+    if (userQuery && isCapabilityQuestion(userQuery)) {
+      await postSlackText(channel, SAFE_CAPABILITY_FALLBACK, {
+        threadTs: replyThreadTs,
+        unfurlLinks: false,
+        unfurlMedia: false,
+      })
+      return
+    }
+
     const turns = await buildConversationTurns(event)
     if (turns.length === 0) {
       await postSlackText(
@@ -340,13 +372,45 @@ async function handleBotMention(event: SlackMessageEvent): Promise<void> {
       return
     }
 
-    const replyText = await generateBotReply({
+    let replyText = await generateBotReply({
       systemPrompt: FRUITION_BOT_PERSONALITY,
       messages: turns,
       maxTokens: 600,
       tools: BOT_TOOLS,
       executor: botToolExecutor,
     })
+
+    // Post-reply hallucination guard. Scan for banned phrases; if found,
+    // ask the model to revise once with an explicit correction. If the
+    // revision still fails, drop the LLM reply and post the canonical
+    // capability answer.
+    const hits = detectBannedPhrases(replyText)
+    if (hits.length > 0) {
+      console.warn(
+        `[slack-blog] banned phrases in initial reply: ${hits.map((h) => `${h.match} (${h.reason})`).join("; ")}`,
+      )
+      const revisionTurns: ChatTurn[] = [
+        ...turns,
+        { role: "assistant", content: replyText },
+        { role: "user", content: buildRevisionInstruction(hits) },
+      ]
+      const revised = await generateBotReply({
+        systemPrompt: FRUITION_BOT_PERSONALITY,
+        messages: revisionTurns,
+        maxTokens: 600,
+        tools: BOT_TOOLS,
+        executor: botToolExecutor,
+      })
+      const revisedHits = detectBannedPhrases(revised)
+      if (revisedHits.length > 0) {
+        console.error(
+          `[slack-blog] banned phrases survived revision: ${revisedHits.map((h) => `${h.match} (${h.reason})`).join("; ")} -- falling back to canonical answer`,
+        )
+        replyText = SAFE_CAPABILITY_FALLBACK
+      } else {
+        replyText = revised
+      }
+    }
 
     const finalText = replyText || "I am here but coming up empty on that one. Mind rephrasing?"
     await postSlackText(channel, finalText, {
@@ -474,11 +538,23 @@ async function queueBlogFromSlack(
 
   try {
     itemId = await createItem(BOARD_ID, GROUP_TOPICS, idea.title)
+    // Stash the Slack message coords so monday-blog can thread the auto-docs
+    // reply back to the original request. Skipped if event lacks channel/ts
+    // (defensive — every real top-level message has both).
+    const slackOrigin = event.channel && event.ts
+      ? JSON.stringify({
+          channel: event.channel,
+          ts: event.ts,
+          user: event.user ?? null,
+          team: TEAM_ID,
+        })
+      : ""
     await changeColumnValues(BOARD_ID, itemId, {
       [COL_BRIEF]: { text: idea.brief },
       [COL_TARGET_KW]: idea.targetKeyword,
       [COL_INDUSTRY]: { labels: [idea.industry] },
       [COL_STAGE]: { labels: [STAGE_DRAFTING] },
+      ...(slackOrigin ? { [COL_SLACK_ORIGIN]: { text: slackOrigin } } : {}),
     })
 
     await forwardToMarketaDraft(itemId, idea)

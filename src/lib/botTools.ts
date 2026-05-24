@@ -3,6 +3,33 @@ import type { ToolExecutor, ToolSpec } from "@/lib/claudeClient"
 import { listBoardItems } from "@/lib/mondayClient"
 import { getRecentChannelMessages, lookupSlackUserName } from "@/lib/slackClient"
 
+/**
+ * SECURITY INVARIANT — READ ONLY.
+ *
+ * The slack-blog @-mention bot is read-only by design. The four tools below
+ * are the entire surface. Do NOT add any tool that performs a write,
+ * delete, modify, send, archive, move, or assign action without explicit
+ * sign-off from Edward. The executor below uses a literal switch on tool
+ * name, so any tool the LLM tries to call that is not in this file will
+ * return "Unknown tool" and not execute.
+ *
+ * If a write tool is ever genuinely needed, it MUST be added behind an
+ * additional confirmation gate (e.g. require an allowed-user check inside
+ * the executor itself, like the blog idea queue path already does), and
+ * the prompt's "I am read-only" rule must be relaxed in lockstep.
+ */
+const ALLOWED_TOOL_NAMES = [
+  "find_monday_items",
+  "read_channel_history",
+  "fetch_url_content",
+  "web_search",
+] as const
+type AllowedToolName = (typeof ALLOWED_TOOL_NAMES)[number]
+
+function isAllowedToolName(name: string): name is AllowedToolName {
+  return (ALLOWED_TOOL_NAMES as readonly string[]).includes(name)
+}
+
 const BLOG_BOARD_ID = 5028637584
 const STAGE_COLUMN_ID = "dropdown_mm3jh58b"
 const INDUSTRY_COLUMN_ID = "dropdown_mm3gb7wm"
@@ -110,6 +137,13 @@ export const BOT_TOOLS: ToolSpec[] = [
 ]
 
 export const botToolExecutor: ToolExecutor = async (name, args) => {
+  // Hard whitelist. If the model ever hallucinates a tool name (e.g.
+  // "delete_monday_item"), this returns without executing. See the
+  // SECURITY INVARIANT comment at the top of the file.
+  if (!isAllowedToolName(name)) {
+    console.warn(`[botTools] rejected non-whitelisted tool call: ${name}`)
+    return `Tool '${name}' is not available. The bot only has read-only tools: ${ALLOWED_TOOL_NAMES.join(", ")}.`
+  }
   try {
     switch (name) {
       case "find_monday_items":
@@ -120,8 +154,6 @@ export const botToolExecutor: ToolExecutor = async (name, args) => {
         return await execFetchUrlContent(args)
       case "web_search":
         return await execWebSearch(args)
-      default:
-        return `Unknown tool: ${name}`
     }
   } catch (err) {
     const detail = err instanceof Error ? err.message : String(err)
