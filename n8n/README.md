@@ -10,6 +10,12 @@ Three workflows that drive Marketa's blog pipeline. Live on Yash's n8n instance 
 | `marketa-draft-blog.json` | Webhook `POST /webhook/marketa-draft` | Triggered by `/api/webhooks/monday-blog` route when reviewer flips Stage to `Idea approved`. Fetches monday item, retrieves brain chunks by Industry, Claude writes draft, patches monday item with `Draft body` and Stage `Draft ready` |
 | `marketa-revise-blog.json` | Webhook `POST /webhook/marketa-revise` | Triggered when Stage → `Edits requested`. Reads draft + edit notes, Claude revises, patches monday, clears edit notes, Stage → `Draft ready` |
 
+Slack requests from Josh's blog-idea channel enter the same draft workflow through
+`/api/webhooks/slack-blog`. The route creates a monday item on board `5028637584`,
+sets Stage `Drafting`, then POSTs `N8N_MARKETA_DRAFT_WEBHOOK_URL`. That avoids
+double-triggering the monday Stage webhook while leaving the item in the normal
+Marketa board for review, revisions, and publishing.
+
 ## Import
 
 In n8n UI: `Workflows → Import from File → select JSON`.
@@ -47,6 +53,9 @@ N8N_MARKETA_REVISE_WEBHOOK_URL=https://n8n.<railway>.app/webhook/marketa-revise
 
 `src/app/api/webhooks/monday-blog/route.ts` reads these.
 
+`src/app/api/webhooks/slack-blog/route.ts` also reads
+`N8N_MARKETA_DRAFT_WEBHOOK_URL` for Slack-originated ideas.
+
 ## Board reference
 
 monday board: `5028637584` ("Website Blogs")
@@ -71,3 +80,30 @@ Stage is a single-select **dropdown** (not a status col). Patch with `{ "labels"
 `#fruition-blogs` — channel id `C0B4NFVDJKY`. **All Slack pings come from `/api/webhooks/monday-blog`** (single source of truth). n8n workflows do **not** post to Slack. Disable any monday native Slack automations to avoid double-pings.
 
 Pings fire on the three human-in-loop stages: `Idea proposed` (review queue), `Draft ready` (review draft), `Published` (announce).
+
+## Slack idea trigger
+
+Josh's request channel URL: `https://app.slack.com/client/T05B4T8UYV8/C08VD9R6SGP`.
+
+Configure the Slack app:
+
+1. Event Subscriptions → Request URL:
+   `https://<site>/api/webhooks/slack-blog`
+2. Subscribe to bot event: `message.channels`
+3. OAuth scopes: `channels:history`, `chat:write`
+4. Invite the app/bot to channel `C08VD9R6SGP`
+5. Set `SLACK_SIGNING_SECRET` from the app's Basic Information page
+6. Optional but recommended: set `SLACK_BLOG_IDEA_ALLOWED_USER_IDS=<Josh user id>`
+
+Message format can be loose prose. These optional labels improve routing:
+
+```
+Title: How monday.com teams can use AI agents without losing governance
+Industry: SaaS
+Keyword: monday.com AI agents
+
+Angle: focus on approval checkpoints, auditability, and when to use n8n.
+```
+
+If `Industry:` is omitted, the route infers one of the existing board labels and
+falls back to `Marketing`.

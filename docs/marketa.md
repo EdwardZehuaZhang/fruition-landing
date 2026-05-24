@@ -372,6 +372,10 @@ If any legacy native Slack automation exists on this board → **delete it** to 
 | `MONDAY_WEBHOOK_SECRET` | Shared secret for `?key=` query auth | Reuse existing |
 | `MONDAY_API_TOKEN` | Server-side monday GraphQL auth (for write-back) | Reuse existing |
 | `SANITY_WRITE_TOKEN` | Sanity dataset write | Reuse existing |
+| `SLACK_SIGNING_SECRET` | Verifies Slack Event Subscription callbacks | Required for `/api/webhooks/slack-blog` |
+| `SLACK_BLOG_IDEA_CHANNEL_ID` | Slack source channel for approved blog ideas | Optional; defaults to `C08VD9R6SGP` |
+| `SLACK_BLOG_IDEA_TEAM_ID` | Slack workspace/team id | Optional; defaults to `T05B4T8UYV8` |
+| `SLACK_BLOG_IDEA_ALLOWED_USER_IDS` | Comma-separated Slack user IDs allowed to trigger drafts | Optional; set to Josh's user ID for Josh-only triggering |
 | `N8N_MARKETA_DRAFT_WEBHOOK_URL` | n8n entry for drafting | **New** — get from Yash |
 | `N8N_MARKETA_REVISE_WEBHOOK_URL` | n8n entry for revisions | **New** — get from Yash |
 | `NEXT_PUBLIC_SITE_URL` | Used to build `Published URL` written back to monday | Reuse existing |
@@ -390,17 +394,59 @@ Placeholders inside the JSON files marked `{{ SUPABASE_BRAIN_TABLE }}`, `{{ CLAU
 
 This repo never calls Claude or Voyage directly. n8n owns Marketa's reasoning side.
 
-## B8. Settings locked
+## B8. Slack-approved ideas
+
+Josh's blog-request channel can bypass the weekly idea-review queue:
+
+```
+Slack channel C08VD9R6SGP
+   │ message.channels event
+   ▼
+/api/webhooks/slack-blog
+   │ verify Slack signature + optional Josh user filter
+   ▼
+monday item: Stage = "Drafting"
+   │
+   ▼
+N8N_MARKETA_DRAFT_WEBHOOK_URL
+   │
+   ▼
+Draft body + Stage = "Draft ready"
+```
+
+Slack app setup:
+
+- Request URL: `https://<site>/api/webhooks/slack-blog`
+- Bot event subscription: `message.channels`
+- Bot scopes: `channels:history`, `chat:write`
+- Invite the bot to channel `C08VD9R6SGP`
+- Add `SLACK_SIGNING_SECRET` to the site environment
+- Add `SLACK_BLOG_IDEA_ALLOWED_USER_IDS=<Josh user id>` to make it Josh-only. If omitted, any non-bot top-level message in that channel is treated as an approved idea.
+
+Supported message format is intentionally loose. Optional labels:
+
+```
+Title: How monday.com teams can use AI agents without losing governance
+Industry: SaaS
+Keyword: monday.com AI agents
+
+Angle: focus on approval checkpoints, auditability, and when to use n8n.
+```
+
+Unlabeled messages use the cleaned first line as the title, the full message as
+the brief, an inferred Industry dropdown value, and a blank target keyword.
+
+## B9. Settings locked
 
 | Decision | Value |
 |---|---|
 | Reviewer | Single `People` col, same person both stages |
 | Revision cap | None |
 | Idea cadence | 5/week |
-| Slack notifs | monday native automation |
+| Slack notifs | `/api/webhooks/monday-blog` route |
 | Board | Existing `5028637584` ("Blogs"), modified in place |
 
-## B9. Flywheel (closes Part A)
+## B10. Flywheel (closes Part A)
 
 ```
 Marketa generates blog
@@ -412,9 +458,9 @@ Marketa generates blog
 
 Each cycle adds to the retrievable corpus. Compounds.
 
-## B10. Open items
+## B11. Open items
 
-- **Slack channel name** for `#marketa-blog` — confirm or replace.
+- **Josh Slack user id** — set `SLACK_BLOG_IDEA_ALLOWED_USER_IDS` once confirmed.
 - **Author byline** on Sanity post — currently hardcoded `"Marketa / Fruition Editorial"`. Brief §10.2 still has this as open question.
 - **n8n webhook URLs** — get from Yash and add to Doppler.
 - **Cover image** — Marketa-generated or human-uploaded? Schema supports both; pipeline currently leaves it null.
