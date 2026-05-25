@@ -553,13 +553,22 @@ async function queueBlogFromSlack(
           team: TEAM_ID,
         })
       : ""
-    await changeColumnValues(BOARD_ID, itemId, {
-      [COL_BRIEF]: { text: idea.brief },
-      [COL_TARGET_KW]: idea.targetKeyword,
-      [COL_INDUSTRY]: { labels: [idea.industry] },
-      [COL_STAGE]: { labels: [STAGE_DRAFTING] },
-      ...(slackOrigin ? { [COL_SLACK_ORIGIN]: { text: slackOrigin } } : {}),
-    })
+    await changeColumnValues(
+      BOARD_ID,
+      itemId,
+      {
+        [COL_BRIEF]: { text: idea.brief },
+        [COL_TARGET_KW]: idea.targetKeyword,
+        [COL_INDUSTRY]: { labels: [idea.industry] },
+        [COL_STAGE]: { labels: [STAGE_DRAFTING] },
+        ...(slackOrigin ? { [COL_SLACK_ORIGIN]: { text: slackOrigin } } : {}),
+      },
+      // INDUSTRIES enum is the source of truth; auto-create the monday
+      // dropdown label if it's not on the board yet. STAGE_DRAFTING is one
+      // of the existing fixed labels so this flag only matters for
+      // Industry. See [[fruition-slack-blog-pipeline]] memory note.
+      { createLabelsIfMissing: true },
+    )
 
     await forwardToMarketaDraft(itemId, idea)
     await postSlackConfirmation(event, idea, itemId)

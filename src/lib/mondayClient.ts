@@ -56,17 +56,37 @@ export async function createItem(boardId: number, groupId: string, name: string)
   return data.create_item.id
 }
 
+/**
+ * Write multiple column values on a monday item.
+ *
+ * Pass `createLabelsIfMissing: true` when the write includes dropdown or
+ * status labels that may not yet exist on the column. monday will create
+ * the label on the fly instead of erroring with
+ * `"The dropdown label 'X' does not exist"`. Use sparingly — typos in
+ * label names will silently create new labels rather than failing loud.
+ */
 export async function changeColumnValues(
   boardId: number,
   itemId: string,
   values: Record<string, unknown>,
+  opts: { createLabelsIfMissing?: boolean } = {},
 ): Promise<void> {
   if (Object.keys(values).length === 0) return
   await gql(
-    `mutation ($board: ID!, $item: ID!, $vals: JSON!) {
-      change_multiple_column_values(board_id: $board, item_id: $item, column_values: $vals) { id }
+    `mutation ($board: ID!, $item: ID!, $vals: JSON!, $createLabels: Boolean) {
+      change_multiple_column_values(
+        board_id: $board,
+        item_id: $item,
+        column_values: $vals,
+        create_labels_if_missing: $createLabels
+      ) { id }
     }`,
-    { board: String(boardId), item: String(itemId), vals: JSON.stringify(values) },
+    {
+      board: String(boardId),
+      item: String(itemId),
+      vals: JSON.stringify(values),
+      createLabels: Boolean(opts.createLabelsIfMissing),
+    },
   )
 }
 
