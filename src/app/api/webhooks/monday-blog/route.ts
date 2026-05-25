@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import {
+  buildAutoDocsReadyBlocks,
   buildDraftReadyBlocks,
   buildIdeaProposedBlocks,
   buildPublishedBlocks,
@@ -17,7 +18,7 @@ import {
   type MondayItemSnapshot,
 } from "@/lib/mondayClient"
 import { upsertBlogPost } from "@/lib/sanityWriteClient"
-import { postSlackText } from "@/lib/slackClient"
+import { postSlackMessage, postSlackText } from "@/lib/slackClient"
 
 export const runtime = "nodejs"
 export const maxDuration = 60
@@ -499,16 +500,21 @@ async function autoDocsForSlackOrigin(
     [COL_LINKEDIN_DOC_URL]: { url: linkedInDoc.docUrl, text: "LinkedIn post" },
   })
 
-  // Thread reply on the original Slack message.
-  const blogWords = wordCount(draftBody)
-  const linkedInWords = wordCount(linkedInBody)
-  const industryLine = ctx.industry ? `\n:label: ${ctx.industry}` : ""
-  const reply = [
-    `:memo: Draft ready: *${title}*`,
-    `• <${blogDoc.docUrl}|Blog draft (${blogWords} words)>`,
-    `• <${linkedInDoc.docUrl}|LinkedIn post (${linkedInWords} words)>`,
-  ].join("\n") + industryLine
-  await postThreadReply(origin, reply)
+  // Thread reply on the original Slack message — Block Kit with header,
+  // title link, and three action buttons (blog draft, LinkedIn post, monday).
+  const built = buildAutoDocsReadyBlocks({
+    pulseId,
+    title,
+    industry: ctx.industry,
+    targetKeyword: ctx.targetKeyword,
+    blogDocUrl: blogDoc.docUrl,
+    linkedInDocUrl: linkedInDoc.docUrl,
+  })
+  await postSlackMessage(origin.channel, built.blocks, built.fallbackText, {
+    threadTs: origin.ts,
+    unfurlLinks: false,
+    unfurlMedia: false,
+  })
 
   return NextResponse.json({
     ok: true,
@@ -517,7 +523,7 @@ async function autoDocsForSlackOrigin(
     pulseId,
     blogDocUrl: blogDoc.docUrl,
     linkedInDocUrl: linkedInDoc.docUrl,
-    blogWords,
-    linkedInWords,
+    blogWords: wordCount(draftBody),
+    linkedInWords: wordCount(linkedInBody),
   })
 }

@@ -80,6 +80,55 @@ export function buildDraftReadyBlocks(
   return { fallbackText: `:memo: Draft ready: ${args.title}`, blocks }
 }
 
+/**
+ * Block Kit for the auto-docs thread reply on Slack-originated blog items.
+ * Renders as: header, section with the title link, optional industry/keyword
+ * meta line, action row with three URL buttons (blog doc, LinkedIn doc,
+ * monday item). No word-count tags, no preview snippet — the docs themselves
+ * are one click away.
+ */
+export function buildAutoDocsReadyBlocks(args: {
+  pulseId: string
+  title: string
+  industry?: string
+  targetKeyword?: string
+  blogDocUrl: string
+  linkedInDocUrl: string
+}): { fallbackText: string; blocks: Record<string, unknown>[] } {
+  const blocks: Record<string, unknown>[] = []
+  blocks.push({
+    type: "header",
+    text: { type: "plain_text", text: ":memo: Draft ready", emoji: true },
+  })
+  blocks.push({
+    type: "section",
+    text: {
+      type: "mrkdwn",
+      text: `*<${mondayItemUrl(args.pulseId)}|${args.title}>*`,
+    },
+  })
+  const meta = metaLine({ industry: args.industry, targetKeyword: args.targetKeyword })
+  if (meta) blocks.push({ type: "context", elements: [{ type: "mrkdwn", text: meta }] })
+  blocks.push({
+    type: "actions",
+    elements: [
+      {
+        type: "button",
+        style: "primary",
+        text: { type: "plain_text", text: "Open blog draft :pencil:", emoji: true },
+        url: args.blogDocUrl,
+      },
+      {
+        type: "button",
+        text: { type: "plain_text", text: "Open LinkedIn post :linkedin:", emoji: true },
+        url: args.linkedInDocUrl,
+      },
+      openInMondayButton(args.pulseId, "Open in monday :clipboard:", false),
+    ],
+  })
+  return { fallbackText: `:memo: Draft ready: ${args.title}`, blocks }
+}
+
 export function buildPublishedBlocks(
   args: CommonArgs & { publishedUrl: string; excerpt?: string },
 ): { fallbackText: string; blocks: Record<string, unknown>[] } {

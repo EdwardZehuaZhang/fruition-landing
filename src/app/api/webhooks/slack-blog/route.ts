@@ -47,6 +47,10 @@ const INDUSTRIES = [
   "Professional Services",
   "Manufacturing",
   "Product",
+  "Operations",
+  "Finance",
+  "Sales",
+  "Healthcare",
 ] as const
 
 type Industry = (typeof INDUSTRIES)[number]
@@ -578,8 +582,47 @@ function parseIdea(event: SlackMessageEvent): ParsedIdea {
   const targetKeyword = extractField(text, "target keyword") ?? extractField(text, "keyword") ?? ""
   const industry = parseIndustry(extractField(text, "industry")) ?? inferIndustry(text)
   const source = sourceLine(event)
-  const brief = `${text}\n\nSource: ${source}`.trim()
+  // Build a clean brief for Marketa: the actual intent text only, without
+  // the Title/Industry/Keyword header lines (which Claude already gets as
+  // separate prompt fields) and without the "*Sent using* <@...>" Granola
+  // / Cowork attribution footer that some Slack clients append. Falling
+  // back to the full text if extraction yields nothing.
+  const intentText = extractIntent(text) || text
+  const brief = `${intentText}\n\nSource: ${source}`.trim()
   return { title, brief, targetKeyword, industry }
+}
+
+/**
+ * Strip structured header lines (Title:/Industry:/Target keyword:/Keyword:)
+ * and the *Sent using* attribution from the Slack message body, returning
+ * just the user's actual intent text. If the message has an explicit
+ * `Brief: <text>` marker (start of line OR mid-sentence after a period),
+ * everything after the marker wins — this is the most common shape for
+ * Marketa blog requests in #website-blogs.
+ */
+function extractIntent(text: string): string {
+  const cleaned = stripAttribution(text)
+  // Match `brief:` at the start of any line OR right after a period/space,
+  // so both "Brief: do X" on its own line and inline meta-framing like
+  // "smoke test. Brief: do X" both pick the right substring.
+  const briefMatch = cleaned.match(/(?:^|[.\s])brief\s*:\s*([\s\S]+)$/im)
+  if (briefMatch) {
+    return briefMatch[1].trim()
+  }
+  // Otherwise strip the structured field lines and use the rest.
+  const lines = cleaned
+    .split("\n")
+    .filter((line) => !/^[ \t]*(title|industry|target keyword|keyword)\s*:/i.test(line))
+  return lines.join("\n").trim()
+}
+
+function stripAttribution(text: string): string {
+  return text
+    // *Sent using* @ClaudeBot — Cowork/Claude posts include this footer.
+    .replace(/^\s*\*?sent using\*?\s+.*$/gim, "")
+    // Collapse 3+ consecutive newlines down to 2 after stripping.
+    .replace(/\n{3,}/g, "\n\n")
+    .trim()
 }
 
 function extractField(text: string, label: string): string | undefined {
