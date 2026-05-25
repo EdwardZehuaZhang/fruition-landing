@@ -5,12 +5,19 @@ import {
   buildPublishedBlocks,
 } from "@/lib/blogSlackBlocks"
 import {
+  createDraftDoc,
+  createSubfolder,
+  wordCount,
+} from "@/lib/googleDocs"
+import { generateLinkedInPost } from "@/lib/marketaLinkedIn"
+import {
   changeColumnValues,
   getItemForWebhook,
   type MondayColumnValue,
   type MondayItemSnapshot,
 } from "@/lib/mondayClient"
 import { upsertBlogPost } from "@/lib/sanityWriteClient"
+import { postSlackText } from "@/lib/slackClient"
 
 export const runtime = "nodejs"
 export const maxDuration = 60
@@ -29,6 +36,12 @@ const COL_DRAFT_BODY = "long_text_mm3gj0s8"
 const COL_EDIT_NOTES = "long_text_mm3g2bp9"
 const COL_SANITY_DOC_ID = "text_mm3g4ab9"
 const COL_PUBLISHED_URL = "link_mm3gpqq1"
+// Added 2026-05-24 for the Marketa auto-docs flow. See
+// docs/marketa-auto-docs-plan.md and docs/phase2-handoff.md.
+const COL_SLACK_ORIGIN = "long_text_mm3nthd2"
+const COL_LINKEDIN_POST = "long_text_mm3nwhjg"
+const COL_BLOG_DOC_URL = "link_mm3nw491"
+const COL_LINKEDIN_DOC_URL = "link_mm3na3pz"
 
 // Stage values that trigger downstream action. Anything else is ignored.
 const STAGE_IDEA_PROPOSED = "Idea proposed"
@@ -132,7 +145,7 @@ export async function POST(req: Request) {
       case STAGE_IDEA_APPROVED:
         return await forwardToMarketa("draft", pulseId)
       case STAGE_DRAFT_READY:
-        return await pingHumanInLoop(pulseId, "draft-ready")
+        return await handleDraftReady(pulseId)
       case STAGE_EDITS_REQUESTED:
         return await forwardToMarketa("revise", pulseId)
       case STAGE_APPROVED_PUBLISH:
@@ -312,4 +325,199 @@ function extractContext(snapshot: MondayItemSnapshot | null): {
     targetKeyword: colText(snapshot.columns[COL_TARGET_KW]),
     draftBody: colText(snapshot.columns[COL_DRAFT_BODY]),
   }
+}
+
+/**
+ * Dispatch for STAGE_DRAFT_READY. Branches based on whether the item came
+ * from Slack (slack-blog route stamped COL_SLACK_ORIGIN at creation) or
+ * from the regular monday Stage flow.
+ *
+ * - Slack-origin: run the auto-docs flow (LinkedIn + 2 Google Docs + Slack
+ *   thread reply + write back monday columns). Falls back to a Slack thread
+ *   error reply if the auto-docs work throws.
+ * - Otherwise: existing pingHumanInLoop behavior (Block Kit notification to
+ *   #fruition-blogs).
+ */
+async function handleDraftReady(pulseId: string): Promise<NextResponse> {
+  const snapshot = await getItemForWebhook(pulseId)
+  const slackOriginRaw = snapshot
+    ? colText(snapshot.columns[COL_SLACK_ORIGIN])
+    : undefined
+  const slackOrigin = parseSlackOrigin(slackOriginRaw)
+
+  if (!slackOrigin) {
+    return pingHumanInLoop(pulseId, "draft-ready")
+  }
+
+  try {
+    return await autoDocsForSlackOrigin(pulseId, snapshot, slackOrigin)
+  } catch (err) {
+    const detail = errMsg(err)
+    console.error("[monday-blog] auto-docs failed", detail)
+    // Best-effort thread reply so the requester isn't left hanging.
+    await postThreadReply(
+      slackOrigin,
+      `:warning: Draft is ready for *${snapshot?.name?.trim() || "(untitled)"}*, but the auto-docs step failed: \`${detail.slice(0, 200)}\`. Review the item in monday and ping Edward if it keeps happening.`,
+    ).catch((postErr) => {
+      console.error("[monday-blog] thread error-reply also failed", errMsg(postErr))
+    })
+    return NextResponse.json(
+      { ok: false, stage: "draft-ready", autoDocs: "failed", error: detail },
+      { status: 500 },
+    )
+  }
+}
+
+interface SlackOrigin {
+  channel: string
+  ts: string
+  user?: string | null
+  team?: string | null
+}
+
+function parseSlackOrigin(raw: string | undefined): SlackOrigin | null {
+  if (!raw) return null
+  try {
+    const parsed = JSON.parse(raw) as Partial<SlackOrigin>
+    if (!parsed.channel || !parsed.ts) return null
+    return {
+      channel: parsed.channel,
+      ts: parsed.ts,
+      user: parsed.user ?? null,
+      team: parsed.team ?? null,
+    }
+  } catch {
+    return null
+  }
+}
+
+async function postThreadReply(origin: SlackOrigin, text: string): Promise<void> {
+  await postSlackText(origin.channel, text, {
+    threadTs: origin.ts,
+    unfurlLinks: false,
+    unfurlMedia: false,
+  })
+}
+
+function pad2(n: number): string {
+  return n < 10 ? `0${n}` : String(n)
+}
+
+function todayIsoDate(): string {
+  const d = new Date()
+  return `${d.getUTCFullYear()}-${pad2(d.getUTCMonth() + 1)}-${pad2(d.getUTCDate())}`
+}
+
+function clip(text: string, max: number): string {
+  if (text.length <= max) return text
+  return `${text.slice(0, max - 1).trimEnd()}…`
+}
+
+async function autoDocsForSlackOrigin(
+  pulseId: string,
+  snapshot: MondayItemSnapshot | null,
+  origin: SlackOrigin,
+): Promise<NextResponse> {
+  const folderId = process.env.MARKETA_DRAFTS_FOLDER_ID
+  if (!folderId) {
+    throw new Error(
+      "MARKETA_DRAFTS_FOLDER_ID missing in Vercel env — Phase 2 setup incomplete",
+    )
+  }
+  if (!snapshot) {
+    throw new Error(`monday item ${pulseId} not found while building auto-docs`)
+  }
+  const title = snapshot.name?.trim() || "(untitled blog draft)"
+  const ctx = extractContext(snapshot)
+  const draftBody = ctx.draftBody?.trim()
+  if (!draftBody) {
+    throw new Error(`monday item ${pulseId} has no draft body — Marketa write step likely failed`)
+  }
+
+  const linkedInBody = await generateLinkedInPost({
+    title,
+    draft: draftBody,
+    industry: ctx.industry,
+    targetKeyword: ctx.targetKeyword,
+  })
+
+  // Group both docs under a dated subfolder so the parent folder stays scannable.
+  const subfolderName = clip(`${todayIsoDate()} ${title}`, 80)
+  const subfolderId = await createSubfolder(folderId, subfolderName)
+
+  const blogDocBody = [
+    title,
+    "",
+    `Source brief: ${ctx.brief?.replace(/\n+/g, " ") || "(none)"}`,
+    `Industry: ${ctx.industry || "(unset)"}`,
+    `Target keyword: ${ctx.targetKeyword || "(unset)"}`,
+    `monday item: https://fruitionservices.monday.com/boards/${BOARD_ID}/pulses/${pulseId}`,
+    "",
+    "AI Checks / Grammarly / Plagiarism — TODO add screenshots before publish.",
+    "",
+    "---",
+    "",
+    draftBody,
+    "",
+    "---",
+    "",
+    `Word count: ${wordCount(draftBody)}`,
+  ].join("\n")
+
+  const linkedInDocBody = [
+    `${title} — LinkedIn post`,
+    "",
+    `monday item: https://fruitionservices.monday.com/boards/${BOARD_ID}/pulses/${pulseId}`,
+    "",
+    "---",
+    "",
+    linkedInBody,
+    "",
+    "---",
+    "",
+    `Word count: ${wordCount(linkedInBody)}`,
+  ].join("\n")
+
+  const blogTitleClip = clip(title, 80)
+  const [blogDoc, linkedInDoc] = await Promise.all([
+    createDraftDoc({
+      folderId: subfolderId,
+      title: `${blogTitleClip} — Blog draft`,
+      body: blogDocBody,
+    }),
+    createDraftDoc({
+      folderId: subfolderId,
+      title: `${blogTitleClip} — LinkedIn post`,
+      body: linkedInDocBody,
+    }),
+  ])
+
+  // Patch monday with the LinkedIn post and both doc URLs.
+  await changeColumnValues(BOARD_ID, pulseId, {
+    [COL_LINKEDIN_POST]: { text: linkedInBody },
+    [COL_BLOG_DOC_URL]: { url: blogDoc.docUrl, text: "Blog draft" },
+    [COL_LINKEDIN_DOC_URL]: { url: linkedInDoc.docUrl, text: "LinkedIn post" },
+  })
+
+  // Thread reply on the original Slack message.
+  const blogWords = wordCount(draftBody)
+  const linkedInWords = wordCount(linkedInBody)
+  const industryLine = ctx.industry ? `\n:label: ${ctx.industry}` : ""
+  const reply = [
+    `:memo: Draft ready: *${title}*`,
+    `• <${blogDoc.docUrl}|Blog draft (${blogWords} words)>`,
+    `• <${linkedInDoc.docUrl}|LinkedIn post (${linkedInWords} words)>`,
+  ].join("\n") + industryLine
+  await postThreadReply(origin, reply)
+
+  return NextResponse.json({
+    ok: true,
+    stage: "draft-ready",
+    autoDocs: "ok",
+    pulseId,
+    blogDocUrl: blogDoc.docUrl,
+    linkedInDocUrl: linkedInDoc.docUrl,
+    blogWords,
+    linkedInWords,
+  })
 }

@@ -90,15 +90,16 @@ If `ANTHROPIC_API_KEY` isn't already in Vercel Production env, add it. Used for 
 
 ### 2d. Monday board changes
 
-Add three columns to board 5028637584:
+DONE 2026-05-24 via monday MCP. Four columns created on board 5028637584:
 
-| Title | Type | Description |
+| Title | Type | Column ID |
 |---|---|---|
-| LinkedIn post | long_text | Auto-generated short LinkedIn variant |
-| Blog doc URL | link | Google Doc with the full blog draft |
-| LinkedIn doc URL | link | Google Doc with the LinkedIn post |
+| LinkedIn post | long_text | `long_text_mm3nwhjg` |
+| Blog doc URL | link | `link_mm3nw491` |
+| LinkedIn doc URL | link | `link_mm3na3pz` |
+| Slack origin | long_text | `long_text_mm3nthd2` |
 
-Send me the new column IDs once added; I'll wire them into the route.
+Wired into `src/app/api/webhooks/monday-blog/route.ts` and `src/app/api/webhooks/slack-blog/route.ts`.
 
 ### 2e. Slack channel ID env var
 
@@ -111,7 +112,8 @@ So monday-blog knows which Slack message to reply to, the slack-blog route needs
 - (A) New column `Slack origin` (long_text) holding JSON `{channel, ts, user}`. Cleaner.
 - (B) Parse out of the existing `Source: …` line in the Brief column. Hackier but no new column.
 
-I'll go with (A) since you're adding columns anyway — add `Slack origin` (long_text) to the list above.
+Went with (A). Column `long_text_mm3nthd2`. Format stored:
+`{"channel":"C0B4NFVDJKY","ts":"...","user":"U...","team":"T05B4T8UYV8"}`.
 
 ## Phase 3 — Implementation (me, after Phase 2 is done)
 
@@ -173,3 +175,14 @@ Total ~3 hours, gated on Phase 2 user setup.
 ## What I'll do next if you say go
 
 Start Phase 1 right now (slack-blog payload, n8n JSON, event_id dedup). Phase 1 doesn't need any setup from you. Then I'll pause and wait for Phase 2 to be done before touching Phase 3.
+
+---
+
+## Status — 2026-05-24 ~13:30 UTC
+
+- **Phase 1**: shipped in commit `77067a6` (Edward pushed).
+- **Phase 2a (n8n re-import)**: live workflow `Wtqe7VaAD0P0DDdv` on `fruitionservices.app.n8n.cloud` was patched via the n8n REST API. Verified `wh.title` / `wh.brief` fallback is active.
+- **Phase 2d (monday columns)**: DONE via MCP; IDs above.
+- **Phase 2 GCP / Drive / Vercel-env**: blocked on Edward — `console.cloud.google.com`, `drive.google.com`, and `vercel.com` are not reachable from the Cowork browser tool. See `docs/phase2-handoff.md` for the click-by-click.
+- **Phase 3 code**: DONE in working tree. Files added: `src/lib/googleDocs.ts`, `src/lib/marketaLinkedIn.ts`. Files extended: `src/app/api/webhooks/monday-blog/route.ts` (new `handleDraftReady` dispatcher + `autoDocsForSlackOrigin`), `src/app/api/webhooks/slack-blog/route.ts` (writes Slack origin column at item creation). `package.json` adds `googleapis` + `google-auth-library`. **Run `npm install` after pulling.**
+- **Phase 4 smoke test**: blocked on Phase 2 env vars being present in Vercel Production.
