@@ -414,6 +414,22 @@ function clip(text: string, max: number): string {
   return `${text.slice(0, max - 1).trimEnd()}…`
 }
 
+/**
+ * Replace the first H1 in a markdown body with `# <title>`. If the body has
+ * no leading H1, prepend one. Used to enforce the canonical monday title as
+ * the doc's H1 because Claude in n8n keeps inventing its own titles despite
+ * the system prompt forbidding it.
+ */
+function forceLeadingH1(body: string, title: string): string {
+  const trimmed = body.replace(/^\s+/, "")
+  // Match the first "# ..." line (single-level H1, not ## or ###).
+  const h1Re = /^# [^\n]*\n+/
+  if (h1Re.test(trimmed)) {
+    return trimmed.replace(h1Re, `# ${title}\n\n`)
+  }
+  return `# ${title}\n\n${trimmed}`
+}
+
 async function autoDocsForSlackOrigin(
   pulseId: string,
   snapshot: MondayItemSnapshot | null,
@@ -430,10 +446,14 @@ async function autoDocsForSlackOrigin(
   }
   const title = snapshot.name?.trim() || "(untitled blog draft)"
   const ctx = extractContext(snapshot)
-  const draftBody = ctx.draftBody?.trim()
-  if (!draftBody) {
+  const rawDraftBody = ctx.draftBody?.trim()
+  if (!rawDraftBody) {
     throw new Error(`monday item ${pulseId} has no draft body — Marketa write step likely failed`)
   }
+  // Claude in n8n consistently rewrites the H1 instead of using the requested
+  // title verbatim, despite the system prompt forbidding it. Normalize the
+  // leading H1 here so the Doc opens with the canonical title from monday.
+  const draftBody = forceLeadingH1(rawDraftBody, title)
 
   const linkedInBody = await generateLinkedInPost({
     title,
@@ -446,23 +466,20 @@ async function autoDocsForSlackOrigin(
   const subfolderName = clip(`${todayIsoDate()} ${title}`, 80)
   const subfolderId = await createSubfolder(folderId, subfolderName)
 
+  // draftBody already starts with `# ${title}\n\n...` thanks to forceLeadingH1
+  // above, so we don't repeat the title in the preamble.
   const blogDocBody = [
-    title,
+    draftBody,
+    "",
+    "---",
     "",
     `Source brief: ${ctx.brief?.replace(/\n+/g, " ") || "(none)"}`,
     `Industry: ${ctx.industry || "(unset)"}`,
     `Target keyword: ${ctx.targetKeyword || "(unset)"}`,
     `monday item: https://fruitionservices.monday.com/boards/${BOARD_ID}/pulses/${pulseId}`,
+    `Word count: ${wordCount(draftBody)}`,
     "",
     "AI Checks / Grammarly / Plagiarism — TODO add screenshots before publish.",
-    "",
-    "---",
-    "",
-    draftBody,
-    "",
-    "---",
-    "",
-    `Word count: ${wordCount(draftBody)}`,
   ].join("\n")
 
   const linkedInDocBody = [

@@ -120,6 +120,33 @@ export async function createDraftDoc({
     })
   }
 
+  // Share with the Fruition workspace domain so anyone signed in to
+  // fruitionservices.io with the link can edit. Override the default via
+  // MARKETA_DOC_SHARE_DOMAIN if Fruition's primary domain ever changes.
+  // Defensive: any error here gets logged but doesn't fail the doc creation,
+  // because the doc itself is already usable from the Shared Drive.
+  const shareDomain =
+    process.env.MARKETA_DOC_SHARE_DOMAIN ?? "fruitionservices.io"
+  if (shareDomain) {
+    try {
+      await drive.permissions.create({
+        fileId: docId,
+        supportsAllDrives: true,
+        sendNotificationEmail: false,
+        requestBody: {
+          type: "domain",
+          domain: shareDomain,
+          role: "writer",
+        },
+      })
+    } catch (err) {
+      console.warn(
+        `[googleDocs] domain share for ${docId} → ${shareDomain} failed:`,
+        err instanceof Error ? err.message : String(err),
+      )
+    }
+  }
+
   return {
     docId,
     docUrl: `https://docs.google.com/document/d/${docId}/edit`,
