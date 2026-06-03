@@ -42,7 +42,7 @@ export default async function FaqsPage() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-3xl px-4 py-16 md:py-20">
+      <section className="mx-auto w-full max-w-4xl px-4 py-16 md:py-20">
         <FaqList items={faqs ?? []} />
       </section>
 

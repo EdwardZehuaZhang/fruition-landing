@@ -635,5 +635,8 @@ export default {
     // ── Join stats CTA overrides ─────────────────────────────────────
     { name: 'joinCtaLabel', title: 'Join CTA Label', type: 'string' },
     { name: 'joinCtaUrl', title: 'Join CTA URL', type: 'string' },
+
+    // CRO action-item sections
+    { name: 'croSections', title: 'CRO Sections', type: 'croSections' },
   ],
 }

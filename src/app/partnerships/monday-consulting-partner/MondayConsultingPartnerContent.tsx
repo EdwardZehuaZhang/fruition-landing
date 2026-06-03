@@ -8,6 +8,8 @@ import {
   CalendlySection,
   FaqAccordion,
   TestimonialsGrid,
+  CroSections,
+  StickyCtaBar,
 } from "@/components/sections"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import type {
@@ -422,6 +424,7 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
 
   return (
     <div>
+      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* 1. Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow || "monday.com Expert Consultants"}
@@ -469,6 +472,13 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
 
       {/* 5. Why Choose Fruition */}
       <WhyFruitionSection items={resolvedWhyFruition} />
+
+      {/* 5b. CRO action items */}
+      <CroSections
+        data={page.croSections}
+        primaryCtaLabel={page.primaryCtaLabel}
+        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+      />
 
       {/* 6. FAQ */}
       <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />

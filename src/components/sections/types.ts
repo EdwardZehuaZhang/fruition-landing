@@ -89,6 +89,56 @@ export interface PartnerBadge {
   height?: number
 }
 
+/* ── CRO kit types ─────────────────────────────────────────────────────── */
+
+export interface TrustBadge {
+  _key?: string
+  label?: string
+  /** Optional sub-label / accreditation detail */
+  detail?: string
+}
+
+export interface BeforeAfterRow {
+  _key?: string
+  before?: string
+  after?: string
+}
+
+export interface MicroCaseStudy {
+  _key?: string
+  challenge?: string
+  solution?: string
+  impact?: string
+  metric?: string
+  metricLabel?: string
+}
+
+export interface ChecklistItem {
+  _key?: string
+  text?: string
+}
+
+export interface RoiCalcConfig {
+  heading?: string
+  subheading?: string
+  /** Default slider positions */
+  defaultTeamSize?: number
+  defaultHoursPerWeek?: number
+  /** Fully-loaded hourly cost assumption in dollars */
+  hourlyRate?: number
+  /** Fraction of manual hours automation reclaims (0–1) */
+  reclaimRate?: number
+  currencySymbol?: string
+}
+
+export interface StatMetric {
+  _key?: string
+  /** Bold highlighted figure, e.g. "500+" */
+  value?: string
+  /** Supporting statement */
+  text?: string
+}
+
 export interface SiteSettingsData {
   calendlyLink?: string
   carouselLogos?: CarouselLogo[]

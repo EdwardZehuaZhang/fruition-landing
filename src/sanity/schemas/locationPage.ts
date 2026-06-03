@@ -285,5 +285,8 @@ export default {
       type: 'array',
       of: [{ type: 'string' }],
     },
+
+    // CRO action-item sections
+    { name: 'croSections', title: 'CRO Sections', type: 'croSections' },
   ],
 }

@@ -260,5 +260,8 @@ export default {
 
     // Hero image local fallback (preserves GIF animation; image pipeline can strip it)
     { name: 'heroImageUrl', title: 'Hero Image URL (local fallback, overrides Hero Image when set)', type: 'string' },
+
+    // CRO action-item sections
+    { name: 'croSections', title: 'CRO Sections', type: 'croSections' },
   ],
 }

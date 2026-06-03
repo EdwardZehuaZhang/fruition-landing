@@ -8,6 +8,8 @@ import {
   CalendlySection,
   FaqAccordion,
   TestimonialsGrid,
+  CroSections,
+  StickyCtaBar,
 } from "@/components/sections"
 import TeamGridSection, { type TeamMember } from "@/components/TeamGridSection"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
@@ -169,6 +171,7 @@ export default function MondayPartnerUsContent({
 
   return (
     <div>
+      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow}
@@ -214,6 +217,13 @@ export default function MondayPartnerUsContent({
         ctaUrl={page.teamGridCtaUrl}
         members={teamMembers}
         region="US"
+      />
+
+      {/* CRO action items */}
+      <CroSections
+        data={page.croSections}
+        primaryCtaLabel={page.primaryCtaLabel}
+        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
       />
 
       {/* Calendly */}

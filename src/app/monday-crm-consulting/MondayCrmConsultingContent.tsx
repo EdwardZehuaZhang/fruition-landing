@@ -9,6 +9,8 @@ import {
   CalendlySection,
   FaqAccordion,
   CapabilitiesGrid,
+  CroSections,
+  StickyCtaBar,
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData, FaqTab } from "@/components/sections/types"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
@@ -97,6 +99,7 @@ export default function MondayCrmConsultingContent({
 
   return (
     <div>
+      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* 1. Hero */}
       <section className="bg-white">
         <div
@@ -257,6 +260,13 @@ export default function MondayCrmConsultingContent({
 
       {/* 5. Testimonials (above Calendly) */}
       <TestimonialsGrid caseStudies={caseStudies} />
+
+      {/* 5b. CRO action items */}
+      <CroSections
+        data={page.croSections}
+        primaryCtaLabel={page.primaryCtaLabel}
+        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+      />
 
       {/* 6. Calendly */}
       <CalendlySection

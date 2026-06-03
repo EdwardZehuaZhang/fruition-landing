@@ -71,6 +71,9 @@ const PAGE_FIELDS = `
   seoTitle,
   seoDescription,
 
+  // CRO action-item sections (full nested object tree)
+  croSections,
+
   // Hero
   heroEyebrow,
   heroHeading,
@@ -637,6 +640,7 @@ export async function getPageBySlug(slug: string) {
 export async function getImplementationPackagesPage() {
   return client.fetch(`*[_type == "implementationPackagesPage"][0]{
     title, seoTitle, seoDescription,
+    croSections,
     heroHeadingPart1, heroHeadingAccent, heroHeadingPart2,
     heroPartnerBadges[]{ image, alt },
     heroMondayPartnersImage,

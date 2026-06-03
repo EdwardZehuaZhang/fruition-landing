@@ -198,5 +198,8 @@ export default defineType({
 
     // Security badge at bottom
     defineField({ name: 'securityBadge', title: 'Security Badge Image', type: 'image' }),
+
+    // CRO action-item sections
+    defineField({ name: 'croSections', title: 'CRO Sections', type: 'croSections' }),
   ],
 })

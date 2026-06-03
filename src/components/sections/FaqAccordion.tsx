@@ -44,8 +44,39 @@ export default function FaqAccordion({
   if (tabs.length === 0) return null
   const currentItems = tabs[activeFaqTab]?.items ?? []
 
+  // FAQPage JSON-LD for rich snippets / "People Also Ask". Flatten every tab's
+  // items, drop blanks, dedupe by question. Rendered server-side in the initial
+  // HTML so crawlers index it.
+  const seenQ = new Set<string>()
+  const faqEntities = tabs
+    .flatMap((tab) => tab.items ?? [])
+    .filter((it) => {
+      const q = it.question?.trim()
+      const a = it.answer?.trim()
+      if (!q || !a) return false
+      if (seenQ.has(q)) return false
+      seenQ.add(q)
+      return true
+    })
+    .map((it) => ({
+      "@type": "Question",
+      name: it.question!.trim(),
+      acceptedAnswer: { "@type": "Answer", text: it.answer!.trim() },
+    }))
+
+  const faqJsonLd =
+    faqEntities.length > 0
+      ? { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqEntities }
+      : null
+
   return (
     <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <div className="mx-auto flex flex-col px-4 sm:px-6 lg:px-8" style={{ maxWidth: 959, gap: 24 }}>
         {heading && (
           <h2 className="text-section-h2" style={{ color: "var(--purple-primary)" }}>

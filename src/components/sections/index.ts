@@ -22,4 +22,17 @@ export { default as PartnerEcosystemSection } from "./PartnerEcosystemSection"
 export { default as IndustryCaseStudy } from "./IndustryCaseStudy"
 export { default as ServicesWorkflowTabs } from "./ServicesWorkflowTabs"
 
+/* CRO kit (PDF action items) */
+export { default as TrustBadgeRow } from "./TrustBadgeRow"
+export { default as StickyCtaBar } from "./StickyCtaBar"
+export { default as DualCtaRow } from "./DualCtaRow"
+export { default as BeforeAfterSection } from "./BeforeAfterSection"
+export { default as StatMetricBanner } from "./StatMetricBanner"
+export { default as MicroCaseStudyBox } from "./MicroCaseStudyBox"
+export { default as SymptomsChecklist } from "./SymptomsChecklist"
+export { default as RoiCalculator } from "./RoiCalculator"
+export { default as LeadForm } from "./LeadForm"
+export { default as CroSections } from "./CroSections"
+export type { CroSectionsData } from "./CroSections"
+
 export type * from "./types"

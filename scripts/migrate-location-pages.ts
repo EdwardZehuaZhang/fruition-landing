@@ -406,6 +406,58 @@ const pages: LocationPage[] = [
     joinStats: SHARED_FORRESTER_STATS,
     joinFootnote: 'Source: Forrester TEI study of monday.com.',
   },
+
+  // ── Philippines ───────────────────────────────────────────────────
+  {
+    slug: 'monday-partner-philippines',
+    title: 'monday.com Partner Philippines',
+    country: 'Philippines',
+    region: 'APAC',
+    heroImageUrl: 'https://static.wixstatic.com/media/a280a5_83aa7b006f4d4457bf93a43ed1350dd6~mv2.png',
+    heroHeading: 'monday.com Partner Consultants & Implementation Experts Philippines',
+    heroSubheading:
+      'Get certified monday.com partner consultants and implementation experts to build robust infrastructure and architecture for your business. Our Philippines-based specialists serve teams across Metro Manila, Cebu and Davao — from fast-scaling startups to BPO and outsourcing operations — getting you operational in days, not months.',
+    primaryCtaLabel: '🚀 Book a Consultation',
+    primaryCtaUrl: CALENDLY,
+    secondaryCtaLabel: '▶️ Get Started with monday.com',
+    secondaryCtaUrl: MONDAY_CRM,
+    seoTitle: 'monday.com Partner Philippines | Certified Implementation Consultants | Fruition',
+    seoDescription:
+      'Fruition is a certified monday.com partner in the Philippines delivering CRM and work management implementations with Philippines-based consultants across Manila, Cebu and Davao.',
+    capabilitiesHeading: 'Top leadership challenges across Philippine businesses',
+    capabilitiesCards: [
+      { emoji: '🌐', title: 'Distributed & BPO Workforce', description: 'Coordinate large, shift-based and outsourced teams across Manila, Cebu and Davao while maintaining visibility, accountability and service-level targets.' },
+      { emoji: '🎓', title: 'Digital Upskilling for Filipino Teams', description: 'Accelerate technology adoption with expert-led training that minimises productivity disruption and builds lasting in-house capability.' },
+      { emoji: '🤖', title: 'AI & Automation', description: 'Implement AI and automation to remove repetitive manual work, reduce errors and free your team to focus on higher-value client outcomes.' },
+      { emoji: '💰', title: 'Cost Efficiency & Reporting Visibility', description: 'Improve reporting visibility into business performance to make better decisions and quickly correct course on strategic initiatives.' },
+      { emoji: '🇵🇭', title: 'Cross-Site & Client Time-Zone Collaboration', description: 'Keep onshore and offshore teams aligned across Philippine business hubs and global client time zones through one unified platform.' },
+    ],
+    comparisonHeading: 'monday.com features built for Philippine teams',
+    comparisonSubheading: 'How monday.com transforms work for Philippine businesses across Metro Manila, Cebu, Davao and beyond.',
+    comparisonTabs: [
+      {
+        label: 'monday.com Features',
+        items: [
+          { number: '01', title: '⚡ Save Time with Automations', description: 'Automated workflows on monday.com act as your dedicated process manager, continuously running in the background to keep initiatives moving seamlessly and productively.' },
+          { number: '02', title: '📄 Centralised Documentation', description: 'Create rich documents directly within monday and embed real-time project information from any of your boards within those docs.' },
+          { number: '03', title: '📊 Visualise with Dashboards & Charts', description: 'Turn project data into visually engaging, easily digestible information — simplifying analysis and improving decision-making with clear, actionable views.' },
+          { number: '04', title: '🧩 Flexible Organisation', description: 'Organise projects using Agile or traditional methodologies — adaptable to startup, enterprise, BPO and services-team workflows alike.' },
+          { number: '05', title: '🔌 Integrate with Other Tools', description: 'Keep all your data in monday.com and integrate with your accounting, CRM and communication tools — Aircall, Gmail, Outlook, Slack, Teams and more.' },
+        ],
+      },
+    ],
+    methodologyHeading: "Fruition's consulting methodology",
+    methodologySteps: SHARED_METHODOLOGY,
+    calendlyHeading: SHARED_CALENDLY_HEADING,
+    calendlySubheading: SHARED_CALENDLY_SUBHEADING,
+    faqTabs: SHARED_FAQ,
+    joinHeadingPart1: 'The economic impact of ',
+    joinHeadingAccent: 'monday.com in the Philippines',
+    joinHeadingPart2: '',
+    joinSubheading: 'Independent Forrester research on the platform behind 500+ businesses choosing monday.com.',
+    joinStats: SHARED_FORRESTER_STATS,
+    joinFootnote: 'Source: Forrester TEI study of monday.com.',
+  },
 ]
 
 function key(slug: string, prefix: string, idx: number, sub?: number) {
@@ -508,8 +560,13 @@ async function buildDocument(p: LocationPage) {
 }
 
 async function main() {
-  console.log(`Migrating ${pages.length} location pages...`)
-  for (const p of pages) {
+  // Optional slug filter (substring match) to seed a single page without
+  // re-writing the others: `npx tsx scripts/migrate-location-pages.ts philippines`
+  const only = process.argv[2]
+  const targets = only ? pages.filter((p) => p.slug.includes(only)) : pages
+  if (only && targets.length === 0) throw new Error(`No location page slug matches "${only}"`)
+  console.log(`Migrating ${targets.length} location page(s)${only ? ` matching "${only}"` : ''}...`)
+  for (const p of targets) {
     console.log(`\n→ ${p.slug}`)
     const doc = await buildDocument(p)
     await writeClient.createOrReplace(doc)

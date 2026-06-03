@@ -9,6 +9,8 @@ import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
 import CalendlySection from "@/components/sections/CalendlySection"
 import PaperPlaneIcon from "@/components/common/icons/PaperPlaneIcon"
 import FaqAccordion from "@/components/sections/FaqAccordion"
+import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
+import StickyCtaBar from "@/components/sections/StickyCtaBar"
 import type { FaqTab as SharedFaqTab } from "@/components/sections/types"
 
 /* ------------------------------------------------------------------ */
@@ -123,6 +125,8 @@ export interface ImplementationPackagesData {
   methodologySteps?: MethodologyStep[]
 
   securityBadge?: SanityImage
+
+  croSections?: CroSectionsData
 }
 
 interface CarouselLogo {
@@ -341,6 +345,7 @@ export default function ImplementationPackagesContent({
 
   return (
     <div>
+      <StickyCtaBar label={data?.croSections?.stickyCtaLabel} href={data?.croSections?.stickyCtaUrl || calendlyUrl || ""} />
       {/* ============================================================ */}
       {/* SECTION 1 -- Hero                                            */}
       {/* ============================================================ */}
@@ -1061,6 +1066,15 @@ export default function ImplementationPackagesContent({
         statCardCtaLabel={statCardCtaLabel}
         statCardCtaUrl={statCardCtaUrl}
         caseStudies={caseStudies as import("@/components/sections/types").CaseStudy[]}
+      />
+
+      {/* ============================================================ */}
+      {/* SECTION 5b -- CRO action items                               */}
+      {/* ============================================================ */}
+      <CroSections
+        data={data?.croSections}
+        primaryCtaLabel={data?.heroPrimaryCtaLabel}
+        primaryCtaUrl={data?.heroPrimaryCtaUrl || calendlyUrl}
       />
 
       {/* ============================================================ */}
