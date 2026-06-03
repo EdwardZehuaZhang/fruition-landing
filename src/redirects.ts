@@ -3945,5 +3945,165 @@ export const wixRedirects: Redirect[] = [
     "source": "/profile/78dc780b-00f1-4417-a034-603049ed359c/profile",
     "destination": "/author/ishani-dhar-chowdhury",
     "permanent": true
+  },
+  {
+    "source": "/post/setting-your-business-up-for-success-role-of-an-expert-monday-com-consultant",
+    "destination": "/post/monday-com-consultants-help",
+    "permanent": true
+  },
+  {
+    "source": "/monday-certified-partner-about",
+    "destination": "/about-us",
+    "permanent": true
+  },
+  {
+    "source": "/post/remote-team-collaboration-with-monday-com-tools-and-strategies",
+    "destination": "/post/team-collaboration-with-monday-com",
+    "permanent": true
+  },
+  {
+    "source": "/post/monday-dev-vs-jira-review-comparison",
+    "destination": "/post/monday-dev-vs-jira",
+    "permanent": true
+  },
+  {
+    "source": "/post/monday-crm-roadmap-a-look-at-2024-s-unique-features-and-strategic-vision",
+    "destination": "/post/monday-crm-roadmap",
+    "permanent": true
+  },
+  {
+    "source": "/post/monday-crm-for-non-profits-your-go-to-platform-for-recruitment-fundraising-and-more",
+    "destination": "/post/monday-crm-for-non-profits",
+    "permanent": true
+  },
+  {
+    "source": "/post/monday-crm-5-crm-challenges-of-2024",
+    "destination": "/post/monday-crm-challenges",
+    "permanent": true
+  },
+  {
+    "source": "/post/monday-com-vs-ms-teams-your-perfect-pick-for-2025",
+    "destination": "/post/monday-com-vs-ms-teams",
+    "permanent": true
+  },
+  {
+    "source": "/post/monday-com-vs-asana-the-project-management-tool-you-should-choose",
+    "destination": "/post/monday-com-vs-asana",
+    "permanent": true
+  },
+  {
+    "source": "/post/monday-com-vs-airtable-the-vast-differences-in-these-project-management-tools-2025",
+    "destination": "/post/monday-com-vs-airtable",
+    "permanent": true
+  },
+  {
+    "source": "/post/monday-com-guest-user-access",
+    "destination": "/post/monday-com-guest-access",
+    "permanent": true
+  },
+  {
+    "source": "/post/monday-com-for-construction-why-do-construction-businesses-need-daily-reports",
+    "destination": "/post/monday-com-for-construction",
+    "permanent": true
+  },
+  {
+    "source": "/post/monday-com-dashboards-reporting",
+    "destination": "/post/data-visualisation-on-monday-com",
+    "permanent": true
+  },
+  {
+    "source": "/post/monday-com-crm-vs-work-management-which-product-should-you-choose",
+    "destination": "/post/monday-com-crm-vs-work-management",
+    "permanent": true
+  },
+  {
+    "source": "/post/monday-com-crm-integrations-everything-you-need-to-know",
+    "destination": "/post/monday-com-crm-integrations",
+    "permanent": true
+  },
+  {
+    "source": "/post/monday-com-crm-5-unique-features",
+    "destination": "/post/monday-crm-unique-features",
+    "permanent": true
+  },
+  {
+    "source": "/post/hubspot-to-monday-migration-how-to-supercharge-workflow-efficiency",
+    "destination": "/post/hubspot-to-monday-migration",
+    "permanent": true
+  },
+  {
+    "source": "/post/how-to-avoid-common-pitfalls-during-monday-com-implementation",
+    "destination": "/post/pitfalls-monday-com-implementation",
+    "permanent": true
+  },
+  {
+    "source": "/post/how-monday-crm-consultants-help-supercharge-revenue",
+    "destination": "/post/monday-crm-consultants",
+    "permanent": true
+  },
+  {
+    "source": "/post/how-monday-com-helps-elt-make-better-decisions",
+    "destination": "/post/monday-com-leadership-decisions",
+    "permanent": true
+  },
+  {
+    "source": "/post/how-does-monday-com-crm-consulting-impact-your-sales-cycle",
+    "destination": "/post/monday-crm-implementation",
+    "permanent": true
+  },
+  {
+    "source": "/post/how-can-you-find-a-reliable-monday-com-certified-partner-for-your-business",
+    "destination": "/post/finding-monday-com-certified-partner",
+    "permanent": true
+  },
+  {
+    "source": "/post/how-can-monday-service-help-with-ticket-management",
+    "destination": "/post/monday-service-ticket-management",
+    "permanent": true
+  },
+  {
+    "source": "/post/how-can-monday-com-crm-help-you-create-a-robust-business-strategy",
+    "destination": "/post/monday-crm-sales-pipeline",
+    "permanent": true
+  },
+  {
+    "source": "/post/fruition-services-becomes-an-official-monday-silver-partner",
+    "destination": "/post/fruition-monday-silver-partner",
+    "permanent": true
+  },
+  {
+    "source": "/post/fruition-secures-a-make-gold-partner-status",
+    "destination": "/post/fruition-make-gold-partner",
+    "permanent": true
+  },
+  {
+    "source": "/post/email-tracking-in-monday-crm-the-only-way-to-effortlessly-boost-sales-productivity",
+    "destination": "/post/email-tracking-in-monday-crm",
+    "permanent": true
+  },
+  {
+    "source": "/post/change-management-how-can-a-monday-consultants-help",
+    "destination": "/post/monday-consultants-help-change-management",
+    "permanent": true
+  },
+  {
+    "source": "/post/automation-in-monday-com-boosting-productivity-with-smart-workflows",
+    "destination": "/post/monday-com-automations",
+    "permanent": true
+  },
+  {
+    "source": "/post/7-monday-com-alternatives-are-they-better-2025-guide",
+    "destination": "/post/monday-com-alternatives",
+    "permanent": true
+  },
+  {
+    "source": "/post/5-favourite-make-com-use-cases-the-unique-ways-you-can-streamline-workflows",
+    "destination": "/post/make-com-use-cases",
+    "permanent": true
+  },
+  {
+    "source": "/post/3-industries-that-ll-need-monday-crm-to-boost-productivity-in-2024",
+    "destination": "/post/monday-crm-industries",
+    "permanent": true
   }
 ];
