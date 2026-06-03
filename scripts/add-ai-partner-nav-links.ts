@@ -47,10 +47,10 @@ async function main() {
   const aiHrefs = new Set(NEW_LINKS.map((l) => l.href))
 
   // Keep non-AI partners (DoiT + rest) in place, drop any existing AI links.
-  const rest = items.filter((it) => !aiHrefs.has(it.href))
+  const rest = items.filter((it) => !aiHrefs.has(it.href ?? ""))
 
   // Re-create AI links, reusing existing _key when present to avoid churn.
-  const existingByHref = new Map(items.filter((it) => aiHrefs.has(it.href)).map((it) => [it.href, it]))
+  const existingByHref = new Map(items.filter((it) => aiHrefs.has(it.href ?? "")).map((it) => [it.href, it]))
   const aiItems = NEW_LINKS.map((l) => {
     const prev = existingByHref.get(l.href)
     return prev?._key ? { ...l, _key: prev._key } : withKey(l)
