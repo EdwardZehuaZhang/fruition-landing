@@ -1,6 +1,10 @@
 ﻿import type { NextConfig } from "next";
+import { wixRedirects } from "./src/redirects";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return wixRedirects;
+  },
   images: {
     remotePatterns: [
       {
