@@ -1,12 +1,16 @@
 import { parse as parseHtml } from "node-html-parser"
 import type { ToolExecutor, ToolSpec } from "@/lib/claudeClient"
-import { listBoardItems } from "@/lib/mondayClient"
-import { getRecentChannelMessages, lookupSlackUserName } from "@/lib/slackClient"
+import { listBoardItems, listBoards } from "@/lib/mondayClient"
+import {
+  getRecentChannelMessages,
+  lookupSlackUserName,
+  searchSlackMessages,
+} from "@/lib/slackClient"
 
 /**
  * SECURITY INVARIANT — READ ONLY.
  *
- * The slack-blog @-mention bot is read-only by design. The four tools below
+ * The slack-blog @-mention bot is read-only by design. The six tools below
  * are the entire surface. Do NOT add any tool that performs a write,
  * delete, modify, send, archive, move, or assign action without explicit
  * sign-off from Edward. The executor below uses a literal switch on tool
@@ -20,7 +24,9 @@ import { getRecentChannelMessages, lookupSlackUserName } from "@/lib/slackClient
  */
 const ALLOWED_TOOL_NAMES = [
   "find_monday_items",
+  "list_monday_boards",
   "read_channel_history",
+  "search_slack",
   "fetch_url_content",
   "web_search",
 ] as const
@@ -49,7 +55,7 @@ export const BOT_TOOLS: ToolSpec[] = [
     function: {
       name: "find_monday_items",
       description:
-        "List items on a Fruition monday.com board. Use this when someone asks about blog ideas, drafts, the content queue, or anything stored on a known board. The blog topics board is board_id 5028637584 (group_id 'topics'). Returns up to 20 items by default with name, stage, industry, and a link.",
+        "List items on a Fruition monday.com board. Use this when someone asks about blog ideas, drafts, the content queue, or anything stored on a known board. The blog topics board is board_id 5028637584 (group_id 'topics'). For any board OTHER than the blog board, call list_monday_boards first to discover the board_id. Returns up to 20 items by default with name, stage (if present), industry (if present), and a link.",
       parameters: {
         type: "object",
         properties: {
@@ -64,7 +70,7 @@ export const BOT_TOOLS: ToolSpec[] = [
           stage: {
             type: "string",
             description:
-              "Optional case-insensitive substring match against the Stage column. Examples: 'Drafting', 'Published', 'Idea approved', 'Stuck'.",
+              "Optional case-insensitive substring match against the Stage column. Examples: 'Drafting', 'Published', 'Idea approved', 'Stuck'. Only meaningful on the blog board.",
           },
           limit: {
             type: "number",
@@ -78,9 +84,32 @@ export const BOT_TOOLS: ToolSpec[] = [
   {
     type: "function",
     function: {
+      name: "list_monday_boards",
+      description:
+        "List monday.com boards that the bot can see (read-only). Use this when the user names a board you don't have memorized (anything other than the blog topics board 5028637584) so you can pick the right board_id before calling find_monday_items. Also use when someone asks 'what monday boards do you have access to'.",
+      parameters: {
+        type: "object",
+        properties: {
+          name_contains: {
+            type: "string",
+            description:
+              "Optional case-insensitive substring filter on board name. Example: 'client' to find client-tracking boards.",
+          },
+          limit: {
+            type: "number",
+            description: "Max boards to return. Default 50, hard cap 200.",
+          },
+        },
+        required: [],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
       name: "read_channel_history",
       description:
-        "Read recent messages from a Slack channel the bot is in. Use when someone asks 'what happened in #X', 'summarize today's #Y', or wants context from a different channel than the one they are mentioning the bot in. The bot must be a member of the channel; if not, this errors. Channel IDs start with C (public) or G (private).",
+        "Read recent messages from a Slack channel the bot is in. Use when someone asks 'what happened in #X', 'summarize today's #Y', or wants context from a different channel than the one they are mentioning the bot in. The bot must be a member of the channel; if not, this errors. Channel IDs start with C (public) or G (private). For full-workspace keyword search across channels you are not in, use search_slack instead.",
       parameters: {
         type: "object",
         properties: {
@@ -95,6 +124,45 @@ export const BOT_TOOLS: ToolSpec[] = [
           },
         },
         required: ["channel_id"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "search_slack",
+      description:
+        "Search Slack messages across all channels the search user can see (public channels workspace-wide, plus private channels the search user is in). Use when someone asks 'what did we say about X', 'find the thread about Y', 'when did we decide Z', or wants to surface a past conversation without naming a specific channel. Prefer read_channel_history when the channel is known. Requires the SLACK_USER_TOKEN env var to be configured; if it isn't, this tool returns a missing-env error.",
+      parameters: {
+        type: "object",
+        properties: {
+          query: {
+            type: "string",
+            description:
+              "Search query. Plain English works. You can add Slack search operators like from:@name or has:link if helpful.",
+          },
+          channel: {
+            type: "string",
+            description:
+              "Optional channel filter. Either a channel id (C...) or a channel name without the leading #. Example: 'fruition-digital' or 'C08VD9R6SGP'.",
+          },
+          days_back: {
+            type: "number",
+            description:
+              "Optional lookback window in days, translated to after:YYYY-MM-DD. Use 7 for 'this week', 30 for 'this month', 365 for 'this year'.",
+          },
+          count: {
+            type: "number",
+            description: "Max matches to return. Default 20, hard cap 50.",
+          },
+          sort: {
+            type: "string",
+            enum: ["score", "timestamp"],
+            description:
+              "Sort order. 'score' (default) returns most relevant matches; 'timestamp' returns newest first.",
+          },
+        },
+        required: ["query"],
       },
     },
   },
@@ -148,8 +216,12 @@ export const botToolExecutor: ToolExecutor = async (name, args) => {
     switch (name) {
       case "find_monday_items":
         return await execFindMondayItems(args)
+      case "list_monday_boards":
+        return await execListMondayBoards(args)
       case "read_channel_history":
         return await execReadChannelHistory(args)
+      case "search_slack":
+        return await execSearchSlack(args)
       case "fetch_url_content":
         return await execFetchUrlContent(args)
       case "web_search":
@@ -185,22 +257,85 @@ async function execFindMondayItems(args: Record<string, unknown>): Promise<strin
     return `No items found on board ${boardId}${groupId ? ` in group ${groupId}` : ""}${stage ? ` at stage ~ '${stage}'` : ""}.`
   }
 
+  const isBlogBoard = boardId === BLOG_BOARD_ID
   const lines = filtered.map((it) => {
-    const stageVal = it.columns[STAGE_COLUMN_ID]?.text ?? "?"
-    const industry = it.columns[INDUSTRY_COLUMN_ID]?.text ?? ""
-    const keyword = it.columns[TARGET_KEYWORD_COLUMN_ID]?.text ?? ""
-    const meta = [
-      `stage: ${stageVal}`,
-      industry ? `industry: ${industry}` : "",
-      keyword ? `kw: ${keyword}` : "",
-    ]
-      .filter(Boolean)
-      .join(" | ")
+    let meta: string
+    if (isBlogBoard) {
+      const stageVal = it.columns[STAGE_COLUMN_ID]?.text ?? "?"
+      const industry = it.columns[INDUSTRY_COLUMN_ID]?.text ?? ""
+      const keyword = it.columns[TARGET_KEYWORD_COLUMN_ID]?.text ?? ""
+      meta = [
+        `stage: ${stageVal}`,
+        industry ? `industry: ${industry}` : "",
+        keyword ? `kw: ${keyword}` : "",
+      ]
+        .filter(Boolean)
+        .join(" | ")
+    } else {
+      // Generic board: surface up to 3 non-empty columns so the bot has
+      // something useful to summarize without hardcoding column IDs per
+      // board. Skip empty + skip auto/system columns by type.
+      const skipTypes = new Set(["creation_log", "last_updated", "subtasks", "auto_number"])
+      const interesting = Object.values(it.columns)
+        .filter((c) => c.text && c.text.trim() && !skipTypes.has(c.type))
+        .slice(0, 3)
+      meta = interesting.map((c) => `${c.id}: ${c.text}`).join(" | ")
+      if (it.group?.title) {
+        meta = meta ? `group: ${it.group.title} | ${meta}` : `group: ${it.group.title}`
+      }
+    }
     const url = `https://fruitionservices.monday.com/boards/${boardId}/pulses/${it.id}`
-    return `- ${it.name} (${meta}) ${url}`
+    return `- ${it.name}${meta ? ` (${meta})` : ""} ${url}`
   })
 
   return `Found ${filtered.length} item${filtered.length === 1 ? "" : "s"}:\n${lines.join("\n")}`
+}
+
+async function execListMondayBoards(args: Record<string, unknown>): Promise<string> {
+  const nameContains =
+    typeof args.name_contains === "string" && args.name_contains ? args.name_contains : undefined
+  const limit = typeof args.limit === "number" ? args.limit : 50
+
+  const boards = await listBoards({ nameContains, limit })
+  if (boards.length === 0) {
+    return nameContains
+      ? `No boards found matching '${nameContains}'.`
+      : "No boards visible to the bot."
+  }
+  const lines = boards.map((b) => {
+    const workspace = b.workspaceName ? ` [${b.workspaceName}]` : ""
+    const count = b.itemsCount != null ? ` (${b.itemsCount} items)` : ""
+    return `- ${b.name}${workspace}${count} - board_id ${b.id}`
+  })
+  return `Boards visible to the bot (${boards.length}):\n${lines.join("\n")}`
+}
+
+async function execSearchSlack(args: Record<string, unknown>): Promise<string> {
+  const query = String(args.query ?? "").trim()
+  if (!query) return "query is required."
+  if (!process.env.SLACK_USER_TOKEN) {
+    return "Slack search is not configured. SLACK_USER_TOKEN env var is missing. Tell the user that cross-channel search needs an admin to add a Slack user token with search:read scope (see docs/bot-permissions.md), and that for now you can read a specific channel with read_channel_history if they give you the channel id."
+  }
+  const channel =
+    typeof args.channel === "string" && args.channel ? args.channel : undefined
+  const daysBack = typeof args.days_back === "number" ? args.days_back : undefined
+  const count = typeof args.count === "number" ? args.count : 20
+  const sortRaw = typeof args.sort === "string" ? args.sort : undefined
+  const sort: "score" | "timestamp" = sortRaw === "timestamp" ? "timestamp" : "score"
+
+  const matches = await searchSlackMessages(query, { channel, daysBack, count, sort })
+  if (matches.length === 0) {
+    return `No matches for '${query}'${channel ? ` in #${channel}` : ""}${daysBack ? ` (last ${daysBack}d)` : ""}.`
+  }
+  const lines = matches.map((m) => {
+    const who = m.username || m.user || "?"
+    const where = m.channel?.name ? `#${m.channel.name}` : (m.channel?.id ?? "?")
+    const when = m.ts ? new Date(Number(m.ts.split(".")[0]) * 1000).toISOString().slice(0, 10) : "?"
+    const text = (m.text ?? "").replace(/\s+/g, " ").slice(0, 280)
+    const link = m.permalink ? ` ${m.permalink}` : ""
+    return `[${where} ${when} ${who}] ${text}${link}`
+  })
+  return `Found ${matches.length} match${matches.length === 1 ? "" : "es"} for '${query}':\n${lines.join("\n")}`
 }
 
 async function execReadChannelHistory(args: Record<string, unknown>): Promise<string> {

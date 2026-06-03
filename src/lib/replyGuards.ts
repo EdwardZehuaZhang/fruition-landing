@@ -44,9 +44,15 @@ export function isCapabilityQuestion(userText: string): boolean {
 function humanizeTool(name: string): string {
   switch (name) {
     case "find_monday_items":
-      return "Query the Fruition monday.com blog board (or any board by ID) and list items with stage, industry, and a link."
+      return "Query a Fruition monday.com board by ID and list items with their key columns and a link."
+    case "list_monday_boards":
+      return "List the monday.com boards I can see (read-only) so I can pick the right board_id."
     case "read_channel_history":
       return "Read recent messages from any Slack channel I am a member of, by channel ID."
+    case "search_slack":
+      return process.env.SLACK_USER_TOKEN
+        ? "Search Slack messages across channels (with optional channel and date filters)."
+        : "Search Slack messages across channels (currently disabled - SLACK_USER_TOKEN env var not set)."
     case "fetch_url_content":
       return "Fetch a URL you give me and pull the readable text out of it."
     case "web_search":
@@ -67,7 +73,7 @@ export function getCanonicalCapabilityAnswer(): string {
   lines.push("")
   lines.push("I am read-only. I cannot delete, modify, archive, move, assign, send, or create anything in monday, Slack, HubSpot, or anywhere else. If you need a write action, you have to do it yourself.")
   lines.push("")
-  lines.push("I do not have HubSpot, Gmail, Google Calendar, Asana, Notion, Linear, Jira, file uploads, image generation, or Slack search across channels.")
+  lines.push("I do not have HubSpot, Gmail, Google Calendar, Asana, Notion, Linear, Jira, file uploads, image generation, or voice.")
   return lines.join("\n")
 }
 

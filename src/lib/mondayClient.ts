@@ -262,6 +262,61 @@ function toItemSummary(raw: {
   }
 }
 
+export interface MondayBoardSummary {
+  id: string
+  name: string
+  description: string | null
+  itemsCount: number | null
+  workspaceName: string | null
+}
+
+/**
+ * List boards the read-only token can see. Used by the slack-blog bot's
+ * `list_monday_boards` tool so it can discover which boards exist before
+ * calling `find_monday_items`. Always uses the read-only token so the bot
+ * can never enumerate boards it shouldn't be able to write to.
+ */
+export async function listBoards(
+  opts: { limit?: number; nameContains?: string } = {},
+): Promise<MondayBoardSummary[]> {
+  const limit = Math.min(Math.max(opts.limit ?? 50, 1), 200)
+  const data = await gql<{
+    boards: Array<{
+      id: string
+      name: string
+      description: string | null
+      items_count: number | null
+      workspace: { name: string | null } | null
+      state: string | null
+    }>
+  }>(
+    `query ($limit: Int!) {
+      boards(limit: $limit, state: active) {
+        id
+        name
+        description
+        items_count
+        state
+        workspace { name }
+      }
+    }`,
+    { limit },
+    { readOnly: true },
+  )
+  let boards = data.boards ?? []
+  if (opts.nameContains) {
+    const want = opts.nameContains.toLowerCase()
+    boards = boards.filter((b) => (b.name ?? "").toLowerCase().includes(want))
+  }
+  return boards.map((b) => ({
+    id: b.id,
+    name: b.name,
+    description: b.description ?? null,
+    itemsCount: b.items_count ?? null,
+    workspaceName: b.workspace?.name ?? null,
+  }))
+}
+
 export async function listBoardItems(
   boardId: number,
   opts: { groupId?: string; limit?: number } = {},
