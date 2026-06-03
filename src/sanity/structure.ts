@@ -114,6 +114,16 @@ export const deskStructure = (S: StructureBuilder) =>
             .defaultOrdering([{ field: 'title', direction: 'asc' }])
         ),
 
+      // ── AI Partner Pages ────────────────────────────────────────
+      S.listItem()
+        .title('Partnerships (AI)')
+        .icon(() => '🧠')
+        .child(
+          S.documentTypeList('aiPartnerPage')
+            .title('AI Partner Pages')
+            .defaultOrdering([{ field: 'title', direction: 'asc' }])
+        ),
+
       // ── Location Pages ──────────────────────────────────────────
       S.listItem()
         .title('Locations')

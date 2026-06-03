@@ -366,6 +366,14 @@ export async function getPartnershipPageBySlug(slug: string) {
   )
 }
 
+export async function getAiPartnerPageBySlug(slug: string) {
+  // Full document — the bespoke AiPartnerTemplate consumes every field.
+  return client.fetch(
+    `*[_type == "aiPartnerPage" && slug.current == $slug][0]`,
+    { slug }
+  )
+}
+
 export async function getLocationPageBySlug(slug: string) {
   return client.fetch(
     `*[_type == "locationPage" && slug.current == $slug][0]{${PAGE_FIELDS}, country, region, teamMemberNames}`,

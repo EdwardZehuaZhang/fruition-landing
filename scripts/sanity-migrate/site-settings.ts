@@ -102,6 +102,9 @@ async function main() {
           _type: 'navSection',
           heading: 'Partnerships',
           items: [
+            { _type: 'navLink', label: 'Anthropic Claude Partner', href: '/partnerships/anthropic-claude-partner', icon: 'anthropic', description: 'Enterprise Claude deployments & Claude Code' },
+            { _type: 'navLink', label: 'OpenAI ChatGPT Partner', href: '/partnerships/openai-chatgpt-partner', icon: 'openai', description: 'ChatGPT Enterprise, custom GPTs & Assistants API' },
+            { _type: 'navLink', label: 'Openclaw Partner', href: '/partnerships/openclaw-partner', icon: 'openclaw', description: 'Autonomous AI agents & multi-agent orchestration' },
             { _type: 'navLink', label: 'monday.com Expert Consultants', href: '/partnerships/monday-consulting-partner' },
             { _type: 'navLink', label: 'Certified Make Partner', href: '/partnerships/make-partners' },
             { _type: 'navLink', label: 'Certified n8n Partner', href: '/partnerships/n8n-integration-partner' },

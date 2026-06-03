@@ -10,7 +10,7 @@ import { writeClient } from './lib'
 interface TeamPatch {
   id: string
   emoji: string
-  regions: ('AU' | 'UK' | 'US')[]
+  regions: ('AU' | 'APAC' | 'UK' | 'US' | 'IN')[]
   bio: string
   linkedinUrl?: string
 }
@@ -26,7 +26,7 @@ const PATCHES: TeamPatch[] = [
   {
     id: 'team-ishani',
     emoji: '🍐',
-    regions: ['AU'],
+    regions: ['IN'],
     bio:
       'Content and blog writer. Ishani specialises in search engine optimisation, creating content related to B2B SaaS, and writes all of our Fruition blogs.',
   },

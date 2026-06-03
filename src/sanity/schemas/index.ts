@@ -3,6 +3,7 @@ import blogPost from './blogPost'
 import blogCategory from './blogCategory'
 import solutionPage from './solutionPage'
 import partnershipPage from './partnershipPage'
+import aiPartnerPage from './aiPartnerPage'
 import locationPage from './locationPage'
 import industryPage from './industryPage'
 import servicePage from './servicePage'
@@ -40,6 +41,7 @@ export const schemaTypes = [
   blogCategory,
   solutionPage,
   partnershipPage,
+  aiPartnerPage,
   locationPage,
   industryPage,
   servicePage,
