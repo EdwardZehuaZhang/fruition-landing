@@ -81,6 +81,40 @@ export function buildDraftReadyBlocks(
 }
 
 /**
+ * Block Kit for the initial "queued" thread reply on Slack-originated blog
+ * items, posted by slack-blog right after the monday item is created. Same
+ * shape as buildAutoDocsReadyBlocks so the two replies in the thread feel
+ * like a matched pair: header → linked title → industry/keyword meta →
+ * single "Open in monday" button.
+ */
+export function buildIdeaQueuedBlocks(args: {
+  pulseId: string
+  title: string
+  industry?: string
+  targetKeyword?: string
+}): { fallbackText: string; blocks: Record<string, unknown>[] } {
+  const blocks: Record<string, unknown>[] = []
+  blocks.push({
+    type: "header",
+    text: { type: "plain_text", text: ":hourglass_flowing_sand: Queued", emoji: true },
+  })
+  blocks.push({
+    type: "section",
+    text: {
+      type: "mrkdwn",
+      text: `*<${mondayItemUrl(args.pulseId)}|${args.title}>*`,
+    },
+  })
+  const meta = metaLine({ industry: args.industry, targetKeyword: args.targetKeyword })
+  if (meta) blocks.push({ type: "context", elements: [{ type: "mrkdwn", text: meta }] })
+  blocks.push({
+    type: "actions",
+    elements: [openInMondayButton(args.pulseId, "Open in monday :clipboard:", false)],
+  })
+  return { fallbackText: `:hourglass_flowing_sand: Queued: ${args.title}`, blocks }
+}
+
+/**
  * Block Kit for the auto-docs thread reply on Slack-originated blog items.
  * Renders as: header, section with the title link, optional industry/keyword
  * meta line, action row with three URL buttons (blog doc, LinkedIn doc,

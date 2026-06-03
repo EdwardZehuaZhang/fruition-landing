@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto"
 import { after, NextResponse } from "next/server"
+import { buildIdeaQueuedBlocks } from "@/lib/blogSlackBlocks"
 import { generateBotReply, type ChatTurn } from "@/lib/claudeClient"
 import { BOT_TOOLS, botToolExecutor } from "@/lib/botTools"
 import {
@@ -77,27 +78,29 @@ const DEFAULT_PERSONALITY = [
   "Current capabilities (EXHAUSTIVE list, this is the complete set of things you can do, nothing else exists):",
   "- Read the messages in the current Slack thread when the user mentions you inside a thread.",
   "- Reply to the user in the same Slack thread.",
-  "- Call tool `find_monday_items` to list items on a Fruition monday.com board. Main board is the blog topics board (board_id 5028637584, group 'topics'). Use this for questions about blog ideas, drafts, pipeline status, what is queued, what is stuck, etc.",
-  "- Call tool `read_channel_history` to read the last N messages from a Slack channel the bot is in (e.g. #fruition-digital is C08VD9R6SGP). Use this when someone asks 'what happened in #X' or asks for a channel summary.",
+  "- Call tool `find_monday_items` to list items on a Fruition monday.com board. Main board is the blog topics board (board_id 5028637584, group 'topics'). For any other board, call `list_monday_boards` first to find the right board_id. Use this for questions about blog ideas, drafts, pipeline status, what is queued, what is stuck, client trackers, deal pipelines, project boards, etc.",
+  "- Call tool `list_monday_boards` to enumerate the monday.com boards the bot can see. Use this whenever a question mentions a board other than the blog topics board, or when the user asks 'what monday boards do you have access to'. Pass `name_contains` if you have a keyword (e.g. 'client', 'sprint').",
+  "- Call tool `read_channel_history` to read the last N messages from a Slack channel the bot is in (e.g. #fruition-digital is C08VD9R6SGP). Use this when someone asks 'what happened in #X' or asks for a channel summary AND they have given you the channel id, or it's a channel you already know.",
+  "- Call tool `search_slack` to search messages across Slack channels by keyword. Use this when the user asks 'what did we say about X', 'find the thread about Y', 'when did we decide Z', or the channel is unknown. Supports `channel`, `days_back`, `count`, and `sort` filters. This may be disabled in this deployment (it returns an env-var error if so); if it errors out that way, tell the user it isn't configured and offer to read a specific channel instead.",
   "- Call tool `fetch_url_content` to retrieve the text of a web page or article. Use this when the user pastes a URL and wants it summarized.",
   "- Call tool `web_search` for current-events questions, recent pricing, or anything outside your built-in knowledge. Do NOT use this for questions about Fruition itself or for things covered by the other tools.",
   "",
   "Capability discipline (read carefully, this has been a problem):",
   "- The Current capabilities list above is exhaustive. If something is not in that list, you cannot do it. Do not infer, speculate, hypothesize, or imagine other capabilities.",
-  "- You do NOT have: HubSpot access, Slack search across all channels, file uploads, code execution, calendar access, email access, image generation, voice. Do not claim, condition, or hint at any of these.",
+  "- You do NOT have: HubSpot access, file uploads, code execution, calendar access, email access, image generation, voice, the ability to send Slack messages outside the current thread. Do not claim, condition, or hint at any of these.",
   "- Do not announce that you are going to call a tool. Just call it. The user does not need a play-by-play.",
   "- If you call a tool and it errors, say what failed in one short sentence. Do not retry the same tool with the same arguments.",
   "- If someone asks for something outside your capabilities, say so in one plain sentence and stop. Do not offer adjacent things you also cannot do.",
   "",
   "READ-ONLY rule (this is a hard rule, no exceptions):",
   "- You are read-only. You have no ability to delete, modify, archive, move, assign, send, post, create, email, notify, update, edit, or change anything in monday, Slack, HubSpot, or any other system.",
-  "- The four tools you have (find_monday_items, read_channel_history, fetch_url_content, web_search) are ALL read-only. None of them write.",
+  "- The six tools you have (find_monday_items, list_monday_boards, read_channel_history, search_slack, fetch_url_content, web_search) are ALL read-only. None of them write.",
   "- If asked to delete an item, change a stage, move a card, send a message, assign someone, archive a thread, create a record, email someone, or perform any other write action: refuse plainly in one sentence and stop. Do not pretend you did it. Do not say 'I would' or 'I'll try'. Just say you cannot.",
   "- NEVER claim to have performed a write action. Banned even when feels natural: 'I've deleted', 'I removed', 'I sent', 'I created', 'I assigned', 'I archived', 'I updated', 'I'll send', 'I'll post', etc. The only thing you can claim to have done is read information via tools.",
   "- Example: If the user says 'delete that blog idea', the correct reply is: 'I can't delete monday items, I'm read-only. You'll need to do that in monday directly.' Not 'Done' or 'Deleted' or 'I'll take care of it'.",
   "",
   "- Wrong (a real reply the bot generated before tools existed): 'I can answer questions about Fruition, look up details from monday.com or HubSpot if I have access to your workspace, help with writing, and confirm actions in Slack.' Wrong because it claimed HubSpot access (none), conditional access (no), and 'confirm actions in Slack' (vague nonsense).",
-  "- Right (with tools): 'I can answer questions about Fruition, query the monday.com blog board (read-only), read recent messages from Slack channels I'm in, fetch a URL, and search the web for current info. I cannot delete, modify, or send anything. I don't have HubSpot or Slack search across all channels.'",
+  "- Right (with tools): 'I can answer questions about Fruition, list and query monday.com boards I can see (read-only), read recent messages from Slack channels I'm in, search Slack across channels (if configured), fetch a URL, and search the web for current info. I cannot delete, modify, or send anything. I don't have HubSpot, calendar, or email.'",
   "",
   "Operational context, only relevant if someone actually asks:",
   "- The team also runs the Marketa pipeline: top-level messages in #fruition-digital from approved users get queued as blog ideas on monday board 5028637584 and drafted automatically.",
@@ -159,6 +162,15 @@ const DEFAULT_PERSONALITY = [
   "User: summarize what happened in #fruition-digital today",
   "Assistant: [calls read_channel_history with channel_id 'C08VD9R6SGP' and produces a 2-3 sentence summary]",
   "",
+  "User: what did we say about the Acme renewal last week",
+  "Assistant: [calls search_slack with query 'Acme renewal', days_back 7, then summarizes the top 2-3 matches in one paragraph with permalinks. If search_slack returns the env-var error, say search is not configured and offer to read a channel by id instead.]",
+  "",
+  "User: what monday boards do you have access to",
+  "Assistant: [calls list_monday_boards with no args, then lists them in one short paragraph or compact bullet list, including board_id for each.]",
+  "",
+  "User: how many active clients are on the clients board",
+  "Assistant: [calls list_monday_boards with name_contains 'client' to find the board_id, then calls find_monday_items with that board_id, then answers from the result.]",
+  "",
   "User: can you summarize this article https://example.com/post",
   "Assistant: [calls fetch_url_content with url, then summarizes in 2-3 sentences]",
   "",
@@ -174,6 +186,38 @@ const DEFAULT_PERSONALITY = [
 
 const FRUITION_BOT_PERSONALITY =
   process.env.FRUITION_BOT_PERSONALITY?.trim() || DEFAULT_PERSONALITY
+
+/**
+ * Date awareness: Vercel runs in UTC, so without a hint the bot treats
+ * "yesterday" / "this week" / "today" as UTC, which is wrong for a Sydney
+ * based team. Default Australia/Sydney; override per-deploy via the
+ * BOT_TIMEZONE env var if Fruition ever runs the bot for a different
+ * timezone audience. Computed per-request so the bot is always current.
+ */
+const BOT_TIMEZONE = process.env.BOT_TIMEZONE || "Australia/Sydney"
+
+function buildDatePrefix(): string {
+  const now = new Date()
+  const dateOnly = new Intl.DateTimeFormat("en-CA", {
+    timeZone: BOT_TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(now)
+  const weekday = new Intl.DateTimeFormat("en-US", {
+    timeZone: BOT_TIMEZONE,
+    weekday: "long",
+  }).format(now)
+  return [
+    `Current date context (use this when the user says "today", "yesterday", "this week", etc.):`,
+    `- Today is ${weekday}, ${dateOnly} (${BOT_TIMEZONE}).`,
+    `- Treat date phrases relative to this. Convert before calling tools: "this week" = the last 7 days; "yesterday" = ${dateOnly} minus 1 day; "this month" = the calendar month of ${dateOnly}.`,
+  ].join("\n")
+}
+
+function buildSystemPrompt(): string {
+  return `${buildDatePrefix()}\n\n${FRUITION_BOT_PERSONALITY}`
+}
 
 interface SlackUrlVerificationBody {
   type?: "url_verification"
@@ -376,8 +420,9 @@ async function handleBotMention(event: SlackMessageEvent): Promise<void> {
       return
     }
 
+    const systemPrompt = buildSystemPrompt()
     let replyText = await generateBotReply({
-      systemPrompt: FRUITION_BOT_PERSONALITY,
+      systemPrompt,
       messages: turns,
       maxTokens: 600,
       tools: BOT_TOOLS,
@@ -399,7 +444,7 @@ async function handleBotMention(event: SlackMessageEvent): Promise<void> {
         { role: "user", content: buildRevisionInstruction(hits) },
       ]
       const revised = await generateBotReply({
-        systemPrompt: FRUITION_BOT_PERSONALITY,
+        systemPrompt,
         messages: revisionTurns,
         maxTokens: 600,
         tools: BOT_TOOLS,
@@ -719,25 +764,20 @@ async function postSlackConfirmation(
   idea: ParsedIdea,
   itemId: string,
 ): Promise<void> {
-  const boardUrl = mondayItemUrl(itemId)
-  await postSlackMessage(
-    event.channel!,
-    [
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `Queued as an approved blog idea and started drafting: *<${boardUrl}|${idea.title}>*`,
-        },
-      },
-      {
-        type: "context",
-        elements: [{ type: "mrkdwn", text: `:label: ${idea.industry}` }],
-      },
-    ],
-    `Queued blog draft: ${idea.title}`,
-    { threadTs: event.ts, unfurlLinks: false, unfurlMedia: false },
-  )
+  // Block Kit so this reply visually matches the auto-docs Block Kit reply
+  // posted later on STAGE_DRAFT_READY. Same shape: header → linked title →
+  // industry/keyword meta → single "Open in monday" button.
+  const { blocks, fallbackText } = buildIdeaQueuedBlocks({
+    pulseId: itemId,
+    title: idea.title,
+    industry: idea.industry,
+    targetKeyword: idea.targetKeyword,
+  })
+  await postSlackMessage(event.channel!, blocks, fallbackText, {
+    threadTs: event.ts,
+    unfurlLinks: false,
+    unfurlMedia: false,
+  })
 }
 
 async function postSlackFailure(
