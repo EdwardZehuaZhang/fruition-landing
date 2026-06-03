@@ -3,6 +3,7 @@ import { PortableText } from "@portabletext/react"
 import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
+import { authorSlug } from "@/sanity/authorSlug"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 
 /* ------------------------------------------------------------------ */
@@ -231,17 +232,32 @@ function AuthorMetaRow({
   return (
     <div className="flex items-center w-full">
       {/* Avatar — 32px with 12px right padding */}
-      <div className="flex flex-col h-[32px] items-start pr-[12px] w-[44px]">
-        <div className="content-stretch flex flex-col items-start overflow-clip rounded-[16px] shrink-0 size-[32px]">
-          <AuthorAvatar name={author} />
+      {author ? (
+        <Link
+          href={`/author/${authorSlug(author)}`}
+          aria-label={`More articles by ${author}`}
+          className="flex flex-col h-[32px] items-start pr-[12px] w-[44px]"
+        >
+          <div className="content-stretch flex flex-col items-start overflow-clip rounded-[16px] shrink-0 size-[32px]">
+            <AuthorAvatar name={author} />
+          </div>
+        </Link>
+      ) : (
+        <div className="flex flex-col h-[32px] items-start pr-[12px] w-[44px]">
+          <div className="content-stretch flex flex-col items-start overflow-clip rounded-[16px] shrink-0 size-[32px]">
+            <AuthorAvatar name={author} />
+          </div>
         </div>
-      </div>
+      )}
       {/* Name */}
       {author && (
         <div className="flex flex-col items-start shrink-0">
-          <p className="font-montserrat font-normal text-[14px] leading-[21px] text-black whitespace-nowrap">
+          <Link
+            href={`/author/${authorSlug(author)}`}
+            className="font-montserrat font-normal text-[14px] leading-[21px] text-black whitespace-nowrap hover:text-[#604c97] transition-colors"
+          >
             {author}
-          </p>
+          </Link>
         </div>
       )}
       {/* Date */}
@@ -393,13 +409,8 @@ function EngagementBar() {
           </button>
         </div>
       </div>
-      {/* Views + like row — divider top, pt-19 */}
-      <div className="relative flex items-center justify-between pt-[19px] w-full border-t border-[rgba(0,0,0,0.2)]">
-        <div className="h-[21px]">
-          <p className="font-montserrat font-normal text-[14px] leading-[21px] text-black whitespace-nowrap">
-            0 views
-          </p>
-        </div>
+      {/* Like row — divider top, pt-19 */}
+      <div className="relative flex items-center justify-end pt-[19px] w-full border-t border-[rgba(0,0,0,0.2)]">
         <button
           aria-label="Like post"
           className="flex items-center justify-center size-[19px] hover:opacity-70 transition-opacity"

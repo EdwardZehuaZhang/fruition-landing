@@ -1,4 +1,5 @@
 import { client } from './client'
+import { authorSlug } from './authorSlug'
 
 /* ================================================================== */
 /*  Blog                                                                */
@@ -51,6 +52,67 @@ export async function getRelatedBlogPosts(excludeSlug: string, limit = 2) {
       "coverImage": coalesce(coverImage, mainImage, featuredImage, heroImage, body[_type == "image"][0])
     }`,
     { excludeSlug, limit }
+  )
+}
+
+export interface BlogAuthorSummary {
+  name: string
+  slug: string
+  postCount: number
+  latestPublishedAt?: string
+}
+
+/**
+ * Distinct blog authors with a post count + slug. Author is a free-text string
+ * on blogPost (not a reference), so grouping happens in JS after the fetch.
+ * Used by /author/[slug] generateStaticParams and to resolve slug -> exact name.
+ */
+export async function getBlogAuthors(): Promise<BlogAuthorSummary[]> {
+  const rows: { author?: string; publishedAt?: string }[] = await client.fetch(
+    `*[_type == "blogPost" && defined(author) && author != ""]{ author, publishedAt }`
+  )
+  const map = new Map<string, BlogAuthorSummary>()
+  for (const row of rows) {
+    const name = (row.author ?? "").trim()
+    if (!name) continue
+    const slug = authorSlug(name)
+    if (!slug) continue
+    const existing = map.get(slug)
+    if (existing) {
+      existing.postCount += 1
+      if (row.publishedAt && (!existing.latestPublishedAt || row.publishedAt > existing.latestPublishedAt)) {
+        existing.latestPublishedAt = row.publishedAt
+      }
+    } else {
+      map.set(slug, { name, slug, postCount: 1, latestPublishedAt: row.publishedAt })
+    }
+  }
+  return [...map.values()].sort((a, b) => b.postCount - a.postCount)
+}
+
+export async function getPostsByAuthor(authorName: string) {
+  return client.fetch(
+    `*[_type == "blogPost" && author == $authorName] | order(publishedAt desc) {
+      _id,
+      title,
+      "slug": slug.current,
+      publishedAt,
+      author,
+      excerpt,
+      "coverImage": coalesce(coverImage, mainImage, featuredImage, heroImage, body[_type == "image"][0]),
+      "charCount": length(pt::text(body)),
+      categories[]->{ _id, title, "slug": slug.current }
+    }`,
+    { authorName }
+  )
+}
+
+export async function getTeamMemberByName(name: string) {
+  return client.fetch(
+    `*[_type == "teamMember" && lower(name) == lower($name)][0] {
+      name, role, emoji, photo, bio, linkedinUrl, regions
+    }`,
+    { name }
   )
 }
 

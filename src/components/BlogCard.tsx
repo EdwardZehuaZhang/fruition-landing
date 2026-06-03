@@ -1,5 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
+import { authorSlug } from "@/sanity/authorSlug"
 
 interface BlogCategory {
   _id?: string
@@ -95,8 +96,17 @@ export default function BlogCard({
   const gradientClass = GRADIENT_PALETTES[hashIndex(title, GRADIENT_PALETTES.length)]
   const category = categories?.[0]
 
+  const authorHref = author ? `/author/${authorSlug(author)}` : null
+
   return (
-    <Link href={`/post/${slug}`} className="group block">
+    <div className="group relative block">
+      {/* Stretched overlay link — whole card navigates to the post. Interactive
+          children (author link) sit above this via position+z-index. */}
+      <Link
+        href={`/post/${slug}`}
+        aria-label={title}
+        className="absolute inset-0"
+      />
       <div
         className={`relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br ${gradientClass}`}
       >
@@ -129,7 +139,16 @@ export default function BlogCard({
               {initials(displayAuthor) || "F"}
             </div>
             <div className="leading-tight min-w-0">
-              <div className="text-sm text-gray-900 truncate">{displayAuthor}</div>
+              {authorHref ? (
+                <Link
+                  href={authorHref}
+                  className="relative z-10 text-sm text-gray-900 truncate hover:text-[#8015e8] transition-colors"
+                >
+                  {displayAuthor}
+                </Link>
+              ) : (
+                <div className="text-sm text-gray-900 truncate">{displayAuthor}</div>
+              )}
               <div className="text-xs text-gray-500 flex items-center gap-1.5">
                 {publishedAt && <span>{relativeTime(publishedAt)}</span>}
                 {publishedAt && <span aria-hidden>·</span>}
@@ -179,6 +198,6 @@ export default function BlogCard({
           </span>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
