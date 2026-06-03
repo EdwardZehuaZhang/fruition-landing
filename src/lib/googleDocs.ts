@@ -104,17 +104,16 @@ export async function createDraftDoc({
   }
 
   if (body && body.trim()) {
-    // Insert all body text at index 1 (after the doc's implicit start segment).
+    // Render the markdown to a real Docs payload: plain text plus Docs API
+    // style requests (heading paragraph styles, bold/italic character runs,
+    // hyperlinks). See renderMarkdownForDocs below.
+    const { text, requests } = renderMarkdownForDocs(body)
     await docs.documents.batchUpdate({
       documentId: docId,
       requestBody: {
         requests: [
-          {
-            insertText: {
-              location: { index: 1 },
-              text: body,
-            },
-          },
+          { insertText: { location: { index: 1 }, text } },
+          ...requests,
         ],
       },
     })
@@ -183,4 +182,242 @@ export async function createSubfolder(
 export function wordCount(text: string): number {
   if (!text) return 0
   return text.trim().split(/\s+/).filter(Boolean).length
+}
+
+// ---------------------------------------------------------------------------
+// Markdown → Google Docs renderer
+//
+// Goal: turn a markdown blog draft into actual Google Docs formatting (real
+// heading paragraph styles, real bold runs, real hyperlinks) rather than the
+// previous behaviour of inserting raw markdown source as plain text.
+//
+// Scope of this v1:
+//   - # / ## / ### → HEADING_1 / HEADING_2 / HEADING_3 paragraph styles
+//   - **bold** → bold character run
+//   - *italic* → italic character run (single-asterisk only, avoids the bold
+//     overlap by skipping ** sequences)
+//   - [text](url) → hyperlinked text
+//   - Bullets that start with "- " or "* " → marked with a leading bullet
+//     character and indent (cheap version — real Docs lists need
+//     createParagraphBullets which is more involved)
+//   - Markdown tables (lines starting with `|`) and `---` horizontal rules
+//     are left as plain text. A v2 could convert tables to real Docs tables.
+// ---------------------------------------------------------------------------
+
+interface DocsRequest {
+  // We intentionally keep this loose — the googleapis types for batchUpdate
+  // requests are a giant discriminated union and the only consumer here is
+  // batchUpdate itself, which validates server-side.
+  [key: string]: unknown
+}
+
+interface InlineSegment {
+  text: string
+  bold?: boolean
+  italic?: boolean
+  link?: string
+}
+
+const HEADING_PREFIXES: Array<{ prefix: string; style: string }> = [
+  { prefix: "### ", style: "HEADING_3" },
+  { prefix: "## ", style: "HEADING_2" },
+  { prefix: "# ", style: "HEADING_1" },
+]
+
+function parseInline(line: string): InlineSegment[] {
+  const segs: InlineSegment[] = []
+  let i = 0
+  let buf = ""
+  const flushBuf = () => {
+    if (buf) {
+      segs.push({ text: buf })
+      buf = ""
+    }
+  }
+
+  while (i < line.length) {
+    // **bold**
+    if (line[i] === "*" && line[i + 1] === "*") {
+      const close = line.indexOf("**", i + 2)
+      if (close > i + 2) {
+        flushBuf()
+        const inner = line.slice(i + 2, close)
+        // Recurse so a link inside bold still works.
+        const innerSegs = parseInline(inner)
+        for (const s of innerSegs) {
+          segs.push({ ...s, bold: true })
+        }
+        i = close + 2
+        continue
+      }
+    }
+
+    // *italic* — single asterisk, must not be the start of **
+    if (line[i] === "*" && line[i + 1] !== "*" && line[i - 1] !== "*") {
+      const close = line.indexOf("*", i + 1)
+      // Make sure the close isn't actually the start of a ** pair we should ignore
+      if (close > i + 1 && line[close + 1] !== "*") {
+        flushBuf()
+        const inner = line.slice(i + 1, close)
+        const innerSegs = parseInline(inner)
+        for (const s of innerSegs) {
+          segs.push({ ...s, italic: true })
+        }
+        i = close + 1
+        continue
+      }
+    }
+
+    // [text](url)
+    if (line[i] === "[") {
+      const closeBracket = line.indexOf("]", i + 1)
+      if (closeBracket > i + 1 && line[closeBracket + 1] === "(") {
+        const closeParen = line.indexOf(")", closeBracket + 2)
+        if (closeParen > closeBracket + 2) {
+          flushBuf()
+          const text = line.slice(i + 1, closeBracket)
+          const url = line.slice(closeBracket + 2, closeParen).trim()
+          segs.push({ text, link: url })
+          i = closeParen + 1
+          continue
+        }
+      }
+    }
+
+    buf += line[i]
+    i++
+  }
+  flushBuf()
+  return segs
+}
+
+interface RenderedLine {
+  // The text that will appear on the line (no trailing \n).
+  displayText: string
+  // Character-range style requests, indices relative to start of displayText.
+  charRanges: Array<{ start: number; end: number; bold?: boolean; italic?: boolean; link?: string }>
+  // Paragraph-level Docs named style (e.g. HEADING_1) or null for normal text.
+  paragraphStyle: string | null
+}
+
+function renderLine(rawLine: string): RenderedLine {
+  let line = rawLine
+  let paragraphStyle: string | null = null
+
+  // Heading prefix.
+  for (const { prefix, style } of HEADING_PREFIXES) {
+    if (line.startsWith(prefix)) {
+      line = line.slice(prefix.length)
+      paragraphStyle = style
+      break
+    }
+  }
+
+  // Cheap bullet handling: strip "- " or "* " prefix and prepend a bullet glyph
+  // so reviewers can see the list shape. Real Docs list bullets require
+  // createParagraphBullets which is a v2 enhancement.
+  let bulletPrefix = ""
+  const bulletMatch = line.match(/^(\s*)([-*])\s+(.*)$/)
+  if (bulletMatch && !paragraphStyle) {
+    const indent = bulletMatch[1] || ""
+    bulletPrefix = `${indent}• `
+    line = bulletMatch[3]
+  }
+
+  const segs = parseInline(line)
+  let displayText = bulletPrefix
+  const charRanges: RenderedLine["charRanges"] = []
+  for (const seg of segs) {
+    const start = displayText.length
+    displayText += seg.text
+    const end = displayText.length
+    if (seg.bold || seg.italic || seg.link) {
+      charRanges.push({
+        start,
+        end,
+        bold: seg.bold,
+        italic: seg.italic,
+        link: seg.link,
+      })
+    }
+  }
+  return { displayText, charRanges, paragraphStyle }
+}
+
+export interface RenderResult {
+  text: string
+  requests: DocsRequest[]
+}
+
+/**
+ * Convert a markdown body into a Google Docs batchUpdate payload.
+ *
+ * Returns the plain text to insert (no markdown syntax characters left) and
+ * a list of Docs API style requests with absolute index ranges that assume
+ * the text is inserted at index 1.
+ */
+export function renderMarkdownForDocs(markdown: string): RenderResult {
+  const lines = markdown.split("\n")
+  const requests: DocsRequest[] = []
+  let cursor = 1 // Google Docs body starts inserting at index 1
+  const pieces: string[] = []
+
+  for (const raw of lines) {
+    const { displayText, charRanges, paragraphStyle } = renderLine(raw)
+    const lineStart = cursor
+    const lineWithNewline = `${displayText}\n`
+    pieces.push(lineWithNewline)
+
+    for (const range of charRanges) {
+      const absStart = lineStart + range.start
+      const absEnd = lineStart + range.end
+      if (range.bold || range.italic) {
+        const style: Record<string, unknown> = {}
+        const fields: string[] = []
+        if (range.bold) {
+          style.bold = true
+          fields.push("bold")
+        }
+        if (range.italic) {
+          style.italic = true
+          fields.push("italic")
+        }
+        requests.push({
+          updateTextStyle: {
+            range: { startIndex: absStart, endIndex: absEnd },
+            textStyle: style,
+            fields: fields.join(","),
+          },
+        })
+      }
+      if (range.link) {
+        requests.push({
+          updateTextStyle: {
+            range: { startIndex: absStart, endIndex: absEnd },
+            textStyle: { link: { url: range.link }, foregroundColor: { color: { rgbColor: { red: 0.07, green: 0.33, blue: 0.8 } } }, underline: true },
+            fields: "link,foregroundColor,underline",
+          },
+        })
+      }
+    }
+
+    if (paragraphStyle) {
+      // updateParagraphStyle range must cover the whole paragraph including
+      // its trailing newline.
+      requests.push({
+        updateParagraphStyle: {
+          range: { startIndex: lineStart, endIndex: lineStart + lineWithNewline.length },
+          paragraphStyle: { namedStyleType: paragraphStyle },
+          fields: "namedStyleType",
+        },
+      })
+    }
+
+    cursor += lineWithNewline.length
+  }
+
+  return {
+    text: pieces.join(""),
+    requests,
+  }
 }

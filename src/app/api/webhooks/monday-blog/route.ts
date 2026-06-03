@@ -415,19 +415,57 @@ function clip(text: string, max: number): string {
 }
 
 /**
- * Replace the first H1 in a markdown body with `# <title>`. If the body has
- * no leading H1, prepend one. Used to enforce the canonical monday title as
- * the doc's H1 because Claude in n8n keeps inventing its own titles despite
- * the system prompt forbidding it.
+ * Replace the first H1 anywhere in a markdown body with `# <title>`. Claude
+ * in n8n keeps inventing its own title despite the system prompt forbidding
+ * it, so we normalize after the fact. Works whether the H1 is on line 1 or
+ * preceded by a **Meta-Description** prefix.
  */
 function forceLeadingH1(body: string, title: string): string {
   const trimmed = body.replace(/^\s+/, "")
-  // Match the first "# ..." line (single-level H1, not ## or ###).
-  const h1Re = /^# [^\n]*\n+/
+  // Multiline match — the first single-level H1 line anywhere in the body.
+  const h1Re = /^# [^\n]+$/m
   if (h1Re.test(trimmed)) {
-    return trimmed.replace(h1Re, `# ${title}\n\n`)
+    return trimmed.replace(h1Re, `# ${title}`)
   }
   return `# ${title}\n\n${trimmed}`
+}
+
+/**
+ * Pull the **Meta-Description**: line out of a Claude-generated body, returning
+ * the description (without the prefix) and the rest of the body. Returns
+ * `{ meta: "", rest: body }` if the body has no Meta-Description line.
+ */
+function extractMetaDescription(body: string): { meta: string; rest: string } {
+  const re = /^\*\*Meta[- ]?[Dd]escription\*\*:\s*([^\n]+)\n+/
+  const m = body.match(re)
+  if (!m) return { meta: "", rest: body }
+  return { meta: m[1].trim(), rest: body.slice(m[0].length) }
+}
+
+/**
+ * Wrap the Claude draft in the standard Fruition doc layout: Meta-Description,
+ * AI Checks / Grammarly / Plagiarism review placeholders, then the H1+body.
+ * Mirrors the structure used by Ishani's published posts so reviewers can
+ * paste their screenshots in the same spots without restructuring the doc.
+ */
+function buildFruitionLayout(raw: string, title: string): string {
+  const body = raw.replace(/^\s+/, "")
+  const { meta, rest } = extractMetaDescription(body)
+  const withForcedH1 = forceLeadingH1(rest || body, title)
+  const metaLine = meta
+    ? `**Meta-Description**: ${meta}`
+    : `**Meta-Description**: _TODO: paste the 140-160 char meta description (Marketa did not emit one)_`
+  return [
+    metaLine,
+    "",
+    "**AI Checks:** _TODO: paste AI-detection screenshots before publish_",
+    "",
+    "**Grammarly:** _TODO: paste Grammarly score before publish_",
+    "",
+    "**Plagiarism:** _TODO: paste plagiarism report before publish_",
+    "",
+    withForcedH1,
+  ].join("\n")
 }
 
 async function autoDocsForSlackOrigin(
@@ -450,14 +488,18 @@ async function autoDocsForSlackOrigin(
   if (!rawDraftBody) {
     throw new Error(`monday item ${pulseId} has no draft body — Marketa write step likely failed`)
   }
-  // Claude in n8n consistently rewrites the H1 instead of using the requested
-  // title verbatim, despite the system prompt forbidding it. Normalize the
-  // leading H1 here so the Doc opens with the canonical title from monday.
-  const draftBody = forceLeadingH1(rawDraftBody, title)
+  // Wrap Claude's output in the standard Fruition layout: Meta-Description +
+  // AI Checks / Grammarly / Plagiarism placeholders + corrected H1 + body.
+  // Forces the H1 to match the requested title and gives reviewers the
+  // same scaffolding shape they're used to seeing in Ishani's posts.
+  const draftBody = buildFruitionLayout(rawDraftBody, title)
 
   const linkedInBody = await generateLinkedInPost({
     title,
-    draft: draftBody,
+    // LinkedIn generator only needs the actual prose, not the review
+    // scaffolding — feed it the title-corrected body without the
+    // Meta-Description / AI Checks header.
+    draft: forceLeadingH1(rawDraftBody, title),
     industry: ctx.industry,
     targetKeyword: ctx.targetKeyword,
   })
