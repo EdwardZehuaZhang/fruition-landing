@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useState, useTransition } from "react"
+import { Camera, Hand } from "lucide-react"
 
 interface RegionOption {
   value: string
@@ -112,7 +113,10 @@ export default function OnboardingForm({ regionOptions }: Props) {
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--purple-primary)]">
             All done
           </p>
-          <h2 className="mt-2 text-2xl font-semibold text-[#10003a]">Welcome, {name} 👋</h2>
+          <h2 className="mt-2 inline-flex items-center gap-2 text-2xl font-semibold text-[#10003a]">
+            Welcome, {name}
+            <Hand size={24} aria-hidden />
+          </h2>
           <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
             Your profile is being published to fruitionservices.com and the monday.com team board.
             Refresh /fruition-team in a minute or two to see your card.
@@ -217,11 +221,11 @@ export default function OnboardingForm({ regionOptions }: Props) {
             />
           ) : (
             <div
-              className="flex h-20 w-20 items-center justify-center rounded-pill text-2xl"
+              className="flex h-20 w-20 items-center justify-center rounded-pill text-[var(--color-text-secondary)]"
               style={{ backgroundColor: "var(--light-section-bg)" }}
               aria-hidden
             >
-              📷
+              <Camera size={32} aria-hidden />
             </div>
           )}
           <div className="flex-1 text-sm">

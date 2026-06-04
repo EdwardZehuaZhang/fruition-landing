@@ -1,4 +1,23 @@
 import type { StructureBuilder } from 'sanity/structure'
+import {
+  Settings,
+  FileText,
+  Home,
+  Package,
+  GraduationCap,
+  Hammer,
+  Link2,
+  Files,
+  Building2,
+  Lightbulb,
+  Handshake,
+  Brain,
+  Globe,
+  Bell,
+  Users,
+  Star,
+  HelpCircle,
+} from 'lucide-react'
 
 export const deskStructure = (S: StructureBuilder) =>
   S.list()
@@ -7,7 +26,7 @@ export const deskStructure = (S: StructureBuilder) =>
       // ── Site Settings (singleton) ───────────────────────────────
       S.listItem()
         .title('Site Settings')
-        .icon(() => '⚙️')
+        .icon(Settings)
         .child(
           S.editor()
             .id('siteSettings')
@@ -20,14 +39,14 @@ export const deskStructure = (S: StructureBuilder) =>
       // ── Pages ───────────────────────────────────────────────────
       S.listItem()
         .title('Pages')
-        .icon(() => '📄')
+        .icon(FileText)
         .child(
           S.list()
             .title('Pages')
             .items([
               S.listItem()
                 .title('Home Page')
-                .icon(() => '🏠')
+                .icon(Home)
                 .child(
                   S.editor()
                     .id('homePage')
@@ -36,7 +55,7 @@ export const deskStructure = (S: StructureBuilder) =>
                 ),
               S.listItem()
                 .title('Implementation Packages')
-                .icon(() => '📦')
+                .icon(Package)
                 .child(
                   S.editor()
                     .id('implementationPackagesPage')
@@ -45,7 +64,7 @@ export const deskStructure = (S: StructureBuilder) =>
                 ),
               S.listItem()
                 .title('Monday Training')
-                .icon(() => '🎓')
+                .icon(GraduationCap)
                 .child(
                   S.editor()
                     .id('mondayTrainingPage')
@@ -54,7 +73,7 @@ export const deskStructure = (S: StructureBuilder) =>
                 ),
               S.listItem()
                 .title('Monday Implementation Consultants')
-                .icon(() => '🛠️')
+                .icon(Hammer)
                 .child(
                   S.editor()
                     .id('mondayImplementationConsultantsPage')
@@ -63,7 +82,7 @@ export const deskStructure = (S: StructureBuilder) =>
                 ),
               S.listItem()
                 .title('Make Partners')
-                .icon(() => '🔗')
+                .icon(Link2)
                 .child(
                   S.editor()
                     .id('makePartnersPage')
@@ -73,7 +92,7 @@ export const deskStructure = (S: StructureBuilder) =>
               S.divider(),
               S.listItem()
                 .title('General Pages')
-                .icon(() => '📑')
+                .icon(Files)
                 .child(
                   S.documentTypeList('page')
                     .title('General Pages')
@@ -87,7 +106,7 @@ export const deskStructure = (S: StructureBuilder) =>
       // ── Industry Pages ──────────────────────────────────────────
       S.listItem()
         .title('Industries')
-        .icon(() => '🏢')
+        .icon(Building2)
         .child(
           S.documentTypeList('industryPage')
             .title('Industry Pages')
@@ -97,7 +116,7 @@ export const deskStructure = (S: StructureBuilder) =>
       // ── Solution Pages ──────────────────────────────────────────
       S.listItem()
         .title('Solutions')
-        .icon(() => '💡')
+        .icon(Lightbulb)
         .child(
           S.documentTypeList('solutionPage')
             .title('Solution Pages')
@@ -107,7 +126,7 @@ export const deskStructure = (S: StructureBuilder) =>
       // ── Partnership Pages ───────────────────────────────────────
       S.listItem()
         .title('Partnerships')
-        .icon(() => '🤝')
+        .icon(Handshake)
         .child(
           S.documentTypeList('partnershipPage')
             .title('Partnership Pages')
@@ -117,7 +136,7 @@ export const deskStructure = (S: StructureBuilder) =>
       // ── AI Partner Pages ────────────────────────────────────────
       S.listItem()
         .title('Partnerships (AI)')
-        .icon(() => '🧠')
+        .icon(Brain)
         .child(
           S.documentTypeList('aiPartnerPage')
             .title('AI Partner Pages')
@@ -127,7 +146,7 @@ export const deskStructure = (S: StructureBuilder) =>
       // ── Location Pages ──────────────────────────────────────────
       S.listItem()
         .title('Locations')
-        .icon(() => '🌍')
+        .icon(Globe)
         .child(
           S.documentTypeList('locationPage')
             .title('Location Pages')
@@ -137,7 +156,7 @@ export const deskStructure = (S: StructureBuilder) =>
       // ── Service Pages ───────────────────────────────────────────
       S.listItem()
         .title('Services')
-        .icon(() => '🛎️')
+        .icon(Bell)
         .child(
           S.documentTypeList('servicePage')
             .title('Service Pages')
@@ -149,7 +168,7 @@ export const deskStructure = (S: StructureBuilder) =>
       // ── Blog ────────────────────────────────────────────────────
       S.listItem()
         .title('Blog')
-        .icon(() => '📝')
+        .icon(FileText)
         .child(
           S.list()
             .title('Blog')
@@ -176,7 +195,7 @@ export const deskStructure = (S: StructureBuilder) =>
       // ── Content Library ─────────────────────────────────────────
       S.listItem()
         .title('Team Members')
-        .icon(() => '👥')
+        .icon(Users)
         .child(
           S.documentTypeList('teamMember')
             .title('Team Members')
@@ -185,7 +204,7 @@ export const deskStructure = (S: StructureBuilder) =>
 
       S.listItem()
         .title('Case Studies')
-        .icon(() => '⭐')
+        .icon(Star)
         .child(
           S.documentTypeList('caseStudy')
             .title('Case Studies')
@@ -194,7 +213,7 @@ export const deskStructure = (S: StructureBuilder) =>
 
       S.listItem()
         .title('FAQ Items')
-        .icon(() => '❓')
+        .icon(HelpCircle)
         .child(
           S.documentTypeList('faqItem')
             .title('FAQ Items')

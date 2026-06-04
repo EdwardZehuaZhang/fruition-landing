@@ -374,8 +374,8 @@ export default function ImplementationPackagesContent({
           <h1
             className="text-center font-bold"
             style={{
-              fontSize: 48,
-              lineHeight: "67.2px",
+              fontSize: "clamp(32px, 8vw, 48px)",
+              lineHeight: "1.2",
               marginTop: 42,
               maxWidth: 924,
             }}
@@ -536,9 +536,9 @@ export default function ImplementationPackagesContent({
           <div
             className="text-center"
             style={{
-              fontSize: 40,
+              fontSize: "clamp(24px, 6vw, 40px)",
               fontWeight: 400,
-              lineHeight: "56px",
+              lineHeight: 1.3,
               maxWidth: 924,
             }}
           >

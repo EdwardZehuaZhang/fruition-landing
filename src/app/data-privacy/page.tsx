@@ -1,5 +1,5 @@
 import { getPageBySlug } from "@/sanity/queries"
-import { PortableText } from "@portabletext/react"
+import PolicyContent from "@/components/PolicyContent"
 import VisitorTrackingDisclosure from "@/components/VisitorTrackingDisclosure"
 
 export async function generateMetadata() {
@@ -16,15 +16,11 @@ export default async function PrivacyPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-16">
       {page.heroHeading && (
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-10">
           {page.heroHeading}
         </h1>
       )}
-      {page.body && (
-        <div className="prose prose-lg prose-gray max-w-none">
-          <PortableText value={page.body} />
-        </div>
-      )}
+      {page.body && <PolicyContent value={page.body} />}
       <VisitorTrackingDisclosure />
     </div>
   )

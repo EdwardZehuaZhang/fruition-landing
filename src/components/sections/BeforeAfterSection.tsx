@@ -1,3 +1,4 @@
+import { Check, X } from "lucide-react"
 import type { BeforeAfterRow } from "./types"
 
 interface BeforeAfterSectionProps {
@@ -36,7 +37,7 @@ export default function BeforeAfterSection({
             <ul className="flex flex-col" style={{ gap: 14 }}>
               {rows.map((r, i) => (
                 <li key={`b-${r._key || i}`} className="flex gap-3" style={{ color: "#5b4040", fontSize: 15, lineHeight: "22px" }}>
-                  <span aria-hidden style={{ color: "#c0392b" }}>✕</span>
+                  <span aria-hidden style={{ color: "#c0392b", flexShrink: 0, marginTop: 2 }}><X size={16} /></span>
                   <span>{r.before}</span>
                 </li>
               ))}
@@ -50,7 +51,7 @@ export default function BeforeAfterSection({
             <ul className="flex flex-col" style={{ gap: 14 }}>
               {rows.map((r, i) => (
                 <li key={`a-${r._key || i}`} className="flex gap-3" style={{ color: "#274d33", fontSize: 15, lineHeight: "22px" }}>
-                  <span aria-hidden style={{ color: "#1e8449" }}>✓</span>
+                  <span aria-hidden style={{ color: "#1e8449", flexShrink: 0, marginTop: 2 }}><Check size={16} /></span>
                   <span>{r.after}</span>
                 </li>
               ))}

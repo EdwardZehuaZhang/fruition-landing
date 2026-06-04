@@ -17,7 +17,9 @@ export default {
       options: {
         list: [
           { title: 'APAC 🌏', value: 'APAC' },
+          { title: 'Singapore 🇸🇬', value: 'SG' },
           { title: 'India 🇮🇳', value: 'IN' },
+          { title: 'Philippines 🇵🇭', value: 'PH' },
           { title: 'United Kingdom 🇬🇧', value: 'UK' },
           { title: 'United States 🇺🇸', value: 'US' },
           { title: 'Australia 🇦🇺 (legacy)', value: 'AU' },

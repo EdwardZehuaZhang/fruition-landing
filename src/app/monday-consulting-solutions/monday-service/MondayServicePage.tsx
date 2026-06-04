@@ -154,7 +154,7 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
           {heroTitle && (
             <h1
               className="text-center font-bold"
-              style={{ fontSize: 48, lineHeight: "67.2px", marginTop: 42, maxWidth: 924 }}
+              style={{ fontSize: "clamp(32px, 8vw, 48px)", lineHeight: 1.2, marginTop: 42, maxWidth: 924 }}
             >
               <span className="text-black">{heroTitle}</span>
             </h1>
@@ -443,7 +443,7 @@ function FourCardSection({
         {(headingPart1 || headingAccent) && (
           <h2
             className="text-center font-bold"
-            style={{ fontSize: 40, lineHeight: "52px", color: "#2b074d", maxWidth: 900 }}
+            style={{ fontSize: "clamp(26px, 6.5vw, 40px)", lineHeight: 1.25, color: "#2b074d", maxWidth: 900 }}
           >
             {headingPart1 && (
               <>

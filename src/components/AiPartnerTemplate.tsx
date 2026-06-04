@@ -474,7 +474,7 @@ const CSS = `
 .aipartner .ap-hero { padding: 96px 0 72px; border-bottom: 1px solid var(--rule); background: linear-gradient(180deg, #fff 0%, var(--paper) 100%); }
 .aipartner .hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 56px; align-items: end; }
 .aipartner .hero-grid-single { grid-template-columns: 1fr; max-width: 60ch; }
-.aipartner .hero-h1 { font-size: clamp(40px, 6vw, 78px); font-weight: 700; line-height: 1.02; letter-spacing: -0.035em; }
+.aipartner .hero-h1 { font-size: clamp(32px, 6vw, 78px); font-weight: 700; line-height: 1.05; letter-spacing: -0.035em; }
 .aipartner.serif-accent .hero-h1 { font-weight: 600; letter-spacing: -0.025em; }
 .aipartner .hero-lead { font-size: 19px; color: var(--ink-soft); max-width: 56ch; margin-top: 26px; }
 

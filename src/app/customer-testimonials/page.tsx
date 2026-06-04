@@ -102,8 +102,8 @@ export default async function CustomerTestimonialsPage() {
             <h1
               className="text-center font-bold"
               style={{
-                fontSize: 48,
-                lineHeight: "67.2px",
+                fontSize: "clamp(32px, 8vw, 48px)",
+                lineHeight: "1.2",
                 marginTop: partnerBadges.length > 0 ? 42 : 0,
                 maxWidth: 924,
                 color: "black",
@@ -249,8 +249,8 @@ export default async function CustomerTestimonialsPage() {
                       <h2
                         className="font-bold"
                         style={{
-                          fontSize: 44,
-                          lineHeight: "52px",
+                          fontSize: "clamp(28px, 7vw, 44px)",
+                          lineHeight: "1.2",
                           letterSpacing: "-0.015em",
                           color: "#1a0b3e",
                           marginTop: 18,

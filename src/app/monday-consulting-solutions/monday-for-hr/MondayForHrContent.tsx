@@ -1,6 +1,19 @@
 "use client"
 
 import Link from "next/link"
+import type { LucideIcon } from "lucide-react"
+import {
+  FileText,
+  Check,
+  Users,
+  Mail,
+  AlertTriangle,
+  Wallet,
+  ClipboardList,
+  Umbrella,
+  Calendar,
+  Building2,
+} from "lucide-react"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -22,21 +35,21 @@ interface Props {
   faqTabs?: FaqTab[]
 }
 
-const HR_HIRING_ITEMS: Array<{ emoji: string; text: string }> = [
-  { emoji: "📝", text: "ATS recruitment workflows including Forms" },
-  { emoji: "✅", text: "Onboarding checklists" },
-  { emoji: "📄", text: "Contracting document creation" },
-  { emoji: "👥", text: "Talent Pool / Contractor Management" },
+const HR_HIRING_ITEMS: Array<{ icon: LucideIcon; text: string }> = [
+  { icon: FileText, text: "ATS recruitment workflows including Forms" },
+  { icon: Check, text: "Onboarding checklists" },
+  { icon: FileText, text: "Contracting document creation" },
+  { icon: Users, text: "Talent Pool / Contractor Management" },
 ]
 
-const HR_OPERATIONS_ITEMS: Array<{ emoji: string; text: string }> = [
-  { emoji: "📧", text: "Email/inbox ticketing" },
-  { emoji: "⚠️", text: "OHS Policy and Operations" },
-  { emoji: "💰", text: "Budgeting & Headcount Planning" },
-  { emoji: "📋", text: "HR Project Management" },
-  { emoji: "🏖️", text: "Leave Management" },
-  { emoji: "📅", text: "Scheduling" },
-  { emoji: "🏢", text: "Organisational Charts" },
+const HR_OPERATIONS_ITEMS: Array<{ icon: LucideIcon; text: string }> = [
+  { icon: Mail, text: "Email/inbox ticketing" },
+  { icon: AlertTriangle, text: "OHS Policy and Operations" },
+  { icon: Wallet, text: "Budgeting & Headcount Planning" },
+  { icon: ClipboardList, text: "HR Project Management" },
+  { icon: Umbrella, text: "Leave Management" },
+  { icon: Calendar, text: "Scheduling" },
+  { icon: Building2, text: "Organisational Charts" },
 ]
 
 function HrLifecycleSection({ stages: resolvedLifecycleStages }: { stages: { n?: string; title?: string; body?: string }[] }) {
@@ -48,7 +61,7 @@ function HrLifecycleSection({ stages: resolvedLifecycleStages }: { stages: { n?:
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <h2
           className="text-center font-bold"
-          style={{ color: "#10003a", fontSize: 40, lineHeight: "48px", marginBottom: 56 }}
+          style={{ color: "#10003a", fontSize: "clamp(26px, 6.5vw, 40px)", lineHeight: 1.2, marginBottom: 56 }}
         >
           Supporting Each Stage of Your HR Life Cycle
         </h2>
@@ -107,16 +120,19 @@ function HrExpertiseSection() {
               Hiring
             </h3>
             <ul className="flex flex-col" style={{ gap: 10 }}>
-              {HR_HIRING_ITEMS.map((item) => (
-                <li
-                  key={item.text}
-                  className="flex items-start"
-                  style={{ gap: 10, fontSize: 14, lineHeight: "22px", color: "#444" }}
-                >
-                  <span style={{ fontSize: 18, lineHeight: "22px", flexShrink: 0 }}>{item.emoji}</span>
-                  <span>{item.text}</span>
-                </li>
-              ))}
+              {HR_HIRING_ITEMS.map((item) => {
+                const Icon = item.icon
+                return (
+                  <li
+                    key={item.text}
+                    className="flex items-start"
+                    style={{ gap: 10, fontSize: 14, lineHeight: "22px", color: "#444" }}
+                  >
+                    <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 2, color: "#8015e8" }} />
+                    <span>{item.text}</span>
+                  </li>
+                )
+              })}
             </ul>
           </div>
           <div
@@ -127,16 +143,19 @@ function HrExpertiseSection() {
               HR Operations
             </h3>
             <ul className="flex flex-col" style={{ gap: 10 }}>
-              {HR_OPERATIONS_ITEMS.map((item) => (
-                <li
-                  key={item.text}
-                  className="flex items-start"
-                  style={{ gap: 10, fontSize: 14, lineHeight: "22px", color: "#444" }}
-                >
-                  <span style={{ fontSize: 18, lineHeight: "22px", flexShrink: 0 }}>{item.emoji}</span>
-                  <span>{item.text}</span>
-                </li>
-              ))}
+              {HR_OPERATIONS_ITEMS.map((item) => {
+                const Icon = item.icon
+                return (
+                  <li
+                    key={item.text}
+                    className="flex items-start"
+                    style={{ gap: 10, fontSize: 14, lineHeight: "22px", color: "#444" }}
+                  >
+                    <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 2, color: "#8015e8" }} />
+                    <span>{item.text}</span>
+                  </li>
+                )
+              })}
             </ul>
           </div>
         </div>

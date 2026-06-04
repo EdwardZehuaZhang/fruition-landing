@@ -140,14 +140,7 @@ export default function ComparisonTabsSection({
             )}
           </div>
 
-          <div
-            className="grid w-full"
-            style={{
-              gridTemplateColumns: "1fr 1fr",
-              gap: 48,
-              alignItems: "start",
-            }}
-          >
+          <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
             <ul className="flex flex-col" style={{ gap: 20, listStyle: "none" }}>
               {beforeItems.map((item, i) => (
                 <li

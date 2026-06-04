@@ -1,6 +1,4 @@
 import { getPageBySlug } from "@/sanity/queries"
-import { PortableText } from "@portabletext/react"
-import VisitorTrackingDisclosure from "@/components/VisitorTrackingDisclosure"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("terms-and-conditions")
@@ -24,18 +22,14 @@ export default async function TermsPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-16">
       {page?.heroHeading && (
-        <h1 className="text-4xl font-bold text-gray-900 mb-12">
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-4">
           {page?.heroHeading}
         </h1>
       )}
 
-      {page?.body && (
-        <div className="prose prose-lg prose-gray max-w-none mb-12">
-          <PortableText value={page?.body} />
-        </div>
-      )}
-
-      <VisitorTrackingDisclosure />
+      <p className="mb-12 text-gray-600">
+        Download our governing documents below.
+      </p>
 
       {docs.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">

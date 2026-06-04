@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { Check } from "lucide-react"
 import type { CapabilityCard, SectionTheme } from "./types"
 
 interface CapabilitiesGridProps {
@@ -178,7 +179,7 @@ export default function CapabilitiesGrid({
                               fontWeight: 700,
                             }}
                           >
-                            {bulletEmoji || "✓"}
+                            {bulletEmoji || <Check size={14} aria-hidden />}
                           </span>
                           <span>{b.text}</span>
                         </li>

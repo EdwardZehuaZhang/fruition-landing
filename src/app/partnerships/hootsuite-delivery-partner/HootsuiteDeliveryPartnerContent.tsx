@@ -46,7 +46,7 @@ export default function HootsuiteDeliveryPartnerContent({
             ? page.heroPartnerBadges
             : siteSettings?.navbarPartnerBadges || []
         }
-        primaryCtaLabel={page.primaryCtaLabel || "🚀  Book a Consultation"}
+        primaryCtaLabel={page.primaryCtaLabel || "Book a Consultation"}
         primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
         secondaryCtaLabel={page.secondaryCtaLabel}
         secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}

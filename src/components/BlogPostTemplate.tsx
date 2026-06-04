@@ -99,12 +99,12 @@ function getYouTubeEmbedUrl(url: string): string | null {
 const blogPortableTextComponents: PortableTextComponents = {
   block: {
     h1: ({ children }) => (
-      <h2 className="font-montserrat font-bold text-[28px] leading-[35px] text-black w-full py-[27.5px]">
+      <h2 className="font-montserrat font-bold text-[24px] sm:text-[28px] leading-[31px] sm:leading-[35px] text-black w-full py-[27.5px]">
         {children}
       </h2>
     ),
     h2: ({ children }) => (
-      <h2 className="font-montserrat font-bold text-[28px] leading-[35px] text-black w-full py-[27.5px]">
+      <h2 className="font-montserrat font-bold text-[24px] sm:text-[28px] leading-[31px] sm:leading-[35px] text-black w-full py-[27.5px]">
         {children}
       </h2>
     ),
@@ -279,7 +279,7 @@ function AuthorMetaRow({
 function ArticleTitle({ title }: { title: string }) {
   return (
     <div className="flex flex-col items-start w-full">
-      <h1 className="font-montserrat font-bold text-[40px] leading-[50px] text-black w-full">
+      <h1 className="font-montserrat font-bold text-[28px] leading-[36px] sm:text-[40px] sm:leading-[50px] text-black w-full">
         {title}
       </h1>
     </div>

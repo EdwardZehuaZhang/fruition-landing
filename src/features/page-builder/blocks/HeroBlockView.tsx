@@ -120,7 +120,7 @@ export default function HeroBlockView({
 
               {/* Heading */}
               {heading && (
-                <h1 className="text-[48px] font-bold text-black leading-[67.2px]">
+                <h1 className="text-[32px] leading-[40px] sm:text-[48px] sm:leading-[67.2px] font-bold text-black">
                   {renderHeading(heading, headingAccents ?? [])}
                 </h1>
               )}
@@ -131,13 +131,13 @@ export default function HeroBlockView({
           </div>
 
           {/* Buttons */}
-          <div className="flex gap-[20px] items-start w-full max-w-[680px]">
+          <div className="flex flex-col sm:flex-row gap-[20px] items-start w-full max-w-[680px]">
             {primaryCtaLabel && primaryCtaUrl && (
               <CtaButton
                 href={primaryCtaUrl}
                 label={primaryCtaLabel}
                 variant="outline"
-                className="w-[330px]"
+                className="w-full sm:w-[330px]"
               />
             )}
             {secondaryCtaLabel && secondaryCtaUrl && (
@@ -145,7 +145,7 @@ export default function HeroBlockView({
                 href={secondaryCtaUrl}
                 label={secondaryCtaLabel}
                 variant="primary"
-                className="w-[330px]"
+                className="w-full sm:w-[330px]"
               />
             )}
           </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { Check } from "lucide-react"
 import { urlFor } from "@/sanity/image"
 import {
   HeroBanner,
@@ -67,7 +68,7 @@ function KeyFeaturesSection({
           <ul className="flex flex-col" style={{ gap: 14 }}>
             {keyFeatures.map((f) => (
               <li key={f.title} className="flex items-start" style={{ gap: 10 }}>
-                <span style={{ color: "#8015e8", fontSize: 16, lineHeight: "24px", flexShrink: 0 }}>✓</span>
+                <Check size={16} color="#8015e8" style={{ flexShrink: 0 }} aria-hidden />
                 <p style={{ fontSize: 15, lineHeight: "24px", color: "#222" }}>
                   <span className="font-bold">{f.title}:</span> {f.body}
                 </p>
@@ -82,7 +83,7 @@ function KeyFeaturesSection({
           <ul className="flex flex-col" style={{ gap: 14 }}>
             {services.map((s) => (
               <li key={s} className="flex items-start" style={{ gap: 10 }}>
-                <span style={{ color: "#8015e8", fontSize: 16, lineHeight: "24px", flexShrink: 0 }}>✓</span>
+                <Check size={16} color="#8015e8" style={{ flexShrink: 0 }} aria-hidden />
                 <p style={{ fontSize: 15, lineHeight: "24px", color: "#222" }}>{s}</p>
               </li>
             ))}
@@ -131,7 +132,7 @@ function ReturnsBannerSection({
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <h2
           className="text-center font-bold"
-          style={{ color: "white", fontSize: 44, lineHeight: "52px", marginBottom: 12 }}
+          style={{ color: "white", fontSize: "clamp(28px, 7vw, 44px)", lineHeight: 1.2, marginBottom: 12 }}
         >
           {heading}
         </h2>
@@ -256,16 +257,16 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
             ? page.heroPartnerBadges
             : siteSettings?.navbarPartnerBadges || []
         }
-        primaryCtaLabel={page.primaryCtaLabel || "🚀  Book a Consultation"}
+        primaryCtaLabel={page.primaryCtaLabel || "Book a Consultation"}
         primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
-        secondaryCtaLabel={page.secondaryCtaLabel || "▶️  Get Started with monday.com"}
+        secondaryCtaLabel={page.secondaryCtaLabel || "Get Started with monday.com"}
         secondaryCtaUrl={page.secondaryCtaUrl || "https://monday.com"}
       />
 
       {/* Trusted-by caption */}
       <section className="bg-white px-4" style={{ paddingTop: 0, paddingBottom: 24 }}>
         <p className="text-center" style={{ color: "#10003a", fontSize: 14, fontWeight: 600 }}>
-          {page.trustedByCaption || "🔨  Trusted by 500+ businesses worldwide"}
+          {page.trustedByCaption || "Trusted by 500+ businesses worldwide"}
         </p>
       </section>
 
@@ -322,9 +323,9 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
           "Join 500+ organisations that have implemented with us."
         }
         testimonials={inlineTestimonials}
-        primaryLabel={page.returnsBannerPrimaryLabel || "🚀  Book a Consultation"}
+        primaryLabel={page.returnsBannerPrimaryLabel || "Book a Consultation"}
         primaryUrl={page.returnsBannerPrimaryUrl || calendlyUrl}
-        secondaryLabel={page.returnsBannerSecondaryLabel || "▶️  Get Started with monday.com"}
+        secondaryLabel={page.returnsBannerSecondaryLabel || "Get Started with monday.com"}
         secondaryUrl={page.returnsBannerSecondaryUrl || "https://monday.com"}
       />
 

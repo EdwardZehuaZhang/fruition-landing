@@ -40,11 +40,9 @@ export default function SolutionCardsSection({
             return (
               <div
                 key={card._key || i}
-                className="flex items-center"
-                style={{
-                  gap: 48,
-                  flexDirection: isEven ? "row" : "row-reverse",
-                }}
+                className={`flex flex-col items-center gap-8 md:gap-12 ${
+                  isEven ? "md:flex-row" : "md:flex-row-reverse"
+                }`}
               >
                 <div style={{ flex: 1 }}>
                   {card.eyebrow && (

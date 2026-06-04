@@ -1,3 +1,4 @@
+import { Check } from "lucide-react"
 import type { ChecklistItem } from "./types"
 
 interface SymptomsChecklistProps {
@@ -42,7 +43,7 @@ export default function SymptomsChecklist({
                 className="shrink-0 flex items-center justify-center font-bold"
                 style={{ width: 22, height: 22, borderRadius: 999, background: "#f3e8ff", color: "#8015e8", fontSize: 13, marginTop: 1 }}
               >
-                ✓
+                <Check size={14} aria-hidden />
               </span>
               <span style={{ fontSize: 16, lineHeight: "24px", color: "#10003a" }}>{it.text}</span>
             </li>

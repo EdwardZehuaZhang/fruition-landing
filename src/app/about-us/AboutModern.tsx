@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { Play } from "lucide-react"
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
 import CalendlySection from "@/components/sections/CalendlySection"
@@ -185,8 +186,8 @@ function HeroSection({
               className="text-display"
               style={{
                 marginTop: 20,
-                fontSize: "clamp(40px, 5.4vw, 64px)",
-                lineHeight: 1.06,
+                fontSize: "clamp(32px, 5.4vw, 64px)",
+                lineHeight: 1.1,
                 letterSpacing: "-0.025em",
                 color: "var(--dark-bg)",
               }}
@@ -1221,7 +1222,7 @@ function ClosingCta({
                   className="cta-btn cta-btn-on-dark-outline"
                 >
                   <span className="cta-btn-icon" aria-hidden>
-                    ▶️
+                    <Play size={18} />
                   </span>
                   <span className="cta-btn-label">{secondaryLabel}</span>
                 </Link>

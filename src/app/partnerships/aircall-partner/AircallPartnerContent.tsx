@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useState } from "react"
+import { Rocket, Check } from "lucide-react"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -202,7 +203,7 @@ function AircallTabsSection({ tabs }: { tabs: AircallTabShape[] }) {
                 <ul className="flex flex-col" style={{ gap: 8 }}>
                   {g.bullets.map((b: string) => (
                     <li key={b} className="flex items-start" style={{ gap: 8, color: "#444", fontSize: 13, lineHeight: "20px" }}>
-                      <span style={{ color: "#8015e8" }}>✓</span>
+                      <Check size={16} color="#8015e8" aria-hidden />
                       <span>{b}</span>
                     </li>
                   ))}
@@ -242,10 +243,10 @@ function AIConversationsSection({ calendlyUrl, features }: { calendlyUrl: string
           </h2>
           <Link
             href={calendlyUrl}
-            className="inline-flex items-center justify-center font-semibold"
+            className="inline-flex items-center justify-center gap-2 font-semibold"
             style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", fontSize: 15, boxShadow: "0 14px 28px -12px rgba(128,21,232,0.55)" }}
           >
-            🚀 Book a Meeting
+            <Rocket size={16} aria-hidden /> Book a Meeting
           </Link>
         </div>
 
@@ -309,7 +310,7 @@ export default function AircallPartnerContent({ page, siteSettings, faqTabs }: P
             ? page.heroPartnerBadges
             : siteSettings?.navbarPartnerBadges || []
         }
-        primaryCtaLabel={page.primaryCtaLabel || "🚀  Book a Consultation"}
+        primaryCtaLabel={page.primaryCtaLabel || "Book a Consultation"}
         primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
         secondaryCtaLabel={page.secondaryCtaLabel}
         secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}

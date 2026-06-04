@@ -374,8 +374,8 @@ export default function MondayImplementationConsultantsContent({
           <h1
             className="text-center font-bold"
             style={{
-              fontSize: 48,
-              lineHeight: "67.2px",
+              fontSize: "clamp(32px, 8vw, 48px)",
+              lineHeight: 1.2,
               marginTop: 14,
               maxWidth: 924,
               whiteSpace: "pre-line",

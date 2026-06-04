@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { Check } from "lucide-react"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -62,7 +63,7 @@ function KeyFeaturesSection({
           <ul className="flex flex-col" style={{ gap: 14 }}>
             {features.map((f, i) => (
               <li key={f.title || i} className="flex items-start" style={{ gap: 10 }}>
-                <span style={{ color: "#8015e8", fontSize: 16, lineHeight: "24px", flexShrink: 0 }}>✓</span>
+                <Check size={16} color="#8015e8" style={{ flexShrink: 0 }} aria-hidden />
                 <p style={{ fontSize: 15, lineHeight: "24px", color: "#222" }}>
                   <span className="font-bold">{f.title}:</span> {f.body}
                 </p>
@@ -80,7 +81,7 @@ function KeyFeaturesSection({
           <ul className="flex flex-col" style={{ gap: 14 }}>
             {services.map((s, i) => (
               <li key={s || i} className="flex items-start" style={{ gap: 10 }}>
-                <span style={{ color: "#8015e8", fontSize: 16, lineHeight: "24px", flexShrink: 0 }}>✓</span>
+                <Check size={16} color="#8015e8" style={{ flexShrink: 0 }} aria-hidden />
                 <p style={{ fontSize: 15, lineHeight: "24px", color: "#222" }}>{s}</p>
               </li>
             ))}
@@ -122,7 +123,7 @@ function ReturnsBannerSection({
         {heading && (
           <h2
             className="text-center font-bold"
-            style={{ color: "white", fontSize: 44, lineHeight: "52px", marginBottom: 12 }}
+            style={{ color: "white", fontSize: "clamp(28px, 7vw, 44px)", lineHeight: 1.2, marginBottom: 12 }}
           >
             {heading}
           </h2>

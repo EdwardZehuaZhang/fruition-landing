@@ -1,6 +1,37 @@
 "use client"
 
 import { useState } from "react"
+import type { LucideIcon } from "lucide-react"
+import {
+  Link2,
+  Zap,
+  Lock,
+  TrendingUp,
+  Bot,
+  Hand,
+  Target,
+  Rocket,
+  RefreshCw,
+  BarChart3,
+  Construction,
+  Ruler,
+  Hammer,
+  Wrench,
+  Brain,
+  Settings,
+  Shield,
+  Building2,
+  Cloud,
+  Briefcase,
+  GraduationCap,
+  Handshake,
+  Lightbulb,
+  LifeBuoy,
+  Sparkles,
+  ClipboardList,
+  Palette,
+  Plug,
+} from "lucide-react"
 import {
   LogoCloudMarquee,
   CalendlySection,
@@ -17,7 +48,7 @@ import CtaButton from "@/components/CtaButton"
 type MakeFeatureGroup = {
   number: string
   title?: string
-  bullets: { emoji: string; text: string }[]
+  bullets: { icon: LucideIcon; text: string }[]
 }
 
 type MakeFeatureTab = {
@@ -39,40 +70,40 @@ const MAKE_FEATURE_TABS: MakeFeatureTab[] = [
         number: "01",
         title: "As a Gold Partner, we leverage make's features to transform your operations:",
         bullets: [
-          { emoji: "🔗", text: "Unlimited Integration Possibilities: Connect seamlessly with 1000+ apps and services" },
-          { emoji: "⚡", text: "Real-Time Execution: Experience immediate process automation that responds instantly to triggers" },
-          { emoji: "🔒", text: "Enterprise-Grade Security: Trust in our SOC 2 Type II certified platform for maximum protection" },
-          { emoji: "📈", text: "Scalable Architecture: Effortlessly handle millions of operations as your business grows" },
+          { icon: Link2, text: "Unlimited Integration Possibilities: Connect seamlessly with 1000+ apps and services" },
+          { icon: Zap, text: "Real-Time Execution: Experience immediate process automation that responds instantly to triggers" },
+          { icon: Lock, text: "Enterprise-Grade Security: Trust in our SOC 2 Type II certified platform for maximum protection" },
+          { icon: TrendingUp, text: "Scalable Architecture: Effortlessly handle millions of operations as your business grows" },
         ],
       },
       {
         number: "02",
         title: "Streamline operations and eliminate workflow friction:",
         bullets: [
-          { emoji: "🤖", text: "Automate repetitive tasks that drain your team's productivity and consume valuable working hours" },
-          { emoji: "✋", text: "Reduce manual data entry errors while saving time and improving overall operational accuracy" },
-          { emoji: "🎯", text: "Enhance process accuracy with consistent, reliable automation that delivers predictable results every time" },
-          { emoji: "🚀", text: "Accelerate workflow execution across all departments to boost team performance and output" },
+          { icon: Bot, text: "Automate repetitive tasks that drain your team's productivity and consume valuable working hours" },
+          { icon: Hand, text: "Reduce manual data entry errors while saving time and improving overall operational accuracy" },
+          { icon: Target, text: "Enhance process accuracy with consistent, reliable automation that delivers predictable results every time" },
+          { icon: Rocket, text: "Accelerate workflow execution across all departments to boost team performance and output" },
         ],
       },
       {
         number: "03",
         title: "Improve efficiency and maximise your operational potential:",
         bullets: [
-          { emoji: "🔄", text: "Connect disparate systems into one cohesive ecosystem that works harmoniously across platforms" },
-          { emoji: "📊", text: "Synchronise data in real-time across all platforms to ensure information consistency and accessibility" },
-          { emoji: "🚧", text: "Eliminate process bottlenecks that slow down your business and create operational inefficiencies" },
-          { emoji: "📏", text: "Scale operations seamlessly without adding complexity or requiring additional manual oversight" },
+          { icon: RefreshCw, text: "Connect disparate systems into one cohesive ecosystem that works harmoniously across platforms" },
+          { icon: BarChart3, text: "Synchronise data in real-time across all platforms to ensure information consistency and accessibility" },
+          { icon: Construction, text: "Eliminate process bottlenecks that slow down your business and create operational inefficiencies" },
+          { icon: Ruler, text: "Scale operations seamlessly without adding complexity or requiring additional manual oversight" },
         ],
       },
       {
         number: "04",
         title: "Drive innovation and stay ahead of the competition:",
         bullets: [
-          { emoji: "🛠️", text: "Create custom automation solutions tailored to your unique business needs and specific requirements" },
-          { emoji: "🔧", text: "Implement advanced integrations that unlock new possibilities and enhance your existing systems" },
-          { emoji: "🧠", text: "Deploy intelligent workflows that adapt to your business requirements and evolving operational demands" },
-          { emoji: "⚙️", text: "Optimise business processes for maximum efficiency, growth, and long-term competitive advantage" },
+          { icon: Hammer, text: "Create custom automation solutions tailored to your unique business needs and specific requirements" },
+          { icon: Wrench, text: "Implement advanced integrations that unlock new possibilities and enhance your existing systems" },
+          { icon: Brain, text: "Deploy intelligent workflows that adapt to your business requirements and evolving operational demands" },
+          { icon: Settings, text: "Optimise business processes for maximum efficiency, growth, and long-term competitive advantage" },
         ],
       },
     ],
@@ -86,55 +117,55 @@ const MAKE_FEATURE_TABS: MakeFeatureTab[] = [
         number: "01",
         title: "Our Gold Partner status demonstrates our expertise in:",
         bullets: [
-          { emoji: "🔧", text: "Advanced automation capabilities to handle complex business requirements" },
-          { emoji: "🎯", text: "Complex multi-step workflow design for sophisticated process automation" },
-          { emoji: "🔄", text: "Real-time data synchronisation across all your connected systems" },
-          { emoji: "🛡️", text: "Error handling and monitoring systems for reliable operation" },
-          { emoji: "🔗", text: "Custom API integration development tailored to your needs" },
+          { icon: Wrench, text: "Advanced automation capabilities to handle complex business requirements" },
+          { icon: Target, text: "Complex multi-step workflow design for sophisticated process automation" },
+          { icon: RefreshCw, text: "Real-time data synchronisation across all your connected systems" },
+          { icon: Shield, text: "Error handling and monitoring systems for reliable operation" },
+          { icon: Link2, text: "Custom API integration development tailored to your needs" },
         ],
       },
       {
         number: "02",
         title: "Enterprise integration solutions that connect your entire business ecosystem:",
         bullets: [
-          { emoji: "📊", text: "Cross-platform data management for seamless information flow" },
-          { emoji: "🏢", text: "Legacy system connectivity to modernise existing infrastructure" },
-          { emoji: "☁️", text: "Cloud service orchestration for optimal performance" },
-          { emoji: "🔒", text: "Secure data transfer protocols ensuring complete protection" },
-          { emoji: "⚙️", text: "Scalable architecture design that grows with your business" },
+          { icon: BarChart3, text: "Cross-platform data management for seamless information flow" },
+          { icon: Building2, text: "Legacy system connectivity to modernise existing infrastructure" },
+          { icon: Cloud, text: "Cloud service orchestration for optimal performance" },
+          { icon: Lock, text: "Secure data transfer protocols ensuring complete protection" },
+          { icon: Settings, text: "Scalable architecture design that grows with your business" },
         ],
       },
       {
         number: "03",
         title: "Professional services that guide you from concept to completion:",
         bullets: [
-          { emoji: "👨‍💼", text: "Expert implementation guidance throughout your automation journey" },
-          { emoji: "🛠️", text: "Custom scenario development aligned with your business goals" },
-          { emoji: "🎓", text: "Team training and enablement for long-term success" },
-          { emoji: "🤝", text: "Ongoing support and optimisation for continuous improvement" },
-          { emoji: "📈", text: "Strategic consulting to maximize your automation ROI" },
+          { icon: Briefcase, text: "Expert implementation guidance throughout your automation journey" },
+          { icon: Hammer, text: "Custom scenario development aligned with your business goals" },
+          { icon: GraduationCap, text: "Team training and enablement for long-term success" },
+          { icon: Handshake, text: "Ongoing support and optimisation for continuous improvement" },
+          { icon: TrendingUp, text: "Strategic consulting to maximize your automation ROI" },
         ],
       },
       {
         number: "04",
         title: "Drive Innovation and transform your operational capabilities:",
         bullets: [
-          { emoji: "💡", text: "Create custom automation solutions that solve unique challenges" },
-          { emoji: "🔧", text: "Implement advanced integrations for enhanced functionality" },
-          { emoji: "🧠", text: "Deploy intelligent workflows that adapt to changing needs" },
-          { emoji: "⚙️", text: "Optimise business processes for maximum efficiency" },
-          { emoji: "🚀", text: "Future-proof your operations with cutting-edge technology" },
+          { icon: Lightbulb, text: "Create custom automation solutions that solve unique challenges" },
+          { icon: Wrench, text: "Implement advanced integrations for enhanced functionality" },
+          { icon: Brain, text: "Deploy intelligent workflows that adapt to changing needs" },
+          { icon: Settings, text: "Optimise business processes for maximum efficiency" },
+          { icon: Rocket, text: "Future-proof your operations with cutting-edge technology" },
         ],
       },
       {
         number: "05",
         title: "Partner-Led Implementation Advantages that ensure your success:",
         bullets: [
-          { emoji: "🎯", text: "Expert scenario development from certified make specialists" },
-          { emoji: "📋", text: "Best practices implementation based on proven methodologies" },
-          { emoji: "⚡", text: "Performance optimisation for maximum speed and reliability" },
-          { emoji: "🛟", text: "Comprehensive support throughout implementation and beyond" },
-          { emoji: "🔮", text: "Future-proof solutions designed to evolve with your business" },
+          { icon: Target, text: "Expert scenario development from certified make specialists" },
+          { icon: ClipboardList, text: "Best practices implementation based on proven methodologies" },
+          { icon: Zap, text: "Performance optimisation for maximum speed and reliability" },
+          { icon: LifeBuoy, text: "Comprehensive support throughout implementation and beyond" },
+          { icon: Sparkles, text: "Future-proof solutions designed to evolve with your business" },
         ],
       },
     ],
@@ -148,20 +179,20 @@ const MAKE_FEATURE_TABS: MakeFeatureTab[] = [
         number: "01",
         title: "Our certified team will guide you through:",
         bullets: [
-          { emoji: "📋", text: "Automation strategy development" },
-          { emoji: "🎨", text: "Workflow design and implementation" },
-          { emoji: "🔗", text: "System integration and testing" },
-          { emoji: "🔧", text: "Ongoing optimisation and support" },
+          { icon: ClipboardList, text: "Automation strategy development" },
+          { icon: Palette, text: "Workflow design and implementation" },
+          { icon: Link2, text: "System integration and testing" },
+          { icon: Wrench, text: "Ongoing optimisation and support" },
         ],
       },
       {
         number: "02",
         title: "As your dedicated make Gold Partner, we specialise in:",
         bullets: [
-          { emoji: "⚙️", text: "Advanced Workflow Design" },
-          { emoji: "🔌", text: "System Integration Development" },
-          { emoji: "🛠️", text: "Custom Automation Solutions" },
-          { emoji: "📈", text: "Enterprise Scaling Support" },
+          { icon: Settings, text: "Advanced Workflow Design" },
+          { icon: Plug, text: "System Integration Development" },
+          { icon: Hammer, text: "Custom Automation Solutions" },
+          { icon: TrendingUp, text: "Enterprise Scaling Support" },
         ],
       },
     ],
@@ -240,12 +271,15 @@ function MakeFeatureTabsSection({ tabs }: { tabs: MakeFeatureTab[] }) {
                 )}
               </div>
               <ul className="flex flex-col" style={{ gap: 10 }}>
-                {g.bullets.map((b: { emoji: string; text: string }) => (
-                  <li key={b.text} className="flex items-start" style={{ gap: 10 }}>
-                    <span style={{ fontSize: 18, lineHeight: "22px", flexShrink: 0 }}>{b.emoji}</span>
-                    <span style={{ color: "#444", fontSize: 13, lineHeight: "20px" }}>{b.text}</span>
-                  </li>
-                ))}
+                {g.bullets.map((b: { icon: LucideIcon; text: string }) => {
+                  const Icon = b.icon
+                  return (
+                    <li key={b.text} className="flex items-start" style={{ gap: 10 }}>
+                      <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 1, color: "#8015e8" }} />
+                      <span style={{ color: "#444", fontSize: 13, lineHeight: "20px" }}>{b.text}</span>
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           ))}
@@ -461,7 +495,7 @@ export default function MakePartnersContent({
           {(pageData?.heroHeadingPart1 || pageData?.heroHeadingAccent) && (
             <h1
               className="text-center font-bold"
-              style={{ fontSize: 48, lineHeight: "67.2px", marginTop: 42, maxWidth: 924 }}
+              style={{ fontSize: "clamp(32px, 8vw, 48px)", lineHeight: 1.2, marginTop: 42, maxWidth: 924 }}
             >
               {pageData?.heroHeadingPart1 && <span className="text-black">{pageData.heroHeadingPart1}</span>}
               {pageData?.heroHeadingAccent && <span style={{ color: "#8015e8" }}>{pageData.heroHeadingAccent}</span>}

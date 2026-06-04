@@ -52,9 +52,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
   const partnerBadges: PartnerBadge[] = siteSettings?.navbarPartnerBadges ?? []
   const ctaLabel = siteSettings?.navbarCtaLabel || ''
 
-  const logoUrl = siteSettings?.logo
-    ? urlFor(siteSettings.logo).height(80).fit('max').url()
-    : null
+  const logoUrl = '/images/logo-fruition-black.svg'
 
   const isNavItemActive = (item: NavItem) =>
     item.sections?.some((s) => s.items?.some((link) => link.href && pathname === link.href)) ?? false
@@ -69,9 +67,9 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
               <Image
                 src={logoUrl}
                 alt="Fruition Services"
-                width={320}
-                height={40}
-                className="h-10 w-auto"
+                width={1366}
+                height={280}
+                className="h-8 w-auto -translate-y-0.5"
                 priority
                 unoptimized
               />

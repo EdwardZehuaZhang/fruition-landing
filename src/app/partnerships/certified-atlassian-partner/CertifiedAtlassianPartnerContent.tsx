@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { Rocket, Check } from "lucide-react"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -68,7 +69,7 @@ function ComprehensiveServicesSection({ cards }: { cards: ServiceCard[] }) {
                 <ul className="flex flex-col" style={{ gap: 6, marginTop: 4 }}>
                   {c.bullets.map((b: string, j: number) => (
                     <li key={b || j} className="flex items-start" style={{ gap: 8, color: "#444", fontSize: 12, lineHeight: "18px" }}>
-                      <span style={{ color: "#8015e8" }}>✓</span>
+                      <Check size={16} color="#8015e8" aria-hidden />
                       <span>{b}</span>
                     </li>
                   ))}
@@ -93,10 +94,10 @@ function AtlassianExpertsSection({ calendlyUrl, cards }: { calendlyUrl: string; 
           </h2>
           <Link
             href={calendlyUrl}
-            className="inline-flex items-center justify-center font-semibold"
+            className="inline-flex items-center justify-center gap-2 font-semibold"
             style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", fontSize: 15, boxShadow: "0 14px 28px -12px rgba(128,21,232,0.55)" }}
           >
-            🚀 Book a Meeting
+            <Rocket size={16} aria-hidden /> Book a Meeting
           </Link>
         </div>
 

@@ -88,7 +88,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
   const ctaLabel = siteSettings?.footerCtaLabel || ''
 
   const contactEmail = siteSettings?.contactEmail
-  const logoSrc = '/images/logo-fruition-white.png'
+  const logoSrc = '/images/logo-fruition-white.svg'
 
   return (
     <footer className="flex flex-col lg:flex-row w-full">
@@ -108,8 +108,8 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
               <Image
                 src={logoSrc}
                 alt="Site logo"
-                width={320}
-                height={28}
+                width={1241}
+                height={255}
                 className="h-[28px] w-auto"
                 unoptimized
               />
@@ -160,7 +160,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
           {siteSettings?.footerPartnerExpertiseHeading && (
             <h4 className="text-white font-semibold text-[16px] mb-3">{siteSettings.footerPartnerExpertiseHeading}</h4>
           )}
-          <div className="grid grid-cols-2 gap-x-[40px] gap-y-[7px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[40px] gap-y-[7px]">
             {partnerLogos.map((p, i) => {
               const w = p.width ?? 110
               const h = p.height ?? 38

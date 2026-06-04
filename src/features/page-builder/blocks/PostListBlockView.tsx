@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { PenLine } from 'lucide-react'
 import { getBlogPosts } from '@/sanity/queries'
 import { urlFor } from '@/sanity/image'
 
@@ -72,9 +73,9 @@ export default async function PostListBlockView({ heading, subheading, limit = 6
         {/* CTA button */}
         <Link
           href="/consulting-blog"
-          className="flex items-center justify-center h-[53px] w-[275px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
+          className="flex items-center justify-center gap-2 h-[53px] w-[275px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
         >
-          ✍️ Check Out Our Blog
+          <PenLine size={18} aria-hidden /> Check Out Our Blog
         </Link>
       </div>
     </section>

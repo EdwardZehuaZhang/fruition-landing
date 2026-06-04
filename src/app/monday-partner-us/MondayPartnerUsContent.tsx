@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { Rocket, Play } from "lucide-react"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -78,17 +79,17 @@ function PartnerSectionCta({ calendlyUrl }: { calendlyUrl: string }) {
         <div className="flex flex-wrap justify-center" style={{ gap: 14 }}>
           <Link
             href={calendlyUrl}
-            className="inline-flex items-center justify-center font-semibold"
+            className="inline-flex items-center justify-center font-semibold gap-2"
             style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", fontSize: 14 }}
           >
-            🚀  Schedule a 30-minute Consultation
+            <Rocket size={16} aria-hidden /> Schedule a 30-minute Consultation
           </Link>
           <Link
             href="https://monday.com"
-            className="inline-flex items-center justify-center font-semibold"
+            className="inline-flex items-center justify-center font-semibold gap-2"
             style={{ height: 50, padding: "0 26px", borderRadius: 999, border: "1px solid #8015e8", color: "#8015e8", fontSize: 14, background: "white" }}
           >
-            ▶️  Get Started with monday.com
+            <Play size={16} aria-hidden /> Get Started with monday.com
           </Link>
         </div>
       </div>
@@ -135,17 +136,17 @@ function EconomicImpactSection({ calendlyUrl, stats }: { calendlyUrl: string; st
         <div className="flex flex-wrap justify-center" style={{ gap: 14 }}>
           <Link
             href={calendlyUrl}
-            className="inline-flex items-center justify-center font-semibold"
+            className="inline-flex items-center justify-center font-semibold gap-2"
             style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", fontSize: 14 }}
           >
-            🚀  Book a Consultation
+            <Rocket size={16} aria-hidden /> Book a Consultation
           </Link>
           <Link
             href="https://monday.com"
-            className="inline-flex items-center justify-center font-semibold"
+            className="inline-flex items-center justify-center font-semibold gap-2"
             style={{ height: 50, padding: "0 26px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.6)", color: "white", fontSize: 14 }}
           >
-            ▶️  Get Started with monday.com
+            <Play size={16} aria-hidden /> Get Started with monday.com
           </Link>
         </div>
       </div>

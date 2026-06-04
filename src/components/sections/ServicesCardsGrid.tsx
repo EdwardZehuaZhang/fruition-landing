@@ -1,5 +1,6 @@
 "use client"
 
+import { Check } from "lucide-react"
 import type { Bullet, SectionTheme } from "./types"
 
 export interface ServiceCard {
@@ -147,7 +148,7 @@ export default function ServicesCardsGrid({
                           fontWeight: 700,
                         }}
                       >
-                        ✓
+                        <Check size={14} aria-hidden />
                       </span>
                       <span>{b.text}</span>
                     </li>

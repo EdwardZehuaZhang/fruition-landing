@@ -168,7 +168,7 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
 
         <div className="mx-auto max-w-[1199px] relative z-10 flex flex-col items-center">
           {stepsHeading && (
-            <h2 className="mb-3 text-center text-[45px] text-white leading-[63px]">{stepsHeading}</h2>
+            <h2 className="mb-3 text-center text-[28px] leading-[36px] sm:text-[45px] sm:leading-[63px] text-white">{stepsHeading}</h2>
           )}
           {stepsSubheading && (
             <p className="mb-12 text-center text-[25px] font-extralight italic text-white">{stepsSubheading}</p>

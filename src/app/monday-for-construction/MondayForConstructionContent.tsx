@@ -222,8 +222,8 @@ export default function MondayForConstructionContent({
 
       {/* General customers say testimonials */}
       <TestimonialsGrid
-        heading="What our customers say about us 🙌"
-        ctaLabel="🚀  Start Your Transformation"
+        heading="What our customers say about us"
+        ctaLabel="Start Your Transformation"
         ctaUrl={calendlyUrl}
         statCardValue="500+"
         statCardSubtitle="have maximised their workflows with our monday.com expert support"

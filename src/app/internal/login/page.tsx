@@ -1,3 +1,4 @@
+import { Lock } from "lucide-react"
 import LoginForm from "./LoginForm"
 
 interface SearchParams {
@@ -23,7 +24,7 @@ export default async function LoginPage({
             className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-pill"
             style={{ backgroundColor: "rgba(128, 21, 232, 0.10)" }}
           >
-            <span style={{ fontSize: 24 }}>🔒</span>
+            <Lock size={24} aria-hidden />
           </div>
           <h1 className="text-2xl font-semibold text-[#10003a]">Fruition Internal</h1>
           <p className="mt-2 text-sm text-[var(--color-text-secondary)]">

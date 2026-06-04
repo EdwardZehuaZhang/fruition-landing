@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { BarChart3 } from 'lucide-react'
 import NumberedStepList from '@/components/common/NumberedStepList'
 
 interface Feature {
@@ -138,11 +139,11 @@ export default function TabSectionBlockView({
                 <p className="text-[16px] text-black leading-[22.4px]">{active.body}</p>
               )}
               {active?.features && active.features.length > 0 && (
-                <div className="grid grid-cols-3 gap-x-[20px] gap-y-[12px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-[20px] gap-y-[12px]">
                   {active.features.map((f, i) => (
                     <div key={f._key ?? i} className="flex items-center gap-[12px]">
                       <span className="text-[24px] font-semibold text-[#7a14e1]">
-                        {f.icon || '📊'}
+                        {f.icon || <BarChart3 size={22} aria-hidden />}
                       </span>
                       <span className="text-[14px] text-black">{f.label}</span>
                     </div>

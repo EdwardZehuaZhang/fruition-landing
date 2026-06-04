@@ -66,11 +66,11 @@ export default function TestimonialsGrid({
     <section className="bg-white py-[80px] px-4">
       <div className="mx-auto max-w-[1343px]">
         {/* Header */}
-        <div className="flex items-center justify-center gap-[89px] mb-[58px] w-full">
-          <h2 className="text-section-h2 text-black w-[919px] shrink-0">{heading}</h2>
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-6 lg:gap-[89px] mb-10 lg:mb-[58px] w-full">
+          <h2 className="text-section-h2 text-black w-full lg:w-[919px] lg:shrink-0">{heading}</h2>
           <Link
             href={ctaUrl}
-            className="ui-cta-btn ui-cta-btn-secondary h-[53px] w-[330px] shrink-0"
+            className="ui-cta-btn ui-cta-btn-secondary h-[53px] w-full lg:w-[330px] lg:shrink-0"
           >
             {ctaLabel}
           </Link>

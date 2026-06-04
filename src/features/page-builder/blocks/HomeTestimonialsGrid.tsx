@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { Rocket } from "lucide-react"
 import TestimonialBlockView from "./TestimonialBlockView"
 
 interface TestimonialBlockData {
@@ -45,15 +46,15 @@ export default function HomeTestimonialsGrid({
   return (
     <section className="bg-white py-[80px] px-4">
       <div className="mx-auto max-w-[1343px]">
-        <div className="flex items-center justify-center gap-[89px] mb-[58px] w-full">
-          <h2 className="text-[48px] text-black leading-[67.2px] w-[919px] shrink-0">
-            What our customers say about us 🙌
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-6 lg:gap-[89px] mb-10 lg:mb-[58px] w-full">
+          <h2 className="text-[32px] leading-[40px] lg:text-[48px] lg:leading-[67.2px] text-black w-full lg:w-[919px] lg:shrink-0">
+            What our customers say about us
           </h2>
           <Link
             href="/customer-testimonials"
-            className="shrink-0 flex items-center justify-center h-[53px] w-[330px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
+            className="shrink-0 flex items-center justify-center gap-2 h-[53px] w-full lg:w-[330px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
           >
-            🚀 Start Your Transformation
+            <Rocket size={18} aria-hidden /> Start Your Transformation
           </Link>
         </div>
 

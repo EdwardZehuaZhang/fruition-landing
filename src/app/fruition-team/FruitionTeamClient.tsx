@@ -129,8 +129,8 @@ export default function FruitionTeamClient({
           <h1
             className="text-center font-bold"
             style={{
-              fontSize: 48,
-              lineHeight: "60px",
+              fontSize: "clamp(32px, 8vw, 48px)",
+              lineHeight: 1.2,
               marginTop: partnerBadges.length > 0 ? 36 : 0,
               maxWidth: 920,
               color: "black",

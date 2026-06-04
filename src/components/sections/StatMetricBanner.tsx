@@ -46,7 +46,7 @@ export default function StatMetricBanner({
           </p>
         )}
         {metrics.length > 0 && (
-          <div className="mt-8 flex flex-wrap items-start justify-center" style={{ gap: 48 }}>
+          <div className="mt-8 flex flex-wrap items-start justify-center gap-x-8 gap-y-6 md:gap-12">
             {metrics.map((m, i) => (
               <div key={m._key || i} className="flex flex-col items-center" style={{ minWidth: 140 }}>
                 <span className="font-bold" style={{ fontSize: 40, lineHeight: "44px", color: dark ? "#fff" : "var(--purple-primary)" }}>

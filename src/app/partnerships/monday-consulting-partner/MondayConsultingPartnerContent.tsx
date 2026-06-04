@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { Rocket, Play, Check } from "lucide-react"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -176,17 +177,17 @@ function CertifiedExcellenceSection({ calendlyUrl }: { calendlyUrl: string }) {
         <div className="flex flex-wrap justify-center" style={{ gap: 16 }}>
           <Link
             href={calendlyUrl}
-            className="inline-flex items-center justify-center font-semibold"
+            className="inline-flex items-center justify-center gap-2 font-semibold"
             style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", fontSize: 15 }}
           >
-            🚀  Book a Consultation
+            <Rocket size={16} aria-hidden /> Book a Consultation
           </Link>
           <Link
             href="https://monday.com"
-            className="inline-flex items-center justify-center font-semibold"
+            className="inline-flex items-center justify-center gap-2 font-semibold"
             style={{ height: 50, padding: "0 26px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.6)", color: "white", fontSize: 15 }}
           >
-            ▶️  Get Started with monday.com
+            <Play size={16} aria-hidden /> Get Started with monday.com
           </Link>
         </div>
       </div>
@@ -208,7 +209,7 @@ function WhyFruitionSection({ items }: { items: WhyFruitionItem[] }) {
               className="flex items-center bg-white rounded-card"
               style={{ gap: 12, padding: 20, border: "1px solid #ece7fb" }}
             >
-              <span style={{ fontSize: 22 }}>✅</span>
+              <Check size={22} color="#8015e8" aria-hidden />
               <p className="font-semibold" style={{ color: "#10003a", fontSize: 14 }}>{reason}</p>
             </div>
           ))}
@@ -373,7 +374,7 @@ function PartnerWrapUpSection({
               </p>
               <Link
                 href={calendlyUrl}
-                className="inline-flex items-center justify-center font-semibold"
+                className="inline-flex items-center justify-center gap-2 font-semibold"
                 style={{
                   height: 46,
                   padding: "0 22px",
@@ -383,7 +384,7 @@ function PartnerWrapUpSection({
                   fontSize: 14,
                 }}
               >
-                🚀  Schedule a Meeting
+                <Rocket size={16} aria-hidden /> Schedule a Meeting
               </Link>
             </div>
           </div>
@@ -444,9 +445,9 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
             ? page.heroPartnerBadges
             : siteSettings?.navbarPartnerBadges || []
         }
-        primaryCtaLabel={page.primaryCtaLabel || "🚀  Book a Consultation"}
+        primaryCtaLabel={page.primaryCtaLabel || "Book a Consultation"}
         primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
-        secondaryCtaLabel={page.secondaryCtaLabel || "▶️  Get Started with monday.com"}
+        secondaryCtaLabel={page.secondaryCtaLabel || "Get Started with monday.com"}
         secondaryCtaUrl={page.secondaryCtaUrl || "https://monday.com"}
       />
 
@@ -494,8 +495,8 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
 
       {/* 7. Testimonials — use shared TestimonialsGrid */}
       <TestimonialsGrid
-        heading="What our customers say about us 🙌"
-        ctaLabel="🚀  Start Your Transformation"
+        heading="What our customers say about us"
+        ctaLabel="Start Your Transformation"
         ctaUrl={calendlyUrl}
         statCardValue="500+"
         statCardSubtitle="have maximised their workflows with our monday.com expert support"

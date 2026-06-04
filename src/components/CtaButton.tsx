@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import type { CSSProperties, ReactNode } from "react"
+import { Rocket, Play } from "lucide-react"
 
 export type CtaVariant =
   | "outline"
@@ -14,13 +15,13 @@ interface CtaButtonProps {
   label?: string
   children?: ReactNode
   variant?: CtaVariant
-  icon?: string
+  icon?: ReactNode
   className?: string
   style?: CSSProperties
 }
 
-const ROCKET = "\u{1F680}"
-const PLAY = "▶️"
+const ROCKET = <Rocket size={18} aria-hidden />
+const PLAY = <Play size={18} aria-hidden />
 
 const VARIANT_CLASS: Record<CtaVariant, string> = {
   outline: "cta-btn-outline",
@@ -29,7 +30,7 @@ const VARIANT_CLASS: Record<CtaVariant, string> = {
   onDarkPrimary: "cta-btn-on-dark-primary",
 }
 
-function inferIcon(text: string, variant: CtaVariant): string {
+function inferIcon(text: string, variant: CtaVariant): ReactNode {
   const lower = text.toLowerCase()
   if (/\b(book|consult|schedul|contact|talk|chat|call)/i.test(lower)) return ROCKET
   if (/\b(start|get started|monday|demo|watch|try|launch|begin)/i.test(lower)) return PLAY
