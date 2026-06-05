@@ -48,7 +48,7 @@ import CtaButton from "@/components/CtaButton"
 type MakeFeatureGroup = {
   number: string
   title?: string
-  bullets: { icon: LucideIcon; text: string }[]
+  bullets: { icon?: LucideIcon; emoji?: string; text: string }[]
 }
 
 type MakeFeatureTab = {
@@ -271,11 +271,20 @@ function MakeFeatureTabsSection({ tabs }: { tabs: MakeFeatureTab[] }) {
                 )}
               </div>
               <ul className="flex flex-col" style={{ gap: 10 }}>
-                {g.bullets.map((b: { icon: LucideIcon; text: string }) => {
-                  const Icon = b.icon
+                {g.bullets.map((b: { icon?: LucideIcon; emoji?: string; text: string }, bi: number) => {
+                  // Hardcoded fallback bullets carry a LucideIcon component;
+                  // Sanity-driven bullets carry an `emoji` string (no icon).
+                  // Default to Sparkles so a missing icon never renders `undefined`.
+                  const Icon = typeof b.icon === "function" ? b.icon : null
                   return (
-                    <li key={b.text} className="flex items-start" style={{ gap: 10 }}>
-                      <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 1, color: "#8015e8" }} />
+                    <li key={b.text || bi} className="flex items-start" style={{ gap: 10 }}>
+                      {Icon ? (
+                        <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 1, color: "#8015e8" }} />
+                      ) : b.emoji ? (
+                        <span aria-hidden style={{ flexShrink: 0, marginTop: 1, fontSize: 16, lineHeight: "20px" }}>{b.emoji}</span>
+                      ) : (
+                        <Sparkles size={18} aria-hidden style={{ flexShrink: 0, marginTop: 1, color: "#8015e8" }} />
+                      )}
                       <span style={{ color: "#444", fontSize: 13, lineHeight: "20px" }}>{b.text}</span>
                     </li>
                   )
