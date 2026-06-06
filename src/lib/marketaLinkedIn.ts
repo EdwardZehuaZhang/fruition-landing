@@ -12,8 +12,12 @@
  */
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+// Haiku handles LinkedIn-post transformations comfortably and at ~1/5 the
+// OpenRouter cost of Sonnet, which matters when the long-form blog drafting
+// is already burning tokens on every run. Override with MARKETA_LINKEDIN_MODEL
+// if a richer model is needed.
 const DEFAULT_MODEL =
-  process.env.MARKETA_LINKEDIN_MODEL ?? "anthropic/claude-sonnet-4.5"
+  process.env.MARKETA_LINKEDIN_MODEL ?? "anthropic/claude-haiku-4.5"
 
 function getApiKey(): string {
   const key = process.env.OPENROUTER_API_KEY
@@ -77,8 +81,11 @@ export async function generateLinkedInPost(
 
   const apiKey = getApiKey()
   const body = {
+    // 500 is ~2x the actual output we need (a 250-word LinkedIn post is
+    // ~350 tokens) which leaves headroom for hashtags without billing for
+    // unused capacity on a thin OpenRouter balance.
     model: DEFAULT_MODEL,
-    max_tokens: 800,
+    max_tokens: 500,
     messages: [
       { role: "system", content: SYSTEM_PROMPT },
       { role: "user", content: userPrompt },
