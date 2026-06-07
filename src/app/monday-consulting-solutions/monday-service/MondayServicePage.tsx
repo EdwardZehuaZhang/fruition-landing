@@ -11,6 +11,7 @@ import {
 import type { SiteSettingsData, PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
+import CtaLabel from "@/components/CtaLabel"
 
 interface ComparisonItem {
   _key?: string
@@ -467,7 +468,7 @@ function FourCardSection({
               fontSize: 16,
             }}
           >
-            {ctaLabel}
+            <CtaLabel label={ctaLabel} />
           </Link>
         )}
 

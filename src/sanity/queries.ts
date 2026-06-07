@@ -548,7 +548,7 @@ export async function getSiteSettings() {
 
 export async function getTeamMembers() {
   return client.fetch(
-    `*[_type == "teamMember"] | order(order asc) { _id, name, role, emoji, photo, bio, linkedinUrl, regions, order }`
+    `*[_type == "teamMember"] | order(order asc) { _id, name, role, emoji, photo, bio, linkedinUrl, regions, order, certifications }`
   )
 }
 
@@ -596,6 +596,8 @@ export async function getPageBySlug(slug: string) {
   return client.fetch(
     `*[_type == "page" && slug.current == $slug][0]{
       _id, title, "slug": slug.current, seoTitle, seoDescription,
+      croSections,
+      leadershipNote, leadershipSignatureName, leadershipSignatureTitle,
       heroEyebrow, heroHeading, heroHeadingAccent,
       heroHeadingPart1, heroHeadingPart2,
       heroPartnerBadgesLabel,
@@ -741,6 +743,7 @@ export async function getImplementationPackagesPage() {
 export async function getMondayTrainingPage() {
   return client.fetch(`*[_type == "mondayTrainingPage"][0]{
     title, seoTitle, seoDescription,
+    croSections,
     heroHeadingPart1, heroHeadingAccent, heroSubheading,
     heroPartnerBadges[]{ image, alt },
     heroMondayPartnersImage,
@@ -770,6 +773,7 @@ export async function getMondayTrainingPage() {
 export async function getMondayImplementationConsultantsPage() {
   return client.fetch(`*[_type == "mondayImplementationConsultantsPage"][0]{
     title, seoTitle, seoDescription,
+    croSections,
     heroEyebrow, heroHeadingPart1, heroHeadingAccent, heroHeadingPart2,
     heroSubheading,
     heroPartnerBadges[]{ image, alt },
@@ -802,6 +806,7 @@ export async function getMondayImplementationConsultantsPage() {
 export async function getMakePartnersPage() {
   return client.fetch(`*[_type == "makePartnersPage"][0]{
     title, seoTitle, seoDescription,
+    croSections,
     heroHeadingPart1, heroHeadingAccent, heroSubheading,
     heroPrimaryCtaLabel, heroPrimaryCtaUrl,
     heroImage,

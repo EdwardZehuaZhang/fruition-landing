@@ -7,6 +7,9 @@ import {
   CalendlySection,
   FaqAccordion,
   ServicesCardsGrid,
+  CroSections,
+  StickyCtaBar,
+  WorkflowConnector,
 } from "@/components/sections"
 import type {
   CaseStudy,
@@ -89,6 +92,7 @@ export default function N8nIntegrationPartnerContent({
 
   return (
     <div>
+      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow}
@@ -117,6 +121,21 @@ export default function N8nIntegrationPartnerContent({
         logos={siteSettings?.carouselLogos || []}
       />
 
+      {/* Tech stack connector — apps orchestrated through n8n into monday.com */}
+      <WorkflowConnector
+        eyebrow="Tech stack connector"
+        heading="Orchestrate your entire stack through one Work OS"
+        subheading="We route data across your existing apps with custom n8n workflows, syncing everything into monday.com in real time."
+        theme="dark"
+        steps={[
+          { glyph: "🗂️", label: "CRM & ERP", sublabel: "Leads, orders, invoices" },
+          { glyph: "💬", label: "Slack & Email", sublabel: "Alerts & approvals" },
+          { glyph: "⚙️", label: "n8n", sublabel: "Webhooks · JSON transforms · branching" },
+          { glyph: "📊", label: "monday.com", sublabel: "Single source of truth", tone: "hub" },
+        ]}
+        footnote="Cloud or self-hosted. n8n charges per full workflow execution, not per step."
+      />
+
       {/* Our Comprehensive n8n Services */}
       {page.servicesCards?.length > 0 && (
         <ServicesCardsGrid
@@ -127,6 +146,13 @@ export default function N8nIntegrationPartnerContent({
           cards={page.servicesCards}
         />
       )}
+
+      {/* CRO action items */}
+      <CroSections
+        data={page.croSections}
+        primaryCtaLabel={page.primaryCtaLabel}
+        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+      />
 
       {/* Calendly under services */}
       <CalendlySection

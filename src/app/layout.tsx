@@ -4,12 +4,17 @@ import "./globals.css"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import NavigationProgress from "@/components/NavigationProgress"
+import CookieNotice from "@/components/CookieNotice"
 import { getSiteSettings } from "@/sanity/queries"
 
 // RB2B loader. Disclosure of B2B visitor identification lives in
 // /data-privacy and /terms-and-conditions. RB2B handles region-level
 // suppression server-side per the account's compliance settings.
-const REB2B_LOADER = `!function(key){if(window.reb2b)return;window.reb2b={loaded:true};var s=document.createElement("script");s.async=true;s.src="https://ddwl4m2hdecbv.cloudfront.net/b/"+key+"/"+key+".js.gz";document.getElementsByTagName("script")[0].parentNode.insertBefore(s,document.getElementsByTagName("script")[0]);}("9NMMZHR9W0NW");`
+//
+// Opt-out gate: visitors who clicked "Decline" in <CookieNotice /> get a
+// "declined" value under this localStorage key, which suppresses the loader on
+// every later visit. Keep the key in sync with src/components/CookieNotice.tsx.
+const REB2B_LOADER = `(function(){try{if(window.localStorage.getItem("fruition-visitor-consent")==="declined")return;}catch(e){}!function(key){if(window.reb2b)return;window.reb2b={loaded:true};var s=document.createElement("script");s.async=true;s.src="https://ddwl4m2hdecbv.cloudfront.net/b/"+key+"/"+key+".js.gz";document.getElementsByTagName("script")[0].parentNode.insertBefore(s,document.getElementsByTagName("script")[0]);}("9NMMZHR9W0NW");})();`
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -48,6 +53,7 @@ export default async function RootLayout({
         <Navbar siteSettings={siteSettings} />
         <main>{children}</main>
         <Footer siteSettings={siteSettings} />
+        <CookieNotice />
       </body>
     </html>
   )

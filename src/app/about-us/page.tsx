@@ -79,6 +79,10 @@ export default async function Page() {
       closingCtaPrimaryLabel={page.closingCtaPrimaryLabel}
       closingCtaSecondaryLabel={page.closingCtaSecondaryLabel}
       closingCtaSecondaryUrl={page.closingCtaSecondaryUrl}
+      croSections={page.croSections}
+      leadershipNote={page.leadershipNote}
+      leadershipSignatureName={page.leadershipSignatureName}
+      leadershipSignatureTitle={page.leadershipSignatureTitle}
       siteSettings={siteSettings}
     />
   )

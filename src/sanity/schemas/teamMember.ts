@@ -8,6 +8,22 @@ export default {
     { name: 'emoji', title: 'Emoji', type: 'string' },
     { name: 'photo', title: 'Photo', type: 'image' },
     { name: 'bio', title: 'Bio', type: 'text' },
+    {
+      name: 'certifications',
+      title: 'Certifications (badges shown under the bio)',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        list: [
+          { title: 'Certified Core Consultant', value: 'Certified Core Consultant' },
+          { title: 'Advanced Workflow Builder', value: 'Advanced Workflow Builder' },
+          { title: 'CRM Specialist', value: 'CRM Specialist' },
+          { title: 'Make.com Certified', value: 'Make.com Certified' },
+          { title: 'n8n Specialist', value: 'n8n Specialist' },
+          { title: 'Solutions Architect', value: 'Solutions Architect' },
+        ],
+      },
+    },
     { name: 'linkedinUrl', title: 'LinkedIn URL', type: 'string' },
     {
       name: 'regions',

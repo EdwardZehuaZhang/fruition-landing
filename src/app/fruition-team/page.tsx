@@ -48,6 +48,7 @@ export default async function TeamPage() {
       certificationBadge={certificationBadge}
       regions={regions}
       heroDescriptionBlocks={heroDescriptionBlocks}
+      croSections={page?.croSections}
     />
   )
 }

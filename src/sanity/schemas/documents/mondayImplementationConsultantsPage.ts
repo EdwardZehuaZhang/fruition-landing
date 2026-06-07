@@ -10,6 +10,7 @@ export default defineType({
     defineField({ name: 'title', title: 'Title', type: 'string' }),
     defineField({ name: 'seoTitle', title: 'SEO Title', type: 'string' }),
     defineField({ name: 'seoDescription', title: 'SEO Description', type: 'text' }),
+    defineField({ name: 'croSections', title: 'CRO Sections', type: 'croSections' }),
 
     // Hero
     defineField({ name: 'heroEyebrow', title: 'Hero Eyebrow (small label above heading)', type: 'string' }),

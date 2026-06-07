@@ -8,7 +8,10 @@ import CalendlySection from "@/components/sections/CalendlySection"
 import StatsBlockView from "@/features/page-builder/blocks/StatsBlockView"
 import ComparisonTabsSection from "@/components/sections/ComparisonTabsSection"
 import FaqAccordion from "@/components/sections/FaqAccordion"
+import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
+import StickyCtaBar from "@/components/sections/StickyCtaBar"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
+import CtaLabel from "@/components/CtaLabel"
 import type { ComparisonTab as SharedComparisonTab, FaqTab as SharedFaqTab } from "@/components/sections/types"
 
 /* ------------------------------------------------------------------ */
@@ -100,6 +103,7 @@ export interface MicPageData {
   title?: string
   seoTitle?: string
   seoDescription?: string
+  croSections?: CroSectionsData | null
 
   heroEyebrow?: string
   heroHeadingPart1?: string
@@ -346,6 +350,7 @@ export default function MondayImplementationConsultantsContent({
 
   return (
     <div>
+      <StickyCtaBar label={data?.croSections?.stickyCtaLabel} href={data?.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* ============================================================ */}
       {/* SECTION 1 — Hero                                             */}
       {/* ============================================================ */}
@@ -365,6 +370,7 @@ export default function MondayImplementationConsultantsContent({
                   width={120}
                   height={44}
                   className="h-[44px] w-auto rounded-[5px]"
+                  unoptimized
                 />
               ))}
             </div>
@@ -448,7 +454,7 @@ export default function MondayImplementationConsultantsContent({
                     fontSize: 16,
                   }}
                 >
-                  {heroPrimaryCtaLabel}
+                  <CtaLabel label={heroPrimaryCtaLabel} />
                 </Link>
               )}
               {heroSecondaryCtaUrl && (
@@ -462,7 +468,7 @@ export default function MondayImplementationConsultantsContent({
                     fontSize: 16,
                   }}
                 >
-                  {heroSecondaryCtaLabel}
+                  <CtaLabel label={heroSecondaryCtaLabel} />
                 </Link>
               )}
             </div>
@@ -587,6 +593,9 @@ export default function MondayImplementationConsultantsContent({
         tabs={resolvedComparisonTabs as SharedComparisonTab[]}
       />
 
+      {/* CRO action items */}
+      <CroSections data={data?.croSections} primaryCtaLabel={data?.heroPrimaryCtaLabel} primaryCtaUrl={calendlyUrl} />
+
       {/* ============================================================ */}
       {/* SECTION 5 — Calendly                                         */}
       {/* ============================================================ */}
@@ -710,7 +719,7 @@ export default function MondayImplementationConsultantsContent({
                           marginTop: 24,
                         }}
                       >
-                        {card.ctaLabel}
+                        <CtaLabel label={card.ctaLabel} />
                       </Link>
                     )}
                   </div>

@@ -11,6 +11,7 @@ import {
   CapabilitiesGrid,
   CroSections,
   StickyCtaBar,
+  SolutionSelector,
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData, FaqTab } from "@/components/sections/types"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
@@ -257,6 +258,53 @@ export default function MondayCrmConsultingContent({
           withPurpleCircle
         />
       )}
+
+      {/* 4b. Interactive pipeline solution selector */}
+      <SolutionSelector
+        eyebrow="Find your fix"
+        heading="Which pipeline bottleneck is slowing you down?"
+        subheading="Pick the one you recognize and see exactly how we configure monday CRM to solve it."
+        ctaLabel="Book a Free Discovery Call"
+        ctaUrl={page.primaryCtaUrl || calendlyUrl}
+        options={[
+          {
+            key: "lead-routing",
+            glyph: "🎯",
+            label: "Lead Routing",
+            problem: "Leads sit unassigned or land with the wrong rep.",
+            configures: [
+              "Automated round-robin and rule-based assignment",
+              "Instant Slack / email alerts on new leads",
+              "SLA timers that escalate stalled leads",
+            ],
+            outcome: "Every lead reaches the right rep in seconds, not days.",
+          },
+          {
+            key: "forecasting",
+            glyph: "📈",
+            label: "Forecasting",
+            problem: "Forecasts live in stale spreadsheets nobody trusts.",
+            configures: [
+              "Weighted pipeline stages with automated probability",
+              "Real-time executive dashboards by rep and region",
+              "Snapshot reporting to track forecast vs actual",
+            ],
+            outcome: "A live forecast leadership can actually act on.",
+          },
+          {
+            key: "erp-integration",
+            glyph: "🔗",
+            label: "ERP Integration",
+            problem: "Sales and finance data never reconcile.",
+            configures: [
+              "Two-way sync between monday CRM and your ERP",
+              "Automated order and invoice status mirroring",
+              "Custom field mapping with zero double entry",
+            ],
+            outcome: "One source of truth from first touch to paid invoice.",
+          },
+        ]}
+      />
 
       {/* 5. Testimonials (above Calendly) */}
       <TestimonialsGrid caseStudies={caseStudies} />

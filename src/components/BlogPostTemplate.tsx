@@ -41,7 +41,10 @@ export interface RelatedBlogPost {
 interface BlogPostTemplateProps {
   post: BlogPostData
   relatedPosts?: RelatedBlogPost[]
+  calendlyUrl?: string
 }
+
+const DEFAULT_CALENDLY = "https://calendly.com/global-calendar-fruitionservices"
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -81,6 +84,51 @@ function getYouTubeEmbedUrl(url: string): string | null {
   return match ? `https://www.youtube.com/embed/${match[1]}` : null
 }
 
+/** Plain text of a portable-text block (joined span text). */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function blockText(block: any): string {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const children: any[] = block?.children || []
+  return children.map((c) => (typeof c?.text === "string" ? c.text : "")).join("")
+}
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 80)
+}
+
+interface TocEntry {
+  id: string
+  text: string
+  level: 2 | 3
+}
+
+/** h2/h3 headings from the body, slugified, deduped, for the jump-to TOC. */
+function extractHeadings(body?: PortableTextBlock[]): TocEntry[] {
+  if (!body?.length) return []
+  const seen = new Set<string>()
+  const out: TocEntry[] = []
+  for (const block of body) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const style = (block as any)?.style
+    if (block?._type !== "block" || (style !== "h2" && style !== "h1" && style !== "h3")) continue
+    const text = blockText(block).trim()
+    if (!text) continue
+    const id = slugify(text)
+    // Anchors aren't suffix-deduped in the renderer, so skip repeats to keep
+    // every TOC link pointing at a real, first-occurrence heading.
+    if (!id || seen.has(id)) continue
+    seen.add(id)
+    out.push({ id, text, level: style === "h3" ? 3 : 2 })
+  }
+  return out
+}
+
 /* ------------------------------------------------------------------ */
 /*  Portable text components — pixel-matched to Figma article body    */
 /* ------------------------------------------------------------------ */
@@ -98,18 +146,18 @@ function getYouTubeEmbedUrl(url: string): string | null {
 
 const blogPortableTextComponents: PortableTextComponents = {
   block: {
-    h1: ({ children }) => (
-      <h2 className="font-montserrat font-bold text-[24px] sm:text-[28px] leading-[31px] sm:leading-[35px] text-black w-full py-[27.5px]">
+    h1: ({ children, value }) => (
+      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-montserrat font-bold text-[24px] sm:text-[28px] leading-[31px] sm:leading-[35px] text-black w-full py-[27.5px]">
         {children}
       </h2>
     ),
-    h2: ({ children }) => (
-      <h2 className="font-montserrat font-bold text-[24px] sm:text-[28px] leading-[31px] sm:leading-[35px] text-black w-full py-[27.5px]">
+    h2: ({ children, value }) => (
+      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-montserrat font-bold text-[24px] sm:text-[28px] leading-[31px] sm:leading-[35px] text-black w-full py-[27.5px]">
         {children}
       </h2>
     ),
-    h3: ({ children }) => (
-      <h3 className="font-montserrat font-bold text-[22px] leading-[27px] text-black w-full pt-[27.5px] pb-[10px]">
+    h3: ({ children, value }) => (
+      <h3 id={slugify(blockText(value))} className="scroll-mt-[100px] font-montserrat font-bold text-[22px] leading-[27px] text-black w-full pt-[27.5px] pb-[10px]">
         {children}
       </h3>
     ),
@@ -430,6 +478,68 @@ function EngagementBar() {
   )
 }
 
+/** Quick-read "On this page" jump-to list, generated from the body headings. */
+function ArticleToc({ entries }: { entries: TocEntry[] }) {
+  if (entries.length < 3) return null
+  return (
+    <nav
+      aria-label="On this page"
+      className="w-full rounded-[16px] p-[24px] sm:p-[28px]"
+      style={{ background: "linear-gradient(180deg, #faf7ff 0%, #ffffff 100%)", border: "1px solid #efe7fb" }}
+    >
+      <p className="font-montserrat font-semibold uppercase" style={{ color: "#8015e8", fontSize: 12, letterSpacing: "0.16em" }}>
+        On this page
+      </p>
+      <ul className="mt-[14px] flex flex-col" style={{ gap: 8, listStyle: "none", padding: 0 }}>
+        {entries.map((e) => (
+          <li key={e.id} style={{ paddingLeft: e.level === 3 ? 16 : 0 }}>
+            <a
+              href={`#${e.id}`}
+              className="font-montserrat hover:underline"
+              style={{ color: e.level === 3 ? "#56516a" : "#2b074d", fontSize: e.level === 3 ? 14 : 15, fontWeight: e.level === 3 ? 400 : 600 }}
+            >
+              {e.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+/** Bottom-of-article conversion CTA. */
+function InlineAuditCta({ calendlyUrl }: { calendlyUrl: string }) {
+  return (
+    <aside
+      className="relative w-full overflow-hidden rounded-[20px] p-[32px] sm:p-[40px]"
+      style={{ background: "linear-gradient(135deg, #2b074d 0%, #10003a 100%)" }}
+    >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute"
+        style={{ top: -120, right: -100, width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(128,21,232,0.4) 0%, rgba(128,21,232,0) 70%)" }}
+      />
+      <div className="relative flex flex-col gap-[18px] sm:flex-row sm:items-center sm:justify-between">
+        <div style={{ maxWidth: 540 }}>
+          <h2 className="font-montserrat font-bold" style={{ color: "#ffffff", fontSize: 22, lineHeight: "30px", textWrap: "balance" }}>
+            Scaling this workflow across 50+ users?
+          </h2>
+          <p className="font-montserrat" style={{ color: "rgba(255,255,255,0.78)", fontSize: 15, lineHeight: "24px", marginTop: 8 }}>
+            Book a complimentary 30-minute process audit with a Fruition consultant and we will map the build for your team.
+          </p>
+        </div>
+        <Link
+          href={calendlyUrl}
+          className="inline-flex flex-none items-center justify-center font-montserrat font-semibold"
+          style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "#ffffff", fontSize: 15 }}
+        >
+          Book a 30-Min System Audit
+        </Link>
+      </div>
+    </aside>
+  )
+}
+
 function RelatedPostCard({ post }: { post: RelatedBlogPost }) {
   const imgSrc = post.coverImage?.asset?._ref
     ? urlFor(post.coverImage).width(580).height(324).url()
@@ -535,11 +645,28 @@ function RelatedPostsSection({ posts }: { posts: RelatedBlogPost[] }) {
 export default function BlogPostTemplate({
   post,
   relatedPosts = [],
+  calendlyUrl = DEFAULT_CALENDLY,
 }: BlogPostTemplateProps) {
   const readingTime = estimateReadingTime(post.body)
+  const headings = extractHeadings(post.body)
+
+  const articleLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    ...(post.excerpt ? { description: post.excerpt } : {}),
+    ...(post.author ? { author: { "@type": "Person", name: post.author } } : {}),
+    ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
+    publisher: { "@type": "Organization", name: "Fruition" },
+  }
 
   return (
     <div className="bg-white w-full font-montserrat">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
+      />
       <div className="mx-auto w-full max-w-[1470px] flex items-start justify-center px-[24px] sm:px-[48px] lg:px-[80px] xl:px-[273px] py-[48px] lg:py-[80px]">
         <div className="flex flex-col gap-[40px] items-center justify-center w-full max-w-[924px]">
           {/* Author meta */}
@@ -551,6 +678,13 @@ export default function BlogPostTemplate({
 
           {/* Title */}
           <ArticleTitle title={post.title} />
+
+          {/* Quick-read jump-to (auto-generated from headings) */}
+          {headings.length >= 3 && (
+            <div className="w-full">
+              <ArticleToc entries={headings} />
+            </div>
+          )}
 
           {/* Body */}
           <div className="flex flex-col items-start pb-[0.5px] w-full">
@@ -572,6 +706,9 @@ export default function BlogPostTemplate({
               <VideoEmbeds urls={post.videoUrls} />
             )}
           </div>
+
+          {/* Bottom-of-article conversion CTA */}
+          <InlineAuditCta calendlyUrl={calendlyUrl} />
 
           {/* Tags (from categories) */}
           {post.categories && post.categories.length > 0 && (

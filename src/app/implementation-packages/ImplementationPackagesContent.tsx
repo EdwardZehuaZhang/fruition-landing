@@ -11,6 +11,7 @@ import PaperPlaneIcon from "@/components/common/icons/PaperPlaneIcon"
 import FaqAccordion from "@/components/sections/FaqAccordion"
 import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
 import StickyCtaBar from "@/components/sections/StickyCtaBar"
+import CtaLabel from "@/components/CtaLabel"
 import type { FaqTab as SharedFaqTab } from "@/components/sections/types"
 
 /* ------------------------------------------------------------------ */
@@ -365,6 +366,7 @@ export default function ImplementationPackagesContent({
                   width={120}
                   height={44}
                   className="h-[44px] w-auto rounded-[5px]"
+                  unoptimized
                 />
               ))}
             </div>
@@ -428,7 +430,7 @@ export default function ImplementationPackagesContent({
                     fontSize: 16,
                   }}
                 >
-                  {heroPrimaryCtaLabel}
+                  <CtaLabel label={heroPrimaryCtaLabel} />
                 </Link>
               )}
               {heroSecondaryCtaUrl && (
@@ -443,7 +445,7 @@ export default function ImplementationPackagesContent({
                     fontSize: 16,
                   }}
                 >
-                  {heroSecondaryCtaLabel}
+                  <CtaLabel label={heroSecondaryCtaLabel} />
                 </Link>
               )}
             </div>
@@ -660,7 +662,7 @@ export default function ImplementationPackagesContent({
                   }}
                 >
                   <PaperPlaneIcon size={16} />
-                  {socialProofCtaLabel}
+                  <CtaLabel label={socialProofCtaLabel} />
                 </Link>
               )}
             </div>
@@ -1143,7 +1145,7 @@ export default function ImplementationPackagesContent({
                     fontSize: 16,
                   }}
                 >
-                  {discoverPrimaryCtaLabel}
+                  <CtaLabel label={discoverPrimaryCtaLabel} />
                 </Link>
               )}
               {discoverSecondaryCtaUrl && (
@@ -1157,7 +1159,7 @@ export default function ImplementationPackagesContent({
                     fontSize: 16,
                   }}
                 >
-                  {discoverSecondaryCtaLabel}
+                  <CtaLabel label={discoverSecondaryCtaLabel} />
                 </Link>
               )}
             </div>

@@ -3,6 +3,9 @@
 import Link from "next/link"
 import { useMemo, useState } from "react"
 import { urlFor } from "@/sanity/image"
+import CtaLabel from "@/components/CtaLabel"
+import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
+import StickyCtaBar from "@/components/sections/StickyCtaBar"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
 
 export interface TeamMember {
@@ -16,6 +19,17 @@ export interface TeamMember {
   linkedinUrl?: string
   regions?: string[]
   order?: number
+  certifications?: string[]
+}
+
+/** Short, hover-revealed explanation per certification. */
+const CERT_INFO: Record<string, string> = {
+  "Certified Core Consultant": "Certified on monday.com core platform configuration and delivery.",
+  "Advanced Workflow Builder": "Builds advanced automations, dependencies, and cross-board logic.",
+  "CRM Specialist": "Specializes in monday CRM and sales-pipeline architecture.",
+  "Make.com Certified": "Certified to build Make.com integration scenarios.",
+  "n8n Specialist": "Designs custom n8n workflows and API integrations.",
+  "Solutions Architect": "Architects end-to-end Work OS solutions for enterprise teams.",
 }
 
 export interface TeamRegion {
@@ -38,6 +52,7 @@ interface Props {
   certificationBadge?: SanityImageRef
   regions: TeamRegion[]
   heroDescriptionBlocks?: HeroDescriptionBlock[]
+  croSections?: CroSectionsData | null
 }
 
 function safeImageUrl(ref: SanityImageRef): string | null {
@@ -77,6 +92,7 @@ export default function FruitionTeamClient({
   partnerBadges,
   regions,
   heroDescriptionBlocks,
+  croSections,
 }: Props) {
   const [region, setRegion] = useState<string>(regions[0]?.code ?? "APAC")
 
@@ -94,6 +110,7 @@ export default function FruitionTeamClient({
 
   return (
     <div>
+      <StickyCtaBar label={croSections?.stickyCtaLabel} href={croSections?.stickyCtaUrl || calendlyUrl} />
       {/* Hero */}
       <section className="bg-white">
         <div
@@ -151,7 +168,7 @@ export default function FruitionTeamClient({
               fontSize: 16,
             }}
           >
-            {heroCtaLabel}
+            <CtaLabel label={heroCtaLabel} />
           </Link>
 
           {/* Description */}
@@ -301,6 +318,35 @@ export default function FruitionTeamClient({
                           {m.bio}
                         </p>
                       )}
+                      {Array.isArray(m.certifications) && m.certifications.length > 0 && (
+                        <ul
+                          className="flex flex-wrap"
+                          style={{ gap: 6, marginTop: 14, listStyle: "none", padding: 0 }}
+                        >
+                          {m.certifications.map((cert) => (
+                            <li
+                              key={cert}
+                              title={CERT_INFO[cert] ?? cert}
+                              className="inline-flex items-center font-semibold"
+                              style={{
+                                gap: 5,
+                                padding: "4px 10px",
+                                borderRadius: 999,
+                                backgroundColor: "#f3e9ff",
+                                color: "#5a0ea5",
+                                fontSize: 11,
+                                lineHeight: "16px",
+                                cursor: "help",
+                              }}
+                            >
+                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                                <path d="M20 6 9 17l-5-5" />
+                              </svg>
+                              {cert}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                       {m.linkedinUrl && (
                         <Link
                           href={m.linkedinUrl}
@@ -327,6 +373,7 @@ export default function FruitionTeamClient({
           )}
         </div>
       </section>
+      <CroSections data={croSections} primaryCtaUrl={calendlyUrl} />
     </div>
   )
 }

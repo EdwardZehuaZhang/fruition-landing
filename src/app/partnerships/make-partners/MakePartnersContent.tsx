@@ -36,6 +36,10 @@ import {
   LogoCloudMarquee,
   CalendlySection,
   JoinStatsSection,
+  CroSections,
+  StickyCtaBar,
+  WorkflowConnector,
+  EcosystemGrid,
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData, ComparisonTab } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
@@ -329,6 +333,7 @@ interface FeatureListItem {
 interface MakePartnersPageData {
   seoTitle?: string
   seoDescription?: string
+  croSections?: import("@/components/sections/CroSections").CroSectionsData | null
   heroHeadingPart1?: string
   heroHeadingAccent?: string
   heroSubheading?: string
@@ -477,6 +482,7 @@ export default function MakePartnersContent({
 
   return (
     <div>
+      <StickyCtaBar label={pageData?.croSections?.stickyCtaLabel} href={pageData?.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* 1. Hero */}
       <section className="bg-white">
         <div className="mx-auto flex flex-col items-center px-6 md:px-16 lg:px-[273px] py-[80px]">
@@ -605,6 +611,46 @@ export default function MakePartnersContent({
         tabs={(pageData?.makeFeatureTabs && pageData.makeFeatureTabs.length > 0) ? pageData.makeFeatureTabs : MAKE_FEATURE_TABS}
       />
 
+
+      {/* Make scenario — the branching pipeline we build */}
+      <WorkflowConnector
+        eyebrow="A Make scenario, visualized"
+        heading="What a custom Make.com build actually looks like"
+        subheading="One inbound trigger, routed and reshaped, lands in monday.com without a single manual copy-paste."
+        theme="dark"
+        steps={[
+          { glyph: "📥", label: "Inbound CRM lead", sublabel: "New signed contract" },
+          { glyph: "🔀", label: "Router", sublabel: "Branch by deal type" },
+          { glyph: "🧩", label: "Format & enrich", sublabel: "Parse, map, validate" },
+          { glyph: "📊", label: "monday.com board", sublabel: "Created & team alerted", tone: "hub" },
+        ]}
+        footnote="Make.com bundles actions into scenarios, billing full runs instead of every step."
+      />
+
+      {/* Ecosystem connector grid — apps orbiting monday.com */}
+      <EcosystemGrid
+        eyebrow="One connected ecosystem"
+        heading="Every tool you run, synced into monday.com"
+        subheading="We wire your finance, sales, comms and storage apps into a single Work OS through Make."
+        countLabel="2,000+ apps connectable via Make"
+        apps={[
+          { glyph: "📒", label: "Xero" },
+          { glyph: "💰", label: "QuickBooks" },
+          { glyph: "🟠", label: "HubSpot" },
+          { glyph: "☁️", label: "Salesforce" },
+          { glyph: "📧", label: "Gmail" },
+          { glyph: "💬", label: "Slack" },
+          { glyph: "🗄️", label: "Google Drive" },
+          { glyph: "🏢", label: "ERP systems" },
+        ]}
+      />
+
+      {/* CRO action items */}
+      <CroSections
+        data={pageData?.croSections}
+        primaryCtaLabel={pageData?.heroPrimaryCtaLabel}
+        primaryCtaUrl={pageData?.heroPrimaryCtaUrl || calendlyUrl}
+      />
 
       {/* 6. Calendly */}
       {(pageData?.calendlyHeading || pageData?.calendlySubheading) && (

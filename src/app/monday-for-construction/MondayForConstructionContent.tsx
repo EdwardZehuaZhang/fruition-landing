@@ -7,6 +7,8 @@ import {
   CalendlySection,
   FaqAccordion,
   TestimonialsGrid,
+  CroSections,
+  StickyCtaBar,
 } from "@/components/sections"
 import type {
   CaseStudy,
@@ -170,6 +172,7 @@ export default function MondayForConstructionContent({
 
   return (
     <div>
+      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow}
@@ -203,6 +206,13 @@ export default function MondayForConstructionContent({
 
       {/* Tab section — heading rotates with active tab */}
       <ConstructionTabs tabs={resolvedComparisonTabs} />
+
+      {/* CRO action items */}
+      <CroSections
+        data={page.croSections}
+        primaryCtaLabel={page.primaryCtaLabel}
+        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+      />
 
       {/* Calendly */}
       <CalendlySection

@@ -10,8 +10,12 @@ import CalendlySection from "@/components/sections/CalendlySection"
 import PaperPlaneIcon from "@/components/common/icons/PaperPlaneIcon"
 import FaqAccordion from "@/components/sections/FaqAccordion"
 import LeftRightSection from "@/components/sections/LeftRightSection"
+import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
+import StickyCtaBar from "@/components/sections/StickyCtaBar"
+import TrainingRecommender from "@/components/sections/TrainingRecommender"
 import type { FaqTab as SharedFaqTab } from "@/components/sections/types"
 import type { SiteSettings } from "@/features/page-builder/types"
+import CtaLabel from "@/components/CtaLabel"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -80,6 +84,7 @@ interface MondayTrainingData {
   title?: string
   seoTitle?: string
   seoDescription?: string
+  croSections?: CroSectionsData | null
 
   heroHeadingPart1?: string
   heroHeadingAccent?: string
@@ -289,6 +294,7 @@ export default function MondayTrainingContent({
 
   return (
     <div>
+      <StickyCtaBar label={data?.croSections?.stickyCtaLabel} href={data?.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* ============================================================ */}
       {/* SECTION 1 -- Hero                                            */}
       {/* ============================================================ */}
@@ -308,6 +314,7 @@ export default function MondayTrainingContent({
                   width={120}
                   height={44}
                   className="h-[44px] w-auto rounded-[5px]"
+                  unoptimized
                 />
               ))}
             </div>
@@ -390,7 +397,7 @@ export default function MondayTrainingContent({
                     fontSize: 16,
                   }}
                 >
-                  {primaryCtaLabel}
+                  <CtaLabel label={primaryCtaLabel} />
                 </Link>
               )}
               {showSecondaryCta && secondaryCtaUrl && (
@@ -409,7 +416,7 @@ export default function MondayTrainingContent({
                     fontSize: 16,
                   }}
                 >
-                  {secondaryCtaLabel}
+                  <CtaLabel label={secondaryCtaLabel} />
                 </Link>
               )}
             </div>
@@ -618,6 +625,18 @@ export default function MondayTrainingContent({
         </div>
       </section>
 
+      {/* Interactive training recommender */}
+      <TrainingRecommender
+        eyebrow="Find your track"
+        heading="Which training format fits your team?"
+        subheading="Set your team size and workflow complexity for an instant recommendation."
+        ctaLabel="Book a FREE Training Consultation"
+        ctaUrl={calendlyUrl}
+      />
+
+      {/* CRO action items */}
+      <CroSections data={data?.croSections} primaryCtaLabel={data?.heroPrimaryCtaLabel} primaryCtaUrl={calendlyUrl} />
+
       {/* ============================================================ */}
       {/* SECTION 4 -- Testimonials (shared carousel component)        */}
       {/* ============================================================ */}
@@ -667,7 +686,7 @@ export default function MondayTrainingContent({
             className="group flex items-center justify-center gap-2 h-[53px] w-[326px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white text-[16px] font-bold tracking-[0.32px] transition-colors"
           >
             <PaperPlaneIcon />
-            {data.empowerCtaLabel}
+            <CtaLabel label={data.empowerCtaLabel} />
           </Link>
         )}
       </LeftRightSection>
@@ -717,7 +736,7 @@ export default function MondayTrainingContent({
                 href={service.ctaUrl}
                 className="inline-flex items-center font-semibold text-[16px] text-[#8015e8]"
               >
-                {service.ctaLabel}
+                <CtaLabel label={service.ctaLabel} />
               </Link>
             )}
           </LeftRightSection>
@@ -778,7 +797,7 @@ export default function MondayTrainingContent({
                     fontSize: 16,
                   }}
                 >
-                  {discoverPrimaryCtaLabel}
+                  <CtaLabel label={discoverPrimaryCtaLabel} />
                 </Link>
               )}
               {discoverSecondaryCtaUrl && (
@@ -792,7 +811,7 @@ export default function MondayTrainingContent({
                     fontSize: 16,
                   }}
                 >
-                  {discoverSecondaryCtaLabel}
+                  <CtaLabel label={discoverSecondaryCtaLabel} />
                 </Link>
               )}
             </div>
@@ -848,7 +867,7 @@ export default function MondayTrainingContent({
                           className="inline-flex items-center font-semibold"
                           style={{ fontSize: 16, color: "#8015e8" }}
                         >
-                          {service.ctaLabel}
+                          <CtaLabel label={service.ctaLabel} />
                         </Link>
                       )}
                     </div>

@@ -8,6 +8,8 @@ import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
 import CalendlySection from "@/components/sections/CalendlySection"
 import FaqAccordion from "@/components/sections/FaqAccordion"
+import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
+import StickyCtaBar from "@/components/sections/StickyCtaBar"
 import type {
   CapabilityCard,
   ComparisonTab,
@@ -83,7 +85,76 @@ interface AboutModernProps {
   closingCtaPrimaryLabel?: string
   closingCtaSecondaryLabel?: string
   closingCtaSecondaryUrl?: string
+  croSections?: CroSectionsData | null
+  leadershipNote?: string
+  leadershipSignatureName?: string
+  leadershipSignatureTitle?: string
   siteSettings?: SiteSettingsData | null
+}
+
+/** A signed leadership note with a hand-drawn signature flourish (SVG). */
+function SignatureNote({
+  note,
+  name,
+  title,
+}: {
+  note?: string
+  name?: string
+  title?: string
+}) {
+  if (!note) return null
+  return (
+    <section className="px-4" style={{ paddingTop: 24, paddingBottom: 72 }}>
+      <figure
+        className="mx-auto relative overflow-hidden"
+        style={{
+          maxWidth: 820,
+          margin: "0 auto",
+          padding: "44px 48px",
+          borderRadius: 24,
+          background: "linear-gradient(180deg, #faf7ff 0%, #ffffff 100%)",
+          border: "1px solid #efe7fb",
+        }}
+      >
+        <span
+          aria-hidden
+          className="pointer-events-none absolute font-bold"
+          style={{ top: 8, left: 28, fontSize: 120, lineHeight: 1, color: "rgba(128,21,232,0.10)" }}
+        >
+          &ldquo;
+        </span>
+        <blockquote
+          className="relative"
+          style={{ color: "#2b074d", fontSize: 20, lineHeight: "32px", fontWeight: 500, textWrap: "pretty" }}
+        >
+          {note}
+        </blockquote>
+        <figcaption className="relative flex items-center" style={{ gap: 18, marginTop: 28 }}>
+          {/* hand-drawn signature flourish */}
+          <svg width="116" height="40" viewBox="0 0 116 40" fill="none" aria-hidden role="presentation">
+            <path
+              d="M3 28c10-14 16-20 20-18s-2 22 4 22 14-26 20-24-4 24 4 24 16-30 24-24c4 3-2 14 6 14 6 0 12-8 18-12"
+              stroke="#8015e8"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
+            />
+          </svg>
+          <div className="flex flex-col">
+            {name && (
+              <span className="font-bold" style={{ color: "#10003a", fontSize: 16 }}>
+                {name}
+              </span>
+            )}
+            {title && (
+              <span style={{ color: "#686b82", fontSize: 13 }}>{title}</span>
+            )}
+          </div>
+        </figcaption>
+      </figure>
+    </section>
+  )
 }
 
 function safeUrl(ref: SanityImageRef, width = 1600): string | null {
@@ -1285,6 +1356,10 @@ export default function AboutModern(props: AboutModernProps) {
     closingCtaPrimaryLabel,
     closingCtaSecondaryLabel,
     closingCtaSecondaryUrl,
+    croSections,
+    leadershipNote,
+    leadershipSignatureName,
+    leadershipSignatureTitle,
     siteSettings,
   } = props
 
@@ -1295,6 +1370,7 @@ export default function AboutModern(props: AboutModernProps) {
 
   return (
     <div>
+      <StickyCtaBar label={croSections?.stickyCtaLabel} href={croSections?.stickyCtaUrl || calendlyUrl} />
       <HeroSection
         eyebrow={heroEyebrow}
         headingPart1={heroHeadingPart1}
@@ -1345,6 +1421,7 @@ export default function AboutModern(props: AboutModernProps) {
         offices={offices}
       />
       <PartnerStack badges={allBadges} eyebrow={partnerStackEyebrow} />
+      <CroSections data={croSections} primaryCtaLabel={primaryCtaLabel} primaryCtaUrl={primaryCtaUrl || calendlyUrl} />
       {faqTabs.length > 0 && faqHeading && (
         <FaqAccordion
           heading={faqHeading}
@@ -1355,6 +1432,11 @@ export default function AboutModern(props: AboutModernProps) {
         heading={calendlyHeading}
         subheading={calendlySubheading}
         calendlyUrl={calendlyUrl}
+      />
+      <SignatureNote
+        note={leadershipNote}
+        name={leadershipSignatureName}
+        title={leadershipSignatureTitle}
       />
       <ClosingCta
         calendlyUrl={calendlyUrl}

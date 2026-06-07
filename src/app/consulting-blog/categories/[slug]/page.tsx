@@ -1,5 +1,10 @@
-﻿import { getBlogPosts, getBlogCategories } from "@/sanity/queries"
+﻿import type { Metadata } from "next"
+import { getBlogPosts, getBlogCategories } from "@/sanity/queries"
 import BlogCard from "@/components/BlogCard"
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: true },
+}
 
 interface BlogCategoryRef { slug: string }
 

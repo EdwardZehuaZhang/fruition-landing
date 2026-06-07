@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
+import CtaLabel from "@/components/CtaLabel"
 import type { CaseStudy, SanityImageRef } from "./types"
 
 interface TestimonialsGridProps {
@@ -72,7 +73,7 @@ export default function TestimonialsGrid({
             href={ctaUrl}
             className="ui-cta-btn ui-cta-btn-secondary h-[53px] w-full lg:w-[330px] lg:shrink-0"
           >
-            {ctaLabel}
+            <CtaLabel label={ctaLabel} />
           </Link>
         </div>
 
@@ -100,7 +101,7 @@ export default function TestimonialsGrid({
                       href={statCardCtaUrl}
                       className="inline-flex items-center justify-center rounded-[100px] border border-white/40 px-6 py-2.5 text-sm font-semibold text-white hover:bg-white/10 transition"
                     >
-                      {statCardCtaLabel}
+                      <CtaLabel label={statCardCtaLabel} />
                     </Link>
                   </div>
                 </div>

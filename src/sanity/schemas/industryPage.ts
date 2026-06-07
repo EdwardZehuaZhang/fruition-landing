@@ -7,6 +7,7 @@ export default {
     { name: 'slug', title: 'Slug', type: 'slug', options: { source: 'title' } },
     { name: 'seoTitle', title: 'SEO Title', type: 'string' },
     { name: 'seoDescription', title: 'SEO Description', type: 'text' },
+    { name: 'croSections', title: 'CRO Sections', type: 'croSections' },
     { name: 'industryName', title: 'Industry Name', type: 'string' },
 
     // Hero section
