@@ -7,7 +7,6 @@ import { PortableText, type PortableTextBlock } from "@portabletext/react"
 import { urlFor } from "@/sanity/image"
 import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
 import CalendlySection from "@/components/sections/CalendlySection"
-import PaperPlaneIcon from "@/components/common/icons/PaperPlaneIcon"
 import FaqAccordion from "@/components/sections/FaqAccordion"
 import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
 import StickyCtaBar from "@/components/sections/StickyCtaBar"
@@ -661,7 +660,6 @@ export default function ImplementationPackagesContent({
                     fontSize: 16,
                   }}
                 >
-                  <PaperPlaneIcon size={16} />
                   <CtaLabel label={socialProofCtaLabel} />
                 </Link>
               )}
