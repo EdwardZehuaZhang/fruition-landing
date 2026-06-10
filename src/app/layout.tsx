@@ -30,9 +30,25 @@ const montserrat = Montserrat({
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSiteSettings()
+  const ogTitle =
+    "Fruition | monday.com Platinum Partners | monday CRM Experts"
+  const ogDescription =
+    "monday.com Partner certified - Fruition is an expert in Monday implementation and integration. Our monday.com consultants partners with you to integrate and automate Sales, Projects & Operations"
   return {
+    metadataBase: new URL(
+      process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.fruitionservices.io",
+    ),
     title: s?.defaultSeoTitle,
     description: s?.defaultSeoDescription,
+    openGraph: {
+      title: ogTitle,
+      description: ogDescription,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: ogTitle,
+      description: ogDescription,
+    },
   }
 }
 
