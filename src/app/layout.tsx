@@ -49,6 +49,9 @@ export async function generateMetadata(): Promise<Metadata> {
       title: ogTitle,
       description: ogDescription,
     },
+    verification: {
+      google: "h7rPggK-qoBgzjiEXeiHKaKsYbQI2LjippLHnlizyp8",
+    },
   }
 }
 
