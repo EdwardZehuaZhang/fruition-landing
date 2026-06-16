@@ -50,7 +50,10 @@ export async function generateMetadata(): Promise<Metadata> {
       description: ogDescription,
     },
     verification: {
-      google: "h7rPggK-qoBgzjiEXeiHKaKsYbQI2LjippLHnlizyp8",
+      google: [
+        "h7rPggK-qoBgzjiEXeiHKaKsYbQI2LjippLHnlizyp8",
+        "SNyBhKEoT5fNsGG4BxYuy2XLiTubLFfvDvVbZwwpb8c",
+      ],
     },
   }
 }
