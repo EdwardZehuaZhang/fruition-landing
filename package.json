@@ -27,7 +27,8 @@
         "marketa:ideas": "tsx scripts/marketa-harness/generate-ideas.ts",
         "marketa:draft": "tsx scripts/marketa-harness/draft.ts",
         "marketa:revise": "tsx scripts/marketa-harness/revise.ts",
-        "marketa:listen": "tsx scripts/marketa-harness/server.ts"
+        "marketa:listen": "tsx scripts/marketa-harness/server.ts",
+        "brain:backfill": "tsx scripts/brain-backfill.ts"
     },
     "dependencies": {
         "@anthropic-ai/sdk": "^0.97.0",

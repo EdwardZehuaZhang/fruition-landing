@@ -188,6 +188,27 @@ Marketa's own published output trains the next round. Compounds over time.
 
 ---
 
+## 11b. Built in this repo — 2026-06-16
+
+The brain read+write layer is now implemented and version-controlled:
+
+| Component | Path | Status |
+|---|---|---|
+| Brain schema (pgvector + `content_chunks` + `match_content_chunks` RPC) | `supabase/migrations/20260616000000_marketa_brain.sql` | Ready to apply to the brain project |
+| Embed + upsert client (Gemini `gemini-embedding-001` 768-dim, Supabase REST) | `src/lib/marketa/brain.ts` | Done |
+| Sanity → plaintext → chunk logic | `src/lib/marketa/sanityIngest.ts` | Done |
+| Ingest webhook receiver | `src/app/api/sanity-ingest/route.ts` | Done |
+| One-shot backfill | `scripts/brain-backfill.ts` (`npm run brain:backfill`) | Done |
+| Retrieval wired to real schema | `n8n/marketa-draft-blog.json` (RPC + GROQ voice guide) | Placeholders to fill on import |
+
+**Architecture note:** unlike the original §3 sketch (route verifies → forwards to n8n for embed/upsert), ingest embedding+upsert runs in the Next.js route/script (TypeScript, testable, inspectable in Vercel logs — same rationale as the auto-docs flow). Retrieval embedding stays in n8n. Both sides call Gemini `gemini-embedding-001` (768-dim), so vectors share one space — **do not change the model on one side only.** (Switched from Voyage `voyage-3` on 2026-06-17 to use Gemini's free tier; schema is now `vector(768)`.)
+
+**App env vars (Vercel / `.env.local`):** `GEMINI_API_KEY` (+ optional `EMBEDDING_MODEL`, `EMBEDDING_DIM`), `MARKETA_SUPABASE_URL`, `MARKETA_SUPABASE_SERVICE_ROLE_KEY`, `SANITY_WEBHOOK_SECRET`, plus existing `NEXT_PUBLIC_SANITY_*` and `SANITY_WRITE_TOKEN`. In n8n the embed node uses an `x-goog-api-key` Header Auth credential.
+
+> The brain's Supabase vars are **namespaced `MARKETA_SUPABASE_*`** on purpose: the repo already has generic `SUPABASE_*` vars pointing at a *different* project (`vfcgltxd…`). The brain lives in its own project (`wucrgqdfyaiccacvxvpq`), so distinct names prevent the backfill/ingest from writing to the wrong database.
+
+**Remaining to go live:** (1) apply the migration to the brain project; (2) set the app env vars; (3) `npm run brain:backfill`; (4) add a Sanity webhook → `POST /api/sanity-ingest` with the GROQ filter from §6 and the shared secret; (5) import the updated `marketa-draft-blog.json` and **deploy it in place of the "Claude-only, no brain" workflow** that is currently wired up (that brainless workflow is the root cause of the off-topic, generic drafts).
+
 ## 12. What's needed from Yash (handoff)
 
 Block on these before coding:

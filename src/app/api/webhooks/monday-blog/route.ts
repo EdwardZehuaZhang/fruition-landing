@@ -4,13 +4,14 @@ import {
   buildDraftReadyBlocks,
   buildIdeaProposedBlocks,
   buildPublishedBlocks,
-} from "@/lib/blogSlackBlocks"
+} from "@/lib/marketa/blogSlackBlocks"
 import {
   createDraftDoc,
   createSubfolder,
   wordCount,
 } from "@/lib/googleDocs"
-import { generateLinkedInPost } from "@/lib/marketaLinkedIn"
+import { getFullDraft } from "@/lib/marketa/brain"
+import { generateLinkedInPost } from "@/lib/marketa/marketaLinkedIn"
 import {
   changeColumnValues,
   getItemForWebhook,
@@ -443,29 +444,14 @@ function extractMetaDescription(body: string): { meta: string; rest: string } {
 }
 
 /**
- * Wrap the Claude draft in the standard Fruition doc layout: Meta-Description,
- * AI Checks / Grammarly / Plagiarism review placeholders, then the H1+body.
- * Mirrors the structure used by Ishani's published posts so reviewers can
- * paste their screenshots in the same spots without restructuring the doc.
+ * The clean, publish-shaped article: title-corrected H1 + body, with the
+ * inline **Meta-Description** line stripped out (it moves to a small review
+ * footer at the very bottom so the doc reads as a real blog from the top).
  */
-function buildFruitionLayout(raw: string, title: string): string {
+function buildCleanArticle(raw: string, title: string): string {
   const body = raw.replace(/^\s+/, "")
-  const { meta, rest } = extractMetaDescription(body)
-  const withForcedH1 = forceLeadingH1(rest || body, title)
-  const metaLine = meta
-    ? `**Meta-Description**: ${meta}`
-    : `**Meta-Description**: _TODO: paste the 140-160 char meta description (Marketa did not emit one)_`
-  return [
-    metaLine,
-    "",
-    "**AI Checks:** _TODO: paste AI-detection screenshots before publish_",
-    "",
-    "**Grammarly:** _TODO: paste Grammarly score before publish_",
-    "",
-    "**Plagiarism:** _TODO: paste plagiarism report before publish_",
-    "",
-    withForcedH1,
-  ].join("\n")
+  const { rest } = extractMetaDescription(body)
+  return forceLeadingH1(rest || body, title)
 }
 
 async function autoDocsForSlackOrigin(
@@ -484,22 +470,24 @@ async function autoDocsForSlackOrigin(
   }
   const title = snapshot.name?.trim() || "(untitled blog draft)"
   const ctx = extractContext(snapshot)
-  const rawDraftBody = ctx.draftBody?.trim()
+  // Prefer the FULL draft from Supabase. monday's long_text column truncates at
+  // ~2000 chars (which chopped the post to its intro), so the n8n workflow
+  // stores the complete draft in blog_drafts and we read it here. Fall back to
+  // the monday column only if the Supabase row is missing.
+  const fullDraft = await getFullDraft(pulseId)
+  const rawDraftBody = (fullDraft || ctx.draftBody)?.trim()
   if (!rawDraftBody) {
-    throw new Error(`monday item ${pulseId} has no draft body — Marketa write step likely failed`)
+    throw new Error(`monday item ${pulseId} has no draft body (Supabase + monday both empty)`)
   }
-  // Wrap Claude's output in the standard Fruition layout: Meta-Description +
-  // AI Checks / Grammarly / Plagiarism placeholders + corrected H1 + body.
-  // Forces the H1 to match the requested title and gives reviewers the
-  // same scaffolding shape they're used to seeing in Ishani's posts.
-  const draftBody = buildFruitionLayout(rawDraftBody, title)
+  if (!fullDraft) {
+    console.warn(`[monday-blog] no Supabase draft for ${pulseId}; using (possibly truncated) monday column`)
+  }
+  const { meta } = extractMetaDescription(rawDraftBody.replace(/^\s+/, ""))
+  const article = buildCleanArticle(rawDraftBody, title)
 
   const linkedInBody = await generateLinkedInPost({
     title,
-    // LinkedIn generator only needs the actual prose, not the review
-    // scaffolding — feed it the title-corrected body without the
-    // Meta-Description / AI Checks header.
-    draft: forceLeadingH1(rawDraftBody, title),
+    draft: article,
     industry: ctx.industry,
     targetKeyword: ctx.targetKeyword,
   })
@@ -508,20 +496,17 @@ async function autoDocsForSlackOrigin(
   const subfolderName = clip(`${todayIsoDate()} ${title}`, 80)
   const subfolderId = await createSubfolder(folderId, subfolderName)
 
-  // draftBody already starts with `# ${title}\n\n...` thanks to forceLeadingH1
-  // above, so we don't repeat the title in the preamble.
+  // The doc reads as a clean blog post (title + body). Review notes live in a
+  // small footer at the very bottom, clearly separated from the article.
   const blogDocBody = [
-    draftBody,
+    article,
     "",
-    "---",
     "",
-    `Source brief: ${ctx.brief?.replace(/\n+/g, " ") || "(none)"}`,
-    `Industry: ${ctx.industry || "(unset)"}`,
-    `Target keyword: ${ctx.targetKeyword || "(unset)"}`,
-    `monday item: https://fruitionservices.monday.com/boards/${BOARD_ID}/pulses/${pulseId}`,
-    `Word count: ${wordCount(draftBody)}`,
-    "",
-    "AI Checks / Grammarly / Plagiarism — TODO add screenshots before publish.",
+    "———",
+    "_Review checklist (not part of the post):_",
+    `_Meta description: ${meta || "TODO — write 140-160 chars"}_`,
+    "_AI detection / Grammarly / plagiarism: paste before publish_",
+    `_${wordCount(article)} words · keyword: ${ctx.targetKeyword || "unset"} · industry: ${ctx.industry || "unset"} · monday item ${pulseId}_`,
   ].join("\n")
 
   const linkedInDocBody = [
@@ -582,7 +567,7 @@ async function autoDocsForSlackOrigin(
     pulseId,
     blogDocUrl: blogDoc.docUrl,
     linkedInDocUrl: linkedInDoc.docUrl,
-    blogWords: wordCount(draftBody),
+    blogWords: wordCount(article),
     linkedInWords: wordCount(linkedInBody),
   })
 }

@@ -58,7 +58,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.voyageai.com/v1/embeddings",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "httpHeaderAuth",
         "sendHeaders": true,
@@ -69,27 +69,27 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"input\": [{{ JSON.stringify($json.title + ' — ' + $json.brief + ' — ' + $json.target_keyword) }}],\n  \"model\": \"voyage-3\",\n  \"input_type\": \"query\"\n}",
+        "jsonBody": "={\n  \"model\": \"models/gemini-embedding-001\",\n  \"content\": { \"parts\": [ { \"text\": {{ JSON.stringify($json.title + ' - ' + $json.brief + ' - ' + $json.target_keyword) }} } ] },\n  \"taskType\": \"RETRIEVAL_QUERY\",\n  \"outputDimensionality\": 768\n}",
         "options": {}
       },
       "id": "embed-query",
-      "name": "Voyage: embed query",
+      "name": "Gemini: embed query",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [860, 300],
       "credentials": {
         "httpHeaderAuth": {
-          "id": "{{ VOYAGE_CREDENTIAL_ID }}",
-          "name": "Voyage AI"
+          "id": "{{ GEMINI_CREDENTIAL_ID }}",
+          "name": "Gemini"
         }
       }
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "-- TODO Yash: confirm table name, embedding col, metadata col shape.\n-- Returns top 8 chunks filtered by industry (if set) ordered by cosine distance.\nSELECT body, source_id, source_path, metadata\nFROM {{ SUPABASE_BRAIN_TABLE }}\nWHERE (metadata->>'industry' = $2 OR $2 = 'general')\nORDER BY embedding <=> $1\nLIMIT 8;",
+        "query": "-- Top 8 public chunks via the brain retrieval RPC (see\n-- supabase/migrations/20260616000000_marketa_brain.sql). $2 = industry or\n-- 'general'; the function treats 'general'/null as no industry filter.\nSELECT source_id, source_path, body, metadata, similarity\nFROM match_content_chunks($1::vector, 8, $2);",
         "additionalFields": {
-          "queryParams": "={{ JSON.stringify($('Voyage: embed query').first().json.data[0].embedding) }}, {{ JSON.stringify($('Normalize item').first().json.industry.toLowerCase()) }}"
+          "queryParams": "={{ JSON.stringify($('Gemini: embed query').first().json.embedding.values) }}, {{ JSON.stringify(($('Normalize item').first().json.industry || 'general').toLowerCase()) }}"
         }
       },
       "id": "rag-retrieve",
@@ -106,20 +106,15 @@
     },
     {
       "parameters": {
-        "operation": "executeQuery",
-        "query": "-- TODO Yash: replace with the actual voice guide source. If voice guide\n-- lives in Sanity per Brief §2.3, swap this for a GROQ fetch via HTTP node.\nSELECT body FROM {{ SUPABASE_BRAIN_TABLE }} WHERE source_type = 'voice_guide' LIMIT 1;"
+        "method": "GET",
+        "url": "https://{{ SANITY_PROJECT_ID }}.api.sanity.io/v2024-01-01/data/query/{{ SANITY_DATASET }}?query=%2A%5B_type%3D%3D%22voiceGuide%22%5D%5B0%5D.body",
+        "options": {}
       },
       "id": "voice-guide",
       "name": "Fetch voice guide",
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.5,
-      "position": [1080, 480],
-      "credentials": {
-        "postgres": {
-          "id": "{{ SUPABASE_CREDENTIAL_ID }}",
-          "name": "Supabase brain"
-        }
-      }
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1080, 480]
     },
     {
       "parameters": {
@@ -135,7 +130,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Build the Claude prompt: voice guide + brief + retrieved chunks.\nconst meta = $('Normalize item').first().json;\nconst chunks = $('Supabase: retrieve chunks').all().map(i => i.json);\nconst voice = $('Fetch voice guide').first()?.json?.body || '(no voice guide)';\nconst context = chunks.map((c, i) => `--- Source ${i+1} (id: ${c.source_id}) ---\\n${c.body}`).join('\\n\\n');\nreturn [{\n  json: {\n    ...meta,\n    voice,\n    context,\n    source_ids: chunks.map(c => c.source_id)\n  }\n}];"
+        "jsCode": "// Build the Claude prompt: voice guide + brief + retrieved chunks.\nconst meta = $('Normalize item').first().json;\nconst chunks = $('Supabase: retrieve chunks').all().map(i => i.json);\nconst voice = $('Fetch voice guide').first()?.json?.result || '(no voice guide)';\nconst context = chunks.map((c, i) => `--- Source ${i+1} (id: ${c.source_id}) ---\\n${c.body}`).join('\\n\\n');\nreturn [{\n  json: {\n    ...meta,\n    voice,\n    context,\n    source_ids: chunks.map(c => c.source_id)\n  }\n}];"
       },
       "id": "build-prompt",
       "name": "Build draft prompt",
@@ -185,6 +180,26 @@
     },
     {
       "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Persist the FULL Claude draft (monday long_text caps at ~2000 chars and\n-- silently truncates). The auto-docs route reads this via getFullDraft().\n-- RETURNING re-emits pulseId + draft so the in-series monday patch node\n-- (which reads $json.pulseId/$json.draft) still works. See\n-- supabase/migrations/20260617000000_blog_drafts.sql.\ninsert into blog_drafts (monday_item_id, body) values ($1, $2) on conflict (monday_item_id) do update set body = excluded.body, updated_at = now() returning monday_item_id as \"pulseId\", body as draft;",
+        "additionalFields": {
+          "queryParams": "={{ [$json.pulseId, $json.draft] }}"
+        }
+      },
+      "id": "save-full-draft",
+      "name": "Supabase: save full draft",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2070, 380],
+      "credentials": {
+        "postgres": {
+          "id": "{{ SUPABASE_CREDENTIAL_ID }}",
+          "name": "Supabase brain"
+        }
+      }
+    },
+    {
+      "parameters": {
         "method": "POST",
         "url": "https://api.monday.com/v2",
         "authentication": "predefinedCredentialType",
@@ -229,14 +244,15 @@
   "connections": {
     "Webhook: /marketa-draft": { "main": [[{ "node": "monday: fetch item", "type": "main", "index": 0 }]] },
     "monday: fetch item": { "main": [[{ "node": "Normalize item", "type": "main", "index": 0 }]] },
-    "Normalize item": { "main": [[{ "node": "Voyage: embed query", "type": "main", "index": 0 }]] },
-    "Voyage: embed query": { "main": [[{ "node": "Supabase: retrieve chunks", "type": "main", "index": 0 }]] },
+    "Normalize item": { "main": [[{ "node": "Gemini: embed query", "type": "main", "index": 0 }]] },
+    "Gemini: embed query": { "main": [[{ "node": "Supabase: retrieve chunks", "type": "main", "index": 0 }]] },
     "Supabase: retrieve chunks": { "main": [[{ "node": "Merge RAG + voice", "type": "main", "index": 0 }]] },
     "Fetch voice guide": { "main": [[{ "node": "Merge RAG + voice", "type": "main", "index": 1 }]] },
     "Merge RAG + voice": { "main": [[{ "node": "Build draft prompt", "type": "main", "index": 0 }]] },
     "Build draft prompt": { "main": [[{ "node": "Claude: write draft", "type": "main", "index": 0 }]] },
     "Claude: write draft": { "main": [[{ "node": "Extract draft text", "type": "main", "index": 0 }]] },
-    "Extract draft text": { "main": [[{ "node": "monday: patch draft + stage", "type": "main", "index": 0 }]] },
+    "Extract draft text": { "main": [[{ "node": "Supabase: save full draft", "type": "main", "index": 0 }]] },
+    "Supabase: save full draft": { "main": [[{ "node": "monday: patch draft + stage", "type": "main", "index": 0 }]] },
     "monday: patch draft + stage": { "main": [[{ "node": "Respond 200", "type": "main", "index": 0 }]] }
   },
   "settings": { "executionOrder": "v1" },

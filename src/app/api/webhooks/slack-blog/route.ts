@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto"
 import { after, NextResponse } from "next/server"
-import { buildIdeaQueuedBlocks } from "@/lib/blogSlackBlocks"
+import { buildIdeaQueuedBlocks } from "@/lib/marketa/blogSlackBlocks"
 import { generateBotReply, type ChatTurn } from "@/lib/claudeClient"
 import { BOT_TOOLS, botToolExecutor } from "@/lib/botTools"
 import {

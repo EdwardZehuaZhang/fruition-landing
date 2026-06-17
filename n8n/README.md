@@ -20,15 +20,27 @@ Marketa board for review, revisions, and publishing.
 
 In n8n UI: `Workflows → Import from File → select JSON`.
 
-Each workflow has TODO comments marking spots that need Yash's actual values:
+Each workflow has placeholders marking spots that need Yash's actual values:
 
-- `{{ SUPABASE_BRAIN_TABLE }}` — exact table name + column shape
-- `{{ VOYAGE_EMBEDDING_NODE }}` — Yash's existing embed sub-workflow (don't rewrite)
 - `{{ CLAUDE_CREDENTIAL_ID }}` — n8n credential id for Claude API
 - `{{ MONDAY_CREDENTIAL_ID }}` — n8n credential id for monday.com API
-- `{{ SUPABASE_CREDENTIAL_ID }}` — n8n credential id for Supabase
+- `{{ GEMINI_CREDENTIAL_ID }}` — n8n credential id for Gemini embeddings (HTTP Header Auth, header `x-goog-api-key` = your Gemini API key)
+- `{{ SUPABASE_CREDENTIAL_ID }}` — n8n Postgres credential for the brain DB
+- `{{ SANITY_PROJECT_ID }}` / `{{ SANITY_DATASET }}` — used by the "Fetch voice guide" HTTP node (GROQ against Sanity)
 
 Replace before activation.
+
+**Brain schema is now fixed** (`supabase/migrations/20260616000000_marketa_brain.sql`):
+the retrieve node calls `match_content_chunks($1::vector, 8, $2)` against
+`content_chunks` — no more `{{ SUPABASE_BRAIN_TABLE }}` guesswork. The voice
+guide is fetched via GROQ (`*[_type=="voiceGuide"][0].body`), not from the
+brain (it is intentionally not embedded). If the `production` dataset is
+private, add an `Authorization: Bearer <token>` header to that HTTP node.
+
+**Deploy `marketa-draft-blog.json`, not `marketa-draft-blog-claude.json`.**
+The `-claude` ("no brain") variant has no retrieval and produces off-topic,
+generic drafts — it must be replaced by the brain workflow once the brain is
+seeded.
 
 ## Credentials required in n8n
 
