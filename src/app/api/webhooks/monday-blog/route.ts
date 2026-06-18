@@ -363,10 +363,11 @@ async function handleDraftReady(pulseId: string): Promise<NextResponse> {
     ).catch((postErr) => {
       console.error("[monday-blog] thread error-reply also failed", errMsg(postErr))
     })
-    return NextResponse.json(
-      { ok: false, stage: "draft-ready", autoDocs: "failed", error: detail },
-      { status: 500 },
-    )
+    // Return 200, NOT 500: monday retries failed webhook deliveries every ~minute,
+    // which turned a single auto-docs failure into a retry storm (each retry
+    // re-runs the whole flow). We've already logged + posted a Slack alert, so
+    // acknowledge the webhook and let a human follow up instead of looping.
+    return NextResponse.json({ ok: false, stage: "draft-ready", autoDocs: "failed", error: detail })
   }
 }
 
@@ -451,7 +452,35 @@ function extractMetaDescription(body: string): { meta: string; rest: string } {
 function buildCleanArticle(raw: string, title: string): string {
   const body = raw.replace(/^\s+/, "")
   const { rest } = extractMetaDescription(body)
-  return forceLeadingH1(rest || body, title)
+  const source = rest || body
+  // Drop any pre-article preamble. With web search on, Claude sometimes narrates
+  // its process ("I don't have source material, let me research...") before the
+  // post. Keep everything from the first H1 onward so the doc starts clean.
+  const h1Index = source.search(/^# .+/m)
+  const trimmed = h1Index > 0 ? source.slice(h1Index) : source
+  return forceLeadingH1(trimmed, title)
+}
+
+/**
+ * Bold the FIRST body occurrence of the primary keyword (per the content team:
+ * highlight the keyword so it's easy to spot for SEO review). Skips the H1 line,
+ * matches case-insensitively on a whole-word boundary, and leaves the rest of
+ * the article untouched. No-op when there's no keyword.
+ */
+function boldPrimaryKeyword(article: string, keyword: string | undefined): string {
+  const kw = keyword?.trim()
+  if (!kw) return article
+  const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  const re = new RegExp(`(?<![\\*\\w])(${escaped})(?![\\*\\w])`, "i")
+  const lines = article.split("\n")
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].startsWith("# ")) continue // keep the H1 clean
+    if (re.test(lines[i])) {
+      lines[i] = lines[i].replace(re, "**$1**")
+      break
+    }
+  }
+  return lines.join("\n")
 }
 
 async function autoDocsForSlackOrigin(
@@ -483,14 +512,22 @@ async function autoDocsForSlackOrigin(
     console.warn(`[monday-blog] no Supabase draft for ${pulseId}; using (possibly truncated) monday column`)
   }
   const { meta } = extractMetaDescription(rawDraftBody.replace(/^\s+/, ""))
-  const article = buildCleanArticle(rawDraftBody, title)
+  const article = boldPrimaryKeyword(buildCleanArticle(rawDraftBody, title), ctx.targetKeyword)
 
-  const linkedInBody = await generateLinkedInPost({
-    title,
-    draft: article,
-    industry: ctx.industry,
-    targetKeyword: ctx.targetKeyword,
-  })
+  // LinkedIn generation is best-effort. It calls OpenRouter (separate balance)
+  // and must never sink the blog doc — the primary deliverable — if it fails.
+  let linkedInBody: string
+  try {
+    linkedInBody = await generateLinkedInPost({
+      title,
+      draft: article,
+      industry: ctx.industry,
+      targetKeyword: ctx.targetKeyword,
+    })
+  } catch (err) {
+    console.error("[monday-blog] LinkedIn generation failed (non-fatal)", errMsg(err))
+    linkedInBody = "(LinkedIn post generation failed — regenerate manually. The blog draft above is unaffected.)"
+  }
 
   // Group both docs under a dated subfolder so the parent folder stays scannable.
   const subfolderName = clip(`${todayIsoDate()} ${title}`, 80)
