@@ -210,7 +210,7 @@ async function extract(slug: string, category: string): Promise<Extracted> {
   const seoDescription = metaContent(root, "og:description")
   const coverUrl = metaContent(root, "og:image")
   const author =
-    (ld.author && (ld.author as { name?: string }).name) || "Fruition Editorial"
+    (ld.author as { name?: string } | undefined)?.name || "Fruition Editorial"
   const publishedAt = (ld.datePublished as string) || new Date().toISOString()
 
   // --- body ---
