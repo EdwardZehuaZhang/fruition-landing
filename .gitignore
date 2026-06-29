@@ -49,3 +49,9 @@ qa/
 
 # Codex local config (may contain API tokens)
 .codex/config.toml
+
+# Cloudflare / OpenNext
+.open-next/
+.wrangler/
+.dev.vars
+cloudflare-env.d.ts
