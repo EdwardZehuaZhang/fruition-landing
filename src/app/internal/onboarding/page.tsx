@@ -1,3 +1,6 @@
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
+import { INTERNAL_COOKIE, verifyToken } from "@/lib/internalAuth"
 import OnboardingForm from "./OnboardingForm"
 
 export const REGION_OPTIONS = [
@@ -7,7 +10,13 @@ export const REGION_OPTIONS = [
   { value: "US", label: "United States 🇺🇸" },
 ] as const
 
-export default function OnboardingPage() {
+export default async function OnboardingPage() {
+  // Auth gate (replaces the former proxy/middleware, which Next 16 forces onto
+  // the Node.js runtime and the Cloudflare OpenNext adapter cannot deploy).
+  const token = (await cookies()).get(INTERNAL_COOKIE)?.value
+  if (!verifyToken(token)) {
+    redirect(`/internal/login?next=${encodeURIComponent("/internal/onboarding")}`)
+  }
   return (
     <div className="w-full max-w-2xl">
       <div
