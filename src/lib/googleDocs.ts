@@ -8,7 +8,12 @@
  * See docs/marketa-auto-docs-plan.md (Phase 3a). Setup steps for the env
  * vars live in docs/phase2-handoff.md.
  */
-import { docs_v1, drive_v3, google } from "googleapis"
+// Use the per-API packages (@googleapis/docs, @googleapis/drive) instead of the
+// monolithic `googleapis` package. The full package bundles thousands of API
+// definitions (~40+ MiB) into the Cloudflare Worker and blows past the size
+// limit; these two pull in only Docs v1 + Drive v3. Behaviour is identical.
+import { docs as makeDocs, docs_v1 } from "@googleapis/docs"
+import { drive as makeDrive, drive_v3 } from "@googleapis/drive"
 import { JWT } from "google-auth-library"
 
 const SCOPES = [
@@ -49,11 +54,11 @@ function getAuthClient(): JWT {
 }
 
 function getDocs(): docs_v1.Docs {
-  return google.docs({ version: "v1", auth: getAuthClient() })
+  return makeDocs({ version: "v1", auth: getAuthClient() })
 }
 
 function getDrive(): drive_v3.Drive {
-  return google.drive({ version: "v3", auth: getAuthClient() })
+  return makeDrive({ version: "v3", auth: getAuthClient() })
 }
 
 export interface CreatedDoc {
