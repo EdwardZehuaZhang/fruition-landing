@@ -7,6 +7,7 @@ import Footer from "@/components/Footer"
 import NavigationProgress from "@/components/NavigationProgress"
 import CookieNotice from "@/components/CookieNotice"
 import { getSiteSettings } from "@/sanity/queries"
+import { urlFor } from "@/sanity/image"
 
 // RB2B loader. Disclosure of B2B visitor identification lives in
 // /data-privacy and /terms-and-conditions. RB2B handles region-level
@@ -51,6 +52,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: s?.defaultSeoTitle,
     description: s?.defaultSeoDescription,
     openGraph: {
+      type: "website",
+      siteName: "Fruition",
+      locale: "en_US",
       title: ogTitle,
       description: ogDescription,
     },
@@ -58,6 +62,17 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: ogTitle,
       description: ogDescription,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
     verification: {
       google: [
@@ -75,9 +90,51 @@ export default async function RootLayout({
 }>) {
   const siteSettings = await getSiteSettings()
 
+  const BASE =
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.fruitionservices.io"
+  const socials = Array.isArray(siteSettings?.socialLinks)
+    ? (siteSettings.socialLinks as Array<{ href?: string }>)
+        .map((l) => l?.href)
+        .filter((h): h is string => Boolean(h))
+    : []
+  let logoUrl = `${BASE}/og-image.png`
+  try {
+    if (siteSettings?.logo) logoUrl = urlFor(siteSettings.logo).width(512).url()
+  } catch {
+    logoUrl = `${BASE}/og-image.png`
+  }
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${BASE}/#organization`,
+        name: "Fruition",
+        url: BASE,
+        logo: logoUrl,
+        description:
+          "monday.com Partner certified. Fruition is an expert in monday.com implementation, integration and automation.",
+        ...(socials.length ? { sameAs: socials } : {}),
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${BASE}/#website`,
+        name: "Fruition",
+        url: BASE,
+        publisher: { "@id": `${BASE}/#organization` },
+      },
+    ],
+  }
+
   return (
     <html lang="en">
       <head>
+        <link rel="preconnect" href="https://cdn.sanity.io" />
+        <link rel="dns-prefetch" href="https://cdn.sanity.io" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         <Script
           id="gtm-loader"
           strategy="afterInteractive"
