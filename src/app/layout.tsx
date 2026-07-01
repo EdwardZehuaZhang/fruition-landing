@@ -78,6 +78,7 @@ export async function generateMetadata(): Promise<Metadata> {
       google: [
         "h7rPggK-qoBgzjiEXeiHKaKsYbQI2LjippLHnlizyp8",
         "SNyBhKEoT5fNsGG4BxYuy2XLiTubLFfvDvVbZwwpb8c",
+        "jyOeWAMmPK3KH3Fwf4vm55PLSK-wBwKarqv_BG5xHbk",
       ],
     },
   }
