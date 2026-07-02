@@ -10,10 +10,10 @@ export default function SecurityBadgeSection({ badge }: SecurityBadgeSectionProp
   if (!src) return null
 
   return (
-    <section className="bg-white" style={{ paddingBottom: 80 }}>
-      <div className="mx-auto max-w-[976px]">
+    <section className="bg-white px-4" style={{ paddingBottom: 80 }}>
+      <div className="mx-auto max-w-[976px] overflow-x-auto">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt="Security certifications" width={976} height={94} className="w-full h-auto" />
+        <img src={src} alt="Security certifications" width={976} height={94} className="h-auto w-full min-w-[560px] sm:min-w-0" />
       </div>
     </section>
   )

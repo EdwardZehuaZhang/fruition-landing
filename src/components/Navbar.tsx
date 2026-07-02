@@ -217,7 +217,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
               </div>
             ))}
             {/* Partner badges mobile */}
-            <div className="flex items-center gap-3 px-2 py-3 border-t border-gray-100">
+            <div className="flex flex-wrap items-center gap-3 px-2 py-3 border-t border-gray-100">
               {partnerBadges.map((badge, i) => {
                 const h = Math.round((badge.height ?? 32) * 0.75)
                 const src = badge.image

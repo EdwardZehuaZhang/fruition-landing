@@ -33,7 +33,7 @@ export default function StickyCtaBar({
 
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-50 transition-all duration-300"
+      className="fixed inset-x-0 bottom-0 z-50 px-4 transition-all duration-300"
       style={{
         transform: visible ? "translateY(0)" : "translateY(120%)",
         opacity: visible ? 1 : 0,

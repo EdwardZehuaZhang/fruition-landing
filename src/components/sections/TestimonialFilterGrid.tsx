@@ -191,11 +191,10 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
               return (
                 <article
                   key={study._key || study.title || i}
-                  className="cs-card relative overflow-hidden"
+                  className="cs-card relative overflow-hidden p-6 sm:p-10 lg:p-14"
                   style={{
                     borderRadius: 32,
                     background: "linear-gradient(135deg, #faf7ff 0%, #ffffff 55%, #f9f5ff 100%)",
-                    padding: 56,
                     animationDelay: `${Math.min(i, 6) * 70}ms`,
                   }}
                 >

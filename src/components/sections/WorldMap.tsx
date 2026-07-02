@@ -143,7 +143,17 @@ export default function WorldMap({ offices }: { offices: MapOffice[] }) {
               </button>
 
               {isActive && (
-                <div role="tooltip" className="fr-map-tooltip">
+                <div
+                  role="tooltip"
+                  className="fr-map-tooltip"
+                  style={
+                    pin.left < 22
+                      ? { left: 0, right: "auto", transform: "none", alignItems: "flex-start", textAlign: "left" }
+                      : pin.left > 78
+                        ? { left: "auto", right: 0, transform: "none", alignItems: "flex-end", textAlign: "right" }
+                        : undefined
+                  }
+                >
                   {pin.office.flag && (
                     <span className="fr-map-flag" aria-hidden="true">{pin.office.flag}</span>
                   )}
@@ -211,7 +221,7 @@ export default function WorldMap({ offices }: { offices: MapOffice[] }) {
           left: 50%;
           transform: translateX(-50%);
           width: max-content;
-          max-width: 220px;
+          max-width: min(220px, 80vw);
           text-align: center;
           display: flex;
           flex-direction: column;

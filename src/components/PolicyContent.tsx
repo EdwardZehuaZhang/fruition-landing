@@ -48,7 +48,7 @@ const components: PortableTextComponents = {
         href={value?.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="font-medium text-[#8015E8] underline underline-offset-2 hover:text-[#6a11c2]"
+        className="font-medium text-[#8015E8] underline underline-offset-2 break-words hover:text-[#6a11c2]"
       >
         {children}
       </a>

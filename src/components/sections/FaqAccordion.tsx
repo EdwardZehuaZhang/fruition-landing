@@ -139,10 +139,10 @@ export default function FaqAccordion({
             <div key={item._key || i} style={{ paddingTop: i === 0 ? 20 : 24 }}>
               <button
                 onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                className="w-full flex items-center justify-between text-left cursor-pointer"
-                style={{ height: 30 }}
+                className="w-full flex items-start justify-between gap-3 text-left cursor-pointer"
+                style={{ minHeight: 30 }}
               >
-                <span style={{ fontSize: 20, lineHeight: "24px", color: "black" }}>{item.question}</span>
+                <span className="min-w-0" style={{ fontSize: 20, lineHeight: "24px", color: "black" }}>{item.question}</span>
                 <div className="shrink-0" style={{ width: 30, height: 30 }}>
                   <svg className={`transition-transform ${openFaqIndex === i ? "rotate-180" : ""}`} width="30" height="30" viewBox="0 0 30 30" fill="none">
                     <path d="M8 12L15 19L22 12" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

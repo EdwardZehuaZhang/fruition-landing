@@ -7,7 +7,7 @@ export const portableTextComponents: PortableTextComponents = {
     image: ({ value }) => {
       if (!value?.asset?._ref) return null
       return (
-        <div className="my-8 relative w-full h-96 rounded-xl overflow-hidden">
+        <div className="my-8 relative w-full aspect-[16/9] rounded-xl overflow-hidden">
           <Image
             src={`https://cdn.sanity.io/images/bt6nb58h/production/${value.asset._ref.replace("image-", "").replace(/-(\w+)$/, ".$1")}`}
             alt={value.alt || ""}
@@ -17,10 +17,15 @@ export const portableTextComponents: PortableTextComponents = {
         </div>
       )
     },
+    code: ({ value }) => (
+      <pre className="my-6 overflow-x-auto rounded-lg bg-gray-900 p-4 text-sm text-gray-100">
+        <code className="whitespace-pre">{value?.code}</code>
+      </pre>
+    ),
   },
   marks: {
     link: ({ children, value }) => (
-      <a href={value?.href} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline hover:text-blue-900">
+      <a href={value?.href} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline break-words hover:text-blue-900">
         {children}
       </a>
     ),

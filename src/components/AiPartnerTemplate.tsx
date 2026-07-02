@@ -627,6 +627,12 @@ const CSS = `
   .aipartner .hero-regions { border-left: none; padding-left: 0; }
   .aipartner .ap-wrap { padding: 0 20px; }
   .aipartner .ap-hero { padding: 56px 0; }
+  .aipartner .ap-section { padding: 56px 0; }
+  .aipartner .final-cta { padding: 72px 0; }
   .aipartner .operator { padding: 28px; }
+}
+
+@media (max-width: 480px) {
+  .aipartner .stats-grid { grid-template-columns: 1fr; }
 }
 `

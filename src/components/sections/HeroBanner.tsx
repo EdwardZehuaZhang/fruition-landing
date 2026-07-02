@@ -202,7 +202,7 @@ export default function HeroBanner({
       >
         {/* Partner badges — hidden when a single partnerImageUrl is used or hidePartnerBadges flag is set */}
         {showPartnerBadges && (
-          <div className="flex items-center" style={{ gap: 22 }}>
+          <div className="flex flex-wrap items-center justify-center" style={{ gap: 22 }}>
             {partnerBadges.map((badge, i) => {
               const cmsSrc = safeImageUrl(badge.image)
               const src = getDarkBadgeSrc(badge.name, cmsSrc)
@@ -271,7 +271,7 @@ export default function HeroBanner({
             <img
               src={partnerImageUrl}
               alt="monday.com partner certifications"
-              style={{ maxWidth: 700, height: "auto" }}
+              style={{ width: "100%", maxWidth: 700, height: "auto" }}
             />
           </div>
         )}

@@ -81,7 +81,7 @@ export default function TeamGridSection({
         {(heading || subheading || ctaLabel) && (
           <div className="flex flex-col items-center text-center" style={{ marginBottom: 40 }}>
             {heading && (
-              <h2 className="font-bold" style={{ color: "#10003a", fontSize: 36, lineHeight: "44px", marginBottom: 12 }}>
+              <h2 className="font-bold" style={{ color: "#10003a", fontSize: "clamp(28px, 6vw, 36px)", lineHeight: 1.2, marginBottom: 12 }}>
                 {heading}
               </h2>
             )}
