@@ -44,7 +44,7 @@ export default function TeamsTransformedSection({ heading, subheading, tabs }: P
         {(heading || subheading) && (
           <div className="flex flex-col gap-[12px] items-center text-center w-full">
             {heading && (
-              <h2 className="text-[35px] font-medium text-black leading-[49px]">
+              <h2 className="text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-black">
                 {heading}
               </h2>
             )}

@@ -82,8 +82,8 @@ export default function StatsBlockView({
         {/* Subheading with optional inline monday.com partners badge */}
         {subheading && (
           showMondayPartnersBadge ? (
-            <div className="flex items-start gap-[5px] text-[14px] text-[#242323]">
-              <span>{subheading}</span>
+            <div className="flex flex-wrap items-center justify-center gap-[5px] text-[14px] text-[#242323]">
+              <span className="min-w-0">{subheading}</span>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={mondayPartnersBadgeSrc} alt="monday.com partners" width={148} height={23} className="h-[23px] w-auto" />
             </div>

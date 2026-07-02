@@ -29,7 +29,7 @@ export default function CalendlyBlockView({
       <div className="mx-auto max-w-[959px] flex flex-col items-center">
         {/* Logo removed — not in Figma design */}
         {heading && (
-          <h2 className="mb-4 text-center text-[35px] font-medium text-black leading-[49px]">
+          <h2 className="mb-4 text-center text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-black">
             {heading}
           </h2>
         )}
@@ -40,7 +40,7 @@ export default function CalendlyBlockView({
           <div
             className="calendly-inline-widget w-full"
             data-url={calendlyUrl}
-            style={{ minWidth: '320px', height: '880px' }}
+            style={{ height: '880px' }}
           />
         )}
       </div>
