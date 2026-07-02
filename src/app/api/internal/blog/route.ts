@@ -1,6 +1,5 @@
-import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
-import { INTERNAL_COOKIE, verifyToken } from "@/lib/internalAuth"
+import { getPortalApiUser, bylineFor } from "@/lib/portalAuth"
 import { upsertBlogPost, uploadImageAsset } from "@/lib/sanityWriteClient"
 
 export const runtime = "nodejs"
@@ -34,17 +33,16 @@ function slugify(s: string): string {
 /**
  * Publish/update a blog post from the internal portal.
  *
- * Auth: the same shared-session cookie that gates the rest of /internal
- * (see src/lib/internalAuth.ts). This is defence-in-depth — the portal pages
- * also gate server-side. When the portal moves to Supabase/Google SSO, only
- * this check changes; the write path below is unaffected.
+ * Auth: the portal Supabase/Google session (see src/lib/portalAuth.ts),
+ * domain-locked to @fruitionservices.io. Defence-in-depth — the portal pages
+ * also gate server-side.
  *
  * All Sanity writes go through the single SANITY_WRITE_TOKEN (inside
  * upsertBlogPost), so no writer needs a paid Sanity seat.
  */
 export async function POST(req: Request) {
-  const token = (await cookies()).get(INTERNAL_COOKIE)?.value
-  if (!verifyToken(token)) {
+  const user = await getPortalApiUser()
+  if (!user) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 })
   }
 
@@ -108,6 +106,8 @@ export async function POST(req: Request) {
 
   // Stable, slug-derived id so re-publishing the same post updates in place.
   const docId = docIdInput || `blog-portal-${slug}`
+  // Byline: an explicit form value wins, otherwise the signed-in author's profile.
+  const byline = author || (await bylineFor(user))
 
   try {
     const result = await upsertBlogPost({
@@ -117,7 +117,7 @@ export async function POST(req: Request) {
       slug,
       excerpt: excerpt || undefined,
       industry: industry || undefined,
-      author: author || undefined,
+      author: byline,
       seoTitle: seoTitle || undefined,
       seoDescription: seoDescription || undefined,
       categoryIds: categoryIds.length ? categoryIds : undefined,

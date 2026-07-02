@@ -1,6 +1,5 @@
-import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
-import { INTERNAL_COOKIE, verifyToken } from "@/lib/internalAuth"
+import { getPortalApiUser } from "@/lib/portalAuth"
 import { createTeamMember, uploadImageAsset } from "@/lib/sanityWriteClient"
 import {
   changeColumnValues,
@@ -45,9 +44,9 @@ function slugify(s: string): string {
 }
 
 export async function POST(req: Request) {
-  // Defence-in-depth — proxy.ts already gates this, but re-check.
-  const token = (await cookies()).get(INTERNAL_COOKIE)?.value
-  if (!verifyToken(token)) {
+  // Defence-in-depth — the page also gates; re-check the portal session here.
+  const user = await getPortalApiUser()
+  if (!user) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 })
   }
 
