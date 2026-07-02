@@ -44,7 +44,13 @@ interface SiteSettingsProp {
 export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsProp | null }) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null)
   const pathname = usePathname()
+
+  const closeMobile = () => {
+    setMobileOpen(false)
+    setMobileExpanded(null)
+  }
 
   const calendlyUrl = siteSettings?.calendlyLink || ''
   const phoneAu = siteSettings?.phone
@@ -156,7 +162,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
           {/* Mobile toggle */}
           <button
             className="lg:hidden text-[#242323]"
-            onClick={() => setMobileOpen(!mobileOpen)}
+            onClick={() => (mobileOpen ? closeMobile() : setMobileOpen(true))}
           >
             <span className="sr-only">Open menu</span>
             {mobileOpen ? (
@@ -173,49 +179,76 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
 
         {/* Mobile menu */}
         {mobileOpen && (
-          <div className="lg:hidden py-4 border-t border-gray-100 max-h-[80vh] overflow-y-auto">
-            {navItems.map((item) => (
-              <div key={item.label} className="mb-4">
-                {item.sections?.map((section, sIdx) => (
-                  <div key={`${section.heading}-${sIdx}`} className="mb-3">
-                    {section.heading && (
-                      <p className="text-xs font-semibold text-[#8015e8] uppercase tracking-wider px-2 mb-1">
-                        {section.heading}
-                      </p>
-                    )}
-                    {section.items?.map((sub) => {
-                      const isActive = sub.href && pathname === sub.href
-                      return (
-                        <Link
-                          key={sub.href}
-                          href={sub.href || '#'}
-                          className={`flex items-start gap-3 px-2 py-2 rounded-md transition-colors ${
-                            isActive ? 'bg-[#f5edfd]' : 'hover:bg-gray-50'
-                          }`}
-                          onClick={() => setMobileOpen(false)}
-                        >
-                          {sub.icon && (
-                            <div className={`shrink-0 mt-0.5 w-7 h-7 rounded-md ring-1 ring-gray-200 bg-white flex items-center justify-center ${isActive ? 'text-[#8015e8]' : 'text-[#242323]'}`}>
-                              <NavIcon iconKey={sub.icon} className="h-4 w-4" />
-                            </div>
+          <div className="lg:hidden py-2 border-t border-gray-100 max-h-[80vh] overflow-y-auto">
+            {navItems.map((item) => {
+              const expanded = mobileExpanded === item.label
+              const active = isNavItemActive(item)
+              return (
+                <div key={item.label} className="border-b border-gray-100 last:border-b-0">
+                  {/* Level 1: category header (tap to expand) */}
+                  <button
+                    type="button"
+                    aria-expanded={expanded}
+                    onClick={() => setMobileExpanded(expanded ? null : item.label || null)}
+                    className={`w-full flex items-center justify-between gap-3 px-2 py-3 text-left transition-colors ${
+                      expanded || active ? 'text-[#8015e8]' : 'text-[#242323] hover:text-[#8015e8]'
+                    }`}
+                  >
+                    <span className="text-[15px] font-semibold">{item.label}</span>
+                    <svg
+                      className={`shrink-0 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+                      width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                    >
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
+
+                  {/* Level 2: sub-sections + pages (revealed when expanded) */}
+                  {expanded && (
+                    <div className="pb-2">
+                      {item.sections?.map((section, sIdx) => (
+                        <div key={`${section.heading}-${sIdx}`} className="mb-2">
+                          {section.heading && (
+                            <p className="text-xs font-semibold text-[#8015e8] uppercase tracking-wider px-3 mb-1">
+                              {section.heading}
+                            </p>
                           )}
-                          <div className="min-w-0">
-                            <div className={`text-sm font-medium ${isActive ? 'text-[#8015e8]' : 'text-[#242323]'}`}>
-                              {sub.label}
-                            </div>
-                            {sub.description && (
-                              <div className="mt-0.5 text-xs text-[#686b82] leading-snug">
-                                {sub.description}
-                              </div>
-                            )}
-                          </div>
-                        </Link>
-                      )
-                    })}
-                  </div>
-                ))}
-              </div>
-            ))}
+                          {section.items?.map((sub) => {
+                            const isActive = sub.href && pathname === sub.href
+                            return (
+                              <Link
+                                key={sub.href}
+                                href={sub.href || '#'}
+                                className={`flex items-start gap-3 pl-4 pr-2 py-2 rounded-md transition-colors ${
+                                  isActive ? 'bg-[#f5edfd]' : 'hover:bg-gray-50'
+                                }`}
+                                onClick={closeMobile}
+                              >
+                                {sub.icon && (
+                                  <div className={`shrink-0 mt-0.5 w-7 h-7 rounded-md ring-1 ring-gray-200 bg-white flex items-center justify-center ${isActive ? 'text-[#8015e8]' : 'text-[#242323]'}`}>
+                                    <NavIcon iconKey={sub.icon} className="h-4 w-4" />
+                                  </div>
+                                )}
+                                <div className="min-w-0">
+                                  <div className={`text-sm font-medium ${isActive ? 'text-[#8015e8]' : 'text-[#242323]'}`}>
+                                    {sub.label}
+                                  </div>
+                                  {sub.description && (
+                                    <div className="mt-0.5 text-xs text-[#686b82] leading-snug">
+                                      {sub.description}
+                                    </div>
+                                  )}
+                                </div>
+                              </Link>
+                            )
+                          })}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
             {/* Partner badges mobile */}
             <div className="flex flex-wrap items-center gap-3 px-2 py-3 border-t border-gray-100">
               {partnerBadges.map((badge, i) => {
