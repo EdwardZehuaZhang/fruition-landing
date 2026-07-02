@@ -61,7 +61,7 @@ export default function TabSectionBlockView({
       <div className="relative mx-auto max-w-[959px] flex flex-col items-center gap-[24px]">
         {/* Heading */}
         {heading && (
-          <h2 className="text-center text-[35px] font-medium text-black leading-[49px]">
+          <h2 className="text-center text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-black">
             {heading}
           </h2>
         )}
@@ -117,7 +117,7 @@ export default function TabSectionBlockView({
           {isImplementSection ? (
             /* "Implement monday.com" layout: heading + button row, body text, emoji features grid */
             <div className="flex flex-col gap-[24px]">
-              <div className="flex items-start justify-between w-full">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between w-full">
                 {active?.heading && (
                   <h3 className="text-[24px] font-medium text-[#2b074d] leading-[33.6px] max-w-[487px]">
                     {active.heading}

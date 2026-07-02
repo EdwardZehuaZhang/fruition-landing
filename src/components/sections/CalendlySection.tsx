@@ -80,7 +80,7 @@ export default function CalendlySection({
         <div
           ref={widgetRef}
           className="w-full"
-          style={{ marginTop: 8, minWidth: 320, height: BASE_WIDGET_HEIGHT + subheadingExtra }}
+          style={{ marginTop: 8, height: BASE_WIDGET_HEIGHT + subheadingExtra }}
         />
       </div>
     </section>

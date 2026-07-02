@@ -278,7 +278,7 @@ function AuthorMetaRow({
   readingTime: string
 }) {
   return (
-    <div className="flex items-center w-full">
+    <div className="flex flex-wrap items-center gap-y-[4px] w-full">
       {/* Avatar — 32px with 12px right padding */}
       {author ? (
         <Link
@@ -299,10 +299,10 @@ function AuthorMetaRow({
       )}
       {/* Name */}
       {author && (
-        <div className="flex flex-col items-start shrink-0">
+        <div className="flex flex-col items-start min-w-0">
           <Link
             href={`/author/${authorSlug(author)}`}
-            className="font-montserrat font-normal text-[14px] leading-[21px] text-black whitespace-nowrap hover:text-[#604c97] transition-colors"
+            className="font-montserrat font-normal text-[14px] leading-[21px] text-black truncate max-w-full hover:text-[#604c97] transition-colors"
           >
             {author}
           </Link>
@@ -629,7 +629,7 @@ function RelatedPostsSection({ posts }: { posts: RelatedBlogPost[] }) {
         </Link>
       </header>
       {/* Cards row */}
-      <div className="flex gap-[34px] items-start w-full h-[313.5px]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-[34px] items-start w-full">
         {posts.slice(0, 2).map((p) => (
           <RelatedPostCard key={p._id} post={p} />
         ))}

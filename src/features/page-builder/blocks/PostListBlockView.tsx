@@ -19,7 +19,7 @@ export default async function PostListBlockView({ heading, subheading, limit = 6
       <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[24px]">
         {/* Header */}
         <div className="flex flex-col gap-[12px] items-center w-full text-center">
-          <h2 className="text-[35px] font-medium text-black leading-[49px]">
+          <h2 className="text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-black">
             {heading || "Don\u2019t miss our latest pieces"}
           </h2>
           <p className="text-[20px] text-black text-center">
@@ -41,7 +41,7 @@ export default async function PostListBlockView({ heading, subheading, limit = 6
             <Link
               key={post._id}
               href={`/post/${post.slug}`}
-              className="group flex flex-col w-[307px] overflow-hidden hover:opacity-90 transition"
+              className="group flex flex-col w-full max-w-[307px] overflow-hidden hover:opacity-90 transition"
             >
               {post.coverImage?.asset && (
                 // eslint-disable-next-line @next/next/no-img-element

@@ -20,14 +20,14 @@ function renderHeadingWithAccent(heading: string) {
     const before = heading.slice(0, idx)
     const after = heading.slice(idx + accent.length)
     return (
-      <p className="text-[28px] font-medium leading-[39.2px] text-center">
+      <p className="text-[22px] leading-[30px] sm:text-[28px] sm:leading-[39.2px] font-medium text-center">
         <span className="text-black">{before}</span>
         <span className="text-[#8015e8]">{accent}</span>
         {after && <span className="text-black">{after}</span>}
       </p>
     )
   }
-  return <p className="text-[28px] font-medium leading-[39.2px] text-black text-center">{heading}</p>
+  return <p className="text-[22px] leading-[30px] sm:text-[28px] sm:leading-[39.2px] font-medium text-black text-center">{heading}</p>
 }
 
 export default function LogoCloudBlockView({ heading, logos }: LogoCloudBlockProps) {

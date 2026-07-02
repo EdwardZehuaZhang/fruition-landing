@@ -217,7 +217,7 @@ export default function ComparisonTabsSection({
         {/* Tab pills + content card */}
         <div className="flex flex-col gap-[24px] items-center w-full max-w-[816px]">
           {/* Tab buttons — allow overflow beyond the 816px content card */}
-          <div className="flex justify-center gap-[12px] flex-wrap" style={{ overflow: "visible", width: "max-content", maxWidth: "100vw" }}>
+          <div className="flex justify-center gap-[12px] flex-wrap w-full" style={{ overflow: "visible" }}>
             {tabs.map((tab, i) => {
               const isActive = i === activeIndex
               const inactiveClass = isDark

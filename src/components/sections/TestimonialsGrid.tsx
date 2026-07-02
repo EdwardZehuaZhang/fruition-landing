@@ -91,8 +91,8 @@ export default function TestimonialsGrid({
                 {/* Stat card (repeats on every page) */}
                 <div className="relative flex w-full max-w-[437px] flex-col rounded-card bg-[#10003a] px-[38px] shadow-card">
                   <div className="pt-[23px] pb-[30px]">
-                    <p className="font-semibold text-[40px] text-[#ba83f0] leading-[60px]">{statCardValue}</p>
-                    <p className="font-normal text-white text-[24px] leading-[34px]" style={{ whiteSpace: "pre-line" }}>
+                    <p className="font-semibold text-[32px] sm:text-[40px] text-[#ba83f0] leading-[1.2]">{statCardValue}</p>
+                    <p className="font-normal text-white text-[19px] sm:text-[24px] leading-[1.4]" style={{ whiteSpace: "pre-line" }}>
                       {statCardSubtitle}
                     </p>
                   </div>

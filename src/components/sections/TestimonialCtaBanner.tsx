@@ -107,7 +107,7 @@ export default function TestimonialCtaBanner({
               <div
                 key={active._id || index}
                 className="bg-white text-black rounded-[18px] px-8 py-9 md:px-10 md:py-10 shadow-2xl shadow-black/30 max-w-[500px] justify-self-end animate-fade-in flex flex-col"
-                style={{ height: 420 }}
+                style={{ minHeight: 420 }}
               >
                 {active.quote && (
                   <p

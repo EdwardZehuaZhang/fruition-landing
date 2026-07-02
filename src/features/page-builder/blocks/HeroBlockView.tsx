@@ -104,7 +104,7 @@ export default function HeroBlockView({
           <div className="flex flex-col gap-[31px] w-full">
             {/* Partner badges */}
             <div className="flex flex-col gap-[42px]">
-              <div className="flex items-center gap-[22px]">
+              <div className="flex flex-wrap items-center gap-[22px]">
                 {partnerBadges.map((badge, i) => (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img

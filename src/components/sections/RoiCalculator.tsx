@@ -121,7 +121,7 @@ export default function RoiCalculator({ config = {} }: RoiCalculatorProps) {
           >
             <Result big value={`${fmt(yearlyHours)} hrs`} label="reclaimed per year" />
             <div style={{ height: 20 }} />
-            <div className="flex gap-8">
+            <div className="flex flex-wrap gap-x-8 gap-y-4">
               <Result value={`${fmt(weeklyHours)} hrs`} label="per week" />
               <Result value={`${currencySymbol}${fmt(yearlyDollars)}`} label="saved per year" />
             </div>
@@ -180,7 +180,7 @@ function Slider({
 function Result({ value, label, big = false }: { value: string; label: string; big?: boolean }) {
   return (
     <div>
-      <div className="font-bold" style={{ fontSize: big ? 44 : 26, lineHeight: big ? "48px" : "30px" }}>
+      <div className="font-bold" style={{ fontSize: big ? "clamp(28px, 8vw, 44px)" : "clamp(20px, 5vw, 26px)", lineHeight: 1.1, wordBreak: "break-word" }}>
         {value}
       </div>
       <div style={{ fontSize: 13, lineHeight: "18px", color: "rgba(255,255,255,0.72)", marginTop: 4 }}>{label}</div>
