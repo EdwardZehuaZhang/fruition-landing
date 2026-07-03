@@ -1,9 +1,21 @@
 ﻿import type { NextConfig } from "next";
+import type { Redirect } from "next/dist/lib/load-custom-routes";
 import { wixRedirects } from "./src/redirects";
+
+// Redirects added after the Wix migration (e.g. from SEO/technical audits).
+// src/redirects.ts is auto-generated from the migration import — add new
+// entries here instead.
+const auditRedirects: Redirect[] = [
+  {
+    source: "/solutions/monday-com-manufacturing",
+    destination: "/monday-for-manufacturing",
+    permanent: true,
+  },
+];
 
 const nextConfig: NextConfig = {
   async redirects() {
-    return wixRedirects;
+    return [...wixRedirects, ...auditRedirects];
   },
   images: {
     remotePatterns: [
