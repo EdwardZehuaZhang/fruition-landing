@@ -27,21 +27,26 @@ export type VideoCatalogEntry = {
   duration?: string
 }
 
-// Known, hardcoded YouTube videos keyed by their video id. Titles here mirror
-// what already ships in the UI. `uploadDate`/`description` are intentionally
-// blank until confirmed against YouTube — fill them to complete the markup.
+// Known, hardcoded YouTube videos keyed by their video id. Titles mirror what
+// already ships in the UI; uploadDate is the real YouTube publish date
+// (confirmed against each video's YouTube Studio entry). Add `description`
+// per entry to further enrich the markup.
 export const VIDEO_CATALOG: Record<string, VideoCatalogEntry> = {
   eoOCR6OjJhI: {
     name: "Everything you need to know to get started with monday CRM",
+    uploadDate: "2025-04-02",
   },
   _0MhMjicbIM: {
     name: "monday.com consulting partner overview",
+    uploadDate: "2023-08-06",
   },
   g83dt0bCG4I: {
     name: "Improve your HR processes",
+    uploadDate: "2020-12-03",
   },
   "7vtrtlfC1Zg": {
     name: "monday CRM Success Story - Star Aviation | Powered by Fruition",
+    uploadDate: "2025-11-17",
   },
 }
 
