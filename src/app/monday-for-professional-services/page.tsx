@@ -21,6 +21,7 @@ import YouTubeEmbed from "@/components/YouTubeEmbed"
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-professional-services")
   return {
+    alternates: { canonical: "/monday-for-professional-services" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

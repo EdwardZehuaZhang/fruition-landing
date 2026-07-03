@@ -5,6 +5,7 @@ const SALES_EMAIL = "contact@fruitionservices.io"
 
 export async function generateMetadata() {
   return {
+    alternates: { canonical: "/contact-us" },
     title: "Contact Us | Fruition",
     description:
       "Talk to the Fruition team. Reach sales or support by email, call us, or find the office nearest you across our six locations worldwide.",

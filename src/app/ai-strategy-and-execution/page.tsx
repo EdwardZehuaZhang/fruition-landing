@@ -10,6 +10,7 @@ import AiStrategyContent from "./AiStrategyContent"
 export async function generateMetadata() {
   const page = await getServicePageBySlug("ai-strategy-and-execution")
   return {
+    alternates: { canonical: "/ai-strategy-and-execution" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

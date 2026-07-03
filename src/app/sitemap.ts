@@ -10,8 +10,8 @@ const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.fruitionservices.i
 
 // Indexable static routes. Add new marketing pages here.
 // Deliberately excludes: /internal/*, /studio/*, the dynamic [slug] routes
-// (added from Sanity below), and /consulting-blog/categories/* (disallowed in
-// robots.ts, so kept out of the sitemap to avoid conflicting signals).
+// (added from Sanity below), and /consulting-blog/categories/* (noindexed via
+// page metadata, so kept out of the sitemap to avoid conflicting signals).
 const STATIC_PATHS: string[] = [
   "/",
   "/about-us",

@@ -5,6 +5,7 @@ import { getHomePage, getSiteSettings } from '@/features/content/loaders'
 export async function generateMetadata(): Promise<Metadata> {
   const homePage = await getHomePage()
   return {
+    alternates: { canonical: '/' },
     title: homePage?.seoTitle,
     description: homePage?.seoDescription,
   }

@@ -6,6 +6,7 @@ const SLUG = "microsoft-copilot-partner"
 export async function generateMetadata() {
   const page = await getAiPartnerPageBySlug(SLUG)
   return {
+    alternates: { canonical: "/partnerships/microsoft-copilot-partner" },
     title: page?.seoTitle || page?.title || SLUG,
     description: page?.seoDescription,
   }

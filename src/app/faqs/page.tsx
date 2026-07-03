@@ -5,6 +5,7 @@ import FaqList, { type FaqItem } from "./FaqList"
 export async function generateMetadata() {
   const page = await getPageBySlug("faqs")
   return {
+    alternates: { canonical: "/faqs" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

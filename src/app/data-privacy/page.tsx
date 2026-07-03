@@ -5,6 +5,7 @@ import VisitorTrackingDisclosure from "@/components/VisitorTrackingDisclosure"
 export async function generateMetadata() {
   const page = await getPageBySlug("data-privacy")
   return {
+    alternates: { canonical: "/data-privacy" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

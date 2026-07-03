@@ -6,6 +6,7 @@ const SLUG = "openai-chatgpt-partner"
 export async function generateMetadata() {
   const page = await getAiPartnerPageBySlug(SLUG)
   return {
+    alternates: { canonical: "/partnerships/openai-chatgpt-partner" },
     title: page?.seoTitle || page?.title || SLUG,
     description: page?.seoDescription,
   }

@@ -5,6 +5,7 @@ import { getAllPartnershipPages, getPageBySlug, getSiteSettings } from "@/sanity
 export async function generateMetadata() {
   const page = await getPageBySlug("partnerships")
   return {
+    alternates: { canonical: "/partnerships" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

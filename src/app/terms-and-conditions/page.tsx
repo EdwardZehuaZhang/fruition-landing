@@ -3,6 +3,7 @@ import { getPageBySlug } from "@/sanity/queries"
 export async function generateMetadata() {
   const page = await getPageBySlug("terms-and-conditions")
   return {
+    alternates: { canonical: "/terms-and-conditions" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

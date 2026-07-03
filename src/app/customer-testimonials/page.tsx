@@ -7,6 +7,7 @@ import CtaButton from "@/components/CtaButton"
 export async function generateMetadata() {
   const page = await getPageBySlug("customer-testimonials")
   return {
+    alternates: { canonical: "/customer-testimonials" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }
