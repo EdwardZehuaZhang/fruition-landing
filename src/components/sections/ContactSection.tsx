@@ -34,12 +34,12 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const inputStyle: React.CSSProperties = {
   width: "100%",
-  border: "1px solid var(--line-tint)",
+  border: "1px solid var(--border-ui)",
   borderRadius: 10,
   padding: "12px 14px",
   fontSize: 15,
-  color: "var(--ink-heading)",
-  background: "var(--surface)",
+  color: "var(--text-body)",
+  background: "var(--surface-raised)",
 }
 
 export default function ContactSection({
@@ -70,14 +70,14 @@ function ContactHero({ offices, salesEmail, supportEmail, phone, phoneTel }: Con
         <span
           className="inline-flex items-center rounded-full"
           style={{
-            backgroundColor: "var(--surface-muted)",
-            color: "var(--brand)",
+            backgroundColor: "#f4ecff",
+            color: "var(--purple-primary)",
             padding: "8px 16px",
             fontSize: 13,
             fontWeight: 700,
             letterSpacing: "0.12em",
             textTransform: "uppercase",
-            border: "1px solid var(--line-tint)",
+            border: "1px solid #e4d6fb",
           }}
         >
           Contact us
@@ -92,7 +92,7 @@ function ContactHero({ offices, salesEmail, supportEmail, phone, phoneTel }: Con
             fontWeight: 600,
             lineHeight: 1.08,
             letterSpacing: "-0.03em",
-            color: "var(--ink-heading)",
+            color: "var(--text-body)",
             textWrap: "balance",
           }}
         >
@@ -101,7 +101,7 @@ function ContactHero({ offices, salesEmail, supportEmail, phone, phoneTel }: Con
 
         <p
           className="text-center text-body-lead"
-          style={{ marginTop: 20, maxWidth: 600, color: "var(--ink-soft)", textWrap: "pretty" }}
+          style={{ marginTop: 20, maxWidth: 600, color: "var(--text-muted-fg)", textWrap: "pretty" }}
         >
           Reach the team directly, or find the office nearest you. We answer every message within one business day.
         </p>
@@ -162,17 +162,17 @@ function ContactHero({ offices, salesEmail, supportEmail, phone, phoneTel }: Con
 function Channel({ title, blurb, value, href }: { title: string; blurb: string; value: string; href?: string }) {
   return (
     <div className="flex flex-col items-center" style={{ gap: 6 }}>
-      <h2 style={{ fontSize: 17, fontWeight: 600, color: "var(--ink-heading)" }}>{title}</h2>
-      <p style={{ fontSize: 14, color: "var(--ink-muted)", lineHeight: "20px", maxWidth: 240 }}>{blurb}</p>
+      <h2 style={{ fontSize: 17, fontWeight: 600, color: "var(--text-body)" }}>{title}</h2>
+      <p style={{ fontSize: 14, color: "var(--text-muted-fg)", lineHeight: "20px", maxWidth: 240 }}>{blurb}</p>
       {href ? (
         <a
           href={href}
-          style={{ fontSize: 15, fontWeight: 600, color: "var(--brand)", marginTop: 2, wordBreak: "break-word" }}
+          style={{ fontSize: 15, fontWeight: 600, color: "var(--purple-primary)", marginTop: 2, wordBreak: "break-word" }}
         >
           {value}
         </a>
       ) : (
-        <span style={{ fontSize: 15, fontWeight: 600, color: "var(--ink-muted)", marginTop: 2 }}>{value}</span>
+        <span style={{ fontSize: 15, fontWeight: 600, color: "var(--text-muted-fg)", marginTop: 2 }}>{value}</span>
       )}
     </div>
   )
@@ -184,19 +184,19 @@ function OfficeBand({ offices }: { offices: ContactOffice[] }) {
   return (
     <section
       style={{
-        background: "linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 55%, var(--purple-dark) 100%)",
+        background: "linear-gradient(135deg, #10003a 0%, #2b074d 55%, #550e9b 100%)",
         padding: "96px 0",
       }}
     >
       <div className="mx-auto px-4 fr-office-band" style={{ maxWidth: 1280 }}>
         {/* Heading column */}
         <div style={{ maxWidth: 360, minWidth: 0 }}>
-          <p style={{ color: "var(--brand-light)", fontSize: 16, fontWeight: 600, lineHeight: "24px" }}>
+          <p style={{ color: "#d9bff5", fontSize: 16, fontWeight: 600, lineHeight: "24px" }}>
             Our locations
           </p>
           <h2
             className="text-section-h2"
-            style={{ color: "var(--white)", marginTop: 12, textWrap: "balance" }}
+            style={{ color: "#ffffff", marginTop: 12, textWrap: "balance" }}
           >
             Visit our offices
           </h2>
@@ -211,7 +211,7 @@ function OfficeBand({ offices }: { offices: ContactOffice[] }) {
             <div key={`${o.city}-${i}`} className="fr-office-item">
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 {o.flag && <span style={{ fontSize: 18, lineHeight: 1 }}>{o.flag}</span>}
-                <span style={{ fontSize: 18, fontWeight: 600, color: "var(--white)", lineHeight: "28px" }}>{o.city}</span>
+                <span style={{ fontSize: 18, fontWeight: 600, color: "#ffffff", lineHeight: "28px" }}>{o.city}</span>
               </div>
               {o.address &&
                 (o.addressUrl ? (
@@ -323,23 +323,23 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
   return (
     <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 96 }}>
       <div
-        className="mx-auto grid"
-        style={{ maxWidth: 1100, gap: 0, gridTemplateColumns: "minmax(0, 1fr)", overflow: "hidden", borderRadius: 24, border: "1px solid var(--line-tint)", boxShadow: "0 30px 70px -50px rgba(64,12,140,0.4)" }}
+        className="mx-auto grid bg-surface-raised dark:shadow-none dark:border dark:border-ui"
+        style={{ maxWidth: 1100, gap: 0, gridTemplateColumns: "minmax(0, 1fr)", overflow: "hidden", borderRadius: 24, border: "1px solid #ece7fb", boxShadow: "0 30px 70px -50px rgba(64,12,140,0.4)" }}
       >
         <div className="fr-form-grid">
           {/* Left: form */}
           <div style={{ padding: "clamp(28px, 4vw, 48px)" }}>
-            <h2 className="text-section-h3" style={{ color: "var(--ink-heading)" }}>
+            <h2 className="text-section-h3" style={{ color: "var(--text-body)" }}>
               Tell us what you&rsquo;re building
             </h2>
-            <p style={{ color: "var(--ink-muted)", fontSize: 15, lineHeight: "22px", marginTop: 10, marginBottom: 26 }}>
+            <p style={{ color: "var(--text-muted-fg)", fontSize: 15, lineHeight: "22px", marginTop: 10, marginBottom: 26 }}>
               A specialist reads every message and replies within one business day.
             </p>
 
             {status === "done" ? (
               <div
                 className="rounded-card"
-                style={{ background: "var(--success-surface)", border: "1px solid var(--success)", padding: 22, color: "var(--success-strong)", fontSize: 16, lineHeight: "24px" }}
+                style={{ background: "#f5fbf6", border: "1px solid #d6ecd9", padding: 22, color: "#1e7a40", fontSize: 16, lineHeight: "24px" }}
                 role="status"
               >
                 Thanks for reaching out. Your message is on its way to {salesEmail} and we&rsquo;ll be in touch within one business day.
@@ -354,7 +354,7 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
                 <Field name="phone" label="Phone (optional)" type="tel" />
 
                 <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
-                  <legend style={{ fontSize: 13, color: "var(--ink-heading)", fontWeight: 600, marginBottom: 8 }}>
+                  <legend style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600, marginBottom: 8 }}>
                     What can we help with?
                   </legend>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
@@ -371,9 +371,9 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
                             fontSize: 13.5,
                             fontWeight: 500,
                             cursor: "pointer",
-                            border: `1px solid ${selected ? "var(--brand)" : "var(--line-tint)"}`,
-                            background: selected ? "var(--surface-muted)" : "var(--surface)",
-                            color: selected ? "var(--brand-dark)" : "var(--ink-soft)",
+                            border: `1px solid ${selected ? "var(--purple-primary)" : "var(--border-ui)"}`,
+                            background: selected ? "#f4ecff" : "var(--surface-raised)",
+                            color: selected ? "var(--purple-dark)" : "var(--text-body)",
                             transition: "border-color 0.18s ease, background 0.18s ease, color 0.18s ease",
                           }}
                         >
@@ -405,7 +405,7 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
                 />
 
                 {status === "error" && (
-                  <p role="alert" style={{ color: "var(--danger)", fontSize: 14 }}>
+                  <p role="alert" style={{ color: "#c0392b", fontSize: 14 }}>
                     {error}
                   </p>
                 )}
@@ -426,9 +426,9 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
           <aside
             className="fr-form-aside"
             style={{
-              background: "linear-gradient(150deg, var(--purple-dark) 0%, var(--purple-primary) 60%, var(--purple-light) 100%)",
+              background: "linear-gradient(150deg, #550e9b 0%, #8015e8 60%, #ba83f0 100%)",
               padding: "clamp(28px, 4vw, 48px)",
-              color: "var(--white)",
+              color: "#fff",
               position: "relative",
               overflow: "hidden",
             }}
@@ -479,7 +479,7 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
 
               <div style={{ marginTop: 36, paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.18)" }}>
                 <div style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>Prefer email?</div>
-                <a href={`mailto:${salesEmail}`} style={{ fontSize: 16, fontWeight: 600, color: "var(--white)" }}>
+                <a href={`mailto:${salesEmail}`} style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>
                   {salesEmail}
                 </a>
               </div>
@@ -505,7 +505,7 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
 function FieldLabel({ label, children }: { label?: string; children: React.ReactNode }) {
   return (
     <label className="flex flex-col" style={{ gap: 6 }}>
-      {label && <span style={{ fontSize: 13, color: "var(--ink-heading)", fontWeight: 600 }}>{label}</span>}
+      {label && <span style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600 }}>{label}</span>}
       {children}
     </label>
   )
@@ -531,7 +531,7 @@ function Field({
         type={type}
         required={required}
         aria-invalid={invalid || undefined}
-        style={{ ...inputStyle, borderColor: invalid ? "var(--danger)" : "var(--line-tint)" }}
+        style={{ ...inputStyle, borderColor: invalid ? "#e0708a" : "var(--border-ui)" }}
       />
     </FieldLabel>
   )
@@ -545,7 +545,7 @@ function TextArea({ name, label, required, invalid }: { name: string; label?: st
         required={required}
         rows={4}
         aria-invalid={invalid || undefined}
-        style={{ ...inputStyle, resize: "vertical", borderColor: invalid ? "var(--danger)" : "var(--line-tint)" }}
+        style={{ ...inputStyle, resize: "vertical", borderColor: invalid ? "#e0708a" : "var(--border-ui)" }}
       />
     </FieldLabel>
   )

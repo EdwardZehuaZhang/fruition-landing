@@ -41,6 +41,7 @@ import {
   WorkflowConnector,
   EcosystemGrid,
 } from "@/components/sections"
+import FramedMedia from "@/components/common/FramedMedia"
 import type { CaseStudy, SiteSettingsData, ComparisonTab } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
@@ -212,7 +213,7 @@ function MakeFeatureTabsSection({ tabs }: { tabs: MakeFeatureTab[] }) {
   return (
     <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "var(--ink-heading)", fontSize: 32, lineHeight: "40px", marginBottom: 32 }}>
+        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 32, lineHeight: "40px", marginBottom: 32 }}>
           {active.heading}
         </h2>
 
@@ -229,8 +230,8 @@ function MakeFeatureTabsSection({ tabs }: { tabs: MakeFeatureTab[] }) {
                 fontSize: 14,
                 fontWeight: 600,
                 ...(i === activeIdx
-                  ? { background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))", color: "white", border: "none", boxShadow: "0 10px 22px -12px rgba(128,21,232,0.55)" }
-                  : { background: "var(--surface)", color: "var(--surface-inverse-2)", border: "1px solid var(--line)" }),
+                  ? { background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", border: "none", boxShadow: "0 10px 22px -12px rgba(128,21,232,0.55)" }
+                  : { background: "var(--surface-raised)", color: "var(--text-body)", border: "1px solid var(--border-ui)" }),
               }}
             >
               {tab.label}
@@ -243,10 +244,11 @@ function MakeFeatureTabsSection({ tabs }: { tabs: MakeFeatureTab[] }) {
           {active.groups.map((g: MakeFeatureGroup) => (
             <div
               key={g.number}
-              className="bg-surface"
+              className="dark:shadow-none"
               style={{
                 padding: 24,
                 borderRadius: 18,
+                background: "var(--surface-raised)",
                 border: "1px solid rgba(128,21,232,0.08)",
                 boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)",
                 display: "flex",
@@ -261,7 +263,7 @@ function MakeFeatureTabsSection({ tabs }: { tabs: MakeFeatureTab[] }) {
                     width: 38,
                     height: 38,
                     borderRadius: 12,
-                    background: "linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-light) 100%)",
+                    background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)",
                     color: "white",
                     fontSize: 13,
                   }}
@@ -269,7 +271,7 @@ function MakeFeatureTabsSection({ tabs }: { tabs: MakeFeatureTab[] }) {
                   {g.number}
                 </span>
                 {g.title && (
-                  <p className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 15, lineHeight: "22px" }}>
+                  <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 15, lineHeight: "22px" }}>
                     {g.title}
                   </p>
                 )}
@@ -283,13 +285,13 @@ function MakeFeatureTabsSection({ tabs }: { tabs: MakeFeatureTab[] }) {
                   return (
                     <li key={b.text || bi} className="flex items-start" style={{ gap: 10 }}>
                       {Icon ? (
-                        <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 1, color: "var(--brand)" }} />
+                        <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 1, color: "#8015e8" }} />
                       ) : b.emoji ? (
                         <span aria-hidden style={{ flexShrink: 0, marginTop: 1, fontSize: 16, lineHeight: "20px" }}>{b.emoji}</span>
                       ) : (
-                        <Sparkles size={18} aria-hidden style={{ flexShrink: 0, marginTop: 1, color: "var(--brand)" }} />
+                        <Sparkles size={18} aria-hidden style={{ flexShrink: 0, marginTop: 1, color: "#8015e8" }} />
                       )}
-                      <span style={{ color: "var(--ink-soft)", fontSize: 13, lineHeight: "20px" }}>{b.text}</span>
+                      <span style={{ color: "var(--text-muted-fg)", fontSize: 13, lineHeight: "20px" }}>{b.text}</span>
                     </li>
                   )
                 })}
@@ -299,7 +301,7 @@ function MakeFeatureTabsSection({ tabs }: { tabs: MakeFeatureTab[] }) {
         </div>
 
         {active.outro && (
-          <p className="text-center mx-auto" style={{ color: "var(--ink-soft)", fontSize: 14, lineHeight: "24px", maxWidth: 880, marginTop: 36 }}>
+          <p className="text-center mx-auto" style={{ color: "var(--text-muted-fg)", fontSize: 14, lineHeight: "24px", maxWidth: 880, marginTop: 36 }}>
             {active.outro}
           </p>
         )}
@@ -512,8 +514,8 @@ export default function MakePartnersContent({
               className="text-center font-bold"
               style={{ fontSize: "clamp(32px, 8vw, 48px)", lineHeight: 1.2, marginTop: 42, maxWidth: 924 }}
             >
-              {pageData?.heroHeadingPart1 && <span className="text-ink">{pageData.heroHeadingPart1}</span>}
-              {pageData?.heroHeadingAccent && <span style={{ color: "var(--brand)" }}>{pageData.heroHeadingAccent}</span>}
+              {pageData?.heroHeadingPart1 && <span className="text-body">{pageData.heroHeadingPart1}</span>}
+              {pageData?.heroHeadingAccent && <span style={{ color: "#8015e8" }}>{pageData.heroHeadingAccent}</span>}
             </h1>
           )}
 
@@ -522,7 +524,7 @@ export default function MakePartnersContent({
               style={{
                 fontSize: 18,
                 lineHeight: "25.2px",
-                color: "black",
+                color: "var(--text-body)",
                 marginTop: 31,
                 textAlign: "center",
                 maxWidth: 859,
@@ -555,43 +557,45 @@ export default function MakePartnersContent({
           )}
 
           {heroImageSrc && (
-            <div style={{ marginTop: 40, width: "100%", maxWidth: 1042 }}>
+            <FramedMedia style={{ marginTop: 40, width: "100%", maxWidth: 1042 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroImageSrc}
                 alt={pageData?.heroHeadingAccent || "Hero"}
                 className="w-full h-auto"
               />
-            </div>
+            </FramedMedia>
           )}
         </div>
       </section>
 
       {/* 2. Partnership Announcement */}
       {(pageData?.announcementHeading || pageData?.announcementBody || announcementImageSrc) && (
-        <section className="bg-surface-2 py-[80px] px-4">
+        <section className="bg-surface-subtle py-[80px] px-4">
           <div className="mx-auto flex flex-col md:flex-row items-center justify-center gap-12" style={{ maxWidth: 1100 }}>
             <div style={{ flex: 1, maxWidth: 650 }}>
               {pageData?.announcementHeading && (
-                <h2 className="text-section-h2 text-ink" style={{ marginBottom: 20 }}>
+                <h2 className="text-section-h2 text-body" style={{ marginBottom: 20 }}>
                   {pageData.announcementHeading}
                 </h2>
               )}
               {pageData?.announcementBody && (
-                <p style={{ fontSize: 18, lineHeight: "28.8px", color: "black" }}>
+                <p style={{ fontSize: 18, lineHeight: "28.8px", color: "var(--text-body)" }}>
                   {pageData.announcementBody}
                 </p>
               )}
             </div>
             {announcementImageSrc && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={announcementImageSrc}
-                alt={pageData?.announcementHeading || "Partnership"}
-                width={233}
-                height={233}
-                className="rounded-[16px] shrink-0"
-              />
+              <FramedMedia className="shrink-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={announcementImageSrc}
+                  alt={pageData?.announcementHeading || "Partnership"}
+                  width={233}
+                  height={233}
+                  className="rounded-[16px]"
+                />
+              </FramedMedia>
             )}
           </div>
         </section>
@@ -667,12 +671,12 @@ export default function MakePartnersContent({
           <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
             <div className="flex flex-col items-center text-center" style={{ marginBottom: 60 }}>
               {pageData?.showcaseHeading && (
-                <h2 className="text-section-h2 text-ink" style={{ maxWidth: 900 }}>
+                <h2 className="text-section-h2 text-body" style={{ maxWidth: 900 }}>
                   {pageData.showcaseHeading}
                 </h2>
               )}
               {pageData?.showcaseSubheading && (
-                <p className="text-ink" style={{ fontSize: 20, marginTop: 12, maxWidth: 760 }}>
+                <p className="text-body" style={{ fontSize: 20, marginTop: 12, maxWidth: 760 }}>
                   {pageData.showcaseSubheading}
                 </p>
               )}
@@ -685,14 +689,14 @@ export default function MakePartnersContent({
                   className={`flex flex-col items-center gap-10 ${card.imageRight ? "md:flex-row" : "md:flex-row-reverse"}`}
                 >
                   <div style={{ flex: 1 }}>
-                    <h3 style={{ fontSize: 28, fontWeight: 600, color: "var(--ink-heading)", lineHeight: "36px" }}>
+                    <h3 style={{ fontSize: 28, fontWeight: 600, color: "var(--text-body)", lineHeight: "36px" }}>
                       {card.heading}
                     </h3>
-                    <p style={{ fontSize: 16, lineHeight: "25.6px", color: "var(--ink)", marginTop: 20 }}>
+                    <p style={{ fontSize: 16, lineHeight: "25.6px", color: "var(--text-body)", marginTop: 20 }}>
                       {card.body}
                     </p>
                   </div>
-                  <div
+                  <FramedMedia
                     className="rounded-card overflow-hidden w-full"
                     style={{ flex: 1, aspectRatio: "16 / 10" }}
                   >
@@ -713,7 +717,7 @@ export default function MakePartnersContent({
                         className="w-full h-full object-contain"
                       />
                     )}
-                  </div>
+                  </FramedMedia>
                 </div>
               ))}
             </div>

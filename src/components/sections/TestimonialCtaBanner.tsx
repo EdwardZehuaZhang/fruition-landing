@@ -106,12 +106,12 @@ export default function TestimonialCtaBanner({
             {active && (
               <div
                 key={active._id || index}
-                className="bg-surface text-ink rounded-[18px] px-8 py-9 md:px-10 md:py-10 shadow-2xl shadow-black/30 max-w-[500px] justify-self-end animate-fade-in flex flex-col"
-                style={{ height: 420 }}
+                className="bg-white text-black rounded-[18px] px-8 py-9 md:px-10 md:py-10 shadow-2xl shadow-black/30 max-w-[500px] justify-self-end animate-fade-in flex flex-col"
+                style={{ minHeight: 420 }}
               >
                 {active.quote && (
                   <p
-                    className="text-[1.08rem] md:text-[1.15rem] leading-[1.5] font-semibold tracking-[-0.02em] text-ink/90 overflow-hidden"
+                    className="text-[1.08rem] md:text-[1.15rem] leading-[1.5] font-semibold tracking-[-0.02em] text-black/90 overflow-hidden"
                     style={{
                       display: "-webkit-box",
                       WebkitLineClamp: 6,
@@ -128,7 +128,7 @@ export default function TestimonialCtaBanner({
                     src={photoSrc || "/images/default-avatar.svg"}
                     alt={active.clientName || ""}
                     className="h-24 w-24 shrink-0 rounded-full object-cover"
-                    style={{ backgroundColor: "var(--line-soft)" }}
+                    style={{ backgroundColor: "#ddd" }}
                   />
                   <div className="pb-1">
                     <div className="mb-3 flex h-9 w-9 items-center justify-center bg-[#6c35c8] text-white text-2xl font-bold rounded-sm">
@@ -138,7 +138,7 @@ export default function TestimonialCtaBanner({
                       {active.clientName ?? ""}
                     </div>
                     {role && (
-                      <div className="text-[0.95rem] text-ink/60">{role}</div>
+                      <div className="text-[0.95rem] text-black/60">{role}</div>
                     )}
                   </div>
                 </div>

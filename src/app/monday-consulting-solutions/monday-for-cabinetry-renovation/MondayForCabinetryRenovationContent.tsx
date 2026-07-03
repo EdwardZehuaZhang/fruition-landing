@@ -62,14 +62,14 @@ function KeyFeaturesSection({
     <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto grid grid-cols-1 md:grid-cols-2" style={{ maxWidth: 1100, gap: 48 }}>
         <div>
-          <h2 className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
-            {keyFeaturesPart1} <span style={{ color: "var(--brand)" }}>{keyFeaturesAccent}</span>
+          <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
+            {keyFeaturesPart1} <span style={{ color: "#8015e8" }}>{keyFeaturesAccent}</span>
           </h2>
           <ul className="flex flex-col" style={{ gap: 14 }}>
             {keyFeatures.map((f) => (
               <li key={f.title} className="flex items-start" style={{ gap: 10 }}>
-                <Check size={16} color="var(--brand)" style={{ flexShrink: 0 }} aria-hidden />
-                <p style={{ fontSize: 15, lineHeight: "24px", color: "var(--ink)" }}>
+                <Check size={16} color="#8015e8" style={{ flexShrink: 0 }} aria-hidden />
+                <p style={{ fontSize: 15, lineHeight: "24px", color: "var(--text-body)" }}>
                   <span className="font-bold">{f.title}:</span> {f.body}
                 </p>
               </li>
@@ -77,14 +77,14 @@ function KeyFeaturesSection({
           </ul>
         </div>
         <div>
-          <h2 className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
-            {servicesPart1} <span style={{ color: "var(--brand)" }}>{servicesAccent}</span>
+          <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
+            {servicesPart1} <span style={{ color: "#8015e8" }}>{servicesAccent}</span>
           </h2>
           <ul className="flex flex-col" style={{ gap: 14 }}>
             {services.map((s) => (
               <li key={s} className="flex items-start" style={{ gap: 10 }}>
-                <Check size={16} color="var(--brand)" style={{ flexShrink: 0 }} aria-hidden />
-                <p style={{ fontSize: 15, lineHeight: "24px", color: "var(--ink)" }}>{s}</p>
+                <Check size={16} color="#8015e8" style={{ flexShrink: 0 }} aria-hidden />
+                <p style={{ fontSize: 15, lineHeight: "24px", color: "var(--text-body)" }}>{s}</p>
               </li>
             ))}
           </ul>
@@ -126,13 +126,13 @@ function ReturnsBannerSection({
       style={{
         paddingTop: 96,
         paddingBottom: 96,
-        background: "linear-gradient(160deg, var(--navy-700) 0%, var(--navy-900) 100%)",
+        background: "linear-gradient(160deg, #2b074d 0%, #10003a 100%)",
       }}
     >
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <h2
           className="text-center font-bold"
-          style={{ color: "var(--white)", fontSize: "clamp(28px, 7vw, 44px)", lineHeight: 1.2, marginBottom: 12 }}
+          style={{ color: "white", fontSize: "clamp(28px, 7vw, 44px)", lineHeight: 1.2, marginBottom: 12 }}
         >
           {heading}
         </h2>
@@ -144,10 +144,10 @@ function ReturnsBannerSection({
           {testimonials.map((t) => (
             <figure
               key={t.name}
-              className="bg-white"
+              className="bg-surface-raised dark:shadow-none dark:border dark:border-ui"
               style={{ borderRadius: 16, padding: 24, display: "flex", flexDirection: "column", gap: 16 }}
             >
-              <blockquote style={{ fontSize: 14, lineHeight: "22px", color: "var(--ink)" }}>
+              <blockquote style={{ fontSize: 14, lineHeight: "22px", color: "var(--text-body)" }}>
                 “{t.quote}”
               </blockquote>
               <figcaption className="flex items-center" style={{ marginTop: "auto", gap: 12 }}>
@@ -161,9 +161,9 @@ function ReturnsBannerSection({
                   style={{ width: 56, height: 56, flexShrink: 0 }}
                 />
                 <div>
-                  <p className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 14 }}>{t.name}</p>
-                  <p style={{ color: "var(--ink-soft)", fontSize: 12 }}>{t.role}</p>
-                  <p style={{ color: "var(--brand)", fontSize: 12, fontWeight: 700 }}>{t.company}</p>
+                  <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 14 }}>{t.name}</p>
+                  <p style={{ color: "var(--text-muted-fg)", fontSize: 12 }}>{t.role}</p>
+                  <p style={{ color: "#8015e8", fontSize: 12, fontWeight: 700 }}>{t.company}</p>
                 </div>
               </figcaption>
             </figure>
@@ -178,8 +178,8 @@ function ReturnsBannerSection({
               height: 50,
               padding: "0 26px",
               borderRadius: 999,
-              background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
-              color: "var(--white)",
+              background: "linear-gradient(to right, #8015e8, #ba83f0)",
+              color: "white",
               fontSize: 15,
             }}
           >
@@ -193,7 +193,7 @@ function ReturnsBannerSection({
               padding: "0 26px",
               borderRadius: 999,
               border: "1px solid rgba(255,255,255,0.6)",
-              color: "var(--white)",
+              color: "white",
               fontSize: 15,
             }}
           >
@@ -265,7 +265,7 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
 
       {/* Trusted-by caption */}
       <section className="bg-surface px-4" style={{ paddingTop: 0, paddingBottom: 24 }}>
-        <p className="text-center" style={{ color: "var(--ink-heading)", fontSize: 14, fontWeight: 600 }}>
+        <p className="text-center" style={{ color: "var(--text-body)", fontSize: 14, fontWeight: 600 }}>
           {page.trustedByCaption || "Trusted by 500+ businesses worldwide"}
         </p>
       </section>

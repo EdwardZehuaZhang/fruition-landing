@@ -43,7 +43,7 @@ export default function CaseStudyCardsSection({
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         {heading && (
           <h2
-            className="text-section-h2 text-ink"
+            className="text-section-h2 text-body"
             style={{ marginBottom: 48 }}
           >
             {heading}
@@ -56,7 +56,7 @@ export default function CaseStudyCardsSection({
             return (
               <div
                 key={card._key || i}
-                className="bg-surface rounded-card border border-line overflow-hidden flex flex-col shadow-whisper"
+                className="bg-surface-raised rounded-card border border-ui overflow-hidden flex flex-col shadow-whisper dark:shadow-none"
               >
                 {/* Media: video or image */}
                 {embedUrl ? (
@@ -81,7 +81,7 @@ export default function CaseStudyCardsSection({
                       style={{
                         fontSize: 20,
                         fontWeight: 600,
-                        color: "var(--ink-heading)",
+                        color: "var(--text-body)",
                       }}
                     >
                       {card.title}
@@ -92,7 +92,7 @@ export default function CaseStudyCardsSection({
                       style={{
                         fontSize: 15,
                         lineHeight: "22.5px",
-                        color: "var(--ink)",
+                        color: "var(--text-body)",
                         marginTop: 12,
                         whiteSpace: "pre-line",
                       }}
@@ -106,7 +106,7 @@ export default function CaseStudyCardsSection({
                         style={{
                           fontSize: 14,
                           fontWeight: 600,
-                          color: "var(--ink-heading)",
+                          color: "var(--text-body)",
                         }}
                       >
                         {card.personName}
@@ -115,7 +115,7 @@ export default function CaseStudyCardsSection({
                         <p
                           style={{
                             fontSize: 13,
-                            color: "var(--ink-soft)",
+                            color: "var(--text-muted-fg)",
                           }}
                         >
                           {card.personRole}

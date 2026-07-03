@@ -21,6 +21,7 @@ function safeImageUrl(ref: SanityImageRef): string | null {
 export async function generateMetadata() {
   const page = await getPageBySlug("careers")
   return {
+    alternates: { canonical: "/careers" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }
@@ -52,14 +53,14 @@ export default async function CareersPage() {
             <div
               className="inline-flex items-center rounded-full"
               style={{
-                backgroundColor: "var(--surface-tint-2)",
+                backgroundColor: "#f4ecff",
                 color: "var(--purple-primary)",
                 padding: "8px 16px",
                 fontSize: 13,
                 fontWeight: 700,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
-                border: "1px solid var(--line-tint)",
+                border: "1px solid #e4d6fb",
               }}
             >
               {page.heroEyebrow}
@@ -77,16 +78,16 @@ export default async function CareersPage() {
                   if (idx >= 0) {
                     return (
                       <>
-                        <span className="text-ink">{page.heroHeading.slice(0, idx)}</span>
+                        <span className="text-body">{page.heroHeading.slice(0, idx)}</span>
                         <span style={{ color: "var(--purple-primary)" }}>{page.heroHeadingAccent}</span>
-                        <span className="text-ink">{page.heroHeading.slice(idx + page.heroHeadingAccent.length)}</span>
+                        <span className="text-body">{page.heroHeading.slice(idx + page.heroHeadingAccent.length)}</span>
                       </>
                     )
                   }
-                  return <span className="text-ink">{page.heroHeading}</span>
+                  return <span className="text-body">{page.heroHeading}</span>
                 })()
               ) : (
-                <span className="text-ink">{page.heroHeading}</span>
+                <span className="text-body">{page.heroHeading}</span>
               )}
             </h1>
           )}
@@ -97,7 +98,7 @@ export default async function CareersPage() {
               style={{
                 marginTop: 24,
                 maxWidth: 820,
-                color: "var(--ink-soft)",
+                color: "var(--text-body)",
                 lineHeight: 1.6,
               }}
             >
@@ -119,7 +120,7 @@ export default async function CareersPage() {
                     height: 53,
                     padding: "0 32px",
                     borderRadius: 100,
-                    background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
                     color: "white",
                     fontSize: 16,
                   }}
@@ -136,9 +137,9 @@ export default async function CareersPage() {
                     height: 53,
                     padding: "0 32px",
                     borderRadius: 100,
-                    border: "1px solid var(--brand)",
-                    backgroundColor: "var(--surface)",
-                    color: "var(--brand)",
+                    border: "1px solid #8015e8",
+                    backgroundColor: "white",
+                    color: "#8015e8",
                     fontSize: 16,
                   }}
                 >

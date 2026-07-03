@@ -31,7 +31,7 @@ export default function ServicesWorkflowTabs({ heading, tabs }: ServicesWorkflow
         {heading && (
           <h2
             className="text-section-h2 text-center"
-            style={{ color: "var(--ink)", marginBottom: 32 }}
+            style={{ color: "var(--text-body)", marginBottom: 32 }}
           >
             {heading}
           </h2>
@@ -50,8 +50,8 @@ export default function ServicesWorkflowTabs({ heading, tabs }: ServicesWorkflow
                 onClick={() => setActiveIndex(i)}
                 className={`relative inline-flex items-center justify-center rounded-[99px] px-[24px] py-[8px] text-[15px] leading-[1.2] transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   isActive
-                    ? "bg-gradient-to-r from-[color:var(--purple-primary)] to-[color:var(--purple-light)] text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]"
-                    : "bg-surface text-[color:var(--navy-700)] border border-line hover:border-brand"
+                    ? "bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]"
+                    : "bg-surface-raised text-body border border-ui hover:border-[#8015e8]"
                 }`}
               >
                 {tab.label}
@@ -62,14 +62,14 @@ export default function ServicesWorkflowTabs({ heading, tabs }: ServicesWorkflow
 
         {/* Active panel */}
         <div
-          className="rounded-card border border-[color:var(--line)] bg-surface"
+          className="rounded-card border border-ui bg-surface-raised"
           style={{ padding: 40 }}
         >
           <h3
             style={{
               fontSize: 28,
               fontWeight: 700,
-              color: "var(--ink)",
+              color: "var(--text-body)",
               marginBottom: 16,
               lineHeight: 1.2,
             }}
@@ -80,7 +80,7 @@ export default function ServicesWorkflowTabs({ heading, tabs }: ServicesWorkflow
             style={{
               fontSize: 16,
               lineHeight: "26px",
-              color: "var(--ink-soft)",
+              color: "var(--text-muted-fg)",
               marginBottom: 32,
             }}
           >
@@ -90,7 +90,7 @@ export default function ServicesWorkflowTabs({ heading, tabs }: ServicesWorkflow
             style={{
               fontSize: 14,
               fontWeight: 700,
-              color: "var(--brand)",
+              color: "#8015e8",
               letterSpacing: "0.08em",
               textTransform: "uppercase",
               marginBottom: 16,
@@ -109,7 +109,7 @@ export default function ServicesWorkflowTabs({ heading, tabs }: ServicesWorkflow
                 style={{
                   padding: 16,
                   borderRadius: 12,
-                  backgroundColor: "var(--surface-tint)",
+                  backgroundColor: "var(--surface-subtle)",
                   gap: 8,
                 }}
               >
@@ -118,7 +118,7 @@ export default function ServicesWorkflowTabs({ heading, tabs }: ServicesWorkflow
                   style={{
                     fontSize: 13,
                     lineHeight: "18px",
-                    color: "var(--ink)",
+                    color: "var(--text-body)",
                     fontWeight: 500,
                   }}
                 >

@@ -2,6 +2,10 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
   "name": "fruition-landing",
+  "routes": [
+    { "pattern": "fruitionservices.io/*", "zone_name": "fruitionservices.io" },
+    { "pattern": "www.fruitionservices.io/*", "zone_name": "fruitionservices.io" }
+  ],
   "compatibility_date": "2025-03-25",
   "compatibility_flags": [
     "nodejs_compat",

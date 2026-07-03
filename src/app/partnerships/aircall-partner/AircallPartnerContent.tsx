@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useState } from "react"
 import { Rocket, Check } from "lucide-react"
+import FramedMedia from "@/components/common/FramedMedia"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -142,9 +143,9 @@ function IntroSection() {
   return (
     <section className="bg-surface px-4" style={{ paddingTop: 60, paddingBottom: 60 }}>
       <div className="mx-auto text-center" style={{ maxWidth: 920 }}>
-        <p style={{ fontSize: 16, lineHeight: "26px", color: "var(--ink-soft)" }}>
-          Fruition is an <span className="font-bold" style={{ color: "var(--brand)" }}>official Aircall Partner</span> specialising in
-          <span className="font-bold" style={{ color: "var(--brand)" }}> enterprise-grade cloud phone system implementations</span>. Our certified team delivers comprehensive Aircall integration services, connecting your business communications with CRM platforms, contact centre operations, and sales workflows.
+        <p style={{ fontSize: 16, lineHeight: "26px", color: "var(--text-muted-fg)" }}>
+          Fruition is an <span className="font-bold" style={{ color: "#8015e8" }}>official Aircall Partner</span> specialising in
+          <span className="font-bold" style={{ color: "#8015e8" }}> enterprise-grade cloud phone system implementations</span>. Our certified team delivers comprehensive Aircall integration services, connecting your business communications with CRM platforms, contact centre operations, and sales workflows.
         </p>
       </div>
     </section>
@@ -160,10 +161,10 @@ function AircallTabsSection({ tabs }: { tabs: AircallTabShape[] }) {
     <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <div className="flex flex-col items-center text-center" style={{ marginBottom: 32 }}>
-          <h2 className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 32, lineHeight: "40px", maxWidth: 860, marginBottom: 14 }}>
+          <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 32, lineHeight: "40px", maxWidth: 860, marginBottom: 14 }}>
             Streamline Operations & Maximize Efficiency on monday.com with n8n Solutions
           </h2>
-          <p style={{ color: "var(--ink-soft)", fontSize: 16, lineHeight: "26px", maxWidth: 820 }}>
+          <p style={{ color: "var(--text-muted-fg)", fontSize: 16, lineHeight: "26px", maxWidth: 820 }}>
             We transform fragmented business processes into cohesive, automated systems that enhance team collaboration and deliver measurable ROI across your entire organization.
           </p>
         </div>
@@ -179,8 +180,8 @@ function AircallTabsSection({ tabs }: { tabs: AircallTabShape[] }) {
                 fontWeight: 600,
                 cursor: "pointer",
                 ...(i === activeIdx
-                  ? { background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))", color: "white", border: "none", boxShadow: "0 10px 22px -12px rgba(128,21,232,0.55)" }
-                  : { background: "var(--surface)", color: "var(--surface-inverse-2)", border: "1px solid var(--line)" }),
+                  ? { background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", border: "none", boxShadow: "0 10px 22px -12px rgba(128,21,232,0.55)" }
+                  : { background: "var(--surface-raised)", color: "var(--text-body)", border: "1px solid var(--border-ui)" }),
               }}
             >
               {tab.label}
@@ -189,21 +190,21 @@ function AircallTabsSection({ tabs }: { tabs: AircallTabShape[] }) {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
           {(active.items ?? []).map((g, idx) => (
-            <div key={g.number || idx} className="bg-surface" style={{ padding: 24, borderRadius: 18, border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 12 }}>
+            <div key={g.number || idx} className="dark:shadow-none" style={{ padding: 24, borderRadius: 18, background: "var(--surface-raised)", border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 12 }}>
               <div className="flex items-center" style={{ gap: 14 }}>
-                <span className="flex items-center justify-center font-bold" style={{ width: 38, height: 38, borderRadius: 12, background: "linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-light) 100%)", color: "white", fontSize: 13 }}>
+                <span className="flex items-center justify-center font-bold" style={{ width: 38, height: 38, borderRadius: 12, background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)", color: "white", fontSize: 13 }}>
                   {g.number}
                 </span>
-                <p className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 15, lineHeight: "22px" }}>{g.title}</p>
+                <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 15, lineHeight: "22px" }}>{g.title}</p>
               </div>
               {g.description && (
-                <p style={{ color: "var(--ink-soft)", fontSize: 13, lineHeight: "20px" }}>{g.description}</p>
+                <p style={{ color: "var(--text-muted-fg)", fontSize: 13, lineHeight: "20px" }}>{g.description}</p>
               )}
               {g.bullets && (
                 <ul className="flex flex-col" style={{ gap: 8 }}>
                   {g.bullets.map((b: string) => (
-                    <li key={b} className="flex items-start" style={{ gap: 8, color: "var(--ink-soft)", fontSize: 13, lineHeight: "20px" }}>
-                      <Check size={16} color="var(--brand)" aria-hidden />
+                    <li key={b} className="flex items-start" style={{ gap: 8, color: "var(--text-muted-fg)", fontSize: 13, lineHeight: "20px" }}>
+                      <Check size={16} color="#8015e8" aria-hidden />
                       <span>{b}</span>
                     </li>
                   ))}
@@ -238,13 +239,13 @@ function AIConversationsSection({ calendlyUrl, features }: { calendlyUrl: string
     <section className="bg-surface px-4" style={{ paddingTop: 64, paddingBottom: 64 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <div className="flex flex-col items-center text-center" style={{ marginBottom: 48 }}>
-          <h2 className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
+          <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
             AI-powered customer conversations made easy
           </h2>
           <Link
             href={calendlyUrl}
             className="inline-flex items-center justify-center gap-2 font-semibold"
-            style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))", color: "white", fontSize: 15, boxShadow: "0 14px 28px -12px rgba(128,21,232,0.55)" }}
+            style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", fontSize: 15, boxShadow: "0 14px 28px -12px rgba(128,21,232,0.55)" }}
           >
             <Rocket size={16} aria-hidden /> Book a Meeting
           </Link>
@@ -258,18 +259,18 @@ function AIConversationsSection({ calendlyUrl, features }: { calendlyUrl: string
               style={{ gap: 40, flexDirection: f.imageRight ? "row" : "row-reverse" }}
             >
               <div style={{ flex: 1, minWidth: 0 }}>
-                <p className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 26, lineHeight: "34px", marginBottom: 14 }}>
+                <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 26, lineHeight: "34px", marginBottom: 14 }}>
                   {f.title}
                 </p>
-                <p style={{ color: "var(--ink-soft)", fontSize: 15, lineHeight: "25px" }}>{f.body}</p>
+                <p style={{ color: "var(--text-muted-fg)", fontSize: 15, lineHeight: "25px" }}>{f.body}</p>
               </div>
-              <div
+              <FramedMedia
                 className="rounded-card overflow-hidden"
-                style={{ flex: 1, aspectRatio: "16 / 10", border: "1px solid var(--line-tint)", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
+                style={{ flex: 1, aspectRatio: "16 / 10", border: "1px solid var(--border-ui)", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={f.image} alt={f.title} className="w-full h-full object-cover" />
-              </div>
+              </FramedMedia>
             </div>
           ))}
         </div>

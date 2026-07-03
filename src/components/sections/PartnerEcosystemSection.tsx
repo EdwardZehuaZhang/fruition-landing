@@ -23,7 +23,7 @@ interface PartnerEcosystemSectionProps {
   partners?: Partner[]
 }
 
-const ACCENT = "var(--brand)"
+const ACCENT = "#8015e8"
 
 export default function PartnerEcosystemSection({
   eyebrow,
@@ -58,7 +58,7 @@ export default function PartnerEcosystemSection({
         {(heading || headingAccent) && (
           <h2
             className="text-section-h2 text-center"
-            style={{ color: "var(--ink)", marginBottom: subheading ? 16 : 48 }}
+            style={{ color: "var(--text-body)", marginBottom: subheading ? 16 : 48 }}
           >
             {heading}
             {headingAccent && (
@@ -70,7 +70,7 @@ export default function PartnerEcosystemSection({
           <p
             className="text-body text-center mx-auto"
             style={{
-              color: "var(--ink-soft)",
+              color: "var(--text-muted-fg)",
               maxWidth: 760,
               marginBottom: 48,
             }}
@@ -86,7 +86,7 @@ export default function PartnerEcosystemSection({
           {partners.map((p, i) => (
             <div
               key={p._key || i}
-              className="rounded-card border border-line-tint bg-surface flex flex-col"
+              className="rounded-card border border-ui bg-surface-raised flex flex-col dark:shadow-none"
               style={{
                 padding: 20,
                 boxShadow: "var(--shadow-whisper)",
@@ -97,7 +97,7 @@ export default function PartnerEcosystemSection({
                 className="flex items-center justify-center rounded-[16px]"
                 style={{
                   height: 72,
-                  background: p.tint || "var(--surface-tint)",
+                  background: p.tint || "#f7f5ff",
                   marginBottom: 14,
                 }}
               >
@@ -111,14 +111,14 @@ export default function PartnerEcosystemSection({
                 ) : p.wordmark ? (
                   p.wordmark
                 ) : (
-                  <span style={{ fontSize: 18, fontWeight: 700, color: "var(--ink)" }}>{p.name}</span>
+                  <span style={{ fontSize: 18, fontWeight: 700, color: "var(--text-body)" }}>{p.name}</span>
                 )}
               </div>
               <div
                 style={{
                   fontSize: 16,
                   fontWeight: 700,
-                  color: "var(--ink)",
+                  color: "var(--text-body)",
                   marginBottom: 2,
                 }}
               >
@@ -143,7 +143,7 @@ export default function PartnerEcosystemSection({
                   style={{
                     fontSize: 13,
                     lineHeight: 1.5,
-                    color: "var(--ink-soft)",
+                    color: "var(--text-muted-fg)",
                   }}
                 >
                   {p.description}

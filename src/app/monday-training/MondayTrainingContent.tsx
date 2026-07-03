@@ -330,8 +330,8 @@ export default function MondayTrainingContent({
               maxWidth: 924,
             }}
           >
-            <span className="text-ink">{heroHeadingPart1}</span>
-            <span style={{ color: "var(--brand)" }}>{heroHeadingAccent}</span>
+            <span className="text-body">{heroHeadingPart1}</span>
+            <span style={{ color: "#8015e8" }}>{heroHeadingAccent}</span>
           </h1>
 
           {/* Subheading */}
@@ -339,7 +339,7 @@ export default function MondayTrainingContent({
             style={{
               fontSize: 18,
               lineHeight: "25.2px",
-              color: "var(--ink)",
+              color: "black",
               marginTop: 31,
               textAlign: "center",
               maxWidth: 859,
@@ -393,7 +393,7 @@ export default function MondayTrainingContent({
                     paddingRight: 28,
                     height: 53,
                     borderRadius: 100,
-                    background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
                     fontSize: 16,
                   }}
                 >
@@ -410,9 +410,9 @@ export default function MondayTrainingContent({
                     paddingRight: 28,
                     height: 53,
                     borderRadius: 100,
-                    border: "1px solid var(--brand)",
-                    backgroundColor: "var(--surface)",
-                    color: "var(--brand)",
+                    border: "1px solid #8015e8",
+                    backgroundColor: "white",
+                    color: "#8015e8",
                     fontSize: 16,
                   }}
                 >
@@ -431,7 +431,7 @@ export default function MondayTrainingContent({
                 alt="monday.com training dashboards"
                 width={1042}
                 height={312}
-                className="rounded-card object-contain bg-surface"
+                className="rounded-card object-contain bg-white"
                 style={{ width: 1042, height: 312 }}
               />
             </div>
@@ -445,8 +445,8 @@ export default function MondayTrainingContent({
       <section className="bg-surface py-[80px] px-4">
         <div className="flex flex-col gap-[35px] items-center w-full max-w-[1348px] mx-auto">
           <p className="text-[28px] font-medium leading-[39.2px] text-center">
-            <span className="text-ink">{logoCloudPart1}</span>
-            <span className="text-brand">{logoCloudAccent}</span>
+            <span className="text-body">{logoCloudPart1}</span>
+            <span className="text-[#8015e8]">{logoCloudAccent}</span>
           </p>
           {duplicatedLogos.length > 0 && (
             <div className="w-full overflow-hidden">
@@ -500,7 +500,7 @@ export default function MondayTrainingContent({
       {/* ============================================================ */}
       {/* SECTION 3 -- Training Intro + Tabbed Content                 */}
       {/* ============================================================ */}
-      <section className="relative overflow-visible" style={{ backgroundColor: "var(--surface-tint-2)" }}>
+      <section className="relative overflow-visible" style={{ backgroundColor: "#f0ecfe" }}>
         {/* Decorative purple circle bg */}
         <div
           aria-hidden
@@ -526,7 +526,7 @@ export default function MondayTrainingContent({
               maxWidth: 924,
             }}
           >
-            <span className="text-ink">{trainingIntroHeading}</span>
+            <span className="text-body">{trainingIntroHeading}</span>
           </p>
 
           <p
@@ -535,7 +535,7 @@ export default function MondayTrainingContent({
               fontSize: 16,
               fontWeight: 400,
               lineHeight: "22.4px",
-              color: "var(--ink)",
+              color: "black",
               marginTop: 20,
               maxWidth: 924,
             }}
@@ -565,14 +565,14 @@ export default function MondayTrainingContent({
                       cursor: "pointer",
                       ...(isActive
                         ? {
-                            background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                            background: "linear-gradient(to right, #8015e8, #ba83f0)",
                             color: "white",
                             boxShadow: "0px 2px 8px rgba(128,21,232,0.35)",
                           }
                         : {
-                            backgroundColor: "var(--surface)",
-                            border: "1px solid var(--line)",
-                            color: "var(--ink)",
+                            backgroundColor: "white",
+                            border: "1px solid #e8e6e6",
+                            color: "black",
                           }),
                     }}
                   >
@@ -588,8 +588,8 @@ export default function MondayTrainingContent({
             <div
               style={{
                 width: 816,
-                backgroundColor: "var(--surface)",
-                border: "1px solid var(--line)",
+                backgroundColor: "white",
+                border: "1px solid #e8e6e6",
                 borderRadius: "var(--radius-card)",
                 padding: 28,
                 marginTop: 28,
@@ -598,20 +598,20 @@ export default function MondayTrainingContent({
               {currentTrainingItems.map((item, i) => (
                 <div key={`${item.number}-${i}`} className="flex items-start" style={{ gap: 20, marginBottom: 28 }}>
                   {/* Number */}
-                  <p className="font-extralight shrink-0" style={{ fontSize: 48, color: 'var(--brand)', lineHeight: 'normal', width: 60, textAlign: 'center' }}>
+                  <p className="font-extralight shrink-0" style={{ fontSize: 48, color: '#8015e8', lineHeight: 'normal', width: 60, textAlign: 'center' }}>
                     {item.number}
                   </p>
                   {/* Content */}
                   <div style={{ flex: 1 }}>
-                    <p className="font-bold" style={{ fontSize: 16, color: 'var(--ink-heading)', lineHeight: '22.4px' }}>
+                    <p className="font-bold" style={{ fontSize: 16, color: '#2b074d', lineHeight: '22.4px' }}>
                       {item.title}
                     </p>
                     {item.description ? (
-                      <p style={{ marginTop: 8, fontSize: 14, color: 'var(--ink-heading)', lineHeight: '22.4px', whiteSpace: 'pre-line' }}>
+                      <p style={{ marginTop: 8, fontSize: 14, color: '#2b074d', lineHeight: '22.4px', whiteSpace: 'pre-line' }}>
                         {item.description}
                       </p>
                     ) : (
-                      <ul className="list-disc" style={{ paddingLeft: 18, marginTop: 8, fontSize: 14, color: 'var(--ink-heading)', lineHeight: '22.4px' }}>
+                      <ul className="list-disc" style={{ paddingLeft: 18, marginTop: 8, fontSize: 14, color: '#2b074d', lineHeight: '22.4px' }}>
                         {(item.bullets ?? []).map((b, j) => (
                           <li key={j}>{b}</li>
                         ))}
@@ -670,20 +670,20 @@ export default function MondayTrainingContent({
         }
       >
         {empowerEyebrow && (
-          <p className="text-[14px] font-medium text-brand">
+          <p className="text-[14px] font-medium text-[#8015e8]">
             {empowerEyebrow}
           </p>
         )}
-        <h2 className="text-[30px] font-medium text-brand leading-[42px]">
+        <h2 className="text-[30px] font-medium text-[#8015e8] leading-[42px]">
           {empowerHeading}
         </h2>
-        <div className="text-[16px] text-ink leading-[22.4px]" style={{ whiteSpace: "pre-line" }}>
+        <div className="text-[16px] text-body leading-[22.4px]" style={{ whiteSpace: "pre-line" }}>
           {empowerBody}
         </div>
         {data?.empowerCtaLabel && data?.empowerCtaUrl && (
           <Link
             href={data.empowerCtaUrl}
-            className="group flex items-center justify-center gap-2 h-[53px] w-[326px] rounded-[100px] bg-gradient-to-r from-[var(--purple-primary)] to-[var(--purple-light)] hover:bg-accent-blue hover:bg-none text-white text-[16px] font-bold tracking-[0.32px] transition-colors"
+            className="group flex items-center justify-center gap-2 h-[53px] w-[326px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white text-[16px] font-bold tracking-[0.32px] transition-colors"
           >
             <PaperPlaneIcon />
             <CtaLabel label={data.empowerCtaLabel} />
@@ -712,21 +712,21 @@ export default function MondayTrainingContent({
             }
           >
             {service.title && (
-              <p className="text-[14px] font-medium text-brand flex items-center gap-2">
+              <p className="text-[14px] font-medium text-[#8015e8] flex items-center gap-2">
                 {service.emoji && <span>{service.emoji}</span>}
                 {service.title}
               </p>
             )}
             {service.subtitle && (
               <h2
-                className="text-[30px] font-medium text-ink leading-[42px]"
+                className="text-[30px] font-medium text-body leading-[42px]"
                 style={{ whiteSpace: "pre-line" }}
               >
                 {service.subtitle}
               </h2>
             )}
             <p
-              className="text-[16px] text-ink leading-[22.4px]"
+              className="text-[16px] text-body leading-[22.4px]"
               style={{ whiteSpace: "pre-line" }}
             >
               {service.description}
@@ -734,7 +734,7 @@ export default function MondayTrainingContent({
             {service.ctaLabel && service.ctaUrl && (
               <Link
                 href={service.ctaUrl}
-                className="inline-flex items-center font-semibold text-[16px] text-brand"
+                className="inline-flex items-center font-semibold text-[16px] text-[#8015e8]"
               >
                 <CtaLabel label={service.ctaLabel} />
               </Link>
@@ -762,7 +762,7 @@ export default function MondayTrainingContent({
       {/* ============================================================ */}
       {/* SECTION 11 -- Discover CTA                                   */}
       {/* ============================================================ */}
-      <section style={{ backgroundColor: "var(--surface-muted)", paddingTop: 80, paddingBottom: 80 }}>
+      <section style={{ backgroundColor: "#ece6fc", paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto flex flex-col items-center">
           {discoverBadgeSrc && (
             /* eslint-disable-next-line @next/next/no-img-element */
@@ -775,7 +775,7 @@ export default function MondayTrainingContent({
             />
           )}
           <h2
-            className="text-section-h2 text-center text-ink"
+            className="text-section-h2 text-center text-body"
             style={{ width: 694, marginTop: 28 }}
           >
             {discoverHeading}
@@ -792,8 +792,8 @@ export default function MondayTrainingContent({
                   style={{
                     height: 63,
                     borderRadius: 100,
-                    backgroundColor: "var(--surface)",
-                    color: "var(--brand)",
+                    backgroundColor: "white",
+                    color: "#8015e8",
                     fontSize: 16,
                   }}
                 >
@@ -807,7 +807,7 @@ export default function MondayTrainingContent({
                   style={{
                     height: 63,
                     borderRadius: 100,
-                    background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
                     fontSize: 16,
                   }}
                 >
@@ -844,8 +844,8 @@ export default function MondayTrainingContent({
                           paddingRight: 16,
                           height: 32,
                           borderRadius: 99,
-                          backgroundColor: "var(--surface-tint-2)",
-                          color: "var(--brand)",
+                          backgroundColor: "#f0ecfe",
+                          color: "#8015e8",
                           fontSize: 14,
                           fontWeight: 600,
                         }}
@@ -854,18 +854,18 @@ export default function MondayTrainingContent({
                         {service.title}
                       </span>
                       {service.subtitle && (
-                        <h2 className="text-[30px] font-bold text-ink leading-[42px]" style={{ whiteSpace: "pre-line" }}>
+                        <h2 className="text-[30px] font-bold text-body leading-[42px]" style={{ whiteSpace: "pre-line" }}>
                           {service.subtitle}
                         </h2>
                       )}
-                      <p style={{ fontSize: 16, lineHeight: "24px", color: "var(--ink)", whiteSpace: "pre-line" }}>
+                      <p style={{ fontSize: 16, lineHeight: "24px", color: "black", whiteSpace: "pre-line" }}>
                         {service.description}
                       </p>
                       {service.ctaLabel && service.ctaUrl && (
                         <Link
                           href={service.ctaUrl}
                           className="inline-flex items-center font-semibold"
-                          style={{ fontSize: 16, color: "var(--brand)" }}
+                          style={{ fontSize: 16, color: "#8015e8" }}
                         >
                           <CtaLabel label={service.ctaLabel} />
                         </Link>

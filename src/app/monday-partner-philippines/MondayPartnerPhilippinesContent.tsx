@@ -11,6 +11,7 @@ import {
 } from "@/components/sections"
 import TeamGridSection, { type TeamMember } from "@/components/TeamGridSection"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
+import FramedMedia from "@/components/common/FramedMedia"
 import type {
   CaseStudy,
   SiteSettingsData,
@@ -31,9 +32,9 @@ function TeamsTransformedStrip() {
   return (
     <section className="bg-surface px-4" style={{ paddingTop: 24, paddingBottom: 32 }}>
       <div className="mx-auto text-center" style={{ maxWidth: 920 }}>
-        <p className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 16, marginBottom: 8 }}>Teams Transformed with Proven Efficiency Gains.</p>
-        <p style={{ color: "var(--ink-soft)", fontSize: 14, lineHeight: "22px" }}>
-          Authorised <span className="font-bold" style={{ color: "var(--brand)" }}>monday.com</span> consulting, implementation and integration partner consultant in <span className="font-bold" style={{ color: "var(--brand)" }}>the Philippines</span>.
+        <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 16, marginBottom: 8 }}>Teams Transformed with Proven Efficiency Gains.</p>
+        <p style={{ color: "var(--text-body)", fontSize: 14, lineHeight: "22px" }}>
+          Authorised <span className="font-bold" style={{ color: "#8015e8" }}>monday.com</span> consulting, implementation and integration partner consultant in <span className="font-bold" style={{ color: "#8015e8" }}>the Philippines</span>.
         </p>
       </div>
     </section>
@@ -55,23 +56,23 @@ function FeatureBlocksSection({ blocks }: { blocks: FeatureBlock[] }) {
               style={{ gap: 40, flexDirection: i % 2 === 0 ? "row" : "row-reverse" }}
             >
               <div style={{ flex: 1, minWidth: 0 }}>
-                <h3 className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 26, lineHeight: "34px", marginBottom: 14 }}>{b.title}</h3>
-                <p style={{ color: "var(--ink-soft)", fontSize: 15, lineHeight: "24px", whiteSpace: "pre-line" }}>{b.body}</p>
+                <h3 className="font-bold" style={{ color: "var(--text-body)", fontSize: 26, lineHeight: "34px", marginBottom: 14 }}>{b.title}</h3>
+                <p style={{ color: "var(--text-body)", fontSize: 15, lineHeight: "24px", whiteSpace: "pre-line" }}>{b.body}</p>
                 <Link
                   href={b.ctaUrl || "#"}
                   className="inline-flex items-center font-semibold"
-                  style={{ marginTop: 18, color: "var(--brand)", fontSize: 14 }}
+                  style={{ marginTop: 18, color: "#8015e8", fontSize: 14 }}
                 >
                   {b.ctaLabel} →
                 </Link>
               </div>
-              <div
-                className="rounded-card overflow-hidden bg-surface"
-                style={{ flex: 1, aspectRatio: "16 / 10", border: "1px solid var(--line-tint)", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
+              <FramedMedia
+                className="rounded-card overflow-hidden bg-surface-raised dark:shadow-none"
+                style={{ flex: 1, aspectRatio: "16 / 10", border: "1px solid var(--border-ui)", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={b.image} alt={b.title} className="w-full h-full object-cover" />
-              </div>
+              </FramedMedia>
             </div>
           ))}
         </div>
@@ -84,21 +85,21 @@ function PartnerSectionCta({ calendlyUrl }: { calendlyUrl: string }) {
   return (
     <section className="bg-surface px-4" style={{ paddingTop: 24, paddingBottom: 80 }}>
       <div className="mx-auto text-center" style={{ maxWidth: 920 }}>
-        <h2 className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 28, lineHeight: "36px", marginBottom: 22 }}>
-          Work with a certified <span style={{ color: "var(--brand)" }}>monday.com partner consultant</span> today
+        <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 28, lineHeight: "36px", marginBottom: 22 }}>
+          Work with a certified <span style={{ color: "#8015e8" }}>monday.com partner consultant</span> today
         </h2>
         <div className="flex flex-wrap justify-center" style={{ gap: 14 }}>
           <Link
             href={calendlyUrl}
             className="inline-flex items-center justify-center font-semibold gap-2"
-            style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))", color: "var(--white)", fontSize: 14 }}
+            style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", fontSize: 14 }}
           >
             <Rocket size={16} aria-hidden /> Schedule a Consultation
           </Link>
           <Link
             href="https://monday.com"
             className="inline-flex items-center justify-center font-semibold gap-2"
-            style={{ height: 50, padding: "0 26px", borderRadius: 999, border: "1px solid var(--brand)", color: "var(--brand)", fontSize: 14, background: "var(--surface)" }}
+            style={{ height: 50, padding: "0 26px", borderRadius: 999, border: "1px solid #8015e8", color: "#8015e8", fontSize: 14, background: "white" }}
           >
             <Play size={16} aria-hidden /> Get Started with monday.com
           </Link>
@@ -110,16 +111,16 @@ function PartnerSectionCta({ calendlyUrl }: { calendlyUrl: string }) {
 
 function EconomicImpactSection({ calendlyUrl, stats }: { calendlyUrl: string; stats: RoiStat[] }) {
   return (
-    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(160deg, var(--navy-700) 0%, var(--navy-900) 100%)" }}>
+    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(160deg, #2b074d 0%, #10003a 100%)" }}>
       <div className="mx-auto text-center" style={{ maxWidth: 1100 }}>
-        <h2 className="font-bold" style={{ color: "var(--white)", fontSize: 30, lineHeight: "38px", maxWidth: 820, margin: "0 auto 12px" }}>
-          Join <span style={{ color: "var(--brand-light)" }}>500+ businesses</span> that have leveraged our monday.com expert consultants.
+        <h2 className="font-bold" style={{ color: "white", fontSize: 30, lineHeight: "38px", maxWidth: 820, margin: "0 auto 12px" }}>
+          Join <span style={{ color: "#b162fe" }}>500+ businesses</span> that have leveraged our monday.com expert consultants.
         </h2>
         <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 15, marginBottom: 36 }}>The economic impact of</p>
         <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 20, marginBottom: 40 }}>
           {stats.map((s, i) => (
             <div key={s.label || i}>
-              <p className="font-bold" style={{ color: "var(--white)", fontSize: 36, lineHeight: 1 }}>{s.value}</p>
+              <p className="font-bold" style={{ color: "white", fontSize: 36, lineHeight: 1 }}>{s.value}</p>
               <p style={{ color: "rgba(255,255,255,0.78)", fontSize: 13, marginTop: 8 }}>{s.label}</p>
             </div>
           ))}
@@ -128,7 +129,7 @@ function EconomicImpactSection({ calendlyUrl, stats }: { calendlyUrl: string; st
           <Link
             href={calendlyUrl}
             className="inline-flex items-center justify-center font-semibold gap-2"
-            style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))", color: "var(--white)", fontSize: 14 }}
+            style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", fontSize: 14 }}
           >
             <Rocket size={16} aria-hidden /> Book a Time
           </Link>
@@ -140,20 +141,20 @@ function EconomicImpactSection({ calendlyUrl, stats }: { calendlyUrl: string; st
 
 function CrmTutorialCta({ calendlyUrl }: { calendlyUrl: string }) {
   return (
-    <section className="px-4" style={{ paddingTop: 60, paddingBottom: 60, background: "linear-gradient(180deg, var(--surface-tint) 0%, var(--line-tint) 100%)" }}>
+    <section className="px-4" style={{ paddingTop: 60, paddingBottom: 60, background: "linear-gradient(180deg, #faf6ff 0%, #ebd9ff 100%)" }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <div className="text-center">
-          <h2 className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 28, lineHeight: "36px", marginBottom: 14 }}>
-            Everything You Need to Know to Get Started with <span style={{ color: "var(--brand)" }}>monday CRM</span>
+          <h2 className="font-bold" style={{ color: "#10003a", fontSize: 28, lineHeight: "36px", marginBottom: 14 }}>
+            Everything You Need to Know to Get Started with <span style={{ color: "#8015e8" }}>monday CRM</span>
           </h2>
-          <p style={{ color: "var(--ink-soft)", fontSize: 15, lineHeight: "24px", maxWidth: 720, margin: "0 auto" }}>
+          <p style={{ color: "#444", fontSize: 15, lineHeight: "24px", maxWidth: 720, margin: "0 auto" }}>
             Our tutorial walks you through the entire process, from managing leads and pipeline tracking, to sending emails, automations, dashboards, and integrations.
           </p>
           <div className="flex justify-center" style={{ marginTop: 22 }}>
             <Link
               href={calendlyUrl}
               className="inline-flex items-center justify-center font-semibold gap-2"
-              style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))", color: "var(--white)", fontSize: 14 }}
+              style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", fontSize: 14 }}
             >
               <Rocket size={16} aria-hidden /> Book a Time
             </Link>

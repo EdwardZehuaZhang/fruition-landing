@@ -3,10 +3,12 @@ import { LogoCloudMarquee, CalendlySection, DiscoverCtaSection, CroSections, Sti
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
+import FramedMedia from "@/components/common/FramedMedia"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("customer-testimonials")
   return {
+    alternates: { canonical: "/customer-testimonials" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }
@@ -87,15 +89,16 @@ export default async function CustomerTestimonialsPage() {
                 const src = safeImageUrl(badge.image)
                 if (!src) return null
                 return (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={badge._key || `badge-${i}`}
-                    src={src}
-                    alt={badge.name || "Partner badge"}
-                    width={120}
-                    height={44}
-                    className="h-[44px] w-auto rounded-[5px]"
-                  />
+                  <FramedMedia key={badge._key || `badge-${i}`} className="dark:p-1.5">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={src}
+                      alt={badge.name || "Partner badge"}
+                      width={120}
+                      height={44}
+                      className="h-[44px] w-auto rounded-[5px]"
+                    />
+                  </FramedMedia>
                 )
               })}
             </div>
@@ -109,7 +112,7 @@ export default async function CustomerTestimonialsPage() {
                 lineHeight: "1.2",
                 marginTop: partnerBadges.length > 0 ? 42 : 0,
                 maxWidth: 924,
-                color: "var(--ink)",
+                color: "var(--text-body)",
               }}
             >
               {heroHeading}
@@ -122,7 +125,7 @@ export default async function CustomerTestimonialsPage() {
               style={{
                 fontSize: 18,
                 lineHeight: "28px",
-                color: "var(--ink)",
+                color: "var(--text-body)",
                 marginTop: 24,
                 maxWidth: 860,
               }}
@@ -137,7 +140,7 @@ export default async function CustomerTestimonialsPage() {
               style={{
                 fontSize: 16,
                 lineHeight: "26px",
-                color: "var(--ink-soft)",
+                color: "var(--text-body)",
                 marginTop: 16,
                 maxWidth: 860,
               }}

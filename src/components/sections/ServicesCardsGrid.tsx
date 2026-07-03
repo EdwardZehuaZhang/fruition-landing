@@ -19,9 +19,9 @@ interface ServicesCardsGridProps {
   theme?: SectionTheme
 }
 
-const DARK_BG = "var(--surface-inverse-2)"
-const LIGHT_BG = "var(--surface-tint)"
-const ACCENT = "var(--brand)"
+const DARK_BG = "#2b074d"
+const LIGHT_BG = "var(--surface-subtle)"
+const ACCENT = "#8015e8"
 
 export default function ServicesCardsGrid({
   heading,
@@ -34,8 +34,8 @@ export default function ServicesCardsGrid({
 
   const isDark = theme === "dark"
   const bg = isDark ? DARK_BG : LIGHT_BG
-  const headingColor = isDark ? "var(--ink-inverse)" : "var(--ink)"
-  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "var(--ink-soft)"
+  const headingColor = isDark ? "#ffffff" : "var(--text-body)"
+  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "var(--text-muted-fg)"
 
   return (
     <section style={{ backgroundColor: bg, paddingTop: 80, paddingBottom: 80 }}>
@@ -50,7 +50,7 @@ export default function ServicesCardsGrid({
           >
             {heading}
             {headingAccent && (
-              <span style={{ color: "var(--brand-light)" }}>{headingAccent}</span>
+              <span style={{ color: "#b990f5" }}>{headingAccent}</span>
             )}
           </h2>
         )}
@@ -74,7 +74,7 @@ export default function ServicesCardsGrid({
           {cards.map((card, i) => (
             <div
               key={card._key || i}
-              className="bg-surface rounded-card"
+              className="bg-surface-raised rounded-card dark:shadow-none dark:border dark:border-ui"
               style={{
                 padding: 28,
                 boxShadow: "var(--shadow-whisper)",
@@ -95,7 +95,7 @@ export default function ServicesCardsGrid({
                 style={{
                   fontSize: 20,
                   fontWeight: 700,
-                  color: "var(--navy-700)",
+                  color: "var(--text-body)",
                   marginBottom: 10,
                 }}
               >
@@ -106,7 +106,7 @@ export default function ServicesCardsGrid({
                   style={{
                     fontSize: 14,
                     lineHeight: 1.55,
-                    color: "var(--ink-soft)",
+                    color: "var(--text-body)",
                     whiteSpace: "pre-line",
                     marginBottom: card.bullets?.length ? 16 : 0,
                   }}
@@ -131,7 +131,7 @@ export default function ServicesCardsGrid({
                         gap: 10,
                         fontSize: 14,
                         lineHeight: 1.5,
-                        color: "var(--ink)",
+                        color: "var(--text-body)",
                       }}
                     >
                       <span

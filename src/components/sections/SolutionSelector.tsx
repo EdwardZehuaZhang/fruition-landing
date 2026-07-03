@@ -45,17 +45,17 @@ export default function SolutionSelector({
       <div className="mx-auto" style={{ maxWidth: 1040 }}>
         <div className="text-center" style={{ marginBottom: 36, marginInline: "auto", maxWidth: 680 }}>
           {eyebrow && (
-            <p className="font-semibold uppercase" style={{ color: "var(--brand)", fontSize: 12, letterSpacing: "0.16em", marginBottom: 12 }}>
+            <p className="font-semibold uppercase" style={{ color: "#8015e8", fontSize: 12, letterSpacing: "0.16em", marginBottom: 12 }}>
               {eyebrow}
             </p>
           )}
           {heading && (
-            <h2 className="font-bold" style={{ color: "var(--ink-heading)", fontSize: "clamp(26px, 4.5vw, 36px)", lineHeight: 1.2, letterSpacing: "-0.015em", textWrap: "balance" }}>
+            <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: "clamp(26px, 4.5vw, 36px)", lineHeight: 1.2, letterSpacing: "-0.015em", textWrap: "balance" }}>
               {heading}
             </h2>
           )}
           {subheading && (
-            <p style={{ color: "var(--ink-soft)", fontSize: 16, lineHeight: "26px", marginTop: 12 }}>{subheading}</p>
+            <p style={{ color: "var(--text-muted-fg)", fontSize: 16, lineHeight: "26px", marginTop: 12 }}>{subheading}</p>
           )}
         </div>
 
@@ -82,8 +82,8 @@ export default function SolutionSelector({
                     padding: "18px 20px",
                     borderRadius: 16,
                     cursor: "pointer",
-                    border: isActive ? "1px solid var(--brand)" : "1px solid var(--line-tint)",
-                    background: isActive ? "linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-light) 100%)" : "var(--surface)",
+                    border: isActive ? "1px solid #8015e8" : "1px solid var(--border-ui)",
+                    background: isActive ? "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)" : "var(--surface-raised)",
                     boxShadow: isActive ? "0 18px 36px -24px rgba(128,21,232,0.7)" : "none",
                   }}
                 >
@@ -91,10 +91,10 @@ export default function SolutionSelector({
                     {opt.glyph ?? "•"}
                   </span>
                   <span className="flex flex-col">
-                    <span className="font-bold" style={{ fontSize: 15, color: isActive ? "var(--white)" : "var(--ink-heading)" }}>
+                    <span className="font-bold" style={{ fontSize: 15, color: isActive ? "#ffffff" : "var(--text-body)" }}>
                       {opt.label}
                     </span>
-                    <span style={{ fontSize: 12, lineHeight: "16px", marginTop: 2, color: isActive ? "rgba(255,255,255,0.82)" : "var(--ink-muted)" }}>
+                    <span style={{ fontSize: 12, lineHeight: "16px", marginTop: 2, color: isActive ? "rgba(255,255,255,0.82)" : "var(--text-muted-fg)" }}>
                       {opt.problem}
                     </span>
                   </span>
@@ -107,11 +107,11 @@ export default function SolutionSelector({
           <div
             key={active.key}
             role="tabpanel"
-            className="cs-card relative overflow-hidden rounded-card flex flex-col"
+            className="cs-card relative overflow-hidden rounded-card flex flex-col dark:!bg-surface-raised dark:!bg-none"
             style={{
               padding: 36,
-              background: "linear-gradient(135deg, var(--surface-tint) 0%, var(--surface) 55%, var(--surface-tint) 100%)",
-              border: "1px solid var(--line-tint)",
+              background: "linear-gradient(135deg, #faf7ff 0%, #ffffff 55%, #f9f5ff 100%)",
+              border: "1px solid var(--border-ui)",
             }}
           >
             <span
@@ -120,10 +120,10 @@ export default function SolutionSelector({
               style={{ top: -120, right: -120, width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(128,21,232,0.10) 0%, rgba(128,21,232,0) 70%)" }}
             />
             <div className="relative">
-              <p className="font-semibold uppercase" style={{ color: "var(--brand)", fontSize: 11, letterSpacing: "0.16em" }}>
+              <p className="font-semibold uppercase" style={{ color: "#8015e8", fontSize: 11, letterSpacing: "0.16em" }}>
                 How we solve it
               </p>
-              <h3 className="font-bold" style={{ color: "var(--navy-800)", fontSize: 24, lineHeight: "30px", marginTop: 8, textWrap: "balance" }}>
+              <h3 className="font-bold" style={{ color: "var(--text-body)", fontSize: 24, lineHeight: "30px", marginTop: 8, textWrap: "balance" }}>
                 {active.label}
               </h3>
               <ul className="flex flex-col" style={{ gap: 12, marginTop: 22 }}>
@@ -132,28 +132,28 @@ export default function SolutionSelector({
                     <span
                       aria-hidden
                       className="flex-none inline-flex items-center justify-center"
-                      style={{ width: 22, height: 22, borderRadius: 999, background: "var(--surface-tint-2)", color: "var(--brand)", marginTop: 1 }}
+                      style={{ width: 22, height: 22, borderRadius: 999, background: "#efe7fb", color: "#8015e8", marginTop: 1 }}
                     >
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                         <path d="M20 6 9 17l-5-5" />
                       </svg>
                     </span>
-                    <span style={{ color: "var(--brand-contrast)", fontSize: 15, lineHeight: "22px" }}>{c}</span>
+                    <span style={{ color: "var(--text-body)", fontSize: 15, lineHeight: "22px" }}>{c}</span>
                   </li>
                 ))}
               </ul>
               <div
                 className="flex flex-wrap items-center justify-between"
-                style={{ gap: 16, marginTop: 26, paddingTop: 22, borderTop: "1px solid var(--line-tint)" }}
+                style={{ gap: 16, marginTop: 26, paddingTop: 22, borderTop: "1px solid var(--border-ui)" }}
               >
-                <p className="font-semibold" style={{ color: "var(--ink-heading)", fontSize: 15, maxWidth: 360 }}>
+                <p className="font-semibold" style={{ color: "var(--text-body)", fontSize: 15, maxWidth: 360 }}>
                   {active.outcome}
                 </p>
                 {ctaLabel && ctaUrl && (
                   <a
                     href={ctaUrl}
                     className="inline-flex flex-none items-center justify-center font-semibold"
-                    style={{ height: 46, padding: "0 22px", borderRadius: 999, background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))", color: "var(--white)", fontSize: 14 }}
+                    style={{ height: 46, padding: "0 22px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "#ffffff", fontSize: 14 }}
                   >
                     {ctaLabel}
                   </a>

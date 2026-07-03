@@ -77,8 +77,8 @@ export default function BlogInfiniteList({
       {hasMore && (
         <div ref={sentinelRef} className="flex justify-center py-12">
           {loading ? (
-            <div className="flex items-center gap-2 text-ink-muted text-sm">
-              <span className="w-4 h-4 rounded-full border-2 border-line-soft border-t-blue-600 animate-spin" />
+            <div className="flex items-center gap-2 text-muted text-sm">
+              <span className="w-4 h-4 rounded-full border-2 border-ui border-t-blue-600 animate-spin" />
               Loading more posts…
             </div>
           ) : (
@@ -88,7 +88,7 @@ export default function BlogInfiniteList({
       )}
 
       {!hasMore && posts.length > 0 && (
-        <p className="text-center text-sm text-ink-faint py-12">
+        <p className="text-center text-sm text-muted py-12">
           You&apos;ve reached the end.
         </p>
       )}

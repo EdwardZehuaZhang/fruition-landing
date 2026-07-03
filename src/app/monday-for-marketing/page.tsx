@@ -20,6 +20,7 @@ import YouTubeEmbed from "@/components/YouTubeEmbed"
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-marketing")
   return {
+    alternates: { canonical: "/monday-for-marketing" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }
@@ -101,7 +102,7 @@ export default async function Page() {
       )}
 
       {/* 8. Full-width video + Why the best use monday.com — single unified section */}
-      <section style={{ backgroundColor: "var(--surface-tint)", paddingTop: 80, paddingBottom: 80 }}>
+      <section style={{ backgroundColor: "var(--surface-subtle)", paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
           {page.bottomVideoUrl && (
             <div
@@ -117,7 +118,7 @@ export default async function Page() {
           {page.whyBestHeading && (
             <h2
               className="text-section-h2 text-center"
-              style={{ color: "var(--ink)", marginBottom: 48 }}
+              style={{ color: "var(--text-body)", marginBottom: 48 }}
             >
               {page.whyBestHeading}
             </h2>
@@ -126,14 +127,14 @@ export default async function Page() {
             {(page.whyBestCards || []).map((card: { _key?: string; emoji?: string; title?: string; description?: string }) => (
               <div
                 key={card._key}
-                className="bg-surface rounded-card border border-line"
+                className="bg-surface-raised rounded-card border border-ui"
                 style={{ padding: 28 }}
               >
                 <div style={{ fontSize: 32, lineHeight: 1, marginBottom: 12 }}>{card.emoji}</div>
-                <h3 style={{ fontSize: 20, fontWeight: 700, color: "var(--ink)", marginBottom: 8 }}>
+                <h3 style={{ fontSize: 20, fontWeight: 700, color: "var(--text-body)", marginBottom: 8 }}>
                   {card.title}
                 </h3>
-                <p style={{ fontSize: 15, lineHeight: "22px", color: "var(--ink-soft)" }}>
+                <p style={{ fontSize: 15, lineHeight: "22px", color: "var(--text-muted-fg)" }}>
                   {card.description}
                 </p>
               </div>

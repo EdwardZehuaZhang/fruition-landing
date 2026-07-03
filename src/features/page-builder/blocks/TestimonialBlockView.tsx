@@ -23,10 +23,10 @@ export default function TestimonialBlockView({ quote, authorName, authorRole, co
       <div className="flex items-start justify-between px-8 pb-4 pt-7">
         <div>
           {authorName && (
-            <p className="text-[20px] font-semibold leading-[1.45] text-ink-heading">{authorName}</p>
+            <p className="text-[20px] font-semibold leading-[1.45] text-body">{authorName}</p>
           )}
           {(authorRole || company) && (
-            <p className="text-caption font-normal text-ink-soft">
+            <p className="text-caption font-normal text-muted">
               {authorRole}{authorRole && company ? ', ' : ''}{company}
             </p>
           )}
@@ -39,22 +39,22 @@ export default function TestimonialBlockView({ quote, authorName, authorRole, co
             width={53}
             height={53}
             className="w-[53px] h-[53px] rounded-full object-cover shrink-0 ml-4"
-            style={{ backgroundColor: 'var(--line)' }}
+            style={{ backgroundColor: '#e8e6e6' }}
           />
         ) : (
-          <div className="w-[53px] h-[53px] rounded-full bg-line shrink-0 ml-4" />
+          <div className="w-[53px] h-[53px] rounded-full bg-[#e8e6e6] shrink-0 ml-4" />
         )}
       </div>
 
       <div className="flex-1 px-8">
-        <p className="text-body-sm text-ink">
+        <p className="text-body-sm text-body">
           {quote}
         </p>
       </div>
 
       <div className="flex gap-[2px] px-8 pb-8 pt-4">
         {[...Array(5)].map((_, i) => (
-          <svg key={i} className="w-[23px] h-[21px]" viewBox="0 0 23 21" fill="var(--brand)">
+          <svg key={i} className="w-[23px] h-[21px]" viewBox="0 0 23 21" fill="#8015E8">
             <path d="M11.5 0L14.09 7.36H22.06L15.49 11.92L18.08 19.28L11.5 14.72L4.92 19.28L7.51 11.92L0.94 7.36H8.91L11.5 0Z" />
           </svg>
         ))}

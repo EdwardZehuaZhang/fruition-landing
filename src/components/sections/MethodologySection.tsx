@@ -13,10 +13,10 @@ export default function MethodologySection({
   if (steps.length === 0) return null
 
   return (
-    <section id="our-process" style={{ backgroundColor: "var(--surface-tint-2)" }} className="py-[80px] px-4">
+    <section id="our-process" style={{ backgroundColor: "var(--surface-subtle)" }} className="py-[80px] px-4">
       <div className="mx-auto max-w-[959px] flex flex-col items-center gap-10">
         {heading && (
-          <h2 className="text-section-h3 text-center text-ink">
+          <h2 className="text-section-h3 text-center text-body">
             {heading}
           </h2>
         )}

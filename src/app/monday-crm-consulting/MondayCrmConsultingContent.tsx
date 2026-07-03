@@ -147,7 +147,7 @@ export default function MondayCrmConsultingContent({
             className="text-display text-center"
             style={{ marginTop: page.heroEyebrow ? 16 : 42, maxWidth: 924 }}
           >
-            <span className="text-ink">
+            <span className="text-body">
               {page.heroHeading || page.title || ""}
             </span>
           </h1>
@@ -155,7 +155,7 @@ export default function MondayCrmConsultingContent({
           {/* Subheading */}
           {!page.hideHeroSubheading && page.heroSubheading && (
             <p
-              className="text-body-lead text-center text-ink"
+              className="text-body-lead text-center text-body"
               style={{
                 marginTop: 31,
                 maxWidth: 859,
@@ -180,14 +180,14 @@ export default function MondayCrmConsultingContent({
                   borderRadius: 100,
                   ...(page.secondaryCtaLabel
                     ? {
-                        border: "1px solid var(--brand)",
-                        backgroundColor: "var(--surface)",
-                        color: "var(--brand)",
+                        border: "1px solid #8015e8",
+                        backgroundColor: "white",
+                        color: "#8015e8",
                       }
                     : {
                         background:
-                          "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
-                        color: "var(--white)",
+                          "linear-gradient(to right, #8015e8, #ba83f0)",
+                        color: "white",
                       }),
                   fontSize: 16,
                 }}
@@ -202,7 +202,7 @@ export default function MondayCrmConsultingContent({
                 style={{
                   height: 53,
                   borderRadius: 100,
-                  background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                  background: "linear-gradient(to right, #8015e8, #ba83f0)",
                   fontSize: 16,
                 }}
               >

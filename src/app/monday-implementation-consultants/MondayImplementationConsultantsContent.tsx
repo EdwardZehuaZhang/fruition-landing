@@ -387,9 +387,9 @@ export default function MondayImplementationConsultantsContent({
               whiteSpace: "pre-line",
             }}
           >
-            {heroHeadingPart1 && <span className="text-ink">{heroHeadingPart1}</span>}
-            <span style={{ color: "var(--brand)" }}>{heroHeadingAccent}</span>
-            {heroHeadingPart2 && <span className="text-ink">{heroHeadingPart2}</span>}
+            {heroHeadingPart1 && <span className="text-body">{heroHeadingPart1}</span>}
+            <span style={{ color: "#8015e8" }}>{heroHeadingAccent}</span>
+            {heroHeadingPart2 && <span className="text-body">{heroHeadingPart2}</span>}
           </h1>
 
           {/* Subheading */}
@@ -398,7 +398,7 @@ export default function MondayImplementationConsultantsContent({
               style={{
                 fontSize: 18,
                 lineHeight: "25.2px",
-                color: "var(--ink)",
+                color: "black",
                 marginTop: 31,
                 textAlign: "center",
                 maxWidth: 859,
@@ -448,9 +448,9 @@ export default function MondayImplementationConsultantsContent({
                   style={{
                     height: 53,
                     borderRadius: 100,
-                    border: "1px solid var(--brand)",
-                    backgroundColor: "var(--surface)",
-                    color: "var(--brand)",
+                    border: "1px solid #8015e8",
+                    backgroundColor: "white",
+                    color: "#8015e8",
                     fontSize: 16,
                   }}
                 >
@@ -464,7 +464,7 @@ export default function MondayImplementationConsultantsContent({
                   style={{
                     height: 53,
                     borderRadius: 100,
-                    background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
                     fontSize: 16,
                   }}
                 >
@@ -483,7 +483,7 @@ export default function MondayImplementationConsultantsContent({
                 alt="monday.com dashboards"
                 width={1042}
                 height={312}
-                className="rounded-card object-contain bg-surface w-full"
+                className="rounded-card object-contain bg-white w-full"
                 style={{ height: "auto", aspectRatio: "1042 / 312" }}
               />
             </div>
@@ -513,7 +513,7 @@ export default function MondayImplementationConsultantsContent({
       <section
         className="px-4"
         style={{
-          background: "linear-gradient(to bottom, var(--surface) 0%, #e9e1ff 100%)",
+          background: "linear-gradient(to bottom, #ffffff 0%, #e9e1ff 100%)",
           paddingTop: 40,
           paddingBottom: 40,
         }}
@@ -542,8 +542,8 @@ export default function MondayImplementationConsultantsContent({
       <section className="bg-surface py-[80px] px-4">
         <div className="flex flex-col gap-[35px] items-center w-full max-w-[1348px] mx-auto">
           <p className="text-[28px] font-medium leading-[39.2px] text-center">
-            <span className="text-ink">{logoCloudPart1}</span>
-            <span className="text-brand">{logoCloudAccent}</span>
+            <span className="text-body">{logoCloudPart1}</span>
+            <span className="text-[#8015e8]">{logoCloudAccent}</span>
           </p>
           {duplicatedLogos.length > 0 && (
             <div className="w-full overflow-hidden">
@@ -614,7 +614,7 @@ export default function MondayImplementationConsultantsContent({
       {/* ============================================================ */}
       {/* SECTION 8 — Solution cards                                   */}
       {/* ============================================================ */}
-      <section style={{ backgroundColor: "var(--surface)", paddingTop: 80, paddingBottom: 80 }}>
+      <section style={{ backgroundColor: "#ffffff", paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
           {/* Solution cards — alternating sides.
               Re-map source data to match design: synthesize CRM card from
@@ -672,7 +672,7 @@ export default function MondayImplementationConsultantsContent({
                         style={{
                           fontSize: 14,
                           fontWeight: 600,
-                          color: "var(--brand)",
+                          color: "#8015e8",
                           letterSpacing: "0.5px",
                           textTransform: "uppercase",
                         }}
@@ -684,7 +684,7 @@ export default function MondayImplementationConsultantsContent({
                       className="font-bold"
                       style={{
                         fontSize: 28,
-                        color: "var(--ink-heading)",
+                        color: "#2b074d",
                         lineHeight: "36px",
                         marginTop: 12,
                       }}
@@ -696,7 +696,7 @@ export default function MondayImplementationConsultantsContent({
                         style={{
                           fontSize: 15,
                           lineHeight: "22.5px",
-                          color: "var(--ink)",
+                          color: "black",
                           marginTop: 16,
                           whiteSpace: "pre-line",
                         }}
@@ -713,8 +713,8 @@ export default function MondayImplementationConsultantsContent({
                           paddingLeft: 28,
                           paddingRight: 28,
                           borderRadius: 100,
-                          background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
-                          color: "var(--white)",
+                          background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                          color: "white",
                           fontSize: 14,
                           marginTop: 24,
                         }}
@@ -729,7 +729,7 @@ export default function MondayImplementationConsultantsContent({
                     className="flex-1 w-full"
                     style={{
                       minHeight: 320,
-                      backgroundColor: "var(--surface)",
+                      backgroundColor: "#ffffff",
                     }}
                   >
                     {imgSrc && (

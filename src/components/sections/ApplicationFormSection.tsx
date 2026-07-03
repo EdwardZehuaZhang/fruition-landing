@@ -17,13 +17,13 @@ export default function ApplicationFormSection({
         {heading && (
           <h2
             className="text-section-h2 text-center"
-            style={{ color: "var(--ink)", marginBottom: 32 }}
+            style={{ color: "var(--text-body)", marginBottom: 32 }}
           >
             {heading}
           </h2>
         )}
         <div
-          className="rounded-card overflow-hidden border border-[var(--line-tint)]"
+          className="rounded-card overflow-hidden border border-ui dark:shadow-none"
           style={{ boxShadow: "var(--shadow-whisper)" }}
         >
           <iframe

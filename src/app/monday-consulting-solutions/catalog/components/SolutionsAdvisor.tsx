@@ -157,8 +157,8 @@ export default function SolutionsAdvisor({
         onClick={() => setOpen(true)}
         className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-[var(--purple-primary)] text-white px-5 py-3 text-caption font-semibold shadow-card hover:bg-[var(--purple-dark)] lg:hidden"
       >
-        <span className="relative inline-block w-2 h-2 rounded-full bg-success">
-          <span className="absolute inset-0 rounded-full bg-success opacity-60 animate-ping" />
+        <span className="relative inline-block w-2 h-2 rounded-full bg-[#22ee8a]">
+          <span className="absolute inset-0 rounded-full bg-[#22ee8a] opacity-60 animate-ping" />
         </span>
         Talk to the advisor
       </button>
@@ -172,10 +172,10 @@ export default function SolutionsAdvisor({
       className={
         isFloating
           ? "fixed inset-0 z-40 bg-surface flex flex-col lg:hidden"
-          : "rounded-[var(--radius-card)] bg-surface text-[var(--text-dark)] overflow-hidden border border-[var(--color-border)] shadow-card flex flex-col max-h-[640px] min-h-[520px]"
+          : "rounded-[var(--radius-card)] bg-surface-raised text-[var(--text-dark)] overflow-hidden border border-[var(--color-border)] shadow-card dark:shadow-none flex flex-col max-h-[640px] min-h-[520px]"
       }
     >
-      <div className="px-5 py-4 border-b border-[var(--color-border)] bg-surface flex items-center gap-3">
+      <div className="px-5 py-4 border-b border-[var(--color-border)] bg-surface-raised flex items-center gap-3">
         <div className="w-9 h-9 rounded-full bg-[var(--purple-primary)] text-white flex items-center justify-center font-bold">
           F
         </div>
@@ -184,8 +184,8 @@ export default function SolutionsAdvisor({
             Fruition Solutions Advisor
           </div>
           <div className="text-caption text-[var(--color-text-secondary)] flex items-center gap-1.5">
-            <span className="relative inline-block w-1.5 h-1.5 rounded-full bg-success">
-              <span className="absolute inset-0 rounded-full bg-success opacity-60 animate-ping" />
+            <span className="relative inline-block w-1.5 h-1.5 rounded-full bg-[#22c55e]">
+              <span className="absolute inset-0 rounded-full bg-[#22c55e] opacity-60 animate-ping" />
             </span>
             Live · Answers in 6 quick taps
           </div>
@@ -194,7 +194,7 @@ export default function SolutionsAdvisor({
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="w-8 h-8 rounded-full hover:bg-surface-tint inline-flex items-center justify-center text-[var(--color-text-secondary)]"
+            className="w-8 h-8 rounded-full hover:bg-surface-subtle inline-flex items-center justify-center text-[var(--color-text-secondary)]"
             aria-label="Close advisor"
           >
             <span className="text-2xl leading-none">×</span>
@@ -202,7 +202,7 @@ export default function SolutionsAdvisor({
         )}
       </div>
 
-      <div className="h-1 bg-surface-tint-2">
+      <div className="h-1 bg-surface-subtle">
         <div
           className="h-full bg-[var(--purple-primary)] transition-all"
           style={{ width: `${progress}%` }}
@@ -211,7 +211,7 @@ export default function SolutionsAdvisor({
 
       <div
         ref={bodyRef}
-        className="flex-1 overflow-y-auto px-5 py-4 space-y-3 bg-surface text-[var(--text-dark)]"
+        className="flex-1 overflow-y-auto px-5 py-4 space-y-3 bg-surface-raised text-[var(--text-dark)]"
       >
         {messages.map((m, i) => (
           <ChatBubble key={i} message={m} />
@@ -240,7 +240,7 @@ export default function SolutionsAdvisor({
       </div>
 
       {!recommendations && (
-        <div className="border-t border-[var(--color-border)] px-4 py-3 bg-surface">
+        <div className="border-t border-[var(--color-border)] px-4 py-3 bg-surface-raised">
           <div className="flex items-center gap-2">
             <input
               type="text"
@@ -256,7 +256,7 @@ export default function SolutionsAdvisor({
                     ? "Or type your answer here"
                     : "Tap an option above"
               }
-              className="flex-1 text-caption px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface text-[var(--text-dark)] placeholder:text-[var(--color-text-secondary)] focus:outline-none focus:border-[var(--purple-primary)]"
+              className="flex-1 text-caption px-3 py-2 rounded-lg border border-[var(--color-border)] bg-surface-raised text-[var(--text-dark)] placeholder:text-[var(--color-text-secondary)] focus:outline-none focus:border-[var(--purple-primary)]"
               disabled={!currentStep || chipsLocked[currentStep.key]}
             />
             <button
@@ -270,7 +270,7 @@ export default function SolutionsAdvisor({
                   (multiSelections[currentStep.key] || []).length === 0 &&
                   !textInput.trim())
               }
-              className="text-caption font-semibold px-3 py-2 rounded-lg bg-[var(--purple-primary)] text-white disabled:bg-surface-muted disabled:text-[var(--color-text-secondary)]"
+              className="text-caption font-semibold px-3 py-2 rounded-lg bg-[var(--purple-primary)] text-white disabled:bg-[#e7e0f3] disabled:text-[var(--color-text-secondary)]"
             >
               Send
             </button>
@@ -294,7 +294,7 @@ export default function SolutionsAdvisor({
 function ChatBubble({ message }: { message: Message }) {
   if (message.role === "bot") {
     return (
-      <div className="rounded-2xl px-4 py-2.5 text-body-sm bg-surface-tint text-[var(--text-dark)] max-w-[88%]">
+      <div className="rounded-2xl px-4 py-2.5 text-body-sm bg-surface-subtle text-[var(--text-dark)] max-w-[88%]">
         <span dangerouslySetInnerHTML={{ __html: renderInline(message.html) }} />
       </div>
     )
@@ -342,7 +342,7 @@ function ChipRow({
           : "hover:border-[var(--purple-primary)] hover:text-[var(--purple-primary)]"
         const colorClasses = isSelected
           ? "bg-[var(--purple-primary)] text-white border-[var(--purple-primary)]"
-          : "bg-surface text-[var(--purple-dark)] border-[var(--color-border)]"
+          : "bg-surface-raised text-[var(--purple-dark)] border-[var(--border-ui)]"
         return (
           <button
             key={val}
@@ -373,7 +373,7 @@ function RecommendationsBlock({
   onReset: () => void
 }) {
   const baseCard =
-    "bg-surface text-[var(--text-dark)] border-[var(--color-border)]"
+    "bg-surface-raised text-body border-[var(--border-ui)]"
 
   return (
     <div className="space-y-3 pt-2">
@@ -408,7 +408,7 @@ function RecommendationsBlock({
                   : "Complementary service"
             const tagColor =
               kind === "adjacent"
-                ? "text-brand-light"
+                ? "text-[#a855f7]"
                 : kind === "service"
                   ? "text-[#16a34a]"
                   : "text-[var(--purple-primary)]"

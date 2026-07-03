@@ -110,7 +110,7 @@ function PillRow<T extends string>({
             className={`shrink-0 inline-flex items-center gap-1.5 text-caption px-3 py-1.5 rounded-full border transition-colors ${
               isActive
                 ? "bg-[var(--purple-primary)] text-white border-[var(--purple-primary)]"
-                : "bg-surface text-[var(--color-text-secondary)] border-[var(--color-border)] hover:border-[var(--purple-light)] hover:text-[var(--purple-primary)]"
+                : "bg-surface-raised text-[var(--color-text-secondary)] border-[var(--color-border)] hover:border-[var(--purple-light)] hover:text-[var(--purple-primary)]"
             }`}
           >
             <span>{p.label}</span>

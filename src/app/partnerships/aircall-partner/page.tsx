@@ -12,6 +12,7 @@ const SLUG = "aircall-partner"
 export async function generateMetadata() {
   const page = await getPartnershipPageBySlug(SLUG)
   return {
+    alternates: { canonical: "/partnerships/aircall-partner" },
     title: page?.seoTitle || page?.title || SLUG,
     description: page?.seoDescription,
   }

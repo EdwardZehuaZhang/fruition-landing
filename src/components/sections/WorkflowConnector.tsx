@@ -37,10 +37,10 @@ export default function WorkflowConnector({
   if (!steps?.length) return null
 
   const dark = theme === "dark"
-  const ink = dark ? "var(--white)" : "var(--ink-heading)"
-  const muted = dark ? "rgba(255,255,255,0.66)" : "var(--ink-soft)"
-  const nodeBg = dark ? "rgba(255,255,255,0.06)" : "var(--surface)"
-  const nodeBorder = dark ? "rgba(255,255,255,0.14)" : "var(--line-tint)"
+  const ink = dark ? "#ffffff" : "var(--text-body)"
+  const muted = dark ? "rgba(255,255,255,0.66)" : "var(--text-muted-fg)"
+  const nodeBg = dark ? "rgba(255,255,255,0.06)" : "var(--surface-raised)"
+  const nodeBorder = dark ? "rgba(255,255,255,0.14)" : "var(--border-ui)"
 
   return (
     <section
@@ -49,7 +49,7 @@ export default function WorkflowConnector({
         paddingTop: 88,
         paddingBottom: 88,
         background: dark
-          ? "linear-gradient(160deg, var(--navy-700) 0%, var(--navy-900) 100%)"
+          ? "linear-gradient(160deg, #2b074d 0%, #10003a 100%)"
           : "var(--surface)",
       }}
     >
@@ -57,7 +57,7 @@ export default function WorkflowConnector({
         {(eyebrow || heading || subheading) && (
           <div className="text-center" style={{ marginBottom: 52, marginInline: "auto", maxWidth: 720 }}>
             {eyebrow && (
-              <p className="font-semibold uppercase" style={{ color: "var(--brand-light)", fontSize: 12, letterSpacing: "0.18em", marginBottom: 12 }}>
+              <p className="font-semibold uppercase" style={{ color: "#ba83f0", fontSize: 12, letterSpacing: "0.18em", marginBottom: 12 }}>
                 {eyebrow}
               </p>
             )}
@@ -98,7 +98,7 @@ export default function WorkflowConnector({
                       padding: isHub ? "26px 20px" : "22px 18px",
                       borderRadius: 20,
                       background: isHub
-                        ? "linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-light) 100%)"
+                        ? "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)"
                         : nodeBg,
                       border: isHub ? "none" : `1px solid ${nodeBorder}`,
                       boxShadow: isHub
@@ -130,7 +130,7 @@ export default function WorkflowConnector({
                         zIndex: 1,
                         marginTop: 10,
                         fontSize: isHub ? 16 : 14,
-                        color: isHub ? "var(--white)" : ink,
+                        color: isHub ? "#ffffff" : ink,
                       }}
                     >
                       {step.label}

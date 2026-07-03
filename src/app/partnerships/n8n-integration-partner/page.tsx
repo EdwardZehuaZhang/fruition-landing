@@ -12,6 +12,7 @@ const SLUG = "n8n-integration-partner"
 export async function generateMetadata() {
   const page = await getPartnershipPageBySlug(SLUG)
   return {
+    alternates: { canonical: "/partnerships/n8n-integration-partner" },
     title: page?.seoTitle || page?.title || SLUG,
     description: page?.seoDescription,
   }

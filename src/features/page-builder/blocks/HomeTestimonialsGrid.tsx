@@ -47,12 +47,12 @@ export default function HomeTestimonialsGrid({
     <section className="bg-surface py-[80px] px-4">
       <div className="mx-auto max-w-[1343px]">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-6 lg:gap-[89px] mb-10 lg:mb-[58px] w-full">
-          <h2 className="text-[32px] leading-[40px] lg:text-[48px] lg:leading-[67.2px] text-ink w-full lg:w-[919px] lg:shrink-0">
+          <h2 className="text-[32px] leading-[40px] lg:text-[48px] lg:leading-[67.2px] text-body w-full lg:w-[919px] lg:shrink-0">
             What our customers say about us
           </h2>
           <Link
             href="/customer-testimonials"
-            className="shrink-0 flex items-center justify-center gap-2 h-[53px] w-full lg:w-[330px] rounded-[100px] bg-gradient-to-r from-[var(--purple-primary)] to-[var(--purple-light)] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
+            className="shrink-0 flex items-center justify-center gap-2 h-[53px] w-full lg:w-[330px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
           >
             <Rocket size={18} aria-hidden /> Start Your Transformation
           </Link>
@@ -68,9 +68,9 @@ export default function HomeTestimonialsGrid({
                 key={pageIdx}
                 className="flex flex-wrap gap-x-[16px] gap-y-[18px] w-full shrink-0"
               >
-                <div className="relative w-full max-w-[437px] bg-[var(--navy-900)] rounded-card shadow-card flex flex-col px-[38px]">
+                <div className="relative w-full max-w-[437px] bg-[#10003a] rounded-card shadow-card flex flex-col px-[38px]">
                   <div className="pt-[23px] pb-[30px]">
-                    <p className="font-semibold text-[40px] text-brand-light leading-[60px]">500+</p>
+                    <p className="font-semibold text-[40px] text-[#ba83f0] leading-[60px]">500+</p>
                     <p className="font-light text-[24px] text-white leading-[36px]">
                       have maximised their<br />
                       workflows with our<br />
@@ -80,7 +80,7 @@ export default function HomeTestimonialsGrid({
                   <div className="pb-[30px]">
                     <Link
                       href="/customer-testimonials"
-                      className="inline-flex items-center justify-center rounded-[100px] border border-white/40 px-6 py-2.5 text-sm font-semibold text-white hover:bg-white/10 transition"
+                      className="inline-flex items-center justify-center rounded-[100px] border border-white/40 px-6 py-2.5 text-sm font-semibold text-white hover:bg-surface/10 transition"
                     >
                       Read our case studies
                     </Link>
@@ -110,7 +110,7 @@ export default function HomeTestimonialsGrid({
                 onClick={() => setCurrentPage(i)}
                 className="w-3 h-3 rounded-full transition-colors"
                 style={{
-                  backgroundColor: i === currentPage ? "var(--brand)" : "var(--line)",
+                  backgroundColor: i === currentPage ? "#8015e8" : "#e8e6e6",
                 }}
                 aria-label={`Go to testimonial page ${i + 1}`}
               />

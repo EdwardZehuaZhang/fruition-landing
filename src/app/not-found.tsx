@@ -41,14 +41,14 @@ export default function NotFound() {
       </p>
 
       <h1
-        className="nf-rise text-section-h2 text-[var(--text-dark)]"
+        className="nf-rise text-section-h2 text-body"
         style={{ animationDelay: "80ms", textWrap: "balance" }}
       >
         We can&rsquo;t find that page.
       </h1>
 
       <p
-        className="nf-rise text-body-lead mx-auto mt-4 max-w-[52ch] text-[var(--color-text-secondary)]"
+        className="nf-rise text-body-lead mx-auto mt-4 max-w-[52ch] text-muted"
         style={{ animationDelay: "160ms", textWrap: "pretty" }}
       >
         The page may have moved, or the link was mistyped. Here&rsquo;s the way
@@ -67,14 +67,14 @@ export default function NotFound() {
         className="nf-rise mt-12 flex flex-col items-center gap-3"
         style={{ animationDelay: "320ms" }}
       >
-        <span className="text-micro uppercase text-[var(--color-text-secondary)]">
+        <span className="text-micro uppercase text-muted">
           Or try one of these
         </span>
         <nav className="flex flex-wrap items-center justify-center gap-x-2 gap-y-2">
           {QUICK_LINKS.map((link, i) => (
             <span key={link.href} className="flex items-center gap-2">
               {i > 0 && (
-                <span aria-hidden="true" className="text-[var(--color-border)]">
+                <span aria-hidden="true" className="text-[var(--border-ui)]">
                   ·
                 </span>
               )}

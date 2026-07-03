@@ -178,7 +178,7 @@ export default function MondayProductManagementContent({
               maxWidth: 924,
             }}
           >
-            <span className="text-ink">
+            <span className="text-body">
               {page.heroHeading || page.title || ""}
             </span>
           </h1>
@@ -186,7 +186,7 @@ export default function MondayProductManagementContent({
           {/* Subheading */}
           {!page.hideHeroSubheading && page.heroSubheading && (
             <p
-              className="text-body-lead text-center text-ink"
+              className="text-body-lead text-center text-body"
               style={{
                 marginTop: 31,
                 maxWidth: 859,
@@ -212,14 +212,14 @@ export default function MondayProductManagementContent({
                   borderRadius: 100,
                   ...(page.secondaryCtaLabel
                     ? {
-                        border: "1px solid var(--brand)",
-                        backgroundColor: "var(--surface)",
-                        color: "var(--brand)",
+                        border: "1px solid #8015e8",
+                        backgroundColor: "white",
+                        color: "#8015e8",
                       }
                     : {
                         background:
-                          "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
-                        color: "var(--white)",
+                          "linear-gradient(to right, #8015e8, #ba83f0)",
+                        color: "white",
                       }),
                   fontSize: 16,
                 }}
@@ -235,7 +235,7 @@ export default function MondayProductManagementContent({
                   width: 330,
                   height: 53,
                   borderRadius: 100,
-                  background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                  background: "linear-gradient(to right, #8015e8, #ba83f0)",
                   fontSize: 16,
                 }}
               >
@@ -381,14 +381,14 @@ function StrategicApproachCardsSection({
   return (
     <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1100 }}>
-        <h2 className="text-section-h2 text-center text-ink" style={{ maxWidth: 900 }}>
+        <h2 className="text-section-h2 text-center text-body" style={{ maxWidth: 900 }}>
           {headingPart1}
-          <span style={{ color: "var(--brand)" }}>{headingAccent}</span>
+          <span style={{ color: "#8015e8" }}>{headingAccent}</span>
         </h2>
         {subheading && (
           <p
             className="text-body text-center mx-auto"
-            style={{ color: "var(--ink-soft)", maxWidth: 820, marginTop: 16 }}
+            style={{ color: "var(--text-muted-fg)", maxWidth: 820, marginTop: 16 }}
           >
             {subheading}
           </p>
@@ -401,10 +401,10 @@ function StrategicApproachCardsSection({
           {tabs.map((card, i) => (
             <div
               key={card._key || card.label || `strat-card-${i}`}
-              className="flex flex-col bg-surface-tint rounded-card border border-line-tint"
+              className="flex flex-col bg-[#f7f5fc] rounded-card border border-[#ece7fb]"
               style={{ padding: 28 }}
             >
-              <h3 className="font-bold" style={{ fontSize: 18, color: "var(--brand)", marginBottom: 16 }}>
+              <h3 className="font-bold" style={{ fontSize: 18, color: "#8015e8", marginBottom: 16 }}>
                 {card.label}
               </h3>
               <ul className="flex flex-col" style={{ gap: 12 }}>
@@ -412,7 +412,7 @@ function StrategicApproachCardsSection({
                   <li
                     key={item._key || item.text || `strat-item-${i}-${ii}`}
                     className="flex items-start"
-                    style={{ fontSize: 14, lineHeight: "22px", color: "var(--ink-soft)", gap: 10 }}
+                    style={{ fontSize: 14, lineHeight: "22px", color: "#444", gap: 10 }}
                   >
                     <span style={{ fontSize: 20, lineHeight: "22px", flexShrink: 0 }}>{item.emoji}</span>
                     <span>{item.text}</span>
@@ -449,7 +449,7 @@ function WhyProductTeamsSection({
   return (
     <section
       style={{
-        backgroundColor: "var(--surface-tint)",
+        backgroundColor: "var(--surface-subtle)",
         paddingTop: 80,
         paddingBottom: 80,
       }}
@@ -457,16 +457,16 @@ function WhyProductTeamsSection({
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         <h2
           className="text-section-h2 text-center"
-          style={{ color: "var(--ink)", marginBottom: 16 }}
+          style={{ color: "var(--text-body)", marginBottom: 16 }}
         >
           {headingPart1}
-          <span style={{ color: "var(--brand)", display: "block" }}>{headingAccent}</span>
+          <span style={{ color: "#8015e8", display: "block" }}>{headingAccent}</span>
         </h2>
         {subheading && (
           <p
             className="text-body text-center mx-auto"
             style={{
-              color: "var(--ink-soft)",
+              color: "var(--text-muted-fg)",
               maxWidth: 820,
               marginBottom: 48,
             }}
@@ -482,7 +482,7 @@ function WhyProductTeamsSection({
           {cards.map((card, i) => (
             <div
               key={card._key || card.title || `why-card-${i}`}
-              className="flex flex-col items-center text-center bg-surface rounded-card border border-line-tint ui-hover-card"
+              className="flex flex-col items-center text-center bg-surface-raised rounded-card border border-ui ui-hover-card dark:shadow-none"
               style={{ padding: 28, boxShadow: "var(--shadow-whisper)" }}
             >
               <span
@@ -492,7 +492,7 @@ function WhyProductTeamsSection({
               </span>
               <h3
                 className="font-bold"
-                style={{ fontSize: 20, color: "var(--brand)", marginBottom: 10 }}
+                style={{ fontSize: 20, color: "#8015e8", marginBottom: 10 }}
               >
                 {card.title}
               </h3>
@@ -500,7 +500,7 @@ function WhyProductTeamsSection({
                 style={{
                   fontSize: 14,
                   lineHeight: "22px",
-                  color: "var(--ink)",
+                  color: "var(--text-body)",
                 }}
               >
                 {card.description}
@@ -544,17 +544,17 @@ function StrategicApproachSection({
         style={{ maxWidth: 959 }}
       >
         <h2
-          className="text-section-h2 text-center text-ink"
+          className="text-section-h2 text-center text-body"
           style={{ maxWidth: 900 }}
         >
           {headingPart1}
-          <span style={{ color: "var(--brand)" }}>{headingAccent}</span>
+          <span style={{ color: "#8015e8" }}>{headingAccent}</span>
         </h2>
         {subheading && (
           <p
             className="text-body text-center mx-auto"
             style={{
-              color: "var(--ink-soft)",
+              color: "var(--text-muted-fg)",
               maxWidth: 820,
               marginTop: 16,
               marginBottom: 40,
@@ -582,16 +582,16 @@ function StrategicApproachSection({
                 ...(i === activeTab
                   ? {
                       background:
-                        "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
-                      color: "var(--white)",
+                        "linear-gradient(to right, #8015e8, #ba83f0)",
+                      color: "white",
                       boxShadow:
                         "2.83px 2.83px 15px 3px rgba(0,0,0,0.18)",
                       border: "none",
                     }
                   : {
-                      backgroundColor: "var(--surface)",
-                      color: "var(--navy-700)",
-                      border: "1px solid var(--line)",
+                      backgroundColor: "var(--surface-raised)",
+                      color: "var(--text-body)",
+                      border: "1px solid var(--border-ui)",
                     }),
               }}
             >
@@ -602,12 +602,12 @@ function StrategicApproachSection({
 
         {/* Tab content */}
         <div
-          className="w-full rounded-card border border-line"
+          className="w-full rounded-card border border-ui"
           style={{ marginTop: 32, padding: "32px 40px" }}
         >
           <h3
             className="font-semibold"
-            style={{ fontSize: 22, color: "var(--brand)", marginBottom: 24 }}
+            style={{ fontSize: 22, color: "#8015e8", marginBottom: 24 }}
           >
             {active?.label}
           </h3>
@@ -631,7 +631,7 @@ function StrategicApproachSection({
                   style={{
                     fontSize: 16,
                     lineHeight: "24px",
-                    color: "var(--navy-700)",
+                    color: "var(--text-body)",
                   }}
                 >
                   {item.text}
@@ -665,7 +665,7 @@ function IndustrySpecificSection({
   return (
     <section
       style={{
-        background: "linear-gradient(135deg, #1c024c 0%, var(--purple-hover) 100%)",
+        background: "linear-gradient(135deg, #1c024c 0%, #7d14e3 100%)",
         paddingTop: 80,
         paddingBottom: 80,
       }}
@@ -701,13 +701,13 @@ function IndustrySpecificSection({
                   cursor: "pointer",
                   ...(isActive
                     ? {
-                        backgroundColor: "var(--white)",
-                        color: "var(--brand)",
+                        backgroundColor: "white",
+                        color: "#8015e8",
                         boxShadow: "0px 2px 8px rgba(128,21,232,0.35)",
                       }
                     : {
                         backgroundColor: "rgba(255,255,255,0.15)",
-                        color: "var(--white)",
+                        color: "white",
                         border: "1px solid rgba(255,255,255,0.3)",
                       }),
                 }}
@@ -754,7 +754,7 @@ function IndustrySpecificSection({
                   style={{
                     fontSize: 36,
                     fontWeight: 200,
-                    color: "var(--purple-light)",
+                    color: "#ba83f0",
                     lineHeight: 1,
                   }}
                 >
@@ -828,7 +828,7 @@ function ProductDevelopmentSection({
   return (
     <section
       style={{
-        backgroundColor: "var(--surface-tint)",
+        backgroundColor: "var(--surface-subtle)",
         paddingTop: 80,
         paddingBottom: 80,
       }}
@@ -836,10 +836,10 @@ function ProductDevelopmentSection({
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         <h2
           className="text-section-h2 text-center"
-          style={{ color: "var(--ink)", marginBottom: 40, maxWidth: 1000, marginLeft: "auto", marginRight: "auto" }}
+          style={{ color: "var(--text-body)", marginBottom: 40, maxWidth: 1000, marginLeft: "auto", marginRight: "auto" }}
         >
           {headingPart1}
-          <span style={{ color: "var(--brand)" }}>{headingAccent}</span>
+          <span style={{ color: "#8015e8" }}>{headingAccent}</span>
           {headingPart2}
         </h2>
 
@@ -862,16 +862,16 @@ function ProductDevelopmentSection({
                   ...(isActive
                     ? {
                         background:
-                          "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
-                        color: "var(--white)",
+                          "linear-gradient(to right, #8015e8, #ba83f0)",
+                        color: "white",
                         boxShadow:
                           "2.83px 2.83px 15px 3px rgba(0,0,0,0.18)",
                         border: "none",
                       }
                     : {
-                        backgroundColor: "var(--surface)",
-                        color: "var(--navy-700)",
-                        border: "1px solid var(--line)",
+                        backgroundColor: "var(--surface-raised)",
+                        color: "var(--text-body)",
+                        border: "1px solid var(--border-ui)",
                       }),
                 }}
               >
@@ -883,7 +883,7 @@ function ProductDevelopmentSection({
 
         {/* Tab content */}
         <div
-          className="w-full rounded-card border border-line-tint bg-surface"
+          className="w-full rounded-card border border-ui bg-surface-raised dark:shadow-none"
           style={{ padding: "40px" }}
         >
           <div
@@ -894,7 +894,7 @@ function ProductDevelopmentSection({
             <div>
               <h3
                 className="font-semibold"
-                style={{ fontSize: 24, color: "var(--brand)", marginBottom: 16 }}
+                style={{ fontSize: 24, color: "#8015e8", marginBottom: 16 }}
               >
                 {active?.label}
               </h3>
@@ -902,7 +902,7 @@ function ProductDevelopmentSection({
                 style={{
                   fontSize: 16,
                   lineHeight: "24px",
-                  color: "var(--navy-700)",
+                  color: "var(--text-body)",
                   marginBottom: 24,
                 }}
               >
@@ -934,7 +934,7 @@ function ProductDevelopmentSection({
                       style={{
                         fontSize: 16,
                         lineHeight: "24px",
-                        color: "var(--navy-700)",
+                        color: "var(--text-body)",
                       }}
                     >
                       {bullet.text}
@@ -948,8 +948,8 @@ function ProductDevelopmentSection({
             <div
               className="rounded-card overflow-hidden"
               style={{
-                border: "1px solid var(--line-tint)",
-                backgroundColor: "var(--surface)",
+                border: "1px solid #ece7fb",
+                backgroundColor: "#fff",
               }}
             >
               {activeImageSrc && (

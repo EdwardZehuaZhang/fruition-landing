@@ -37,10 +37,10 @@ export default function TrustBadgeRow({
             style={{
               gap: 12,
               padding: "12px 22px 12px 14px",
-              border: `1px solid ${dark ? "rgba(255,255,255,0.18)" : "var(--line-tint)"}`,
+              border: `1px solid ${dark ? "rgba(255,255,255,0.18)" : "var(--border-ui)"}`,
               background: dark
                 ? "rgba(255,255,255,0.07)"
-                : "linear-gradient(180deg, var(--surface) 0%, var(--surface-tint) 100%)",
+                : "var(--surface-raised)",
               boxShadow: dark ? "none" : "0 8px 22px -16px rgba(64,12,140,0.35)",
             }}
           >
@@ -51,8 +51,8 @@ export default function TrustBadgeRow({
               style={{
                 width: 30,
                 height: 30,
-                background: dark ? "rgba(255,255,255,0.14)" : "var(--surface-tint-2)",
-                color: dark ? "var(--white)" : "var(--brand)",
+                background: dark ? "rgba(255,255,255,0.14)" : "#f0e7ff",
+                color: dark ? "#fff" : "#8015e8",
               }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -62,12 +62,12 @@ export default function TrustBadgeRow({
             <span className="flex flex-col" style={{ gap: 1 }}>
               <span
                 className="font-semibold"
-                style={{ fontSize: 15, lineHeight: "19px", letterSpacing: "-0.01em", color: dark ? "var(--white)" : "var(--ink-heading)" }}
+                style={{ fontSize: 15, lineHeight: "19px", letterSpacing: "-0.01em", color: dark ? "#fff" : "var(--text-body)" }}
               >
                 {b.label}
               </span>
               {b.detail && (
-                <span style={{ fontSize: 12.5, lineHeight: "16px", color: dark ? "rgba(255,255,255,0.65)" : "var(--ink-muted)" }}>
+                <span style={{ fontSize: 12.5, lineHeight: "16px", color: dark ? "rgba(255,255,255,0.65)" : "var(--text-muted-fg)" }}>
                   {b.detail}
                 </span>
               )}

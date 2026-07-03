@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
+import FramedMedia from "@/components/common/FramedMedia"
 import type { SanityImageRef } from "./types"
 
 interface SolutionCard {
@@ -50,7 +51,7 @@ export default function SolutionCardsSection({
                       style={{
                         fontSize: 14,
                         fontWeight: 600,
-                        color: "var(--brand)",
+                        color: "#8015e8",
                         letterSpacing: "0.5px",
                         textTransform: "uppercase",
                       }}
@@ -63,7 +64,7 @@ export default function SolutionCardsSection({
                       style={{
                         fontSize: 28,
                         fontWeight: 600,
-                        color: "var(--ink-heading)",
+                        color: "var(--text-body)",
                         marginTop: card.eyebrow ? 8 : 0,
                       }}
                     >
@@ -75,7 +76,7 @@ export default function SolutionCardsSection({
                       style={{
                         fontSize: 16,
                         lineHeight: "25.6px",
-                        color: "var(--ink)",
+                        color: "var(--text-body)",
                         marginTop: 20,
                         whiteSpace: "pre-line",
                       }}
@@ -92,7 +93,7 @@ export default function SolutionCardsSection({
                         paddingLeft: 32,
                         paddingRight: 32,
                         borderRadius: 100,
-                        background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                        background: "linear-gradient(to right, #8015e8, #ba83f0)",
                         fontSize: 16,
                         marginTop: 24,
                       }}
@@ -102,8 +103,8 @@ export default function SolutionCardsSection({
                   )}
                 </div>
                 {imageSrc && (
-                  <div
-                    className="rounded-card overflow-hidden shadow-whisper bg-surface flex items-center justify-center"
+                  <FramedMedia
+                    className="rounded-card overflow-hidden shadow-whisper bg-surface-raised flex items-center justify-center dark:shadow-none"
                     style={{ flex: 1, aspectRatio: "16 / 10" }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -112,7 +113,7 @@ export default function SolutionCardsSection({
                       alt={card.heading || ""}
                       className="w-full h-full object-contain"
                     />
-                  </div>
+                  </FramedMedia>
                 )}
               </div>
             )

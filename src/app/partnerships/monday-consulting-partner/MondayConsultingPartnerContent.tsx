@@ -164,7 +164,7 @@ function CertifiedExcellenceSection({ calendlyUrl }: { calendlyUrl: string }) {
       style={{
         paddingTop: 96,
         paddingBottom: 96,
-        background: "linear-gradient(160deg, var(--navy-700) 0%, var(--navy-900) 100%)",
+        background: "linear-gradient(160deg, #2b074d 0%, #10003a 100%)",
       }}
     >
       <div className="mx-auto text-center" style={{ maxWidth: 920 }}>
@@ -178,7 +178,7 @@ function CertifiedExcellenceSection({ calendlyUrl }: { calendlyUrl: string }) {
           <Link
             href={calendlyUrl}
             className="inline-flex items-center justify-center gap-2 font-semibold"
-            style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))", color: "white", fontSize: 15 }}
+            style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", fontSize: 15 }}
           >
             <Rocket size={16} aria-hidden /> Book a Consultation
           </Link>
@@ -199,18 +199,18 @@ function WhyFruitionSection({ items }: { items: WhyFruitionItem[] }) {
   return (
     <section className="bg-surface px-4" style={{ paddingTop: 64, paddingBottom: 64 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "var(--ink-heading)", fontSize: 32, lineHeight: "40px", marginBottom: 32 }}>
-          Why Choose Fruition for <span style={{ color: "var(--brand)" }}>monday.com?</span>
+        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 32, lineHeight: "40px", marginBottom: 32 }}>
+          Why Choose Fruition for <span style={{ color: "#8015e8" }}>monday.com?</span>
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4" style={{ gap: 16 }}>
           {items.map((reason: WhyFruitionItem, i: number) => (
             <div
               key={reason || i}
-              className="flex items-center bg-surface rounded-card"
-              style={{ gap: 12, padding: 20, border: "1px solid var(--line-tint)" }}
+              className="flex items-center rounded-card"
+              style={{ gap: 12, padding: 20, background: "var(--surface-raised)", border: "1px solid var(--border-ui)" }}
             >
-              <Check size={22} color="var(--brand)" aria-hidden />
-              <p className="font-semibold" style={{ color: "var(--ink-heading)", fontSize: 14 }}>{reason}</p>
+              <Check size={22} color="#8015e8" aria-hidden />
+              <p className="font-semibold" style={{ color: "var(--text-body)", fontSize: 14 }}>{reason}</p>
             </div>
           ))}
         </div>
@@ -223,18 +223,19 @@ function ImplementationServicesSection({ items }: { items: ImplementationService
   return (
     <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 64 }}>
       <div className="mx-auto" style={{ maxWidth: 1000 }}>
-        <h2 className="text-center font-bold" style={{ color: "var(--ink-heading)", fontSize: 30, lineHeight: "40px", marginBottom: 32 }}>
-          Our monday.com Expert <span style={{ color: "var(--brand)" }}>Implementation Services</span>
+        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 30, lineHeight: "40px", marginBottom: 32 }}>
+          Our monday.com Expert <span style={{ color: "#8015e8" }}>Implementation Services</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
           {items.map((s: ImplementationServiceItem, i: number) => (
             <div
               key={s.title || i}
-              className="bg-surface"
+              className="dark:shadow-none"
               style={{
                 padding: 24,
                 borderRadius: 16,
-                border: "1px solid var(--line-tint)",
+                background: "var(--surface-raised)",
+                border: "1px solid var(--border-ui)",
                 display: "flex",
                 flexDirection: "column",
                 gap: 10,
@@ -242,8 +243,8 @@ function ImplementationServicesSection({ items }: { items: ImplementationService
               }}
             >
               <span style={{ fontSize: 28 }}>{s.emoji}</span>
-              <p className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 16 }}>{s.title}</p>
-              <p style={{ color: "var(--ink-soft)", fontSize: 13, lineHeight: "20px" }}>{s.body}</p>
+              <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 16 }}>{s.title}</p>
+              <p style={{ color: "var(--text-muted-fg)", fontSize: 13, lineHeight: "20px" }}>{s.body}</p>
             </div>
           ))}
         </div>
@@ -267,15 +268,15 @@ function PartnerWrapUpSection({
   return (
     <section
       className="px-4"
-      style={{ paddingTop: 64, paddingBottom: 96, background: "linear-gradient(180deg, var(--surface-tint) 0%, var(--line-tint) 100%)" }}
+      style={{ paddingTop: 64, paddingBottom: 96, background: "linear-gradient(180deg, #faf6ff 0%, #ebd9ff 100%)" }}
     >
       <div className="mx-auto" style={{ maxWidth: 1000 }}>
         {/* CRM Expertise eyebrow header */}
         <div className="flex flex-col items-center text-center" style={{ marginBottom: 40 }}>
-          <h2 className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 34, lineHeight: "44px", marginBottom: 12 }}>
-            <span style={{ color: "var(--brand)" }}>monday CRM</span> Consulting Expertise
+          <h2 className="font-bold" style={{ color: "#10003a", fontSize: 34, lineHeight: "44px", marginBottom: 12 }}>
+            <span style={{ color: "#8015e8" }}>monday CRM</span> Consulting Expertise
           </h2>
-          <p style={{ color: "var(--ink-soft)", fontSize: 15, lineHeight: "24px", maxWidth: 640 }}>
+          <p style={{ color: "#4a4a4a", fontSize: 15, lineHeight: "24px", maxWidth: 640 }}>
             Streamline your customer relationships with custom CRM implementations tailored to your business needs.
           </p>
         </div>
@@ -284,7 +285,7 @@ function PartnerWrapUpSection({
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20, marginBottom: 36 }}>
           {/* Industry Solutions card */}
           <div
-            className="bg-surface"
+            className="bg-white"
             style={{
               borderRadius: 18,
               padding: 24,
@@ -292,14 +293,14 @@ function PartnerWrapUpSection({
               boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)",
             }}
           >
-            <p className="font-bold" style={{ color: "var(--brand)", fontSize: 16, marginBottom: 14 }}>
+            <p className="font-bold" style={{ color: "#8015e8", fontSize: 16, marginBottom: 14 }}>
               Industry Solutions
             </p>
             <ul className="flex flex-col" style={{ gap: 10 }}>
               {industrySolutions.map((s: IconLabelItem, i: number) => (
                 <li key={s.label || i} className="flex items-center" style={{ gap: 10 }}>
                   <span style={{ fontSize: 18 }}>{s.emoji}</span>
-                  <span style={{ color: "var(--ink-heading)", fontSize: 13 }}>{s.label}</span>
+                  <span style={{ color: "#10003a", fontSize: 13 }}>{s.label}</span>
                 </li>
               ))}
             </ul>
@@ -307,7 +308,7 @@ function PartnerWrapUpSection({
 
           {/* Global Reach card */}
           <div
-            className="bg-surface"
+            className="bg-white"
             style={{
               borderRadius: 18,
               padding: 24,
@@ -315,15 +316,15 @@ function PartnerWrapUpSection({
               boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)",
             }}
           >
-            <p className="font-bold" style={{ color: "var(--brand)", fontSize: 16, marginBottom: 4 }}>
+            <p className="font-bold" style={{ color: "#8015e8", fontSize: 16, marginBottom: 4 }}>
               Global Reach, Local Expertise
             </p>
-            <p style={{ color: "var(--ink-soft)", fontSize: 12, marginBottom: 14 }}>Serving clients across:</p>
+            <p style={{ color: "#666", fontSize: 12, marginBottom: 14 }}>Serving clients across:</p>
             <ul className="flex flex-col" style={{ gap: 10 }}>
               {countries.map((c: IconLabelItem, i: number) => (
                 <li key={c.label || i} className="flex items-center" style={{ gap: 10 }}>
                   <span style={{ fontSize: 18 }}>{c.emoji}</span>
-                  <span style={{ color: "var(--ink-heading)", fontSize: 13 }}>{c.label}</span>
+                  <span style={{ color: "#10003a", fontSize: 13 }}>{c.label}</span>
                 </li>
               ))}
             </ul>
@@ -336,7 +337,7 @@ function PartnerWrapUpSection({
           style={{
             borderRadius: 20,
             padding: 28,
-            background: "linear-gradient(135deg, var(--navy-700) 0%, #6a18c7 60%, var(--purple-primary) 100%)",
+            background: "linear-gradient(135deg, #2b074d 0%, #6a18c7 60%, #8015e8 100%)",
             boxShadow: "0 24px 40px -28px rgba(64,12,140,0.5)",
           }}
         >
@@ -380,7 +381,7 @@ function PartnerWrapUpSection({
                   padding: "0 22px",
                   borderRadius: 999,
                   background: "white",
-                  color: "var(--brand)",
+                  color: "#8015e8",
                   fontSize: 14,
                 }}
               >

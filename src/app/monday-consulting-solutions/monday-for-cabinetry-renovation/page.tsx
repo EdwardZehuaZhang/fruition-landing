@@ -10,6 +10,7 @@ import MondayForCabinetryRenovationContent from "./MondayForCabinetryRenovationC
 export async function generateMetadata() {
   const page = await getSolutionPageBySlug("monday-for-cabinetry-renovation")
   return {
+    alternates: { canonical: "/monday-consulting-solutions/monday-for-cabinetry-renovation" },
     title:
       page?.seoTitle ||
       page?.title ||

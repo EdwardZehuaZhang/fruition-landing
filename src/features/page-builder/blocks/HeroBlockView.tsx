@@ -47,7 +47,7 @@ function renderHeading(heading: string, accents: string[]) {
   return (
     <>
       {parts.map((p, i) =>
-        p.purple ? <span key={i} className="text-brand">{p.text}</span> : <span key={i}>{p.text}</span>
+        p.purple ? <span key={i} className="text-[#8015e8]">{p.text}</span> : <span key={i}>{p.text}</span>
       )}
     </>
   )
@@ -60,12 +60,12 @@ function renderSubheading(text: string) {
     return (
       <div className="flex flex-col gap-[12px] w-full max-w-[859px]">
         {paragraphs.map((p, i) => (
-          <p key={i} className="text-[18px] text-ink leading-[25.2px]">{p}</p>
+          <p key={i} className="text-[18px] text-body leading-[25.2px]">{p}</p>
         ))}
       </div>
     )
   }
-  return <p className="text-[18px] text-ink leading-[25.2px] max-w-[859px]">{text}</p>
+  return <p className="text-[18px] text-body leading-[25.2px] max-w-[859px]">{text}</p>
 }
 
 export default function HeroBlockView({
@@ -104,7 +104,7 @@ export default function HeroBlockView({
           <div className="flex flex-col gap-[31px] w-full">
             {/* Partner badges */}
             <div className="flex flex-col gap-[42px]">
-              <div className="flex items-center gap-[22px]">
+              <div className="flex flex-wrap items-center gap-[22px]">
                 {partnerBadges.map((badge, i) => (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -120,7 +120,7 @@ export default function HeroBlockView({
 
               {/* Heading */}
               {heading && (
-                <h1 className="text-[32px] leading-[40px] sm:text-[48px] sm:leading-[67.2px] font-bold text-ink">
+                <h1 className="text-[32px] leading-[40px] sm:text-[48px] sm:leading-[67.2px] font-bold text-body">
                   {renderHeading(heading, headingAccents ?? [])}
                 </h1>
               )}
@@ -166,7 +166,7 @@ export default function HeroBlockView({
             <source src={heroVideoSrc} type="video/mp4" />
           </video>
         ) : (
-          <div className="hidden md:block flex-1 min-w-0 w-full h-[550px] bg-line-soft" />
+          <div className="hidden md:block flex-1 min-w-0 w-full h-[550px] bg-[#d9d9d9]" />
         )}
       </div>
     </section>

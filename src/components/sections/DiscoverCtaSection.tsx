@@ -1,5 +1,6 @@
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
+import FramedMedia from "@/components/common/FramedMedia"
 import type { SanityImageRef } from "./types"
 
 interface DiscoverCtaSectionProps {
@@ -28,14 +29,16 @@ export default function DiscoverCtaSection({
   if (!heading && !primaryCtaLabel && !secondaryCtaLabel && !badgeSrc) return null
 
   return (
-    <section style={{ backgroundColor: "var(--surface-muted)" }} className="py-[80px] px-4">
+    <section style={{ backgroundColor: "var(--surface-subtle)" }} className="py-[80px] px-4">
       <div className="mx-auto flex max-w-[900px] flex-col items-center">
         {badgeSrc && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={badgeSrc} alt="Certifications" width={325} height={73} className="h-[73px] w-[325px] object-contain" />
+          <FramedMedia>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={badgeSrc} alt="Certifications" width={325} height={73} className="h-auto max-h-[73px] w-[325px] max-w-full object-contain" />
+          </FramedMedia>
         )}
         {heading && (
-          <h2 className="mt-7 text-section-h2 text-center text-ink text-balance max-w-[720px]">
+          <h2 className="mt-7 text-section-h2 text-center text-body text-balance max-w-[720px]">
             {heading}
           </h2>
         )}

@@ -58,7 +58,10 @@ jobs:
           set -o pipefail
           npm run upload 2>&1 | tee upload.log
           # wrangler prints e.g. "Version Preview URL: https://<hash>-fruition-landing.<sub>.workers.dev"
-          URL="$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9-]+\.workers\.dev' upload.log | head -1)"
+          # "|| true": no match must not fail the step (Actions runs bash -e) —
+          # a missing URL just means preview URLs are disabled for the Worker,
+          # which the branch below and the PR comment already handle.
+          URL="$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9-]+\.workers\.dev' upload.log | head -1 || true)"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           if [ -n "$URL" ]; then echo "Preview URL: $URL"; else echo "No preview URL found (are preview URLs enabled for this Worker?)"; fi
 

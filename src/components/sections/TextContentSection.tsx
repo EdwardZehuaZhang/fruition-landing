@@ -21,11 +21,11 @@ export default function TextContentSection({
         {(heading || headingAccent) && (
           <h2
             className="text-section-h2 text-center"
-            style={{ marginBottom: 32, color: "var(--ink)" }}
+            style={{ marginBottom: 32, color: "var(--text-body)" }}
           >
             {heading}
             {headingAccent && (
-              <span style={{ color: "var(--brand)" }}> {headingAccent}</span>
+              <span style={{ color: "var(--purple-primary)" }}> {headingAccent}</span>
             )}
           </h2>
         )}
@@ -34,7 +34,7 @@ export default function TextContentSection({
             style={{
               fontSize: 17,
               lineHeight: "28px",
-              color: "var(--ink)",
+              color: "var(--text-body)",
               whiteSpace: "pre-line",
               textAlign: "center",
             }}

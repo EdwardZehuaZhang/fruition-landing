@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import Script from "next/script"
 import { Poppins, Montserrat } from "next/font/google"
 import "./globals.css"
@@ -9,6 +9,7 @@ import CookieNotice from "@/components/CookieNotice"
 import SiteFrame from "@/components/SiteFrame"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { getSiteSettings } from "@/sanity/queries"
+import { urlFor } from "@/sanity/image"
 
 
 
@@ -42,6 +43,12 @@ const montserrat = Montserrat({
   weight: ["400", "500", "600", "700"],
 })
 
+// Declare support for both schemes so browsers (notably mobile Chrome/Android)
+// stop auto-inverting the page and let our own prefers-color-scheme dark theme own it.
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSiteSettings()
   const ogTitle =
@@ -55,6 +62,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: s?.defaultSeoTitle,
     description: s?.defaultSeoDescription,
     openGraph: {
+      type: "website",
+      siteName: "Fruition",
+      locale: "en_US",
       title: ogTitle,
       description: ogDescription,
     },
@@ -63,10 +73,22 @@ export async function generateMetadata(): Promise<Metadata> {
       title: ogTitle,
       description: ogDescription,
     },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
     verification: {
       google: [
         "h7rPggK-qoBgzjiEXeiHKaKsYbQI2LjippLHnlizyp8",
         "SNyBhKEoT5fNsGG4BxYuy2XLiTubLFfvDvVbZwwpb8c",
+        "jyOeWAMmPK3KH3Fwf4vm55PLSK-wBwKarqv_BG5xHbk",
       ],
     },
   }
@@ -79,9 +101,51 @@ export default async function RootLayout({
 }>) {
   const siteSettings = await getSiteSettings()
 
+  const BASE =
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.fruitionservices.io"
+  const socials = Array.isArray(siteSettings?.socialLinks)
+    ? (siteSettings.socialLinks as Array<{ href?: string }>)
+        .map((l) => l?.href)
+        .filter((h): h is string => Boolean(h))
+    : []
+  let logoUrl = `${BASE}/og-image.png`
+  try {
+    if (siteSettings?.logo) logoUrl = urlFor(siteSettings.logo).width(512).url()
+  } catch {
+    logoUrl = `${BASE}/og-image.png`
+  }
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${BASE}/#organization`,
+        name: "Fruition",
+        url: BASE,
+        logo: logoUrl,
+        description:
+          "monday.com Partner certified. Fruition is an expert in monday.com implementation, integration and automation.",
+        ...(socials.length ? { sameAs: socials } : {}),
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${BASE}/#website`,
+        name: "Fruition",
+        url: BASE,
+        publisher: { "@id": `${BASE}/#organization` },
+      },
+    ],
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://cdn.sanity.io" />
+        <link rel="dns-prefetch" href="https://cdn.sanity.io" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         <Script
           id="gtm-loader"
           strategy="afterInteractive"

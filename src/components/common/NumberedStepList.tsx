@@ -68,12 +68,12 @@ export default function NumberedStepList({
               {hasBullets && item.bullets && (
                 <>
                   {title && (
-                    <p className="font-semibold text-[1rem] leading-[1.6] text-ink mb-2">
+                    <p className="font-semibold text-[1rem] leading-[1.6] text-body mb-2">
                       {title}
                     </p>
                   )}
                   {description && (
-                    <p className="text-body-sm text-ink mb-3">
+                    <p className="text-body-sm text-body mb-3">
                       {description}
                     </p>
                   )}
@@ -88,7 +88,7 @@ export default function NumberedStepList({
                             {bullet.emoji || bullet.icon}
                           </span>
                         )}
-                        <span className="text-body-sm text-ink">
+                        <span className="text-body-sm text-body">
                           {bullet.text || bullet.label}
                         </span>
                       </div>

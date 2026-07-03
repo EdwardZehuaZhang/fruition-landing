@@ -10,6 +10,7 @@ import CalendlySection from "@/components/sections/CalendlySection"
 import FaqAccordion from "@/components/sections/FaqAccordion"
 import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
 import StickyCtaBar from "@/components/sections/StickyCtaBar"
+import FramedMedia from "@/components/common/FramedMedia"
 import type {
   CapabilityCard,
   ComparisonTab,
@@ -106,14 +107,15 @@ function SignatureNote({
   return (
     <section className="px-4" style={{ paddingTop: 24, paddingBottom: 72 }}>
       <figure
-        className="mx-auto relative overflow-hidden"
+        className="mx-auto relative overflow-hidden dark:bg-none"
         style={{
           maxWidth: 820,
           margin: "0 auto",
           padding: "44px 48px",
           borderRadius: 24,
-          background: "linear-gradient(180deg, var(--surface-tint) 0%, var(--surface) 100%)",
-          border: "1px solid var(--line-tint)",
+          background: "linear-gradient(180deg, #faf7ff 0%, #ffffff 100%)",
+          backgroundColor: "var(--surface-raised)",
+          border: "1px solid var(--border-ui)",
         }}
       >
         <span
@@ -125,7 +127,7 @@ function SignatureNote({
         </span>
         <blockquote
           className="relative"
-          style={{ color: "var(--ink-heading)", fontSize: 20, lineHeight: "32px", fontWeight: 500, textWrap: "pretty" }}
+          style={{ color: "var(--text-body)", fontSize: 20, lineHeight: "32px", fontWeight: 500, textWrap: "pretty" }}
         >
           {note}
         </blockquote>
@@ -134,7 +136,7 @@ function SignatureNote({
           <svg width="116" height="40" viewBox="0 0 116 40" fill="none" aria-hidden role="presentation">
             <path
               d="M3 28c10-14 16-20 20-18s-2 22 4 22 14-26 20-24-4 24 4 24 16-30 24-24c4 3-2 14 6 14 6 0 12-8 18-12"
-              stroke="var(--brand)"
+              stroke="#8015e8"
               strokeWidth="2.4"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -143,12 +145,12 @@ function SignatureNote({
           </svg>
           <div className="flex flex-col">
             {name && (
-              <span className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 16 }}>
+              <span className="font-bold" style={{ color: "var(--text-body)", fontSize: 16 }}>
                 {name}
               </span>
             )}
             {title && (
-              <span style={{ color: "var(--ink-muted)", fontSize: 13 }}>{title}</span>
+              <span style={{ color: "var(--text-muted-fg)", fontSize: 13 }}>{title}</span>
             )}
           </div>
         </figcaption>
@@ -213,7 +215,7 @@ function HeroSection({
         className="absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(1100px 600px at 12% -10%, rgba(128, 21, 232, 0.18), transparent 60%), radial-gradient(900px 500px at 95% 0%, rgba(70, 116, 251, 0.12), transparent 55%), linear-gradient(180deg, var(--surface-tint) 0%, var(--surface) 70%)",
+            "radial-gradient(1100px 600px at 12% -10%, rgba(128, 21, 232, 0.18), transparent 60%), radial-gradient(900px 500px at 95% 0%, rgba(70, 116, 251, 0.12), transparent 55%), linear-gradient(180deg, #f7f4ff 0%, #ffffff 70%)",
         }}
       />
       <div
@@ -260,7 +262,7 @@ function HeroSection({
                 fontSize: "clamp(32px, 5.4vw, 64px)",
                 lineHeight: 1.1,
                 letterSpacing: "-0.025em",
-                color: "var(--dark-bg)",
+                color: "var(--text-body)",
               }}
             >
               {headingPart1}
@@ -269,7 +271,7 @@ function HeroSection({
                   {" "}
                   <span
                     style={{
-                      background: "linear-gradient(135deg, var(--purple-primary) 0%, var(--blue-accent-strong) 100%)",
+                      background: "linear-gradient(135deg, #8015e8 0%, #4674FB 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                       backgroundClip: "text",
@@ -285,7 +287,7 @@ function HeroSection({
             {subheading && (
               <p
                 className="text-body-lead"
-                style={{ marginTop: 20, maxWidth: 560, color: "var(--ink-soft)" }}
+                style={{ marginTop: 20, maxWidth: 560, color: "var(--text-body)" }}
               >
                 {subheading}
               </p>
@@ -302,7 +304,7 @@ function HeroSection({
 
             <div className="flex flex-wrap items-center" style={{ marginTop: 36, gap: 28 }}>
               {partnerBadgesLabel && (
-                <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: 0.8, textTransform: "uppercase", color: "var(--ink-muted)" }}>
+                <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: 0.8, textTransform: "uppercase", color: "var(--text-muted-fg)" }}>
                   {partnerBadgesLabel}
                 </span>
               )}
@@ -311,15 +313,17 @@ function HeroSection({
                   const u = badgeUrl(b)
                   if (!u) return null
                   return (
-                    <span key={b._key || i} className="relative inline-block" style={{ height: 28, width: 84 }}>
-                      <Image
-                        src={u}
-                        alt={b.name || ""}
-                        fill
-                        sizes="84px"
-                        style={{ objectFit: "contain", objectPosition: "left center" }}
-                      />
-                    </span>
+                    <FramedMedia key={b._key || i} className="dark:!p-1">
+                      <span className="relative inline-block" style={{ height: 28, width: 84 }}>
+                        <Image
+                          src={u}
+                          alt={b.name || ""}
+                          fill
+                          sizes="84px"
+                          style={{ objectFit: "contain", objectPosition: "left center" }}
+                        />
+                      </span>
+                    </FramedMedia>
                   )
                 })}
               </div>
@@ -340,12 +344,12 @@ function HeroSection({
                 aria-hidden
               />
               <div
-                className="relative overflow-hidden"
+                className="relative overflow-hidden dark:shadow-none"
                 style={{
                   borderRadius: 28,
                   boxShadow: "0 30px 80px -30px rgba(16, 0, 58, 0.45), 0 2px 8px rgba(0,0,0,0.06)",
                   border: "1px solid rgba(128, 21, 232, 0.16)",
-                  background: "var(--surface)",
+                  background: "var(--surface-raised)",
                   aspectRatio: "16 / 11",
                 }}
               >
@@ -363,7 +367,7 @@ function HeroSection({
                     style={{
                       width: "100%",
                       height: "100%",
-                      background: "linear-gradient(135deg, var(--navy-700) 0%, var(--navy-900) 100%)",
+                      background: "linear-gradient(135deg, #2b074d 0%, #10003a 100%)",
                     }}
                   />
                 )}
@@ -371,11 +375,11 @@ function HeroSection({
 
               {(calloutBadgeLabel || calloutBadgeText) && (
                 <div
-                  className="absolute"
+                  className="absolute dark:shadow-none"
                   style={{
                     right: -16,
                     bottom: -22,
-                    background: "var(--surface)",
+                    background: "var(--surface-raised)",
                     borderRadius: 18,
                     padding: "14px 18px",
                     boxShadow: "0 18px 40px -12px rgba(16, 0, 58, 0.25)",
@@ -396,12 +400,12 @@ function HeroSection({
                   />
                   <div>
                     {calloutBadgeLabel && (
-                      <div style={{ fontSize: 11, fontWeight: 600, color: "var(--ink-muted)", letterSpacing: 0.6, textTransform: "uppercase" }}>
+                      <div style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted-fg)", letterSpacing: 0.6, textTransform: "uppercase" }}>
                         {calloutBadgeLabel}
                       </div>
                     )}
                     {calloutBadgeText && (
-                      <div style={{ fontSize: 14, fontWeight: 600, color: "var(--dark-bg)" }}>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-body)" }}>
                         {calloutBadgeText}
                       </div>
                     )}
@@ -411,15 +415,15 @@ function HeroSection({
 
               {calloutOfficesText && (
                 <div
-                  className="absolute hidden md:flex"
+                  className="absolute hidden md:flex dark:shadow-none"
                   style={{
                     left: -22,
                     top: 28,
-                    background: "var(--surface)",
+                    background: "var(--surface-raised)",
                     borderRadius: 16,
                     padding: "10px 14px",
                     boxShadow: "0 18px 40px -12px rgba(16, 0, 58, 0.2)",
-                    border: "1px solid rgba(0,0,0,0.06)",
+                    border: "1px solid var(--border-ui)",
                     alignItems: "center",
                     gap: 10,
                   }}
@@ -433,13 +437,13 @@ function HeroSection({
                           height: 24,
                           borderRadius: 9999,
                           background: c,
-                          border: "2px solid #fff",
+                          border: "2px solid var(--surface-raised)",
                           marginLeft: i ? -8 : 0,
                         }}
                       />
                     ))}
                   </div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "var(--dark-bg)" }}>{calloutOfficesText}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-body)" }}>{calloutOfficesText}</div>
                 </div>
               )}
             </div>
@@ -459,8 +463,8 @@ function StatsBand({ stats }: { stats: StatItem[] }) {
           className="grid grid-cols-1 sm:grid-cols-3"
           style={{
             borderRadius: 28,
-            background: "linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 100%)",
-            color: "var(--white)",
+            background: "linear-gradient(135deg, #10003a 0%, #2b074d 100%)",
+            color: "#fff",
             padding: "44px 24px",
             boxShadow: "0 24px 60px -28px rgba(16, 0, 58, 0.55)",
             position: "relative",
@@ -490,7 +494,7 @@ function StatsBand({ stats }: { stats: StatItem[] }) {
                   fontSize: "clamp(38px, 4.6vw, 56px)",
                   fontWeight: 700,
                   letterSpacing: "-0.02em",
-                  background: "linear-gradient(135deg, var(--white) 0%, var(--purple-light) 100%)",
+                  background: "linear-gradient(135deg, #ffffff 0%, #ba83f0 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -555,7 +559,7 @@ function StorySection({
             </span>
           )}
           {(heading || headingAccent) && (
-            <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--dark-bg)" }}>
+            <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--text-body)" }}>
               {heading}
               {headingAccent && (
                 <>
@@ -571,11 +575,12 @@ function StorySection({
           {sections.map((s, i) => (
             <article
               key={s._key || i}
+              className="dark:shadow-none"
               style={{
                 position: "relative",
                 padding: 32,
                 borderRadius: 24,
-                background: i % 2 === 0 ? "var(--surface)" : "linear-gradient(160deg, var(--surface-tint) 0%, var(--surface) 70%)",
+                background: i % 2 === 0 ? "var(--surface-raised)" : "linear-gradient(160deg, #f6f1ff 0%, #ffffff 70%)",
                 border: "1px solid rgba(128, 21, 232, 0.12)",
                 boxShadow: "0 10px 30px -18px rgba(16, 0, 58, 0.18)",
                 overflow: "hidden",
@@ -606,7 +611,7 @@ function StorySection({
                 0{i + 1}
                 {cardEyebrowPrefix && <> · {cardEyebrowPrefix}</>}
               </div>
-              <h3 className="text-section-h3" style={{ color: "var(--dark-bg)" }}>
+              <h3 className="text-section-h3" style={{ color: i % 2 === 0 ? "var(--text-body)" : "var(--dark-bg)" }}>
                 {s.heading}
                 {s.headingAccent && (
                   <span style={{ color: "var(--purple-primary)" }}> {s.headingAccent}</span>
@@ -615,7 +620,7 @@ function StorySection({
               <div
                 style={{
                   marginTop: 16,
-                  color: "var(--ink-soft)",
+                  color: i % 2 === 0 ? "var(--text-body)" : "#3f4256",
                   fontSize: 16,
                   lineHeight: 1.6,
                   whiteSpace: "pre-line",
@@ -651,11 +656,13 @@ function ChallengesBento({
   const accent = ["#8015e8", "#4674FB", "#ec4899", "#10b981", "#f59e0b"]
   return (
     <section
+      className="dark:bg-none"
       style={{
         paddingTop: 96,
         paddingBottom: 96,
         background:
-          "linear-gradient(180deg, var(--surface-tint) 0%, var(--surface) 100%)",
+          "linear-gradient(180deg, #fbf9ff 0%, #ffffff 100%)",
+        backgroundColor: "var(--surface)",
       }}
     >
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
@@ -676,7 +683,7 @@ function ChallengesBento({
               {eyebrow}
             </span>
           )}
-          <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--dark-bg)" }}>
+          <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--text-body)" }}>
             {heading}
           </h2>
         </div>
@@ -690,16 +697,16 @@ function ChallengesBento({
             return (
               <article
                 key={c._key || i}
-                className={layout[i] ?? "md:col-span-2"}
+                className={`${layout[i] ?? "md:col-span-2"}${isFeature ? "" : " dark:shadow-none"}`}
                 style={{
                   position: "relative",
                   padding: isFeature ? 32 : 26,
                   borderRadius: 24,
                   background: isFeature
-                    ? "linear-gradient(155deg, var(--navy-900) 0%, var(--navy-700) 100%)"
-                    : "var(--surface)",
-                  color: isFeature ? "var(--white)" : "var(--dark-bg)",
-                  border: isFeature ? "none" : "1px solid var(--line-soft)",
+                    ? "linear-gradient(155deg, #10003a 0%, #2b074d 100%)"
+                    : "var(--surface-raised)",
+                  color: isFeature ? "#fff" : "var(--text-body)",
+                  border: isFeature ? "none" : "1px solid var(--border-ui)",
                   boxShadow: isFeature
                     ? "0 30px 60px -28px rgba(16, 0, 58, 0.5)"
                     : "0 8px 24px -16px rgba(16, 0, 58, 0.12)",
@@ -746,7 +753,7 @@ function ChallengesBento({
                 <h3
                   className="text-card-title"
                   style={{
-                    color: isFeature ? "var(--white)" : "var(--dark-bg)",
+                    color: isFeature ? "#fff" : "var(--text-body)",
                     marginTop: 4,
                   }}
                 >
@@ -756,7 +763,7 @@ function ChallengesBento({
                   style={{
                     fontSize: 15,
                     lineHeight: 1.6,
-                    color: isFeature ? "rgba(255,255,255,0.78)" : "var(--ink-soft)",
+                    color: isFeature ? "rgba(255,255,255,0.78)" : "var(--text-muted-fg)",
                     margin: 0,
                   }}
                 >
@@ -788,8 +795,8 @@ function MethodologyTimeline({
       style={{
         paddingTop: 96,
         paddingBottom: 96,
-        background: "var(--navy-900)",
-        color: "var(--white)",
+        background: "#10003a",
+        color: "#fff",
         position: "relative",
         overflow: "hidden",
       }}
@@ -811,7 +818,7 @@ function MethodologyTimeline({
                 padding: "4px 12px",
                 borderRadius: 9999,
                 background: "rgba(255,255,255,0.1)",
-                color: "var(--purple-light)",
+                color: "#ba83f0",
                 fontSize: 12,
                 fontWeight: 700,
                 letterSpacing: 0.8,
@@ -868,14 +875,14 @@ function MethodologyTimeline({
                         fontSize: 12,
                         fontWeight: 700,
                         letterSpacing: 1,
-                        color: "var(--purple-light)",
+                        color: "#ba83f0",
                       }}
                     >
                       {stepLabel} {step.number}
                     </div>
                     <h3
                       className="text-card-title"
-                      style={{ marginTop: 6, color: "var(--white)" }}
+                      style={{ marginTop: 6, color: "#fff" }}
                     >
                       {step.title}
                     </h3>
@@ -901,8 +908,8 @@ function MethodologyTimeline({
                       width: 64,
                       height: 64,
                       borderRadius: 9999,
-                      background: "linear-gradient(135deg, var(--purple-primary), var(--blue-accent-strong))",
-                      color: "var(--white)",
+                      background: "linear-gradient(135deg, #8015e8, #4674FB)",
+                      color: "#fff",
                       fontWeight: 700,
                       fontSize: 22,
                       display: "inline-flex",
@@ -958,7 +965,7 @@ function ApproachTabs({
             </span>
           )}
           {(heading || headingAccent) && (
-            <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--dark-bg)" }}>
+            <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--text-body)" }}>
               {heading}
               {headingAccent && (
                 <>
@@ -975,7 +982,7 @@ function ApproachTabs({
           style={{
             gap: 8,
             padding: 6,
-            background: "var(--surface-tint-2)",
+            background: "#f4f0fb",
             borderRadius: 9999,
             margin: "0 auto 40px",
             width: "fit-content",
@@ -990,7 +997,7 @@ function ApproachTabs({
                 padding: "10px 22px",
                 borderRadius: 9999,
                 background: i === active ? "var(--dark-bg)" : "transparent",
-                color: i === active ? "var(--white)" : "var(--dark-bg)",
+                color: i === active ? "#fff" : "var(--dark-bg)",
                 fontWeight: 600,
                 fontSize: 14,
                 cursor: "pointer",
@@ -1008,11 +1015,12 @@ function ApproachTabs({
           {(current?.items ?? []).map((item, i) => (
             <article
               key={item._key || i}
+              className="dark:shadow-none"
               style={{
                 padding: 24,
                 borderRadius: 20,
-                background: "var(--surface)",
-                border: "1px solid var(--line-soft)",
+                background: "var(--surface-raised)",
+                border: "1px solid var(--border-ui)",
                 boxShadow: "0 8px 24px -16px rgba(16, 0, 58, 0.12)",
                 position: "relative",
                 overflow: "hidden",
@@ -1032,7 +1040,7 @@ function ApproachTabs({
               </div>
               <h3
                 className="text-card-title"
-                style={{ marginTop: 12, color: "var(--dark-bg)" }}
+                style={{ marginTop: 12, color: "var(--text-body)" }}
               >
                 {item.title}
               </h3>
@@ -1041,7 +1049,7 @@ function ApproachTabs({
                   marginTop: 10,
                   fontSize: 14,
                   lineHeight: 1.6,
-                  color: "var(--ink-soft)",
+                  color: "var(--text-muted-fg)",
                 }}
               >
                 {item.description}
@@ -1069,7 +1077,7 @@ function GlobalPresence({
 }) {
   if (!offices?.length) return null
   return (
-    <section style={{ paddingTop: 96, paddingBottom: 96, background: "linear-gradient(180deg, var(--surface-subtle) 0%, var(--surface) 100%)" }}>
+    <section className="dark:bg-none" style={{ paddingTop: 96, paddingBottom: 96, background: "linear-gradient(180deg, #ecf1fc 0%, #ffffff 100%)", backgroundColor: "var(--surface-subtle)" }}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
         <div className="text-center" style={{ marginBottom: 56 }}>
           {eyebrow && (
@@ -1089,7 +1097,7 @@ function GlobalPresence({
             </span>
           )}
           {(heading || headingAccent) && (
-            <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--dark-bg)" }}>
+            <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--text-body)" }}>
               {heading}
               {headingAccent && (
                 <>
@@ -1102,7 +1110,7 @@ function GlobalPresence({
           {body && (
             <p
               className="text-body-lead"
-              style={{ marginTop: 12, color: "var(--ink-soft)", maxWidth: 640, marginLeft: "auto", marginRight: "auto" }}
+              style={{ marginTop: 12, color: "var(--text-muted-fg)", maxWidth: 640, marginLeft: "auto", marginRight: "auto" }}
             >
               {body}
             </p>
@@ -1113,10 +1121,11 @@ function GlobalPresence({
           {offices.map((o, i) => (
             <div
               key={o._key || o.city || i}
+              className="dark:shadow-none"
               style={{
                 padding: 22,
                 borderRadius: 18,
-                background: "var(--surface)",
+                background: "var(--surface-raised)",
                 border: "1px solid rgba(128, 21, 232, 0.12)",
                 boxShadow: "0 8px 24px -18px rgba(16, 0, 58, 0.18)",
                 textAlign: "left",
@@ -1128,12 +1137,12 @@ function GlobalPresence({
                   marginTop: 10,
                   fontSize: 18,
                   fontWeight: 700,
-                  color: "var(--dark-bg)",
+                  color: "var(--text-body)",
                 }}
               >
                 {o.city}
               </div>
-              <div style={{ fontSize: 13, color: "var(--ink-muted)", marginTop: 2 }}>
+              <div style={{ fontSize: 13, color: "var(--text-muted-fg)", marginTop: 2 }}>
                 {o.country}
               </div>
               {o.note && (
@@ -1175,7 +1184,7 @@ function PartnerStack({ badges, eyebrow }: { badges: PartnerBadge[]; eyebrow?: s
                 fontWeight: 700,
                 letterSpacing: 1,
                 textTransform: "uppercase",
-                color: "var(--ink-muted)",
+                color: "var(--text-muted-fg)",
               }}
             >
               {eyebrow}
@@ -1188,27 +1197,28 @@ function PartnerStack({ badges, eyebrow }: { badges: PartnerBadge[]; eyebrow?: s
             gap: 36,
             padding: "28px 24px",
             borderRadius: 24,
-            background: "var(--surface-tint)",
-            border: "1px solid rgba(128, 21, 232, 0.1)",
+            background: "var(--surface-subtle)",
+            border: "1px solid var(--border-ui)",
           }}
         >
           {badges.map((b, i) => {
             const u = badgeUrl(b)
             if (!u) return null
             return (
-              <span
-                key={b._key || i}
-                className="relative inline-block"
-                style={{ height: 44, width: 130 }}
-              >
-                <Image
-                  src={u}
-                  alt={b.name || ""}
-                  fill
-                  sizes="130px"
-                  style={{ objectFit: "contain" }}
-                />
-              </span>
+              <FramedMedia key={b._key || i} className="dark:!p-1.5">
+                <span
+                  className="relative inline-block"
+                  style={{ height: 44, width: 130 }}
+                >
+                  <Image
+                    src={u}
+                    alt={b.name || ""}
+                    fill
+                    sizes="130px"
+                    style={{ objectFit: "contain" }}
+                  />
+                </span>
+              </FramedMedia>
             )
           })}
         </div>
@@ -1241,8 +1251,8 @@ function ClosingCta({
             overflow: "hidden",
             borderRadius: 32,
             padding: "64px 48px",
-            background: "linear-gradient(135deg, var(--purple-primary) 0%, var(--blue-accent-strong) 100%)",
-            color: "var(--white)",
+            background: "linear-gradient(135deg, #8015e8 0%, #4674FB 100%)",
+            color: "#fff",
             textAlign: "center",
             boxShadow: "0 30px 80px -30px rgba(70, 116, 251, 0.55)",
           }}
@@ -1260,7 +1270,7 @@ function ClosingCta({
             {heading && (
               <h2
                 className="text-section-h2"
-                style={{ color: "var(--white)", maxWidth: 720, margin: "0 auto" }}
+                style={{ color: "#fff", maxWidth: 720, margin: "0 auto" }}
               >
                 {heading}
               </h2>

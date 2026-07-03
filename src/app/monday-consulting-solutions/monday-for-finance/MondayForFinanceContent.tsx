@@ -11,6 +11,7 @@ import {
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData, FaqTab, PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
+import FramedMedia from "@/components/common/FramedMedia"
 
 interface Props {
   page: any
@@ -66,15 +67,16 @@ export default function MondayForFinanceContent({
                 const src = safeImageUrl(badge.image)
                 if (!src) return null
                 return (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={badge._key || `badge-${i}`}
-                    src={src}
-                    alt={badge.name || "Partner badge"}
-                    width={120}
-                    height={44}
-                    className="h-[44px] w-auto rounded-[5px]"
-                  />
+                  <FramedMedia key={badge._key || `badge-${i}`} className="rounded-[5px]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={src}
+                      alt={badge.name || "Partner badge"}
+                      width={120}
+                      height={44}
+                      className="h-[44px] w-auto rounded-[5px]"
+                    />
+                  </FramedMedia>
                 )
               })}
             </div>
@@ -104,7 +106,7 @@ export default function MondayForFinanceContent({
               maxWidth: 924,
             }}
           >
-            <span className="text-ink">
+            <span className="text-body">
               {page.heroHeading || page.title || ""}
             </span>
           </h1>
@@ -112,7 +114,7 @@ export default function MondayForFinanceContent({
           {/* Subheading */}
           {!page.hideHeroSubheading && page.heroSubheading && (
             <p
-              className="text-body-lead text-center text-ink"
+              className="text-body-lead text-center text-body"
               style={{
                 marginTop: 31,
                 maxWidth: 859,
@@ -138,14 +140,14 @@ export default function MondayForFinanceContent({
                   borderRadius: 100,
                   ...(page.secondaryCtaLabel
                     ? {
-                        border: "1px solid var(--brand)",
-                        backgroundColor: "var(--surface)",
-                        color: "var(--brand)",
+                        border: "1px solid #8015e8",
+                        backgroundColor: "white",
+                        color: "#8015e8",
                       }
                     : {
                         background:
-                          "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
-                        color: "var(--white)",
+                          "linear-gradient(to right, #8015e8, #ba83f0)",
+                        color: "white",
                       }),
                   fontSize: 16,
                 }}
@@ -161,7 +163,7 @@ export default function MondayForFinanceContent({
                   width: 330,
                   height: 53,
                   borderRadius: 100,
-                  background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                  background: "linear-gradient(to right, #8015e8, #ba83f0)",
                   fontSize: 16,
                 }}
               >
@@ -173,13 +175,15 @@ export default function MondayForFinanceContent({
           {/* Hero image */}
           {heroImageSrc && (
             <div style={{ marginTop: 40 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={heroImageSrc}
-                alt={page.heroHeading || "Hero"}
-                className="rounded-card"
-                style={{ width: "100%", maxWidth: 1042, height: "auto" }}
-              />
+              <FramedMedia className="rounded-card" style={{ width: "100%", maxWidth: 1042 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={heroImageSrc}
+                  alt={page.heroHeading || "Hero"}
+                  className="rounded-card"
+                  style={{ width: "100%", height: "auto" }}
+                />
+              </FramedMedia>
             </div>
           )}
         </div>
@@ -271,7 +275,7 @@ function FinanceTabsSection({
       style={{
         paddingTop: 80,
         paddingBottom: 80,
-        background: "linear-gradient(180deg,var(--surface-tint-2) 0%,var(--surface) 60%)",
+        background: "linear-gradient(180deg,#f5f0ff 0%,#ffffff 60%)",
       }}
     >
       <div
@@ -280,13 +284,13 @@ function FinanceTabsSection({
       >
         {(headingPart1 || headingAccent) && (
           <h2
-            className="text-section-h2 text-center text-ink"
+            className="text-section-h2 text-center text-body"
             style={{ maxWidth: 900 }}
           >
             {headingPart1}
             {headingPart1 && headingAccent ? " " : ""}
             {headingAccent && (
-              <span style={{ color: "var(--brand)" }}>{headingAccent}</span>
+              <span style={{ color: "#8015e8" }}>{headingAccent}</span>
             )}
           </h2>
         )}
@@ -309,16 +313,16 @@ function FinanceTabsSection({
                 ...(i === activeTab
                   ? {
                       background:
-                        "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
-                      color: "var(--white)",
+                        "linear-gradient(to right, #8015e8, #ba83f0)",
+                      color: "white",
                       boxShadow:
                         "2.83px 2.83px 15px 3px rgba(0,0,0,0.18)",
                       border: "none",
                     }
                   : {
-                      backgroundColor: "var(--surface)",
-                      color: "var(--navy-700)",
-                      border: "1px solid var(--line)",
+                      backgroundColor: "white",
+                      color: "#2b074d",
+                      border: "1px solid #e8e6e6",
                     }),
               }}
             >
@@ -331,7 +335,7 @@ function FinanceTabsSection({
         {active?.subheading && (
           <h3
             className="text-center font-semibold"
-            style={{ fontSize: 22, color: "var(--brand)", marginTop: 40 }}
+            style={{ fontSize: 22, color: "#8015e8", marginTop: 40 }}
           >
             {active.subheading}
           </h3>
@@ -339,7 +343,7 @@ function FinanceTabsSection({
 
         {/* Numbered items */}
         <div
-          className="w-full rounded-card border border-line"
+          className="w-full rounded-card border border-[#e8e6e6]"
           style={{ marginTop: 24, padding: "12px 0" }}
         >
           {(active.items ?? []).map((item, i) => (
@@ -350,7 +354,7 @@ function FinanceTabsSection({
                 padding: "24px 40px",
                 borderBottom:
                   i < (active.items?.length ?? 0) - 1
-                    ? "1px solid var(--line-soft)"
+                    ? "1px solid #f0f0f0"
                     : "none",
               }}
             >
@@ -369,7 +373,7 @@ function FinanceTabsSection({
               <div style={{ flex: 1 }}>
                 <p
                   className="font-bold"
-                  style={{ fontSize: 18, color: "var(--navy-700)" }}
+                  style={{ fontSize: 18, color: "#2b074d" }}
                 >
                   {"icon" in item && (item as { icon?: string }).icon
                     ? `${(item as { icon?: string }).icon} `
@@ -380,7 +384,7 @@ function FinanceTabsSection({
                   style={{
                     fontSize: 14,
                     lineHeight: "22px",
-                    color: "var(--ink-soft)",
+                    color: "#444",
                     marginTop: 8,
                     whiteSpace: "pre-line",
                   }}
@@ -415,18 +419,18 @@ function BottomFeatureSection({
 }) {
   if (cards.length === 0 && !videoUrl) return null
   return (
-    <section style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(180deg, var(--surface-tint-2) 0%, var(--surface) 100%)" }}>
+    <section style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(180deg, #f5f0ff 0%, #ffffff 100%)" }}>
       <div className="mx-auto px-4" style={{ maxWidth: 1100 }}>
         {/* Title */}
         {(headingPart1 || headingAccent) && (
           <h2
             className="text-section-h2 text-center"
-            style={{ color: "var(--navy-700)", maxWidth: 900, margin: "0 auto" }}
+            style={{ color: "#2b074d", maxWidth: 900, margin: "0 auto" }}
           >
             {headingPart1}
             {headingPart1 && headingAccent ? " " : ""}
             {headingAccent && (
-              <span style={{ color: "var(--brand)" }}>{headingAccent}</span>
+              <span style={{ color: "#8015e8" }}>{headingAccent}</span>
             )}
           </h2>
         )}
@@ -439,7 +443,7 @@ function BottomFeatureSection({
           {cards.map((card, i) => (
             <div
               key={card.title || i}
-              className="flex flex-col items-center text-center bg-surface rounded-card border border-line-tint"
+              className="flex flex-col items-center text-center bg-surface-raised rounded-card border border-ui dark:shadow-none"
               style={{
                 padding: 28,
                 boxShadow: "var(--shadow-whisper)",
@@ -450,7 +454,7 @@ function BottomFeatureSection({
               </span>
               <h4
                 className="font-bold"
-                style={{ fontSize: 18, color: "var(--brand)" }}
+                style={{ fontSize: 18, color: "#8015e8" }}
               >
                 {card.title}
               </h4>
@@ -458,7 +462,7 @@ function BottomFeatureSection({
                 style={{
                   fontSize: 14,
                   lineHeight: "22px",
-                  color: "var(--ink-soft)",
+                  color: "#444",
                   marginTop: 10,
                 }}
               >

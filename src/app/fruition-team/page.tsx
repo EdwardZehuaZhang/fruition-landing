@@ -10,6 +10,7 @@ import { mergeTeamMembers } from "@/lib/mergeTeamMembers"
 export async function generateMetadata() {
   const page = await getPageBySlug("fruition-team")
   return {
+    alternates: { canonical: "/fruition-team" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

@@ -13,10 +13,10 @@ interface FeatureNumberListProps {
   columns?: 2 | 3
 }
 
-const DARK_BG = "var(--navy-700)"
-const LIGHT_BG = "var(--surface-tint)"
-const NUMBER_COLOR_DARK = "var(--purple-light)"
-const NUMBER_COLOR_LIGHT = "var(--brand)"
+const DARK_BG = "#2b074d"
+const LIGHT_BG = "var(--surface-subtle)"
+const NUMBER_COLOR_DARK = "#b990f5"
+const NUMBER_COLOR_LIGHT = "#8015e8"
 
 export default function FeatureNumberList({
   heading,
@@ -31,10 +31,10 @@ export default function FeatureNumberList({
 
   const isDark = theme === "dark"
   const bg = isDark ? DARK_BG : LIGHT_BG
-  const headingColor = isDark ? "var(--white)" : "var(--ink)"
-  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "var(--ink-soft)"
-  const titleColor = isDark ? "var(--white)" : "var(--ink)"
-  const descColor = isDark ? "rgba(255,255,255,0.8)" : "var(--ink-soft)"
+  const headingColor = isDark ? "#ffffff" : "var(--text-body)"
+  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "var(--text-muted-fg)"
+  const titleColor = isDark ? "#ffffff" : "var(--text-body)"
+  const descColor = isDark ? "rgba(255,255,255,0.8)" : "var(--text-body)"
   const numberColor = isDark ? NUMBER_COLOR_DARK : NUMBER_COLOR_LIGHT
 
   const gridClass =

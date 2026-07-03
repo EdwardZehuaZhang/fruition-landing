@@ -5,6 +5,7 @@ import FaqList, { type FaqItem } from "./FaqList"
 export async function generateMetadata() {
   const page = await getPageBySlug("faqs")
   return {
+    alternates: { canonical: "/faqs" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }
@@ -32,7 +33,7 @@ export default async function FaqsPage() {
             </span>
           )}
           {page.heroHeading && (
-            <h1 className="mt-4 text-display text-ink">{page.heroHeading}</h1>
+            <h1 className="mt-4 text-display text-body">{page.heroHeading}</h1>
           )}
           {page.heroSubheading && (
             <p className="mt-5 max-w-2xl text-body-lead text-[color:var(--color-text-secondary)]">

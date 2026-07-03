@@ -37,13 +37,13 @@ export default function ProjectBuildsIndex() {
           </p>
         </div>
 
-        <div className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-surface shadow-whisper overflow-hidden">
+        <div className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-surface-raised shadow-whisper dark:shadow-none overflow-hidden">
           <button
             type="button"
             aria-expanded={open}
             aria-controls="builds-folder-body"
             onClick={() => setOpen((v) => !v)}
-            className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-surface-tint transition-colors"
+            className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-surface-subtle transition-colors"
           >
             <span
               className={`inline-flex items-center justify-center w-6 h-6 transition-transform duration-200 text-[var(--purple-primary)] ${
@@ -84,7 +84,7 @@ export default function ProjectBuildsIndex() {
                     {g.items.map((c, idx) => (
                       <div
                         key={`${g.key}-${c.name}-${idx}`}
-                        className="rounded-xl border border-[var(--color-border)] bg-surface p-3 hover:border-[var(--purple-light)] hover:shadow-whisper transition-all"
+                        className="rounded-xl border border-[var(--color-border)] bg-surface-raised p-3 hover:border-[var(--purple-light)] hover:shadow-whisper dark:hover:shadow-none transition-all"
                       >
                         <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-[#16a34a] font-semibold mb-1.5">
                           <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#16a34a]" />

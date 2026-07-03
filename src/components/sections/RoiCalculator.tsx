@@ -41,7 +41,7 @@ export default function RoiCalculator({ config = {} }: RoiCalculatorProps) {
   const fmt = (n: number) => n.toLocaleString("en-US")
 
   return (
-    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "var(--surface-tint-2)" }}>
+    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "#f0ecfe" }}>
       <style>{`
         .roi-range {
           -webkit-appearance: none;
@@ -49,7 +49,7 @@ export default function RoiCalculator({ config = {} }: RoiCalculatorProps) {
           width: 100%;
           height: 8px;
           border-radius: 999px;
-          background: var(--line-tint);
+          background: #e2d8f7;
           outline: none;
           cursor: pointer;
         }
@@ -59,8 +59,8 @@ export default function RoiCalculator({ config = {} }: RoiCalculatorProps) {
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          background: var(--brand);
-          border: 3px solid var(--white);
+          background: #8015e8;
+          border: 3px solid #fff;
           box-shadow: 0 2px 8px rgba(128,21,232,0.45);
           cursor: pointer;
         }
@@ -68,26 +68,26 @@ export default function RoiCalculator({ config = {} }: RoiCalculatorProps) {
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          background: var(--brand);
-          border: 3px solid var(--white);
+          background: #8015e8;
+          border: 3px solid #fff;
           box-shadow: 0 2px 8px rgba(128,21,232,0.45);
           cursor: pointer;
         }
-        .roi-range::-moz-range-track { height: 8px; border-radius: 999px; background: var(--line-tint); }
+        .roi-range::-moz-range-track { height: 8px; border-radius: 999px; background: #e2d8f7; }
       `}</style>
       <div className="mx-auto" style={{ maxWidth: 920 }}>
         <div className="text-center" style={{ marginBottom: 36 }}>
-          <h2 className="text-section-h2 text-ink">{heading}</h2>
+          <h2 className="text-section-h2 text-body">{heading}</h2>
           {subheading && (
-            <p style={{ color: "var(--ink-muted)", fontSize: 17, lineHeight: "26px", marginTop: 12 }}>{subheading}</p>
+            <p style={{ color: "var(--text-muted-fg)", fontSize: 17, lineHeight: "26px", marginTop: 12 }}>{subheading}</p>
           )}
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 md:items-stretch">
           {/* Inputs */}
           <div
-            className="rounded-card bg-surface flex flex-col justify-center h-full"
-            style={{ padding: 36, border: "1px solid var(--line-tint)", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
+            className="rounded-card bg-surface-raised flex flex-col justify-center h-full dark:shadow-none dark:border dark:border-ui"
+            style={{ padding: 36, border: "1px solid #ece7fb", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
           >
             <Slider
               id={`${uid}-team`}
@@ -116,12 +116,12 @@ export default function RoiCalculator({ config = {} }: RoiCalculatorProps) {
             style={{
               padding: 36,
               background: "linear-gradient(-38deg, rgb(128,21,232) 0%, rgb(16,0,58) 100%)",
-              color: "var(--white)",
+              color: "#fff",
             }}
           >
             <Result big value={`${fmt(yearlyHours)} hrs`} label="reclaimed per year" />
             <div style={{ height: 20 }} />
-            <div className="flex gap-8">
+            <div className="flex flex-wrap gap-x-8 gap-y-4">
               <Result value={`${fmt(weeklyHours)} hrs`} label="per week" />
               <Result value={`${currencySymbol}${fmt(yearlyDollars)}`} label="saved per year" />
             </div>
@@ -157,11 +157,11 @@ function Slider({
   return (
     <div>
       <div className="flex items-baseline justify-between gap-4" style={{ marginBottom: 14 }}>
-        <label htmlFor={id} className="font-medium" style={{ fontSize: 17, lineHeight: "24px", color: "var(--ink-heading)", maxWidth: "65%" }}>
+        <label htmlFor={id} className="font-medium" style={{ fontSize: 17, lineHeight: "24px", color: "var(--text-body)", maxWidth: "65%" }}>
           {label}
         </label>
-        <span className="font-bold shrink-0" style={{ fontSize: 28, lineHeight: "30px", color: "var(--brand)" }}>
-          {value} <span style={{ fontSize: 15, fontWeight: 500, color: "var(--ink-muted)" }}>{suffix}</span>
+        <span className="font-bold shrink-0" style={{ fontSize: 28, lineHeight: "30px", color: "#8015e8" }}>
+          {value} <span style={{ fontSize: 15, fontWeight: 500, color: "var(--text-muted-fg)" }}>{suffix}</span>
         </span>
       </div>
       <input
@@ -180,7 +180,7 @@ function Slider({
 function Result({ value, label, big = false }: { value: string; label: string; big?: boolean }) {
   return (
     <div>
-      <div className="font-bold" style={{ fontSize: big ? 44 : 26, lineHeight: big ? "48px" : "30px" }}>
+      <div className="font-bold" style={{ fontSize: big ? "clamp(28px, 8vw, 44px)" : "clamp(20px, 5vw, 26px)", lineHeight: 1.1, wordBreak: "break-word" }}>
         {value}
       </div>
       <div style={{ fontSize: 13, lineHeight: "18px", color: "rgba(255,255,255,0.72)", marginTop: 4 }}>{label}</div>

@@ -54,12 +54,12 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
           {/* Heading + subheading */}
           <div className="flex flex-col gap-[12px] items-center text-center w-full">
             {heading && (
-              <h2 className="text-[35px] font-medium text-ink leading-[49px]">
+              <h2 className="text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">
                 {heading}
               </h2>
             )}
             {subheading && (
-              <p className="text-[20px] text-ink text-center">{subheading}</p>
+              <p className="text-[20px] text-body text-center">{subheading}</p>
             )}
           </div>
 
@@ -96,7 +96,7 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
         <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[36px]">
           <div className="flex flex-col gap-[12px] items-center text-center">
             {heading && (
-              <h2 className="text-[35px] font-medium text-ink leading-[49px]">
+              <h2 className="text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">
                 {headingAccent ? (
                   (() => {
                     const idx = heading.indexOf(headingAccent)
@@ -104,7 +104,7 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
                       return (
                         <>
                           <span>{heading.slice(0, idx)}</span>
-                          <span className="text-brand">{headingAccent}</span>
+                          <span className="text-[#8015e8]">{headingAccent}</span>
                           <span>{heading.slice(idx + headingAccent.length)}</span>
                         </>
                       )
@@ -114,7 +114,7 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
                 ) : heading}
               </h2>
             )}
-            <p className="text-[20px] text-ink text-center">{resolvedSubheading}</p>
+            <p className="text-[20px] text-body text-center">{resolvedSubheading}</p>
           </div>
 
           {/* Partner badge */}
@@ -143,10 +143,10 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
                         className="w-full h-full object-cover group-hover:scale-105 transition"
                       />
                     ) : (
-                      <div className="w-full h-full bg-line-soft" />
+                      <div className="w-full h-full bg-[#d9d9d9]" />
                     )}
                   </div>
-                  <p className="text-[16px] font-medium text-ink-heading text-center">{f.title}</p>
+                  <p className="text-[16px] font-medium text-body text-center">{f.title}</p>
                 </Link>
               )
             })}
@@ -163,15 +163,15 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
 
     return (
       <section className="relative py-[80px] pb-[120px] px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-[var(--navy-900)]" />
-        <div className="absolute inset-0 bg-gradient-to-br from-[var(--navy-700)] via-[var(--navy-900)] to-[var(--navy-900)] opacity-30" />
+        <div className="absolute inset-0 bg-[#10003a]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#2b074d] via-[#10003a] to-[#10003a] opacity-30" />
 
         <div className="mx-auto max-w-[1199px] relative z-10 flex flex-col items-center">
           {stepsHeading && (
             <h2 className="mb-3 text-center text-[28px] leading-[36px] sm:text-[45px] sm:leading-[63px] text-white">{stepsHeading}</h2>
           )}
           {stepsSubheading && (
-            <p className="mb-12 text-center text-[25px] font-extralight italic text-white">{stepsSubheading}</p>
+            <p className="mb-12 text-center text-[19px] sm:text-[25px] font-extralight italic text-white">{stepsSubheading}</p>
           )}
 
           <div className="flex flex-wrap gap-0 w-full justify-center">
@@ -180,7 +180,7 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
                 key={f._key ?? i}
                 className="group w-[237px] text-center cursor-default transition-transform duration-300 ease-out hover:-translate-y-1"
               >
-                <p className="text-[48px] font-light text-brand-light leading-[67.2px] transition-all duration-300 ease-out group-hover:font-bold group-hover:text-white">
+                <p className="text-[48px] font-light text-[#b162fe] leading-[67.2px] transition-all duration-300 ease-out group-hover:font-bold group-hover:text-white">
                   {String(i + 1).padStart(2, '0')}
                 </p>
                 <p className="text-[14px] font-medium text-white mb-2 transition-all duration-300 ease-out group-hover:font-bold">{f.title}</p>
@@ -200,26 +200,26 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
     <section className="bg-surface py-[80px] px-4">
       <div className="mx-auto max-w-[959px] flex flex-col items-center">
         {heading && (
-          <h2 className="mb-3 text-center text-[35px] font-medium text-ink leading-[49px]">{heading}</h2>
+          <h2 className="mb-3 text-center text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">{heading}</h2>
         )}
         {subheading && (
-          <p className="mb-10 text-center text-[20px] text-ink max-w-[800px]">{subheading}</p>
+          <p className="mb-10 text-center text-[20px] text-body max-w-[800px]">{subheading}</p>
         )}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
           {features?.map((f, i) => (
             <div
               key={f._key ?? i}
-              className="flex items-start gap-4 rounded-card bg-surface border border-line p-6"
+              className="flex items-start gap-4 rounded-card bg-surface-raised border border-ui p-6"
             >
               {f.icon && (
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand/10 text-sm font-bold text-brand">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#8015e8]/10 text-sm font-bold text-[#8015e8]">
                   {f.icon}
                 </span>
               )}
               <div>
-                <p className="font-semibold text-ink">{f.title}</p>
+                <p className="font-semibold text-body">{f.title}</p>
                 {f.description && (
-                  <p className="mt-1 text-[14px] text-ink-soft leading-[22.4px]">{f.description}</p>
+                  <p className="mt-1 text-[14px] text-muted leading-[22.4px]">{f.description}</p>
                 )}
               </div>
             </div>

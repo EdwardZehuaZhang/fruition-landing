@@ -11,6 +11,7 @@ import FaqAccordion from "@/components/sections/FaqAccordion"
 import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
 import StickyCtaBar from "@/components/sections/StickyCtaBar"
 import CtaLabel from "@/components/CtaLabel"
+import FramedMedia from "@/components/common/FramedMedia"
 import type { FaqTab as SharedFaqTab } from "@/components/sections/types"
 
 /* ------------------------------------------------------------------ */
@@ -358,15 +359,16 @@ export default function ImplementationPackagesContent({
           {heroPartnerBadges.length > 0 && (
             <div className="flex items-center" style={{ gap: 22 }}>
               {heroPartnerBadges.map((badge) => (
-                <Image
-                  key={badge._key ?? badge.src}
-                  src={badge.src}
-                  alt={badge.alt}
-                  width={120}
-                  height={44}
-                  className="h-[44px] w-auto rounded-[5px]"
-                  unoptimized
-                />
+                <FramedMedia key={badge._key ?? badge.src} className="dark:!p-1">
+                  <Image
+                    src={badge.src}
+                    alt={badge.alt}
+                    width={120}
+                    height={44}
+                    className="h-[44px] w-auto rounded-[5px]"
+                    unoptimized
+                  />
+                </FramedMedia>
               ))}
             </div>
           )}
@@ -381,13 +383,13 @@ export default function ImplementationPackagesContent({
               maxWidth: 924,
             }}
           >
-            <span className="text-ink">{heroHeadingPart1}</span>
-            <span style={{ color: "var(--brand)" }}>{heroHeadingAccent}</span>
-            <span className="text-ink">{heroHeadingPart2}</span>
+            <span className="text-body">{heroHeadingPart1}</span>
+            <span style={{ color: "#8015e8" }}>{heroHeadingAccent}</span>
+            <span className="text-body">{heroHeadingPart2}</span>
           </h1>
 
           {/* Monday Partners image */}
-          <div style={{ marginTop: 40 }}>
+          <FramedMedia style={{ marginTop: 40 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/monday-partners.avif"
@@ -396,7 +398,7 @@ export default function ImplementationPackagesContent({
               height={0}
               className="w-full max-w-[924px] h-auto object-contain"
             />
-          </div>
+          </FramedMedia>
 
           {/* Certification banner (hidden) */}
           {/* <div style={{ marginTop: 40 }}>
@@ -423,9 +425,9 @@ export default function ImplementationPackagesContent({
                     width: 330,
                     height: 53,
                     borderRadius: 100,
-                    border: "1px solid var(--brand)",
-                    backgroundColor: "var(--surface)",
-                    color: "var(--brand)",
+                    border: "1px solid #8015e8",
+                    backgroundColor: "white",
+                    color: "#8015e8",
                     fontSize: 16,
                   }}
                 >
@@ -440,7 +442,7 @@ export default function ImplementationPackagesContent({
                     width: 330,
                     height: 53,
                     borderRadius: 100,
-                    background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
                     fontSize: 16,
                   }}
                 >
@@ -452,17 +454,17 @@ export default function ImplementationPackagesContent({
 
           {/* Hero image */}
           {heroImageSrc && (
-            <div style={{ marginTop: 40 }}>
+            <FramedMedia style={{ marginTop: 40 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroImageSrc}
                 alt="monday.com dashboards — project planning and team OKRs"
                 width={1042}
                 height={312}
-                className="rounded-card object-contain bg-surface"
+                className="rounded-card object-contain bg-white"
                 style={{ width: 1042, height: 312 }}
               />
-            </div>
+            </FramedMedia>
           )}
         </div>
       </section>
@@ -475,8 +477,8 @@ export default function ImplementationPackagesContent({
           <div className="flex flex-col gap-[35px] items-center w-full max-w-[1348px] mx-auto">
             {/* Heading */}
             <p className="text-[28px] font-medium leading-[39.2px] text-center">
-              <span className="text-ink">{logoCloudHeadingPart1}</span>
-              <span className="text-brand">{logoCloudHeadingAccent}</span>
+              <span className="text-body">{logoCloudHeadingPart1}</span>
+              <span className="text-[#8015e8]">{logoCloudHeadingAccent}</span>
             </p>
 
             {/* Horizontal marquee logo strip */}
@@ -486,9 +488,9 @@ export default function ImplementationPackagesContent({
                 style={{ width: "max-content" }}
               >
                 {duplicatedLogos.map((logo, i) => (
-                  <div
+                  <FramedMedia
                     key={`logo-${i}`}
-                    className="flex items-center justify-center shrink-0 h-[65px] overflow-hidden"
+                    className="flex items-center justify-center shrink-0 h-[65px] dark:!p-1.5"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -497,7 +499,7 @@ export default function ImplementationPackagesContent({
                       height={65}
                       className="h-full w-auto object-contain"
                     />
-                  </div>
+                  </FramedMedia>
                 ))}
               </div>
             </div>
@@ -528,7 +530,7 @@ export default function ImplementationPackagesContent({
       {/* ============================================================ */}
       {/* SECTION 4 -- Services Content (bg-[#f0ecfe])                 */}
       {/* ============================================================ */}
-      <section style={{ backgroundColor: "var(--surface-tint-2)" }}>
+      <section style={{ backgroundColor: "var(--surface-subtle)" }}>
         <div
           className="mx-auto flex flex-col items-center"
           style={{ paddingTop: 80, paddingBottom: 80 }}
@@ -544,9 +546,9 @@ export default function ImplementationPackagesContent({
             }}
           >
             <p>
-              <span className="text-ink">{servicesIntroHeadingPart1}</span>
-              <span style={{ color: "var(--brand)" }}>{servicesIntroHeadingAccent}</span>
-              <span className="text-ink">{servicesIntroHeadingPart2}</span>
+              <span className="text-body">{servicesIntroHeadingPart1}</span>
+              <span style={{ color: "#8015e8" }}>{servicesIntroHeadingAccent}</span>
+              <span className="text-body">{servicesIntroHeadingPart2}</span>
             </p>
           </div>
 
@@ -559,10 +561,10 @@ export default function ImplementationPackagesContent({
             {featureCards.map((card, i) => (
               <div
                 key={card._key ?? i}
-                className="flex-1"
+                className="flex-1 dark:shadow-none"
                 style={{
-                  backgroundColor: "var(--surface)",
-                  border: "1px solid var(--line)",
+                  backgroundColor: "var(--surface-raised)",
+                  border: "1px solid var(--border-ui)",
                   borderRadius: "var(--radius-card)",
                   padding: 28,
                 }}
@@ -573,7 +575,7 @@ export default function ImplementationPackagesContent({
                     style={{
                       fontSize: 24,
                       fontWeight: 500,
-                      color: "var(--ink-heading)",
+                      color: "var(--text-body)",
                     }}
                   >
                     {card.title}
@@ -584,7 +586,7 @@ export default function ImplementationPackagesContent({
                     fontSize: 16,
                     fontWeight: 400,
                     lineHeight: "22.4px",
-                    color: "var(--ink)",
+                    color: "var(--text-body)",
                     marginTop: 20,
                   }}
                 >
@@ -633,7 +635,7 @@ export default function ImplementationPackagesContent({
                                 return (
                                   <span key={i}>
                                     {child.slice(0, idx)}
-                                    <span style={{ color: "var(--purple-light)" }}>
+                                    <span style={{ color: "#ba83f0" }}>
                                       {highlight}
                                     </span>
                                     {child.slice(idx + highlight.length)}
@@ -651,7 +653,7 @@ export default function ImplementationPackagesContent({
               {socialProofCtaUrl && (
                 <Link
                   href={socialProofCtaUrl}
-                  className="flex shrink-0 items-center justify-center gap-2 font-bold text-white transition-colors hover:bg-[var(--accent-blue)] hover:border-[var(--accent-blue)]"
+                  className="flex shrink-0 items-center justify-center gap-2 font-bold text-white transition-colors hover:bg-[#579bfc] hover:border-[#579bfc]"
                   style={{
                     width: 216,
                     height: 53,
@@ -683,14 +685,14 @@ export default function ImplementationPackagesContent({
             style={{ gap: 24 }}
           >
             <div className="flex flex-col" style={{ maxWidth: 640 }}>
-              <h2 className="text-section-h2 text-ink" style={{ textAlign: "left" }}>
+              <h2 className="text-section-h2 text-body" style={{ textAlign: "left" }}>
                 {pricingHeading || "Pricing Packages"}
               </h2>
               <p
                 style={{
                   marginTop: 14,
                   fontSize: 18,
-                  color: "var(--ink-soft)",
+                  color: "var(--text-muted-fg)",
                   lineHeight: 1.5,
                   textAlign: "left",
                 }}
@@ -720,9 +722,9 @@ export default function ImplementationPackagesContent({
                     paddingLeft: 18,
                     paddingRight: 14,
                     borderRadius: 99,
-                    backgroundColor: "var(--surface)",
-                    border: `1px solid ${currencyHover || currencyOpen ? "var(--brand)" : "var(--line-tint)"}`,
-                    color: "var(--ink-heading)",
+                    backgroundColor: "var(--surface-raised)",
+                    border: `1px solid ${currencyHover || currencyOpen ? "#8015e8" : "var(--border-ui)"}`,
+                    color: "var(--text-body)",
                     fontSize: 14,
                     gap: 10,
                     boxShadow: currencyHover
@@ -733,23 +735,24 @@ export default function ImplementationPackagesContent({
                     cursor: "pointer",
                   }}
                 >
-                  <span style={{ color: "var(--brand)", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}>
+                  <span style={{ color: "#8015e8", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}>
                     CURRENCY
                   </span>
                   <span>{CURRENCIES[currency].symbol} {CURRENCIES[currency].label}</span>
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: currencyOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>
-                    <path d="M2 4l4 4 4-4" stroke="var(--brand)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M2 4l4 4 4-4" stroke="#8015e8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
                 {currencyOpen && (
                   <div
+                    className="dark:shadow-none"
                     style={{
                       position: "absolute",
                       top: "calc(100% + 8px)",
                       left: 0,
                       minWidth: 180,
-                      backgroundColor: "var(--surface)",
-                      border: "1px solid var(--line)",
+                      backgroundColor: "var(--surface-raised)",
+                      border: "1px solid var(--border-ui)",
                       borderRadius: 16,
                       padding: 6,
                       boxShadow: "0px 12px 32px rgba(43,7,77,0.12)",
@@ -772,14 +775,14 @@ export default function ImplementationPackagesContent({
                             borderRadius: 10,
                             fontSize: 14,
                             fontWeight: active ? 600 : 500,
-                            color: active ? "var(--brand)" : "var(--ink-heading)",
+                            color: active ? "#8015e8" : "var(--text-body)",
                             backgroundColor: active ? "rgba(128,21,232,0.08)" : "transparent",
                             cursor: "pointer",
                             textAlign: "left",
                           }}
                         >
                           <span>{CURRENCIES[code].label}</span>
-                          <span style={{ color: "var(--ink-faint)", fontWeight: 400 }}>{CURRENCIES[code].symbol}</span>
+                          <span style={{ color: "var(--text-muted-fg)", fontWeight: 400 }}>{CURRENCIES[code].symbol}</span>
                         </button>
                       )
                     })}
@@ -803,9 +806,9 @@ export default function ImplementationPackagesContent({
                     paddingLeft: 18,
                     paddingRight: 14,
                     borderRadius: 99,
-                    backgroundColor: "var(--surface)",
-                    border: `1px solid ${regionHover || regionOpen ? "var(--brand)" : "var(--line-tint)"}`,
-                    color: "var(--ink-heading)",
+                    backgroundColor: "var(--surface-raised)",
+                    border: `1px solid ${regionHover || regionOpen ? "#8015e8" : "var(--border-ui)"}`,
+                    color: "var(--text-body)",
                     fontSize: 14,
                     gap: 10,
                     boxShadow: regionHover
@@ -816,23 +819,24 @@ export default function ImplementationPackagesContent({
                     cursor: "pointer",
                   }}
                 >
-                  <span style={{ color: "var(--brand)", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}>
+                  <span style={{ color: "#8015e8", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}>
                     TEAM
                   </span>
                   <span>{REGIONS[region].label}</span>
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: regionOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>
-                    <path d="M2 4l4 4 4-4" stroke="var(--brand)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M2 4l4 4 4-4" stroke="#8015e8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
                 {regionOpen && (
                   <div
+                    className="dark:shadow-none"
                     style={{
                       position: "absolute",
                       top: "calc(100% + 8px)",
                       left: 0,
                       minWidth: 180,
-                      backgroundColor: "var(--surface)",
-                      border: "1px solid var(--line)",
+                      backgroundColor: "var(--surface-raised)",
+                      border: "1px solid var(--border-ui)",
                       borderRadius: 16,
                       padding: 6,
                       boxShadow: "0px 12px 32px rgba(43,7,77,0.12)",
@@ -855,14 +859,14 @@ export default function ImplementationPackagesContent({
                             borderRadius: 10,
                             fontSize: 14,
                             fontWeight: active ? 600 : 500,
-                            color: active ? "var(--brand)" : "var(--ink-heading)",
+                            color: active ? "#8015e8" : "var(--text-body)",
                             backgroundColor: active ? "rgba(128,21,232,0.08)" : "transparent",
                             cursor: "pointer",
                             textAlign: "left",
                           }}
                         >
                           <span>{REGIONS[code].label}</span>
-                          <span style={{ color: "var(--ink-faint)", fontWeight: 400, fontSize: 12 }}>
+                          <span style={{ color: "var(--text-muted-fg)", fontWeight: 400, fontSize: 12 }}>
                             {code === "US" ? "Americas" : code === "UK" ? "EMEA" : "Asia-Pacific"}
                           </span>
                         </button>
@@ -887,7 +891,7 @@ export default function ImplementationPackagesContent({
                 return (
                   <div
                     key={tier.name}
-                    className="flex flex-col"
+                    className={`flex flex-col${featured ? "" : " dark:shadow-none"}`}
                     onMouseEnter={() => setHoveredTier(tier.name)}
                     onMouseLeave={() => setHoveredTier(null)}
                     style={{
@@ -898,16 +902,16 @@ export default function ImplementationPackagesContent({
                       transform: `translateY(${baseTranslate + hoverLift}px)`,
                       ...(featured
                         ? {
-                            background: "linear-gradient(160deg, var(--purple-hover) 0%, var(--purple-dark) 100%)",
+                            background: "linear-gradient(160deg, #7d14e3 0%, #5a0eb0 100%)",
                             color: "white",
                             boxShadow: hovered
                               ? "0px 32px 72px rgba(125,20,227,0.45), 0px 0px 0px 1px rgba(125,20,227,0.4)"
                               : "0px 24px 60px rgba(125,20,227,0.35), 0px 0px 0px 1px rgba(125,20,227,0.4)",
                           }
                         : {
-                            backgroundColor: "var(--surface)",
-                            border: "1px solid var(--line-tint)",
-                            color: "var(--ink-heading)",
+                            backgroundColor: "var(--surface-raised)",
+                            border: "1px solid var(--border-ui)",
+                            color: "var(--text-body)",
                             boxShadow: hovered
                               ? "0px 16px 36px rgba(43,7,77,0.12)"
                               : "0px 8px 24px rgba(43,7,77,0.06)",
@@ -919,7 +923,7 @@ export default function ImplementationPackagesContent({
                       style={{
                         fontSize: 22,
                         fontWeight: 700,
-                        color: featured ? "white" : "var(--ink-heading)",
+                        color: featured ? "white" : "var(--text-body)",
                       }}
                     >
                       {tier.name}
@@ -930,7 +934,7 @@ export default function ImplementationPackagesContent({
                       style={{
                         fontSize: 14,
                         marginTop: 4,
-                        color: featured ? "rgba(255,255,255,0.78)" : "var(--ink-muted)",
+                        color: featured ? "rgba(255,255,255,0.78)" : "var(--text-muted-fg)",
                         fontWeight: 500,
                       }}
                     >
@@ -944,7 +948,7 @@ export default function ImplementationPackagesContent({
                           style={{
                             fontSize: 18,
                             fontWeight: 500,
-                            color: featured ? "rgba(255,255,255,0.85)" : "var(--ink-soft)",
+                            color: featured ? "rgba(255,255,255,0.85)" : "var(--text-muted-fg)",
                           }}
                         >
                           {tier.pricePrefix}
@@ -955,7 +959,7 @@ export default function ImplementationPackagesContent({
                           fontSize: 40,
                           fontWeight: 600,
                           lineHeight: 1,
-                          color: featured ? "white" : "var(--ink-heading)",
+                          color: featured ? "white" : "var(--text-body)",
                           letterSpacing: "-0.02em",
                         }}
                       >
@@ -966,7 +970,7 @@ export default function ImplementationPackagesContent({
                       style={{
                         marginTop: 6,
                         fontSize: 12,
-                        color: featured ? "rgba(255,255,255,0.7)" : "var(--ink-faint)",
+                        color: featured ? "rgba(255,255,255,0.7)" : "var(--text-muted-fg)",
                       }}
                     >
                       {CURRENCIES[currency].label} · {REGIONS[region].label} team rate
@@ -978,7 +982,7 @@ export default function ImplementationPackagesContent({
                         marginTop: 24,
                         marginBottom: 20,
                         height: 1,
-                        backgroundColor: featured ? "rgba(255,255,255,0.18)" : "var(--line-tint)",
+                        backgroundColor: featured ? "rgba(255,255,255,0.18)" : "var(--border-ui)",
                       }}
                     />
 
@@ -1000,13 +1004,13 @@ export default function ImplementationPackagesContent({
                           >
                             <path
                               d="M1.5 5.6l2.6 2.6L9.5 2.8"
-                              stroke={featured ? "white" : "var(--brand)"}
+                              stroke={featured ? "white" : "#8015e8"}
                               strokeWidth="2"
                               strokeLinecap="round"
                               strokeLinejoin="round"
                             />
                           </svg>
-                          <span style={{ color: featured ? "rgba(255,255,255,0.95)" : "var(--ink-heading)" }}>{f}</span>
+                          <span style={{ color: featured ? "rgba(255,255,255,0.95)" : "var(--text-body)" }}>{f}</span>
                         </li>
                       ))}
                     </ul>
@@ -1023,10 +1027,10 @@ export default function ImplementationPackagesContent({
                         ...(featured
                           ? {
                               backgroundColor: "white",
-                              color: "var(--brand)",
+                              color: "#8015e8",
                             }
                           : {
-                              background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                              background: "linear-gradient(to right, #8015e8, #ba83f0)",
                               color: "white",
                             }),
                       }}
@@ -1044,7 +1048,7 @@ export default function ImplementationPackagesContent({
               style={{
                 marginTop: 28,
                 fontSize: 12,
-                color: "var(--ink-muted)",
+                color: "var(--text-muted-fg)",
                 fontStyle: "italic",
               }}
             >
@@ -1098,12 +1102,12 @@ export default function ImplementationPackagesContent({
       {/* SECTION 8 -- Discover CTA                                    */}
       {/* ============================================================ */}
       <section
-        style={{ backgroundColor: "var(--surface-muted)", paddingTop: 80, paddingBottom: 80 }}
+        style={{ backgroundColor: "var(--surface-subtle)", paddingTop: 80, paddingBottom: 80 }}
       >
         <div className="mx-auto flex flex-col items-center">
           {/* Certifications badge */}
           {discoverBadgeSrc && (
-            <>
+            <FramedMedia>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={discoverBadgeSrc}
@@ -1112,13 +1116,13 @@ export default function ImplementationPackagesContent({
                 height={73}
                 className="h-[73px] w-[325px] object-contain"
               />
-            </>
+            </FramedMedia>
           )}
 
           {/* Heading */}
           {discoverHeading && (
             <h2
-              className="text-section-h2 text-center text-ink"
+              className="text-section-h2 text-center text-body"
               style={{ width: 694, marginTop: 28 }}
             >
               {discoverHeading}
@@ -1138,8 +1142,8 @@ export default function ImplementationPackagesContent({
                   style={{
                     height: 63,
                     borderRadius: 100,
-                    backgroundColor: "var(--surface)",
-                    color: "var(--brand)",
+                    backgroundColor: "white",
+                    color: "#8015e8",
                     fontSize: 16,
                   }}
                 >
@@ -1153,7 +1157,7 @@ export default function ImplementationPackagesContent({
                   style={{
                     height: 63,
                     borderRadius: 100,
-                    background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
                     fontSize: 16,
                   }}
                 >
@@ -1173,7 +1177,7 @@ export default function ImplementationPackagesContent({
         <div className="mx-auto flex flex-col items-center px-4 sm:px-6 lg:px-8" style={{ gap: 56, maxWidth: 1040 }}>
           {/* Heading */}
           <h2 className="text-section-h2 text-center">
-            <span style={{ color: 'var(--ink)' }}>{methodologyHeading}</span>
+            <span style={{ color: 'var(--text-body)' }}>{methodologyHeading}</span>
             <br />
             <span style={{ color: 'var(--purple-primary)' }}>{methodologyHeadingAccent}</span>
           </h2>
@@ -1188,19 +1192,19 @@ export default function ImplementationPackagesContent({
                 {/* Number */}
                 <p
                   className="font-extralight"
-                  style={{ fontSize: 56, color: 'var(--brand)', lineHeight: 1, marginBottom: 16 }}
+                  style={{ fontSize: 56, color: '#8015e8', lineHeight: 1, marginBottom: 16 }}
                 >
                   {step.number}
                 </p>
                 {/* Content */}
                 <h3
                   className="font-bold"
-                  style={{ fontSize: 18, color: 'var(--ink-heading)', lineHeight: 1.4, marginBottom: 8 }}
+                  style={{ fontSize: 18, color: 'var(--text-body)', lineHeight: 1.4, marginBottom: 8 }}
                 >
                   {step.title}
                 </h3>
                 {step.description && (
-                  <p style={{ fontSize: 15, color: 'var(--ink-soft)', lineHeight: 1.6 }}>
+                  <p style={{ fontSize: 15, color: 'var(--text-muted-fg)', lineHeight: 1.6 }}>
                     {step.description}
                   </p>
                 )}
@@ -1211,7 +1215,7 @@ export default function ImplementationPackagesContent({
                       paddingLeft: 20,
                       marginTop: 16,
                       fontSize: 15,
-                      color: 'var(--ink-soft)',
+                      color: 'var(--text-muted-fg)',
                       lineHeight: 1.6,
                     }}
                   >
@@ -1224,7 +1228,7 @@ export default function ImplementationPackagesContent({
                   <p
                     style={{
                       fontSize: 15,
-                      color: 'var(--ink-soft)',
+                      color: 'var(--text-muted-fg)',
                       lineHeight: 1.6,
                       marginTop: 16,
                     }}
@@ -1244,7 +1248,7 @@ export default function ImplementationPackagesContent({
       {/* ============================================================ */}
       {securityBadgeSrc && (
         <section className="bg-surface" style={{ paddingBottom: 80 }}>
-          <div className="mx-auto max-w-[976px]">
+          <FramedMedia className="mx-auto max-w-[976px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={securityBadgeSrc}
@@ -1253,7 +1257,7 @@ export default function ImplementationPackagesContent({
               height={94}
               className="w-full h-auto"
             />
-          </div>
+          </FramedMedia>
         </section>
       )}
     </div>

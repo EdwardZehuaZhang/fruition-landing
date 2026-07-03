@@ -10,6 +10,7 @@ import ImplementationPackagesContent from "./ImplementationPackagesContent"
 export async function generateMetadata() {
   const data = await getImplementationPackagesPage()
   return {
+    alternates: { canonical: "/implementation-packages" },
     title: data?.seoTitle,
     description: data?.seoDescription,
   }

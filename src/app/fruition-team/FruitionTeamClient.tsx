@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useMemo, useState } from "react"
 import { urlFor } from "@/sanity/image"
 import CtaLabel from "@/components/CtaLabel"
+import FramedMedia from "@/components/common/FramedMedia"
 import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
 import StickyCtaBar from "@/components/sections/StickyCtaBar"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
@@ -129,15 +130,16 @@ export default function FruitionTeamClient({
                 const src = safeBadgeUrl(badge.image)
                 if (!src) return null
                 return (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={badge._key || `badge-${i}`}
-                    src={src}
-                    alt={badge.name || "Partner badge"}
-                    width={120}
-                    height={44}
-                    className="h-[44px] w-auto rounded-[5px]"
-                  />
+                  <FramedMedia key={badge._key || `badge-${i}`} className="dark:p-1.5">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={src}
+                      alt={badge.name || "Partner badge"}
+                      width={120}
+                      height={44}
+                      className="h-[44px] w-auto rounded-[5px]"
+                    />
+                  </FramedMedia>
                 )
               })}
             </div>
@@ -150,7 +152,7 @@ export default function FruitionTeamClient({
               lineHeight: 1.2,
               marginTop: partnerBadges.length > 0 ? 36 : 0,
               maxWidth: 920,
-              color: "var(--ink)",
+              color: "var(--text-body)",
             }}
           >
             {heroHeading}
@@ -164,7 +166,7 @@ export default function FruitionTeamClient({
               width: 240,
               height: 53,
               borderRadius: 100,
-              background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+              background: "linear-gradient(to right, #8015e8, #ba83f0)",
               fontSize: 16,
             }}
           >
@@ -182,14 +184,14 @@ export default function FruitionTeamClient({
                   <p
                     key={`hero-desc-${i}`}
                     className="font-bold"
-                    style={{ fontSize: 22, lineHeight: "30px", color: "var(--ink-heading)", marginTop: 8 }}
+                    style={{ fontSize: 22, lineHeight: "30px", color: "var(--text-body)", marginTop: 8 }}
                   >
                     {block.text}
                   </p>
                 ) : (
                   <p
                     key={`hero-desc-${i}`}
-                    style={{ fontSize: 17, lineHeight: "28px", color: "var(--ink)" }}
+                    style={{ fontSize: 17, lineHeight: "28px", color: "var(--text-body)" }}
                   >
                     {block.text}
                   </p>
@@ -221,15 +223,15 @@ export default function FruitionTeamClient({
                     fontWeight: 600,
                     ...(active
                       ? {
-                          background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
-                          color: "var(--white)",
+                          background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                          color: "white",
                           boxShadow: "2.83px 2.83px 15px 3px rgba(0,0,0,0.18)",
                           border: "none",
                         }
                       : {
-                          backgroundColor: "var(--surface)",
-                          color: "var(--ink-heading)",
-                          border: "1px solid var(--line)",
+                          backgroundColor: "var(--surface-raised)",
+                          color: "var(--text-body)",
+                          border: "1px solid var(--border-ui)",
                         }),
                   }}
                 >
@@ -245,7 +247,7 @@ export default function FruitionTeamClient({
       <section className="bg-surface" style={{ paddingTop: 56, paddingBottom: 96 }}>
         <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
           {filteredMembers.length === 0 ? (
-            <p className="text-center" style={{ color: "var(--ink-soft)", fontSize: 16 }}>
+            <p className="text-center" style={{ color: "var(--text-muted-fg)", fontSize: 16 }}>
               No team members listed for this region yet.
             </p>
           ) : (
@@ -258,12 +260,12 @@ export default function FruitionTeamClient({
                 return (
                   <article
                     key={m._id}
-                    className="bg-surface rounded-card border border-line overflow-hidden flex flex-col shadow-whisper"
+                    className="bg-surface-raised rounded-card border border-ui overflow-hidden flex flex-col shadow-whisper dark:shadow-none"
                   >
                     <div
                       style={{
                         aspectRatio: "1 / 1",
-                        backgroundColor: "var(--surface-tint-2)",
+                        backgroundColor: "#f5f0ff",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -286,7 +288,7 @@ export default function FruitionTeamClient({
                           className="font-semibold"
                           style={{
                             fontSize: 13,
-                            color: "var(--brand)",
+                            color: "#8015e8",
                             letterSpacing: "0.04em",
                             textTransform: "uppercase",
                           }}
@@ -299,7 +301,7 @@ export default function FruitionTeamClient({
                         style={{
                           fontSize: 22,
                           lineHeight: "28px",
-                          color: "var(--ink-heading)",
+                          color: "var(--text-body)",
                           marginTop: 8,
                         }}
                       >
@@ -310,7 +312,7 @@ export default function FruitionTeamClient({
                           style={{
                             fontSize: 14,
                             lineHeight: "22px",
-                            color: "var(--ink-soft)",
+                            color: "var(--text-body)",
                             marginTop: 14,
                             flex: 1,
                           }}
@@ -332,8 +334,8 @@ export default function FruitionTeamClient({
                                 gap: 5,
                                 padding: "4px 10px",
                                 borderRadius: 999,
-                                backgroundColor: "var(--surface-tint-2)",
-                                color: "var(--brand-dark)",
+                                backgroundColor: "#f3e9ff",
+                                color: "#5a0ea5",
                                 fontSize: 11,
                                 lineHeight: "16px",
                                 cursor: "help",
@@ -355,7 +357,7 @@ export default function FruitionTeamClient({
                           className="font-semibold"
                           style={{
                             marginTop: 16,
-                            color: "var(--brand)",
+                            color: "#8015e8",
                             fontSize: 14,
                             display: "inline-flex",
                             alignItems: "center",

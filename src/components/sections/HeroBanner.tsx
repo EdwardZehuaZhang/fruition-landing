@@ -2,6 +2,7 @@
 
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
+import FramedMedia from "@/components/common/FramedMedia"
 import type { SanityImageRef, PartnerBadge } from "./types"
 
 interface HeroBannerProps {
@@ -132,16 +133,16 @@ export default function HeroBanner({
                 </div>
               )}
               <h1 className="text-display" style={{ marginTop: 0 }}>
-                <span className="text-ink">{headingPart1}</span>
+                <span className="text-body">{headingPart1}</span>
                 {headingAccent && (
                   <span style={{ color: "var(--purple-primary)", display: accentBlock ? "block" : undefined }}>
                     {headingAccent}
                   </span>
                 )}
-                {headingPart2 && <span className="text-ink">{headingPart2}</span>}
+                {headingPart2 && <span className="text-body">{headingPart2}</span>}
               </h1>
               {subheading && (
-                <p className="text-body-lead text-ink" style={{ marginTop: 24, whiteSpace: "pre-line" }}>
+                <p className="text-body-lead text-body" style={{ marginTop: 24, whiteSpace: "pre-line" }}>
                   {subheading}
                 </p>
               )}
@@ -167,25 +168,29 @@ export default function HeroBanner({
             {/* Right: image */}
             <div className="flex-1 w-full flex justify-center lg:justify-end">
               {heroVideoSrc ? (
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  className="rounded-card object-contain bg-surface w-full"
-                  style={{ maxWidth: 560, height: "auto" }}
-                >
-                  <source src={heroVideoSrc} type="video/mp4" />
-                </video>
+                <FramedMedia className="w-full max-w-[560px]">
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    className="rounded-card object-contain bg-surface w-full"
+                    style={{ height: "auto" }}
+                  >
+                    <source src={heroVideoSrc} type="video/mp4" />
+                  </video>
+                </FramedMedia>
               ) : heroImageSrc ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={heroImageSrc}
-                  alt="Hero"
-                  className="rounded-card bg-surface w-full"
-                  style={{ maxWidth: 560, height: "auto", objectFit: "contain" }}
-                />
+                <FramedMedia className="w-full max-w-[560px]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={heroImageSrc}
+                    alt="Hero"
+                    className="rounded-card bg-surface w-full"
+                    style={{ height: "auto", objectFit: "contain" }}
+                  />
+                </FramedMedia>
               ) : null}
             </div>
           </div>
@@ -202,7 +207,7 @@ export default function HeroBanner({
       >
         {/* Partner badges — hidden when a single partnerImageUrl is used or hidePartnerBadges flag is set */}
         {showPartnerBadges && (
-          <div className="flex items-center" style={{ gap: 22 }}>
+          <div className="flex flex-wrap items-center justify-center" style={{ gap: 22 }}>
             {partnerBadges.map((badge, i) => {
               const cmsSrc = safeImageUrl(badge.image)
               const src = getDarkBadgeSrc(badge.name, cmsSrc)
@@ -243,7 +248,7 @@ export default function HeroBanner({
           className="text-display text-center"
           style={{ marginTop: eyebrow ? 16 : 42, maxWidth: 924 }}
         >
-          <span className="text-ink">{headingPart1}</span>
+          <span className="text-body">{headingPart1}</span>
           {headingAccent && (
             <span
               style={{
@@ -254,12 +259,12 @@ export default function HeroBanner({
               {headingAccent}
             </span>
           )}
-          {headingPart2 && <span className="text-ink">{headingPart2}</span>}
+          {headingPart2 && <span className="text-body">{headingPart2}</span>}
         </h1>
 
         {/* Subheading */}
         {subheading && (
-          <p className="text-body-lead text-center text-ink" style={{ marginTop: 31, maxWidth: 859, whiteSpace: "pre-line" }}>
+          <p className="text-body-lead text-center text-body" style={{ marginTop: 31, maxWidth: 859, whiteSpace: "pre-line" }}>
             {subheading}
           </p>
         )}
@@ -271,7 +276,7 @@ export default function HeroBanner({
             <img
               src={partnerImageUrl}
               alt="monday.com partner certifications"
-              style={{ maxWidth: 700, height: "auto" }}
+              style={{ width: "100%", maxWidth: 700, height: "auto" }}
             />
           </div>
         )}
@@ -298,7 +303,7 @@ export default function HeroBanner({
 
         {/* Hero media — video takes precedence over image */}
         {heroVideoSrc ? (
-          <div className="w-full max-w-[1042px]" style={{ marginTop: 40 }}>
+          <FramedMedia className="w-full max-w-[1042px]" style={{ marginTop: 40 }}>
             <video
               autoPlay
               muted
@@ -310,9 +315,9 @@ export default function HeroBanner({
             >
               <source src={heroVideoSrc} type="video/mp4" />
             </video>
-          </div>
+          </FramedMedia>
         ) : heroImageSrc ? (
-          <div className="w-full max-w-[1042px]" style={{ marginTop: 40 }}>
+          <FramedMedia className="w-full max-w-[1042px]" style={{ marginTop: 40 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={heroImageSrc}
@@ -328,7 +333,7 @@ export default function HeroBanner({
                   : { height: "auto", aspectRatio: "1042 / 312", objectFit: "contain" }
               }
             />
-          </div>
+          </FramedMedia>
         ) : null}
 
       </div>
