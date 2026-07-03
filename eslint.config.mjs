@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Sanity Studio build output: bundled megabyte-scale files crash the
+    // ESLint "stylish" formatter (RangeError in text-table), taking the
+    // whole lint run down with them.
+    "dist/**",
   ]),
 ]);
 

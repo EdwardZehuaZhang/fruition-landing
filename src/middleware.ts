@@ -6,9 +6,13 @@ import type { NextRequest } from "next/server"
 // redirect every page is live on two hosts. Google then has to pick a
 // canonical host itself and drops the duplicates from the index
 // ("Duplicate without user-selected canonical" in Search Console).
+//
+// This stays a middleware.ts (deprecated in Next 16 in favour of proxy.ts)
+// on purpose: proxy.ts always compiles to the Node.js runtime, which
+// @opennextjs/cloudflare rejects — only edge middleware is supported.
 const CANONICAL_HOST = "www.fruitionservices.io"
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const host = (request.headers.get("host") ?? "").split(":")[0].toLowerCase()
   if (host === "fruitionservices.io") {
     const url = request.nextUrl.clone()
