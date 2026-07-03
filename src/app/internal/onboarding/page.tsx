@@ -1,6 +1,4 @@
-import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
-import { INTERNAL_COOKIE, verifyToken } from "@/lib/internalAuth"
+import { requirePortalUser } from "@/lib/portalAuth"
 import OnboardingForm from "./OnboardingForm"
 
 export const REGION_OPTIONS = [
@@ -11,12 +9,8 @@ export const REGION_OPTIONS = [
 ] as const
 
 export default async function OnboardingPage() {
-  // Auth gate (replaces the former proxy/middleware, which Next 16 forces onto
-  // the Node.js runtime and the Cloudflare OpenNext adapter cannot deploy).
-  const token = (await cookies()).get(INTERNAL_COOKIE)?.value
-  if (!verifyToken(token)) {
-    redirect(`/internal/login?next=${encodeURIComponent("/internal/onboarding")}`)
-  }
+  // Auth gate — Supabase/Google session (no middleware; OpenNext can't deploy it).
+  await requirePortalUser({ next: "/internal/onboarding" })
   return (
     <div className="w-full max-w-2xl">
       <div
