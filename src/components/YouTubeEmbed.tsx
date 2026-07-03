@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { buildVideoObject } from "@/lib/videoObject"
 
 interface YouTubeEmbedProps {
   /** Full YouTube URL or embed URL. videoId extracted automatically. */
@@ -10,6 +11,15 @@ interface YouTubeEmbedProps {
   title?: string
   className?: string
   style?: React.CSSProperties
+  /**
+   * VideoObject enrichment. This component is a click-to-load facade, so
+   * Googlebot can't see the video without structured data — these feed the
+   * emitted VideoObject JSON-LD. uploadDate (ISO 8601) is what makes a video
+   * eligible for video results; description/duration are recommended.
+   */
+  uploadDate?: string
+  description?: string
+  duration?: string
 }
 
 function extractVideoId(input?: string): string | null {
@@ -36,23 +46,45 @@ function extractVideoId(input?: string): string | null {
  * until the user clicks play, then swaps to the iframe. Avoids the
  * blurry default YouTube preview thumbnail.
  */
-export default function YouTubeEmbed({ url, videoId, title, className, style }: YouTubeEmbedProps) {
+export default function YouTubeEmbed({
+  url,
+  videoId,
+  title,
+  className,
+  style,
+  uploadDate,
+  description,
+  duration,
+}: YouTubeEmbedProps) {
   const id = videoId || extractVideoId(url)
   const [playing, setPlaying] = useState(false)
   if (!id) return null
   const posterMax = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`
   const posterHq = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
 
+  // VideoObject JSON-LD so the facaded video is discoverable by Googlebot.
+  // Null when there's no meaningful title (avoids placeholder-named markup).
+  const videoObject = buildVideoObject({ id, title, uploadDate, description, duration })
+  const videoLd = videoObject ? (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(videoObject) }}
+    />
+  ) : null
+
   if (playing) {
     return (
-      <iframe
-        src={`https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`}
-        title={title || "YouTube video"}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-        className={className}
-        style={{ border: 0, width: "100%", height: "100%", ...style }}
-      />
+      <>
+        {videoLd}
+        <iframe
+          src={`https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`}
+          title={title || "YouTube video"}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className={className}
+          style={{ border: 0, width: "100%", height: "100%", ...style }}
+        />
+      </>
     )
   }
 
@@ -64,6 +96,7 @@ export default function YouTubeEmbed({ url, videoId, title, className, style }: 
       className={`relative w-full h-full block group ${className ?? ""}`}
       style={{ padding: 0, border: 0, cursor: "pointer", background: "black", ...style }}
     >
+      {videoLd}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={posterMax}
