@@ -2,6 +2,7 @@ import { getSiteSettings } from "@/sanity/queries"
 import CatalogContent from "./CatalogContent"
 
 export const metadata = {
+  alternates: { canonical: "/monday-consulting-solutions/catalog" },
   title: "Solutions Catalog | Fruition Services",
   description:
     "The full map of what Fruition builds on monday.com. 45 solutions across Work Management, CRM, Service, Operations, and the 2026 R&D pipeline.",

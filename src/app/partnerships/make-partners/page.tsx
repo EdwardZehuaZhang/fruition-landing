@@ -4,6 +4,7 @@ import MakePartnersContent from "./MakePartnersContent"
 export async function generateMetadata() {
   const page = await getMakePartnersPage()
   return {
+    alternates: { canonical: "/partnerships/make-partners" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

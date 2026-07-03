@@ -6,6 +6,7 @@ import { getAllSolutionPages, getPageBySlug, getSiteSettings } from "@/sanity/qu
 export async function generateMetadata() {
   const page = await getPageBySlug("monday-consulting-solutions")
   return {
+    alternates: { canonical: "/monday-consulting-solutions" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

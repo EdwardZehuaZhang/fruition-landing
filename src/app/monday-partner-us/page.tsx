@@ -14,6 +14,7 @@ const SLUG = "monday-partner-us"
 export async function generateMetadata() {
   const page = await getLocationPageBySlug(SLUG)
   return {
+    alternates: { canonical: "/monday-partner-us" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

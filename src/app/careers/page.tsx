@@ -21,6 +21,7 @@ function safeImageUrl(ref: SanityImageRef): string | null {
 export async function generateMetadata() {
   const page = await getPageBySlug("careers")
   return {
+    alternates: { canonical: "/careers" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

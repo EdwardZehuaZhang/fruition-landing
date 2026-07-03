@@ -19,6 +19,7 @@ import CtaButton from "@/components/CtaButton"
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-real-estate")
   return {
+    alternates: { canonical: "/monday-for-real-estate" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

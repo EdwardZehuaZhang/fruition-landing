@@ -10,6 +10,7 @@ import MondayCrmConsultingContent from "./MondayCrmConsultingContent"
 export async function generateMetadata() {
   const page = await getServicePageBySlug("monday-crm-consulting")
   return {
+    alternates: { canonical: "/monday-crm-consulting" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }
