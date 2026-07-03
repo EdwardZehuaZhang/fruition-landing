@@ -44,10 +44,10 @@ export default function HomeTestimonialsGrid({
   if (totalPages === 0) return null
 
   return (
-    <section className="bg-white py-[80px] px-4">
+    <section className="bg-surface py-[80px] px-4">
       <div className="mx-auto max-w-[1343px]">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-6 lg:gap-[89px] mb-10 lg:mb-[58px] w-full">
-          <h2 className="text-[32px] leading-[40px] lg:text-[48px] lg:leading-[67.2px] text-black w-full lg:w-[919px] lg:shrink-0">
+          <h2 className="text-[32px] leading-[40px] lg:text-[48px] lg:leading-[67.2px] text-body w-full lg:w-[919px] lg:shrink-0">
             What our customers say about us
           </h2>
           <Link
@@ -80,7 +80,7 @@ export default function HomeTestimonialsGrid({
                   <div className="pb-[30px]">
                     <Link
                       href="/customer-testimonials"
-                      className="inline-flex items-center justify-center rounded-[100px] border border-white/40 px-6 py-2.5 text-sm font-semibold text-white hover:bg-white/10 transition"
+                      className="inline-flex items-center justify-center rounded-[100px] border border-white/40 px-6 py-2.5 text-sm font-semibold text-white hover:bg-surface/10 transition"
                     >
                       Read our case studies
                     </Link>

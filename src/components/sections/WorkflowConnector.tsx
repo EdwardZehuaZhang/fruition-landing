@@ -37,10 +37,10 @@ export default function WorkflowConnector({
   if (!steps?.length) return null
 
   const dark = theme === "dark"
-  const ink = dark ? "#ffffff" : "#10003a"
-  const muted = dark ? "rgba(255,255,255,0.66)" : "#56516a"
-  const nodeBg = dark ? "rgba(255,255,255,0.06)" : "#ffffff"
-  const nodeBorder = dark ? "rgba(255,255,255,0.14)" : "#ece7fb"
+  const ink = dark ? "#ffffff" : "var(--text-body)"
+  const muted = dark ? "rgba(255,255,255,0.66)" : "var(--text-muted-fg)"
+  const nodeBg = dark ? "rgba(255,255,255,0.06)" : "var(--surface-raised)"
+  const nodeBorder = dark ? "rgba(255,255,255,0.14)" : "var(--border-ui)"
 
   return (
     <section
@@ -50,7 +50,7 @@ export default function WorkflowConnector({
         paddingBottom: 88,
         background: dark
           ? "linear-gradient(160deg, #2b074d 0%, #10003a 100%)"
-          : "#ffffff",
+          : "var(--surface)",
       }}
     >
       <div className="mx-auto" style={{ maxWidth: 1100 }}>

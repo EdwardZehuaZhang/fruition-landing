@@ -115,12 +115,12 @@ export default function AuthorProfileTemplate({
   const countLabel = `${postCount} article${postCount === 1 ? "" : "s"}`
 
   return (
-    <div className="bg-white w-full font-montserrat">
+    <div className="bg-surface w-full font-montserrat">
       <div className="max-w-7xl mx-auto px-4 py-14 sm:py-16">
         {/* Back to blog */}
         <Link
           href="/consulting-blog"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#8015e8] transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-[#8015e8] transition-colors"
         >
           <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M15 18l-6-6 6-6" />
@@ -134,16 +134,16 @@ export default function AuthorProfileTemplate({
 
           <div className="min-w-0">
             <h1
-              className="font-montserrat font-bold text-gray-900 leading-[1.1] tracking-[-0.02em] text-[clamp(1.9rem,5vw,2.75rem)]"
+              className="font-montserrat font-bold text-body leading-[1.1] tracking-[-0.02em] text-[clamp(1.9rem,5vw,2.75rem)]"
               style={{ textWrap: "balance" }}
             >
               {name}
             </h1>
 
             {(role || regions.length > 0) && (
-              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[15px] text-gray-600">
-                {role && <span className="font-medium text-gray-700">{role}</span>}
-                {role && regions.length > 0 && <span aria-hidden className="text-gray-300">·</span>}
+              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[15px] text-muted">
+                {role && <span className="font-medium text-body">{role}</span>}
+                {role && regions.length > 0 && <span aria-hidden className="text-muted">·</span>}
                 {regions.length > 0 && (
                   <span className="flex items-center gap-1.5">
                     {regions.map((r) => (
@@ -160,12 +160,12 @@ export default function AuthorProfileTemplate({
               <span className="text-sm font-medium text-[#8015e8]">{countLabel}</span>
               {linkedinUrl && (
                 <>
-                  <span aria-hidden className="text-gray-300">·</span>
+                  <span aria-hidden className="text-muted">·</span>
                   <a
                     href={linkedinUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-[#8015e8] transition-colors"
+                    className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-[#8015e8] transition-colors"
                   >
                     <LinkedInIcon />
                     LinkedIn profile
@@ -179,7 +179,7 @@ export default function AuthorProfileTemplate({
         {/* Bio */}
         {bio && (
           <p
-            className="mt-6 max-w-[68ch] text-[17px] leading-[1.65] text-gray-700"
+            className="mt-6 max-w-[68ch] text-[17px] leading-[1.65] text-body"
             style={{ textWrap: "pretty" }}
           >
             {bio}
@@ -187,11 +187,11 @@ export default function AuthorProfileTemplate({
         )}
 
         {/* Divider */}
-        <div className="mt-10 sm:mt-12 border-t border-[rgba(0,0,0,0.12)]" />
+        <div className="mt-10 sm:mt-12 border-t border-ui" />
 
         {/* Posts */}
         <section className="mt-10 sm:mt-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-8">
+          <h2 className="text-xl font-bold text-body mb-8">
             {postCount === 1 ? "The article" : `Articles by ${name.split(/\s+/)[0]}`}
           </h2>
 
@@ -208,7 +208,7 @@ export default function AuthorProfileTemplate({
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-sm py-8">No articles yet.</p>
+            <p className="text-muted text-sm py-8">No articles yet.</p>
           )}
         </section>
       </div>

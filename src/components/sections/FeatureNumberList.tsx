@@ -14,7 +14,7 @@ interface FeatureNumberListProps {
 }
 
 const DARK_BG = "#2b074d"
-const LIGHT_BG = "#f7f5ff"
+const LIGHT_BG = "var(--surface-subtle)"
 const NUMBER_COLOR_DARK = "#b990f5"
 const NUMBER_COLOR_LIGHT = "#8015e8"
 
@@ -31,10 +31,10 @@ export default function FeatureNumberList({
 
   const isDark = theme === "dark"
   const bg = isDark ? DARK_BG : LIGHT_BG
-  const headingColor = isDark ? "#ffffff" : "#000000"
-  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "#4a4a4a"
-  const titleColor = isDark ? "#ffffff" : "#111"
-  const descColor = isDark ? "rgba(255,255,255,0.8)" : "#333"
+  const headingColor = isDark ? "#ffffff" : "var(--text-body)"
+  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "var(--text-muted-fg)"
+  const titleColor = isDark ? "#ffffff" : "var(--text-body)"
+  const descColor = isDark ? "rgba(255,255,255,0.8)" : "var(--text-body)"
   const numberColor = isDark ? NUMBER_COLOR_DARK : NUMBER_COLOR_LIGHT
 
   const gridClass =

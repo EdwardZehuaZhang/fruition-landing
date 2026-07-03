@@ -298,7 +298,7 @@ export default function MondayTrainingContent({
       {/* ============================================================ */}
       {/* SECTION 1 -- Hero                                            */}
       {/* ============================================================ */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div
           className="mx-auto flex flex-col items-center"
           style={{ paddingLeft: 273, paddingRight: 273, paddingTop: 80, paddingBottom: 80 }}
@@ -330,7 +330,7 @@ export default function MondayTrainingContent({
               maxWidth: 924,
             }}
           >
-            <span className="text-black">{heroHeadingPart1}</span>
+            <span className="text-body">{heroHeadingPart1}</span>
             <span style={{ color: "#8015e8" }}>{heroHeadingAccent}</span>
           </h1>
 
@@ -442,10 +442,10 @@ export default function MondayTrainingContent({
       {/* ============================================================ */}
       {/* SECTION 2 -- Logo Cloud with Marquee Scroll                  */}
       {/* ============================================================ */}
-      <section className="bg-white py-[80px] px-4">
+      <section className="bg-surface py-[80px] px-4">
         <div className="flex flex-col gap-[35px] items-center w-full max-w-[1348px] mx-auto">
           <p className="text-[28px] font-medium leading-[39.2px] text-center">
-            <span className="text-black">{logoCloudPart1}</span>
+            <span className="text-body">{logoCloudPart1}</span>
             <span className="text-[#8015e8]">{logoCloudAccent}</span>
           </p>
           {duplicatedLogos.length > 0 && (
@@ -478,7 +478,7 @@ export default function MondayTrainingContent({
       {/* SECTION 2b -- Video Embed                                    */}
       {/* ============================================================ */}
       {videoEmbedUrl && (
-        <section className="bg-white" style={{ paddingBottom: 80 }}>
+        <section className="bg-surface" style={{ paddingBottom: 80 }}>
           <div className="mx-auto" style={{ maxWidth: 1042 }}>
             <div
               className="rounded-card overflow-hidden"
@@ -526,7 +526,7 @@ export default function MondayTrainingContent({
               maxWidth: 924,
             }}
           >
-            <span className="text-black">{trainingIntroHeading}</span>
+            <span className="text-body">{trainingIntroHeading}</span>
           </p>
 
           <p
@@ -677,7 +677,7 @@ export default function MondayTrainingContent({
         <h2 className="text-[30px] font-medium text-[#8015e8] leading-[42px]">
           {empowerHeading}
         </h2>
-        <div className="text-[16px] text-black leading-[22.4px]" style={{ whiteSpace: "pre-line" }}>
+        <div className="text-[16px] text-body leading-[22.4px]" style={{ whiteSpace: "pre-line" }}>
           {empowerBody}
         </div>
         {data?.empowerCtaLabel && data?.empowerCtaUrl && (
@@ -719,14 +719,14 @@ export default function MondayTrainingContent({
             )}
             {service.subtitle && (
               <h2
-                className="text-[30px] font-medium text-black leading-[42px]"
+                className="text-[30px] font-medium text-body leading-[42px]"
                 style={{ whiteSpace: "pre-line" }}
               >
                 {service.subtitle}
               </h2>
             )}
             <p
-              className="text-[16px] text-black leading-[22.4px]"
+              className="text-[16px] text-body leading-[22.4px]"
               style={{ whiteSpace: "pre-line" }}
             >
               {service.description}
@@ -775,7 +775,7 @@ export default function MondayTrainingContent({
             />
           )}
           <h2
-            className="text-section-h2 text-center text-black"
+            className="text-section-h2 text-center text-body"
             style={{ width: 694, marginTop: 28 }}
           >
             {discoverHeading}
@@ -824,7 +824,7 @@ export default function MondayTrainingContent({
       {/* (Bird's-Eye View, IT Support, Handover Documentation)         */}
       {/* ============================================================ */}
       {trainingServices.length > 1 && (
-        <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+        <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
           <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1200 }}>
             <div className="flex flex-col" style={{ gap: 80 }}>
               {trainingServices.slice(1).map((service, i) => {
@@ -854,7 +854,7 @@ export default function MondayTrainingContent({
                         {service.title}
                       </span>
                       {service.subtitle && (
-                        <h2 className="text-[30px] font-bold text-black leading-[42px]" style={{ whiteSpace: "pre-line" }}>
+                        <h2 className="text-[30px] font-bold text-body leading-[42px]" style={{ whiteSpace: "pre-line" }}>
                           {service.subtitle}
                         </h2>
                       )}

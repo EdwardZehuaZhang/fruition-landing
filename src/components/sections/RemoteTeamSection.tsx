@@ -40,7 +40,7 @@ export default function RemoteTeamSection({
   features = [],
   ctaLabel,
   ctaUrl,
-  bg = "#f7f5ff",
+  bg = "var(--surface-subtle)",
   children,
 }: RemoteTeamSectionProps) {
   if (!heading && !headingAccent && offices.length === 0) return null
@@ -66,7 +66,7 @@ export default function RemoteTeamSection({
         {(heading || headingAccent) && (
           <h2
             className="text-section-h2 text-center"
-            style={{ color: "#000", marginBottom: subheading ? 16 : 48 }}
+            style={{ color: "var(--text-body)", marginBottom: subheading ? 16 : 48 }}
           >
             {heading}
             {headingAccent && <span style={{ color: ACCENT }}>{headingAccent}</span>}
@@ -76,7 +76,7 @@ export default function RemoteTeamSection({
           <p
             className="text-body text-center mx-auto"
             style={{
-              color: "#4a4a4a",
+              color: "var(--text-muted-fg)",
               maxWidth: 820,
               marginBottom: 48,
               whiteSpace: "pre-line",
@@ -96,7 +96,7 @@ export default function RemoteTeamSection({
             {offices.map((o, i) => (
               <div
                 key={o._key || i}
-                className="bg-white rounded-card border border-[#ece7fb]"
+                className="bg-surface-raised rounded-card border border-ui dark:shadow-none"
                 style={{
                   padding: 20,
                   textAlign: "center",
@@ -109,7 +109,7 @@ export default function RemoteTeamSection({
                   </div>
                 )}
                 {o.city && (
-                  <h3 style={{ fontSize: 18, fontWeight: 700, color: "#111", marginBottom: 2 }}>
+                  <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-body)", marginBottom: 2 }}>
                     {o.city}
                   </h3>
                 )}
@@ -123,7 +123,7 @@ export default function RemoteTeamSection({
                     style={{
                       fontSize: 13,
                       lineHeight: 1.5,
-                      color: "#4a4a4a",
+                      color: "var(--text-muted-fg)",
                       whiteSpace: "pre-line",
                     }}
                   >
@@ -143,12 +143,12 @@ export default function RemoteTeamSection({
             {features.map((f, i) => (
               <div
                 key={f._key || i}
-                className="bg-white rounded-full border border-[#ece7fb]"
+                className="bg-surface-raised rounded-full border border-ui dark:shadow-none"
                 style={{
                   padding: "10px 18px",
                   fontSize: 14,
                   fontWeight: 600,
-                  color: "#111",
+                  color: "var(--text-body)",
                   display: "inline-flex",
                   alignItems: "center",
                   gap: 8,

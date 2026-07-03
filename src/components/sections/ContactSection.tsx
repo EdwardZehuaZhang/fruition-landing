@@ -34,12 +34,12 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const inputStyle: React.CSSProperties = {
   width: "100%",
-  border: "1px solid #ddd6f3",
+  border: "1px solid var(--border-ui)",
   borderRadius: 10,
   padding: "12px 14px",
   fontSize: 15,
-  color: "#10003a",
-  background: "#fff",
+  color: "var(--text-body)",
+  background: "var(--surface-raised)",
 }
 
 export default function ContactSection({
@@ -65,7 +65,7 @@ function ContactHero({ offices, salesEmail, supportEmail, phone, phoneTel }: Con
   // The CMS often uses one shared inbox — don't show the same address twice.
   const sameInbox = salesEmail.toLowerCase() === supportEmail.toLowerCase()
   return (
-    <section className="bg-white px-4">
+    <section className="bg-surface px-4">
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1100, paddingTop: 104, paddingBottom: 24 }}>
         <span
           className="inline-flex items-center rounded-full"
@@ -92,7 +92,7 @@ function ContactHero({ offices, salesEmail, supportEmail, phone, phoneTel }: Con
             fontWeight: 600,
             lineHeight: 1.08,
             letterSpacing: "-0.03em",
-            color: "#10003a",
+            color: "var(--text-body)",
             textWrap: "balance",
           }}
         >
@@ -101,7 +101,7 @@ function ContactHero({ offices, salesEmail, supportEmail, phone, phoneTel }: Con
 
         <p
           className="text-center text-body-lead"
-          style={{ marginTop: 20, maxWidth: 600, color: "#4a4a4a", textWrap: "pretty" }}
+          style={{ marginTop: 20, maxWidth: 600, color: "var(--text-muted-fg)", textWrap: "pretty" }}
         >
           Reach the team directly, or find the office nearest you. We answer every message within one business day.
         </p>
@@ -162,8 +162,8 @@ function ContactHero({ offices, salesEmail, supportEmail, phone, phoneTel }: Con
 function Channel({ title, blurb, value, href }: { title: string; blurb: string; value: string; href?: string }) {
   return (
     <div className="flex flex-col items-center" style={{ gap: 6 }}>
-      <h2 style={{ fontSize: 17, fontWeight: 600, color: "#10003a" }}>{title}</h2>
-      <p style={{ fontSize: 14, color: "#686b82", lineHeight: "20px", maxWidth: 240 }}>{blurb}</p>
+      <h2 style={{ fontSize: 17, fontWeight: 600, color: "var(--text-body)" }}>{title}</h2>
+      <p style={{ fontSize: 14, color: "var(--text-muted-fg)", lineHeight: "20px", maxWidth: 240 }}>{blurb}</p>
       {href ? (
         <a
           href={href}
@@ -172,7 +172,7 @@ function Channel({ title, blurb, value, href }: { title: string; blurb: string; 
           {value}
         </a>
       ) : (
-        <span style={{ fontSize: 15, fontWeight: 600, color: "#686b82", marginTop: 2 }}>{value}</span>
+        <span style={{ fontSize: 15, fontWeight: 600, color: "var(--text-muted-fg)", marginTop: 2 }}>{value}</span>
       )}
     </div>
   )
@@ -321,18 +321,18 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
   }
 
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 96 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 96 }}>
       <div
-        className="mx-auto grid"
+        className="mx-auto grid bg-surface-raised dark:shadow-none dark:border dark:border-ui"
         style={{ maxWidth: 1100, gap: 0, gridTemplateColumns: "minmax(0, 1fr)", overflow: "hidden", borderRadius: 24, border: "1px solid #ece7fb", boxShadow: "0 30px 70px -50px rgba(64,12,140,0.4)" }}
       >
         <div className="fr-form-grid">
           {/* Left: form */}
           <div style={{ padding: "clamp(28px, 4vw, 48px)" }}>
-            <h2 className="text-section-h3" style={{ color: "#10003a" }}>
+            <h2 className="text-section-h3" style={{ color: "var(--text-body)" }}>
               Tell us what you&rsquo;re building
             </h2>
-            <p style={{ color: "#686b82", fontSize: 15, lineHeight: "22px", marginTop: 10, marginBottom: 26 }}>
+            <p style={{ color: "var(--text-muted-fg)", fontSize: 15, lineHeight: "22px", marginTop: 10, marginBottom: 26 }}>
               A specialist reads every message and replies within one business day.
             </p>
 
@@ -354,7 +354,7 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
                 <Field name="phone" label="Phone (optional)" type="tel" />
 
                 <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
-                  <legend style={{ fontSize: 13, color: "#10003a", fontWeight: 600, marginBottom: 8 }}>
+                  <legend style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600, marginBottom: 8 }}>
                     What can we help with?
                   </legend>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
@@ -371,9 +371,9 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
                             fontSize: 13.5,
                             fontWeight: 500,
                             cursor: "pointer",
-                            border: `1px solid ${selected ? "var(--purple-primary)" : "#ddd6f3"}`,
-                            background: selected ? "#f4ecff" : "#fff",
-                            color: selected ? "var(--purple-dark)" : "#4a4a4a",
+                            border: `1px solid ${selected ? "var(--purple-primary)" : "var(--border-ui)"}`,
+                            background: selected ? "#f4ecff" : "var(--surface-raised)",
+                            color: selected ? "var(--purple-dark)" : "var(--text-body)",
                             transition: "border-color 0.18s ease, background 0.18s ease, color 0.18s ease",
                           }}
                         >
@@ -505,7 +505,7 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
 function FieldLabel({ label, children }: { label?: string; children: React.ReactNode }) {
   return (
     <label className="flex flex-col" style={{ gap: 6 }}>
-      {label && <span style={{ fontSize: 13, color: "#10003a", fontWeight: 600 }}>{label}</span>}
+      {label && <span style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600 }}>{label}</span>}
       {children}
     </label>
   )
@@ -531,7 +531,7 @@ function Field({
         type={type}
         required={required}
         aria-invalid={invalid || undefined}
-        style={{ ...inputStyle, borderColor: invalid ? "#e0708a" : "#ddd6f3" }}
+        style={{ ...inputStyle, borderColor: invalid ? "#e0708a" : "var(--border-ui)" }}
       />
     </FieldLabel>
   )
@@ -545,7 +545,7 @@ function TextArea({ name, label, required, invalid }: { name: string; label?: st
         required={required}
         rows={4}
         aria-invalid={invalid || undefined}
-        style={{ ...inputStyle, resize: "vertical", borderColor: invalid ? "#e0708a" : "#ddd6f3" }}
+        style={{ ...inputStyle, resize: "vertical", borderColor: invalid ? "#e0708a" : "var(--border-ui)" }}
       />
     </FieldLabel>
   )

@@ -55,3 +55,9 @@ qa/
 .wrangler/
 .dev.vars
 cloudflare-env.d.ts
+
+# brainstorming visual companion
+.superpowers/
+
+# dark-mode QA screenshots
+qa/darkmode/

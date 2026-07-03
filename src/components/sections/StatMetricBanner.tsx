@@ -28,7 +28,7 @@ export default function StatMetricBanner({
         paddingBottom: 64,
         background: dark
           ? "linear-gradient(-38deg, rgb(128,21,232) 0%, rgb(16,0,58) 100%)"
-          : "#f0ecfe",
+          : "var(--surface-subtle)",
       }}
     >
       <div className="mx-auto text-center" style={{ maxWidth: 980 }}>
@@ -39,7 +39,7 @@ export default function StatMetricBanner({
               fontSize: "clamp(19px, 4.5vw, 24px)",
               lineHeight: 1.4,
               letterSpacing: "-0.01em",
-              color: dark ? "#fff" : "#10003a",
+              color: dark ? "#fff" : "var(--text-body)",
             }}
           >
             {statement}
@@ -52,7 +52,7 @@ export default function StatMetricBanner({
                 <span className="font-bold" style={{ fontSize: "clamp(30px, 8vw, 40px)", lineHeight: 1.1, color: dark ? "#fff" : "var(--purple-primary)" }}>
                   {m.value}
                 </span>
-                <span style={{ fontSize: 14, lineHeight: "20px", color: dark ? "rgba(255,255,255,0.72)" : "#686b82", marginTop: 6 }}>
+                <span style={{ fontSize: 14, lineHeight: "20px", color: dark ? "rgba(255,255,255,0.72)" : "var(--text-muted-fg)", marginTop: 6 }}>
                   {m.text}
                 </span>
               </div>

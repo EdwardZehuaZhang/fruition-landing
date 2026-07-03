@@ -26,6 +26,7 @@ import {
   TestimonialCtaBanner,
 } from "@/components/sections"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
+import FramedMedia from "@/components/common/FramedMedia"
 import type { CaseStudy, SiteSettingsData, FaqTab } from "@/components/sections/types"
 
 interface Props {
@@ -55,13 +56,13 @@ const HR_OPERATIONS_ITEMS: Array<{ icon: LucideIcon; text: string }> = [
 function HrLifecycleSection({ stages: resolvedLifecycleStages }: { stages: { n?: string; title?: string; body?: string }[] }) {
   return (
     <section
-      className="bg-white px-4 relative overflow-hidden"
+      className="bg-surface px-4 relative overflow-hidden"
       style={{ paddingTop: 96, paddingBottom: 96 }}
     >
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <h2
           className="text-center font-bold"
-          style={{ color: "#10003a", fontSize: "clamp(26px, 6.5vw, 40px)", lineHeight: 1.2, marginBottom: 56 }}
+          style={{ color: "var(--text-body)", fontSize: "clamp(26px, 6.5vw, 40px)", lineHeight: 1.2, marginBottom: 56 }}
         >
           Supporting Each Stage of Your HR Life Cycle
         </h2>
@@ -69,17 +70,17 @@ function HrLifecycleSection({ stages: resolvedLifecycleStages }: { stages: { n?:
           {resolvedLifecycleStages.map((stage: { n?: string; title?: string; body?: string }, i: number) => (
             <div key={stage.n || i} className="flex flex-col" style={{ gap: 12 }}>
               <p style={{ color: "#8015e8", fontSize: 40, fontWeight: 300, lineHeight: 1 }}>{stage.n}</p>
-              <p style={{ color: "#10003a", fontSize: 18, fontWeight: 700 }}>{stage.title}</p>
-              <p style={{ color: "#4a4a4a", fontSize: 14, lineHeight: "22px" }}>{stage.body}</p>
+              <p style={{ color: "var(--text-body)", fontSize: 18, fontWeight: 700 }}>{stage.title}</p>
+              <p style={{ color: "var(--text-body)", fontSize: 14, lineHeight: "22px" }}>{stage.body}</p>
               {stage.n === "04" && (
-                <div className="rounded-card overflow-hidden" style={{ marginTop: 8, maxWidth: 460 }}>
+                <FramedMedia className="rounded-card overflow-hidden" style={{ marginTop: 8, maxWidth: 460 }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/images/hr-lifecycle-stage-04.gif"
                     alt="System rollout"
                     className="w-full h-auto"
                   />
-                </div>
+                </FramedMedia>
               )}
             </div>
           ))}
@@ -234,7 +235,7 @@ function HrFitSection({ calendlyUrl, reasons: resolvedFitReasons }: { calendlyUr
           {resolvedFitReasons.map((r: { title?: string; body?: string }, i: number) => (
             <div
               key={r.title || i}
-              className="relative bg-white transition-transform hover:-translate-y-[2px]"
+              className="relative bg-surface-raised dark:shadow-none transition-transform hover:-translate-y-[2px]"
               style={{
                 borderRadius: 20,
                 padding: "24px 26px",

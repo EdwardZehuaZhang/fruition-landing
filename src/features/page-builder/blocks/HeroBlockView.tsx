@@ -60,12 +60,12 @@ function renderSubheading(text: string) {
     return (
       <div className="flex flex-col gap-[12px] w-full max-w-[859px]">
         {paragraphs.map((p, i) => (
-          <p key={i} className="text-[18px] text-black leading-[25.2px]">{p}</p>
+          <p key={i} className="text-[18px] text-body leading-[25.2px]">{p}</p>
         ))}
       </div>
     )
   }
-  return <p className="text-[18px] text-black leading-[25.2px] max-w-[859px]">{text}</p>
+  return <p className="text-[18px] text-body leading-[25.2px] max-w-[859px]">{text}</p>
 }
 
 export default function HeroBlockView({
@@ -97,7 +97,7 @@ export default function HeroBlockView({
     .filter((b): b is { src: string; alt: string; width: number; height: number } => b !== null)
 
   return (
-    <section className="bg-white w-full">
+    <section className="bg-surface w-full">
       <div className="mx-auto max-w-[1348px] flex items-start gap-[10px] py-[80px] px-4 xl:px-0">
         {/* Left column */}
         <div className="flex flex-col gap-[109px] w-full max-w-[924px]">
@@ -120,7 +120,7 @@ export default function HeroBlockView({
 
               {/* Heading */}
               {heading && (
-                <h1 className="text-[32px] leading-[40px] sm:text-[48px] sm:leading-[67.2px] font-bold text-black">
+                <h1 className="text-[32px] leading-[40px] sm:text-[48px] sm:leading-[67.2px] font-bold text-body">
                   {renderHeading(heading, headingAccents ?? [])}
                 </h1>
               )}

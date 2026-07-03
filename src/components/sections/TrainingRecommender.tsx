@@ -84,20 +84,20 @@ export default function TrainingRecommender({
               {eyebrow}
             </p>
           )}
-          {heading && <h2 className="text-section-h2 text-black" style={{ textWrap: "balance" }}>{heading}</h2>}
+          {heading && <h2 className="text-section-h2 text-body" style={{ textWrap: "balance" }}>{heading}</h2>}
           {subheading && (
-            <p style={{ color: "#686b82", fontSize: 17, lineHeight: "26px", marginTop: 12 }}>{subheading}</p>
+            <p style={{ color: "var(--text-muted-fg)", fontSize: 17, lineHeight: "26px", marginTop: 12 }}>{subheading}</p>
           )}
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 md:items-stretch">
           {/* Inputs */}
           <div
-            className="rounded-card bg-white flex flex-col justify-center h-full"
+            className="rounded-card bg-surface-raised flex flex-col justify-center h-full dark:shadow-none dark:border dark:border-ui"
             style={{ padding: 36, border: "1px solid #ece7fb", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
           >
             <label htmlFor={`${uid}-size`} className="flex items-baseline justify-between" style={{ marginBottom: 12 }}>
-              <span className="font-semibold" style={{ color: "#10003a", fontSize: 14 }}>Team size</span>
+              <span className="font-semibold" style={{ color: "var(--text-body)", fontSize: 14 }}>Team size</span>
               <span className="font-bold" style={{ color: "#8015e8", fontSize: 15 }}>
                 {teamSize} {teamSize === 1 ? "person" : "people"}
               </span>
@@ -114,7 +114,7 @@ export default function TrainingRecommender({
 
             <div style={{ height: 32 }} />
 
-            <span className="font-semibold" style={{ color: "#10003a", fontSize: 14, marginBottom: 12, display: "block" }}>
+            <span className="font-semibold" style={{ color: "var(--text-body)", fontSize: 14, marginBottom: 12, display: "block" }}>
               Workflow complexity
             </span>
             <div className="flex flex-col" style={{ gap: 8 }} role="radiogroup" aria-label="Workflow complexity">
@@ -133,8 +133,8 @@ export default function TrainingRecommender({
                       padding: "12px 14px",
                       borderRadius: 12,
                       cursor: "pointer",
-                      border: isActive ? "1px solid #8015e8" : "1px solid #ece7fb",
-                      background: isActive ? "#f3e9ff" : "#ffffff",
+                      border: isActive ? "1px solid #8015e8" : "1px solid var(--border-ui)",
+                      background: isActive ? "#f3e9ff" : "var(--surface-raised)",
                     }}
                   >
                     <span
@@ -145,10 +145,10 @@ export default function TrainingRecommender({
                         height: 18,
                         borderRadius: 999,
                         border: isActive ? "5px solid #8015e8" : "2px solid #cbbce6",
-                        background: "#fff",
+                        background: "var(--surface-raised)",
                       }}
                     />
-                    <span style={{ color: "#3b2963", fontSize: 14 }}>{label}</span>
+                    <span style={{ color: isActive ? "#3b2963" : "var(--text-body)", fontSize: 14 }}>{label}</span>
                   </button>
                 )
               })}

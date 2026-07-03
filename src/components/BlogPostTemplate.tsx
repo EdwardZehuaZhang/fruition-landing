@@ -134,7 +134,7 @@ function extractHeadings(body?: PortableTextBlock[]): TocEntry[] {
 /* ------------------------------------------------------------------ */
 /*  Figma rules:                                                       */
 /*    - Montserrat Regular/Bold                                        */
-/*    - body: 18px / leading-27px / text-black                         */
+/*    - body: 18px / leading-27px / text-body                         */
 /*    - h2 (section): 28px Bold / leading-35px / py-27.5px             */
 /*    - h3 (sub): 22px Bold / leading-27px / pt-27.5px                 */
 /*    - h4 (inline): 18px Bold / leading-27px / pt-27.5px              */
@@ -147,32 +147,32 @@ function extractHeadings(body?: PortableTextBlock[]): TocEntry[] {
 const blogPortableTextComponents: PortableTextComponents = {
   block: {
     h1: ({ children, value }) => (
-      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-montserrat font-bold text-[24px] sm:text-[28px] leading-[31px] sm:leading-[35px] text-black w-full py-[27.5px]">
+      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-montserrat font-bold text-[24px] sm:text-[28px] leading-[31px] sm:leading-[35px] text-body w-full py-[27.5px]">
         {children}
       </h2>
     ),
     h2: ({ children, value }) => (
-      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-montserrat font-bold text-[24px] sm:text-[28px] leading-[31px] sm:leading-[35px] text-black w-full py-[27.5px]">
+      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-montserrat font-bold text-[24px] sm:text-[28px] leading-[31px] sm:leading-[35px] text-body w-full py-[27.5px]">
         {children}
       </h2>
     ),
     h3: ({ children, value }) => (
-      <h3 id={slugify(blockText(value))} className="scroll-mt-[100px] font-montserrat font-bold text-[22px] leading-[27px] text-black w-full pt-[27.5px] pb-[10px]">
+      <h3 id={slugify(blockText(value))} className="scroll-mt-[100px] font-montserrat font-bold text-[22px] leading-[27px] text-body w-full pt-[27.5px] pb-[10px]">
         {children}
       </h3>
     ),
     h4: ({ children }) => (
-      <h4 className="font-montserrat font-bold text-[18px] leading-[27px] text-black w-full pt-[27.5px]">
+      <h4 className="font-montserrat font-bold text-[18px] leading-[27px] text-body w-full pt-[27.5px]">
         {children}
       </h4>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="font-montserrat font-normal text-[18px] leading-[27px] text-black w-full pt-[27.5px] pl-[20px] border-l-[3px] border-[#604c97] italic">
+      <blockquote className="font-montserrat font-normal text-[18px] leading-[27px] text-body w-full pt-[27.5px] pl-[20px] border-l-[3px] border-[#604c97] italic">
         {children}
       </blockquote>
     ),
     normal: ({ children }) => (
-      <p className="font-montserrat font-normal text-[18px] leading-[27px] text-black w-full pt-[27.5px] first:pt-0">
+      <p className="font-montserrat font-normal text-[18px] leading-[27px] text-body w-full pt-[27.5px] first:pt-0">
         {children}
       </p>
     ),
@@ -187,12 +187,12 @@ const blogPortableTextComponents: PortableTextComponents = {
   },
   listItem: {
     bullet: ({ children }) => (
-      <li className="font-montserrat font-normal text-[18px] leading-[27px] text-black">
+      <li className="font-montserrat font-normal text-[18px] leading-[27px] text-body">
         {children}
       </li>
     ),
     number: ({ children }) => (
-      <li className="font-montserrat font-normal text-[18px] leading-[27px] text-black">
+      <li className="font-montserrat font-normal text-[18px] leading-[27px] text-body">
         {children}
       </li>
     ),
@@ -239,7 +239,7 @@ const blogPortableTextComponents: PortableTextComponents = {
           </div>
           {value.caption && (
             <figcaption className="w-full flex items-center justify-center p-[16px]">
-              <span className="font-montserrat font-normal text-[14px] leading-[27px] text-black text-center">
+              <span className="font-montserrat font-normal text-[14px] leading-[27px] text-body text-center">
                 {value.caption}
               </span>
             </figcaption>
@@ -302,7 +302,7 @@ function AuthorMetaRow({
         <div className="flex flex-col items-start min-w-0">
           <Link
             href={`/author/${authorSlug(author)}`}
-            className="font-montserrat font-normal text-[14px] leading-[21px] text-black truncate max-w-full hover:text-[#604c97] transition-colors"
+            className="font-montserrat font-normal text-[14px] leading-[21px] text-body truncate max-w-full hover:text-[#604c97] transition-colors"
           >
             {author}
           </Link>
@@ -310,13 +310,13 @@ function AuthorMetaRow({
       )}
       {/* Date */}
       {publishedAt && (
-        <div className="flex gap-[6px] items-start pl-[6px] shrink-0 font-montserrat font-normal text-[14px] leading-[21px] text-black whitespace-nowrap">
+        <div className="flex gap-[6px] items-start pl-[6px] shrink-0 font-montserrat font-normal text-[14px] leading-[21px] text-body whitespace-nowrap">
           <span>·</span>
           <span>{formatDate(publishedAt)}</span>
         </div>
       )}
       {/* Reading time */}
-      <div className="flex gap-[6px] items-start pl-[6px] shrink-0 font-montserrat font-normal text-[14px] leading-[21px] text-black whitespace-nowrap">
+      <div className="flex gap-[6px] items-start pl-[6px] shrink-0 font-montserrat font-normal text-[14px] leading-[21px] text-body whitespace-nowrap">
         <span>·</span>
         <span>{readingTime}</span>
       </div>
@@ -327,7 +327,7 @@ function AuthorMetaRow({
 function ArticleTitle({ title }: { title: string }) {
   return (
     <div className="flex flex-col items-start w-full">
-      <h1 className="font-montserrat font-bold text-[28px] leading-[36px] sm:text-[40px] sm:leading-[50px] text-black w-full">
+      <h1 className="font-montserrat font-bold text-[28px] leading-[36px] sm:text-[40px] sm:leading-[50px] text-body w-full">
         {title}
       </h1>
     </div>
@@ -384,9 +384,9 @@ function TagsRow({ categories }: { categories: BlogCategoryRef[] }) {
         <Link
           key={cat.slug}
           href={`/consulting-blog/categories/${cat.slug}`}
-          className="inline-flex items-start px-[13px] py-[7px] bg-white border border-[rgba(0,0,0,0.2)] hover:border-[#604c97] transition-colors"
+          className="inline-flex items-start px-[13px] py-[7px] bg-surface-raised border border-ui hover:border-[#604c97] transition-colors"
         >
-          <span className="font-montserrat font-normal text-[14px] leading-[17px] text-black">
+          <span className="font-montserrat font-normal text-[14px] leading-[17px] text-body">
             {cat.title}
           </span>
         </Link>
@@ -399,7 +399,7 @@ function EngagementBar() {
   return (
     <div className="flex flex-col items-start w-full">
       {/* Share icons row — divider top, 66px min-h, pt-24 pb-23 */}
-      <div className="relative flex items-center min-h-[66px] pt-[24px] pb-[23px] w-full border-t border-[rgba(0,0,0,0.2)]">
+      <div className="relative flex items-center min-h-[66px] pt-[24px] pb-[23px] w-full border-t border-ui">
         <div className="flex gap-[30px] items-center">
           {/* Facebook */}
           <button
@@ -409,7 +409,7 @@ function EngagementBar() {
             <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M11.83 6.08V4.66c0-.69.46-.86.78-.86h1.98V1.02L11.85 1c-3.02 0-3.71 2.27-3.71 3.72v1.36H6.39v2.97h1.78v7.95h3.43V9.05h2.54l.12-1.17.19-1.8h-2.62Z"
-                fill="black"
+                fill="var(--text-body)"
               />
             </svg>
           </button>
@@ -421,7 +421,7 @@ function EngagementBar() {
             <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M4.3 6.43H1.22v9.92H4.3V6.43ZM2.76 1.08c-1.06 0-1.76.7-1.76 1.6 0 .89.68 1.6 1.72 1.6h.02c1.08 0 1.76-.71 1.76-1.6-.02-.9-.68-1.6-1.74-1.6ZM12.31 6.21c-1.63 0-2.36.9-2.77 1.53V6.43H6.46c.04.87 0 9.92 0 9.92h3.08v-5.54c0-.28.02-.55.1-.75.22-.55.73-1.13 1.59-1.13 1.12 0 1.57.85 1.57 2.1v5.32H15.9v-5.68c0-2.85-1.52-4.17-3.55-4.17l-.04-.29Z"
-                fill="black"
+                fill="var(--text-body)"
               />
             </svg>
           </button>
@@ -458,7 +458,7 @@ function EngagementBar() {
         </div>
       </div>
       {/* Like row — divider top, pt-19 */}
-      <div className="relative flex items-center justify-end pt-[19px] w-full border-t border-[rgba(0,0,0,0.2)]">
+      <div className="relative flex items-center justify-end pt-[19px] w-full border-t border-ui">
         <button
           aria-label="Like post"
           className="flex items-center justify-center size-[19px] hover:opacity-70 transition-opacity"
@@ -485,7 +485,7 @@ function ArticleToc({ entries }: { entries: TocEntry[] }) {
     <nav
       aria-label="On this page"
       className="w-full rounded-[16px] p-[24px] sm:p-[28px]"
-      style={{ background: "linear-gradient(180deg, #faf7ff 0%, #ffffff 100%)", border: "1px solid #efe7fb" }}
+      style={{ background: "var(--surface-subtle)", border: "1px solid var(--border-ui)" }}
     >
       <p className="font-montserrat font-semibold uppercase" style={{ color: "#8015e8", fontSize: 12, letterSpacing: "0.16em" }}>
         On this page
@@ -496,7 +496,7 @@ function ArticleToc({ entries }: { entries: TocEntry[] }) {
             <a
               href={`#${e.id}`}
               className="font-montserrat hover:underline"
-              style={{ color: e.level === 3 ? "#56516a" : "#2b074d", fontSize: e.level === 3 ? 14 : 15, fontWeight: e.level === 3 ? 400 : 600 }}
+              style={{ color: e.level === 3 ? "var(--text-muted-fg)" : "var(--text-body)", fontSize: e.level === 3 ? 14 : 15, fontWeight: e.level === 3 ? 400 : 600 }}
             >
               {e.text}
             </a>
@@ -547,7 +547,7 @@ function RelatedPostCard({ post }: { post: RelatedBlogPost }) {
   return (
     <Link
       href={`/post/${post.slug}`}
-      className="group bg-white relative flex-1 min-w-0 max-w-[290.67px] self-stretch border border-[rgba(232,230,230,0.75)] hover:border-[#604c97] transition-colors overflow-hidden"
+      className="group bg-surface-raised relative flex-1 min-w-0 max-w-[290.67px] self-stretch border border-ui hover:border-[#604c97] dark:shadow-none transition-colors overflow-hidden"
     >
       <div className="flex flex-col items-start h-full">
         {/* Image — 162px tall, full card width */}
@@ -567,12 +567,12 @@ function RelatedPostCard({ post }: { post: RelatedBlogPost }) {
         {/* Body */}
         <div className="flex flex-col items-start flex-1 w-full pt-[24px] px-[24px] pb-[24px]">
           <div className="flex flex-col items-start w-full overflow-hidden">
-            <p className="font-montserrat font-bold text-[18px] leading-[normal] text-black w-full line-clamp-2 group-hover:text-[#604c97] transition-colors">
+            <p className="font-montserrat font-bold text-[18px] leading-[normal] text-body w-full line-clamp-2 group-hover:text-[#604c97] transition-colors">
               {post.title}
             </p>
           </div>
           {/* Footer — divider top, pt-16, h-34 */}
-          <div className="mt-auto w-full pt-[16px] flex items-start justify-between h-[34px] border-t border-[rgba(0,0,0,0.2)]">
+          <div className="mt-auto w-full pt-[16px] flex items-start justify-between h-[34px] border-t border-ui">
             <div className="flex items-center h-full">
               <div className="flex items-center gap-[6px]">
                 <svg
@@ -584,10 +584,10 @@ function RelatedPostCard({ post }: { post: RelatedBlogPost }) {
                 >
                   <path
                     d="M9.5 2C5.5 2 2.17 4.44 1 6c1.17 1.56 4.5 4 8.5 4s7.33-2.44 8.5-4c-1.17-1.56-4.5-4-8.5-4Zm0 6.67A2.67 2.67 0 1 1 9.5 3.33a2.67 2.67 0 0 1 0 5.34Z"
-                    fill="black"
+                    fill="var(--text-body)"
                   />
                 </svg>
-                <span className="font-montserrat font-normal text-[12px] leading-[18px] text-black">
+                <span className="font-montserrat font-normal text-[12px] leading-[18px] text-body">
                   0
                 </span>
               </div>
@@ -617,13 +617,13 @@ function RelatedPostsSection({ posts }: { posts: RelatedBlogPost[] }) {
       {/* Header */}
       <header className="flex items-start justify-between w-full h-[27px]">
         <div className="flex flex-col items-start self-stretch">
-          <h2 className="font-montserrat font-normal text-[18px] leading-[27px] text-black whitespace-nowrap">
+          <h2 className="font-montserrat font-normal text-[18px] leading-[27px] text-body whitespace-nowrap">
             Recent Posts
           </h2>
         </div>
         <Link
           href="/consulting-blog"
-          className="flex flex-col items-start self-stretch font-montserrat font-normal text-[14px] leading-[21px] text-black whitespace-nowrap hover:text-[#604c97] transition-colors"
+          className="flex flex-col items-start self-stretch font-montserrat font-normal text-[14px] leading-[21px] text-body whitespace-nowrap hover:text-[#604c97] transition-colors"
         >
           See All
         </Link>
@@ -661,7 +661,7 @@ export default function BlogPostTemplate({
   }
 
   return (
-    <div className="bg-white w-full font-montserrat">
+    <div className="bg-surface w-full font-montserrat">
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger

@@ -20,7 +20,7 @@ interface ServicesCardsGridProps {
 }
 
 const DARK_BG = "#2b074d"
-const LIGHT_BG = "#f7f5ff"
+const LIGHT_BG = "var(--surface-subtle)"
 const ACCENT = "#8015e8"
 
 export default function ServicesCardsGrid({
@@ -34,8 +34,8 @@ export default function ServicesCardsGrid({
 
   const isDark = theme === "dark"
   const bg = isDark ? DARK_BG : LIGHT_BG
-  const headingColor = isDark ? "#ffffff" : "#000000"
-  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "#4a4a4a"
+  const headingColor = isDark ? "#ffffff" : "var(--text-body)"
+  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "var(--text-muted-fg)"
 
   return (
     <section style={{ backgroundColor: bg, paddingTop: 80, paddingBottom: 80 }}>
@@ -74,7 +74,7 @@ export default function ServicesCardsGrid({
           {cards.map((card, i) => (
             <div
               key={card._key || i}
-              className="bg-white rounded-card"
+              className="bg-surface-raised rounded-card dark:shadow-none dark:border dark:border-ui"
               style={{
                 padding: 28,
                 boxShadow: "var(--shadow-whisper)",
@@ -95,7 +95,7 @@ export default function ServicesCardsGrid({
                 style={{
                   fontSize: 20,
                   fontWeight: 700,
-                  color: "#2b074d",
+                  color: "var(--text-body)",
                   marginBottom: 10,
                 }}
               >
@@ -106,7 +106,7 @@ export default function ServicesCardsGrid({
                   style={{
                     fontSize: 14,
                     lineHeight: 1.55,
-                    color: "#333",
+                    color: "var(--text-body)",
                     whiteSpace: "pre-line",
                     marginBottom: card.bullets?.length ? 16 : 0,
                   }}
@@ -131,7 +131,7 @@ export default function ServicesCardsGrid({
                         gap: 10,
                         fontSize: 14,
                         lineHeight: 1.5,
-                        color: "#111",
+                        color: "var(--text-body)",
                       }}
                     >
                       <span

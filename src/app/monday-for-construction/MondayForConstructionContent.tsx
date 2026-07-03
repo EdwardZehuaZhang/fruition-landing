@@ -28,9 +28,9 @@ interface Props {
 
 function ConstructionIntroStrip() {
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 32, paddingBottom: 32 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 32, paddingBottom: 32 }}>
       <div className="mx-auto text-center" style={{ maxWidth: 920 }}>
-        <p style={{ color: "#444", fontSize: 16, lineHeight: "26px" }}>
+        <p style={{ color: "var(--text-body)", fontSize: 16, lineHeight: "26px" }}>
           With monday.com <span className="font-bold" style={{ color: "#8015e8" }}>CRM</span> and{" "}
           <span className="font-bold" style={{ color: "#8015e8" }}>Work Management</span> as your Construction software, your teams will experience simplified and streamlined communication with mobile access and improved automated workflow efficiency.
         </p>
@@ -44,17 +44,17 @@ type ConstructionTestimonial = { title?: string; quote?: string; name?: string; 
 
 function LifecycleSection({ stages }: { stages: LifecycleStage[] }) {
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "#10003a", fontSize: 32, lineHeight: "42px", marginBottom: 40 }}>
+        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 32, lineHeight: "42px", marginBottom: 40 }}>
           Support Each Stage of Your Project Life Cycle with a <span style={{ color: "#8015e8" }}>monday.com Expert</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 28 }}>
           {stages.map((s, i) => (
-            <div key={s.n || i} className="flex flex-col" style={{ gap: 10, padding: 24, borderRadius: 16, border: "1px solid #ece7fb", background: "white", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)" }}>
+            <div key={s.n || i} className="flex flex-col dark:shadow-none dark:border dark:border-ui" style={{ gap: 10, padding: 24, borderRadius: 16, border: "1px solid var(--border-ui)", background: "var(--surface-raised)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)" }}>
               <p style={{ color: "#8015e8", fontSize: 36, fontWeight: 300, lineHeight: 1 }}>{s.n}</p>
-              <p className="font-bold" style={{ color: "#10003a", fontSize: 18 }}>{s.title}</p>
-              <p style={{ color: "#444", fontSize: 14, lineHeight: "22px" }}>{s.body}</p>
+              <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 18 }}>{s.title}</p>
+              <p style={{ color: "var(--text-body)", fontSize: 14, lineHeight: "22px" }}>{s.body}</p>
             </div>
           ))}
         </div>
@@ -105,7 +105,7 @@ function ConstructionTabs({ tabs }: { tabs: ComparisonTab[] }) {
         : "Our expert consultants empower you to adopt workflow automation & AI systems"
 
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         {/* Tab buttons */}
         <div className="flex flex-wrap justify-center" style={{ gap: 12, marginBottom: 32 }}>
@@ -121,7 +121,7 @@ function ConstructionTabs({ tabs }: { tabs: ComparisonTab[] }) {
                 cursor: "pointer",
                 ...(i === activeIdx
                   ? { background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", border: "none", boxShadow: "0 10px 22px -12px rgba(128,21,232,0.55)" }
-                  : { background: "white", color: "#2b074d", border: "1px solid #e8e6e6" }),
+                  : { background: "var(--surface-raised)", color: "var(--text-body)", border: "1px solid var(--border-ui)" }),
               }}
             >
               {tab.label}
@@ -129,20 +129,20 @@ function ConstructionTabs({ tabs }: { tabs: ComparisonTab[] }) {
           ))}
         </div>
         {/* Heading swaps with active tab */}
-        <h2 className="text-center font-bold" style={{ color: "#10003a", fontSize: 30, lineHeight: "40px", marginBottom: 32 }}>
+        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 30, lineHeight: "40px", marginBottom: 32 }}>
           {heading}
         </h2>
         {/* Items grid */}
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
           {active.items?.map((it) => (
-            <div key={it._key} className="bg-white" style={{ padding: 24, borderRadius: 18, border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 12 }}>
+            <div key={it._key} className="bg-surface-raised dark:shadow-none dark:border dark:border-ui" style={{ padding: 24, borderRadius: 18, border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 12 }}>
               <div className="flex items-center" style={{ gap: 14 }}>
                 <span className="flex items-center justify-center font-bold" style={{ width: 38, height: 38, borderRadius: 12, background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)", color: "white", fontSize: 13 }}>
                   {it.number}
                 </span>
-                <p className="font-bold" style={{ color: "#10003a", fontSize: 15, lineHeight: "22px" }}>{it.title}</p>
+                <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 15, lineHeight: "22px" }}>{it.title}</p>
               </div>
-              <p style={{ color: "#444", fontSize: 13, lineHeight: "20px", whiteSpace: "pre-line" }}>{it.description}</p>
+              <p style={{ color: "var(--text-body)", fontSize: 13, lineHeight: "20px", whiteSpace: "pre-line" }}>{it.description}</p>
             </div>
           ))}
         </div>

@@ -32,9 +32,9 @@ type ExpertCard = { _key?: string; title?: string; body?: string; image?: string
 function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
   if (!stats || stats.length === 0) return null
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "#10003a", fontSize: 36, lineHeight: "44px", marginBottom: 40 }}>
+        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 40 }}>
           Proven <span style={{ color: "#8015e8" }}>Atlassian Cloud</span> Results
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>
@@ -54,21 +54,21 @@ function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
 function ComprehensiveServicesSection({ cards }: { cards: ServiceCard[] }) {
   if (!cards || cards.length === 0) return null
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "#10003a", fontSize: 36, lineHeight: "44px", marginBottom: 40 }}>
+        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 40 }}>
           Our Comprehensive <span style={{ color: "#8015e8" }}>Atlassian</span> Services
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 20 }}>
           {cards.map((c: ServiceCard, i: number) => (
-            <div key={c._key || c.title || i} className="bg-white" style={{ padding: 24, borderRadius: 16, border: "1px solid #ece7fb", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 12 }}>
+            <div key={c._key || c.title || i} className="dark:shadow-none" style={{ padding: 24, borderRadius: 16, background: "var(--surface-raised)", border: "1px solid var(--border-ui)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 12 }}>
               <span style={{ fontSize: 28 }}>{c.emoji}</span>
-              <p className="font-bold" style={{ color: "#10003a", fontSize: 16 }}>{c.title}</p>
-              <p style={{ color: "#444", fontSize: 13, lineHeight: "20px" }}>{c.body}</p>
+              <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 16 }}>{c.title}</p>
+              <p style={{ color: "var(--text-muted-fg)", fontSize: 13, lineHeight: "20px" }}>{c.body}</p>
               {c.bullets && c.bullets.length > 0 && (
                 <ul className="flex flex-col" style={{ gap: 6, marginTop: 4 }}>
                   {c.bullets.map((b: string, j: number) => (
-                    <li key={b || j} className="flex items-start" style={{ gap: 8, color: "#444", fontSize: 12, lineHeight: "18px" }}>
+                    <li key={b || j} className="flex items-start" style={{ gap: 8, color: "var(--text-muted-fg)", fontSize: 12, lineHeight: "18px" }}>
                       <Check size={16} color="#8015e8" aria-hidden />
                       <span>{b}</span>
                     </li>

@@ -16,6 +16,14 @@
   --color-text-secondary: #686b82;
   --color-border: #dedee5;
 
+  /* Semantic surface/text/border — light values (flipped in dark @media below) */
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-subtle: #ecf1fc;
+  --text-body: #242323;
+  --text-muted-fg: #686b82;
+  --border-ui: #dedee5;
+
   /* Radius scale */
   --radius-badge: 8px;
   --radius-chip: 12px;
@@ -40,9 +48,15 @@
   --color-brand-dark: var(--purple-dark);
   --color-surface-dark: var(--dark-bg);
   --color-surface-dark-2: var(--dark-bg-secondary);
-  --color-surface-subtle: var(--light-section-bg);
-  --color-text-muted: var(--color-text-secondary);
-  --color-border-ui: var(--color-border);
+
+  /* Semantic tokens (flip with prefers-color-scheme) →
+     bg-surface, bg-surface-raised, bg-surface-subtle, text-body, text-muted, border-ui */
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-body: var(--text-body);
+  --color-muted: var(--text-muted-fg);
+  --color-ui: var(--border-ui);
 
   /* Radius tokens → rounded-card, rounded-pill, rounded-badge, rounded-chip */
   --radius-card: var(--radius-card);
@@ -64,6 +78,32 @@
   h5,
   h6 {
     font-weight: 600 !important;
+  }
+
+  body {
+    background: var(--surface);
+    color: var(--text-body);
+  }
+}
+
+/* Dark theme — neutral ink. OS-driven only (no toggle). */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #0f1115;
+    --surface-raised: #1a1d24;
+    --surface-subtle: #161922;
+    --text-body: #f2f3f5;
+    --text-muted-fg: rgba(255, 255, 255, 0.62);
+    --border-ui: rgba(255, 255, 255, 0.12);
+
+    /* Legacy primitives referenced directly via var() across the app —
+       flip them to their dark equivalents so those usages theme too. */
+    --light-section-bg: #161922;
+    --text-dark: #f2f3f5;
+    --color-text-secondary: rgba(255, 255, 255, 0.62);
+    --color-border: rgba(255, 255, 255, 0.12);
+    --background: #0f1115;
+    --foreground: #f2f3f5;
   }
 }
 
@@ -137,16 +177,16 @@
   }
 
   .ui-surface-panel {
-    border: 1px solid #e8e6e6;
+    border: 1px solid var(--border-ui);
     border-radius: var(--radius-card);
-    background: #fff;
+    background: var(--surface-raised);
     box-shadow: var(--shadow-whisper);
   }
 
   .ui-surface-panel-strong {
-    border: 1px solid #e8e6e6;
+    border: 1px solid var(--border-ui);
     border-radius: var(--radius-card);
-    background: #fff;
+    background: var(--surface-raised);
     box-shadow: var(--shadow-card);
   }
 
@@ -160,7 +200,7 @@
   }
 
   .ui-step-row:hover {
-    background-color: #faf7ff;
+    background-color: var(--surface-subtle);
     transform: translateY(-2px);
   }
 

@@ -44,7 +44,7 @@ export default async function CareersPage() {
   return (
     <div>
       {/* 1. Hero */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div
           className="mx-auto flex flex-col items-center px-4"
           style={{ maxWidth: 1200, paddingTop: 96, paddingBottom: 64 }}
@@ -78,16 +78,16 @@ export default async function CareersPage() {
                   if (idx >= 0) {
                     return (
                       <>
-                        <span className="text-black">{page.heroHeading.slice(0, idx)}</span>
+                        <span className="text-body">{page.heroHeading.slice(0, idx)}</span>
                         <span style={{ color: "var(--purple-primary)" }}>{page.heroHeadingAccent}</span>
-                        <span className="text-black">{page.heroHeading.slice(idx + page.heroHeadingAccent.length)}</span>
+                        <span className="text-body">{page.heroHeading.slice(idx + page.heroHeadingAccent.length)}</span>
                       </>
                     )
                   }
-                  return <span className="text-black">{page.heroHeading}</span>
+                  return <span className="text-body">{page.heroHeading}</span>
                 })()
               ) : (
-                <span className="text-black">{page.heroHeading}</span>
+                <span className="text-body">{page.heroHeading}</span>
               )}
             </h1>
           )}
@@ -98,7 +98,7 @@ export default async function CareersPage() {
               style={{
                 marginTop: 24,
                 maxWidth: 820,
-                color: "#4a4a4a",
+                color: "var(--text-body)",
                 lineHeight: 1.6,
               }}
             >
@@ -153,7 +153,7 @@ export default async function CareersPage() {
 
       {/* 2. Team image */}
       {heroImageSrc && (
-        <section className="bg-white">
+        <section className="bg-surface">
           <div className="mx-auto px-4" style={{ maxWidth: 1200, paddingBottom: 64 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

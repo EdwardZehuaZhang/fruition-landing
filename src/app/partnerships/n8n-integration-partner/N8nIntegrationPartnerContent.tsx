@@ -30,9 +30,9 @@ type ProvenStat = { emoji?: string; value?: string; body?: string }
 function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
   if (!stats || stats.length === 0) return null
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "#10003a", fontSize: 36, lineHeight: "44px", marginBottom: 40 }}>
+        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 40 }}>
           Proven <span style={{ color: "#8015e8" }}>n8n Automation</span> Results
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>

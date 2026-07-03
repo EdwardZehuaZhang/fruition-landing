@@ -58,30 +58,33 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
   const partnerBadges: PartnerBadge[] = siteSettings?.navbarPartnerBadges ?? []
   const ctaLabel = siteSettings?.navbarCtaLabel || ''
 
-  const logoUrl = '/images/logo-fruition-black.svg'
-
   const isNavItemActive = (item: NavItem) =>
     item.sections?.some((s) => s.items?.some((link) => link.href && pathname === link.href)) ?? false
 
   return (
-    <nav className="bg-white sticky top-0 z-50 shadow-sm" onMouseLeave={() => setOpenMenu(null)}>
+    <nav className="bg-surface dark:shadow-none sticky top-0 z-50 shadow-sm" onMouseLeave={() => setOpenMenu(null)}>
       <div className="mx-auto max-w-[1348px] px-4 xl:px-0 w-full">
         <div className="flex justify-between items-center gap-4 h-[85px]">
-          {/* Logo */}
+          {/* Logo — black on light, white in dark mode (prefers-color-scheme) */}
           <Link href="/" className="shrink-0">
-            {logoUrl ? (
-              <Image
-                src={logoUrl}
-                alt="Fruition Services"
-                width={1366}
-                height={280}
-                className="h-8 w-auto -translate-y-0.5"
-                priority
-                unoptimized
-              />
-            ) : (
-              <span className="font-bold text-lg">Fruition Services</span>
-            )}
+            <Image
+              src="/images/logo-fruition-black.svg"
+              alt="Fruition Services"
+              width={1366}
+              height={280}
+              className="h-8 w-auto -translate-y-0.5 block dark:hidden"
+              priority
+              unoptimized
+            />
+            <Image
+              src="/images/logo-fruition-white.svg"
+              alt="Fruition Services"
+              width={1366}
+              height={280}
+              className="h-8 w-auto -translate-y-0.5 hidden dark:block"
+              priority
+              unoptimized
+            />
           </Link>
 
           {/* Desktop nav */}
@@ -96,10 +99,10 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                   <button
                     className={`font-medium text-sm py-1.5 px-3 transition-colors border whitespace-nowrap ${
                       openMenu === item.label
-                        ? 'text-[#242323] border-[#242323] rounded-[4px]'
+                        ? 'text-body border-body rounded-[4px]'
                         : active
-                          ? 'text-[#8015e8] border-transparent'
-                          : 'text-[#242323] border-transparent hover:text-[#8015e8]'
+                          ? 'text-[#8015e8] dark:text-[#ba83f0] border-transparent'
+                          : 'text-body border-transparent hover:text-[#8015e8] dark:hover:text-[#ba83f0]'
                     }`}
                   >
                     {item.label}
@@ -109,7 +112,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
             })}
 
             {/* Partner badges + phone icon + CTA */}
-            <div className="flex items-center gap-2 xl:gap-[12px] border-l border-gray-200 pl-3 xl:pl-4" onMouseEnter={() => setOpenMenu(null)}>
+            <div className="flex items-center gap-2 xl:gap-[12px] border-l border-ui pl-3 xl:pl-4" onMouseEnter={() => setOpenMenu(null)}>
               <div className="hidden xl:flex items-center gap-3">
                 {partnerBadges.map((badge, i) => {
                   const h = badge.height ?? 32
@@ -135,7 +138,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
               {phoneAu && (
                 <a
                   href={`tel:${phoneAu.replace(/\s/g, '')}`}
-                  className="flex items-center justify-center w-[36px] h-[32px] rounded-[7px] hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-center w-[36px] h-[32px] rounded-[7px] hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
                   aria-label="Call us"
                 >
                   <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -161,7 +164,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
 
           {/* Mobile toggle */}
           <button
-            className="lg:hidden text-[#242323]"
+            className="lg:hidden text-body"
             onClick={() => (mobileOpen ? closeMobile() : setMobileOpen(true))}
           >
             <span className="sr-only">Open menu</span>
@@ -179,19 +182,19 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
 
         {/* Mobile menu */}
         {mobileOpen && (
-          <div className="lg:hidden py-2 border-t border-gray-100 max-h-[80vh] overflow-y-auto">
+          <div className="lg:hidden py-2 border-t border-ui max-h-[80vh] overflow-y-auto">
             {navItems.map((item) => {
               const expanded = mobileExpanded === item.label
               const active = isNavItemActive(item)
               return (
-                <div key={item.label} className="border-b border-gray-100 last:border-b-0">
+                <div key={item.label} className="border-b border-ui last:border-b-0">
                   {/* Level 1: category header (tap to expand) */}
                   <button
                     type="button"
                     aria-expanded={expanded}
                     onClick={() => setMobileExpanded(expanded ? null : item.label || null)}
                     className={`w-full flex items-center justify-between gap-3 px-2 py-3 text-left transition-colors ${
-                      expanded || active ? 'text-[#8015e8]' : 'text-[#242323] hover:text-[#8015e8]'
+                      expanded || active ? 'text-[#8015e8]' : 'text-body hover:text-[#8015e8]'
                     }`}
                   >
                     <span className="text-[15px] font-semibold">{item.label}</span>
@@ -220,21 +223,21 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                                 key={sub.href}
                                 href={sub.href || '#'}
                                 className={`flex items-start gap-3 pl-4 pr-2 py-2 rounded-md transition-colors ${
-                                  isActive ? 'bg-[#f5edfd]' : 'hover:bg-gray-50'
+                                  isActive ? 'bg-[#f5edfd] dark:bg-white/10' : 'hover:bg-black/5 dark:hover:bg-white/5'
                                 }`}
                                 onClick={closeMobile}
                               >
                                 {sub.icon && (
-                                  <div className={`shrink-0 mt-0.5 w-7 h-7 rounded-md ring-1 ring-gray-200 bg-white flex items-center justify-center ${isActive ? 'text-[#8015e8]' : 'text-[#242323]'}`}>
+                                  <div className={`shrink-0 mt-0.5 w-7 h-7 rounded-md ring-1 ring-ui bg-surface-raised flex items-center justify-center ${isActive ? 'text-[#8015e8]' : 'text-body'}`}>
                                     <NavIcon iconKey={sub.icon} className="h-4 w-4" />
                                   </div>
                                 )}
                                 <div className="min-w-0">
-                                  <div className={`text-sm font-medium ${isActive ? 'text-[#8015e8]' : 'text-[#242323]'}`}>
+                                  <div className={`text-sm font-medium ${isActive ? 'text-[#8015e8] dark:text-[#ba83f0]' : 'text-body'}`}>
                                     {sub.label}
                                   </div>
                                   {sub.description && (
-                                    <div className="mt-0.5 text-xs text-[#686b82] leading-snug">
+                                    <div className="mt-0.5 text-xs text-muted leading-snug">
                                       {sub.description}
                                     </div>
                                   )}
@@ -250,7 +253,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
               )
             })}
             {/* Partner badges mobile */}
-            <div className="flex flex-wrap items-center gap-3 px-2 py-3 border-t border-gray-100">
+            <div className="flex flex-wrap items-center gap-3 px-2 py-3 border-t border-ui">
               {partnerBadges.map((badge, i) => {
                 const h = Math.round((badge.height ?? 32) * 0.75)
                 const src = badge.image
@@ -290,7 +293,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
         const activeItem = navItems.find((item) => item.label === openMenu)
         if (!activeItem?.sections?.length) return null
         return (
-          <div className="hidden lg:block absolute left-0 right-0 top-full border-t border-gray-200 bg-white shadow-lg z-50">
+          <div className="hidden lg:block absolute left-0 right-0 top-full border-t border-ui bg-surface-raised shadow-lg z-50">
             <div className="max-w-[1348px] mx-auto px-4 xl:px-0 py-8">
               <div className="flex flex-col gap-6">
                 {activeItem.sections.map((section, sIdx) => {
@@ -298,7 +301,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                   return (
                     <div key={`${section.heading}-${sIdx}`} className="min-w-0">
                       {section.heading && (
-                        <p className="text-xs font-medium text-[#686b82] pb-3 border-b border-gray-200 mb-3">
+                        <p className="text-xs font-medium text-muted pb-3 border-b border-ui mb-3">
                           {section.heading}
                         </p>
                       )}
@@ -313,15 +316,15 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                               key={sub.href}
                               href={sub.href || '#'}
                               className={`group flex items-start gap-3 rounded-lg p-3 transition-colors ${
-                                isActive ? 'bg-[#f5edfd]' : 'hover:bg-gray-50'
+                                isActive ? 'bg-[#f5edfd] dark:bg-white/10' : 'hover:bg-black/5 dark:hover:bg-white/5'
                               }`}
                               onClick={() => setOpenMenu(null)}
                             >
                               <div
-                                className={`shrink-0 mt-0.5 w-8 h-8 rounded-md ring-1 ring-gray-200 bg-white flex items-center justify-center transition-colors ${
+                                className={`shrink-0 mt-0.5 w-8 h-8 rounded-md ring-1 ring-ui bg-surface-raised flex items-center justify-center transition-colors ${
                                   isActive
                                     ? 'text-[#8015e8]'
-                                    : 'text-[#242323] group-hover:text-[#8015e8] group-hover:ring-[#d9bff5]'
+                                    : 'text-body group-hover:text-[#8015e8] group-hover:ring-[#d9bff5]'
                                 }`}
                               >
                                 {sub.icon ? (
@@ -334,14 +337,14 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                                 <div
                                   className={`text-sm font-semibold leading-tight ${
                                     isActive
-                                      ? 'text-[#8015e8]'
-                                      : 'text-[#242323] group-hover:text-[#8015e8]'
+                                      ? 'text-[#8015e8] dark:text-[#ba83f0]'
+                                      : 'text-body group-hover:text-[#8015e8]'
                                   }`}
                                 >
                                   {sub.label}
                                 </div>
                                 {sub.description && (
-                                  <div className="mt-1 text-xs text-[#686b82] leading-snug">
+                                  <div className="mt-1 text-xs text-muted leading-snug">
                                     {sub.description}
                                   </div>
                                 )}

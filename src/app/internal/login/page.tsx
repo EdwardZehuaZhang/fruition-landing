@@ -16,7 +16,7 @@ export default async function LoginPage({
   return (
     <div className="w-full max-w-md">
       <div
-        className="rounded-card bg-white p-8 sm:p-10"
+        className="rounded-card bg-surface-raised p-8 sm:p-10 dark:border dark:border-ui dark:shadow-none"
         style={{ boxShadow: "var(--shadow-card)" }}
       >
         <div className="mb-6 text-center">
@@ -26,14 +26,14 @@ export default async function LoginPage({
           >
             <Lock size={24} aria-hidden />
           </div>
-          <h1 className="text-2xl font-semibold text-[#10003a]">Fruition Internal</h1>
-          <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+          <h1 className="text-2xl font-semibold text-body">Fruition Internal</h1>
+          <p className="mt-2 text-sm text-muted">
             Enter the shared password to continue.
           </p>
         </div>
         <LoginForm next={next} initialError={sp.error} />
       </div>
-      <p className="mt-4 text-center text-xs text-[var(--color-text-secondary)]">
+      <p className="mt-4 text-center text-xs text-muted">
         Don’t have the password? Ask your team lead on Slack.
       </p>
     </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import { urlFor } from "@/sanity/image"
+import FramedMedia from "@/components/common/FramedMedia"
 import type { CarouselLogo } from "./types"
 
 interface LogoCloudMarqueeProps {
@@ -27,11 +28,11 @@ export default function LogoCloudMarquee({
   if (normalizedLogos.length === 0) return null
 
   return (
-    <section className="bg-white py-[80px] overflow-hidden">
+    <section className="bg-surface py-[80px] overflow-hidden">
       <div className="flex flex-col gap-[35px] items-center w-full">
         <div className="w-full flex flex-col gap-[35px] items-center max-w-[1348px] mx-auto px-4">
           <p className="text-section-h3 text-center">
-            <span className="text-black">{headingPart1}</span>
+            <span className="text-body">{headingPart1}</span>
             <span style={{ color: "var(--purple-primary)" }}>{headingAccent}</span>
           </p>
           {description && (
@@ -40,7 +41,7 @@ export default function LogoCloudMarquee({
               style={{
                 fontSize: 16,
                 lineHeight: "25.6px",
-                color: "#555",
+                color: "var(--text-muted-fg)",
                 maxWidth: 860,
                 whiteSpace: "pre-line",
               }}
@@ -52,10 +53,10 @@ export default function LogoCloudMarquee({
         <div className="relative left-1/2 -translate-x-1/2 w-screen">
           <div className="flex items-center gap-[65px] animate-marquee" style={{ width: "max-content" }}>
             {duplicatedLogos.map((logo, i) => (
-              <div key={`${logo.key}-${i}`} className="flex items-center justify-center shrink-0 h-[65px]">
+              <FramedMedia key={`${logo.key}-${i}`} className="flex items-center justify-center shrink-0 h-[65px]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={logo.src!} alt={logo.alt} height={65} className="h-full w-auto object-contain" />
-              </div>
+              </FramedMedia>
             ))}
           </div>
         </div>

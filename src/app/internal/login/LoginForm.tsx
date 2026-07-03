@@ -34,7 +34,7 @@ export default function LoginForm({ next, initialError }: Props) {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
-        <label htmlFor="pw" className="mb-1 block text-sm font-medium text-[#10003a]">
+        <label htmlFor="pw" className="mb-1 block text-sm font-medium text-body">
           Password
         </label>
         <input
@@ -45,8 +45,8 @@ export default function LoginForm({ next, initialError }: Props) {
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="block w-full rounded-chip border bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--purple-primary)] focus:ring-2 focus:ring-[rgba(128,21,232,0.18)]"
-          style={{ borderColor: "var(--color-border)" }}
+          className="block w-full rounded-chip border bg-surface-raised px-4 py-3 text-sm text-body outline-none transition focus:border-[var(--purple-primary)] focus:ring-2 focus:ring-[rgba(128,21,232,0.18)]"
+          style={{ borderColor: "var(--border-ui)" }}
         />
       </div>
       {error && (
