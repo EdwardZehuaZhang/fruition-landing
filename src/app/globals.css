@@ -107,8 +107,12 @@
   }
 }
 
-/* Typography compound utilities */
-@layer utilities {
+/* Typography compound utilities — kept in the COMPONENTS layer so that real
+   Tailwind size utilities (e.g. text-[48px], sm:text-[48px]) always win when an
+   element combines a size utility with one of these (e.g. a heading that also
+   uses `text-body` for its color). Otherwise `.text-body{font-size:16px}` would
+   override the heading size and shrink titles site-wide. */
+@layer components {
   /* Hero H1: 48px, bold, tight tracking */
   .text-display {
     font-size: 48px;
@@ -175,7 +179,11 @@
     line-height: 1.4;
     letter-spacing: 0.02em;
   }
+}
 
+/* Custom UI component classes stay in the utilities layer so their precedence
+   vs Tailwind utilities is unchanged. */
+@layer utilities {
   .ui-surface-panel {
     border: 1px solid var(--border-ui);
     border-radius: var(--radius-card);
