@@ -37,7 +37,7 @@ export default function CtaBlockView({
       className={`flex flex-col items-center justify-center min-h-[455px] py-[80px] px-4 text-white ${
         isGradient
           ? 'bg-[radial-gradient(ellipse_at_center,rgba(210,172,247,0.98)_0%,rgba(149,59,236,0.98)_27%,rgba(128,21,232,0.98)_36%,rgba(80,11,174,0.98)_56%,rgba(32,1,116,0.98)_76%)]'
-          : 'bg-[#10003a]'
+          : 'bg-[var(--navy-900)]'
       }`}
     >
       {/* Certification badge — show from Sanity or fallback to local image */}

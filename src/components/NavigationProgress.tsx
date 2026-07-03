@@ -64,7 +64,7 @@ export default function NavigationProgress() {
       style={{ opacity: visible ? 1 : 0, transition: "opacity 300ms" }}
     >
       <div
-        className="h-full bg-gradient-to-r from-[#8015e8] to-[#ba83f0]"
+        className="h-full bg-gradient-to-r from-[var(--purple-primary)] to-[var(--purple-light)]"
         style={{
           width: `${progress}%`,
           transition: progress === 0 ? "none" : "width 300ms ease-out",

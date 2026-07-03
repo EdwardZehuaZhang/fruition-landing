@@ -113,11 +113,11 @@ export default function OnboardingForm({ regionOptions }: Props) {
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--purple-primary)]">
             All done
           </p>
-          <h2 className="mt-2 inline-flex items-center gap-2 text-2xl font-semibold text-body">
+          <h2 className="mt-2 inline-flex items-center gap-2 text-2xl font-semibold text-ink-heading">
             Welcome, {name}
             <Hand size={24} aria-hidden />
           </h2>
-          <p className="mt-2 text-sm text-muted">
+          <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
             Your profile is being published to fruitionservices.com and the monday.com team board.
             Refresh /fruition-team in a minute or two to see your card.
           </p>
@@ -161,7 +161,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
     ? "var(--purple-primary)"
     : photo
       ? "var(--purple-light)"
-      : "var(--border-ui)"
+      : "var(--color-border)"
 
   return (
     <form onSubmit={onSubmit} className="space-y-6">
@@ -197,7 +197,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
               </option>
             ))}
           </select>
-          <ChevronIcon className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted" />
+          <ChevronIcon className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" />
         </div>
       </Field>
       <Field label="Photo" hint="Square headshot works best. Max 8 MB." required>
@@ -209,7 +209,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
           onDragLeave={() => setDragActive(false)}
           onDrop={onDrop}
           htmlFor="photo-input"
-          className="flex cursor-pointer items-center gap-4 rounded-chip border border-dashed bg-surface-raised p-4 transition"
+          className="flex cursor-pointer items-center gap-4 rounded-chip border border-dashed bg-surface p-4 transition"
           style={{ borderColor: photoBoxBorder }}
         >
           {photoPreview ? (
@@ -221,18 +221,18 @@ export default function OnboardingForm({ regionOptions }: Props) {
             />
           ) : (
             <div
-              className="flex h-20 w-20 items-center justify-center rounded-pill text-muted"
-              style={{ backgroundColor: "var(--surface-subtle)" }}
+              className="flex h-20 w-20 items-center justify-center rounded-pill text-[var(--color-text-secondary)]"
+              style={{ backgroundColor: "var(--light-section-bg)" }}
               aria-hidden
             >
               <Camera size={32} aria-hidden />
             </div>
           )}
           <div className="flex-1 text-sm">
-            <p className="font-medium text-body">
+            <p className="font-medium text-ink-heading">
               {photo ? photo.name : "Drop a photo or click to choose"}
             </p>
-            <p className="text-muted">
+            <p className="text-[var(--color-text-secondary)]">
               {photo
                 ? `${(photo.size / 1024 / 1024).toFixed(2)} MB · ${photo.type}`
                 : "PNG, JPG, or WebP up to 8 MB"}
@@ -247,7 +247,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
           onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
           className="sr-only"
         />
-        {photoError && <p className="mt-2 text-xs text-red-600">{photoError}</p>}
+        {photoError && <p className="mt-2 text-xs text-danger">{photoError}</p>}
       </Field>
       <Field label="Short bio" hint="2–4 sentences. What you focus on at Fruition.">
         <textarea
@@ -286,7 +286,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
               onChange={(e) => setWorkAnniversary(e.target.value)}
               className={`${inputClass} pr-11 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0`}
             />
-            <CalendarIcon className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted" />
+            <CalendarIcon className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" />
           </div>
         </Field>
         <Field label="Favourite movie">
@@ -309,7 +309,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
       {error && (
         <div
           className="rounded-chip px-3 py-2 text-sm"
-          style={{ backgroundColor: "#fff1f2", color: "#9f1239" }}
+          style={{ backgroundColor: "var(--danger-surface)", color: "var(--danger-strong)" }}
           role="alert"
         >
           {error}
@@ -328,7 +328,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
 }
 
 const inputClass =
-  "block w-full rounded-chip border border-[var(--border-ui)] bg-surface-raised px-4 py-3 text-sm text-body placeholder:text-muted outline-none transition hover:border-[var(--purple-light)] focus:border-[var(--purple-primary)] focus:ring-2 focus:ring-[rgba(128,21,232,0.18)]"
+  "block w-full rounded-chip border border-[var(--color-border)] bg-surface px-4 py-3 text-sm text-ink-heading placeholder:text-ink-faint outline-none transition hover:border-[var(--purple-light)] focus:border-[var(--purple-primary)] focus:ring-2 focus:ring-[rgba(128,21,232,0.18)]"
 
 function Field({
   label,
@@ -343,13 +343,13 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1.5 flex items-baseline justify-between gap-3 text-sm font-medium text-body">
+      <label className="mb-1.5 flex items-baseline justify-between gap-3 text-sm font-medium text-ink-heading">
         <span>
           {label}
           {required && <span className="ml-1 text-[var(--purple-primary)]">*</span>}
         </span>
         {hint && (
-          <span className="text-xs font-normal text-muted">{hint}</span>
+          <span className="text-xs font-normal text-[var(--color-text-secondary)]">{hint}</span>
         )}
       </label>
       {children}

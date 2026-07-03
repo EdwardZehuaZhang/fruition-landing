@@ -20,7 +20,7 @@ export default function DeliveryMethod() {
           className="rounded-[var(--radius-card)] p-8 lg:p-10 text-white shadow-card"
           style={{
             background:
-              "radial-gradient(700px 280px at 85% -10%, rgba(186,131,240,0.35), transparent 60%), linear-gradient(135deg, #10003a 0%, #2b074d 60%, #550e9b 100%)",
+              "radial-gradient(700px 280px at 85% -10%, rgba(186,131,240,0.35), transparent 60%), linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 60%, var(--purple-dark) 100%)",
           }}
         >
           <div className="text-[12px] tracking-[0.18em] uppercase font-bold text-white/70">

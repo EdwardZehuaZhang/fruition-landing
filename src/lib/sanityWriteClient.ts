@@ -98,7 +98,7 @@ export interface UpsertBlogPostInput {
   /** Stable doc id, e.g. `blog-monday-<pulseId>`. Allows re-publish to update in place. */
   docId: string
   title: string
-  /** Plaintext or simple-markdown body. Headings (# / ##) + paragraphs supported. */
+  /** Markdown body. See bodyToPortableText for the supported subset. */
   body: string
   slug?: string
   excerpt?: string
@@ -107,6 +107,8 @@ export interface UpsertBlogPostInput {
   seoTitle?: string
   seoDescription?: string
   coverImageAssetId?: string
+  /** _ids of blogCategory documents to reference. */
+  categoryIds?: string[]
   mondayItemId?: string
   publishedAt?: string
 }
@@ -127,12 +129,40 @@ interface PortableTextSpan {
   marks: string[]
 }
 
+interface LinkMarkDef {
+  _key: string
+  _type: "link"
+  href: string
+}
+
 interface PortableTextBlock {
   _type: "block"
   _key: string
   style: string
-  markDefs: unknown[]
+  markDefs: LinkMarkDef[]
   children: PortableTextSpan[]
+  /** Present only for list items — "bullet" or "number". */
+  listItem?: "bullet" | "number"
+  /** Nesting level for list items (1-based). */
+  level?: number
+}
+
+interface VideoEmbedBlock {
+  _type: "videoEmbed"
+  _key: string
+  url: string
+}
+
+type BodyBlock = PortableTextBlock | VideoEmbedBlock
+
+/**
+ * If a line is nothing but a YouTube / Vimeo / Loom URL, return that URL so it
+ * can be rendered as an inline video block. Otherwise null (treat as text).
+ */
+function loneVideoUrl(line: string): string | null {
+  if (/\s/.test(line)) return null
+  if (!/^https?:\/\//i.test(line)) return null
+  return /(?:youtube\.com|youtu\.be|vimeo\.com|loom\.com)/i.test(line) ? line : null
 }
 
 let keyCounter = 0
@@ -141,37 +171,145 @@ function nextKey(): string {
   return `k${Date.now().toString(36)}${keyCounter.toString(36)}`
 }
 
+function span(text: string, marks: string[]): PortableTextSpan {
+  return { _type: "span", _key: nextKey(), text, marks }
+}
+
 /**
- * Cheap markdown → Portable Text conversion. Handles `# h1`, `## h2`,
- * `### h3`, blank-line paragraph splits. Bold/italic deferred — body
- * comes from Marketa already plain-prosed.
+ * Split a run of plain text (no links) into spans, applying `em` marks on top
+ * of any base marks. Handles `*italic*` and `_italic_`.
  */
-function bodyToPortableText(body: string): PortableTextBlock[] {
-  const blocks: PortableTextBlock[] = []
-  const paragraphs = body.replace(/\r\n/g, "\n").split(/\n{2,}/)
-  for (const raw of paragraphs) {
-    const text = raw.trim()
-    if (!text) continue
-    let style = "normal"
-    let content = text
-    if (text.startsWith("### ")) {
-      style = "h3"
-      content = text.slice(4)
-    } else if (text.startsWith("## ")) {
-      style = "h2"
-      content = text.slice(3)
-    } else if (text.startsWith("# ")) {
-      style = "h1"
-      content = text.slice(2)
+function splitItalic(text: string, baseMarks: string[], out: PortableTextSpan[]): void {
+  const re = /(\*|_)(.+?)\1/g
+  let idx = 0
+  let m: RegExpExecArray | null
+  while ((m = re.exec(text))) {
+    if (m.index > idx) {
+      const pre = text.slice(idx, m.index)
+      if (pre) out.push(span(pre, baseMarks))
     }
-    blocks.push({
-      _type: "block",
-      _key: nextKey(),
-      style,
-      markDefs: [],
-      children: [{ _type: "span", _key: nextKey(), text: content, marks: [] }],
-    })
+    out.push(span(m[2], [...baseMarks, "em"]))
+    idx = m.index + m[0].length
   }
+  const rest = text.slice(idx)
+  if (rest) out.push(span(rest, baseMarks))
+}
+
+/**
+ * Split a run of plain text (no links) into spans, applying `strong` first
+ * (`**bold**` / `__bold__`) then `em` inside each run.
+ */
+function splitMarks(text: string): PortableTextSpan[] {
+  const out: PortableTextSpan[] = []
+  const re = /(\*\*|__)(.+?)\1/g
+  let idx = 0
+  let m: RegExpExecArray | null
+  while ((m = re.exec(text))) {
+    if (m.index > idx) splitItalic(text.slice(idx, m.index), [], out)
+    splitItalic(m[2], ["strong"], out)
+    idx = m.index + m[0].length
+  }
+  if (idx < text.length) splitItalic(text.slice(idx), [], out)
+  return out
+}
+
+/**
+ * Parse a single line of inline markdown into Portable Text spans + link
+ * markDefs. Links (`[text](url)`) are extracted first, then bold/italic are
+ * applied within the non-link runs.
+ */
+function parseInline(text: string): { children: PortableTextSpan[]; markDefs: LinkMarkDef[] } {
+  const markDefs: LinkMarkDef[] = []
+  const children: PortableTextSpan[] = []
+  const linkRe = /\[([^\]]+)\]\(([^)\s]+)\)/g
+  let idx = 0
+  let m: RegExpExecArray | null
+  while ((m = linkRe.exec(text))) {
+    if (m.index > idx) children.push(...splitMarks(text.slice(idx, m.index)))
+    const key = nextKey()
+    markDefs.push({ _key: key, _type: "link", href: m[2] })
+    children.push(span(m[1], [key]))
+    idx = m.index + m[0].length
+  }
+  if (idx < text.length) children.push(...splitMarks(text.slice(idx)))
+  // A block must always have at least one child span.
+  if (children.length === 0) children.push(span("", []))
+  return { children, markDefs }
+}
+
+function makeBlock(
+  style: string,
+  text: string,
+  extra?: Pick<PortableTextBlock, "listItem" | "level">,
+): PortableTextBlock {
+  const { children, markDefs } = parseInline(text)
+  return { _type: "block", _key: nextKey(), style, markDefs, children, ...extra }
+}
+
+/**
+ * Markdown → Portable Text conversion for the internal blog editor.
+ *
+ * Supports (matching the marks/styles rendered by BlogPostTemplate.tsx):
+ *   - Headings `#`..`####` → h1..h4
+ *   - Blockquotes (`> `)
+ *   - Bullet lists (`- ` / `* `) and numbered lists (`1. ` / `1) `)
+ *   - Inline `**bold**`/`__bold__`, `*italic*`/`_italic_`, `[text](url)` links
+ *   - Blank-line-separated paragraphs (soft-wrapped lines are joined)
+ *
+ * Nested lists and images-in-body are out of scope (cover image is handled
+ * separately); tables/HTML pass through as plain text.
+ */
+function bodyToPortableText(body: string): BodyBlock[] {
+  const blocks: BodyBlock[] = []
+  const lines = body.replace(/\r\n/g, "\n").split("\n")
+  let paragraph: string[] = []
+
+  const flushParagraph = () => {
+    if (paragraph.length === 0) return
+    const text = paragraph.join(" ").trim()
+    if (text) blocks.push(makeBlock("normal", text))
+    paragraph = []
+  }
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim()
+    if (!line) {
+      flushParagraph()
+      continue
+    }
+    const videoUrl = loneVideoUrl(line)
+    if (videoUrl) {
+      flushParagraph()
+      blocks.push({ _type: "videoEmbed", _key: nextKey(), url: videoUrl })
+      continue
+    }
+    const heading = /^(#{1,4})\s+(.*)$/.exec(line)
+    if (heading) {
+      flushParagraph()
+      blocks.push(makeBlock(`h${heading[1].length}`, heading[2]))
+      continue
+    }
+    const quote = /^>\s+(.*)$/.exec(line)
+    if (quote) {
+      flushParagraph()
+      blocks.push(makeBlock("blockquote", quote[1]))
+      continue
+    }
+    const bullet = /^[-*]\s+(.*)$/.exec(line)
+    if (bullet) {
+      flushParagraph()
+      blocks.push(makeBlock("normal", bullet[1], { listItem: "bullet", level: 1 }))
+      continue
+    }
+    const numbered = /^\d+[.)]\s+(.*)$/.exec(line)
+    if (numbered) {
+      flushParagraph()
+      blocks.push(makeBlock("normal", numbered[1], { listItem: "number", level: 1 }))
+      continue
+    }
+    paragraph.push(line)
+  }
+  flushParagraph()
   return blocks
 }
 
@@ -189,6 +327,13 @@ function buildBlogPostDoc(input: UpsertBlogPostInput): Record<string, unknown> {
   if (input.industry) doc.industry = input.industry
   if (input.seoTitle) doc.seoTitle = input.seoTitle
   if (input.seoDescription) doc.seoDescription = input.seoDescription
+  if (input.categoryIds && input.categoryIds.length > 0) {
+    doc.categories = input.categoryIds.map((id) => ({
+      _type: "reference",
+      _key: nextKey(),
+      _ref: id,
+    }))
+  }
   if (input.mondayItemId) doc.mondayItemId = input.mondayItemId
   if (input.coverImageAssetId) {
     doc.coverImage = {

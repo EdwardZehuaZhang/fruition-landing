@@ -28,6 +28,26 @@ export default {
             { name: "caption", title: "Caption", type: "string" },
           ],
         },
+        {
+          type: "object",
+          name: "videoEmbed",
+          title: "Video",
+          fields: [
+            {
+              name: "url",
+              title: "Video URL (YouTube, Vimeo, or Loom)",
+              type: "url",
+              validation: (r: any) => r.required(),
+            },
+            { name: "caption", title: "Caption", type: "string" },
+          ],
+          preview: {
+            select: { url: "url", caption: "caption" },
+            prepare({ url, caption }: { url?: string; caption?: string }) {
+              return { title: caption || "Video", subtitle: url }
+            },
+          },
+        },
       ],
     },
     {
