@@ -13,7 +13,7 @@ export default function TextContentSection({
 }: TextContentSectionProps) {
   if (!heading && !body) return null
 
-  const bg = theme === "tint" ? "#f7f7f7" : "#ffffff"
+  const bg = theme === "tint" ? "var(--surface-subtle)" : "var(--surface)"
 
   return (
     <section className="px-4" style={{ backgroundColor: bg, paddingTop: 80, paddingBottom: 80 }}>
@@ -21,11 +21,11 @@ export default function TextContentSection({
         {(heading || headingAccent) && (
           <h2
             className="text-section-h2 text-center"
-            style={{ marginBottom: 32, color: "black" }}
+            style={{ marginBottom: 32, color: "var(--ink)" }}
           >
             {heading}
             {headingAccent && (
-              <span style={{ color: "var(--purple-primary)" }}> {headingAccent}</span>
+              <span style={{ color: "var(--brand)" }}> {headingAccent}</span>
             )}
           </h2>
         )}
@@ -34,7 +34,7 @@ export default function TextContentSection({
             style={{
               fontSize: 17,
               lineHeight: "28px",
-              color: "#222",
+              color: "var(--ink)",
               whiteSpace: "pre-line",
               textAlign: "center",
             }}

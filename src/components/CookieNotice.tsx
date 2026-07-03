@@ -65,7 +65,7 @@ export default function CookieNotice() {
           transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
         }}
         className={[
-          "w-full max-w-[27rem] rounded-card border border-[#e8e6e6] bg-white p-5 shadow-card",
+          "w-full max-w-[27rem] rounded-card border border-line bg-surface p-5 shadow-card",
           "transition-[opacity,transform] will-change-transform",
           "motion-reduce:transition-none",
           entered
@@ -76,7 +76,7 @@ export default function CookieNotice() {
         <div className="flex items-start gap-3">
           <span
             aria-hidden="true"
-            className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-full bg-[#f4ecfd] text-brand"
+            className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-full bg-surface-tint-2 text-brand"
           >
             {/* shield-check */}
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -85,10 +85,10 @@ export default function CookieNotice() {
             </svg>
           </span>
           <div className="min-w-0">
-            <p className="text-[15px] font-semibold tracking-tight text-[#171717]">
+            <p className="text-[15px] font-semibold tracking-tight text-ink">
               We recognise business visitors
             </p>
-            <p className="mt-1.5 text-[13.5px] leading-relaxed text-[#55566a]">
+            <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink-soft">
               To understand which companies research our services and follow up,
               we identify business visitors to this site. You can opt out, and it
               never affects how the site works.{" "}
@@ -106,14 +106,14 @@ export default function CookieNotice() {
           <button
             type="button"
             onClick={() => decide("accepted")}
-            className="inline-flex h-10 flex-1 items-center justify-center rounded-pill bg-[linear-gradient(to_right,#8015e8,#ba83f0)] px-4 text-[14px] font-bold text-white transition-colors hover:bg-[#4674FB] hover:bg-none"
+            className="inline-flex h-10 flex-1 items-center justify-center rounded-pill bg-[linear-gradient(to_right,var(--purple-primary),var(--purple-light))] px-4 text-[14px] font-bold text-white transition-colors hover:bg-accent-blue-strong hover:bg-none"
           >
             Got it
           </button>
           <button
             type="button"
             onClick={() => decide("declined")}
-            className="inline-flex h-10 items-center justify-center rounded-pill border border-[#dedee5] px-4 text-[14px] font-semibold text-[#55566a] transition-colors hover:border-[#c9c9d4] hover:text-[#171717]"
+            className="inline-flex h-10 items-center justify-center rounded-pill border border-line-soft px-4 text-[14px] font-semibold text-ink-soft transition-colors hover:border-[#c9c9d4] hover:text-ink"
           >
             Decline
           </button>

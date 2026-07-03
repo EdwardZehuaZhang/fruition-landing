@@ -82,7 +82,7 @@ function AuthorAvatar({ name, photo }: { name: string; photo?: SanityImage }) {
   return (
     <div
       className="shrink-0 size-[88px] sm:size-[112px] rounded-full flex items-center justify-center text-white font-montserrat font-semibold text-[28px] sm:text-[34px] leading-none select-none shadow-[0_8px_28px_rgba(128,21,232,0.25)]"
-      style={{ background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)" }}
+      style={{ background: "linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-light) 100%)" }}
       aria-hidden="true"
     >
       {authorInitials(name)}
@@ -115,12 +115,12 @@ export default function AuthorProfileTemplate({
   const countLabel = `${postCount} article${postCount === 1 ? "" : "s"}`
 
   return (
-    <div className="bg-white w-full font-montserrat">
+    <div className="bg-surface w-full font-montserrat">
       <div className="max-w-7xl mx-auto px-4 py-14 sm:py-16">
         {/* Back to blog */}
         <Link
           href="/consulting-blog"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#8015e8] transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-brand transition-colors"
         >
           <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M15 18l-6-6 6-6" />
@@ -134,16 +134,16 @@ export default function AuthorProfileTemplate({
 
           <div className="min-w-0">
             <h1
-              className="font-montserrat font-bold text-gray-900 leading-[1.1] tracking-[-0.02em] text-[clamp(1.9rem,5vw,2.75rem)]"
+              className="font-montserrat font-bold text-ink leading-[1.1] tracking-[-0.02em] text-[clamp(1.9rem,5vw,2.75rem)]"
               style={{ textWrap: "balance" }}
             >
               {name}
             </h1>
 
             {(role || regions.length > 0) && (
-              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[15px] text-gray-600">
-                {role && <span className="font-medium text-gray-700">{role}</span>}
-                {role && regions.length > 0 && <span aria-hidden className="text-gray-300">·</span>}
+              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[15px] text-ink-muted">
+                {role && <span className="font-medium text-ink-soft">{role}</span>}
+                {role && regions.length > 0 && <span aria-hidden className="text-ink-faint">·</span>}
                 {regions.length > 0 && (
                   <span className="flex items-center gap-1.5">
                     {regions.map((r) => (
@@ -157,15 +157,15 @@ export default function AuthorProfileTemplate({
             )}
 
             <div className="mt-3 flex items-center gap-4">
-              <span className="text-sm font-medium text-[#8015e8]">{countLabel}</span>
+              <span className="text-sm font-medium text-brand">{countLabel}</span>
               {linkedinUrl && (
                 <>
-                  <span aria-hidden className="text-gray-300">·</span>
+                  <span aria-hidden className="text-ink-faint">·</span>
                   <a
                     href={linkedinUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-[#8015e8] transition-colors"
+                    className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-brand transition-colors"
                   >
                     <LinkedInIcon />
                     LinkedIn profile
@@ -179,7 +179,7 @@ export default function AuthorProfileTemplate({
         {/* Bio */}
         {bio && (
           <p
-            className="mt-6 max-w-[68ch] text-[17px] leading-[1.65] text-gray-700"
+            className="mt-6 max-w-[68ch] text-[17px] leading-[1.65] text-ink-soft"
             style={{ textWrap: "pretty" }}
           >
             {bio}
@@ -191,7 +191,7 @@ export default function AuthorProfileTemplate({
 
         {/* Posts */}
         <section className="mt-10 sm:mt-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-8">
+          <h2 className="text-xl font-bold text-ink mb-8">
             {postCount === 1 ? "The article" : `Articles by ${name.split(/\s+/)[0]}`}
           </h2>
 
@@ -208,7 +208,7 @@ export default function AuthorProfileTemplate({
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-sm py-8">No articles yet.</p>
+            <p className="text-ink-muted text-sm py-8">No articles yet.</p>
           )}
         </section>
       </div>

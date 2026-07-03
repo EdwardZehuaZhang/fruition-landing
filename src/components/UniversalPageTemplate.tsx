@@ -161,7 +161,7 @@ export default function UniversalPageTemplate({
 
       {/* 2b. Hero video (only when heroVideoUrl is set on the page doc) */}
       {heroVideoEmbedSrc && (
-        <section className="bg-white" style={{ paddingBottom: 80 }}>
+        <section className="bg-surface" style={{ paddingBottom: 80 }}>
           <div className="mx-auto" style={{ maxWidth: 1042 }}>
             <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
               <YouTubeEmbed url={heroVideoEmbedSrc} title={page.heroVideoTitle || "Video"} />
@@ -335,7 +335,7 @@ export default function UniversalPageTemplate({
 
       {/* 11. Bottom video embed (if populated) */}
       {bottomVideoEmbedSrc && (
-        <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+        <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
           <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
             <div
               className="rounded-card overflow-hidden"

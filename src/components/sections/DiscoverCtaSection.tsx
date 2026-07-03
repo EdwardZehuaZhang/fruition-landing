@@ -28,14 +28,14 @@ export default function DiscoverCtaSection({
   if (!heading && !primaryCtaLabel && !secondaryCtaLabel && !badgeSrc) return null
 
   return (
-    <section style={{ backgroundColor: "#ece6fc" }} className="py-[80px] px-4">
+    <section style={{ backgroundColor: "var(--surface-muted)" }} className="py-[80px] px-4">
       <div className="mx-auto flex max-w-[900px] flex-col items-center">
         {badgeSrc && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={badgeSrc} alt="Certifications" width={325} height={73} className="h-[73px] w-[325px] object-contain" />
         )}
         {heading && (
-          <h2 className="mt-7 text-section-h2 text-center text-black text-balance max-w-[720px]">
+          <h2 className="mt-7 text-section-h2 text-center text-ink text-balance max-w-[720px]">
             {heading}
           </h2>
         )}

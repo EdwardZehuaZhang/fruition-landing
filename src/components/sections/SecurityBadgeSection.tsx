@@ -10,7 +10,7 @@ export default function SecurityBadgeSection({ badge }: SecurityBadgeSectionProp
   if (!src) return null
 
   return (
-    <section className="bg-white" style={{ paddingBottom: 80 }}>
+    <section className="bg-surface" style={{ paddingBottom: 80 }}>
       <div className="mx-auto max-w-[976px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={src} alt="Security certifications" width={976} height={94} className="w-full h-auto" />

@@ -18,6 +18,7 @@ export interface BlogEditorInitial {
   seoDescription?: string
   publishedAt?: string
   body?: string
+  author?: string
 }
 
 const INDUSTRIES = [
@@ -44,13 +45,15 @@ function slugify(s: string): string {
 }
 
 const inputClass =
-  "block w-full rounded-chip border border-[var(--color-border)] bg-white px-4 py-3 text-sm text-[#10003a] placeholder:text-[#9ca3af] outline-none transition hover:border-[var(--purple-light)] focus:border-[var(--purple-primary)] focus:ring-2 focus:ring-[rgba(128,21,232,0.18)]"
+  "block w-full rounded-chip border border-[var(--color-border)] bg-surface px-4 py-3 text-sm text-ink-heading placeholder:text-ink-faint outline-none transition hover:border-[var(--purple-light)] focus:border-[var(--purple-primary)] focus:ring-2 focus:ring-[rgba(128,21,232,0.18)]"
 
 export default function BlogEditor({
   categories,
+  authors = [],
   initial,
 }: {
   categories: CategoryOption[]
+  authors?: string[]
   initial?: BlogEditorInitial
 }) {
   const [draftId, setDraftId] = useState(initial?.draftId)
@@ -64,6 +67,7 @@ export default function BlogEditor({
   const [seoDescription, setSeoDescription] = useState(initial?.seoDescription ?? "")
   const [publishedAt, setPublishedAt] = useState(initial?.publishedAt ?? "")
   const [body, setBody] = useState(initial?.body ?? "")
+  const [author, setAuthor] = useState(initial?.author ?? "")
   const [cover, setCover] = useState<File | null>(null)
 
   const [status, setStatus] = useState<string | null>(null)
@@ -82,7 +86,7 @@ export default function BlogEditor({
   }
 
   function metadata() {
-    return { excerpt, industry, categoryIds, seoTitle, seoDescription, publishedAt, slug: effectiveSlug }
+    return { excerpt, industry, categoryIds, seoTitle, seoDescription, publishedAt, author, slug: effectiveSlug }
   }
 
   function onSaveDraft() {
@@ -126,6 +130,7 @@ export default function BlogEditor({
     fd.set("slug", effectiveSlug)
     fd.set("excerpt", excerpt.trim())
     fd.set("industry", industry)
+    fd.set("author", author)
     fd.set("seoTitle", seoTitle.trim())
     fd.set("seoDescription", seoDescription.trim())
     if (publishedAt) fd.set("publishedAt", new Date(publishedAt).toISOString())
@@ -165,6 +170,10 @@ export default function BlogEditor({
           Markdown: <code># … ####</code> headings, <code>&gt;</code> quotes, <code>-</code>/<code>1.</code>{" "}
           lists, <code>**bold**</code>, <code>*italic*</code>, <code>[text](url)</code>.
         </p>
+        <p className="text-xs text-[var(--color-text-secondary)]">
+          🎬 Video: paste a <strong>YouTube, Vimeo, or Loom</strong> URL on its own line to embed it
+          inline where it sits.
+        </p>
       </div>
 
       {/* Sidebar: metadata */}
@@ -196,6 +205,16 @@ export default function BlogEditor({
             className="block w-full text-sm"
           />
         </Field>
+        <Field label="Author" hint="From the team page">
+          <select value={author} onChange={(e) => setAuthor(e.target.value)} className={inputClass}>
+            <option value="">— you (default) —</option>
+            {authors.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </Field>
         <Field label="Industry">
           <select value={industry} onChange={(e) => setIndustry(e.target.value)} className={inputClass}>
             {INDUSTRIES.map((o) => (
@@ -218,8 +237,8 @@ export default function BlogEditor({
                     className="rounded-pill border px-3 py-1 text-xs transition"
                     style={{
                       borderColor: on ? "var(--purple-primary)" : "var(--color-border)",
-                      backgroundColor: on ? "rgba(128,21,232,0.10)" : "white",
-                      color: on ? "var(--purple-primary)" : "#10003a",
+                      backgroundColor: on ? "rgba(128,21,232,0.10)" : "var(--surface)",
+                      color: on ? "var(--purple-primary)" : "var(--ink-heading)",
                     }}
                   >
                     {c.title}
@@ -252,7 +271,7 @@ export default function BlogEditor({
         {error && (
           <div
             className="rounded-chip px-3 py-2 text-sm"
-            style={{ backgroundColor: "#fff1f2", color: "#9f1239" }}
+            style={{ backgroundColor: "var(--danger-surface)", color: "var(--danger-strong)" }}
             role="alert"
           >
             {error}
@@ -261,7 +280,7 @@ export default function BlogEditor({
         {status && (
           <div
             className="rounded-chip px-3 py-2 text-sm"
-            style={{ backgroundColor: "#ecfdf5", color: "#065f46" }}
+            style={{ backgroundColor: "var(--success-surface)", color: "var(--success-strong)" }}
           >
             {status}{" "}
             {publishedSlug && (
@@ -283,7 +302,7 @@ export default function BlogEditor({
             onClick={onSaveDraft}
             disabled={savingDraft}
             className="flex-1 rounded-pill border px-4 py-3 text-sm font-semibold transition disabled:opacity-60"
-            style={{ borderColor: "var(--color-border)", color: "#10003a" }}
+            style={{ borderColor: "var(--color-border)", color: "var(--ink-heading)" }}
           >
             {savingDraft ? "Saving…" : "Save draft"}
           </button>
@@ -313,7 +332,7 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1.5 flex items-baseline justify-between gap-3 text-sm font-medium text-[#10003a]">
+      <label className="mb-1.5 flex items-baseline justify-between gap-3 text-sm font-medium text-ink-heading">
         <span>{label}</span>
         {hint && <span className="text-xs font-normal text-[var(--color-text-secondary)]">{hint}</span>}
       </label>

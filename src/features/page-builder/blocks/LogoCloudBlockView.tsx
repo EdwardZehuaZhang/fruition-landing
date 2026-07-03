@@ -21,13 +21,13 @@ function renderHeadingWithAccent(heading: string) {
     const after = heading.slice(idx + accent.length)
     return (
       <p className="text-[28px] font-medium leading-[39.2px] text-center">
-        <span className="text-black">{before}</span>
-        <span className="text-[#8015e8]">{accent}</span>
-        {after && <span className="text-black">{after}</span>}
+        <span className="text-ink">{before}</span>
+        <span className="text-brand">{accent}</span>
+        {after && <span className="text-ink">{after}</span>}
       </p>
     )
   }
-  return <p className="text-[28px] font-medium leading-[39.2px] text-black text-center">{heading}</p>
+  return <p className="text-[28px] font-medium leading-[39.2px] text-ink text-center">{heading}</p>
 }
 
 export default function LogoCloudBlockView({ heading, logos }: LogoCloudBlockProps) {
@@ -37,7 +37,7 @@ export default function LogoCloudBlockView({ heading, logos }: LogoCloudBlockPro
   const duplicatedLogos = [...logos, ...logos]
 
   return (
-    <section className="bg-white py-[80px] px-4">
+    <section className="bg-surface py-[80px] px-4">
       <div className="flex flex-col gap-[35px] items-center w-full max-w-[1348px] mx-auto">
         {/* Heading */}
         {heading && renderHeadingWithAccent(heading)}
@@ -57,7 +57,7 @@ export default function LogoCloudBlockView({ heading, logos }: LogoCloudBlockPro
                   />
                 ) : (
                   logo.name && (
-                    <span className="text-sm font-medium text-gray-500 whitespace-nowrap">{logo.name}</span>
+                    <span className="text-sm font-medium text-ink-muted whitespace-nowrap">{logo.name}</span>
                   )
                 )}
               </div>

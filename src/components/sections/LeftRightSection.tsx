@@ -13,7 +13,7 @@ export default function LeftRightSection({
   imageOnLeft = false,
   image,
   children,
-  className = 'bg-white',
+  className = 'bg-surface',
   beforeRow,
   afterRow,
 }: LeftRightSectionProps) {

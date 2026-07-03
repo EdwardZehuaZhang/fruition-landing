@@ -55,22 +55,22 @@ const HR_OPERATIONS_ITEMS: Array<{ icon: LucideIcon; text: string }> = [
 function HrLifecycleSection({ stages: resolvedLifecycleStages }: { stages: { n?: string; title?: string; body?: string }[] }) {
   return (
     <section
-      className="bg-white px-4 relative overflow-hidden"
+      className="bg-surface px-4 relative overflow-hidden"
       style={{ paddingTop: 96, paddingBottom: 96 }}
     >
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <h2
           className="text-center font-bold"
-          style={{ color: "#10003a", fontSize: "clamp(26px, 6.5vw, 40px)", lineHeight: 1.2, marginBottom: 56 }}
+          style={{ color: "var(--ink-heading)", fontSize: "clamp(26px, 6.5vw, 40px)", lineHeight: 1.2, marginBottom: 56 }}
         >
           Supporting Each Stage of Your HR Life Cycle
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 32, columnGap: 56 }}>
           {resolvedLifecycleStages.map((stage: { n?: string; title?: string; body?: string }, i: number) => (
             <div key={stage.n || i} className="flex flex-col" style={{ gap: 12 }}>
-              <p style={{ color: "#8015e8", fontSize: 40, fontWeight: 300, lineHeight: 1 }}>{stage.n}</p>
-              <p style={{ color: "#10003a", fontSize: 18, fontWeight: 700 }}>{stage.title}</p>
-              <p style={{ color: "#4a4a4a", fontSize: 14, lineHeight: "22px" }}>{stage.body}</p>
+              <p style={{ color: "var(--brand)", fontSize: 40, fontWeight: 300, lineHeight: 1 }}>{stage.n}</p>
+              <p style={{ color: "var(--ink-heading)", fontSize: 18, fontWeight: 700 }}>{stage.title}</p>
+              <p style={{ color: "var(--ink-soft)", fontSize: 14, lineHeight: "22px" }}>{stage.body}</p>
               {stage.n === "04" && (
                 <div className="rounded-card overflow-hidden" style={{ marginTop: 8, maxWidth: 460 }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -95,13 +95,13 @@ function HrExpertiseSection() {
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <h2
           className="text-center font-bold"
-          style={{ color: "#10003a", fontSize: 36, lineHeight: "44px", marginBottom: 16 }}
+          style={{ color: "var(--ink-heading)", fontSize: 36, lineHeight: "44px", marginBottom: 16 }}
         >
           Our monday CRM consulting expertise
         </h2>
         <p
           className="text-center mx-auto"
-          style={{ color: "#4a4a4a", fontSize: 15, lineHeight: "24px", maxWidth: 820, marginBottom: 48 }}
+          style={{ color: "var(--ink-soft)", fontSize: 15, lineHeight: "24px", maxWidth: 820, marginBottom: 48 }}
         >
           Streamline your HR operations and strategic management systems with monday.com,
           through intelligent automation and data tracking; you can enhance your entire
@@ -114,9 +114,9 @@ function HrExpertiseSection() {
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 24 }}>
           <div
             className="rounded-card"
-            style={{ padding: 28, border: "1px solid #ece7fb", backgroundColor: "#f9f7ff" }}
+            style={{ padding: 28, border: "1px solid var(--line-tint)", backgroundColor: "var(--surface-tint)" }}
           >
-            <h3 className="font-bold" style={{ fontSize: 20, color: "#8015e8", marginBottom: 16 }}>
+            <h3 className="font-bold" style={{ fontSize: 20, color: "var(--brand)", marginBottom: 16 }}>
               Hiring
             </h3>
             <ul className="flex flex-col" style={{ gap: 10 }}>
@@ -126,9 +126,9 @@ function HrExpertiseSection() {
                   <li
                     key={item.text}
                     className="flex items-start"
-                    style={{ gap: 10, fontSize: 14, lineHeight: "22px", color: "#444" }}
+                    style={{ gap: 10, fontSize: 14, lineHeight: "22px", color: "var(--ink-soft)" }}
                   >
-                    <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 2, color: "#8015e8" }} />
+                    <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 2, color: "var(--brand)" }} />
                     <span>{item.text}</span>
                   </li>
                 )
@@ -137,9 +137,9 @@ function HrExpertiseSection() {
           </div>
           <div
             className="rounded-card"
-            style={{ padding: 28, border: "1px solid #ece7fb", backgroundColor: "#f9f7ff" }}
+            style={{ padding: 28, border: "1px solid var(--line-tint)", backgroundColor: "var(--surface-tint)" }}
           >
-            <h3 className="font-bold" style={{ fontSize: 20, color: "#8015e8", marginBottom: 16 }}>
+            <h3 className="font-bold" style={{ fontSize: 20, color: "var(--brand)", marginBottom: 16 }}>
               HR Operations
             </h3>
             <ul className="flex flex-col" style={{ gap: 10 }}>
@@ -149,9 +149,9 @@ function HrExpertiseSection() {
                   <li
                     key={item.text}
                     className="flex items-start"
-                    style={{ gap: 10, fontSize: 14, lineHeight: "22px", color: "#444" }}
+                    style={{ gap: 10, fontSize: 14, lineHeight: "22px", color: "var(--ink-soft)" }}
                   >
-                    <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 2, color: "#8015e8" }} />
+                    <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 2, color: "var(--brand)" }} />
                     <span>{item.text}</span>
                   </li>
                 )
@@ -198,13 +198,13 @@ function HrFitSection({ calendlyUrl, reasons: resolvedFitReasons }: { calendlyUr
         <div className="flex flex-col items-center text-center" style={{ marginBottom: 56 }}>
           <span
             className="uppercase font-bold tracking-[0.18em]"
-            style={{ color: "#8015e8", fontSize: 12, marginBottom: 14 }}
+            style={{ color: "var(--brand)", fontSize: 12, marginBottom: 14 }}
           >
             Built for People &amp; Culture
           </span>
           <h2
             className="font-bold"
-            style={{ color: "#10003a", fontSize: 38, lineHeight: "46px", maxWidth: 820 }}
+            style={{ color: "var(--ink-heading)", fontSize: 38, lineHeight: "46px", maxWidth: 820 }}
           >
             Why monday.com is the perfect fit for People and Culture Teams
           </h2>
@@ -216,15 +216,15 @@ function HrFitSection({ calendlyUrl, reasons: resolvedFitReasons }: { calendlyUr
               height: 50,
               padding: "0 28px",
               borderRadius: 999,
-              background: "linear-gradient(to right, #8015e8, #ba83f0)",
-              color: "white",
+              background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+              color: "var(--white)",
               fontSize: 15,
               boxShadow: "0 12px 28px -10px rgba(128,21,232,0.55)",
             }}
           >
             Schedule a Meeting
             <svg width="10" height="14" viewBox="0 0 8 14" fill="none" style={{ marginLeft: 10 }}>
-              <path d="M1 1L7 7L1 13" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M1 1L7 7L1 13" stroke="var(--white)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
         </div>
@@ -234,7 +234,7 @@ function HrFitSection({ calendlyUrl, reasons: resolvedFitReasons }: { calendlyUr
           {resolvedFitReasons.map((r: { title?: string; body?: string }, i: number) => (
             <div
               key={r.title || i}
-              className="relative bg-white transition-transform hover:-translate-y-[2px]"
+              className="relative bg-surface transition-transform hover:-translate-y-[2px]"
               style={{
                 borderRadius: 20,
                 padding: "24px 26px",
@@ -249,19 +249,19 @@ function HrFitSection({ calendlyUrl, reasons: resolvedFitReasons }: { calendlyUr
                     width: 38,
                     height: 38,
                     borderRadius: 12,
-                    background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)",
-                    color: "white",
+                    background: "linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-light) 100%)",
+                    color: "var(--white)",
                     fontSize: 13,
                     letterSpacing: "0.04em",
                   }}
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <p className="font-bold" style={{ color: "#10003a", fontSize: 17, lineHeight: "22px" }}>
+                <p className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 17, lineHeight: "22px" }}>
                   {r.title}
                 </p>
               </div>
-              <p style={{ fontSize: 14, lineHeight: "22px", color: "#56516a", paddingLeft: 52 }}>
+              <p style={{ fontSize: 14, lineHeight: "22px", color: "var(--ink-soft)", paddingLeft: 52 }}>
                 {r.body}
               </p>
             </div>

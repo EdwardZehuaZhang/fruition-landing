@@ -17,8 +17,15 @@ export default async function LoginPage({
   const startHref = `/internal/auth/start?next=${encodeURIComponent(next)}`
 
   return (
-    <div className="w-full max-w-md">
-      <div className="rounded-card bg-white p-8 sm:p-10" style={{ boxShadow: "var(--shadow-card)" }}>
+    <div
+      className="flex min-h-screen w-full flex-col items-center justify-center px-4 py-16"
+      style={{
+        background:
+          "radial-gradient(ellipse at top, rgba(128, 21, 232, 0.18) 0%, rgba(255, 255, 255, 0) 55%), linear-gradient(180deg, #f7f3ff 0%, #ffffff 100%)",
+      }}
+    >
+      <div className="w-full max-w-md">
+      <div className="rounded-card bg-surface p-8 sm:p-10" style={{ boxShadow: "var(--shadow-card)" }}>
         <div className="mb-6 text-center">
           <div
             className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-pill"
@@ -26,7 +33,7 @@ export default async function LoginPage({
           >
             <Lock size={24} aria-hidden />
           </div>
-          <h1 className="text-2xl font-semibold text-[#10003a]">Fruition Internal</h1>
+          <h1 className="text-2xl font-semibold text-ink-heading">Fruition Internal</h1>
           <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
             Sign in with your Google Workspace account to continue.
           </p>
@@ -35,7 +42,7 @@ export default async function LoginPage({
         {sp.error && (
           <div
             className="mb-4 rounded-chip px-3 py-2 text-sm"
-            style={{ backgroundColor: "#fff1f2", color: "#9f1239" }}
+            style={{ backgroundColor: "var(--danger-surface)", color: "var(--danger-strong)" }}
             role="alert"
           >
             {sp.error}
@@ -44,7 +51,7 @@ export default async function LoginPage({
 
         <a
           href={startHref}
-          className="flex w-full items-center justify-center gap-3 rounded-pill border bg-white px-4 py-3 text-sm font-semibold text-[#10003a] transition hover:bg-[var(--light-section-bg)]"
+          className="flex w-full items-center justify-center gap-3 rounded-pill border bg-surface px-4 py-3 text-sm font-semibold text-ink-heading transition hover:bg-[var(--light-section-bg)]"
           style={{ borderColor: "var(--color-border)" }}
         >
           <GoogleGlyph />
@@ -54,6 +61,7 @@ export default async function LoginPage({
       <p className="mt-4 text-center text-xs text-[var(--color-text-secondary)]">
         Only <span className="font-medium">@{domain}</span> accounts can sign in.
       </p>
+      </div>
     </div>
   )
 }

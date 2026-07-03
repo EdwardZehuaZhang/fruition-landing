@@ -78,22 +78,22 @@ export default function LeadForm({
   }
 
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 72, paddingBottom: 72 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 72, paddingBottom: 72 }}>
       <div
         className="mx-auto rounded-card"
-        style={{ maxWidth: 620, padding: 32, border: "1px solid #ece7fb", boxShadow: "0 24px 48px -32px rgba(64,12,140,0.28)" }}
+        style={{ maxWidth: 620, padding: 32, border: "1px solid var(--line-tint)", boxShadow: "0 24px 48px -32px rgba(64,12,140,0.28)" }}
       >
-        <h2 className="text-section-h2 text-black" style={{ marginBottom: subheading ? 12 : 24 }}>
+        <h2 className="text-section-h2 text-ink" style={{ marginBottom: subheading ? 12 : 24 }}>
           {heading}
         </h2>
         {subheading && (
-          <p style={{ color: "#686b82", fontSize: 15, lineHeight: "22px", marginBottom: 22 }}>{subheading}</p>
+          <p style={{ color: "var(--ink-muted)", fontSize: 15, lineHeight: "22px", marginBottom: 22 }}>{subheading}</p>
         )}
 
         {status === "done" ? (
           <div
             className="rounded-card"
-            style={{ background: "#f5fbf6", border: "1px solid #d6ecd9", padding: 20, color: "#1e8449", fontSize: 16 }}
+            style={{ background: "var(--success-surface)", border: "1px solid var(--success)", padding: 20, color: "var(--success-strong)", fontSize: 16 }}
           >
             {successMessage}
           </div>
@@ -123,7 +123,7 @@ export default function LeadForm({
             />
 
             {status === "error" && (
-              <p role="alert" style={{ color: "#c0392b", fontSize: 14 }}>{error}</p>
+              <p role="alert" style={{ color: "var(--danger)", fontSize: 14 }}>{error}</p>
             )}
 
             <button
@@ -143,18 +143,18 @@ export default function LeadForm({
 
 const inputStyle: React.CSSProperties = {
   width: "100%",
-  border: "1px solid #ddd6f3",
+  border: "1px solid var(--line-tint)",
   borderRadius: 10,
   padding: "11px 14px",
   fontSize: 15,
-  color: "#10003a",
-  background: "#fff",
+  color: "var(--ink-heading)",
+  background: "var(--surface)",
 }
 
 function Labeled({ label, children }: { label?: string; children: React.ReactNode }) {
   return (
     <label className="flex flex-col" style={{ gap: 6 }}>
-      {label && <span style={{ fontSize: 13, color: "#10003a", fontWeight: 600 }}>{label}</span>}
+      {label && <span style={{ fontSize: 13, color: "var(--ink-heading)", fontWeight: 600 }}>{label}</span>}
       {children}
     </label>
   )

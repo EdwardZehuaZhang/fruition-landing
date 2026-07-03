@@ -147,6 +147,24 @@ interface PortableTextBlock {
   level?: number
 }
 
+interface VideoEmbedBlock {
+  _type: "videoEmbed"
+  _key: string
+  url: string
+}
+
+type BodyBlock = PortableTextBlock | VideoEmbedBlock
+
+/**
+ * If a line is nothing but a YouTube / Vimeo / Loom URL, return that URL so it
+ * can be rendered as an inline video block. Otherwise null (treat as text).
+ */
+function loneVideoUrl(line: string): string | null {
+  if (/\s/.test(line)) return null
+  if (!/^https?:\/\//i.test(line)) return null
+  return /(?:youtube\.com|youtu\.be|vimeo\.com|loom\.com)/i.test(line) ? line : null
+}
+
 let keyCounter = 0
 function nextKey(): string {
   keyCounter += 1
@@ -241,8 +259,8 @@ function makeBlock(
  * Nested lists and images-in-body are out of scope (cover image is handled
  * separately); tables/HTML pass through as plain text.
  */
-function bodyToPortableText(body: string): PortableTextBlock[] {
-  const blocks: PortableTextBlock[] = []
+function bodyToPortableText(body: string): BodyBlock[] {
+  const blocks: BodyBlock[] = []
   const lines = body.replace(/\r\n/g, "\n").split("\n")
   let paragraph: string[] = []
 
@@ -257,6 +275,12 @@ function bodyToPortableText(body: string): PortableTextBlock[] {
     const line = rawLine.trim()
     if (!line) {
       flushParagraph()
+      continue
+    }
+    const videoUrl = loneVideoUrl(line)
+    if (videoUrl) {
+      flushParagraph()
+      blocks.push({ _type: "videoEmbed", _key: nextKey(), url: videoUrl })
       continue
     }
     const heading = /^(#{1,4})\s+(.*)$/.exec(line)

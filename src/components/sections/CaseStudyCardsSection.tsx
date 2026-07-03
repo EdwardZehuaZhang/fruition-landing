@@ -39,11 +39,11 @@ export default function CaseStudyCardsSection({
   if (cards.length === 0) return null
 
   return (
-    <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         {heading && (
           <h2
-            className="text-section-h2 text-black"
+            className="text-section-h2 text-ink"
             style={{ marginBottom: 48 }}
           >
             {heading}
@@ -56,7 +56,7 @@ export default function CaseStudyCardsSection({
             return (
               <div
                 key={card._key || i}
-                className="bg-white rounded-card border border-[#e8e6e6] overflow-hidden flex flex-col shadow-whisper"
+                className="bg-surface rounded-card border border-line overflow-hidden flex flex-col shadow-whisper"
               >
                 {/* Media: video or image */}
                 {embedUrl ? (
@@ -81,7 +81,7 @@ export default function CaseStudyCardsSection({
                       style={{
                         fontSize: 20,
                         fontWeight: 600,
-                        color: "#2b074d",
+                        color: "var(--ink-heading)",
                       }}
                     >
                       {card.title}
@@ -92,7 +92,7 @@ export default function CaseStudyCardsSection({
                       style={{
                         fontSize: 15,
                         lineHeight: "22.5px",
-                        color: "black",
+                        color: "var(--ink)",
                         marginTop: 12,
                         whiteSpace: "pre-line",
                       }}
@@ -106,7 +106,7 @@ export default function CaseStudyCardsSection({
                         style={{
                           fontSize: 14,
                           fontWeight: 600,
-                          color: "#2b074d",
+                          color: "var(--ink-heading)",
                         }}
                       >
                         {card.personName}
@@ -115,7 +115,7 @@ export default function CaseStudyCardsSection({
                         <p
                           style={{
                             fontSize: 13,
-                            color: "#595959",
+                            color: "var(--ink-soft)",
                           }}
                         >
                           {card.personRole}

@@ -127,7 +127,7 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
   return (
     <div>
       {/* 1. Hero */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div
           className="mx-auto flex flex-col items-center"
           style={{ paddingLeft: 273, paddingRight: 273, paddingTop: 80, paddingBottom: 80 }}
@@ -157,7 +157,7 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
               className="text-center font-bold"
               style={{ fontSize: "clamp(32px, 8vw, 48px)", lineHeight: 1.2, marginTop: 42, maxWidth: 924 }}
             >
-              <span className="text-black">{heroTitle}</span>
+              <span className="text-ink">{heroTitle}</span>
             </h1>
           )}
 
@@ -166,7 +166,7 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
               style={{
                 fontSize: 18,
                 lineHeight: "25.2px",
-                color: "black",
+                color: "var(--ink)",
                 marginTop: 31,
                 textAlign: "center",
                 maxWidth: 859,
@@ -206,7 +206,7 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
                 alt={heroTitle || "Hero"}
                 width={1042}
                 height={312}
-                className="rounded-card object-contain bg-white"
+                className="rounded-card object-contain bg-surface"
                 style={{ width: 1042, height: "auto", maxHeight: 520 }}
               />
             </div>
@@ -314,24 +314,24 @@ function FeatureTabsSection({
   const active = tabs[tab]
 
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1042 }}>
         {(headingPart1 || headingAccent) && (
-          <h2 className="text-section-h2 text-center text-black" style={{ maxWidth: 900 }}>
-            {headingPart1 && <span className="text-black">{headingPart1}</span>}
-            {headingAccent && <span style={{ color: "#8015e8" }}>{headingAccent}</span>}
+          <h2 className="text-section-h2 text-center text-ink" style={{ maxWidth: 900 }}>
+            {headingPart1 && <span className="text-ink">{headingPart1}</span>}
+            {headingAccent && <span style={{ color: "var(--brand)" }}>{headingAccent}</span>}
           </h2>
         )}
         {subheading && (
           <p
-            className="text-center text-black"
+            className="text-center text-ink"
             style={{ fontSize: 18, lineHeight: "28px", marginTop: 20, maxWidth: 860 }}
           >
             {subheading}
           </p>
         )}
         {eyebrow && (
-          <p className="text-center font-semibold" style={{ fontSize: 22, color: "#8015e8", marginTop: 32 }}>
+          <p className="text-center font-semibold" style={{ fontSize: 22, color: "var(--brand)", marginTop: 32 }}>
             {eyebrow}
           </p>
         )}
@@ -350,15 +350,15 @@ function FeatureTabsSection({
                 fontWeight: 600,
                 ...(i === tab
                   ? {
-                      background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                      color: "white",
+                      background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                      color: "var(--white)",
                       boxShadow: "2.83px 2.83px 15px 3px rgba(0,0,0,0.18)",
                       border: "none",
                     }
                   : {
-                      backgroundColor: "white",
-                      color: "#2b074d",
-                      border: "1px solid #e8e6e6",
+                      backgroundColor: "var(--surface)",
+                      color: "var(--navy-700)",
+                      border: "1px solid var(--line)",
                     }),
               }}
             >
@@ -384,7 +384,7 @@ function FeatureTabsSection({
                 style={{
                   padding: 24,
                   borderRadius: 16,
-                  border: "1px solid #e8e6e6",
+                  border: "1px solid var(--line)",
                   backgroundColor: "#fafafa",
                 }}
               >
@@ -392,14 +392,14 @@ function FeatureTabsSection({
                   style={{
                     fontSize: 40,
                     fontWeight: 200,
-                    color: "#8015e8",
+                    color: "var(--brand)",
                     lineHeight: 1,
                   }}
                 >
                   {item.number || String(i + 1).padStart(2, "0")}
                 </span>
                 {item.title && (
-                  <p className="font-bold" style={{ fontSize: 18, marginTop: 16, color: "#2b074d" }}>
+                  <p className="font-bold" style={{ fontSize: 18, marginTop: 16, color: "var(--navy-700)" }}>
                     {item.title}
                   </p>
                 )}
@@ -408,7 +408,7 @@ function FeatureTabsSection({
                     style={{
                       fontSize: 14,
                       lineHeight: "22px",
-                      color: "#444",
+                      color: "var(--ink-soft)",
                       marginTop: 10,
                       whiteSpace: "pre-line",
                     }}
@@ -439,12 +439,12 @@ function FourCardSection({
   cards: FourCard[]
 }) {
   return (
-    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, backgroundColor: "white" }}>
+    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, backgroundColor: "var(--surface)" }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1100 }}>
         {(headingPart1 || headingAccent) && (
           <h2
             className="text-center font-bold"
-            style={{ fontSize: "clamp(26px, 6.5vw, 40px)", lineHeight: 1.25, color: "#2b074d", maxWidth: 900 }}
+            style={{ fontSize: "clamp(26px, 6.5vw, 40px)", lineHeight: 1.25, color: "var(--navy-700)", maxWidth: 900 }}
           >
             {headingPart1 && (
               <>
@@ -452,7 +452,7 @@ function FourCardSection({
                 {headingAccent && <br />}
               </>
             )}
-            {headingAccent && <span style={{ color: "#8015e8" }}>{headingAccent}</span>}
+            {headingAccent && <span style={{ color: "var(--brand)" }}>{headingAccent}</span>}
           </h2>
         )}
         {ctaLabel && ctaUrl && (
@@ -464,7 +464,7 @@ function FourCardSection({
               height: 53,
               width: 260,
               borderRadius: 100,
-              background: "linear-gradient(to right, #8015e8, #ba83f0)",
+              background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
               fontSize: 16,
             }}
           >
@@ -483,7 +483,7 @@ function FourCardSection({
                 style={{
                   flexDirection: isEven ? "row" : "row-reverse",
                   gap: 48,
-                  backgroundColor: "white",
+                  backgroundColor: "var(--surface)",
                   borderRadius: 20,
                   overflow: "hidden",
                   boxShadow: "0 1px 10px rgba(0,0,0,0.06)",
@@ -506,7 +506,7 @@ function FourCardSection({
                   {card.title && (
                     <p
                       className="font-bold"
-                      style={{ fontSize: 24, color: "#2b074d", lineHeight: "32px" }}
+                      style={{ fontSize: 24, color: "var(--navy-700)", lineHeight: "32px" }}
                     >
                       {card.title}
                     </p>
@@ -516,7 +516,7 @@ function FourCardSection({
                       style={{
                         fontSize: 16,
                         lineHeight: "26px",
-                        color: "#444",
+                        color: "var(--ink-soft)",
                         marginTop: 16,
                       }}
                     >
@@ -545,7 +545,7 @@ function MondayServiceFaq({
   const [openIndex, setOpenIndex] = useState<number | null>(0)
 
   return (
-    <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
+    <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 120 }}>
       <div className="mx-auto flex flex-col px-4" style={{ maxWidth: 959, gap: 24 }}>
         {heading && (
           <h2 className="text-section-h2" style={{ color: "var(--purple-primary)" }}>
@@ -553,7 +553,7 @@ function MondayServiceFaq({
           </h2>
         )}
         {eyebrow && (
-          <p style={{ fontSize: 18, color: "#2b074d", marginTop: -8 }}>{eyebrow}</p>
+          <p style={{ fontSize: 18, color: "var(--navy-700)", marginTop: -8 }}>{eyebrow}</p>
         )}
 
         <div className="flex flex-col" style={{ gap: 12, marginTop: 12 }}>
@@ -566,7 +566,7 @@ function MondayServiceFaq({
                   className="w-full flex items-center justify-between text-left cursor-pointer"
                   style={{ minHeight: 30 }}
                 >
-                  <span style={{ fontSize: 20, lineHeight: "24px", color: "black" }}>
+                  <span style={{ fontSize: 20, lineHeight: "24px", color: "var(--ink)" }}>
                     {item.question}
                   </span>
                   <div className="shrink-0" style={{ width: 30, height: 30 }}>
@@ -579,7 +579,7 @@ function MondayServiceFaq({
                     >
                       <path
                         d="M8 12L15 19L22 12"
-                        stroke="black"
+                        stroke="var(--ink)"
                         strokeWidth="1.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -594,7 +594,7 @@ function MondayServiceFaq({
                       paddingTop: 31,
                       fontSize: 16,
                       lineHeight: "24px",
-                      color: "black",
+                      color: "var(--ink)",
                       whiteSpace: "pre-line",
                     }}
                   >
@@ -603,7 +603,7 @@ function MondayServiceFaq({
                 )}
                 <div
                   style={{
-                    borderBottom: "1px solid #2b074d",
+                    borderBottom: "1px solid var(--navy-700)",
                     marginTop: isOpen ? 0 : 36,
                   }}
                 />
@@ -628,18 +628,18 @@ function StrategicApproachSection({
   columns: StrategicColumn[]
 }) {
   return (
-    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, backgroundColor: "#f5f0ff" }}>
+    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, backgroundColor: "var(--surface-tint-2)" }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1200 }}>
         {(headingPart1 || headingAccent) && (
-          <h2 className="text-section-h2 text-center text-black" style={{ maxWidth: 900 }}>
+          <h2 className="text-section-h2 text-center text-ink" style={{ maxWidth: 900 }}>
             {headingPart1 && <>{headingPart1}{headingAccent ? " " : ""}</>}
-            {headingAccent && <span style={{ color: "#8015e8" }}>{headingAccent}</span>}
+            {headingAccent && <span style={{ color: "var(--brand)" }}>{headingAccent}</span>}
           </h2>
         )}
         {subheading && (
           <p
             className="text-center"
-            style={{ fontSize: 16, lineHeight: "24px", color: "#333", marginTop: 20, maxWidth: 860 }}
+            style={{ fontSize: 16, lineHeight: "24px", color: "var(--ink-soft)", marginTop: 20, maxWidth: 860 }}
           >
             {subheading}
           </p>
@@ -660,12 +660,12 @@ function StrategicApproachSection({
               style={{
                 padding: 32,
                 borderRadius: 20,
-                backgroundColor: "white",
+                backgroundColor: "var(--surface)",
                 boxShadow: "0 1px 12px rgba(0,0,0,0.06)",
               }}
             >
               {col.title && (
-                <h3 className="font-bold" style={{ fontSize: 20, lineHeight: "28px", color: "#8015e8" }}>
+                <h3 className="font-bold" style={{ fontSize: 20, lineHeight: "28px", color: "var(--brand)" }}>
                   {col.title}
                 </h3>
               )}
@@ -677,7 +677,7 @@ function StrategicApproachSection({
                         <span style={{ fontSize: 20, lineHeight: "24px", flexShrink: 0 }}>{it.emoji}</span>
                       )}
                       {it.text && (
-                        <p style={{ fontSize: 14, lineHeight: "22px", color: "#333" }}>{it.text}</p>
+                        <p style={{ fontSize: 14, lineHeight: "22px", color: "var(--ink-soft)" }}>{it.text}</p>
                       )}
                     </div>
                   ))}

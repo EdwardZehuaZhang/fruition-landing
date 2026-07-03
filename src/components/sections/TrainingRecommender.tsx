@@ -60,45 +60,45 @@ export default function TrainingRecommender({
   }, [teamSize, complexity])
 
   return (
-    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "#f0ecfe" }}>
+    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "var(--surface-tint-2)" }}>
       <style>{`
         .tr-range {
           -webkit-appearance: none; appearance: none; width: 100%;
-          height: 8px; border-radius: 999px; background: #e2d8f7; outline: none; cursor: pointer;
+          height: 8px; border-radius: 999px; background: var(--line-tint); outline: none; cursor: pointer;
         }
         .tr-range::-webkit-slider-thumb {
           -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%;
-          background: #8015e8; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(128,21,232,0.45); cursor: pointer;
+          background: var(--brand); border: 3px solid var(--white); box-shadow: 0 2px 8px rgba(128,21,232,0.45); cursor: pointer;
         }
         .tr-range::-moz-range-thumb {
-          width: 24px; height: 24px; border-radius: 50%; background: #8015e8;
-          border: 3px solid #fff; box-shadow: 0 2px 8px rgba(128,21,232,0.45); cursor: pointer;
+          width: 24px; height: 24px; border-radius: 50%; background: var(--brand);
+          border: 3px solid var(--white); box-shadow: 0 2px 8px rgba(128,21,232,0.45); cursor: pointer;
         }
-        .tr-range::-moz-range-track { height: 8px; border-radius: 999px; background: #e2d8f7; }
+        .tr-range::-moz-range-track { height: 8px; border-radius: 999px; background: var(--line-tint); }
       `}</style>
 
       <div className="mx-auto" style={{ maxWidth: 920 }}>
         <div className="text-center" style={{ marginBottom: 36, marginInline: "auto", maxWidth: 680 }}>
           {eyebrow && (
-            <p className="font-semibold uppercase" style={{ color: "#8015e8", fontSize: 12, letterSpacing: "0.16em", marginBottom: 12 }}>
+            <p className="font-semibold uppercase" style={{ color: "var(--brand)", fontSize: 12, letterSpacing: "0.16em", marginBottom: 12 }}>
               {eyebrow}
             </p>
           )}
-          {heading && <h2 className="text-section-h2 text-black" style={{ textWrap: "balance" }}>{heading}</h2>}
+          {heading && <h2 className="text-section-h2 text-ink" style={{ textWrap: "balance" }}>{heading}</h2>}
           {subheading && (
-            <p style={{ color: "#686b82", fontSize: 17, lineHeight: "26px", marginTop: 12 }}>{subheading}</p>
+            <p style={{ color: "var(--ink-muted)", fontSize: 17, lineHeight: "26px", marginTop: 12 }}>{subheading}</p>
           )}
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 md:items-stretch">
           {/* Inputs */}
           <div
-            className="rounded-card bg-white flex flex-col justify-center h-full"
-            style={{ padding: 36, border: "1px solid #ece7fb", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
+            className="rounded-card bg-surface flex flex-col justify-center h-full"
+            style={{ padding: 36, border: "1px solid var(--line-tint)", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
           >
             <label htmlFor={`${uid}-size`} className="flex items-baseline justify-between" style={{ marginBottom: 12 }}>
-              <span className="font-semibold" style={{ color: "#10003a", fontSize: 14 }}>Team size</span>
-              <span className="font-bold" style={{ color: "#8015e8", fontSize: 15 }}>
+              <span className="font-semibold" style={{ color: "var(--ink-heading)", fontSize: 14 }}>Team size</span>
+              <span className="font-bold" style={{ color: "var(--brand)", fontSize: 15 }}>
                 {teamSize} {teamSize === 1 ? "person" : "people"}
               </span>
             </label>
@@ -114,7 +114,7 @@ export default function TrainingRecommender({
 
             <div style={{ height: 32 }} />
 
-            <span className="font-semibold" style={{ color: "#10003a", fontSize: 14, marginBottom: 12, display: "block" }}>
+            <span className="font-semibold" style={{ color: "var(--ink-heading)", fontSize: 14, marginBottom: 12, display: "block" }}>
               Workflow complexity
             </span>
             <div className="flex flex-col" style={{ gap: 8 }} role="radiogroup" aria-label="Workflow complexity">
@@ -133,8 +133,8 @@ export default function TrainingRecommender({
                       padding: "12px 14px",
                       borderRadius: 12,
                       cursor: "pointer",
-                      border: isActive ? "1px solid #8015e8" : "1px solid #ece7fb",
-                      background: isActive ? "#f3e9ff" : "#ffffff",
+                      border: isActive ? "1px solid var(--brand)" : "1px solid var(--line-tint)",
+                      background: isActive ? "var(--surface-tint-2)" : "var(--surface)",
                     }}
                   >
                     <span
@@ -144,11 +144,11 @@ export default function TrainingRecommender({
                         width: 18,
                         height: 18,
                         borderRadius: 999,
-                        border: isActive ? "5px solid #8015e8" : "2px solid #cbbce6",
-                        background: "#fff",
+                        border: isActive ? "5px solid var(--brand)" : "2px solid var(--line-tint)",
+                        background: "var(--surface)",
                       }}
                     />
-                    <span style={{ color: "#3b2963", fontSize: 14 }}>{label}</span>
+                    <span style={{ color: "var(--brand-contrast)", fontSize: 14 }}>{label}</span>
                   </button>
                 )
               })}
@@ -159,7 +159,7 @@ export default function TrainingRecommender({
           <div
             key={rec.name}
             className="cs-card rounded-card flex flex-col justify-center h-full"
-            style={{ padding: 36, background: "linear-gradient(-38deg, rgb(128,21,232) 0%, rgb(16,0,58) 100%)", color: "#fff" }}
+            style={{ padding: 36, background: "linear-gradient(-38deg, rgb(128,21,232) 0%, rgb(16,0,58) 100%)", color: "var(--white)" }}
           >
             <p className="font-semibold uppercase" style={{ color: "rgba(255,255,255,0.7)", fontSize: 11, letterSpacing: "0.16em" }}>
               Recommended track
@@ -173,7 +173,7 @@ export default function TrainingRecommender({
               <a
                 href={ctaUrl}
                 className="inline-flex items-center justify-center font-semibold self-start"
-                style={{ marginTop: 26, height: 48, padding: "0 24px", borderRadius: 999, background: "#fff", color: "#8015e8", fontSize: 14 }}
+                style={{ marginTop: 26, height: 48, padding: "0 24px", borderRadius: 999, background: "var(--white)", color: "var(--brand)", fontSize: 14 }}
               >
                 {ctaLabel}
               </a>

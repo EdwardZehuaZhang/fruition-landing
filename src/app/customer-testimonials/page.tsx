@@ -76,7 +76,7 @@ export default async function CustomerTestimonialsPage() {
     <div>
       <StickyCtaBar label={page?.croSections?.stickyCtaLabel} href={page?.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* Hero */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div
           className="mx-auto flex flex-col items-center"
           style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 80, paddingBottom: 80, maxWidth: 1200 }}
@@ -109,7 +109,7 @@ export default async function CustomerTestimonialsPage() {
                 lineHeight: "1.2",
                 marginTop: partnerBadges.length > 0 ? 42 : 0,
                 maxWidth: 924,
-                color: "black",
+                color: "var(--ink)",
               }}
             >
               {heroHeading}
@@ -122,7 +122,7 @@ export default async function CustomerTestimonialsPage() {
               style={{
                 fontSize: 18,
                 lineHeight: "28px",
-                color: "black",
+                color: "var(--ink)",
                 marginTop: 24,
                 maxWidth: 860,
               }}
@@ -137,7 +137,7 @@ export default async function CustomerTestimonialsPage() {
               style={{
                 fontSize: 16,
                 lineHeight: "26px",
-                color: "#444",
+                color: "var(--ink-soft)",
                 marginTop: 16,
                 maxWidth: 860,
               }}

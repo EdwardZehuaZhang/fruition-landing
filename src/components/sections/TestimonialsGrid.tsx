@@ -64,11 +64,11 @@ export default function TestimonialsGrid({
   }, [totalPages, nextPage])
 
   return (
-    <section className="bg-white py-[80px] px-4">
+    <section className="bg-surface py-[80px] px-4">
       <div className="mx-auto max-w-[1343px]">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-6 lg:gap-[89px] mb-10 lg:mb-[58px] w-full">
-          <h2 className="text-section-h2 text-black w-full lg:w-[919px] lg:shrink-0">{heading}</h2>
+          <h2 className="text-section-h2 text-ink w-full lg:w-[919px] lg:shrink-0">{heading}</h2>
           <Link
             href={ctaUrl}
             className="ui-cta-btn ui-cta-btn-secondary h-[53px] w-full lg:w-[330px] lg:shrink-0"
@@ -89,9 +89,9 @@ export default function TestimonialsGrid({
                 className="flex flex-wrap gap-x-[16px] gap-y-[18px] w-full shrink-0"
               >
                 {/* Stat card (repeats on every page) */}
-                <div className="relative flex w-full max-w-[437px] flex-col rounded-card bg-[#10003a] px-[38px] shadow-card">
+                <div className="relative flex w-full max-w-[437px] flex-col rounded-card bg-[color:var(--navy-900)] px-[38px] shadow-card">
                   <div className="pt-[23px] pb-[30px]">
-                    <p className="font-semibold text-[40px] text-[#ba83f0] leading-[60px]">{statCardValue}</p>
+                    <p className="font-semibold text-[40px] text-[color:var(--brand-light)] leading-[60px]">{statCardValue}</p>
                     <p className="font-normal text-white text-[24px] leading-[34px]" style={{ whiteSpace: "pre-line" }}>
                       {statCardSubtitle}
                     </p>
@@ -114,8 +114,8 @@ export default function TestimonialsGrid({
                   >
                     <div className="flex items-start justify-between px-[38px] pt-[29px] pb-[18px]">
                       <div>
-                        <p className="font-semibold text-[20px] text-[#2b074d] leading-[30px]">{t.name}</p>
-                        <p className="text-caption font-normal text-[#595959]">{t.role}</p>
+                        <p className="font-semibold text-[20px] text-[color:var(--navy-700)] leading-[30px]">{t.name}</p>
+                        <p className="text-caption font-normal text-[color:var(--ink-soft)]">{t.role}</p>
                       </div>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
@@ -124,15 +124,15 @@ export default function TestimonialsGrid({
                         width={53}
                         height={53}
                         className="w-[53px] h-[53px] rounded-full object-cover shrink-0 ml-4"
-                        style={{ backgroundColor: "#e8e6e6" }}
+                        style={{ backgroundColor: "var(--line)" }}
                       />
                     </div>
                     <div className="px-[38px] flex-1">
-                      <p className="text-body-sm text-black">{t.quote}</p>
+                      <p className="text-body-sm text-ink">{t.quote}</p>
                     </div>
                     <div className="flex gap-[2px] px-[38px] pb-[35px] pt-4">
                       {[...Array(5)].map((_, si) => (
-                        <svg key={si} className="w-[23px] h-[21px]" viewBox="0 0 23 21" fill="#8015E8">
+                        <svg key={si} className="w-[23px] h-[21px]" viewBox="0 0 23 21" fill="var(--brand)">
                           <path d="M11.5 0L14.09 7.36H22.06L15.49 11.92L18.08 19.28L11.5 14.72L4.92 19.28L7.51 11.92L0.94 7.36H8.91L11.5 0Z" />
                         </svg>
                       ))}
@@ -153,7 +153,7 @@ export default function TestimonialsGrid({
                 onClick={() => setCurrentPage(i)}
                 className="w-3 h-3 rounded-full transition-colors"
                 style={{
-                  backgroundColor: i === currentPage ? "#8015e8" : "#e8e6e6",
+                  backgroundColor: i === currentPage ? "var(--brand)" : "var(--line)",
                 }}
                 aria-label={`Go to testimonial page ${i + 1}`}
               />

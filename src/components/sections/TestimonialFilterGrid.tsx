@@ -51,7 +51,7 @@ function FilterRow({
     <div className="flex flex-col" style={{ gap: 10 }}>
       <span
         className="font-semibold uppercase"
-        style={{ color: "#8015e8", fontSize: 11, letterSpacing: "0.16em" }}
+        style={{ color: "var(--brand)", fontSize: 11, letterSpacing: "0.16em" }}
       >
         {label}
       </span>
@@ -70,9 +70,9 @@ function FilterRow({
                 borderRadius: 999,
                 fontSize: 14,
                 cursor: "pointer",
-                border: isActive ? "1px solid #8015e8" : "1px solid #e2d6f3",
-                backgroundColor: isActive ? "#8015e8" : "#ffffff",
-                color: isActive ? "#ffffff" : "#3b2963",
+                border: isActive ? "1px solid var(--brand)" : "1px solid var(--line-tint)",
+                backgroundColor: isActive ? "var(--brand)" : "var(--surface)",
+                color: isActive ? "var(--white)" : "var(--brand-contrast)",
               }}
             >
               {opt}
@@ -109,7 +109,7 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
   const gridKey = `${industry}|${solution}`
 
   return (
-    <section id="case-studies" className="bg-white" style={{ paddingTop: 96, paddingBottom: 96 }}>
+    <section id="case-studies" className="bg-surface" style={{ paddingTop: 96, paddingBottom: 96 }}>
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         {(heading || subheading) && (
           <div style={{ marginBottom: 40, maxWidth: 760 }}>
@@ -120,7 +120,7 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
                   fontSize: "clamp(28px, 5vw, 40px)",
                   lineHeight: 1.2,
                   letterSpacing: "-0.015em",
-                  color: "#1a0b3e",
+                  color: "var(--navy-800)",
                   textWrap: "balance",
                 }}
               >
@@ -128,7 +128,7 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
               </h2>
             )}
             {subheading && (
-              <p style={{ color: "#4a4a57", fontSize: 17, lineHeight: "26px", marginTop: 14 }}>
+              <p style={{ color: "var(--ink-soft)", fontSize: 17, lineHeight: "26px", marginTop: 14 }}>
                 {subheading}
               </p>
             )}
@@ -143,8 +143,8 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
               marginBottom: 40,
               padding: 24,
               borderRadius: 20,
-              border: "1px solid #efe7fb",
-              background: "linear-gradient(180deg, #ffffff 0%, #faf7ff 100%)",
+              border: "1px solid var(--line-tint)",
+              background: "linear-gradient(180deg, var(--surface) 0%, var(--surface-tint) 100%)",
             }}
           >
             {showIndustry && (
@@ -154,7 +154,7 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
               <FilterRow label="Filter by solution" options={solutions} active={solution} onPick={setSolution} />
             )}
             <div className="flex items-center justify-between" style={{ gap: 12 }}>
-              <span style={{ color: "#686b82", fontSize: 13 }} aria-live="polite">
+              <span style={{ color: "var(--ink-muted)", fontSize: 13 }} aria-live="polite">
                 Showing {filtered.length} of {cards.length} success {cards.length === 1 ? "story" : "stories"}
               </span>
               {(industry !== ALL || solution !== ALL) && (
@@ -165,7 +165,7 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
                     setSolution(ALL)
                   }}
                   className="font-semibold"
-                  style={{ color: "#8015e8", fontSize: 13, cursor: "pointer", background: "none" }}
+                  style={{ color: "var(--brand)", fontSize: 13, cursor: "pointer", background: "none" }}
                 >
                   Reset filters
                 </button>
@@ -177,9 +177,9 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
         {filtered.length === 0 ? (
           <div
             className="text-center"
-            style={{ padding: "64px 24px", borderRadius: 24, border: "1px dashed #d9c8f5", color: "#686b82" }}
+            style={{ padding: "64px 24px", borderRadius: 24, border: "1px dashed var(--line-tint)", color: "var(--ink-muted)" }}
           >
-            <p style={{ fontSize: 17, color: "#3b2963", fontWeight: 600 }}>
+            <p style={{ fontSize: 17, color: "var(--brand-contrast)", fontWeight: 600 }}>
               No success stories match those filters yet.
             </p>
             <p style={{ fontSize: 14, marginTop: 6 }}>Try a broader combination, or reset.</p>
@@ -194,7 +194,7 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
                   className="cs-card relative overflow-hidden"
                   style={{
                     borderRadius: 32,
-                    background: "linear-gradient(135deg, #faf7ff 0%, #ffffff 55%, #f9f5ff 100%)",
+                    background: "linear-gradient(135deg, var(--surface-tint) 0%, var(--surface) 55%, var(--surface-tint) 100%)",
                     padding: 56,
                     animationDelay: `${Math.min(i, 6) * 70}ms`,
                   }}
@@ -214,11 +214,11 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
 
                   <div className="relative">
                     <div className="flex flex-wrap items-center" style={{ gap: 12 }}>
-                      <span className="font-bold" style={{ color: "#8015e8", fontSize: 14, letterSpacing: "0.08em" }}>
+                      <span className="font-bold" style={{ color: "var(--brand)", fontSize: 14, letterSpacing: "0.08em" }}>
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <span aria-hidden style={{ display: "inline-block", width: 28, height: 1, backgroundColor: "#d9c8f5" }} />
-                      <span className="font-semibold uppercase" style={{ color: "#8015e8", fontSize: 12, letterSpacing: "0.18em" }}>
+                      <span aria-hidden style={{ display: "inline-block", width: 28, height: 1, backgroundColor: "var(--line-tint)" }} />
+                      <span className="font-semibold uppercase" style={{ color: "var(--brand)", fontSize: 12, letterSpacing: "0.18em" }}>
                         Case Study
                       </span>
                       {study.verifiedSource && (
@@ -228,8 +228,8 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
                             gap: 6,
                             padding: "5px 12px",
                             borderRadius: 999,
-                            backgroundColor: "#e9f7ee",
-                            color: "#1f7a45",
+                            backgroundColor: "var(--success-surface)",
+                            color: "var(--success-strong)",
                             fontSize: 12,
                           }}
                         >
@@ -247,7 +247,7 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
                         fontSize: "clamp(28px, 6vw, 44px)",
                         lineHeight: 1.2,
                         letterSpacing: "-0.015em",
-                        color: "#1a0b3e",
+                        color: "var(--navy-800)",
                         marginTop: 18,
                         maxWidth: 880,
                         textWrap: "balance",
@@ -257,7 +257,7 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
                     </h3>
 
                     {study.services && (
-                      <p style={{ fontSize: 18, lineHeight: "28px", color: "#4a4a57", marginTop: 18, maxWidth: 820 }}>
+                      <p style={{ fontSize: 18, lineHeight: "28px", color: "var(--ink-soft)", marginTop: 18, maxWidth: 820 }}>
                         {study.services}
                       </p>
                     )}
@@ -266,7 +266,7 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
                       {study.industry && (
                         <span
                           className="inline-flex items-center font-semibold"
-                          style={{ gap: 8, padding: "8px 16px", borderRadius: 999, backgroundColor: "#efe7fb", color: "#5a0ea5", fontSize: 14 }}
+                          style={{ gap: 8, padding: "8px 16px", borderRadius: 999, backgroundColor: "var(--surface-tint-2)", color: "var(--brand-dark)", fontSize: 14 }}
                         >
                           {study.industry}
                         </span>
@@ -274,18 +274,18 @@ export default function TestimonialFilterGrid({ heading, subheading, cards }: Pr
                       {study.product && (
                         <span
                           className="inline-flex items-center font-semibold"
-                          style={{ gap: 8, padding: "8px 16px", borderRadius: 999, backgroundColor: "#f2e8ff", color: "#5a0ea5", fontSize: 14 }}
+                          style={{ gap: 8, padding: "8px 16px", borderRadius: 999, backgroundColor: "var(--surface-tint-2)", color: "var(--brand-dark)", fontSize: 14 }}
                         >
-                          <span aria-hidden style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "#8015e8" }} />
+                          <span aria-hidden style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "var(--brand)" }} />
                           {study.product}
                         </span>
                       )}
                       {study.timeline && (
                         <span
                           className="inline-flex items-center font-medium"
-                          style={{ gap: 8, padding: "8px 16px", borderRadius: 999, border: "1px solid #e2d6f3", backgroundColor: "#ffffff", color: "#3b2963", fontSize: 14 }}
+                          style={{ gap: 8, padding: "8px 16px", borderRadius: 999, border: "1px solid var(--line-tint)", backgroundColor: "var(--surface)", color: "var(--brand-contrast)", fontSize: 14 }}
                         >
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8015e8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                             <circle cx="12" cy="12" r="9" />
                             <polyline points="12 7 12 12 15 14" />
                           </svg>

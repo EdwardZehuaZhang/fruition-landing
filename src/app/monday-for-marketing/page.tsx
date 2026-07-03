@@ -101,7 +101,7 @@ export default async function Page() {
       )}
 
       {/* 8. Full-width video + Why the best use monday.com — single unified section */}
-      <section style={{ backgroundColor: "#f7f5ff", paddingTop: 80, paddingBottom: 80 }}>
+      <section style={{ backgroundColor: "var(--surface-tint)", paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
           {page.bottomVideoUrl && (
             <div
@@ -117,7 +117,7 @@ export default async function Page() {
           {page.whyBestHeading && (
             <h2
               className="text-section-h2 text-center"
-              style={{ color: "#000000", marginBottom: 48 }}
+              style={{ color: "var(--ink)", marginBottom: 48 }}
             >
               {page.whyBestHeading}
             </h2>
@@ -126,14 +126,14 @@ export default async function Page() {
             {(page.whyBestCards || []).map((card: { _key?: string; emoji?: string; title?: string; description?: string }) => (
               <div
                 key={card._key}
-                className="bg-white rounded-card border border-[#e8e6e6]"
+                className="bg-surface rounded-card border border-line"
                 style={{ padding: 28 }}
               >
                 <div style={{ fontSize: 32, lineHeight: 1, marginBottom: 12 }}>{card.emoji}</div>
-                <h3 style={{ fontSize: 20, fontWeight: 700, color: "#111", marginBottom: 8 }}>
+                <h3 style={{ fontSize: 20, fontWeight: 700, color: "var(--ink)", marginBottom: 8 }}>
                   {card.title}
                 </h3>
-                <p style={{ fontSize: 15, lineHeight: "22px", color: "#4a4a4a" }}>
+                <p style={{ fontSize: 15, lineHeight: "22px", color: "var(--ink-soft)" }}>
                   {card.description}
                 </p>
               </div>

@@ -5,18 +5,18 @@
 
 const PRIVACY_EMAIL = "privacy@fruitionservices.com"
 
-const h2 = "mt-12 mb-4 border-b border-gray-200 pb-2 text-2xl font-bold tracking-tight text-gray-900"
-const h3 = "mt-8 mb-3 text-lg font-semibold text-gray-900"
-const p = "mb-4 leading-relaxed text-gray-700"
-const ul = "mb-6 ml-1 list-disc space-y-1.5 pl-5 text-gray-700 marker:text-gray-400"
-const strong = "font-semibold text-gray-900"
-const link = "font-medium text-[#8015E8] underline underline-offset-2 hover:text-[#6a11c2]"
+const h2 = "mt-12 mb-4 border-b border-line-soft pb-2 text-2xl font-bold tracking-tight text-ink"
+const h3 = "mt-8 mb-3 text-lg font-semibold text-ink"
+const p = "mb-4 leading-relaxed text-ink-soft"
+const ul = "mb-6 ml-1 list-disc space-y-1.5 pl-5 text-ink-soft marker:text-ink-faint"
+const strong = "font-semibold text-ink"
+const link = "font-medium text-brand underline underline-offset-2 hover:text-brand-dark"
 
 export default function VisitorTrackingDisclosure() {
   return (
     <section
       aria-labelledby="visitor-tracking-heading"
-      className="mt-12 border-t border-gray-200 pt-12 text-[15px]"
+      className="mt-12 border-t border-line-soft pt-12 text-[15px]"
     >
       <h2 id="visitor-tracking-heading" className={h2}>
         Visitor Identification &amp; Analytics

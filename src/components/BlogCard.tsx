@@ -142,14 +142,14 @@ export default function BlogCard({
               {authorHref ? (
                 <Link
                   href={authorHref}
-                  className="relative z-10 text-sm text-gray-900 truncate hover:text-[#8015e8] transition-colors"
+                  className="relative z-10 text-sm text-ink truncate hover:text-brand transition-colors"
                 >
                   {displayAuthor}
                 </Link>
               ) : (
-                <div className="text-sm text-gray-900 truncate">{displayAuthor}</div>
+                <div className="text-sm text-ink truncate">{displayAuthor}</div>
               )}
-              <div className="text-xs text-gray-500 flex items-center gap-1.5">
+              <div className="text-xs text-ink-muted flex items-center gap-1.5">
                 {publishedAt && <span>{relativeTime(publishedAt)}</span>}
                 {publishedAt && <span aria-hidden>·</span>}
                 <span>{readTime} min read</span>
@@ -158,7 +158,7 @@ export default function BlogCard({
           </div>
           <span
             aria-hidden
-            className="text-gray-400 group-hover:text-gray-700 transition-colors shrink-0"
+            className="text-ink-faint group-hover:text-ink-soft transition-colors shrink-0"
           >
             <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
               <circle cx="5" cy="12" r="1.6" />
@@ -174,16 +174,16 @@ export default function BlogCard({
           </span>
         )}
 
-        <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 leading-snug group-hover:text-gray-700">
+        <h3 className="text-xl font-bold text-ink mb-2 line-clamp-2 leading-snug group-hover:text-ink-soft">
           {title}
         </h3>
 
         {excerpt && (
-          <p className="text-sm text-gray-600 line-clamp-2 mb-4 leading-relaxed">{excerpt}</p>
+          <p className="text-sm text-ink-muted line-clamp-2 mb-4 leading-relaxed">{excerpt}</p>
         )}
 
-        <div className="flex items-center justify-end pt-2 border-t border-gray-100">
-          <span aria-hidden className="text-gray-400 group-hover:text-gray-700 transition-colors">
+        <div className="flex items-center justify-end pt-2 border-t border-line-soft">
+          <span aria-hidden className="text-ink-faint group-hover:text-ink-soft transition-colors">
             <svg
               viewBox="0 0 24 24"
               className="w-5 h-5"

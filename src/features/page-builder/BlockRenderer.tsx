@@ -55,7 +55,7 @@ function groupConsecutiveTestimonials(blocks: ContentBlock[]): Array<ContentBloc
 /* Hardcoded YouTube video section — matches Figma "Video" section */
 function VideoSection() {
   return (
-    <section className="bg-white py-[80px] px-[10px]">
+    <section className="bg-surface py-[80px] px-[10px]">
       <div className="mx-auto flex flex-col items-center justify-center">
         <div className="w-full max-w-[979px] aspect-video rounded-card overflow-hidden">
           <YouTubeEmbed
@@ -142,7 +142,7 @@ export default function BlockRenderer({
             return <FeatureListBlockView key={block._key} {...block} siteSettings={siteSettings} />
           case 'testimonialBlock':
             return (
-              <section key={block._key} className="bg-white py-4 px-4">
+              <section key={block._key} className="bg-surface py-4 px-4">
                 <div className="mx-auto max-w-[1343px]">
                   <TestimonialBlockView
                     quote={block.quote as string}
@@ -176,7 +176,7 @@ export default function BlockRenderer({
                   subheading={block.subheading as string}
                   limit={block.limit as number}
                 />
-                <section className="bg-white pb-[80px] px-4">
+                <section className="bg-surface pb-[80px] px-4">
                   <div className="mx-auto max-w-[976px]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={securityBadgeSrc} alt="Security Partners" width={976} height={94} className="w-full h-auto" />

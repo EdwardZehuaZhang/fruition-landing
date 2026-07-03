@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { requirePortalUser, getPortalAdmin } from "@/lib/portalAuth"
-import { getBlogCategories } from "@/sanity/queries"
+import { getBlogCategories, getTeamMembers } from "@/sanity/queries"
 import PortalShell from "@/components/internal/PortalShell"
 import BlogEditor, {
   type CategoryOption,
@@ -34,7 +34,11 @@ export default async function EditDraftPage({
   const draft = data as DraftRow | null
   if (!draft) notFound()
 
-  const categories = ((await getBlogCategories().catch(() => [])) as CategoryOption[]) ?? []
+  const [categories, team] = await Promise.all([
+    getBlogCategories().catch(() => []) as Promise<CategoryOption[]>,
+    getTeamMembers().catch(() => []) as Promise<{ name?: string }[]>,
+  ])
+  const authors = [...new Set(team.map((m) => m.name).filter((n): n is string => Boolean(n)))]
   const meta = (draft.metadata ?? {}) as Record<string, unknown>
   const initial: BlogEditorInitial = {
     draftId: draft.id,
@@ -47,13 +51,14 @@ export default async function EditDraftPage({
     seoTitle: typeof meta.seoTitle === "string" ? meta.seoTitle : undefined,
     seoDescription: typeof meta.seoDescription === "string" ? meta.seoDescription : undefined,
     publishedAt: typeof meta.publishedAt === "string" ? meta.publishedAt : undefined,
+    author: typeof meta.author === "string" ? meta.author : undefined,
   }
 
   return (
     <PortalShell email={user.email} active="new">
-      <div className="rounded-card bg-white p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
-        <h1 className="mb-6 text-2xl font-semibold text-[#10003a]">Edit draft</h1>
-        <BlogEditor categories={categories} initial={initial} />
+      <div className="rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
+        <h1 className="mb-6 text-2xl font-semibold text-ink-heading">Edit draft</h1>
+        <BlogEditor categories={categories} authors={authors} initial={initial} />
       </div>
     </PortalShell>
   )

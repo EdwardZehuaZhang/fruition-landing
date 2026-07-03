@@ -31,7 +31,7 @@ export default function SolutionCardsSection({
   if (cards.length === 0) return null
 
   return (
-    <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         <div className="flex flex-col" style={{ gap: 60 }}>
           {cards.map((card, i) => {
@@ -50,7 +50,7 @@ export default function SolutionCardsSection({
                       style={{
                         fontSize: 14,
                         fontWeight: 600,
-                        color: "#8015e8",
+                        color: "var(--brand)",
                         letterSpacing: "0.5px",
                         textTransform: "uppercase",
                       }}
@@ -63,7 +63,7 @@ export default function SolutionCardsSection({
                       style={{
                         fontSize: 28,
                         fontWeight: 600,
-                        color: "#2b074d",
+                        color: "var(--ink-heading)",
                         marginTop: card.eyebrow ? 8 : 0,
                       }}
                     >
@@ -75,7 +75,7 @@ export default function SolutionCardsSection({
                       style={{
                         fontSize: 16,
                         lineHeight: "25.6px",
-                        color: "black",
+                        color: "var(--ink)",
                         marginTop: 20,
                         whiteSpace: "pre-line",
                       }}
@@ -92,7 +92,7 @@ export default function SolutionCardsSection({
                         paddingLeft: 32,
                         paddingRight: 32,
                         borderRadius: 100,
-                        background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                        background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
                         fontSize: 16,
                         marginTop: 24,
                       }}
@@ -103,7 +103,7 @@ export default function SolutionCardsSection({
                 </div>
                 {imageSrc && (
                   <div
-                    className="rounded-card overflow-hidden shadow-whisper bg-white flex items-center justify-center"
+                    className="rounded-card overflow-hidden shadow-whisper bg-surface flex items-center justify-center"
                     style={{ flex: 1, aspectRatio: "16 / 10" }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}

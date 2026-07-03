@@ -27,12 +27,12 @@ export default function LogoCloudMarquee({
   if (normalizedLogos.length === 0) return null
 
   return (
-    <section className="bg-white py-[80px] overflow-hidden">
+    <section className="bg-surface py-[80px] overflow-hidden">
       <div className="flex flex-col gap-[35px] items-center w-full">
         <div className="w-full flex flex-col gap-[35px] items-center max-w-[1348px] mx-auto px-4">
           <p className="text-section-h3 text-center">
-            <span className="text-black">{headingPart1}</span>
-            <span style={{ color: "var(--purple-primary)" }}>{headingAccent}</span>
+            <span className="text-ink">{headingPart1}</span>
+            <span style={{ color: "var(--brand)" }}>{headingAccent}</span>
           </p>
           {description && (
             <p
@@ -40,7 +40,7 @@ export default function LogoCloudMarquee({
               style={{
                 fontSize: 16,
                 lineHeight: "25.6px",
-                color: "#555",
+                color: "var(--ink-soft)",
                 maxWidth: 860,
                 whiteSpace: "pre-line",
               }}

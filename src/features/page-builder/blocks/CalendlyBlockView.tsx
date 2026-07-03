@@ -25,16 +25,16 @@ export default function CalendlyBlockView({
   }, [])
 
   return (
-    <section className="bg-white py-[80px] px-4">
+    <section className="bg-surface py-[80px] px-4">
       <div className="mx-auto max-w-[959px] flex flex-col items-center">
         {/* Logo removed — not in Figma design */}
         {heading && (
-          <h2 className="mb-4 text-center text-[35px] font-medium text-black leading-[49px]">
+          <h2 className="mb-4 text-center text-[35px] font-medium text-ink leading-[49px]">
             {heading}
           </h2>
         )}
         {subheading && (
-          <p className="mx-auto mb-8 max-w-2xl text-center text-[12.9px] text-black/60">{subheading}</p>
+          <p className="mx-auto mb-8 max-w-2xl text-center text-[12.9px] text-ink/60">{subheading}</p>
         )}
         {calendlyUrl && (
           <div

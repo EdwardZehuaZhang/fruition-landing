@@ -22,12 +22,12 @@ export default async function TermsPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-16">
       {page?.heroHeading && (
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-4">
+        <h1 className="text-4xl font-bold tracking-tight text-ink mb-4">
           {page?.heroHeading}
         </h1>
       )}
 
-      <p className="mb-12 text-gray-600">
+      <p className="mb-12 text-ink-muted">
         Download our governing documents below.
       </p>
 
@@ -42,7 +42,7 @@ export default async function TermsPage() {
                 href={fileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col items-center gap-4 rounded-xl border border-gray-200 p-8 transition-colors hover:border-gray-400 hover:bg-gray-50"
+                className="flex flex-col items-center gap-4 rounded-xl border border-line-soft p-8 transition-colors hover:border-gray-400 hover:bg-surface-subtle"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@ export default async function TermsPage() {
                     PDF
                   </text>
                 </svg>
-                <span className="text-center text-sm font-medium text-gray-700">
+                <span className="text-center text-sm font-medium text-ink-soft">
                   {doc.label}
                 </span>
               </a>

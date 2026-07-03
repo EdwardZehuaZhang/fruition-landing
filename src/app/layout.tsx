@@ -6,7 +6,11 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import NavigationProgress from "@/components/NavigationProgress"
 import CookieNotice from "@/components/CookieNotice"
+import SiteFrame from "@/components/SiteFrame"
+import { ThemeProvider } from "@/components/ThemeProvider"
 import { getSiteSettings } from "@/sanity/queries"
+
+
 
 // RB2B loader. Disclosure of B2B visitor identification lives in
 // /data-privacy and /terms-and-conditions. RB2B handles region-level
@@ -76,7 +80,7 @@ export default async function RootLayout({
   const siteSettings = await getSiteSettings()
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <Script
           id="gtm-loader"
@@ -95,11 +99,16 @@ export default async function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        <NavigationProgress />
-        <Navbar siteSettings={siteSettings} />
-        <main>{children}</main>
-        <Footer siteSettings={siteSettings} />
-        <CookieNotice />
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
+          <NavigationProgress />
+          <SiteFrame
+            header={<Navbar siteSettings={siteSettings} />}
+            footer={<Footer siteSettings={siteSettings} />}
+            cookie={<CookieNotice />}
+          >
+            {children}
+          </SiteFrame>
+        </ThemeProvider>
       </body>
     </html>
   )

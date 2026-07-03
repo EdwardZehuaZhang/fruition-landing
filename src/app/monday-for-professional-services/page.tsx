@@ -122,7 +122,7 @@ export default async function Page() {
 
       {/* 9. Bottom YouTube video */}
       {page.bottomVideoUrl && (
-        <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+        <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
           <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
             <div
               className="rounded-card overflow-hidden"

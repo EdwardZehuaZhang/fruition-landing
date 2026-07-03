@@ -17,7 +17,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-16">
-      <h1 className="text-4xl font-bold text-gray-900 mb-8 capitalize">{slug.replace(/-/g, " ")}</h1>
+      <h1 className="text-4xl font-bold text-ink mb-8 capitalize">{slug.replace(/-/g, " ")}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filtered.map((post: Parameters<typeof BlogCard>[0]) => (
           <BlogCard key={post.slug} {...post} />

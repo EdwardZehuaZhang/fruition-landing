@@ -15,14 +15,14 @@ export default async function PostListBlockView({ heading, subheading, limit = 6
   if (!posts || posts.length === 0) return null
 
   return (
-    <section className="bg-white py-[80px] px-4">
+    <section className="bg-surface py-[80px] px-4">
       <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[24px]">
         {/* Header */}
         <div className="flex flex-col gap-[12px] items-center w-full text-center">
-          <h2 className="text-[35px] font-medium text-black leading-[49px]">
+          <h2 className="text-[35px] font-medium text-ink leading-[49px]">
             {heading || "Don\u2019t miss our latest pieces"}
           </h2>
-          <p className="text-[20px] text-black text-center">
+          <p className="text-[20px] text-ink text-center">
             {subheading || "Grab our latest guides, articles, and case studies to see all the ways monday.com could make your life easier."}
           </p>
         </div>
@@ -54,15 +54,15 @@ export default async function PostListBlockView({ heading, subheading, limit = 6
                 />
               )}
               {!post.coverImage?.asset && (
-                <div className="h-[173px] w-full bg-gradient-to-br from-[#8015e8] to-[#ba83f0]" />
+                <div className="h-[173px] w-full bg-gradient-to-br from-[var(--purple-primary)] to-[var(--purple-light)]" />
               )}
               <div className="flex flex-col items-center px-[6px] pt-[28px] pb-[25px] h-[172px]">
                 {post.categories && post.categories.length > 0 && (
-                  <span className="mb-3 inline-block rounded-sm bg-[#604c97] px-2 py-0.5 text-[14px] font-extralight text-white">
+                  <span className="mb-3 inline-block rounded-sm bg-brand-contrast px-2 py-0.5 text-[14px] font-extralight text-white">
                     {post.categories[0].title}
                   </span>
                 )}
-                <h3 className="text-[14px] font-semibold text-black text-center line-clamp-3 group-hover:text-[#8015e8] transition-colors">
+                <h3 className="text-[14px] font-semibold text-ink text-center line-clamp-3 group-hover:text-brand transition-colors">
                   {post.title}
                 </h3>
               </div>
@@ -73,7 +73,7 @@ export default async function PostListBlockView({ heading, subheading, limit = 6
         {/* CTA button */}
         <Link
           href="/consulting-blog"
-          className="flex items-center justify-center gap-2 h-[53px] w-[275px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
+          className="flex items-center justify-center gap-2 h-[53px] w-[275px] rounded-[100px] bg-gradient-to-r from-[var(--purple-primary)] to-[var(--purple-light)] text-white text-[16px] font-bold tracking-[0.32px] hover:opacity-90 transition"
         >
           <PenLine size={18} aria-hidden /> Check Out Our Blog
         </Link>

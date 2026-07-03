@@ -76,23 +76,23 @@ export default function TeamGridSection({
     return roleRank(a.role) - roleRank(b.role) || a.name.localeCompare(b.name)
   })
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1200 }}>
         {(heading || subheading || ctaLabel) && (
           <div className="flex flex-col items-center text-center" style={{ marginBottom: 40 }}>
             {heading && (
-              <h2 className="font-bold" style={{ color: "#10003a", fontSize: 36, lineHeight: "44px", marginBottom: 12 }}>
+              <h2 className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 36, lineHeight: "44px", marginBottom: 12 }}>
                 {heading}
               </h2>
             )}
             {subheading && (
-              <p style={{ color: "#444", fontSize: 16, lineHeight: "26px", maxWidth: 760 }}>{subheading}</p>
+              <p style={{ color: "var(--ink-soft)", fontSize: 16, lineHeight: "26px", maxWidth: 760 }}>{subheading}</p>
             )}
             {ctaLabel && ctaUrl && (
               <Link
                 href={ctaUrl}
                 className="inline-flex items-center justify-center font-semibold"
-                style={{ marginTop: 22, height: 46, padding: "0 22px", borderRadius: 999, border: "1px solid #8015e8", color: "#8015e8", fontSize: 14 }}
+                style={{ marginTop: 22, height: 46, padding: "0 22px", borderRadius: 999, border: "1px solid var(--brand)", color: "var(--brand)", fontSize: 14 }}
               >
                 {ctaLabel}
               </Link>
@@ -106,9 +106,9 @@ export default function TeamGridSection({
             return (
               <article
                 key={m._id}
-                className="bg-white rounded-card border border-[#e8e6e6] overflow-hidden flex flex-col shadow-whisper"
+                className="bg-surface rounded-card border border-line overflow-hidden flex flex-col shadow-whisper"
               >
-                <div style={{ aspectRatio: "1 / 1", backgroundColor: "#f5f0ff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ aspectRatio: "1 / 1", backgroundColor: "var(--surface-tint-2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {photo ? (
                     /* eslint-disable-next-line @next/next/no-img-element */
                     <img src={photo} alt={m.name} className="w-full h-full object-cover" />
@@ -118,15 +118,15 @@ export default function TeamGridSection({
                 </div>
                 <div className="flex flex-col" style={{ padding: 24, flex: 1 }}>
                   {m.role && (
-                    <p className="font-semibold" style={{ fontSize: 13, color: "#8015e8", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                    <p className="font-semibold" style={{ fontSize: 13, color: "var(--brand)", letterSpacing: "0.04em", textTransform: "uppercase" }}>
                       {m.role}
                     </p>
                   )}
-                  <h3 className="font-bold" style={{ fontSize: 22, lineHeight: "28px", color: "#2b074d", marginTop: 8 }}>
+                  <h3 className="font-bold" style={{ fontSize: 22, lineHeight: "28px", color: "var(--ink-heading)", marginTop: 8 }}>
                     {m.name} {m.emoji && <span>{m.emoji}</span>}
                   </h3>
                   {m.bio && (
-                    <p style={{ fontSize: 14, lineHeight: "22px", color: "#444", marginTop: 14, flex: 1 }}>{m.bio}</p>
+                    <p style={{ fontSize: 14, lineHeight: "22px", color: "var(--ink-soft)", marginTop: 14, flex: 1 }}>{m.bio}</p>
                   )}
                   {m.linkedinUrl && (
                     <Link
@@ -134,7 +134,7 @@ export default function TeamGridSection({
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-semibold"
-                      style={{ marginTop: 16, color: "#8015e8", fontSize: 14, display: "inline-flex", alignItems: "center", gap: 6 }}
+                      style={{ marginTop: 16, color: "var(--brand)", fontSize: 14, display: "inline-flex", alignItems: "center", gap: 6 }}
                     >
                       LinkedIn ↗
                     </Link>

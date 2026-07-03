@@ -112,7 +112,7 @@ export default function FruitionTeamClient({
     <div>
       <StickyCtaBar label={croSections?.stickyCtaLabel} href={croSections?.stickyCtaUrl || calendlyUrl} />
       {/* Hero */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div
           className="mx-auto flex flex-col items-center"
           style={{
@@ -150,7 +150,7 @@ export default function FruitionTeamClient({
               lineHeight: 1.2,
               marginTop: partnerBadges.length > 0 ? 36 : 0,
               maxWidth: 920,
-              color: "black",
+              color: "var(--ink)",
             }}
           >
             {heroHeading}
@@ -164,7 +164,7 @@ export default function FruitionTeamClient({
               width: 240,
               height: 53,
               borderRadius: 100,
-              background: "linear-gradient(to right, #8015e8, #ba83f0)",
+              background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
               fontSize: 16,
             }}
           >
@@ -182,14 +182,14 @@ export default function FruitionTeamClient({
                   <p
                     key={`hero-desc-${i}`}
                     className="font-bold"
-                    style={{ fontSize: 22, lineHeight: "30px", color: "#2b074d", marginTop: 8 }}
+                    style={{ fontSize: 22, lineHeight: "30px", color: "var(--ink-heading)", marginTop: 8 }}
                   >
                     {block.text}
                   </p>
                 ) : (
                   <p
                     key={`hero-desc-${i}`}
-                    style={{ fontSize: 17, lineHeight: "28px", color: "#222" }}
+                    style={{ fontSize: 17, lineHeight: "28px", color: "var(--ink)" }}
                   >
                     {block.text}
                   </p>
@@ -201,7 +201,7 @@ export default function FruitionTeamClient({
       </section>
 
       {/* Region selector tabs */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div className="mx-auto px-4" style={{ maxWidth: 1100 }}>
           <div
             className="flex items-center justify-center flex-wrap"
@@ -221,15 +221,15 @@ export default function FruitionTeamClient({
                     fontWeight: 600,
                     ...(active
                       ? {
-                          background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                          color: "white",
+                          background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                          color: "var(--white)",
                           boxShadow: "2.83px 2.83px 15px 3px rgba(0,0,0,0.18)",
                           border: "none",
                         }
                       : {
-                          backgroundColor: "white",
-                          color: "#2b074d",
-                          border: "1px solid #e8e6e6",
+                          backgroundColor: "var(--surface)",
+                          color: "var(--ink-heading)",
+                          border: "1px solid var(--line)",
                         }),
                   }}
                 >
@@ -242,10 +242,10 @@ export default function FruitionTeamClient({
       </section>
 
       {/* Team grid */}
-      <section className="bg-white" style={{ paddingTop: 56, paddingBottom: 96 }}>
+      <section className="bg-surface" style={{ paddingTop: 56, paddingBottom: 96 }}>
         <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
           {filteredMembers.length === 0 ? (
-            <p className="text-center" style={{ color: "#666", fontSize: 16 }}>
+            <p className="text-center" style={{ color: "var(--ink-soft)", fontSize: 16 }}>
               No team members listed for this region yet.
             </p>
           ) : (
@@ -258,12 +258,12 @@ export default function FruitionTeamClient({
                 return (
                   <article
                     key={m._id}
-                    className="bg-white rounded-card border border-[#e8e6e6] overflow-hidden flex flex-col shadow-whisper"
+                    className="bg-surface rounded-card border border-line overflow-hidden flex flex-col shadow-whisper"
                   >
                     <div
                       style={{
                         aspectRatio: "1 / 1",
-                        backgroundColor: "#f5f0ff",
+                        backgroundColor: "var(--surface-tint-2)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -286,7 +286,7 @@ export default function FruitionTeamClient({
                           className="font-semibold"
                           style={{
                             fontSize: 13,
-                            color: "#8015e8",
+                            color: "var(--brand)",
                             letterSpacing: "0.04em",
                             textTransform: "uppercase",
                           }}
@@ -299,7 +299,7 @@ export default function FruitionTeamClient({
                         style={{
                           fontSize: 22,
                           lineHeight: "28px",
-                          color: "#2b074d",
+                          color: "var(--ink-heading)",
                           marginTop: 8,
                         }}
                       >
@@ -310,7 +310,7 @@ export default function FruitionTeamClient({
                           style={{
                             fontSize: 14,
                             lineHeight: "22px",
-                            color: "#444",
+                            color: "var(--ink-soft)",
                             marginTop: 14,
                             flex: 1,
                           }}
@@ -332,8 +332,8 @@ export default function FruitionTeamClient({
                                 gap: 5,
                                 padding: "4px 10px",
                                 borderRadius: 999,
-                                backgroundColor: "#f3e9ff",
-                                color: "#5a0ea5",
+                                backgroundColor: "var(--surface-tint-2)",
+                                color: "var(--brand-dark)",
                                 fontSize: 11,
                                 lineHeight: "16px",
                                 cursor: "help",
@@ -355,7 +355,7 @@ export default function FruitionTeamClient({
                           className="font-semibold"
                           style={{
                             marginTop: 16,
-                            color: "#8015e8",
+                            color: "var(--brand)",
                             fontSize: 14,
                             display: "inline-flex",
                             alignItems: "center",

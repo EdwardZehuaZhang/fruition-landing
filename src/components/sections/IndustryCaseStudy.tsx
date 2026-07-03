@@ -45,7 +45,7 @@ export default function IndustryCaseStudy({
   const hasImage = !!imageSrc
 
   return (
-    <section style={{ backgroundColor: "#2b074d", paddingTop: 80, paddingBottom: 80 }}>
+    <section style={{ backgroundColor: "var(--navy-700)", paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         <div
           className={`flex flex-col ${hasImage ? "lg:flex-row" : ""} items-stretch`}
@@ -61,7 +61,7 @@ export default function IndustryCaseStudy({
                     fontWeight: 700,
                     letterSpacing: "0.12em",
                     textTransform: "uppercase",
-                    color: "#ba83f0",
+                    color: "var(--purple-light)",
                     marginBottom: 12,
                   }}
                 >
@@ -74,7 +74,7 @@ export default function IndustryCaseStudy({
                   style={{
                     fontSize: 28,
                     fontWeight: 700,
-                    color: "white",
+                    color: "var(--white)",
                     marginBottom: 8,
                     letterSpacing: "0.04em",
                   }}
@@ -101,9 +101,9 @@ export default function IndustryCaseStudy({
                   style={{
                     fontSize: 16,
                     lineHeight: "26px",
-                    color: "#ba83f0",
+                    color: "var(--purple-light)",
                     fontStyle: "italic",
-                    borderLeft: "3px solid #ba83f0",
+                    borderLeft: "3px solid var(--purple-light)",
                     paddingLeft: 16,
                     marginBottom: 16,
                   }}
@@ -131,7 +131,7 @@ export default function IndustryCaseStudy({
                       style={{
                         fontSize: 36,
                         fontWeight: 700,
-                        color: i === 0 ? "#ba83f0" : "white",
+                        color: i === 0 ? "var(--purple-light)" : "var(--white)",
                       }}
                     >
                       {stat.value}
@@ -153,7 +153,7 @@ export default function IndustryCaseStudy({
                   style={{
                     height: 53,
                     borderRadius: 100,
-                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                    background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
                     fontSize: 16,
                     paddingLeft: 40,
                     paddingRight: 40,

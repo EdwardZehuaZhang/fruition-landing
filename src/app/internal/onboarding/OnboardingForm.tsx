@@ -113,7 +113,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--purple-primary)]">
             All done
           </p>
-          <h2 className="mt-2 inline-flex items-center gap-2 text-2xl font-semibold text-[#10003a]">
+          <h2 className="mt-2 inline-flex items-center gap-2 text-2xl font-semibold text-ink-heading">
             Welcome, {name}
             <Hand size={24} aria-hidden />
           </h2>
@@ -209,7 +209,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
           onDragLeave={() => setDragActive(false)}
           onDrop={onDrop}
           htmlFor="photo-input"
-          className="flex cursor-pointer items-center gap-4 rounded-chip border border-dashed bg-white p-4 transition"
+          className="flex cursor-pointer items-center gap-4 rounded-chip border border-dashed bg-surface p-4 transition"
           style={{ borderColor: photoBoxBorder }}
         >
           {photoPreview ? (
@@ -229,7 +229,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
             </div>
           )}
           <div className="flex-1 text-sm">
-            <p className="font-medium text-[#10003a]">
+            <p className="font-medium text-ink-heading">
               {photo ? photo.name : "Drop a photo or click to choose"}
             </p>
             <p className="text-[var(--color-text-secondary)]">
@@ -247,7 +247,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
           onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
           className="sr-only"
         />
-        {photoError && <p className="mt-2 text-xs text-red-600">{photoError}</p>}
+        {photoError && <p className="mt-2 text-xs text-danger">{photoError}</p>}
       </Field>
       <Field label="Short bio" hint="2–4 sentences. What you focus on at Fruition.">
         <textarea
@@ -309,7 +309,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
       {error && (
         <div
           className="rounded-chip px-3 py-2 text-sm"
-          style={{ backgroundColor: "#fff1f2", color: "#9f1239" }}
+          style={{ backgroundColor: "var(--danger-surface)", color: "var(--danger-strong)" }}
           role="alert"
         >
           {error}
@@ -328,7 +328,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
 }
 
 const inputClass =
-  "block w-full rounded-chip border border-[var(--color-border)] bg-white px-4 py-3 text-sm text-[#10003a] placeholder:text-[#9ca3af] outline-none transition hover:border-[var(--purple-light)] focus:border-[var(--purple-primary)] focus:ring-2 focus:ring-[rgba(128,21,232,0.18)]"
+  "block w-full rounded-chip border border-[var(--color-border)] bg-surface px-4 py-3 text-sm text-ink-heading placeholder:text-ink-faint outline-none transition hover:border-[var(--purple-light)] focus:border-[var(--purple-primary)] focus:ring-2 focus:ring-[rgba(128,21,232,0.18)]"
 
 function Field({
   label,
@@ -343,7 +343,7 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1.5 flex items-baseline justify-between gap-3 text-sm font-medium text-[#10003a]">
+      <label className="mb-1.5 flex items-baseline justify-between gap-3 text-sm font-medium text-ink-heading">
         <span>
           {label}
           {required && <span className="ml-1 text-[var(--purple-primary)]">*</span>}

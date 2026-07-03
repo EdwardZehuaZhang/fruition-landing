@@ -44,17 +44,17 @@ export default function EcosystemGrid({
   return (
     <section
       className="px-4"
-      style={{ paddingTop: 88, paddingBottom: 88, background: "linear-gradient(160deg, #2b074d 0%, #10003a 100%)" }}
+      style={{ paddingTop: 88, paddingBottom: 88, background: "linear-gradient(160deg, var(--navy-700) 0%, var(--navy-900) 100%)" }}
     >
       <div className="mx-auto" style={{ maxWidth: 1040 }}>
         <div className="text-center" style={{ marginBottom: 44, marginInline: "auto", maxWidth: 680 }}>
           {eyebrow && (
-            <p className="font-semibold uppercase" style={{ color: "#ba83f0", fontSize: 12, letterSpacing: "0.18em", marginBottom: 12 }}>
+            <p className="font-semibold uppercase" style={{ color: "var(--purple-light)", fontSize: 12, letterSpacing: "0.18em", marginBottom: 12 }}>
               {eyebrow}
             </p>
           )}
           {heading && (
-            <h2 className="font-bold" style={{ color: "#fff", fontSize: "clamp(26px, 4.5vw, 38px)", lineHeight: 1.2, letterSpacing: "-0.015em", textWrap: "balance" }}>
+            <h2 className="font-bold" style={{ color: "var(--white)", fontSize: "clamp(26px, 4.5vw, 38px)", lineHeight: 1.2, letterSpacing: "-0.015em", textWrap: "balance" }}>
               {heading}
             </h2>
           )}
@@ -102,7 +102,7 @@ export default function EcosystemGrid({
               }}
             >
               <span aria-hidden style={{ fontSize: 24, lineHeight: 1 }}>{p.glyph ?? "•"}</span>
-              <span className="font-semibold text-center" style={{ color: "#fff", fontSize: 11, lineHeight: "14px", marginTop: 6, padding: "0 6px" }}>
+              <span className="font-semibold text-center" style={{ color: "var(--white)", fontSize: 11, lineHeight: "14px", marginTop: 6, padding: "0 6px" }}>
                 {p.label}
               </span>
             </div>
@@ -124,12 +124,12 @@ export default function EcosystemGrid({
                 width: "100%",
                 height: "100%",
                 borderRadius: "50%",
-                background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)",
+                background: "linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-light) 100%)",
                 boxShadow: "0 24px 56px -20px rgba(128,21,232,0.8)",
               }}
             >
               <span aria-hidden style={{ fontSize: 30 }}>📊</span>
-              <span className="font-bold" style={{ color: "#fff", fontSize: 15, marginTop: 6 }}>{hubLabel}</span>
+              <span className="font-bold" style={{ color: "var(--white)", fontSize: 15, marginTop: 6 }}>{hubLabel}</span>
             </div>
           </div>
         </div>
@@ -138,17 +138,17 @@ export default function EcosystemGrid({
         <div className="md:hidden flex flex-col items-center">
           <div
             className="flex flex-col items-center justify-center"
-            style={{ width: 132, height: 132, borderRadius: "50%", background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)", boxShadow: "0 24px 48px -20px rgba(128,21,232,0.8)" }}
+            style={{ width: 132, height: 132, borderRadius: "50%", background: "linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-light) 100%)", boxShadow: "0 24px 48px -20px rgba(128,21,232,0.8)" }}
           >
             <span aria-hidden style={{ fontSize: 26 }}>📊</span>
-            <span className="font-bold" style={{ color: "#fff", fontSize: 14, marginTop: 4 }}>{hubLabel}</span>
+            <span className="font-bold" style={{ color: "var(--white)", fontSize: 14, marginTop: 4 }}>{hubLabel}</span>
           </div>
           <div className="flex flex-wrap justify-center" style={{ gap: 8, marginTop: 28 }}>
             {apps.map((app, i) => (
               <span
                 key={i}
                 className="inline-flex items-center font-semibold"
-                style={{ gap: 7, padding: "8px 14px", borderRadius: 999, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.14)", color: "#fff", fontSize: 13 }}
+                style={{ gap: 7, padding: "8px 14px", borderRadius: 999, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.14)", color: "var(--white)", fontSize: 13 }}
               >
                 <span aria-hidden>{app.glyph ?? "•"}</span>
                 {app.label}
@@ -158,7 +158,7 @@ export default function EcosystemGrid({
         </div>
 
         {countLabel && (
-          <p className="text-center font-semibold" style={{ color: "#ba83f0", fontSize: 15, marginTop: 44 }}>
+          <p className="text-center font-semibold" style={{ color: "var(--purple-light)", fontSize: 15, marginTop: 44 }}>
             {countLabel}
           </p>
         )}

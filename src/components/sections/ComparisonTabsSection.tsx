@@ -15,7 +15,7 @@ interface ComparisonTabsSectionProps {
   withPurpleCircle?: boolean
 }
 
-const DARK_BG = "#2b074d"
+const DARK_BG = "var(--surface-inverse-2)"
 
 function XIcon() {
   return (
@@ -50,7 +50,7 @@ function CheckIcon() {
       style={{ flexShrink: 0, marginTop: 2 }}
       aria-hidden="true"
     >
-      <circle cx="10" cy="10" r="10" fill="#22C55E" />
+      <circle cx="10" cy="10" r="10" fill="var(--success)" />
       <path
         d="M6 10.5L8.5 13L14 7.5"
         stroke="white"
@@ -73,7 +73,7 @@ function renderItemText(item: ComparisonTabItem) {
         style={{
           fontSize: 15,
           lineHeight: "22px",
-          color: "#111",
+          color: "var(--ink)",
         }}
       >
         <span style={{ fontWeight: 700 }}>{number}</span>
@@ -86,7 +86,7 @@ function renderItemText(item: ComparisonTabItem) {
       style={{
         fontSize: 15,
         lineHeight: "22px",
-        color: "#111",
+        color: "var(--ink)",
       }}
     >
       {description}
@@ -106,9 +106,9 @@ export default function ComparisonTabsSection({
   if (tabs.length === 0) return null
   const isDark = theme === "dark"
 
-  const sectionBg = isDark ? DARK_BG : "#ffffff"
-  const headingColor = isDark ? "#ffffff" : "#000000"
-  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "#000000"
+  const sectionBg = isDark ? DARK_BG : "var(--surface)"
+  const headingColor = isDark ? "var(--ink-inverse)" : "var(--ink)"
+  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "var(--ink)"
 
   if (layout === "sideBySide" && tabs.length >= 2) {
     const beforeItems = tabs[0]?.items ?? []
@@ -173,7 +173,7 @@ export default function ComparisonTabsSection({
   }
 
   const active = tabs[activeIndex]
-  const cardBg = "#ffffff"
+  const cardBg = "var(--surface)"
 
   return (
     <section
@@ -221,15 +221,15 @@ export default function ComparisonTabsSection({
             {tabs.map((tab, i) => {
               const isActive = i === activeIndex
               const inactiveClass = isDark
-                ? "bg-white/10 text-white border border-white/20 hover:border-white/60"
-                : "bg-white text-[#2b074d] border border-[#e8e6e6] hover:border-[#8015e8]"
+                ? "bg-white/10 text-ink-inverse border border-white/20 hover:border-white/60"
+                : "bg-surface text-[color:var(--navy-700)] border border-line hover:border-brand"
               return (
                 <button
                   key={tab._key || tab.label || i}
                   onClick={() => setActiveIndex(i)}
                   className={`relative inline-flex items-center justify-center rounded-[99px] px-[31px] py-[7px] text-[16px] leading-[1.2] transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     isActive
-                      ? "bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]"
+                      ? "bg-gradient-to-r from-[color:var(--purple-primary)] to-[color:var(--purple-light)] text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]"
                       : inactiveClass
                   }`}
                 >
@@ -244,7 +244,7 @@ export default function ComparisonTabsSection({
             className="w-full rounded-card border py-[12px]"
             style={{
               backgroundColor: cardBg,
-              borderColor: isDark ? "transparent" : "#e8e6e6",
+              borderColor: isDark ? "transparent" : "var(--line)",
             }}
           >
             <NumberedStepList

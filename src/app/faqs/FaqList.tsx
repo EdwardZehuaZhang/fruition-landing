@@ -208,13 +208,13 @@ function FaqRow({
               {categoryTag}
             </span>
           )}
-          <span className="text-card-title text-black">{item.question}</span>
+          <span className="text-card-title text-ink">{item.question}</span>
         </span>
         <span
           className="mt-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-all"
           style={{
             backgroundColor: isOpen ? "var(--purple-primary)" : "var(--light-section-bg)",
-            color: isOpen ? "white" : "var(--purple-primary)",
+            color: isOpen ? "var(--white)" : "var(--purple-primary)",
           }}
         >
           <svg
@@ -360,7 +360,7 @@ export default function FaqList({ items }: { items: FaqItem[] }) {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search every question..."
           aria-label="Search FAQs"
-          className="w-full rounded-pill border border-[color:var(--color-border)] bg-white py-4 pl-12 pr-5 text-body text-black placeholder:text-[color:var(--color-text-secondary)] outline-none transition-colors focus:border-[color:var(--purple-primary)]"
+          className="w-full rounded-pill border border-[color:var(--color-border)] bg-surface py-4 pl-12 pr-5 text-body text-ink placeholder:text-[color:var(--color-text-secondary)] outline-none transition-colors focus:border-[color:var(--purple-primary)]"
           style={{ boxShadow: "var(--shadow-whisper)" }}
         />
       </div>
@@ -382,7 +382,7 @@ export default function FaqList({ items }: { items: FaqItem[] }) {
           </div>
           {searchResults!.length === 0 ? (
             <div className="ui-surface-panel px-6 py-10 text-center">
-              <p className="text-body text-black">No questions match your search.</p>
+              <p className="text-body text-ink">No questions match your search.</p>
               <p className="mt-2 text-body-sm text-[color:var(--color-text-secondary)]">
                 Try a different keyword, or reach out and we&rsquo;ll answer it for you.
               </p>
@@ -407,7 +407,7 @@ export default function FaqList({ items }: { items: FaqItem[] }) {
       {view === "grid" && (
         <div key="grid" className="animate-fade-in flex flex-col gap-6">
           <div className="flex items-baseline justify-between gap-4">
-            <h2 className="text-section-h3 text-black">Browse by topic</h2>
+            <h2 className="text-section-h3 text-ink">Browse by topic</h2>
             <span className="text-caption text-[color:var(--color-text-secondary)]">
               {normalized.length} questions
             </span>
@@ -435,7 +435,7 @@ export default function FaqList({ items }: { items: FaqItem[] }) {
                     </span>
                   </span>
                   <span className="flex flex-col gap-1.5">
-                    <span className="text-card-title text-black">{g.label}</span>
+                    <span className="text-card-title text-ink">{g.label}</span>
                     <span className="text-body-sm text-[color:var(--color-text-secondary)]">{g.blurb}</span>
                   </span>
                   <span
@@ -499,7 +499,7 @@ export default function FaqList({ items }: { items: FaqItem[] }) {
               <GroupIcon group={activeData.key} />
             </span>
             <div className="flex flex-col gap-1">
-              <h2 className="text-section-h3 text-black">{activeData.label}</h2>
+              <h2 className="text-section-h3 text-ink">{activeData.label}</h2>
               <p className="text-body-sm text-[color:var(--color-text-secondary)]">
                 {activeData.count} {activeData.count === 1 ? "question" : "questions"} · {activeData.blurb}
               </p>
@@ -509,7 +509,7 @@ export default function FaqList({ items }: { items: FaqItem[] }) {
           {activeData.subCategories.map((sub) => (
             <div key={sub.label} className="flex flex-col gap-3">
               {activeData.subCategories.length > 1 && (
-                <h3 className="text-caption font-semibold text-black pt-2">
+                <h3 className="text-caption font-semibold text-ink pt-2">
                   {sub.label}
                   <span className="ml-2 font-normal text-[color:var(--color-text-secondary)]">{sub.items.length}</span>
                 </h3>

@@ -26,10 +26,10 @@ export default async function BlogPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-16">
       {page?.heroHeading && (
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">{page.heroHeading}</h1>
+        <h1 className="text-4xl font-bold text-ink mb-4">{page.heroHeading}</h1>
       )}
       {page?.heroSubheading && (
-        <p className="text-lg text-gray-600 mb-8">{page.heroSubheading}</p>
+        <p className="text-lg text-ink-muted mb-8">{page.heroSubheading}</p>
       )}
 
       <BlogFilterableList

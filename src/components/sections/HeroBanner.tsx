@@ -89,7 +89,7 @@ export default function HeroBanner({
 
   if (splitLayout) {
     return (
-      <section className="bg-white">
+      <section className="bg-surface">
         <div
           className="mx-auto px-4 sm:px-8 md:px-16 lg:px-24 xl:px-[120px] 2xl:px-[273px] max-w-[1588px] w-full"
           style={{ paddingTop: 80, paddingBottom: 80 }}
@@ -132,16 +132,16 @@ export default function HeroBanner({
                 </div>
               )}
               <h1 className="text-display" style={{ marginTop: 0 }}>
-                <span className="text-black">{headingPart1}</span>
+                <span className="text-ink">{headingPart1}</span>
                 {headingAccent && (
                   <span style={{ color: "var(--purple-primary)", display: accentBlock ? "block" : undefined }}>
                     {headingAccent}
                   </span>
                 )}
-                {headingPart2 && <span className="text-black">{headingPart2}</span>}
+                {headingPart2 && <span className="text-ink">{headingPart2}</span>}
               </h1>
               {subheading && (
-                <p className="text-body-lead text-black" style={{ marginTop: 24, whiteSpace: "pre-line" }}>
+                <p className="text-body-lead text-ink" style={{ marginTop: 24, whiteSpace: "pre-line" }}>
                   {subheading}
                 </p>
               )}
@@ -173,7 +173,7 @@ export default function HeroBanner({
                   loop
                   playsInline
                   preload="metadata"
-                  className="rounded-card object-contain bg-white w-full"
+                  className="rounded-card object-contain bg-surface w-full"
                   style={{ maxWidth: 560, height: "auto" }}
                 >
                   <source src={heroVideoSrc} type="video/mp4" />
@@ -183,7 +183,7 @@ export default function HeroBanner({
                 <img
                   src={heroImageSrc}
                   alt="Hero"
-                  className="rounded-card bg-white w-full"
+                  className="rounded-card bg-surface w-full"
                   style={{ maxWidth: 560, height: "auto", objectFit: "contain" }}
                 />
               ) : null}
@@ -195,7 +195,7 @@ export default function HeroBanner({
   }
 
   return (
-    <section className="bg-white">
+    <section className="bg-surface">
       <div
         className="mx-auto flex flex-col items-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-[120px] 2xl:px-[273px] max-w-[1588px] w-full"
         style={{ paddingTop: 80, paddingBottom: 80 }}
@@ -243,7 +243,7 @@ export default function HeroBanner({
           className="text-display text-center"
           style={{ marginTop: eyebrow ? 16 : 42, maxWidth: 924 }}
         >
-          <span className="text-black">{headingPart1}</span>
+          <span className="text-ink">{headingPart1}</span>
           {headingAccent && (
             <span
               style={{
@@ -254,12 +254,12 @@ export default function HeroBanner({
               {headingAccent}
             </span>
           )}
-          {headingPart2 && <span className="text-black">{headingPart2}</span>}
+          {headingPart2 && <span className="text-ink">{headingPart2}</span>}
         </h1>
 
         {/* Subheading */}
         {subheading && (
-          <p className="text-body-lead text-center text-black" style={{ marginTop: 31, maxWidth: 859, whiteSpace: "pre-line" }}>
+          <p className="text-body-lead text-center text-ink" style={{ marginTop: 31, maxWidth: 859, whiteSpace: "pre-line" }}>
             {subheading}
           </p>
         )}
@@ -305,7 +305,7 @@ export default function HeroBanner({
               loop
               playsInline
               preload="metadata"
-              className="rounded-card object-contain bg-white w-full"
+              className="rounded-card object-contain bg-surface w-full"
               style={{ height: "auto", aspectRatio: "1042 / 312" }}
             >
               <source src={heroVideoSrc} type="video/mp4" />
@@ -317,7 +317,7 @@ export default function HeroBanner({
             <img
               src={heroImageSrc}
               alt="Hero"
-              className="rounded-card bg-white w-full"
+              className="rounded-card bg-surface w-full"
               style={
                 heroImageContain
                   ? {

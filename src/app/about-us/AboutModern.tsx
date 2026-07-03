@@ -112,8 +112,8 @@ function SignatureNote({
           margin: "0 auto",
           padding: "44px 48px",
           borderRadius: 24,
-          background: "linear-gradient(180deg, #faf7ff 0%, #ffffff 100%)",
-          border: "1px solid #efe7fb",
+          background: "linear-gradient(180deg, var(--surface-tint) 0%, var(--surface) 100%)",
+          border: "1px solid var(--line-tint)",
         }}
       >
         <span
@@ -125,7 +125,7 @@ function SignatureNote({
         </span>
         <blockquote
           className="relative"
-          style={{ color: "#2b074d", fontSize: 20, lineHeight: "32px", fontWeight: 500, textWrap: "pretty" }}
+          style={{ color: "var(--ink-heading)", fontSize: 20, lineHeight: "32px", fontWeight: 500, textWrap: "pretty" }}
         >
           {note}
         </blockquote>
@@ -134,7 +134,7 @@ function SignatureNote({
           <svg width="116" height="40" viewBox="0 0 116 40" fill="none" aria-hidden role="presentation">
             <path
               d="M3 28c10-14 16-20 20-18s-2 22 4 22 14-26 20-24-4 24 4 24 16-30 24-24c4 3-2 14 6 14 6 0 12-8 18-12"
-              stroke="#8015e8"
+              stroke="var(--brand)"
               strokeWidth="2.4"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -143,12 +143,12 @@ function SignatureNote({
           </svg>
           <div className="flex flex-col">
             {name && (
-              <span className="font-bold" style={{ color: "#10003a", fontSize: 16 }}>
+              <span className="font-bold" style={{ color: "var(--ink-heading)", fontSize: 16 }}>
                 {name}
               </span>
             )}
             {title && (
-              <span style={{ color: "#686b82", fontSize: 13 }}>{title}</span>
+              <span style={{ color: "var(--ink-muted)", fontSize: 13 }}>{title}</span>
             )}
           </div>
         </figcaption>
@@ -213,7 +213,7 @@ function HeroSection({
         className="absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(1100px 600px at 12% -10%, rgba(128, 21, 232, 0.18), transparent 60%), radial-gradient(900px 500px at 95% 0%, rgba(70, 116, 251, 0.12), transparent 55%), linear-gradient(180deg, #f7f4ff 0%, #ffffff 70%)",
+            "radial-gradient(1100px 600px at 12% -10%, rgba(128, 21, 232, 0.18), transparent 60%), radial-gradient(900px 500px at 95% 0%, rgba(70, 116, 251, 0.12), transparent 55%), linear-gradient(180deg, var(--surface-tint) 0%, var(--surface) 70%)",
         }}
       />
       <div
@@ -269,7 +269,7 @@ function HeroSection({
                   {" "}
                   <span
                     style={{
-                      background: "linear-gradient(135deg, #8015e8 0%, #4674FB 100%)",
+                      background: "linear-gradient(135deg, var(--purple-primary) 0%, var(--blue-accent-strong) 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                       backgroundClip: "text",
@@ -285,7 +285,7 @@ function HeroSection({
             {subheading && (
               <p
                 className="text-body-lead"
-                style={{ marginTop: 20, maxWidth: 560, color: "#3f4256" }}
+                style={{ marginTop: 20, maxWidth: 560, color: "var(--ink-soft)" }}
               >
                 {subheading}
               </p>
@@ -302,7 +302,7 @@ function HeroSection({
 
             <div className="flex flex-wrap items-center" style={{ marginTop: 36, gap: 28 }}>
               {partnerBadgesLabel && (
-                <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: 0.8, textTransform: "uppercase", color: "#686b82" }}>
+                <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: 0.8, textTransform: "uppercase", color: "var(--ink-muted)" }}>
                   {partnerBadgesLabel}
                 </span>
               )}
@@ -345,7 +345,7 @@ function HeroSection({
                   borderRadius: 28,
                   boxShadow: "0 30px 80px -30px rgba(16, 0, 58, 0.45), 0 2px 8px rgba(0,0,0,0.06)",
                   border: "1px solid rgba(128, 21, 232, 0.16)",
-                  background: "#fff",
+                  background: "var(--surface)",
                   aspectRatio: "16 / 11",
                 }}
               >
@@ -363,7 +363,7 @@ function HeroSection({
                     style={{
                       width: "100%",
                       height: "100%",
-                      background: "linear-gradient(135deg, #2b074d 0%, #10003a 100%)",
+                      background: "linear-gradient(135deg, var(--navy-700) 0%, var(--navy-900) 100%)",
                     }}
                   />
                 )}
@@ -375,7 +375,7 @@ function HeroSection({
                   style={{
                     right: -16,
                     bottom: -22,
-                    background: "#ffffff",
+                    background: "var(--surface)",
                     borderRadius: 18,
                     padding: "14px 18px",
                     boxShadow: "0 18px 40px -12px rgba(16, 0, 58, 0.25)",
@@ -396,7 +396,7 @@ function HeroSection({
                   />
                   <div>
                     {calloutBadgeLabel && (
-                      <div style={{ fontSize: 11, fontWeight: 600, color: "#686b82", letterSpacing: 0.6, textTransform: "uppercase" }}>
+                      <div style={{ fontSize: 11, fontWeight: 600, color: "var(--ink-muted)", letterSpacing: 0.6, textTransform: "uppercase" }}>
                         {calloutBadgeLabel}
                       </div>
                     )}
@@ -415,7 +415,7 @@ function HeroSection({
                   style={{
                     left: -22,
                     top: 28,
-                    background: "#ffffff",
+                    background: "var(--surface)",
                     borderRadius: 16,
                     padding: "10px 14px",
                     boxShadow: "0 18px 40px -12px rgba(16, 0, 58, 0.2)",
@@ -459,8 +459,8 @@ function StatsBand({ stats }: { stats: StatItem[] }) {
           className="grid grid-cols-1 sm:grid-cols-3"
           style={{
             borderRadius: 28,
-            background: "linear-gradient(135deg, #10003a 0%, #2b074d 100%)",
-            color: "#fff",
+            background: "linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 100%)",
+            color: "var(--white)",
             padding: "44px 24px",
             boxShadow: "0 24px 60px -28px rgba(16, 0, 58, 0.55)",
             position: "relative",
@@ -490,7 +490,7 @@ function StatsBand({ stats }: { stats: StatItem[] }) {
                   fontSize: "clamp(38px, 4.6vw, 56px)",
                   fontWeight: 700,
                   letterSpacing: "-0.02em",
-                  background: "linear-gradient(135deg, #ffffff 0%, #ba83f0 100%)",
+                  background: "linear-gradient(135deg, var(--white) 0%, var(--purple-light) 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -534,7 +534,7 @@ function StorySection({
 }) {
   if (!sections?.length) return null
   return (
-    <section style={{ paddingTop: 72, paddingBottom: 72, background: "#fff" }}>
+    <section style={{ paddingTop: 72, paddingBottom: 72, background: "var(--surface)" }}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1100 }}>
         <div className="text-center" style={{ marginBottom: 56 }}>
           {eyebrow && (
@@ -575,7 +575,7 @@ function StorySection({
                 position: "relative",
                 padding: 32,
                 borderRadius: 24,
-                background: i % 2 === 0 ? "#ffffff" : "linear-gradient(160deg, #f6f1ff 0%, #ffffff 70%)",
+                background: i % 2 === 0 ? "var(--surface)" : "linear-gradient(160deg, var(--surface-tint) 0%, var(--surface) 70%)",
                 border: "1px solid rgba(128, 21, 232, 0.12)",
                 boxShadow: "0 10px 30px -18px rgba(16, 0, 58, 0.18)",
                 overflow: "hidden",
@@ -615,7 +615,7 @@ function StorySection({
               <div
                 style={{
                   marginTop: 16,
-                  color: "#3f4256",
+                  color: "var(--ink-soft)",
                   fontSize: 16,
                   lineHeight: 1.6,
                   whiteSpace: "pre-line",
@@ -655,7 +655,7 @@ function ChallengesBento({
         paddingTop: 96,
         paddingBottom: 96,
         background:
-          "linear-gradient(180deg, #fbf9ff 0%, #ffffff 100%)",
+          "linear-gradient(180deg, var(--surface-tint) 0%, var(--surface) 100%)",
       }}
     >
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
@@ -696,10 +696,10 @@ function ChallengesBento({
                   padding: isFeature ? 32 : 26,
                   borderRadius: 24,
                   background: isFeature
-                    ? "linear-gradient(155deg, #10003a 0%, #2b074d 100%)"
-                    : "#ffffff",
-                  color: isFeature ? "#fff" : "var(--dark-bg)",
-                  border: isFeature ? "none" : "1px solid #ececf2",
+                    ? "linear-gradient(155deg, var(--navy-900) 0%, var(--navy-700) 100%)"
+                    : "var(--surface)",
+                  color: isFeature ? "var(--white)" : "var(--dark-bg)",
+                  border: isFeature ? "none" : "1px solid var(--line-soft)",
                   boxShadow: isFeature
                     ? "0 30px 60px -28px rgba(16, 0, 58, 0.5)"
                     : "0 8px 24px -16px rgba(16, 0, 58, 0.12)",
@@ -746,7 +746,7 @@ function ChallengesBento({
                 <h3
                   className="text-card-title"
                   style={{
-                    color: isFeature ? "#fff" : "var(--dark-bg)",
+                    color: isFeature ? "var(--white)" : "var(--dark-bg)",
                     marginTop: 4,
                   }}
                 >
@@ -756,7 +756,7 @@ function ChallengesBento({
                   style={{
                     fontSize: 15,
                     lineHeight: 1.6,
-                    color: isFeature ? "rgba(255,255,255,0.78)" : "#52556b",
+                    color: isFeature ? "rgba(255,255,255,0.78)" : "var(--ink-soft)",
                     margin: 0,
                   }}
                 >
@@ -788,8 +788,8 @@ function MethodologyTimeline({
       style={{
         paddingTop: 96,
         paddingBottom: 96,
-        background: "#10003a",
-        color: "#fff",
+        background: "var(--navy-900)",
+        color: "var(--white)",
         position: "relative",
         overflow: "hidden",
       }}
@@ -811,7 +811,7 @@ function MethodologyTimeline({
                 padding: "4px 12px",
                 borderRadius: 9999,
                 background: "rgba(255,255,255,0.1)",
-                color: "#ba83f0",
+                color: "var(--purple-light)",
                 fontSize: 12,
                 fontWeight: 700,
                 letterSpacing: 0.8,
@@ -868,14 +868,14 @@ function MethodologyTimeline({
                         fontSize: 12,
                         fontWeight: 700,
                         letterSpacing: 1,
-                        color: "#ba83f0",
+                        color: "var(--purple-light)",
                       }}
                     >
                       {stepLabel} {step.number}
                     </div>
                     <h3
                       className="text-card-title"
-                      style={{ marginTop: 6, color: "#fff" }}
+                      style={{ marginTop: 6, color: "var(--white)" }}
                     >
                       {step.title}
                     </h3>
@@ -901,8 +901,8 @@ function MethodologyTimeline({
                       width: 64,
                       height: 64,
                       borderRadius: 9999,
-                      background: "linear-gradient(135deg, #8015e8, #4674FB)",
-                      color: "#fff",
+                      background: "linear-gradient(135deg, var(--purple-primary), var(--blue-accent-strong))",
+                      color: "var(--white)",
                       fontWeight: 700,
                       fontSize: 22,
                       display: "inline-flex",
@@ -938,7 +938,7 @@ function ApproachTabs({
   if (!tabs?.length) return null
   const current = tabs[active]
   return (
-    <section style={{ paddingTop: 96, paddingBottom: 96, background: "#fff" }}>
+    <section style={{ paddingTop: 96, paddingBottom: 96, background: "var(--surface)" }}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
         <div className="text-center" style={{ marginBottom: 40 }}>
           {eyebrow && (
@@ -975,7 +975,7 @@ function ApproachTabs({
           style={{
             gap: 8,
             padding: 6,
-            background: "#f4f0fb",
+            background: "var(--surface-tint-2)",
             borderRadius: 9999,
             margin: "0 auto 40px",
             width: "fit-content",
@@ -990,7 +990,7 @@ function ApproachTabs({
                 padding: "10px 22px",
                 borderRadius: 9999,
                 background: i === active ? "var(--dark-bg)" : "transparent",
-                color: i === active ? "#fff" : "var(--dark-bg)",
+                color: i === active ? "var(--white)" : "var(--dark-bg)",
                 fontWeight: 600,
                 fontSize: 14,
                 cursor: "pointer",
@@ -1011,8 +1011,8 @@ function ApproachTabs({
               style={{
                 padding: 24,
                 borderRadius: 20,
-                background: "#fff",
-                border: "1px solid #ececf2",
+                background: "var(--surface)",
+                border: "1px solid var(--line-soft)",
                 boxShadow: "0 8px 24px -16px rgba(16, 0, 58, 0.12)",
                 position: "relative",
                 overflow: "hidden",
@@ -1041,7 +1041,7 @@ function ApproachTabs({
                   marginTop: 10,
                   fontSize: 14,
                   lineHeight: 1.6,
-                  color: "#52556b",
+                  color: "var(--ink-soft)",
                 }}
               >
                 {item.description}
@@ -1069,7 +1069,7 @@ function GlobalPresence({
 }) {
   if (!offices?.length) return null
   return (
-    <section style={{ paddingTop: 96, paddingBottom: 96, background: "linear-gradient(180deg, #ecf1fc 0%, #ffffff 100%)" }}>
+    <section style={{ paddingTop: 96, paddingBottom: 96, background: "linear-gradient(180deg, var(--surface-subtle) 0%, var(--surface) 100%)" }}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
         <div className="text-center" style={{ marginBottom: 56 }}>
           {eyebrow && (
@@ -1102,7 +1102,7 @@ function GlobalPresence({
           {body && (
             <p
               className="text-body-lead"
-              style={{ marginTop: 12, color: "#52556b", maxWidth: 640, marginLeft: "auto", marginRight: "auto" }}
+              style={{ marginTop: 12, color: "var(--ink-soft)", maxWidth: 640, marginLeft: "auto", marginRight: "auto" }}
             >
               {body}
             </p>
@@ -1116,7 +1116,7 @@ function GlobalPresence({
               style={{
                 padding: 22,
                 borderRadius: 18,
-                background: "#fff",
+                background: "var(--surface)",
                 border: "1px solid rgba(128, 21, 232, 0.12)",
                 boxShadow: "0 8px 24px -18px rgba(16, 0, 58, 0.18)",
                 textAlign: "left",
@@ -1133,7 +1133,7 @@ function GlobalPresence({
               >
                 {o.city}
               </div>
-              <div style={{ fontSize: 13, color: "#686b82", marginTop: 2 }}>
+              <div style={{ fontSize: 13, color: "var(--ink-muted)", marginTop: 2 }}>
                 {o.country}
               </div>
               {o.note && (
@@ -1165,7 +1165,7 @@ function GlobalPresence({
 function PartnerStack({ badges, eyebrow }: { badges: PartnerBadge[]; eyebrow?: string }) {
   if (!badges?.length) return null
   return (
-    <section style={{ paddingTop: 64, paddingBottom: 64, background: "#fff" }}>
+    <section style={{ paddingTop: 64, paddingBottom: 64, background: "var(--surface)" }}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
         {eyebrow && (
           <div className="text-center" style={{ marginBottom: 32 }}>
@@ -1175,7 +1175,7 @@ function PartnerStack({ badges, eyebrow }: { badges: PartnerBadge[]; eyebrow?: s
                 fontWeight: 700,
                 letterSpacing: 1,
                 textTransform: "uppercase",
-                color: "#686b82",
+                color: "var(--ink-muted)",
               }}
             >
               {eyebrow}
@@ -1188,7 +1188,7 @@ function PartnerStack({ badges, eyebrow }: { badges: PartnerBadge[]; eyebrow?: s
             gap: 36,
             padding: "28px 24px",
             borderRadius: 24,
-            background: "#fbf9ff",
+            background: "var(--surface-tint)",
             border: "1px solid rgba(128, 21, 232, 0.1)",
           }}
         >
@@ -1233,7 +1233,7 @@ function ClosingCta({
   secondaryUrl?: string
 }) {
   return (
-    <section style={{ paddingTop: 96, paddingBottom: 96, background: "#fff" }}>
+    <section style={{ paddingTop: 96, paddingBottom: 96, background: "var(--surface)" }}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1100 }}>
         <div
           style={{
@@ -1241,8 +1241,8 @@ function ClosingCta({
             overflow: "hidden",
             borderRadius: 32,
             padding: "64px 48px",
-            background: "linear-gradient(135deg, #8015e8 0%, #4674FB 100%)",
-            color: "#fff",
+            background: "linear-gradient(135deg, var(--purple-primary) 0%, var(--blue-accent-strong) 100%)",
+            color: "var(--white)",
             textAlign: "center",
             boxShadow: "0 30px 80px -30px rgba(70, 116, 251, 0.55)",
           }}
@@ -1260,7 +1260,7 @@ function ClosingCta({
             {heading && (
               <h2
                 className="text-section-h2"
-                style={{ color: "#fff", maxWidth: 720, margin: "0 auto" }}
+                style={{ color: "var(--white)", maxWidth: 720, margin: "0 auto" }}
               >
                 {heading}
               </h2>

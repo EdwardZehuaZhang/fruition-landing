@@ -34,10 +34,10 @@ export default async function SolutionsPage() {
           <Link
             key={s.slug}
             href={`/monday-consulting-solutions/${s.slug}`}
-            className="p-6 border border-gray-200 rounded-xl hover:border-blue-400 hover:shadow-md transition-all"
+            className="p-6 border border-line-soft rounded-xl hover:border-blue-400 hover:shadow-md transition-all"
           >
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">{s.title}</h3>
-            {s.heroSubheading && <p className="text-gray-600 text-sm">{s.heroSubheading}</p>}
+            <h3 className="text-xl font-semibold text-ink mb-2">{s.title}</h3>
+            {s.heroSubheading && <p className="text-ink-muted text-sm">{s.heroSubheading}</p>}
           </Link>
         ))}
       </div>

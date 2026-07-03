@@ -31,11 +31,11 @@ const SECTION_MAP: Record<string, {
   'setting up': {
     eyebrow: 'Implementation  & optimisation',
     subheadingJSX: (
-      <p className="text-[20px] font-semibold text-black leading-[28px]">
+      <p className="text-[20px] font-semibold text-ink leading-[28px]">
         <span>Get help </span>
-        <span className="text-[#ba83f0]">setting up</span>
+        <span className="text-brand-light">setting up</span>
         <span> or </span>
-        <span className="text-[#ba83f0]">fine-tuning</span>
+        <span className="text-brand-light">fine-tuning</span>
         <span>{'\n'}your monday workflows.</span>
       </p>
     ),
@@ -46,9 +46,9 @@ const SECTION_MAP: Record<string, {
   'training': {
     eyebrow: 'Training & managed services',
     subheadingJSX: (
-      <p className="text-[20px] font-semibold text-black leading-[28px]">
+      <p className="text-[20px] font-semibold text-ink leading-[28px]">
         <span>Get the entire team monday.com </span>
-        <span className="text-[#ba83f0]">training</span>
+        <span className="text-brand-light">training</span>
         <span>.</span>
       </p>
     ),
@@ -59,9 +59,9 @@ const SECTION_MAP: Record<string, {
   'automation': {
     eyebrow: 'Integration & API development',
     subheadingJSX: (
-      <p className="text-[20px] font-semibold text-black leading-[28px]">
+      <p className="text-[20px] font-semibold text-ink leading-[28px]">
         <span>Eliminate manual work with{'\n'}</span>
-        <span className="text-[#ba83f0]">automation</span>
+        <span className="text-brand-light">automation</span>
         <span>.</span>
       </p>
     ),
@@ -120,19 +120,19 @@ export default function RichTextBlockView({
   const textContent = (
     <>
       {section ? (
-        <h2 className="text-[30px] font-medium text-[#8015e8] leading-[42px]">
+        <h2 className="text-[30px] font-medium text-brand leading-[42px]">
           {section.eyebrow}
         </h2>
       ) : heading && (
-        <h2 className="text-[30px] font-medium text-[#8015e8] leading-[42px]">{heading}</h2>
+        <h2 className="text-[30px] font-medium text-brand leading-[42px]">{heading}</h2>
       )}
 
       {section ? section.subheadingJSX : subheading && (
-        <p className="text-[20px] font-semibold text-black leading-[28px]">{subheading}</p>
+        <p className="text-[20px] font-semibold text-ink leading-[28px]">{subheading}</p>
       )}
 
       {content && !hideCorruptedBodyContent && (
-        <div className="text-[16px] text-black leading-[22.4px]">
+        <div className="text-[16px] text-ink leading-[22.4px]">
           <PortableText value={content} components={portableTextComponents} />
         </div>
       )}
@@ -140,7 +140,7 @@ export default function RichTextBlockView({
       {ctaLabel && ctaUrl && (
         <Link
           href={ctaUrl}
-          className="group flex items-center justify-center gap-2 h-[53px] w-[326px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white text-[16px] font-bold tracking-[0.32px] transition-colors"
+          className="group flex items-center justify-center gap-2 h-[53px] w-[326px] rounded-[100px] bg-gradient-to-r from-[var(--purple-primary)] to-[var(--purple-light)] hover:bg-[var(--accent-blue)] hover:bg-none text-white text-[16px] font-bold tracking-[0.32px] transition-colors"
         >
           <PaperPlaneIcon />
           {ctaLabel}
@@ -160,7 +160,7 @@ export default function RichTextBlockView({
   ) : fallbackVideoSrc ? (
     <video
       src={fallbackVideoSrc}
-      className="w-full h-[413px] object-contain bg-white"
+      className="w-full h-[413px] object-contain bg-surface"
       autoPlay
       muted
       loop
@@ -176,7 +176,7 @@ export default function RichTextBlockView({
       height={413}
     />
   ) : (
-    <div className="w-full h-[413px] bg-[#d9d9d9]" />
+    <div className="w-full h-[413px] bg-line-soft" />
   )
 
   return (

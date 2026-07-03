@@ -90,8 +90,8 @@ const FOLDER_META: Record<
 
 const TYPE_LEGEND: { value: TypeFilter; label: string; dotClass: string }[] = [
   { value: "wm", label: "Work Management", dotClass: "bg-[var(--purple-primary)]" },
-  { value: "crm", label: "CRM", dotClass: "bg-[#a855f7]" },
-  { value: "svc", label: "Service", dotClass: "bg-[#22c55e]" },
+  { value: "crm", label: "CRM", dotClass: "bg-brand-light" },
+  { value: "svc", label: "Service", dotClass: "bg-success" },
   { value: "ops", label: "Operations & ERP", dotClass: "bg-[#0ea5e9]" },
   { value: "new", label: "New in 2026", dotClass: "bg-[#f97316]" },
 ]
@@ -218,7 +218,7 @@ export default function SolutionsGrid({ onOpen }: SolutionsGridProps) {
     setOpenFolders((prev) => ({ ...prev, [folder]: !prev[folder] }))
 
   return (
-    <section id="solutions" className="bg-white">
+    <section id="solutions" className="bg-surface">
       <div className="max-w-6xl mx-auto px-5 sm:px-7 py-16 lg:py-20">
         <div className="max-w-[820px] mb-8">
           <div className="text-micro font-semibold tracking-[0.16em] uppercase text-[var(--purple-primary)]">
@@ -266,13 +266,13 @@ export default function SolutionsGrid({ onOpen }: SolutionsGridProps) {
             return (
               <div
                 key={folder}
-                className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-white shadow-whisper overflow-hidden"
+                className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-surface shadow-whisper overflow-hidden"
               >
                 <button
                   type="button"
                   aria-expanded={expanded}
                   onClick={() => toggle(folder)}
-                  className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-[#faf7ff] transition-colors"
+                  className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-surface-tint transition-colors"
                 >
                   <span
                     className={`inline-flex items-center justify-center w-6 h-6 transition-transform duration-200 text-[var(--purple-primary)] ${
@@ -335,7 +335,7 @@ function SolutionCard({
     <button
       type="button"
       onClick={() => onOpen(solution.key)}
-      className="group relative text-left rounded-2xl border border-[var(--color-border)] bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-card hover:border-[var(--purple-light)]"
+      className="group relative text-left rounded-2xl border border-[var(--color-border)] bg-surface p-5 transition-all hover:-translate-y-0.5 hover:shadow-card hover:border-[var(--purple-light)]"
     >
       {isNew && (
         <span className="absolute top-4 right-4 text-[10px] font-bold tracking-wider uppercase bg-[#fff1e6] text-[#c2410c] px-2 py-0.5 rounded">

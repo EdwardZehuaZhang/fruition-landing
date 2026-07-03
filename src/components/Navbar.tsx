@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { urlFor } from '@/sanity/image'
 import PaperPlaneIcon from '@/components/common/icons/PaperPlaneIcon'
 import { NavIcon } from '@/components/common/icons/NavIcons'
+import ThemeToggle from '@/components/ThemeToggle'
 
 interface NavLink {
   label?: string
@@ -52,30 +53,34 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
   const partnerBadges: PartnerBadge[] = siteSettings?.navbarPartnerBadges ?? []
   const ctaLabel = siteSettings?.navbarCtaLabel || ''
 
-  const logoUrl = '/images/logo-fruition-black.svg'
 
   const isNavItemActive = (item: NavItem) =>
     item.sections?.some((s) => s.items?.some((link) => link.href && pathname === link.href)) ?? false
 
   return (
-    <nav className="bg-white sticky top-0 z-50 shadow-sm" onMouseLeave={() => setOpenMenu(null)}>
+    <nav className="bg-surface sticky top-0 z-50 shadow-sm" onMouseLeave={() => setOpenMenu(null)}>
       <div className="mx-auto max-w-[1348px] px-4 xl:px-0 w-full">
         <div className="flex justify-between items-center gap-4 h-[85px]">
-          {/* Logo */}
+          {/* Logo — black in light theme, white in dark (CSS swap keeps it SSR-safe) */}
           <Link href="/" className="shrink-0">
-            {logoUrl ? (
-              <Image
-                src={logoUrl}
-                alt="Fruition Services"
-                width={1366}
-                height={280}
-                className="h-8 w-auto -translate-y-0.5"
-                priority
-                unoptimized
-              />
-            ) : (
-              <span className="font-bold text-lg">Fruition Services</span>
-            )}
+            <Image
+              src="/images/logo-fruition-black.svg"
+              alt="Fruition Services"
+              width={1366}
+              height={280}
+              className="h-8 w-auto -translate-y-0.5 block dark:hidden"
+              priority
+              unoptimized
+            />
+            <Image
+              src="/images/logo-fruition-white.svg"
+              alt="Fruition Services"
+              width={1366}
+              height={280}
+              className="h-8 w-auto -translate-y-0.5 hidden dark:block"
+              priority
+              unoptimized
+            />
           </Link>
 
           {/* Desktop nav */}
@@ -90,10 +95,10 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                   <button
                     className={`font-medium text-sm py-1.5 px-3 transition-colors border whitespace-nowrap ${
                       openMenu === item.label
-                        ? 'text-[#242323] border-[#242323] rounded-[4px]'
+                        ? 'text-ink border-[color:var(--ink)] rounded-[4px]'
                         : active
-                          ? 'text-[#8015e8] border-transparent'
-                          : 'text-[#242323] border-transparent hover:text-[#8015e8]'
+                          ? 'text-brand border-transparent'
+                          : 'text-ink border-transparent hover:text-brand'
                     }`}
                   >
                     {item.label}
@@ -103,7 +108,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
             })}
 
             {/* Partner badges + phone icon + CTA */}
-            <div className="flex items-center gap-2 xl:gap-[12px] border-l border-gray-200 pl-3 xl:pl-4" onMouseEnter={() => setOpenMenu(null)}>
+            <div className="flex items-center gap-2 xl:gap-[12px] border-l border-line-soft pl-3 xl:pl-4" onMouseEnter={() => setOpenMenu(null)}>
               <div className="hidden xl:flex items-center gap-3">
                 {partnerBadges.map((badge, i) => {
                   const h = badge.height ?? 32
@@ -125,15 +130,18 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                 })}
               </div>
 
+              {/* Theme toggle */}
+              <ThemeToggle />
+
               {/* Phone icon */}
               {phoneAu && (
                 <a
                   href={`tel:${phoneAu.replace(/\s/g, '')}`}
-                  className="flex items-center justify-center w-[36px] h-[32px] rounded-[7px] hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-center w-[36px] h-[32px] rounded-[7px] hover:bg-surface-subtle transition-colors"
                   aria-label="Call us"
                 >
                   <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17.22 22.167h-.047a15.633 15.633 0 0 1-6.803-2.987 15.388 15.388 0 0 1-4.678-5.133A15.517 15.517 0 0 1 3.85 7.583a3.395 3.395 0 0 1 .77-2.753A4.667 4.667 0 0 1 6.44 3.5h1.633c.98-.01 1.84.647 2.1 1.587.18.72.432 1.42.747 2.093a2.333 2.333 0 0 1-.525 2.567l-.688.688a11.667 11.667 0 0 0 5.858 5.858l.688-.688a2.333 2.333 0 0 1 2.567-.525c.673.316 1.373.567 2.093.747a2.18 2.18 0 0 1 1.587 2.147v1.633a2.333 2.333 0 0 1-2.333 2.333 3.267 3.267 0 0 1-.467.035l-.48-.007Z" stroke="#8015E8" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M17.22 22.167h-.047a15.633 15.633 0 0 1-6.803-2.987 15.388 15.388 0 0 1-4.678-5.133A15.517 15.517 0 0 1 3.85 7.583a3.395 3.395 0 0 1 .77-2.753A4.667 4.667 0 0 1 6.44 3.5h1.633c.98-.01 1.84.647 2.1 1.587.18.72.432 1.42.747 2.093a2.333 2.333 0 0 1-.525 2.567l-.688.688a11.667 11.667 0 0 0 5.858 5.858l.688-.688a2.333 2.333 0 0 1 2.567-.525c.673.316 1.373.567 2.093.747a2.18 2.18 0 0 1 1.587 2.147v1.633a2.333 2.333 0 0 1-2.333 2.333 3.267 3.267 0 0 1-.467.035l-.48-.007Z" stroke="var(--brand)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </a>
               )}
@@ -144,7 +152,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                   href={calendlyUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 whitespace-nowrap bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-colors shadow-md"
+                  className="inline-flex items-center gap-2 whitespace-nowrap bg-gradient-to-r from-[var(--purple-primary)] to-[var(--purple-light)] hover:bg-accent-blue hover:bg-none text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-colors shadow-md"
                 >
                   <PaperPlaneIcon size={16} />
                   {ctaLabel}
@@ -153,9 +161,11 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
             </div>
           </div>
 
-          {/* Mobile toggle */}
-          <button
-            className="lg:hidden text-[#242323]"
+          {/* Mobile actions */}
+          <div className="flex items-center gap-1 lg:hidden">
+            <ThemeToggle />
+            <button
+            className="text-ink"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             <span className="sr-only">Open menu</span>
@@ -168,18 +178,19 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
-          </button>
+            </button>
+          </div>
         </div>
 
         {/* Mobile menu */}
         {mobileOpen && (
-          <div className="lg:hidden py-4 border-t border-gray-100 max-h-[80vh] overflow-y-auto">
+          <div className="lg:hidden py-4 border-t border-line-soft max-h-[80vh] overflow-y-auto">
             {navItems.map((item) => (
               <div key={item.label} className="mb-4">
                 {item.sections?.map((section, sIdx) => (
                   <div key={`${section.heading}-${sIdx}`} className="mb-3">
                     {section.heading && (
-                      <p className="text-xs font-semibold text-[#8015e8] uppercase tracking-wider px-2 mb-1">
+                      <p className="text-xs font-semibold text-brand uppercase tracking-wider px-2 mb-1">
                         {section.heading}
                       </p>
                     )}
@@ -190,21 +201,21 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                           key={sub.href}
                           href={sub.href || '#'}
                           className={`flex items-start gap-3 px-2 py-2 rounded-md transition-colors ${
-                            isActive ? 'bg-[#f5edfd]' : 'hover:bg-gray-50'
+                            isActive ? 'bg-surface-tint-2' : 'hover:bg-surface-subtle'
                           }`}
                           onClick={() => setMobileOpen(false)}
                         >
                           {sub.icon && (
-                            <div className={`shrink-0 mt-0.5 w-7 h-7 rounded-md ring-1 ring-gray-200 bg-white flex items-center justify-center ${isActive ? 'text-[#8015e8]' : 'text-[#242323]'}`}>
+                            <div className={`shrink-0 mt-0.5 w-7 h-7 rounded-md ring-1 ring-line-soft bg-surface flex items-center justify-center ${isActive ? 'text-brand' : 'text-ink'}`}>
                               <NavIcon iconKey={sub.icon} className="h-4 w-4" />
                             </div>
                           )}
                           <div className="min-w-0">
-                            <div className={`text-sm font-medium ${isActive ? 'text-[#8015e8]' : 'text-[#242323]'}`}>
+                            <div className={`text-sm font-medium ${isActive ? 'text-brand' : 'text-ink'}`}>
                               {sub.label}
                             </div>
                             {sub.description && (
-                              <div className="mt-0.5 text-xs text-[#686b82] leading-snug">
+                              <div className="mt-0.5 text-xs text-ink-muted leading-snug">
                                 {sub.description}
                               </div>
                             )}
@@ -217,7 +228,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
               </div>
             ))}
             {/* Partner badges mobile */}
-            <div className="flex items-center gap-3 px-2 py-3 border-t border-gray-100">
+            <div className="flex items-center gap-3 px-2 py-3 border-t border-line-soft">
               {partnerBadges.map((badge, i) => {
                 const h = Math.round((badge.height ?? 32) * 0.75)
                 const src = badge.image
@@ -242,7 +253,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                 href={calendlyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 mx-2 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white text-center px-6 py-2.5 rounded-full text-sm font-semibold transition-colors"
+                className="mt-4 mx-2 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--purple-primary)] to-[var(--purple-light)] hover:bg-accent-blue hover:bg-none text-white text-center px-6 py-2.5 rounded-full text-sm font-semibold transition-colors"
               >
                 <PaperPlaneIcon size={16} />
                 {ctaLabel}
@@ -257,7 +268,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
         const activeItem = navItems.find((item) => item.label === openMenu)
         if (!activeItem?.sections?.length) return null
         return (
-          <div className="hidden lg:block absolute left-0 right-0 top-full border-t border-gray-200 bg-white shadow-lg z-50">
+          <div className="hidden lg:block absolute left-0 right-0 top-full border-t border-line-soft bg-surface shadow-lg z-50">
             <div className="max-w-[1348px] mx-auto px-4 xl:px-0 py-8">
               <div className="flex flex-col gap-6">
                 {activeItem.sections.map((section, sIdx) => {
@@ -265,7 +276,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                   return (
                     <div key={`${section.heading}-${sIdx}`} className="min-w-0">
                       {section.heading && (
-                        <p className="text-xs font-medium text-[#686b82] pb-3 border-b border-gray-200 mb-3">
+                        <p className="text-xs font-medium text-ink-muted pb-3 border-b border-line-soft mb-3">
                           {section.heading}
                         </p>
                       )}
@@ -280,35 +291,35 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                               key={sub.href}
                               href={sub.href || '#'}
                               className={`group flex items-start gap-3 rounded-lg p-3 transition-colors ${
-                                isActive ? 'bg-[#f5edfd]' : 'hover:bg-gray-50'
+                                isActive ? 'bg-surface-tint-2' : 'hover:bg-surface-subtle'
                               }`}
                               onClick={() => setOpenMenu(null)}
                             >
                               <div
-                                className={`shrink-0 mt-0.5 w-8 h-8 rounded-md ring-1 ring-gray-200 bg-white flex items-center justify-center transition-colors ${
+                                className={`shrink-0 mt-0.5 w-8 h-8 rounded-md ring-1 ring-line-soft bg-surface flex items-center justify-center transition-colors ${
                                   isActive
-                                    ? 'text-[#8015e8]'
-                                    : 'text-[#242323] group-hover:text-[#8015e8] group-hover:ring-[#d9bff5]'
+                                    ? 'text-brand'
+                                    : 'text-ink group-hover:text-brand group-hover:ring-[color:var(--line-tint)]'
                                 }`}
                               >
                                 {sub.icon ? (
                                   <NavIcon iconKey={sub.icon} className="h-[18px] w-[18px]" />
                                 ) : (
-                                  <span className="block h-2 w-2 rounded-full bg-gray-300" />
+                                  <span className="block h-2 w-2 rounded-full bg-line-soft" />
                                 )}
                               </div>
                               <div className="min-w-0">
                                 <div
                                   className={`text-sm font-semibold leading-tight ${
                                     isActive
-                                      ? 'text-[#8015e8]'
-                                      : 'text-[#242323] group-hover:text-[#8015e8]'
+                                      ? 'text-brand'
+                                      : 'text-ink group-hover:text-brand'
                                   }`}
                                 >
                                   {sub.label}
                                 </div>
                                 {sub.description && (
-                                  <div className="mt-1 text-xs text-[#686b82] leading-snug">
+                                  <div className="mt-1 text-xs text-ink-muted leading-snug">
                                     {sub.description}
                                   </div>
                                 )}

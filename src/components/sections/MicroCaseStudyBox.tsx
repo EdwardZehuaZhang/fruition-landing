@@ -16,10 +16,10 @@ export default function MicroCaseStudyBox({
   if (!cases.length) return null
 
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 72, paddingBottom: 72 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 72, paddingBottom: 72 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         {heading && (
-          <h2 className="text-section-h2 text-center text-black" style={{ marginBottom: 40 }}>
+          <h2 className="text-section-h2 text-center text-ink" style={{ marginBottom: 40 }}>
             {heading}
           </h2>
         )}
@@ -28,23 +28,23 @@ export default function MicroCaseStudyBox({
             <div
               key={c._key || i}
               className="rounded-card flex flex-col"
-              style={{ border: "1px solid #ece7fb", background: "#faf8ff", padding: 28, gap: 14 }}
+              style={{ border: "1px solid var(--line-tint)", background: "var(--surface-tint)", padding: 28, gap: 14 }}
             >
               {c.challenge && (
-                <Row label="The Challenge" value={c.challenge} color="#c0392b" />
+                <Row label="The Challenge" value={c.challenge} color="var(--danger)" />
               )}
               {c.solution && (
-                <Row label="The Solution" value={c.solution} color="#8015e8" />
+                <Row label="The Solution" value={c.solution} color="var(--brand)" />
               )}
               {c.impact && (
-                <Row label="The Impact" value={c.impact} color="#1e8449" />
+                <Row label="The Impact" value={c.impact} color="var(--success-strong)" />
               )}
               {(c.metric || c.metricLabel) && (
-                <div className="mt-2 flex items-baseline gap-3" style={{ borderTop: "1px solid #ece7fb", paddingTop: 16 }}>
-                  <span className="font-bold" style={{ fontSize: 34, lineHeight: "38px", color: "var(--purple-primary)" }}>
+                <div className="mt-2 flex items-baseline gap-3" style={{ borderTop: "1px solid var(--line-tint)", paddingTop: 16 }}>
+                  <span className="font-bold" style={{ fontSize: 34, lineHeight: "38px", color: "var(--brand)" }}>
                     {c.metric}
                   </span>
-                  <span style={{ fontSize: 13, lineHeight: "18px", color: "#686b82" }}>{c.metricLabel}</span>
+                  <span style={{ fontSize: 13, lineHeight: "18px", color: "var(--ink-muted)" }}>{c.metricLabel}</span>
                 </div>
               )}
             </div>
@@ -61,7 +61,7 @@ function Row({ label, value, color }: { label: string; value: string; color: str
       <div className="font-bold" style={{ fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", color, marginBottom: 4 }}>
         {label}
       </div>
-      <p style={{ fontSize: 15, lineHeight: "22px", color: "#333" }}>{value}</p>
+      <p style={{ fontSize: 15, lineHeight: "22px", color: "var(--ink-soft)" }}>{value}</p>
     </div>
   )
 }

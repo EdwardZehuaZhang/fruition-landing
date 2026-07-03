@@ -49,7 +49,7 @@ export default function MondayForFinanceContent({
   return (
     <div>
       {/* 1. Hero — certificates on top, no small image */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div
           className="mx-auto flex flex-col items-center"
           style={{
@@ -104,7 +104,7 @@ export default function MondayForFinanceContent({
               maxWidth: 924,
             }}
           >
-            <span className="text-black">
+            <span className="text-ink">
               {page.heroHeading || page.title || ""}
             </span>
           </h1>
@@ -112,7 +112,7 @@ export default function MondayForFinanceContent({
           {/* Subheading */}
           {!page.hideHeroSubheading && page.heroSubheading && (
             <p
-              className="text-body-lead text-center text-black"
+              className="text-body-lead text-center text-ink"
               style={{
                 marginTop: 31,
                 maxWidth: 859,
@@ -138,14 +138,14 @@ export default function MondayForFinanceContent({
                   borderRadius: 100,
                   ...(page.secondaryCtaLabel
                     ? {
-                        border: "1px solid #8015e8",
-                        backgroundColor: "white",
-                        color: "#8015e8",
+                        border: "1px solid var(--brand)",
+                        backgroundColor: "var(--surface)",
+                        color: "var(--brand)",
                       }
                     : {
                         background:
-                          "linear-gradient(to right, #8015e8, #ba83f0)",
-                        color: "white",
+                          "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                        color: "var(--white)",
                       }),
                   fontSize: 16,
                 }}
@@ -161,7 +161,7 @@ export default function MondayForFinanceContent({
                   width: 330,
                   height: 53,
                   borderRadius: 100,
-                  background: "linear-gradient(to right, #8015e8, #ba83f0)",
+                  background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
                   fontSize: 16,
                 }}
               >
@@ -195,7 +195,7 @@ export default function MondayForFinanceContent({
 
       {/* 3. Video (underneath logo scroll) */}
       {page.heroVideoUrl && (
-        <section className="bg-white" style={{ paddingBottom: 80 }}>
+        <section className="bg-surface" style={{ paddingBottom: 80 }}>
           <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
             <div
               className="rounded-card overflow-hidden"
@@ -271,7 +271,7 @@ function FinanceTabsSection({
       style={{
         paddingTop: 80,
         paddingBottom: 80,
-        background: "linear-gradient(180deg,#f5f0ff 0%,#ffffff 60%)",
+        background: "linear-gradient(180deg,var(--surface-tint-2) 0%,var(--surface) 60%)",
       }}
     >
       <div
@@ -280,13 +280,13 @@ function FinanceTabsSection({
       >
         {(headingPart1 || headingAccent) && (
           <h2
-            className="text-section-h2 text-center text-black"
+            className="text-section-h2 text-center text-ink"
             style={{ maxWidth: 900 }}
           >
             {headingPart1}
             {headingPart1 && headingAccent ? " " : ""}
             {headingAccent && (
-              <span style={{ color: "#8015e8" }}>{headingAccent}</span>
+              <span style={{ color: "var(--brand)" }}>{headingAccent}</span>
             )}
           </h2>
         )}
@@ -309,16 +309,16 @@ function FinanceTabsSection({
                 ...(i === activeTab
                   ? {
                       background:
-                        "linear-gradient(to right, #8015e8, #ba83f0)",
-                      color: "white",
+                        "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                      color: "var(--white)",
                       boxShadow:
                         "2.83px 2.83px 15px 3px rgba(0,0,0,0.18)",
                       border: "none",
                     }
                   : {
-                      backgroundColor: "white",
-                      color: "#2b074d",
-                      border: "1px solid #e8e6e6",
+                      backgroundColor: "var(--surface)",
+                      color: "var(--navy-700)",
+                      border: "1px solid var(--line)",
                     }),
               }}
             >
@@ -331,7 +331,7 @@ function FinanceTabsSection({
         {active?.subheading && (
           <h3
             className="text-center font-semibold"
-            style={{ fontSize: 22, color: "#8015e8", marginTop: 40 }}
+            style={{ fontSize: 22, color: "var(--brand)", marginTop: 40 }}
           >
             {active.subheading}
           </h3>
@@ -339,7 +339,7 @@ function FinanceTabsSection({
 
         {/* Numbered items */}
         <div
-          className="w-full rounded-card border border-[#e8e6e6]"
+          className="w-full rounded-card border border-line"
           style={{ marginTop: 24, padding: "12px 0" }}
         >
           {(active.items ?? []).map((item, i) => (
@@ -350,7 +350,7 @@ function FinanceTabsSection({
                 padding: "24px 40px",
                 borderBottom:
                   i < (active.items?.length ?? 0) - 1
-                    ? "1px solid #f0f0f0"
+                    ? "1px solid var(--line-soft)"
                     : "none",
               }}
             >
@@ -369,7 +369,7 @@ function FinanceTabsSection({
               <div style={{ flex: 1 }}>
                 <p
                   className="font-bold"
-                  style={{ fontSize: 18, color: "#2b074d" }}
+                  style={{ fontSize: 18, color: "var(--navy-700)" }}
                 >
                   {"icon" in item && (item as { icon?: string }).icon
                     ? `${(item as { icon?: string }).icon} `
@@ -380,7 +380,7 @@ function FinanceTabsSection({
                   style={{
                     fontSize: 14,
                     lineHeight: "22px",
-                    color: "#444",
+                    color: "var(--ink-soft)",
                     marginTop: 8,
                     whiteSpace: "pre-line",
                   }}
@@ -415,18 +415,18 @@ function BottomFeatureSection({
 }) {
   if (cards.length === 0 && !videoUrl) return null
   return (
-    <section style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(180deg, #f5f0ff 0%, #ffffff 100%)" }}>
+    <section style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(180deg, var(--surface-tint-2) 0%, var(--surface) 100%)" }}>
       <div className="mx-auto px-4" style={{ maxWidth: 1100 }}>
         {/* Title */}
         {(headingPart1 || headingAccent) && (
           <h2
             className="text-section-h2 text-center"
-            style={{ color: "#2b074d", maxWidth: 900, margin: "0 auto" }}
+            style={{ color: "var(--navy-700)", maxWidth: 900, margin: "0 auto" }}
           >
             {headingPart1}
             {headingPart1 && headingAccent ? " " : ""}
             {headingAccent && (
-              <span style={{ color: "#8015e8" }}>{headingAccent}</span>
+              <span style={{ color: "var(--brand)" }}>{headingAccent}</span>
             )}
           </h2>
         )}
@@ -439,7 +439,7 @@ function BottomFeatureSection({
           {cards.map((card, i) => (
             <div
               key={card.title || i}
-              className="flex flex-col items-center text-center bg-white rounded-card border border-[#ece7fb]"
+              className="flex flex-col items-center text-center bg-surface rounded-card border border-line-tint"
               style={{
                 padding: 28,
                 boxShadow: "var(--shadow-whisper)",
@@ -450,7 +450,7 @@ function BottomFeatureSection({
               </span>
               <h4
                 className="font-bold"
-                style={{ fontSize: 18, color: "#8015e8" }}
+                style={{ fontSize: 18, color: "var(--brand)" }}
               >
                 {card.title}
               </h4>
@@ -458,7 +458,7 @@ function BottomFeatureSection({
                 style={{
                   fontSize: 14,
                   lineHeight: "22px",
-                  color: "#444",
+                  color: "var(--ink-soft)",
                   marginTop: 10,
                 }}
               >

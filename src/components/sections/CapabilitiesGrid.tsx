@@ -18,9 +18,9 @@ interface CapabilitiesGridProps {
   ctaSecondaryUrl?: string
 }
 
-const DARK_BG = "#2b074d"
-const LIGHT_BG = "#f7f5ff"
-const ACCENT = "#8015e8"
+const DARK_BG = "var(--surface-inverse-2)"
+const LIGHT_BG = "var(--surface-tint)"
+const ACCENT = "var(--brand)"
 
 export default function CapabilitiesGrid({
   eyebrow,
@@ -39,8 +39,8 @@ export default function CapabilitiesGrid({
 
   const isDark = theme === "dark"
   const bg = isDark ? DARK_BG : LIGHT_BG
-  const headingColor = isDark ? "#ffffff" : "#000000"
-  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "#4a4a4a"
+  const headingColor = isDark ? "var(--ink-inverse)" : "var(--ink)"
+  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "var(--ink-soft)"
   const eyebrowColor = isDark ? "rgba(255,255,255,0.75)" : ACCENT
 
   const cols = columns ?? (cards.length <= 4 ? 2 : 3)
@@ -100,7 +100,7 @@ export default function CapabilitiesGrid({
             return (
               <div
                 key={card._key || i}
-                className="bg-white rounded-card border border-[#ece7fb]"
+                className="bg-surface rounded-card border border-[color:var(--line-tint)]"
                 style={{
                   padding: 28,
                   textAlign: hasBullets ? "left" : "center",
@@ -134,7 +134,7 @@ export default function CapabilitiesGrid({
                     style={{
                       fontSize: 14,
                       lineHeight: 1.55,
-                      color: "#111",
+                      color: "var(--ink)",
                       whiteSpace: "pre-line",
                     }}
                   >
@@ -161,7 +161,7 @@ export default function CapabilitiesGrid({
                             gap: 10,
                             fontSize: 14,
                             lineHeight: 1.5,
-                            color: "#111",
+                            color: "var(--ink)",
                           }}
                         >
                           <span
@@ -204,8 +204,8 @@ export default function CapabilitiesGrid({
                   height: 53,
                   padding: "0 40px",
                   borderRadius: 100,
-                  background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                  color: "white",
+                  background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
+                  color: "var(--white)",
                   fontSize: 16,
                 }}
               >
@@ -220,8 +220,8 @@ export default function CapabilitiesGrid({
                   height: 53,
                   padding: "0 40px",
                   borderRadius: 100,
-                  background: isDark ? "rgba(255,255,255,0.08)" : "#ffffff",
-                  color: isDark ? "#ffffff" : ACCENT,
+                  background: isDark ? "rgba(255,255,255,0.08)" : "var(--surface)",
+                  color: isDark ? "var(--white)" : ACCENT,
                   border: isDark
                     ? "1px solid rgba(255,255,255,0.3)"
                     : `1px solid ${ACCENT}`,

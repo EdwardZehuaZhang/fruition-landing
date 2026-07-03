@@ -30,10 +30,10 @@ type ProvenStat = { emoji?: string; value?: string; body?: string }
 function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
   if (!stats || stats.length === 0) return null
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "#10003a", fontSize: 36, lineHeight: "44px", marginBottom: 40 }}>
-          Proven <span style={{ color: "#8015e8" }}>n8n Automation</span> Results
+        <h2 className="text-center font-bold" style={{ color: "var(--ink-heading)", fontSize: 36, lineHeight: "44px", marginBottom: 40 }}>
+          Proven <span style={{ color: "var(--brand)" }}>n8n Automation</span> Results
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>
           {stats.map((s, i) => (
@@ -43,7 +43,7 @@ function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
               style={{
                 padding: 32,
                 borderRadius: 18,
-                background: "linear-gradient(180deg, #f6efff 0%, #ebd9ff 100%)",
+                background: "linear-gradient(180deg, var(--surface-tint) 0%, var(--line-tint) 100%)",
                 border: "1px solid rgba(128,21,232,0.10)",
                 boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)",
                 display: "flex",
@@ -58,15 +58,15 @@ function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
                   width: 56,
                   height: 56,
                   borderRadius: 999,
-                  background: "white",
+                  background: "var(--surface)",
                   fontSize: 26,
                   boxShadow: "0 4px 14px -8px rgba(64,12,140,0.25)",
                 }}
               >
                 {s.emoji}
               </span>
-              <p className="font-bold" style={{ color: "#8015e8", fontSize: 40, lineHeight: 1 }}>{s.value}</p>
-              <p style={{ color: "#444", fontSize: 14, lineHeight: "22px", maxWidth: 220 }}>{s.body}</p>
+              <p className="font-bold" style={{ color: "var(--brand)", fontSize: 40, lineHeight: 1 }}>{s.value}</p>
+              <p style={{ color: "var(--ink-soft)", fontSize: 14, lineHeight: "22px", maxWidth: 220 }}>{s.body}</p>
             </div>
           ))}
         </div>
