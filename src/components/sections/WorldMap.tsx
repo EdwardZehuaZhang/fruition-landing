@@ -157,12 +157,12 @@ export default function WorldMap({ offices }: { offices: MapOffice[] }) {
                   {pin.office.flag && (
                     <span className="fr-map-flag" aria-hidden="true">{pin.office.flag}</span>
                   )}
-                  <div style={{ fontWeight: 600, fontSize: 13, lineHeight: "18px", color: "#171717" }}>
+                  <div style={{ fontWeight: 600, fontSize: 13, lineHeight: "18px", color: "var(--text-body)" }}>
                     {pin.office.city}
                     {pin.office.country ? `, ${pin.office.country}` : ""}
                   </div>
                   {pin.office.address && (
-                    <div style={{ fontSize: 12, lineHeight: "18px", color: "#525252", marginTop: 4 }}>
+                    <div style={{ fontSize: 12, lineHeight: "18px", color: "var(--text-muted-fg)", marginTop: 4 }}>
                       {pin.office.address}
                     </div>
                   )}
@@ -227,8 +227,8 @@ export default function WorldMap({ offices }: { offices: MapOffice[] }) {
           flex-direction: column;
           align-items: center;
           gap: 8px;
-          background: #ffffff;
-          border: 1px solid rgba(0, 0, 0, 0.1);
+          background: var(--surface-raised);
+          border: 1px solid var(--border-ui);
           border-radius: 8px;
           padding: 12px 16px;
           box-shadow:

@@ -12,18 +12,18 @@ export default function ApplicationFormSection({
   if (!embedUrl) return null
 
   return (
-    <section style={{ backgroundColor: "#ffffff", paddingTop: 80, paddingBottom: 80 }}>
+    <section style={{ backgroundColor: "var(--surface)", paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto px-4" style={{ maxWidth: 920 }}>
         {heading && (
           <h2
             className="text-section-h2 text-center"
-            style={{ color: "#000", marginBottom: 32 }}
+            style={{ color: "var(--text-body)", marginBottom: 32 }}
           >
             {heading}
           </h2>
         )}
         <div
-          className="rounded-card overflow-hidden border border-[#ece7fb]"
+          className="rounded-card overflow-hidden border border-ui dark:shadow-none"
           style={{ boxShadow: "var(--shadow-whisper)" }}
         >
           <iframe

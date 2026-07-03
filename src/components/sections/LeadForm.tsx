@@ -78,16 +78,16 @@ export default function LeadForm({
   }
 
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 72, paddingBottom: 72 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 72, paddingBottom: 72 }}>
       <div
-        className="mx-auto rounded-card"
+        className="mx-auto rounded-card bg-surface-raised dark:shadow-none dark:border dark:border-ui"
         style={{ maxWidth: 620, padding: 32, border: "1px solid #ece7fb", boxShadow: "0 24px 48px -32px rgba(64,12,140,0.28)" }}
       >
-        <h2 className="text-section-h2 text-black" style={{ marginBottom: subheading ? 12 : 24 }}>
+        <h2 className="text-section-h2 text-body" style={{ marginBottom: subheading ? 12 : 24 }}>
           {heading}
         </h2>
         {subheading && (
-          <p style={{ color: "#686b82", fontSize: 15, lineHeight: "22px", marginBottom: 22 }}>{subheading}</p>
+          <p style={{ color: "var(--text-muted-fg)", fontSize: 15, lineHeight: "22px", marginBottom: 22 }}>{subheading}</p>
         )}
 
         {status === "done" ? (
@@ -143,18 +143,18 @@ export default function LeadForm({
 
 const inputStyle: React.CSSProperties = {
   width: "100%",
-  border: "1px solid #ddd6f3",
+  border: "1px solid var(--border-ui)",
   borderRadius: 10,
   padding: "11px 14px",
   fontSize: 15,
-  color: "#10003a",
-  background: "#fff",
+  color: "var(--text-body)",
+  background: "var(--surface-raised)",
 }
 
 function Labeled({ label, children }: { label?: string; children: React.ReactNode }) {
   return (
     <label className="flex flex-col" style={{ gap: 6 }}>
-      {label && <span style={{ fontSize: 13, color: "#10003a", fontWeight: 600 }}>{label}</span>}
+      {label && <span style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600 }}>{label}</span>}
       {children}
     </label>
   )

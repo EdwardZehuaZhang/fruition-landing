@@ -197,20 +197,20 @@ function CertifiedExcellenceSection({ calendlyUrl }: { calendlyUrl: string }) {
 
 function WhyFruitionSection({ items }: { items: WhyFruitionItem[] }) {
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 64, paddingBottom: 64 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 64, paddingBottom: 64 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "#10003a", fontSize: 32, lineHeight: "40px", marginBottom: 32 }}>
+        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 32, lineHeight: "40px", marginBottom: 32 }}>
           Why Choose Fruition for <span style={{ color: "#8015e8" }}>monday.com?</span>
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4" style={{ gap: 16 }}>
           {items.map((reason: WhyFruitionItem, i: number) => (
             <div
               key={reason || i}
-              className="flex items-center bg-white rounded-card"
-              style={{ gap: 12, padding: 20, border: "1px solid #ece7fb" }}
+              className="flex items-center rounded-card"
+              style={{ gap: 12, padding: 20, background: "var(--surface-raised)", border: "1px solid var(--border-ui)" }}
             >
               <Check size={22} color="#8015e8" aria-hidden />
-              <p className="font-semibold" style={{ color: "#10003a", fontSize: 14 }}>{reason}</p>
+              <p className="font-semibold" style={{ color: "var(--text-body)", fontSize: 14 }}>{reason}</p>
             </div>
           ))}
         </div>
@@ -221,20 +221,21 @@ function WhyFruitionSection({ items }: { items: WhyFruitionItem[] }) {
 
 function ImplementationServicesSection({ items }: { items: ImplementationServiceItem[] }) {
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 64 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 64 }}>
       <div className="mx-auto" style={{ maxWidth: 1000 }}>
-        <h2 className="text-center font-bold" style={{ color: "#10003a", fontSize: 30, lineHeight: "40px", marginBottom: 32 }}>
+        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 30, lineHeight: "40px", marginBottom: 32 }}>
           Our monday.com Expert <span style={{ color: "#8015e8" }}>Implementation Services</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
           {items.map((s: ImplementationServiceItem, i: number) => (
             <div
               key={s.title || i}
-              className="bg-white"
+              className="dark:shadow-none"
               style={{
                 padding: 24,
                 borderRadius: 16,
-                border: "1px solid #ece7fb",
+                background: "var(--surface-raised)",
+                border: "1px solid var(--border-ui)",
                 display: "flex",
                 flexDirection: "column",
                 gap: 10,
@@ -242,8 +243,8 @@ function ImplementationServicesSection({ items }: { items: ImplementationService
               }}
             >
               <span style={{ fontSize: 28 }}>{s.emoji}</span>
-              <p className="font-bold" style={{ color: "#10003a", fontSize: 16 }}>{s.title}</p>
-              <p style={{ color: "#56516a", fontSize: 13, lineHeight: "20px" }}>{s.body}</p>
+              <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 16 }}>{s.title}</p>
+              <p style={{ color: "var(--text-muted-fg)", fontSize: 13, lineHeight: "20px" }}>{s.body}</p>
             </div>
           ))}
         </div>
@@ -485,7 +486,7 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
       <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
 
       {/* 6b. Video below FAQ */}
-      <section className="bg-white px-4" style={{ paddingTop: 24, paddingBottom: 80 }}>
+      <section className="bg-surface px-4" style={{ paddingTop: 24, paddingBottom: 80 }}>
         <div className="mx-auto" style={{ maxWidth: 980 }}>
           <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
             <YouTubeEmbed videoId="_0MhMjicbIM" title="monday.com consulting partner overview" />

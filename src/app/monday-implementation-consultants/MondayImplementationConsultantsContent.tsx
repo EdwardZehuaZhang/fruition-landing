@@ -354,7 +354,7 @@ export default function MondayImplementationConsultantsContent({
       {/* ============================================================ */}
       {/* SECTION 1 — Hero                                             */}
       {/* ============================================================ */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div
           className="mx-auto flex flex-col items-center px-4 lg:px-[120px]"
           style={{ paddingTop: 80, paddingBottom: 80, maxWidth: 1600 }}
@@ -387,9 +387,9 @@ export default function MondayImplementationConsultantsContent({
               whiteSpace: "pre-line",
             }}
           >
-            {heroHeadingPart1 && <span className="text-black">{heroHeadingPart1}</span>}
+            {heroHeadingPart1 && <span className="text-body">{heroHeadingPart1}</span>}
             <span style={{ color: "#8015e8" }}>{heroHeadingAccent}</span>
-            {heroHeadingPart2 && <span className="text-black">{heroHeadingPart2}</span>}
+            {heroHeadingPart2 && <span className="text-body">{heroHeadingPart2}</span>}
           </h1>
 
           {/* Subheading */}
@@ -539,10 +539,10 @@ export default function MondayImplementationConsultantsContent({
       {/* ============================================================ */}
       {/* SECTION 2 — Logo cloud marquee                               */}
       {/* ============================================================ */}
-      <section className="bg-white py-[80px] px-4">
+      <section className="bg-surface py-[80px] px-4">
         <div className="flex flex-col gap-[35px] items-center w-full max-w-[1348px] mx-auto">
           <p className="text-[28px] font-medium leading-[39.2px] text-center">
-            <span className="text-black">{logoCloudPart1}</span>
+            <span className="text-body">{logoCloudPart1}</span>
             <span className="text-[#8015e8]">{logoCloudAccent}</span>
           </p>
           {duplicatedLogos.length > 0 && (
@@ -575,7 +575,7 @@ export default function MondayImplementationConsultantsContent({
       {/* SECTION 2b — Video Embed                                     */}
       {/* ============================================================ */}
       {videoEmbedUrl && (
-        <section className="bg-white" style={{ paddingBottom: 80 }}>
+        <section className="bg-surface" style={{ paddingBottom: 80 }}>
           <div className="mx-auto" style={{ maxWidth: 1042 }}>
             <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
               <YouTubeEmbed url={videoEmbedUrl} title={videoTitle} />
@@ -782,7 +782,7 @@ export default function MondayImplementationConsultantsContent({
       {/* ============================================================ */}
       {/* SECTION 12 — Security badge                                   */}
       {/* ============================================================ */}
-      <section className="bg-white px-4" style={{ paddingTop: 40, paddingBottom: 80 }}>
+      <section className="bg-surface px-4" style={{ paddingTop: 40, paddingBottom: 80 }}>
         <div className="mx-auto" style={{ maxWidth: 976 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

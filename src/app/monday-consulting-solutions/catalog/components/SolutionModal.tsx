@@ -52,8 +52,8 @@ function ModalShell({
         onClick={onClose}
         aria-hidden
       />
-      <div className="relative w-full max-w-4xl max-h-[92vh] bg-white rounded-[var(--radius-card)] shadow-card flex flex-col overflow-hidden">
-        <div className="flex items-start justify-between gap-4 px-6 pt-6 pb-3 border-b border-[var(--color-border)]">
+      <div className="relative w-full max-w-4xl max-h-[92vh] bg-surface-raised rounded-[var(--radius-card)] shadow-card dark:shadow-none dark:border dark:border-ui flex flex-col overflow-hidden">
+        <div className="flex items-start justify-between gap-4 px-6 pt-6 pb-3 border-b border-[var(--border-ui)]">
           <div>
             <div className="text-[10px] uppercase tracking-wider font-semibold text-[var(--purple-primary)]">
               {solution.tag}
@@ -75,7 +75,7 @@ function ModalShell({
           </button>
         </div>
 
-        <div role="tablist" className="flex gap-1 px-6 py-3 border-b border-[var(--color-border)]">
+        <div role="tablist" className="flex gap-1 px-6 py-3 border-b border-[var(--border-ui)]">
           {TAB_LABELS.map((label, i) => {
             const isActive = i === tab
             return (
@@ -104,12 +104,12 @@ function ModalShell({
           {tab === 2 && <SimilarTab solution={solution} />}
         </div>
 
-        <div className="flex items-center justify-between gap-3 border-t border-[var(--color-border)] px-6 py-3 bg-[#fafaff]">
+        <div className="flex items-center justify-between gap-3 border-t border-[var(--border-ui)] px-6 py-3 bg-[#fafaff]">
           <button
             type="button"
             onClick={() => setTab((Math.max(0, tab - 1)) as Tab)}
             disabled={tab === 0}
-            className="text-caption px-3 py-1.5 rounded-full border border-[var(--color-border)] disabled:opacity-40 hover:border-[var(--purple-light)]"
+            className="text-caption px-3 py-1.5 rounded-full border border-[var(--border-ui)] disabled:opacity-40 hover:border-[var(--purple-light)]"
           >
             ← Back
           </button>
@@ -148,7 +148,7 @@ function OverviewTab({ solution }: { solution: Solution }) {
           {solution.highlights.map((h, i) => (
             <div
               key={i}
-              className="rounded-xl border border-[var(--color-border)] bg-white p-4"
+              className="rounded-xl border border-[var(--border-ui)] bg-surface-raised p-4"
             >
               <div className="text-[10px] uppercase tracking-wider font-semibold text-[var(--purple-primary)]">
                 {h[0]}
@@ -180,7 +180,7 @@ function OverviewTab({ solution }: { solution: Solution }) {
             {solution.modules.map((m, i) => (
               <div
                 key={i}
-                className="rounded-xl border border-[var(--color-border)] bg-white p-4"
+                className="rounded-xl border border-[var(--border-ui)] bg-surface-raised p-4"
               >
                 <div className="text-card-title text-[15px] text-[var(--text-dark)] mb-2">
                   {m.name}
@@ -204,7 +204,7 @@ function OverviewTab({ solution }: { solution: Solution }) {
             {solution.personas.map((p, i) => (
               <div
                 key={i}
-                className="rounded-xl border border-[var(--color-border)] bg-white p-3"
+                className="rounded-xl border border-[var(--border-ui)] bg-surface-raised p-3"
               >
                 <div className="text-body font-semibold text-[var(--text-dark)]">{p[0]}</div>
                 <div className="text-body-sm text-[var(--color-text-secondary)]">{p[1]}</div>
@@ -220,7 +220,7 @@ function OverviewTab({ solution }: { solution: Solution }) {
             {solution.phases.map((p, i) => (
               <div
                 key={i}
-                className="rounded-xl border border-[var(--color-border)] bg-white p-4"
+                className="rounded-xl border border-[var(--border-ui)] bg-surface-raised p-4"
               >
                 <div className="text-[10px] uppercase tracking-wider font-semibold text-[var(--purple-primary)]">
                   {p.pn}
@@ -288,7 +288,7 @@ function RichSection({ title, children }: { title: string; children: React.React
 
 function MetaPanel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-[var(--color-border)] bg-white p-4">
+    <div className="rounded-xl border border-[var(--border-ui)] bg-surface-raised p-4">
       <div className="text-[10px] uppercase tracking-wider font-semibold text-[var(--purple-primary)] mb-2">
         {title}
       </div>
@@ -358,12 +358,12 @@ function WorkflowTab({ solution }: { solution: Solution }) {
       <h3 className="text-card-title text-[var(--text-dark)] mb-2">Workflow diagram</h3>
       <p className="text-body-sm text-[var(--color-text-secondary)] mb-5">{solution.cap}</p>
       {!diagram ? (
-        <div className="rounded-xl border border-dashed border-[var(--color-border)] bg-[#faf7ff] p-10 text-center text-[var(--color-text-secondary)]">
+        <div className="rounded-xl border border-dashed border-[var(--border-ui)] bg-[#faf7ff] p-10 text-center text-[var(--color-text-secondary)]">
           Workflow diagram for this solution is being prepared. Talk to a solutions engineer for a
           live walk-through.
         </div>
       ) : (
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-3 sm:p-5 overflow-auto min-h-[240px]">
+        <div className="rounded-xl border border-[var(--border-ui)] bg-surface-raised p-3 sm:p-5 overflow-auto min-h-[240px]">
           {loading && (
             <div className="text-body-sm text-[var(--color-text-secondary)] py-10 text-center">
               Rendering diagram…
@@ -391,7 +391,7 @@ function SimilarTab({ solution }: { solution: Solution }) {
         {solution.useCases.map(([name, desc], i) => (
           <div
             key={i}
-            className="rounded-xl border border-[var(--color-border)] bg-white p-4"
+            className="rounded-xl border border-[var(--border-ui)] bg-surface-raised p-4"
           >
             <div className="text-body font-semibold text-[var(--text-dark)]">{name}</div>
             <div className="text-body-sm text-[var(--color-text-secondary)] mt-1">{desc}</div>

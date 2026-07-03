@@ -103,7 +103,7 @@ export default function BlogFilterableList({
           className={`${pillBase} ${
             activeSlug === "all"
               ? "bg-blue-700 text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-blue-50"
+              : "bg-surface-subtle text-body hover:bg-blue-50 dark:hover:bg-blue-950/40"
           }`}
         >
           All Posts
@@ -116,7 +116,7 @@ export default function BlogFilterableList({
             className={`${pillBase} ${
               activeSlug === cat.slug
                 ? "bg-blue-700 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-50"
+                : "bg-surface-subtle text-body hover:bg-blue-50 dark:hover:bg-blue-950/40"
             }`}
           >
             {cat.title}
@@ -131,7 +131,7 @@ export default function BlogFilterableList({
       </div>
 
       {activeSlug !== "all" && filtered.length === 0 && !loading && (
-        <p className="text-center text-sm text-gray-400 py-12">
+        <p className="text-center text-sm text-muted py-12">
           No posts in this category yet.
         </p>
       )}
@@ -139,8 +139,8 @@ export default function BlogFilterableList({
       {hasMore && (
         <div ref={sentinelRef} className="flex justify-center py-12">
           {loading ? (
-            <div className="flex items-center gap-2 text-gray-500 text-sm">
-              <span className="w-4 h-4 rounded-full border-2 border-gray-300 border-t-blue-600 animate-spin" />
+            <div className="flex items-center gap-2 text-muted text-sm">
+              <span className="w-4 h-4 rounded-full border-2 border-ui border-t-blue-600 animate-spin" />
               Loading more posts…
             </div>
           ) : (
@@ -150,7 +150,7 @@ export default function BlogFilterableList({
       )}
 
       {!hasMore && activeSlug === "all" && posts.length > 0 && (
-        <p className="text-center text-sm text-gray-400 py-12">
+        <p className="text-center text-sm text-muted py-12">
           You&apos;ve reached the end.
         </p>
       )}

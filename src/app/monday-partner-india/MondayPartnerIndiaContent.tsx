@@ -29,7 +29,7 @@ interface Props {
 
 function TeamsTransformedStrip() {
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 24, paddingBottom: 32 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 24, paddingBottom: 32 }}>
       <div className="mx-auto text-center" style={{ maxWidth: 920 }}>
         <p className="font-bold" style={{ color: "#10003a", fontSize: 16, marginBottom: 8 }}>Teams Transformed with Proven Efficiency Gains.</p>
         <p style={{ color: "#444", fontSize: 14, lineHeight: "22px" }}>
@@ -45,7 +45,7 @@ type RoiStat = { value?: string; label?: string }
 
 function FeatureBlocksSection({ blocks }: { blocks: FeatureBlock[] }) {
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <div className="flex flex-col" style={{ gap: 56 }}>
           {blocks.map((b, i) => (
@@ -82,7 +82,7 @@ function FeatureBlocksSection({ blocks }: { blocks: FeatureBlock[] }) {
 
 function PartnerSectionCta({ calendlyUrl }: { calendlyUrl: string }) {
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 24, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 24, paddingBottom: 80 }}>
       <div className="mx-auto text-center" style={{ maxWidth: 920 }}>
         <h2 className="font-bold" style={{ color: "#10003a", fontSize: 28, lineHeight: "36px", marginBottom: 22 }}>
           Work with a certified <span style={{ color: "#8015e8" }}>monday.com partner consultant</span> today

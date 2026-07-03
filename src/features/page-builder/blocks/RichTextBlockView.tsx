@@ -31,7 +31,7 @@ const SECTION_MAP: Record<string, {
   'setting up': {
     eyebrow: 'Implementation  & optimisation',
     subheadingJSX: (
-      <p className="text-[20px] font-semibold text-black leading-[28px]">
+      <p className="text-[20px] font-semibold text-body leading-[28px]">
         <span>Get help </span>
         <span className="text-[#ba83f0]">setting up</span>
         <span> or </span>
@@ -46,7 +46,7 @@ const SECTION_MAP: Record<string, {
   'training': {
     eyebrow: 'Training & managed services',
     subheadingJSX: (
-      <p className="text-[20px] font-semibold text-black leading-[28px]">
+      <p className="text-[20px] font-semibold text-body leading-[28px]">
         <span>Get the entire team monday.com </span>
         <span className="text-[#ba83f0]">training</span>
         <span>.</span>
@@ -59,7 +59,7 @@ const SECTION_MAP: Record<string, {
   'automation': {
     eyebrow: 'Integration & API development',
     subheadingJSX: (
-      <p className="text-[20px] font-semibold text-black leading-[28px]">
+      <p className="text-[20px] font-semibold text-body leading-[28px]">
         <span>Eliminate manual work with{'\n'}</span>
         <span className="text-[#ba83f0]">automation</span>
         <span>.</span>
@@ -128,11 +128,11 @@ export default function RichTextBlockView({
       )}
 
       {section ? section.subheadingJSX : subheading && (
-        <p className="text-[20px] font-semibold text-black leading-[28px]">{subheading}</p>
+        <p className="text-[20px] font-semibold text-body leading-[28px]">{subheading}</p>
       )}
 
       {content && !hideCorruptedBodyContent && (
-        <div className="text-[16px] text-black leading-[22.4px]">
+        <div className="text-[16px] text-body leading-[22.4px]">
           <PortableText value={content} components={portableTextComponents} />
         </div>
       )}

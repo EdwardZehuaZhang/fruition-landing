@@ -19,7 +19,7 @@ interface CapabilitiesGridProps {
 }
 
 const DARK_BG = "#2b074d"
-const LIGHT_BG = "#f7f5ff"
+const LIGHT_BG = "var(--surface-subtle)"
 const ACCENT = "#8015e8"
 
 export default function CapabilitiesGrid({
@@ -39,8 +39,8 @@ export default function CapabilitiesGrid({
 
   const isDark = theme === "dark"
   const bg = isDark ? DARK_BG : LIGHT_BG
-  const headingColor = isDark ? "#ffffff" : "#000000"
-  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "#4a4a4a"
+  const headingColor = isDark ? "#ffffff" : "var(--text-body)"
+  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "var(--text-muted-fg)"
   const eyebrowColor = isDark ? "rgba(255,255,255,0.75)" : ACCENT
 
   const cols = columns ?? (cards.length <= 4 ? 2 : 3)
@@ -100,7 +100,7 @@ export default function CapabilitiesGrid({
             return (
               <div
                 key={card._key || i}
-                className="bg-white rounded-card border border-[#ece7fb]"
+                className="bg-surface-raised rounded-card border border-ui dark:shadow-none"
                 style={{
                   padding: 28,
                   textAlign: hasBullets ? "left" : "center",
@@ -134,7 +134,7 @@ export default function CapabilitiesGrid({
                     style={{
                       fontSize: 14,
                       lineHeight: 1.55,
-                      color: "#111",
+                      color: "var(--text-body)",
                       whiteSpace: "pre-line",
                     }}
                   >
@@ -161,7 +161,7 @@ export default function CapabilitiesGrid({
                             gap: 10,
                             fontSize: 14,
                             lineHeight: 1.5,
-                            color: "#111",
+                            color: "var(--text-body)",
                           }}
                         >
                           <span

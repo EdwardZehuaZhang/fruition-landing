@@ -49,17 +49,17 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
   // Matches Figma: white bg, heading + subheading, bordered card with vertical numbered items
   if (isChallenges) {
     return (
-      <section className="bg-white py-[80px] px-4">
+      <section className="bg-surface py-[80px] px-4">
         <div className="mx-auto max-w-[959px] flex flex-col gap-[40px] items-center">
           {/* Heading + subheading */}
           <div className="flex flex-col gap-[12px] items-center text-center w-full">
             {heading && (
-              <h2 className="text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-black">
+              <h2 className="text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">
                 {heading}
               </h2>
             )}
             {subheading && (
-              <p className="text-[20px] text-black text-center">{subheading}</p>
+              <p className="text-[20px] text-body text-center">{subheading}</p>
             )}
           </div>
 
@@ -92,11 +92,11 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
     }
     const resolvedSubheading = subheading || 'Our monday.com consultants have expertise across various industries. As a Platinum monday.com partner, we guarantee delivery of the right solution and training to optimise your team’s efficiency.'
     return (
-      <section className="bg-[#ecf1fc] py-[80px] px-4">
+      <section className="bg-surface-subtle py-[80px] px-4">
         <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[36px]">
           <div className="flex flex-col gap-[12px] items-center text-center">
             {heading && (
-              <h2 className="text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-black">
+              <h2 className="text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">
                 {headingAccent ? (
                   (() => {
                     const idx = heading.indexOf(headingAccent)
@@ -114,7 +114,7 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
                 ) : heading}
               </h2>
             )}
-            <p className="text-[20px] text-black text-center">{resolvedSubheading}</p>
+            <p className="text-[20px] text-body text-center">{resolvedSubheading}</p>
           </div>
 
           {/* Partner badge */}
@@ -146,7 +146,7 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
                       <div className="w-full h-full bg-[#d9d9d9]" />
                     )}
                   </div>
-                  <p className="text-[16px] font-medium text-[#10003a] text-center">{f.title}</p>
+                  <p className="text-[16px] font-medium text-body text-center">{f.title}</p>
                 </Link>
               )
             })}
@@ -197,19 +197,19 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
 
   // ── Generic feature list ───────────────────────────────────────────
   return (
-    <section className="bg-white py-[80px] px-4">
+    <section className="bg-surface py-[80px] px-4">
       <div className="mx-auto max-w-[959px] flex flex-col items-center">
         {heading && (
-          <h2 className="mb-3 text-center text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-black">{heading}</h2>
+          <h2 className="mb-3 text-center text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">{heading}</h2>
         )}
         {subheading && (
-          <p className="mb-10 text-center text-[20px] text-black max-w-[800px]">{subheading}</p>
+          <p className="mb-10 text-center text-[20px] text-body max-w-[800px]">{subheading}</p>
         )}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
           {features?.map((f, i) => (
             <div
               key={f._key ?? i}
-              className="flex items-start gap-4 rounded-card bg-white border border-[#e8e6e6] p-6"
+              className="flex items-start gap-4 rounded-card bg-surface-raised border border-ui p-6"
             >
               {f.icon && (
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#8015e8]/10 text-sm font-bold text-[#8015e8]">
@@ -217,9 +217,9 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
                 </span>
               )}
               <div>
-                <p className="font-semibold text-[#242323]">{f.title}</p>
+                <p className="font-semibold text-body">{f.title}</p>
                 {f.description && (
-                  <p className="mt-1 text-[14px] text-[#595959] leading-[22.4px]">{f.description}</p>
+                  <p className="mt-1 text-[14px] text-muted leading-[22.4px]">{f.description}</p>
                 )}
               </div>
             </div>

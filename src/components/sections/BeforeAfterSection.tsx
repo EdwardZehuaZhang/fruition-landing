@@ -21,10 +21,10 @@ export default function BeforeAfterSection({
   if (!rows.length) return null
 
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1000 }}>
         {heading && (
-          <h2 className="text-section-h2 text-center text-black" style={{ marginBottom: 40 }}>
+          <h2 className="text-section-h2 text-center text-body" style={{ marginBottom: 40 }}>
             {heading}
           </h2>
         )}

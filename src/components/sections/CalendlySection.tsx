@@ -67,13 +67,13 @@ export default function CalendlySection({
   }, [embedUrl])
 
   return (
-    <section className="bg-[#f7f7f7]" style={{ paddingTop: 0, paddingBottom: 0 }}>
+    <section className="bg-surface-subtle" style={{ paddingTop: 0, paddingBottom: 0 }}>
       <div className="mx-auto flex flex-col items-center px-4" style={{ maxWidth: 1200, paddingTop: 80 }}>
-        <h2 className="text-section-h2 text-center text-black" style={{ maxWidth: 900 }}>
+        <h2 className="text-section-h2 text-center text-body" style={{ maxWidth: 900 }}>
           {heading}
         </h2>
         {subheading && (
-          <p ref={subheadingRef} className="text-center" style={{ fontSize: 16, lineHeight: "24px", color: "black", marginTop: 16, maxWidth: 900, whiteSpace: "pre-line" }}>
+          <p ref={subheadingRef} className="text-center" style={{ fontSize: 16, lineHeight: "24px", color: "var(--text-body)", marginTop: 16, maxWidth: 900, whiteSpace: "pre-line" }}>
             {subheading}
           </p>
         )}

@@ -26,7 +26,7 @@ export default function TrustBadgeRow({
       style={{
         paddingTop: compact ? 28 : 56,
         paddingBottom: compact ? 28 : 56,
-        background: dark ? "transparent" : "#fff",
+        background: dark ? "transparent" : "var(--surface)",
       }}
     >
       <div className="mx-auto flex flex-wrap items-stretch justify-center" style={{ maxWidth: 1160, gap: 16 }}>
@@ -37,10 +37,10 @@ export default function TrustBadgeRow({
             style={{
               gap: 12,
               padding: "12px 22px 12px 14px",
-              border: `1px solid ${dark ? "rgba(255,255,255,0.18)" : "#e7defb"}`,
+              border: `1px solid ${dark ? "rgba(255,255,255,0.18)" : "var(--border-ui)"}`,
               background: dark
                 ? "rgba(255,255,255,0.07)"
-                : "linear-gradient(180deg, #ffffff 0%, #faf7ff 100%)",
+                : "var(--surface-raised)",
               boxShadow: dark ? "none" : "0 8px 22px -16px rgba(64,12,140,0.35)",
             }}
           >
@@ -62,12 +62,12 @@ export default function TrustBadgeRow({
             <span className="flex flex-col" style={{ gap: 1 }}>
               <span
                 className="font-semibold"
-                style={{ fontSize: 15, lineHeight: "19px", letterSpacing: "-0.01em", color: dark ? "#fff" : "#10003a" }}
+                style={{ fontSize: 15, lineHeight: "19px", letterSpacing: "-0.01em", color: dark ? "#fff" : "var(--text-body)" }}
               >
                 {b.label}
               </span>
               {b.detail && (
-                <span style={{ fontSize: 12.5, lineHeight: "16px", color: dark ? "rgba(255,255,255,0.65)" : "#7a7596" }}>
+                <span style={{ fontSize: 12.5, lineHeight: "16px", color: dark ? "rgba(255,255,255,0.65)" : "var(--text-muted-fg)" }}>
                   {b.detail}
                 </span>
               )}

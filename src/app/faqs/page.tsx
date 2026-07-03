@@ -21,7 +21,7 @@ export default async function FaqsPage() {
   const calendlyUrl = siteSettings?.calendlyLink || ""
 
   return (
-    <div className="bg-white">
+    <div className="bg-surface">
       <section className="bg-[color:var(--light-section-bg)]">
         <div className="mx-auto flex max-w-4xl flex-col items-center px-4 py-20 text-center md:py-24">
           {page.heroEyebrow && (
@@ -33,7 +33,7 @@ export default async function FaqsPage() {
             </span>
           )}
           {page.heroHeading && (
-            <h1 className="mt-4 text-display text-black">{page.heroHeading}</h1>
+            <h1 className="mt-4 text-display text-body">{page.heroHeading}</h1>
           )}
           {page.heroSubheading && (
             <p className="mt-5 max-w-2xl text-body-lead text-[color:var(--color-text-secondary)]">

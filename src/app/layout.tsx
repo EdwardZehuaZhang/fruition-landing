@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import Script from "next/script"
 import { Poppins, Montserrat } from "next/font/google"
 import "./globals.css"
@@ -38,6 +38,12 @@ const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 })
+
+// Declare support for both schemes so browsers (notably mobile Chrome/Android)
+// stop auto-inverting the page and let our own prefers-color-scheme dark theme own it.
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSiteSettings()

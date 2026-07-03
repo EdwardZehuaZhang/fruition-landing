@@ -65,7 +65,7 @@ export default function CookieNotice() {
           transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
         }}
         className={[
-          "w-full max-w-[27rem] rounded-card border border-[#e8e6e6] bg-white p-5 shadow-card",
+          "w-full max-w-[27rem] rounded-card border border-ui bg-surface-raised p-5 shadow-card dark:shadow-none",
           "transition-[opacity,transform] will-change-transform",
           "motion-reduce:transition-none",
           entered
@@ -85,10 +85,10 @@ export default function CookieNotice() {
             </svg>
           </span>
           <div className="min-w-0">
-            <p className="text-[15px] font-semibold tracking-tight text-[#171717]">
+            <p className="text-[15px] font-semibold tracking-tight text-body">
               We recognise business visitors
             </p>
-            <p className="mt-1.5 text-[13.5px] leading-relaxed text-[#55566a]">
+            <p className="mt-1.5 text-[13.5px] leading-relaxed text-muted">
               To understand which companies research our services and follow up,
               we identify business visitors to this site. You can opt out, and it
               never affects how the site works.{" "}
@@ -113,7 +113,7 @@ export default function CookieNotice() {
           <button
             type="button"
             onClick={() => decide("declined")}
-            className="inline-flex h-10 items-center justify-center rounded-pill border border-[#dedee5] px-4 text-[14px] font-semibold text-[#55566a] transition-colors hover:border-[#c9c9d4] hover:text-[#171717]"
+            className="inline-flex h-10 items-center justify-center rounded-pill border border-ui px-4 text-[14px] font-semibold text-muted transition-colors hover:border-[#c9c9d4] hover:text-body"
           >
             Decline
           </button>

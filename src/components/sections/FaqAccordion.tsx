@@ -70,7 +70,7 @@ export default function FaqAccordion({
       : null
 
   return (
-    <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 120 }}>
+    <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 120 }}>
       {faqJsonLd && (
         <script
           type="application/ld+json"
@@ -101,7 +101,7 @@ export default function FaqAccordion({
                   borderBottom: activeFaqTab === idx ? "3px solid #8e5cbf" : "3px solid transparent",
                 }}
               >
-                <span style={{ fontSize: 16, color: activeFaqTab === idx ? "#8e5cbf" : "black", textAlign: "center", whiteSpace: "nowrap" }}>
+                <span style={{ fontSize: 16, color: activeFaqTab === idx ? "#8e5cbf" : "var(--text-body)", textAlign: "center", whiteSpace: "nowrap" }}>
                   {tab.label}
                 </span>
               </button>
@@ -112,7 +112,7 @@ export default function FaqAccordion({
               type="button"
               aria-label="Scroll tabs left"
               onClick={() => scrollBy(-1)}
-              className="faq-tab-arrow absolute left-0 top-0 h-full w-10 flex items-center justify-start bg-gradient-to-r from-white via-white to-transparent text-[#8e5cbf] hover:text-[#2563eb] transition-colors cursor-pointer"
+              className="faq-tab-arrow absolute left-0 top-0 h-full w-10 flex items-center justify-start bg-gradient-to-r from-surface via-surface to-transparent text-[#8e5cbf] hover:text-[#2563eb] transition-colors cursor-pointer"
             >
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -124,7 +124,7 @@ export default function FaqAccordion({
               type="button"
               aria-label="Scroll tabs right"
               onClick={() => scrollBy(1)}
-              className="faq-tab-arrow absolute right-0 top-0 h-full w-10 flex items-center justify-end bg-gradient-to-l from-white via-white to-transparent text-[#8e5cbf] hover:text-[#2563eb] transition-colors cursor-pointer"
+              className="faq-tab-arrow absolute right-0 top-0 h-full w-10 flex items-center justify-end bg-gradient-to-l from-surface via-surface to-transparent text-[#8e5cbf] hover:text-[#2563eb] transition-colors cursor-pointer"
             >
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -142,19 +142,19 @@ export default function FaqAccordion({
                 className="w-full flex items-start justify-between gap-3 text-left cursor-pointer"
                 style={{ minHeight: 30 }}
               >
-                <span className="min-w-0" style={{ fontSize: 20, lineHeight: "24px", color: "black" }}>{item.question}</span>
+                <span className="min-w-0" style={{ fontSize: 20, lineHeight: "24px", color: "var(--text-body)" }}>{item.question}</span>
                 <div className="shrink-0" style={{ width: 30, height: 30 }}>
                   <svg className={`transition-transform ${openFaqIndex === i ? "rotate-180" : ""}`} width="30" height="30" viewBox="0 0 30 30" fill="none">
-                    <path d="M8 12L15 19L22 12" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M8 12L15 19L22 12" stroke="var(--text-body)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
               </button>
               {openFaqIndex === i && (
-                <div style={{ paddingBottom: 16, paddingTop: 31, fontSize: 16, lineHeight: "24px", color: "black", whiteSpace: "pre-line" }}>
+                <div style={{ paddingBottom: 16, paddingTop: 31, fontSize: 16, lineHeight: "24px", color: "var(--text-body)", whiteSpace: "pre-line" }}>
                   {item.answer}
                 </div>
               )}
-              <div style={{ borderBottom: "1px solid #2b074d", marginTop: openFaqIndex === i ? 0 : 36 }} />
+              <div style={{ borderBottom: "1px solid var(--border-ui)", marginTop: openFaqIndex === i ? 0 : 36 }} />
             </div>
           ))}
         </div>
