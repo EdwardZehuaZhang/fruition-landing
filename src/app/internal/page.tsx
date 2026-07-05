@@ -12,6 +12,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import { FileText } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
@@ -91,12 +100,22 @@ export default async function DashboardPage() {
         </CardHeader>
         <CardContent>
           {drafts.length === 0 ? (
-            <p
-              className="rounded-chip px-4 py-6 text-center text-sm text-[var(--color-text-secondary)]"
-              style={{ backgroundColor: "var(--light-section-bg)" }}
-            >
-              No drafts yet. Start a new post and hit “Save draft”.
-            </p>
+            <Empty className="border-0">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <FileText />
+                </EmptyMedia>
+                <EmptyTitle>No drafts yet</EmptyTitle>
+                <EmptyDescription>
+                  Start a new post and hit “Save draft” — it’ll show up here.
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <Button render={<Link href="/internal/blog/new" />}>
+                  New blog post
+                </Button>
+              </EmptyContent>
+            </Empty>
           ) : (
             <ul className="divide-y" style={{ borderColor: "var(--color-border)" }}>
               {drafts.map((d) => (

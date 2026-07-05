@@ -1,7 +1,17 @@
 import Link from "next/link"
-import { requirePortalUser } from "@/lib/portalAuth"
+import { requirePortalUser, getAuthorProfile } from "@/lib/portalAuth"
 import { getTeamMembers } from "@/sanity/queries"
 import PortalShell from "@/components/internal/PortalShell"
+import AuthorIdentityCard from "@/components/internal/AuthorIdentityCard"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import { Users } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
@@ -14,10 +24,22 @@ interface Member {
 
 export default async function TeamPage() {
   const user = await requirePortalUser({ next: "/internal/team" })
-  const team = ((await getTeamMembers().catch(() => [])) as Member[]) ?? []
+  const [team, profile] = await Promise.all([
+    getTeamMembers().catch(() => []) as Promise<Member[]>,
+    getAuthorProfile(user.id),
+  ])
+  const memberOptions = team
+    .filter((m): m is Member & { name: string } => Boolean(m.name))
+    .map((m) => ({ _id: m._id, name: m.name }))
 
   return (
     <PortalShell email={user.email} active="team">
+      <AuthorIdentityCard
+        email={user.email}
+        members={memberOptions}
+        currentMemberId={profile?.sanity_team_member_id}
+        currentByline={profile?.byline}
+      />
       <div className="rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -36,7 +58,27 @@ export default async function TeamPage() {
         </div>
 
         {team.length === 0 ? (
-          <p className="py-6 text-sm text-[var(--color-text-secondary)]">No team members yet.</p>
+          <Empty className="border-0">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Users />
+              </EmptyMedia>
+              <EmptyTitle>No team members yet</EmptyTitle>
+              <EmptyDescription>
+                Add people to show them on the public team and partner pages, and
+                to select them as blog authors.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Link
+                href="/internal/onboarding"
+                className="rounded-pill px-4 py-2.5 text-sm font-semibold text-white"
+                style={{ backgroundColor: "var(--purple-primary)" }}
+              >
+                Add member
+              </Link>
+            </EmptyContent>
+          </Empty>
         ) : (
           <ul className="divide-y" style={{ borderColor: "var(--color-border)" }}>
             {team.map((m) => (

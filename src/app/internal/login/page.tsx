@@ -1,10 +1,25 @@
-import { Lock } from "lucide-react"
-import { allowedDomain } from "@/lib/portalAuth"
+import Image from "next/image"
+import { buttonVariants } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { cn } from "@/lib/utils"
 
 interface SearchParams {
   next?: string
   error?: string
+  notice?: string
 }
+
+// Light-only: dark mode is disabled site-wide, so always use the light
+// panel image and logo.
+const scopedStyles = `
+  .login-bg {
+    background-image: url('/images/login-bg-light.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .portal-logo-dark { display: none; }
+`
 
 export default async function LoginPage({
   searchParams,
@@ -13,54 +28,175 @@ export default async function LoginPage({
 }) {
   const sp = await searchParams
   const next = sp.next && sp.next.startsWith("/") ? sp.next : "/internal"
-  const domain = allowedDomain()
   const startHref = `/internal/auth/start?next=${encodeURIComponent(next)}`
 
   return (
-    <div
-      className="flex min-h-screen w-full flex-col items-center justify-center px-4 py-16"
-      style={{
-        background:
-          "radial-gradient(ellipse at top, rgba(128, 21, 232, 0.18) 0%, rgba(255, 255, 255, 0) 55%), linear-gradient(180deg, #f7f3ff 0%, #ffffff 100%)",
-      }}
-    >
-      <div className="w-full max-w-md">
-      <div className="rounded-card bg-surface p-8 sm:p-10" style={{ boxShadow: "var(--shadow-card)" }}>
-        <div className="mb-6 text-center">
-          <div
-            className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-pill"
-            style={{ backgroundColor: "rgba(128, 21, 232, 0.10)" }}
-          >
-            <Lock size={24} aria-hidden />
+    <div className="portal-theme relative min-h-screen w-full bg-background lg:grid lg:grid-cols-2">
+      <style dangerouslySetInnerHTML={{ __html: scopedStyles }} />
+
+      {/* Back to site — top-right corner */}
+      <a
+        href="/"
+        className={cn(
+          buttonVariants({ variant: "ghost" }),
+          "absolute right-4 top-4 z-30 text-foreground lg:right-8 lg:top-8",
+        )}
+      >
+        Back to site
+      </a>
+
+      {/* Left brand panel */}
+      <div className="relative hidden h-full flex-col justify-between overflow-hidden p-10 text-white lg:flex">
+        <div className="login-bg absolute inset-0" aria-hidden />
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/25 to-black/75"
+          aria-hidden
+        />
+        <div className="relative z-20">
+          <Image
+            src="/images/logo-fruition-white.svg"
+            alt="Fruition"
+            width={148}
+            height={34}
+            className="h-8 w-auto"
+            priority
+          />
+        </div>
+        <blockquote className="relative z-20 space-y-3">
+          <p className="text-lg leading-relaxed">
+            &ldquo;Fruition turns monday.com into the system that runs our
+            business — sales, projects, and operations finally live in one
+            place.&rdquo;
+          </p>
+          <footer className="text-sm text-white/70">The Fruition Team</footer>
+        </blockquote>
+      </div>
+
+      {/* Right form panel */}
+      <div className="flex min-h-screen items-center justify-center p-6 lg:min-h-0 lg:p-8">
+        <div className="mx-auto flex w-full max-w-[360px] flex-col justify-center space-y-6">
+          {/* Logo above the form (visible where the brand panel is hidden) */}
+          <div className="flex justify-center lg:hidden">
+            <Image
+              src="/images/logo-fruition-black.svg"
+              alt="Fruition"
+              width={148}
+              height={34}
+              className="portal-logo-light h-8 w-auto"
+            />
+            <Image
+              src="/images/logo-fruition-white.svg"
+              alt="Fruition"
+              width={148}
+              height={34}
+              className="portal-logo-dark h-8 w-auto"
+            />
           </div>
-          <h1 className="text-2xl font-semibold text-ink-heading">Fruition Internal</h1>
-          <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-            Sign in with your Google Workspace account to continue.
+
+          <div className="flex flex-col space-y-2 text-center">
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+              Sign in to Fruition Internal
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Enter your Fruition email below to sign in to your account
+            </p>
+          </div>
+
+          {sp.error && (
+            <div
+              className="rounded-md px-3 py-2 text-sm"
+              style={{
+                backgroundColor: "var(--danger-surface)",
+                color: "var(--danger-strong)",
+              }}
+              role="alert"
+            >
+              {sp.error}
+            </div>
+          )}
+
+          {sp.notice && (
+            <div
+              className="rounded-md border bg-muted px-3 py-2 text-sm text-foreground"
+              role="status"
+            >
+              {sp.notice}
+            </div>
+          )}
+
+          <div className="grid gap-6">
+            {/* Email magic-link */}
+            <form action="/internal/auth/email" method="post" className="grid gap-2">
+              <input type="hidden" name="next" value={next} />
+              <label htmlFor="email" className="sr-only">
+                Email
+              </label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="name@fruitionservices.io"
+                autoComplete="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                required
+                className="h-11 text-sm"
+              />
+              <button
+                type="submit"
+                className={cn(
+                  buttonVariants({ variant: "default" }),
+                  "h-11 w-full text-sm font-medium",
+                )}
+              >
+                Sign In with Email
+              </button>
+            </form>
+
+            {/* Divider */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            {/* Google SSO */}
+            <a
+              href={startHref}
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "h-11 w-full gap-3 text-sm font-medium",
+              )}
+            >
+              <GoogleGlyph />
+              Google
+            </a>
+          </div>
+
+          <p className="px-4 text-center text-xs text-muted-foreground">
+            By continuing, you agree to our{" "}
+            <a
+              href="/terms-and-conditions"
+              className="underline underline-offset-4 hover:text-foreground"
+            >
+              Terms &amp; Conditions
+            </a>{" "}
+            and{" "}
+            <a
+              href="/data-privacy"
+              className="underline underline-offset-4 hover:text-foreground"
+            >
+              Privacy Policy
+            </a>
+            .
           </p>
         </div>
-
-        {sp.error && (
-          <div
-            className="mb-4 rounded-chip px-3 py-2 text-sm"
-            style={{ backgroundColor: "var(--danger-surface)", color: "var(--danger-strong)" }}
-            role="alert"
-          >
-            {sp.error}
-          </div>
-        )}
-
-        <a
-          href={startHref}
-          className="flex w-full items-center justify-center gap-3 rounded-pill border bg-surface px-4 py-3 text-sm font-semibold text-ink-heading transition hover:bg-[var(--light-section-bg)]"
-          style={{ borderColor: "var(--color-border)" }}
-        >
-          <GoogleGlyph />
-          Sign in with Google
-        </a>
-      </div>
-      <p className="mt-4 text-center text-xs text-[var(--color-text-secondary)]">
-        Only <span className="font-medium">@{domain}</span> accounts can sign in.
-      </p>
       </div>
     </div>
   )

@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { requirePortalUser, getPortalAdmin } from "@/lib/portalAuth"
+import { requirePortalUser, getPortalAdmin, authorDisplayName } from "@/lib/portalAuth"
 import { getBlogCategories, getTeamMembers } from "@/sanity/queries"
 import PortalShell from "@/components/internal/PortalShell"
 import BlogEditor, {
@@ -34,9 +34,10 @@ export default async function EditDraftPage({
   const draft = data as DraftRow | null
   if (!draft) notFound()
 
-  const [categories, team] = await Promise.all([
+  const [categories, team, currentAuthorName] = await Promise.all([
     getBlogCategories().catch(() => []) as Promise<CategoryOption[]>,
     getTeamMembers().catch(() => []) as Promise<{ name?: string }[]>,
+    authorDisplayName(user),
   ])
   const authors = [...new Set(team.map((m) => m.name).filter((n): n is string => Boolean(n)))]
   const meta = (draft.metadata ?? {}) as Record<string, unknown>
@@ -58,7 +59,12 @@ export default async function EditDraftPage({
     <PortalShell email={user.email} active="new">
       <div className="rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
         <h1 className="mb-6 text-2xl font-semibold text-ink-heading">Edit draft</h1>
-        <BlogEditor categories={categories} authors={authors} initial={initial} />
+        <BlogEditor
+          categories={categories}
+          authors={authors}
+          currentAuthorName={currentAuthorName}
+          initial={initial}
+        />
       </div>
     </PortalShell>
   )

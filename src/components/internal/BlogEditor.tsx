@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useState, useTransition } from "react"
+import RichTextEditor from "@/components/internal/RichTextEditor"
 
 export interface CategoryOption {
   _id: string
@@ -50,10 +51,13 @@ const inputClass =
 export default function BlogEditor({
   categories,
   authors = [],
+  currentAuthorName,
   initial,
 }: {
   categories: CategoryOption[]
   authors?: string[]
+  /** The signed-in user's resolved byline, shown as the default author. */
+  currentAuthorName?: string
   initial?: BlogEditorInitial
 }) {
   const [draftId, setDraftId] = useState(initial?.draftId)
@@ -159,21 +163,7 @@ export default function BlogEditor({
           placeholder="Post title"
           className={`${inputClass} text-lg font-semibold`}
         />
-        <textarea
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          rows={22}
-          placeholder={"Write in Markdown…\n\n## A heading\n\nA paragraph with **bold**, *italic*, and a [link](https://example.com).\n\n- bullet one\n- bullet two"}
-          className={`${inputClass} font-mono resize-y`}
-        />
-        <p className="text-xs text-[var(--color-text-secondary)]">
-          Markdown: <code># … ####</code> headings, <code>&gt;</code> quotes, <code>-</code>/<code>1.</code>{" "}
-          lists, <code>**bold**</code>, <code>*italic*</code>, <code>[text](url)</code>.
-        </p>
-        <p className="text-xs text-[var(--color-text-secondary)]">
-          🎬 Video: paste a <strong>YouTube, Vimeo, or Loom</strong> URL on its own line to embed it
-          inline where it sits.
-        </p>
+        <RichTextEditor value={body} onChange={setBody} />
       </div>
 
       {/* Sidebar: metadata */}
@@ -207,12 +197,14 @@ export default function BlogEditor({
         </Field>
         <Field label="Author" hint="From the team page">
           <select value={author} onChange={(e) => setAuthor(e.target.value)} className={inputClass}>
-            <option value="">— you (default) —</option>
-            {authors.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
+            <option value="">{currentAuthorName || "— you (default) —"}</option>
+            {authors
+              .filter((name) => name !== currentAuthorName)
+              .map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
           </select>
         </Field>
         <Field label="Industry">
