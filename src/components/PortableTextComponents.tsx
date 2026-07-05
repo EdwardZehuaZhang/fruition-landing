@@ -7,7 +7,7 @@ export const portableTextComponents: PortableTextComponents = {
     image: ({ value }) => {
       if (!value?.asset?._ref) return null
       return (
-        <div className="my-8 relative w-full h-96 rounded-xl overflow-hidden">
+        <div className="my-8 relative w-full aspect-[16/9] rounded-xl overflow-hidden">
           <Image
             src={`https://cdn.sanity.io/images/bt6nb58h/production/${value.asset._ref.replace("image-", "").replace(/-(\w+)$/, ".$1")}`}
             alt={value.alt || ""}
@@ -17,10 +17,15 @@ export const portableTextComponents: PortableTextComponents = {
         </div>
       )
     },
+    code: ({ value }) => (
+      <pre className="my-6 overflow-x-auto rounded-lg bg-gray-900 p-4 text-sm text-gray-100">
+        <code className="whitespace-pre">{value?.code}</code>
+      </pre>
+    ),
   },
   marks: {
     link: ({ children, value }) => (
-      <a href={value?.href} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline hover:text-blue-900">
+      <a href={value?.href} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline break-words hover:text-blue-900">
         {children}
       </a>
     ),
@@ -31,18 +36,18 @@ export const portableTextComponents: PortableTextComponents = {
     ),
   },
   block: {
-    h1: ({ children }) => <h1 className="text-4xl font-bold text-gray-900 mt-10 mb-4">{children}</h1>,
-    h2: ({ children }) => <h2 className="text-3xl font-bold text-gray-900 mt-8 mb-3">{children}</h2>,
-    h3: ({ children }) => <h3 className="text-2xl font-semibold text-gray-900 mt-6 mb-2">{children}</h3>,
-    h4: ({ children }) => <h4 className="text-xl font-semibold text-gray-900 mt-4 mb-2">{children}</h4>,
+    h1: ({ children }) => <h1 className="text-4xl font-bold text-body mt-10 mb-4">{children}</h1>,
+    h2: ({ children }) => <h2 className="text-3xl font-bold text-body mt-8 mb-3">{children}</h2>,
+    h3: ({ children }) => <h3 className="text-2xl font-semibold text-body mt-6 mb-2">{children}</h3>,
+    h4: ({ children }) => <h4 className="text-xl font-semibold text-body mt-4 mb-2">{children}</h4>,
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-blue-700 pl-4 italic text-gray-600 my-4">{children}</blockquote>
+      <blockquote className="border-l-4 border-blue-700 pl-4 italic text-muted my-4">{children}</blockquote>
     ),
-    normal: ({ children }) => <p className="text-gray-700 leading-relaxed mb-4">{children}</p>,
+    normal: ({ children }) => <p className="text-body leading-relaxed mb-4">{children}</p>,
   },
   list: {
-    bullet: ({ children }) => <ul className="list-disc list-inside space-y-1 mb-4 text-gray-700">{children}</ul>,
-    number: ({ children }) => <ol className="list-decimal list-inside space-y-1 mb-4 text-gray-700">{children}</ol>,
+    bullet: ({ children }) => <ul className="list-disc list-inside space-y-1 mb-4 text-body">{children}</ul>,
+    number: ({ children }) => <ol className="list-decimal list-inside space-y-1 mb-4 text-body">{children}</ol>,
   },
 }
 

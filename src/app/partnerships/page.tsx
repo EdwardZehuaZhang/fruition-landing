@@ -5,6 +5,7 @@ import { getAllPartnershipPages, getPageBySlug, getSiteSettings } from "@/sanity
 export async function generateMetadata() {
   const page = await getPageBySlug("partnerships")
   return {
+    alternates: { canonical: "/partnerships" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }
@@ -31,10 +32,10 @@ export default async function PartnershipsPage() {
           <Link
             key={p.slug}
             href={`/partnerships/${p.slug}`}
-            className="p-6 border border-gray-200 rounded-xl hover:border-blue-400 hover:shadow-md transition-all"
+            className="p-6 border border-ui rounded-xl hover:border-blue-400 hover:shadow-md dark:hover:shadow-none transition-all"
           >
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">{p.title}</h3>
-            {p.heroSubheading && <p className="text-gray-600 text-sm">{p.heroSubheading}</p>}
+            <h3 className="text-xl font-semibold text-body mb-2">{p.title}</h3>
+            {p.heroSubheading && <p className="text-muted text-sm">{p.heroSubheading}</p>}
           </Link>
         ))}
       </div>

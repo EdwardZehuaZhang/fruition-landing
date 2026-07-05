@@ -12,10 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Committed/generated build output — linting these bundled files
-    // exhausts the Node heap (OOM) in CI.
-    "dist/**",
+    // Build artifacts (huge minified bundles crash/OOM eslint):
     ".open-next/**",
+    "dist/**",
+    ".wrangler/**",
+    ".vercel/**",
   ]),
 ]);
 

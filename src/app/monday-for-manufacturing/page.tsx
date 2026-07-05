@@ -10,6 +10,7 @@ import UniversalPageTemplate from "@/components/UniversalPageTemplate"
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-manufacturing")
   return {
+    alternates: { canonical: "/monday-for-manufacturing" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

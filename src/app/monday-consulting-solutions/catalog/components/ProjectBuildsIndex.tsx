@@ -22,7 +22,7 @@ export default function ProjectBuildsIndex() {
   const total = CLIENTS.length
 
   return (
-    <section id="builds" className="bg-white">
+    <section id="builds" className="bg-surface">
       <div className="max-w-6xl mx-auto px-5 sm:px-7 py-16 lg:py-20">
         <div className="max-w-[820px] mb-10">
           <div className="text-micro font-semibold tracking-[0.16em] uppercase text-[var(--purple-primary)]">
@@ -37,13 +37,13 @@ export default function ProjectBuildsIndex() {
           </p>
         </div>
 
-        <div className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-white shadow-whisper overflow-hidden">
+        <div className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-surface-raised shadow-whisper dark:shadow-none overflow-hidden">
           <button
             type="button"
             aria-expanded={open}
             aria-controls="builds-folder-body"
             onClick={() => setOpen((v) => !v)}
-            className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-[#faf7ff] transition-colors"
+            className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-surface-subtle transition-colors"
           >
             <span
               className={`inline-flex items-center justify-center w-6 h-6 transition-transform duration-200 text-[var(--purple-primary)] ${
@@ -84,7 +84,7 @@ export default function ProjectBuildsIndex() {
                     {g.items.map((c, idx) => (
                       <div
                         key={`${g.key}-${c.name}-${idx}`}
-                        className="rounded-xl border border-[var(--color-border)] bg-white p-3 hover:border-[var(--purple-light)] hover:shadow-whisper transition-all"
+                        className="rounded-xl border border-[var(--color-border)] bg-surface-raised p-3 hover:border-[var(--purple-light)] hover:shadow-whisper dark:hover:shadow-none transition-all"
                       >
                         <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-[#16a34a] font-semibold mb-1.5">
                           <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#16a34a]" />

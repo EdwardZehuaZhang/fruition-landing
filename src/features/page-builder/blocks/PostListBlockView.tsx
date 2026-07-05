@@ -15,14 +15,15 @@ export default async function PostListBlockView({ heading, subheading, limit = 6
   if (!posts || posts.length === 0) return null
 
   return (
-    <section className="bg-white py-[80px] px-4">
+    <section className="bg-surface py-[80px] px-4">
       <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[24px]">
         {/* Header */}
         <div className="flex flex-col gap-[12px] items-center w-full text-center">
-          <h2 className="text-[35px] font-medium text-black leading-[49px]">
+          <h2 className="text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">
+
             {heading || "Don\u2019t miss our latest pieces"}
           </h2>
-          <p className="text-[20px] text-black text-center">
+          <p className="text-[20px] text-body text-center">
             {subheading || "Grab our latest guides, articles, and case studies to see all the ways monday.com could make your life easier."}
           </p>
         </div>
@@ -41,7 +42,7 @@ export default async function PostListBlockView({ heading, subheading, limit = 6
             <Link
               key={post._id}
               href={`/post/${post.slug}`}
-              className="group flex flex-col w-[307px] overflow-hidden hover:opacity-90 transition"
+              className="group flex flex-col w-full max-w-[307px] overflow-hidden hover:opacity-90 transition"
             >
               {post.coverImage?.asset && (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -62,7 +63,7 @@ export default async function PostListBlockView({ heading, subheading, limit = 6
                     {post.categories[0].title}
                   </span>
                 )}
-                <h3 className="text-[14px] font-semibold text-black text-center line-clamp-3 group-hover:text-[#8015e8] transition-colors">
+                <h3 className="text-[14px] font-semibold text-body text-center line-clamp-3 group-hover:text-[#8015e8] transition-colors">
                   {post.title}
                 </h3>
               </div>

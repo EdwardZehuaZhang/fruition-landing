@@ -1,0 +1,109 @@
+import Link from "next/link"
+import { requirePortalUser, getAuthorProfile } from "@/lib/portalAuth"
+import { getTeamMembers } from "@/sanity/queries"
+import PortalShell from "@/components/internal/PortalShell"
+import AuthorIdentityCard from "@/components/internal/AuthorIdentityCard"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import { Users } from "lucide-react"
+
+export const dynamic = "force-dynamic"
+
+interface Member {
+  _id: string
+  name?: string
+  role?: string
+  regions?: string[]
+}
+
+export default async function TeamPage() {
+  const user = await requirePortalUser({ next: "/internal/team" })
+  const [team, profile] = await Promise.all([
+    getTeamMembers().catch(() => []) as Promise<Member[]>,
+    getAuthorProfile(user.id),
+  ])
+  const memberOptions = team
+    .filter((m): m is Member & { name: string } => Boolean(m.name))
+    .map((m) => ({ _id: m._id, name: m.name }))
+
+  return (
+    <PortalShell email={user.email} active="team">
+      <AuthorIdentityCard
+        email={user.email}
+        members={memberOptions}
+        currentMemberId={profile?.sanity_team_member_id}
+        currentByline={profile?.byline}
+      />
+      <div className="rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-semibold text-ink-heading">Team</h1>
+            <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
+              People shown on the public team + partner pages, and selectable as blog authors.
+            </p>
+          </div>
+          <Link
+            href="/internal/onboarding"
+            className="rounded-pill px-4 py-2.5 text-sm font-semibold text-white"
+            style={{ backgroundColor: "var(--purple-primary)" }}
+          >
+            Add member
+          </Link>
+        </div>
+
+        {team.length === 0 ? (
+          <Empty className="border-0">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Users />
+              </EmptyMedia>
+              <EmptyTitle>No team members yet</EmptyTitle>
+              <EmptyDescription>
+                Add people to show them on the public team and partner pages, and
+                to select them as blog authors.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Link
+                href="/internal/onboarding"
+                className="rounded-pill px-4 py-2.5 text-sm font-semibold text-white"
+                style={{ backgroundColor: "var(--purple-primary)" }}
+              >
+                Add member
+              </Link>
+            </EmptyContent>
+          </Empty>
+        ) : (
+          <ul className="divide-y" style={{ borderColor: "var(--color-border)" }}>
+            {team.map((m) => (
+              <li key={m._id} className="flex items-center justify-between gap-4 py-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[rgba(128,21,232,0.10)] text-sm font-semibold text-[var(--purple-primary)]">
+                    {(m.name ?? "?").slice(0, 1).toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-ink-heading">{m.name ?? "Unnamed"}</p>
+                    {m.role && (
+                      <p className="text-xs text-[var(--color-text-secondary)]">{m.role}</p>
+                    )}
+                  </div>
+                </div>
+                {m.regions?.length ? (
+                  <span className="text-xs text-[var(--color-text-secondary)]">
+                    {m.regions.join(", ")}
+                  </span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </PortalShell>
+  )
+}

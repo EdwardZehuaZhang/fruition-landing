@@ -143,16 +143,26 @@ export default function WorldMap({ offices }: { offices: MapOffice[] }) {
               </button>
 
               {isActive && (
-                <div role="tooltip" className="fr-map-tooltip">
+                <div
+                  role="tooltip"
+                  className="fr-map-tooltip"
+                  style={
+                    pin.left < 22
+                      ? { left: 0, right: "auto", transform: "none", alignItems: "flex-start", textAlign: "left" }
+                      : pin.left > 78
+                        ? { left: "auto", right: 0, transform: "none", alignItems: "flex-end", textAlign: "right" }
+                        : undefined
+                  }
+                >
                   {pin.office.flag && (
                     <span className="fr-map-flag" aria-hidden="true">{pin.office.flag}</span>
                   )}
-                  <div style={{ fontWeight: 600, fontSize: 13, lineHeight: "18px", color: "#171717" }}>
+                  <div style={{ fontWeight: 600, fontSize: 13, lineHeight: "18px", color: "var(--text-body)" }}>
                     {pin.office.city}
                     {pin.office.country ? `, ${pin.office.country}` : ""}
                   </div>
                   {pin.office.address && (
-                    <div style={{ fontSize: 12, lineHeight: "18px", color: "#525252", marginTop: 4 }}>
+                    <div style={{ fontSize: 12, lineHeight: "18px", color: "var(--text-muted-fg)", marginTop: 4 }}>
                       {pin.office.address}
                     </div>
                   )}
@@ -211,14 +221,14 @@ export default function WorldMap({ offices }: { offices: MapOffice[] }) {
           left: 50%;
           transform: translateX(-50%);
           width: max-content;
-          max-width: 220px;
+          max-width: min(220px, 80vw);
           text-align: center;
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 8px;
-          background: #ffffff;
-          border: 1px solid rgba(0, 0, 0, 0.1);
+          background: var(--surface-raised);
+          border: 1px solid var(--border-ui);
           border-radius: 8px;
           padding: 12px 16px;
           box-shadow:

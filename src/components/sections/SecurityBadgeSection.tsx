@@ -1,4 +1,5 @@
 import { urlFor } from "@/sanity/image"
+import FramedMedia from "@/components/common/FramedMedia"
 import type { SanityImageRef } from "./types"
 
 interface SecurityBadgeSectionProps {
@@ -10,10 +11,12 @@ export default function SecurityBadgeSection({ badge }: SecurityBadgeSectionProp
   if (!src) return null
 
   return (
-    <section className="bg-white" style={{ paddingBottom: 80 }}>
-      <div className="mx-auto max-w-[976px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt="Security certifications" width={976} height={94} className="w-full h-auto" />
+    <section className="bg-surface px-4" style={{ paddingBottom: 80 }}>
+      <div className="mx-auto max-w-[976px] overflow-x-auto">
+        <FramedMedia>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={src} alt="Security certifications" width={976} height={94} className="h-auto w-full min-w-[560px] sm:min-w-0" />
+        </FramedMedia>
       </div>
     </section>
   )

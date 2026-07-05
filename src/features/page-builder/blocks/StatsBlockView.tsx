@@ -42,13 +42,13 @@ function renderHeadingWithAccent(heading: string, accent?: string) {
   if (idx >= 0) {
     return (
       <>
-        <span className="text-black">{heading.slice(0, idx)}</span>
+        <span className="text-body">{heading.slice(0, idx)}</span>
         <span className="text-[#8015e8]">{target}</span>
-        <span className="text-black">{heading.slice(idx + target.length)}</span>
+        <span className="text-body">{heading.slice(idx + target.length)}</span>
       </>
     )
   }
-  return <span className="text-black">{heading}</span>
+  return <span className="text-body">{heading}</span>
 }
 
 export default function StatsBlockView({
@@ -70,7 +70,7 @@ export default function StatsBlockView({
     : '/images/badge-forrester.png'
 
   return (
-    <section className="bg-white py-16 sm:py-20 lg:py-24 px-4">
+    <section className="bg-surface py-16 sm:py-20 lg:py-24 px-4">
       <div className="mx-auto max-w-[1040px] flex flex-col items-center gap-8">
         {/* Heading */}
         {heading && (
@@ -82,13 +82,14 @@ export default function StatsBlockView({
         {/* Subheading with optional inline monday.com partners badge */}
         {subheading && (
           showMondayPartnersBadge ? (
-            <div className="flex items-start gap-[5px] text-[14px] text-[#242323]">
-              <span>{subheading}</span>
+            <div className="flex flex-wrap items-center justify-center gap-[5px] text-[14px] text-body">
+              <span className="min-w-0">{subheading}</span>
+
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={mondayPartnersBadgeSrc} alt="monday.com partners" width={148} height={23} className="h-[23px] w-auto" />
             </div>
           ) : (
-            <p className="text-base sm:text-lg text-center text-[#4a4a4a] max-w-[600px]">{subheading}</p>
+            <p className="text-base sm:text-lg text-center text-muted max-w-[600px]">{subheading}</p>
           )
         )}
 
@@ -124,13 +125,13 @@ export default function StatsBlockView({
 
         {/* Footnote with Forrester */}
         {footnote ? (
-          <div className="flex items-center gap-1.5 text-xs text-[#666] mt-2">
+          <div className="flex items-center gap-1.5 text-xs text-muted mt-2">
             <span>{footnote}</span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={forresterBadgeSrc} alt="Forrester" width={60} height={24} className="h-5 w-auto" />
           </div>
         ) : (
-          <div className="flex items-center gap-1.5 text-xs text-[#666] mt-2">
+          <div className="flex items-center gap-1.5 text-xs text-muted mt-2">
             <span>Data by</span>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={forresterBadgeSrc} alt="Forrester" width={64} height={14} className="h-[14px] w-auto" />

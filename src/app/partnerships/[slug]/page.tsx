@@ -21,6 +21,7 @@ export async function generateMetadata({
   const { slug } = await params
   const page = await getPartnershipPageBySlug(slug)
   return {
+    alternates: { canonical: `/partnerships/${slug}` },
     title: page?.seoTitle || page?.title || slug,
     description: page?.seoDescription,
   }

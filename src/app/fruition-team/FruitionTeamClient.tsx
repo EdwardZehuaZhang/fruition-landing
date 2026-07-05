@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useMemo, useState } from "react"
 import { urlFor } from "@/sanity/image"
 import CtaLabel from "@/components/CtaLabel"
+import FramedMedia from "@/components/common/FramedMedia"
 import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
 import StickyCtaBar from "@/components/sections/StickyCtaBar"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
@@ -112,7 +113,7 @@ export default function FruitionTeamClient({
     <div>
       <StickyCtaBar label={croSections?.stickyCtaLabel} href={croSections?.stickyCtaUrl || calendlyUrl} />
       {/* Hero */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div
           className="mx-auto flex flex-col items-center"
           style={{
@@ -129,15 +130,16 @@ export default function FruitionTeamClient({
                 const src = safeBadgeUrl(badge.image)
                 if (!src) return null
                 return (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={badge._key || `badge-${i}`}
-                    src={src}
-                    alt={badge.name || "Partner badge"}
-                    width={120}
-                    height={44}
-                    className="h-[44px] w-auto rounded-[5px]"
-                  />
+                  <FramedMedia key={badge._key || `badge-${i}`} className="dark:p-1.5">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={src}
+                      alt={badge.name || "Partner badge"}
+                      width={120}
+                      height={44}
+                      className="h-[44px] w-auto rounded-[5px]"
+                    />
+                  </FramedMedia>
                 )
               })}
             </div>
@@ -150,7 +152,7 @@ export default function FruitionTeamClient({
               lineHeight: 1.2,
               marginTop: partnerBadges.length > 0 ? 36 : 0,
               maxWidth: 920,
-              color: "black",
+              color: "var(--text-body)",
             }}
           >
             {heroHeading}
@@ -182,14 +184,14 @@ export default function FruitionTeamClient({
                   <p
                     key={`hero-desc-${i}`}
                     className="font-bold"
-                    style={{ fontSize: 22, lineHeight: "30px", color: "#2b074d", marginTop: 8 }}
+                    style={{ fontSize: 22, lineHeight: "30px", color: "var(--text-body)", marginTop: 8 }}
                   >
                     {block.text}
                   </p>
                 ) : (
                   <p
                     key={`hero-desc-${i}`}
-                    style={{ fontSize: 17, lineHeight: "28px", color: "#222" }}
+                    style={{ fontSize: 17, lineHeight: "28px", color: "var(--text-body)" }}
                   >
                     {block.text}
                   </p>
@@ -201,7 +203,7 @@ export default function FruitionTeamClient({
       </section>
 
       {/* Region selector tabs */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div className="mx-auto px-4" style={{ maxWidth: 1100 }}>
           <div
             className="flex items-center justify-center flex-wrap"
@@ -227,9 +229,9 @@ export default function FruitionTeamClient({
                           border: "none",
                         }
                       : {
-                          backgroundColor: "white",
-                          color: "#2b074d",
-                          border: "1px solid #e8e6e6",
+                          backgroundColor: "var(--surface-raised)",
+                          color: "var(--text-body)",
+                          border: "1px solid var(--border-ui)",
                         }),
                   }}
                 >
@@ -242,10 +244,10 @@ export default function FruitionTeamClient({
       </section>
 
       {/* Team grid */}
-      <section className="bg-white" style={{ paddingTop: 56, paddingBottom: 96 }}>
+      <section className="bg-surface" style={{ paddingTop: 56, paddingBottom: 96 }}>
         <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
           {filteredMembers.length === 0 ? (
-            <p className="text-center" style={{ color: "#666", fontSize: 16 }}>
+            <p className="text-center" style={{ color: "var(--text-muted-fg)", fontSize: 16 }}>
               No team members listed for this region yet.
             </p>
           ) : (
@@ -258,7 +260,7 @@ export default function FruitionTeamClient({
                 return (
                   <article
                     key={m._id}
-                    className="bg-white rounded-card border border-[#e8e6e6] overflow-hidden flex flex-col shadow-whisper"
+                    className="bg-surface-raised rounded-card border border-ui overflow-hidden flex flex-col shadow-whisper dark:shadow-none"
                   >
                     <div
                       style={{
@@ -299,7 +301,7 @@ export default function FruitionTeamClient({
                         style={{
                           fontSize: 22,
                           lineHeight: "28px",
-                          color: "#2b074d",
+                          color: "var(--text-body)",
                           marginTop: 8,
                         }}
                       >
@@ -310,7 +312,7 @@ export default function FruitionTeamClient({
                           style={{
                             fontSize: 14,
                             lineHeight: "22px",
-                            color: "#444",
+                            color: "var(--text-body)",
                             marginTop: 14,
                             flex: 1,
                           }}

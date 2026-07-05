@@ -76,17 +76,17 @@ export default function TeamGridSection({
     return roleRank(a.role) - roleRank(b.role) || a.name.localeCompare(b.name)
   })
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1200 }}>
         {(heading || subheading || ctaLabel) && (
           <div className="flex flex-col items-center text-center" style={{ marginBottom: 40 }}>
             {heading && (
-              <h2 className="font-bold" style={{ color: "#10003a", fontSize: 36, lineHeight: "44px", marginBottom: 12 }}>
+              <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: "clamp(28px, 6vw, 36px)", lineHeight: 1.2, marginBottom: 12 }}>
                 {heading}
               </h2>
             )}
             {subheading && (
-              <p style={{ color: "#444", fontSize: 16, lineHeight: "26px", maxWidth: 760 }}>{subheading}</p>
+              <p style={{ color: "var(--text-muted-fg)", fontSize: 16, lineHeight: "26px", maxWidth: 760 }}>{subheading}</p>
             )}
             {ctaLabel && ctaUrl && (
               <Link
@@ -106,7 +106,7 @@ export default function TeamGridSection({
             return (
               <article
                 key={m._id}
-                className="bg-white rounded-card border border-[#e8e6e6] overflow-hidden flex flex-col shadow-whisper"
+                className="bg-surface-raised rounded-card border border-ui overflow-hidden flex flex-col shadow-whisper dark:shadow-none"
               >
                 <div style={{ aspectRatio: "1 / 1", backgroundColor: "#f5f0ff", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {photo ? (
@@ -122,11 +122,11 @@ export default function TeamGridSection({
                       {m.role}
                     </p>
                   )}
-                  <h3 className="font-bold" style={{ fontSize: 22, lineHeight: "28px", color: "#2b074d", marginTop: 8 }}>
+                  <h3 className="font-bold" style={{ fontSize: 22, lineHeight: "28px", color: "var(--text-body)", marginTop: 8 }}>
                     {m.name} {m.emoji && <span>{m.emoji}</span>}
                   </h3>
                   {m.bio && (
-                    <p style={{ fontSize: 14, lineHeight: "22px", color: "#444", marginTop: 14, flex: 1 }}>{m.bio}</p>
+                    <p style={{ fontSize: 14, lineHeight: "22px", color: "var(--text-muted-fg)", marginTop: 14, flex: 1 }}>{m.bio}</p>
                   )}
                   {m.linkedinUrl && (
                     <Link

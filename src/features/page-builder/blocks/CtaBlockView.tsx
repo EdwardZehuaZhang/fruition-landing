@@ -37,7 +37,7 @@ export default function CtaBlockView({
       className={`flex flex-col items-center justify-center min-h-[455px] py-[80px] px-4 text-white ${
         isGradient
           ? 'bg-[radial-gradient(ellipse_at_center,rgba(210,172,247,0.98)_0%,rgba(149,59,236,0.98)_27%,rgba(128,21,232,0.98)_36%,rgba(80,11,174,0.98)_56%,rgba(32,1,116,0.98)_76%)]'
-          : 'bg-[#10003a]'
+          : 'bg-[var(--navy-900)]'
       }`}
     >
       {/* Certification badge — show from Sanity or fallback to local image */}
@@ -58,20 +58,20 @@ export default function CtaBlockView({
       ) : null}
 
       {heading && (
-        <h2 className="mb-4 text-center text-[35px] font-medium leading-[49px] max-w-[655px]">{heading}</h2>
+        <h2 className="mb-4 text-center text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium max-w-[655px]">{heading}</h2>
       )}
       {body && (
         <p className="mb-8 text-center text-gray-200 max-w-[600px] leading-relaxed">{body}</p>
       )}
 
       {/* Buttons */}
-      <div className="flex flex-wrap justify-center gap-[24px] items-start">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-[24px] items-center w-full max-w-[680px]">
         {ctaLabel && ctaUrl && (
           <CtaButton
             href={ctaUrl}
             label={ctaLabel}
             variant="onDarkPrimary"
-            className="w-[330px]"
+            className="w-full sm:w-[330px]"
           />
         )}
         {secondaryCtaLabel && secondaryCtaUrl && (
@@ -79,7 +79,7 @@ export default function CtaBlockView({
             href={secondaryCtaUrl}
             label={secondaryCtaLabel}
             variant="onDarkOutline"
-            className="w-[330px]"
+            className="w-full sm:w-[330px]"
           />
         )}
       </div>

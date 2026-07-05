@@ -147,6 +147,56 @@ interface PortableTextBlock {
   level?: number
 }
 
+interface VideoEmbedBlock {
+  _type: "videoEmbed"
+  _key: string
+  url: string
+}
+
+interface TableRow {
+  _type: "tableRow"
+  _key: string
+  cells: string[]
+}
+
+interface TableBlock {
+  _type: "table"
+  _key: string
+  rows: TableRow[]
+}
+
+type BodyBlock = PortableTextBlock | VideoEmbedBlock | TableBlock
+
+/**
+ * If a line is nothing but a YouTube / Vimeo / Twitch / Loom URL, return that
+ * URL so it can be rendered as an inline video block. Otherwise null (text).
+ */
+function loneVideoUrl(line: string): string | null {
+  if (/\s/.test(line)) return null
+  if (!/^https?:\/\//i.test(line)) return null
+  return /(?:youtube\.com|youtu\.be|vimeo\.com|loom\.com|twitch\.tv)/i.test(line) ? line : null
+}
+
+/** Split one GFM table row into trimmed cell strings, honouring `\|` escapes. */
+function splitTableRow(line: string): string[] {
+  let s = line.trim()
+  if (s.startsWith("|")) s = s.slice(1)
+  if (s.endsWith("|")) s = s.slice(0, -1)
+  return s.split(/(?<!\\)\|/).map((c) => c.trim().replace(/\\\|/g, "|"))
+}
+
+/** True for a GFM header/body separator like `| --- | :--: |`. */
+function isTableSeparator(line: string): boolean {
+  const s = line.trim()
+  if (!s.includes("-") || !s.includes("|")) return false
+  return /^\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?$/.test(s)
+}
+
+/** A table starts on a pipe row immediately followed by a separator row. */
+function isTableStart(line: string, next: string | undefined): boolean {
+  return line.includes("|") && next !== undefined && isTableSeparator(next)
+}
+
 let keyCounter = 0
 function nextKey(): string {
   keyCounter += 1
@@ -237,12 +287,13 @@ function makeBlock(
  *   - Bullet lists (`- ` / `* `) and numbered lists (`1. ` / `1) `)
  *   - Inline `**bold**`/`__bold__`, `*italic*`/`_italic_`, `[text](url)` links
  *   - Blank-line-separated paragraphs (soft-wrapped lines are joined)
+ *   - GFM pipe tables (header row + `---` separator) → a `table` block
  *
  * Nested lists and images-in-body are out of scope (cover image is handled
- * separately); tables/HTML pass through as plain text.
+ * separately); raw HTML passes through as plain text.
  */
-function bodyToPortableText(body: string): PortableTextBlock[] {
-  const blocks: PortableTextBlock[] = []
+export function bodyToPortableText(body: string): BodyBlock[] {
+  const blocks: BodyBlock[] = []
   const lines = body.replace(/\r\n/g, "\n").split("\n")
   let paragraph: string[] = []
 
@@ -253,10 +304,40 @@ function bodyToPortableText(body: string): PortableTextBlock[] {
     paragraph = []
   }
 
-  for (const rawLine of lines) {
-    const line = rawLine.trim()
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim()
     if (!line) {
       flushParagraph()
+      continue
+    }
+    // GFM pipe table: a header row + a `---` separator, then body rows.
+    if (isTableStart(line, lines[i + 1]?.trim())) {
+      flushParagraph()
+      const rows: TableRow[] = [{ _type: "tableRow", _key: nextKey(), cells: splitTableRow(line) }]
+      let k = i + 2
+      while (k < lines.length) {
+        const rowLine = lines[k].trim()
+        if (!rowLine || !rowLine.includes("|")) break
+        rows.push({ _type: "tableRow", _key: nextKey(), cells: splitTableRow(rowLine) })
+        k++
+      }
+      // Keep the grid rectangular (pad / truncate body rows to the header width).
+      const cols = rows[0].cells.length
+      for (const r of rows) {
+        if (r.cells.length < cols) {
+          r.cells = [...r.cells, ...Array(cols - r.cells.length).fill("")]
+        } else if (r.cells.length > cols) {
+          r.cells = r.cells.slice(0, cols)
+        }
+      }
+      blocks.push({ _type: "table", _key: nextKey(), rows })
+      i = k - 1
+      continue
+    }
+    const videoUrl = loneVideoUrl(line)
+    if (videoUrl) {
+      flushParagraph()
+      blocks.push({ _type: "videoEmbed", _key: nextKey(), url: videoUrl })
       continue
     }
     const heading = /^(#{1,4})\s+(.*)$/.exec(line)

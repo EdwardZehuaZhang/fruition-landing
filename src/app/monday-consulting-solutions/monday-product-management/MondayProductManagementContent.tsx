@@ -124,7 +124,7 @@ export default function MondayProductManagementContent({
   return (
     <div>
       {/* 1. Hero */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div
           className="mx-auto flex flex-col items-center px-4"
           style={{
@@ -178,7 +178,7 @@ export default function MondayProductManagementContent({
               maxWidth: 924,
             }}
           >
-            <span className="text-black">
+            <span className="text-body">
               {page.heroHeading || page.title || ""}
             </span>
           </h1>
@@ -186,7 +186,7 @@ export default function MondayProductManagementContent({
           {/* Subheading */}
           {!page.hideHeroSubheading && page.heroSubheading && (
             <p
-              className="text-body-lead text-center text-black"
+              className="text-body-lead text-center text-body"
               style={{
                 marginTop: 31,
                 maxWidth: 859,
@@ -273,7 +273,7 @@ export default function MondayProductManagementContent({
 
       {/* 3. Video (underneath logo scroll) */}
       {heroVideoEmbedSrc && (
-        <section className="bg-white" style={{ paddingBottom: 80 }}>
+        <section className="bg-surface" style={{ paddingBottom: 80 }}>
           <div className="mx-auto" style={{ maxWidth: 1042 }}>
             <div
               className="rounded-card overflow-hidden"
@@ -379,16 +379,16 @@ function StrategicApproachCardsSection({
   if (!tabs || tabs.length === 0) return null
 
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1100 }}>
-        <h2 className="text-section-h2 text-center text-black" style={{ maxWidth: 900 }}>
+        <h2 className="text-section-h2 text-center text-body" style={{ maxWidth: 900 }}>
           {headingPart1}
           <span style={{ color: "#8015e8" }}>{headingAccent}</span>
         </h2>
         {subheading && (
           <p
             className="text-body text-center mx-auto"
-            style={{ color: "#4a4a4a", maxWidth: 820, marginTop: 16 }}
+            style={{ color: "var(--text-muted-fg)", maxWidth: 820, marginTop: 16 }}
           >
             {subheading}
           </p>
@@ -449,7 +449,7 @@ function WhyProductTeamsSection({
   return (
     <section
       style={{
-        backgroundColor: "#f7f5ff",
+        backgroundColor: "var(--surface-subtle)",
         paddingTop: 80,
         paddingBottom: 80,
       }}
@@ -457,7 +457,7 @@ function WhyProductTeamsSection({
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         <h2
           className="text-section-h2 text-center"
-          style={{ color: "#000", marginBottom: 16 }}
+          style={{ color: "var(--text-body)", marginBottom: 16 }}
         >
           {headingPart1}
           <span style={{ color: "#8015e8", display: "block" }}>{headingAccent}</span>
@@ -466,7 +466,7 @@ function WhyProductTeamsSection({
           <p
             className="text-body text-center mx-auto"
             style={{
-              color: "#4a4a4a",
+              color: "var(--text-muted-fg)",
               maxWidth: 820,
               marginBottom: 48,
             }}
@@ -482,7 +482,7 @@ function WhyProductTeamsSection({
           {cards.map((card, i) => (
             <div
               key={card._key || card.title || `why-card-${i}`}
-              className="flex flex-col items-center text-center bg-white rounded-card border border-[#ece7fb] ui-hover-card"
+              className="flex flex-col items-center text-center bg-surface-raised rounded-card border border-ui ui-hover-card dark:shadow-none"
               style={{ padding: 28, boxShadow: "var(--shadow-whisper)" }}
             >
               <span
@@ -500,7 +500,7 @@ function WhyProductTeamsSection({
                 style={{
                   fontSize: 14,
                   lineHeight: "22px",
-                  color: "#111",
+                  color: "var(--text-body)",
                 }}
               >
                 {card.description}
@@ -536,7 +536,7 @@ function StrategicApproachSection({
 
   return (
     <section
-      className="bg-white px-4"
+      className="bg-surface px-4"
       style={{ paddingTop: 80, paddingBottom: 80 }}
     >
       <div
@@ -544,7 +544,7 @@ function StrategicApproachSection({
         style={{ maxWidth: 959 }}
       >
         <h2
-          className="text-section-h2 text-center text-black"
+          className="text-section-h2 text-center text-body"
           style={{ maxWidth: 900 }}
         >
           {headingPart1}
@@ -554,7 +554,7 @@ function StrategicApproachSection({
           <p
             className="text-body text-center mx-auto"
             style={{
-              color: "#4a4a4a",
+              color: "var(--text-muted-fg)",
               maxWidth: 820,
               marginTop: 16,
               marginBottom: 40,
@@ -589,9 +589,9 @@ function StrategicApproachSection({
                       border: "none",
                     }
                   : {
-                      backgroundColor: "white",
-                      color: "#2b074d",
-                      border: "1px solid #e8e6e6",
+                      backgroundColor: "var(--surface-raised)",
+                      color: "var(--text-body)",
+                      border: "1px solid var(--border-ui)",
                     }),
               }}
             >
@@ -602,7 +602,7 @@ function StrategicApproachSection({
 
         {/* Tab content */}
         <div
-          className="w-full rounded-card border border-[#e8e6e6]"
+          className="w-full rounded-card border border-ui"
           style={{ marginTop: 32, padding: "32px 40px" }}
         >
           <h3
@@ -631,7 +631,7 @@ function StrategicApproachSection({
                   style={{
                     fontSize: 16,
                     lineHeight: "24px",
-                    color: "#2b074d",
+                    color: "var(--text-body)",
                   }}
                 >
                   {item.text}
@@ -828,7 +828,7 @@ function ProductDevelopmentSection({
   return (
     <section
       style={{
-        backgroundColor: "#f7f5ff",
+        backgroundColor: "var(--surface-subtle)",
         paddingTop: 80,
         paddingBottom: 80,
       }}
@@ -836,7 +836,7 @@ function ProductDevelopmentSection({
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         <h2
           className="text-section-h2 text-center"
-          style={{ color: "#000", marginBottom: 40, maxWidth: 1000, marginLeft: "auto", marginRight: "auto" }}
+          style={{ color: "var(--text-body)", marginBottom: 40, maxWidth: 1000, marginLeft: "auto", marginRight: "auto" }}
         >
           {headingPart1}
           <span style={{ color: "#8015e8" }}>{headingAccent}</span>
@@ -869,9 +869,9 @@ function ProductDevelopmentSection({
                         border: "none",
                       }
                     : {
-                        backgroundColor: "white",
-                        color: "#2b074d",
-                        border: "1px solid #e8e6e6",
+                        backgroundColor: "var(--surface-raised)",
+                        color: "var(--text-body)",
+                        border: "1px solid var(--border-ui)",
                       }),
                 }}
               >
@@ -883,7 +883,7 @@ function ProductDevelopmentSection({
 
         {/* Tab content */}
         <div
-          className="w-full rounded-card border border-[#ece7fb] bg-white"
+          className="w-full rounded-card border border-ui bg-surface-raised dark:shadow-none"
           style={{ padding: "40px" }}
         >
           <div
@@ -902,7 +902,7 @@ function ProductDevelopmentSection({
                 style={{
                   fontSize: 16,
                   lineHeight: "24px",
-                  color: "#2b074d",
+                  color: "var(--text-body)",
                   marginBottom: 24,
                 }}
               >
@@ -934,7 +934,7 @@ function ProductDevelopmentSection({
                       style={{
                         fontSize: 16,
                         lineHeight: "24px",
-                        color: "#2b074d",
+                        color: "var(--text-body)",
                       }}
                     >
                       {bullet.text}

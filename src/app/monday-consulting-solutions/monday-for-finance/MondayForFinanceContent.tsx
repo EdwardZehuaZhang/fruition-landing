@@ -11,6 +11,7 @@ import {
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData, FaqTab, PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
+import FramedMedia from "@/components/common/FramedMedia"
 
 interface Props {
   page: any
@@ -49,7 +50,7 @@ export default function MondayForFinanceContent({
   return (
     <div>
       {/* 1. Hero — certificates on top, no small image */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div
           className="mx-auto flex flex-col items-center"
           style={{
@@ -66,15 +67,16 @@ export default function MondayForFinanceContent({
                 const src = safeImageUrl(badge.image)
                 if (!src) return null
                 return (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={badge._key || `badge-${i}`}
-                    src={src}
-                    alt={badge.name || "Partner badge"}
-                    width={120}
-                    height={44}
-                    className="h-[44px] w-auto rounded-[5px]"
-                  />
+                  <FramedMedia key={badge._key || `badge-${i}`} className="rounded-[5px]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={src}
+                      alt={badge.name || "Partner badge"}
+                      width={120}
+                      height={44}
+                      className="h-[44px] w-auto rounded-[5px]"
+                    />
+                  </FramedMedia>
                 )
               })}
             </div>
@@ -104,7 +106,7 @@ export default function MondayForFinanceContent({
               maxWidth: 924,
             }}
           >
-            <span className="text-black">
+            <span className="text-body">
               {page.heroHeading || page.title || ""}
             </span>
           </h1>
@@ -112,7 +114,7 @@ export default function MondayForFinanceContent({
           {/* Subheading */}
           {!page.hideHeroSubheading && page.heroSubheading && (
             <p
-              className="text-body-lead text-center text-black"
+              className="text-body-lead text-center text-body"
               style={{
                 marginTop: 31,
                 maxWidth: 859,
@@ -173,13 +175,15 @@ export default function MondayForFinanceContent({
           {/* Hero image */}
           {heroImageSrc && (
             <div style={{ marginTop: 40 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={heroImageSrc}
-                alt={page.heroHeading || "Hero"}
-                className="rounded-card"
-                style={{ width: "100%", maxWidth: 1042, height: "auto" }}
-              />
+              <FramedMedia className="rounded-card" style={{ width: "100%", maxWidth: 1042 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={heroImageSrc}
+                  alt={page.heroHeading || "Hero"}
+                  className="rounded-card"
+                  style={{ width: "100%", height: "auto" }}
+                />
+              </FramedMedia>
             </div>
           )}
         </div>
@@ -195,7 +199,7 @@ export default function MondayForFinanceContent({
 
       {/* 3. Video (underneath logo scroll) */}
       {page.heroVideoUrl && (
-        <section className="bg-white" style={{ paddingBottom: 80 }}>
+        <section className="bg-surface" style={{ paddingBottom: 80 }}>
           <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
             <div
               className="rounded-card overflow-hidden"
@@ -280,7 +284,7 @@ function FinanceTabsSection({
       >
         {(headingPart1 || headingAccent) && (
           <h2
-            className="text-section-h2 text-center text-black"
+            className="text-section-h2 text-center text-body"
             style={{ maxWidth: 900 }}
           >
             {headingPart1}
@@ -439,7 +443,7 @@ function BottomFeatureSection({
           {cards.map((card, i) => (
             <div
               key={card.title || i}
-              className="flex flex-col items-center text-center bg-white rounded-card border border-[#ece7fb]"
+              className="flex flex-col items-center text-center bg-surface-raised rounded-card border border-ui dark:shadow-none"
               style={{
                 padding: 28,
                 boxShadow: "var(--shadow-whisper)",

@@ -12,6 +12,7 @@ const SLUG = "certified-clickup-partner"
 export async function generateMetadata() {
   const page = await getPartnershipPageBySlug(SLUG)
   return {
+    alternates: { canonical: "/partnerships/certified-clickup-partner" },
     title: page?.seoTitle || page?.title || SLUG,
     description: page?.seoDescription,
   }

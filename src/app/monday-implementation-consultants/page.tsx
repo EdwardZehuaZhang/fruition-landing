@@ -10,6 +10,7 @@ import MondayImplementationConsultantsContent from "./MondayImplementationConsul
 export async function generateMetadata() {
   const data = await getMondayImplementationConsultantsPage()
   return {
+    alternates: { canonical: "/monday-implementation-consultants" },
     title: data?.seoTitle,
     description: data?.seoDescription,
   }

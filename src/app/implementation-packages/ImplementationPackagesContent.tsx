@@ -11,6 +11,7 @@ import FaqAccordion from "@/components/sections/FaqAccordion"
 import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
 import StickyCtaBar from "@/components/sections/StickyCtaBar"
 import CtaLabel from "@/components/CtaLabel"
+import FramedMedia from "@/components/common/FramedMedia"
 import type { FaqTab as SharedFaqTab } from "@/components/sections/types"
 
 /* ------------------------------------------------------------------ */
@@ -349,7 +350,7 @@ export default function ImplementationPackagesContent({
       {/* ============================================================ */}
       {/* SECTION 1 -- Hero                                            */}
       {/* ============================================================ */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div
           className="mx-auto flex flex-col items-center"
           style={{ paddingLeft: 273, paddingRight: 273, paddingTop: 80, paddingBottom: 80 }}
@@ -358,15 +359,16 @@ export default function ImplementationPackagesContent({
           {heroPartnerBadges.length > 0 && (
             <div className="flex items-center" style={{ gap: 22 }}>
               {heroPartnerBadges.map((badge) => (
-                <Image
-                  key={badge._key ?? badge.src}
-                  src={badge.src}
-                  alt={badge.alt}
-                  width={120}
-                  height={44}
-                  className="h-[44px] w-auto rounded-[5px]"
-                  unoptimized
-                />
+                <FramedMedia key={badge._key ?? badge.src} className="dark:!p-1">
+                  <Image
+                    src={badge.src}
+                    alt={badge.alt}
+                    width={120}
+                    height={44}
+                    className="h-[44px] w-auto rounded-[5px]"
+                    unoptimized
+                  />
+                </FramedMedia>
               ))}
             </div>
           )}
@@ -381,13 +383,13 @@ export default function ImplementationPackagesContent({
               maxWidth: 924,
             }}
           >
-            <span className="text-black">{heroHeadingPart1}</span>
+            <span className="text-body">{heroHeadingPart1}</span>
             <span style={{ color: "#8015e8" }}>{heroHeadingAccent}</span>
-            <span className="text-black">{heroHeadingPart2}</span>
+            <span className="text-body">{heroHeadingPart2}</span>
           </h1>
 
           {/* Monday Partners image */}
-          <div style={{ marginTop: 40 }}>
+          <FramedMedia style={{ marginTop: 40 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/monday-partners.avif"
@@ -396,7 +398,7 @@ export default function ImplementationPackagesContent({
               height={0}
               className="w-full max-w-[924px] h-auto object-contain"
             />
-          </div>
+          </FramedMedia>
 
           {/* Certification banner (hidden) */}
           {/* <div style={{ marginTop: 40 }}>
@@ -452,7 +454,7 @@ export default function ImplementationPackagesContent({
 
           {/* Hero image */}
           {heroImageSrc && (
-            <div style={{ marginTop: 40 }}>
+            <FramedMedia style={{ marginTop: 40 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroImageSrc}
@@ -462,7 +464,7 @@ export default function ImplementationPackagesContent({
                 className="rounded-card object-contain bg-white"
                 style={{ width: 1042, height: 312 }}
               />
-            </div>
+            </FramedMedia>
           )}
         </div>
       </section>
@@ -471,11 +473,11 @@ export default function ImplementationPackagesContent({
       {/* SECTION 2 -- Logo Cloud with Marquee Scroll                  */}
       {/* ============================================================ */}
       {resolvedCarouselLogos.length > 0 && (
-        <section className="bg-white py-[80px] px-4">
+        <section className="bg-surface py-[80px] px-4">
           <div className="flex flex-col gap-[35px] items-center w-full max-w-[1348px] mx-auto">
             {/* Heading */}
             <p className="text-[28px] font-medium leading-[39.2px] text-center">
-              <span className="text-black">{logoCloudHeadingPart1}</span>
+              <span className="text-body">{logoCloudHeadingPart1}</span>
               <span className="text-[#8015e8]">{logoCloudHeadingAccent}</span>
             </p>
 
@@ -486,9 +488,9 @@ export default function ImplementationPackagesContent({
                 style={{ width: "max-content" }}
               >
                 {duplicatedLogos.map((logo, i) => (
-                  <div
+                  <FramedMedia
                     key={`logo-${i}`}
-                    className="flex items-center justify-center shrink-0 h-[65px] overflow-hidden"
+                    className="flex items-center justify-center shrink-0 h-[65px] dark:!p-1.5"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -497,7 +499,7 @@ export default function ImplementationPackagesContent({
                       height={65}
                       className="h-full w-auto object-contain"
                     />
-                  </div>
+                  </FramedMedia>
                 ))}
               </div>
             </div>
@@ -509,7 +511,7 @@ export default function ImplementationPackagesContent({
       {/* SECTION 3 -- YouTube Video Embed                             */}
       {/* ============================================================ */}
       {videoEmbedUrl && (
-        <section className="bg-white py-[80px] px-[10px]">
+        <section className="bg-surface py-[80px] px-[10px]">
           <div className="mx-auto flex flex-col items-center justify-center">
             <div className="w-full max-w-[979px] aspect-video rounded-card overflow-hidden">
               <iframe
@@ -528,7 +530,7 @@ export default function ImplementationPackagesContent({
       {/* ============================================================ */}
       {/* SECTION 4 -- Services Content (bg-[#f0ecfe])                 */}
       {/* ============================================================ */}
-      <section style={{ backgroundColor: "#f0ecfe" }}>
+      <section style={{ backgroundColor: "var(--surface-subtle)" }}>
         <div
           className="mx-auto flex flex-col items-center"
           style={{ paddingTop: 80, paddingBottom: 80 }}
@@ -544,9 +546,9 @@ export default function ImplementationPackagesContent({
             }}
           >
             <p>
-              <span className="text-black">{servicesIntroHeadingPart1}</span>
+              <span className="text-body">{servicesIntroHeadingPart1}</span>
               <span style={{ color: "#8015e8" }}>{servicesIntroHeadingAccent}</span>
-              <span className="text-black">{servicesIntroHeadingPart2}</span>
+              <span className="text-body">{servicesIntroHeadingPart2}</span>
             </p>
           </div>
 
@@ -559,10 +561,10 @@ export default function ImplementationPackagesContent({
             {featureCards.map((card, i) => (
               <div
                 key={card._key ?? i}
-                className="flex-1"
+                className="flex-1 dark:shadow-none"
                 style={{
-                  backgroundColor: "white",
-                  border: "1px solid #e8e6e6",
+                  backgroundColor: "var(--surface-raised)",
+                  border: "1px solid var(--border-ui)",
                   borderRadius: "var(--radius-card)",
                   padding: 28,
                 }}
@@ -573,7 +575,7 @@ export default function ImplementationPackagesContent({
                     style={{
                       fontSize: 24,
                       fontWeight: 500,
-                      color: "#2b074d",
+                      color: "var(--text-body)",
                     }}
                   >
                     {card.title}
@@ -584,7 +586,7 @@ export default function ImplementationPackagesContent({
                     fontSize: 16,
                     fontWeight: 400,
                     lineHeight: "22.4px",
-                    color: "black",
+                    color: "var(--text-body)",
                     marginTop: 20,
                   }}
                 >
@@ -672,7 +674,7 @@ export default function ImplementationPackagesContent({
       {/* ============================================================ */}
       {/* SECTION 4.5 -- Pricing Packages                              */}
       {/* ============================================================ */}
-      <section style={{ backgroundColor: "white" }}>
+      <section style={{ backgroundColor: "var(--surface)" }}>
         <div
           className="mx-auto flex flex-col w-full"
           style={{ paddingTop: 80, paddingBottom: 80, maxWidth: 1200, paddingLeft: 16, paddingRight: 16 }}
@@ -683,14 +685,14 @@ export default function ImplementationPackagesContent({
             style={{ gap: 24 }}
           >
             <div className="flex flex-col" style={{ maxWidth: 640 }}>
-              <h2 className="text-section-h2 text-black" style={{ textAlign: "left" }}>
+              <h2 className="text-section-h2 text-body" style={{ textAlign: "left" }}>
                 {pricingHeading || "Pricing Packages"}
               </h2>
               <p
                 style={{
                   marginTop: 14,
                   fontSize: 18,
-                  color: "#4a4a4a",
+                  color: "var(--text-muted-fg)",
                   lineHeight: 1.5,
                   textAlign: "left",
                 }}
@@ -720,9 +722,9 @@ export default function ImplementationPackagesContent({
                     paddingLeft: 18,
                     paddingRight: 14,
                     borderRadius: 99,
-                    backgroundColor: "white",
-                    border: `1px solid ${currencyHover || currencyOpen ? "#8015e8" : "#e0d4f5"}`,
-                    color: "#2b074d",
+                    backgroundColor: "var(--surface-raised)",
+                    border: `1px solid ${currencyHover || currencyOpen ? "#8015e8" : "var(--border-ui)"}`,
+                    color: "var(--text-body)",
                     fontSize: 14,
                     gap: 10,
                     boxShadow: currencyHover
@@ -743,13 +745,14 @@ export default function ImplementationPackagesContent({
                 </button>
                 {currencyOpen && (
                   <div
+                    className="dark:shadow-none"
                     style={{
                       position: "absolute",
                       top: "calc(100% + 8px)",
                       left: 0,
                       minWidth: 180,
-                      backgroundColor: "white",
-                      border: "1px solid #e8e6e6",
+                      backgroundColor: "var(--surface-raised)",
+                      border: "1px solid var(--border-ui)",
                       borderRadius: 16,
                       padding: 6,
                       boxShadow: "0px 12px 32px rgba(43,7,77,0.12)",
@@ -772,14 +775,14 @@ export default function ImplementationPackagesContent({
                             borderRadius: 10,
                             fontSize: 14,
                             fontWeight: active ? 600 : 500,
-                            color: active ? "#8015e8" : "#2b074d",
+                            color: active ? "#8015e8" : "var(--text-body)",
                             backgroundColor: active ? "rgba(128,21,232,0.08)" : "transparent",
                             cursor: "pointer",
                             textAlign: "left",
                           }}
                         >
                           <span>{CURRENCIES[code].label}</span>
-                          <span style={{ color: "#8a8a8a", fontWeight: 400 }}>{CURRENCIES[code].symbol}</span>
+                          <span style={{ color: "var(--text-muted-fg)", fontWeight: 400 }}>{CURRENCIES[code].symbol}</span>
                         </button>
                       )
                     })}
@@ -803,9 +806,9 @@ export default function ImplementationPackagesContent({
                     paddingLeft: 18,
                     paddingRight: 14,
                     borderRadius: 99,
-                    backgroundColor: "white",
-                    border: `1px solid ${regionHover || regionOpen ? "#8015e8" : "#e0d4f5"}`,
-                    color: "#2b074d",
+                    backgroundColor: "var(--surface-raised)",
+                    border: `1px solid ${regionHover || regionOpen ? "#8015e8" : "var(--border-ui)"}`,
+                    color: "var(--text-body)",
                     fontSize: 14,
                     gap: 10,
                     boxShadow: regionHover
@@ -826,13 +829,14 @@ export default function ImplementationPackagesContent({
                 </button>
                 {regionOpen && (
                   <div
+                    className="dark:shadow-none"
                     style={{
                       position: "absolute",
                       top: "calc(100% + 8px)",
                       left: 0,
                       minWidth: 180,
-                      backgroundColor: "white",
-                      border: "1px solid #e8e6e6",
+                      backgroundColor: "var(--surface-raised)",
+                      border: "1px solid var(--border-ui)",
                       borderRadius: 16,
                       padding: 6,
                       boxShadow: "0px 12px 32px rgba(43,7,77,0.12)",
@@ -855,14 +859,14 @@ export default function ImplementationPackagesContent({
                             borderRadius: 10,
                             fontSize: 14,
                             fontWeight: active ? 600 : 500,
-                            color: active ? "#8015e8" : "#2b074d",
+                            color: active ? "#8015e8" : "var(--text-body)",
                             backgroundColor: active ? "rgba(128,21,232,0.08)" : "transparent",
                             cursor: "pointer",
                             textAlign: "left",
                           }}
                         >
                           <span>{REGIONS[code].label}</span>
-                          <span style={{ color: "#8a8a8a", fontWeight: 400, fontSize: 12 }}>
+                          <span style={{ color: "var(--text-muted-fg)", fontWeight: 400, fontSize: 12 }}>
                             {code === "US" ? "Americas" : code === "UK" ? "EMEA" : "Asia-Pacific"}
                           </span>
                         </button>
@@ -887,7 +891,7 @@ export default function ImplementationPackagesContent({
                 return (
                   <div
                     key={tier.name}
-                    className="flex flex-col"
+                    className={`flex flex-col${featured ? "" : " dark:shadow-none"}`}
                     onMouseEnter={() => setHoveredTier(tier.name)}
                     onMouseLeave={() => setHoveredTier(null)}
                     style={{
@@ -905,9 +909,9 @@ export default function ImplementationPackagesContent({
                               : "0px 24px 60px rgba(125,20,227,0.35), 0px 0px 0px 1px rgba(125,20,227,0.4)",
                           }
                         : {
-                            backgroundColor: "white",
-                            border: "1px solid #ece6fc",
-                            color: "#2b074d",
+                            backgroundColor: "var(--surface-raised)",
+                            border: "1px solid var(--border-ui)",
+                            color: "var(--text-body)",
                             boxShadow: hovered
                               ? "0px 16px 36px rgba(43,7,77,0.12)"
                               : "0px 8px 24px rgba(43,7,77,0.06)",
@@ -919,7 +923,7 @@ export default function ImplementationPackagesContent({
                       style={{
                         fontSize: 22,
                         fontWeight: 700,
-                        color: featured ? "white" : "#2b074d",
+                        color: featured ? "white" : "var(--text-body)",
                       }}
                     >
                       {tier.name}
@@ -930,7 +934,7 @@ export default function ImplementationPackagesContent({
                       style={{
                         fontSize: 14,
                         marginTop: 4,
-                        color: featured ? "rgba(255,255,255,0.78)" : "#7a7a87",
+                        color: featured ? "rgba(255,255,255,0.78)" : "var(--text-muted-fg)",
                         fontWeight: 500,
                       }}
                     >
@@ -944,7 +948,7 @@ export default function ImplementationPackagesContent({
                           style={{
                             fontSize: 18,
                             fontWeight: 500,
-                            color: featured ? "rgba(255,255,255,0.85)" : "#4a4a4a",
+                            color: featured ? "rgba(255,255,255,0.85)" : "var(--text-muted-fg)",
                           }}
                         >
                           {tier.pricePrefix}
@@ -955,7 +959,7 @@ export default function ImplementationPackagesContent({
                           fontSize: 40,
                           fontWeight: 600,
                           lineHeight: 1,
-                          color: featured ? "white" : "#2b074d",
+                          color: featured ? "white" : "var(--text-body)",
                           letterSpacing: "-0.02em",
                         }}
                       >
@@ -966,7 +970,7 @@ export default function ImplementationPackagesContent({
                       style={{
                         marginTop: 6,
                         fontSize: 12,
-                        color: featured ? "rgba(255,255,255,0.7)" : "#8a8a8a",
+                        color: featured ? "rgba(255,255,255,0.7)" : "var(--text-muted-fg)",
                       }}
                     >
                       {CURRENCIES[currency].label} · {REGIONS[region].label} team rate
@@ -978,7 +982,7 @@ export default function ImplementationPackagesContent({
                         marginTop: 24,
                         marginBottom: 20,
                         height: 1,
-                        backgroundColor: featured ? "rgba(255,255,255,0.18)" : "#ece6fc",
+                        backgroundColor: featured ? "rgba(255,255,255,0.18)" : "var(--border-ui)",
                       }}
                     />
 
@@ -1006,7 +1010,7 @@ export default function ImplementationPackagesContent({
                               strokeLinejoin="round"
                             />
                           </svg>
-                          <span style={{ color: featured ? "rgba(255,255,255,0.95)" : "#2b074d" }}>{f}</span>
+                          <span style={{ color: featured ? "rgba(255,255,255,0.95)" : "var(--text-body)" }}>{f}</span>
                         </li>
                       ))}
                     </ul>
@@ -1044,7 +1048,7 @@ export default function ImplementationPackagesContent({
               style={{
                 marginTop: 28,
                 fontSize: 12,
-                color: "#7a7a87",
+                color: "var(--text-muted-fg)",
                 fontStyle: "italic",
               }}
             >
@@ -1098,12 +1102,12 @@ export default function ImplementationPackagesContent({
       {/* SECTION 8 -- Discover CTA                                    */}
       {/* ============================================================ */}
       <section
-        style={{ backgroundColor: "#ece6fc", paddingTop: 80, paddingBottom: 80 }}
+        style={{ backgroundColor: "var(--surface-subtle)", paddingTop: 80, paddingBottom: 80 }}
       >
         <div className="mx-auto flex flex-col items-center">
           {/* Certifications badge */}
           {discoverBadgeSrc && (
-            <>
+            <FramedMedia>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={discoverBadgeSrc}
@@ -1112,13 +1116,13 @@ export default function ImplementationPackagesContent({
                 height={73}
                 className="h-[73px] w-[325px] object-contain"
               />
-            </>
+            </FramedMedia>
           )}
 
           {/* Heading */}
           {discoverHeading && (
             <h2
-              className="text-section-h2 text-center text-black"
+              className="text-section-h2 text-center text-body"
               style={{ width: 694, marginTop: 28 }}
             >
               {discoverHeading}
@@ -1169,11 +1173,11 @@ export default function ImplementationPackagesContent({
       {/* SECTION 9 -- Implementation Methodology                     */}
       {/* ============================================================ */}
       {methodologySteps.length > 0 && (
-      <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+      <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto flex flex-col items-center px-4 sm:px-6 lg:px-8" style={{ gap: 56, maxWidth: 1040 }}>
           {/* Heading */}
           <h2 className="text-section-h2 text-center">
-            <span style={{ color: 'black' }}>{methodologyHeading}</span>
+            <span style={{ color: 'var(--text-body)' }}>{methodologyHeading}</span>
             <br />
             <span style={{ color: 'var(--purple-primary)' }}>{methodologyHeadingAccent}</span>
           </h2>
@@ -1195,12 +1199,12 @@ export default function ImplementationPackagesContent({
                 {/* Content */}
                 <h3
                   className="font-bold"
-                  style={{ fontSize: 18, color: '#2b074d', lineHeight: 1.4, marginBottom: 8 }}
+                  style={{ fontSize: 18, color: 'var(--text-body)', lineHeight: 1.4, marginBottom: 8 }}
                 >
                   {step.title}
                 </h3>
                 {step.description && (
-                  <p style={{ fontSize: 15, color: '#4a4a4a', lineHeight: 1.6 }}>
+                  <p style={{ fontSize: 15, color: 'var(--text-muted-fg)', lineHeight: 1.6 }}>
                     {step.description}
                   </p>
                 )}
@@ -1211,7 +1215,7 @@ export default function ImplementationPackagesContent({
                       paddingLeft: 20,
                       marginTop: 16,
                       fontSize: 15,
-                      color: '#4a4a4a',
+                      color: 'var(--text-muted-fg)',
                       lineHeight: 1.6,
                     }}
                   >
@@ -1224,7 +1228,7 @@ export default function ImplementationPackagesContent({
                   <p
                     style={{
                       fontSize: 15,
-                      color: '#4a4a4a',
+                      color: 'var(--text-muted-fg)',
                       lineHeight: 1.6,
                       marginTop: 16,
                     }}
@@ -1243,8 +1247,8 @@ export default function ImplementationPackagesContent({
       {/* SECTION 10 -- Security Badge                                 */}
       {/* ============================================================ */}
       {securityBadgeSrc && (
-        <section className="bg-white" style={{ paddingBottom: 80 }}>
-          <div className="mx-auto max-w-[976px]">
+        <section className="bg-surface" style={{ paddingBottom: 80 }}>
+          <FramedMedia className="mx-auto max-w-[976px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={securityBadgeSrc}
@@ -1253,7 +1257,7 @@ export default function ImplementationPackagesContent({
               height={94}
               className="w-full h-auto"
             />
-          </div>
+          </FramedMedia>
         </section>
       )}
     </div>

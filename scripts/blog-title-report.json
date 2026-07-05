@@ -1,0 +1,2195 @@
+{
+  "generatedAt": "2026-07-01T16:24:50.198Z",
+  "divergent": [
+    {
+      "_id": "blogPost-monday-crm-pricing-plans",
+      "seoTitle": "How is monday CRM Priced? Pro vs Enterprise",
+      "slug": "monday-crm-pricing-plans-basic-vs-standard",
+      "title": "How is monday CRM Priced? Pro vs Enterprise",
+      "liveTitle": "Which monday CRM Pricing Plan is Right for Your SMB? A Basic vs. Standard Comparison",
+      "fetchOk": true,
+      "diverges": true
+    }
+  ],
+  "failed": [],
+  "all": [
+    {
+      "_id": "blogPost-monday-com-experts",
+      "seoTitle": "monday.com Expert Reveal: 5 Common Platform Mistakes and How to Avoid Them",
+      "slug": "5-common-mondaycom-mistakes",
+      "title": "monday.com Expert Reveal: 5 Common Platform Mistakes and How to Avoid Them",
+      "liveTitle": "monday.com Expert Reveal: 5 Common Platform Mistakes and How to Avoid Them",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-5-monday-com-hacks",
+      "seoTitle": "5 monday.com Expert Hacks: Turn Them Into Your Team's Secret Weapon for Productivity [2025]",
+      "slug": "5-monday-com-hacks",
+      "title": "5 monday.com Expert Hacks: Turn Them Into Your Team's Secret Weapon for Productivity [2025]",
+      "liveTitle": "5 monday.com Expert Hacks: Turn Them Into Your Team's Secret Weapon for Productivity [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-5-mondaycom-consultants-us",
+      "seoTitle": "Top 5 monday.com Consultants in the US",
+      "slug": "5-mondaycom-consultants-us",
+      "title": "Top 5 monday.com Consultants in the US",
+      "liveTitle": "Top 5 monday.com Consultants in the US",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-for-marketing",
+      "seoTitle": "monday.com for Marketing: Strategic Planning Tutorial",
+      "slug": "5-mondaycom-features-for-marketing-teams",
+      "title": "monday.com for Marketing: Strategic Planning Tutorial",
+      "liveTitle": "monday.com for Marketing: Strategic Planning Tutorial",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-accounts-payable-workflow-setup-in-mondaycom",
+      "seoTitle": "Accounts Payable Workflow Setup in monday.com: Streamlining Automated Expense Approval in 2026",
+      "slug": "accounts-payable-workflow-setup-in-mondaycom",
+      "title": "Accounts Payable Workflow Setup in monday.com: Streamlining Automated Expense Approval in 2026",
+      "liveTitle": "Accounts Payable Workflow Setup in monday.com: Streamlining Automated Expense Approval in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-ai-adoption-framework",
+      "seoTitle": "AI Strategy-to-Execution Frameworks: 5 Adoption Models That Drive Digital Transformation in 2026",
+      "slug": "ai-adoption-framework",
+      "title": "AI Strategy-to-Execution Frameworks: 5 Adoption Models That Drive Digital Transformation in 2026",
+      "liveTitle": "AI Strategy-to-Execution Frameworks: 5 Adoption Models That Drive Digital Transformation in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-ai-agent-playbook-deploy-without-draining-budget",
+      "seoTitle": "The AI Agent Playbook: Deploy Without Draining Your Budget",
+      "slug": "ai-agent-playbook-deploy-without-draining-budget",
+      "title": "The AI Agent Playbook: Deploy Without Draining Your Budget",
+      "liveTitle": "The AI Agent Playbook: Deploy Without Draining Your Budget",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-ai-call-recording-apps",
+      "seoTitle": "Top 10 AI Call Recording Apps in 2026",
+      "slug": "ai-call-recording-apps",
+      "title": "Top 10 AI Call Recording Apps in 2026",
+      "liveTitle": "Top 10 AI Call Recording Apps in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blog-wix-ai-consulting-firm-8-factors-to-consider",
+      "seoTitle": "How to Choose an AI Consulting Firm in 2026?",
+      "slug": "ai-consulting-firm-8-factors-to-consider",
+      "title": "How to Choose an AI Consulting Firm in 2026?",
+      "liveTitle": "How to Choose an AI Consulting Firm in 2026?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-ai-enterprise-service-management-with-monday-service",
+      "seoTitle": "Enterprise Service Management: monday Service AI Guide [2025]",
+      "slug": "ai-enterprise-service-management-with-monday-service",
+      "title": "Enterprise Service Management: monday Service AI Guide [2025]",
+      "liveTitle": "Enterprise Service Management: monday Service AI Guide [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-ai-in-monday-crm",
+      "seoTitle": "monday CRM AI: Basic to Advanced Use Cases [2025]",
+      "slug": "ai-in-monday-crm",
+      "title": "monday CRM AI: Basic to Advanced Use Cases [2025]",
+      "liveTitle": "monday CRM AI: Basic to Advanced Use Cases [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-aircall-monday-crm-integration",
+      "seoTitle": "Aircall and monday CRM Integration: Get Real-Time Sentimental Sales Insights in 2026",
+      "slug": "aircall-monday-crm-integration",
+      "title": "Aircall and monday CRM Integration: Get Real-Time Sentimental Sales Insights in 2026",
+      "liveTitle": "Aircall and monday CRM Integration: Get Real-Time Sentimental Sales Insights in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-asana-to-monday-migration-how-do-you-import-projects",
+      "seoTitle": "Asana to monday Migration: How to Import Project data?",
+      "slug": "asana-to-monday-migration-how-do-you-import-projects",
+      "title": "Asana to monday Migration: How to Import Project data?",
+      "liveTitle": "Asana to monday Migration: How to Import Project data?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-australian-ncc-compliance-software-mondaycom-workflows",
+      "seoTitle": "Australian NCC Compliance Software: Navigating National Construction Codes with monday.com in 2026",
+      "slug": "australian-ncc-compliance-software-mondaycom-workflows",
+      "title": "Australian NCC Compliance Software: Navigating National Construction Codes with monday.com in 2026",
+      "liveTitle": "Australian NCC Compliance Software: Navigating National Construction Codes with monday.com in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-australian-standards-for-building-materials-with-mondaycom",
+      "seoTitle": "Australian Standards for Building Materials with monday.com",
+      "slug": "australian-standards-for-building-materials-with-mondaycom",
+      "title": "Australian Standards for Building Materials with monday.com",
+      "liveTitle": "Australian Standards for Building Materials with monday.com",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-automated-invoice-generation-monday",
+      "seoTitle": "How to Structure Client Billing and Automated Invoice Generation in monday? 2026 Guide",
+      "slug": "automated-invoice-generation-monday",
+      "title": "How to Structure Client Billing and Automated Invoice Generation in monday? 2026 Guide",
+      "liveTitle": "How to Structure Client Billing and Automated Invoice Generation in monday? 2026 Guide",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "drafts.blogPost-benefits-of-monday-com-for-construction",
+      "seoTitle": "Benefits of monday.com for Construction",
+      "slug": "benefits-of-monday-com-for-construction",
+      "title": "Benefits of monday.com for Construction",
+      "liveTitle": "Benefits of monday.com for Construction",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-benefits-of-mondaycom-2023",
+      "seoTitle": "Benefits of monday.com 2023",
+      "slug": "benefits-of-mondaycom-2023",
+      "title": "Benefits of monday.com 2023",
+      "liveTitle": "Benefits of monday.com 2023",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-best-job-scheduling-apps-for-construction",
+      "seoTitle": "Best 6 Job Scheduling Apps of 2026: Construction Management From Field to Office",
+      "slug": "best-job-scheduling-apps-for-construction",
+      "title": "Best 6 Job Scheduling Apps of 2026: Construction Management From Field to Office",
+      "liveTitle": "Best 6 Job Scheduling Apps of 2026: Construction Management From Field to Office",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "drafts.blogPost-best-of-breed-or-best-of-suite-software",
+      "seoTitle": "Best of Breed or Best of Suite Software: Which suits your business best?",
+      "slug": "best-of-breed-or-best-of-suite-software",
+      "title": "Best of Breed or Best of Suite Software: Which suits your business best?",
+      "liveTitle": "Best of Breed or Best of Suite Software: Which suits your business best?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-build-buy-orchestrate-enterprise-ai-vendor-decision-2026",
+      "seoTitle": "Build vs. Buy vs. Orchestrate: The Enterprise AI Vendor Decision Framework for 2026",
+      "slug": "build-buy-orchestrate-enterprise-ai-vendor-decision-2026",
+      "title": "Build vs. Buy vs. Orchestrate: The Enterprise AI Vendor Decision Framework for 2026",
+      "liveTitle": "Build vs. Buy vs. Orchestrate: The Enterprise AI Vendor Decision Framework for 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-change-management-for-software-new-tool-fatigue",
+      "seoTitle": "How to Overcome the 'New Tool Fatigue'? Understanding Change Management for Software in 2026",
+      "slug": "change-management-for-software-new-tool-fatigue",
+      "title": "How to Overcome the 'New Tool Fatigue'? Understanding Change Management for Software in 2026",
+      "liveTitle": "How to Overcome the 'New Tool Fatigue'? Understanding Change Management for Software in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "drafts.blogPost-change-management-tips-for-software-implementation",
+      "seoTitle": "Change Management Guide for Implementing Software.",
+      "slug": "change-management-tips-for-software-implementation",
+      "title": "Change Management Guide for Implementing Software.",
+      "liveTitle": "Change Management Guide for Implementing Software.",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-claude-ai-vs-chatgpt",
+      "seoTitle": "Claude.ai vs ChatGPT: Which AI Tool Works Best With monday.com [2025]",
+      "slug": "claude-ai-vs-chatgpt",
+      "title": "Claude.ai vs ChatGPT: Which AI Tool Works Best With monday.com [2025]",
+      "liveTitle": "Claude.ai vs ChatGPT: Which AI Tool Works Best With monday.com [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "drafts.blogPost-crm-for-anything",
+      "seoTitle": "CRM For Every Business Relationship [8 Alternative CRM Use Cases]",
+      "slug": "crm-for-anything",
+      "title": "CRM For Every Business Relationship [8 Alternative CRM Use Cases]",
+      "liveTitle": "CRM For Every Business Relationship [8 Alternative CRM Use Cases]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-cross-functional-product-collaboration-monday",
+      "seoTitle": "Cross-Functional Product Collaboration in monday: Can You Connect Dev, Marketing, and Design Workflows in 2026?",
+      "slug": "cross-functional-product-collaboration-monday",
+      "title": "Cross-Functional Product Collaboration in monday: Can You Connect Dev, Marketing, and Design Workflows in 2026?",
+      "liveTitle": "Cross-Functional Product Collaboration in monday: Can You Connect Dev, Marketing, and Design Workflows in 2026?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-data-visualisation-on-monday-com",
+      "seoTitle": "Data Visualisation on monday.com: How Does It Turn Data into Insights?",
+      "slug": "data-visualisation-on-monday-com",
+      "title": "Data Visualisation on monday.com: How Does It Turn Data into Insights?",
+      "liveTitle": "Data Visualisation on monday.com: How Does It Turn Data into Insights?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-dependencies-on-monday-com",
+      "seoTitle": "Managing Dependencies on monday.com",
+      "slug": "dependencies-on-monday-com",
+      "title": "Managing Dependencies on monday.com",
+      "liveTitle": "Managing Dependencies on monday.com",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-diy-monday-crm-setups-fail",
+      "seoTitle": "Why DIY monday CRM Setups Fail (& How Experts Prevent It) | The Hidden Mistake",
+      "slug": "diy-monday-crm-setups-fail",
+      "title": "Why DIY monday CRM Setups Fail (& How Experts Prevent It) | The Hidden Mistake",
+      "liveTitle": "Why DIY monday CRM Setups Fail (& How Experts Prevent It) | The Hidden Mistake",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-implementation-consultant-diy-self-service",
+      "seoTitle": "DIY vs. Expert: When You Need to Hire a Certified monday.com Implementation Consultant",
+      "slug": "diy-vs-expert-when-you-need-to-hire-consultants",
+      "title": "DIY vs. Expert: When You Need to Hire a Certified monday.com Implementation Consultant",
+      "liveTitle": "DIY vs. Expert: When You Need to Hire a Certified monday.com Implementation Consultant",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-email-tracking-in-monday-crm",
+      "seoTitle": "Email Tracking in monday CRM: Focusing On Revenue Generating Activities",
+      "slug": "email-tracking-in-monday-crm",
+      "title": "Email Tracking in monday CRM: Focusing On Revenue Generating Activities",
+      "liveTitle": "Email Tracking in monday CRM: Focusing On Revenue Generating Activities",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-erp-vs-crm-differences",
+      "seoTitle": "ERP vs CRM: Can monday.com Be Used As Both? [2025 Guide]",
+      "slug": "erp-vs-crm-differences",
+      "title": "ERP vs CRM: Can monday.com Be Used As Both? [2025 Guide]",
+      "liveTitle": "ERP vs CRM: Can monday.com Be Used As Both? [2025 Guide]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-finance-workflow-consulting-mondaycom-for-accounting",
+      "seoTitle": "monday.com for Accounting Firms: Building a Month-End Checklist with Finance Workflow Consulting",
+      "slug": "finance-workflow-consulting-mondaycom-for-accounting",
+      "title": "monday.com for Accounting Firms: Building a Month-End Checklist with Finance Workflow Consulting",
+      "liveTitle": "monday.com for Accounting Firms: Building a Month-End Checklist with Finance Workflow Consulting",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-financial-forecasting-dashboard-monday",
+      "seoTitle": "Financial Forecasting Dashboard in monday",
+      "slug": "financial-forecasting-dashboard-monday",
+      "title": "Financial Forecasting Dashboard in monday",
+      "liveTitle": "Financial Forecasting Dashboard in monday",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-finding-monday-com-certified-partner",
+      "seoTitle": "How to Find a Reliable monday.com Certified Partner for Your Business?",
+      "slug": "finding-monday-com-certified-partner",
+      "title": "How to Find a Reliable monday.com Certified Partner for Your Business?",
+      "liveTitle": "How to Find a Reliable monday.com Certified Partner for Your Business?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-fruition-and-guidde-partnership",
+      "seoTitle": "Fruition and Guidde Partnership: The First Ever Certification in the UK [2025]",
+      "slug": "fruition-and-guidde-partnership",
+      "title": "Fruition and Guidde Partnership: The First Ever Certification in the UK [2025]",
+      "liveTitle": "Fruition and Guidde Partnership: The First Ever Certification in the UK [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-fruition-goes-global-uk",
+      "seoTitle": "Fruition Goes Global: monday.com Expert Support for UK-Based Businesses",
+      "slug": "fruition-goes-global-uk",
+      "title": "Fruition Goes Global: monday.com Expert Support for UK-Based Businesses",
+      "liveTitle": "Fruition Goes Global: monday.com Expert Support for UK-Based Businesses",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-fruition-make-gold-partner",
+      "seoTitle": "Fruition Secures a Make Gold Partner Status",
+      "slug": "fruition-make-gold-partner",
+      "title": "Fruition Secures a Make Gold Partner Status",
+      "liveTitle": "Fruition Secures a Make Gold Partner Status",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-fruition-monday-gold-partnership",
+      "seoTitle": "Fruition now a Monday Gold Partner",
+      "slug": "fruition-monday-gold-partnership",
+      "title": "Fruition now a Monday Gold Partner",
+      "liveTitle": "Fruition now a Monday Gold Partner",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-fruition-monday-silver-partner",
+      "seoTitle": "Fruition Becomes an Official monday Silver Partner",
+      "slug": "fruition-monday-silver-partner",
+      "title": "Fruition Becomes an Official monday Silver Partner",
+      "liveTitle": "Fruition Becomes an Official monday Silver Partner",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-getting-started-with-mondaycom",
+      "seoTitle": "Getting started with monday.com [2023 Quick Guide]",
+      "slug": "getting-started-with-mondaycom",
+      "title": "Getting started with monday.com [2023 Quick Guide]",
+      "liveTitle": "Getting started with monday.com [2023 Quick Guide]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-guide-to-running-effective-discovery-calls",
+      "seoTitle": "Guide to Running Effective Sales Discovery Calls",
+      "slug": "guide-to-running-effective-discovery-calls",
+      "title": "Guide to Running Effective Sales Discovery Calls",
+      "liveTitle": "Guide to Running Effective Sales Discovery Calls",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-hire-monday-com-experts",
+      "seoTitle": "When to Hire monday.com Experts: 6 Signs Your Team Needs Specialist Support [2025]",
+      "slug": "hire-monday-com-experts",
+      "title": "When to Hire monday.com Experts: 6 Signs Your Team Needs Specialist Support [2025]",
+      "liveTitle": "When to Hire monday.com Experts: 6 Signs Your Team Needs Specialist Support [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-hire-mondaycom-partner-questions",
+      "seoTitle": "How to Hire the Right monday.com Implementation Partner: 10 Essential Vetting Questions",
+      "slug": "hire-mondaycom-partner-questions",
+      "title": "How to Hire the Right monday.com Implementation Partner: 10 Essential Vetting Questions",
+      "liveTitle": "How to Hire the Right monday.com Implementation Partner: 10 Essential Vetting Questions",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-how-artificial-intelligence-ai-is-changing-marketing-with-examples",
+      "seoTitle": "How AI Is Changing Marketing [With Examples]",
+      "slug": "how-artificial-intelligence-ai-is-changing-marketing-with-examples",
+      "title": "How AI Is Changing Marketing [With Examples]",
+      "liveTitle": "How AI Is Changing Marketing [With Examples]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-how-is-monday-service-priced",
+      "seoTitle": "monday Service Pricing? Pro or Enterprise?",
+      "slug": "how-is-monday-service-priced",
+      "title": "monday Service Pricing? Pro or Enterprise?",
+      "liveTitle": "monday Service Pricing? Pro or Enterprise?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-how-to-effectively-schedule-life-to-hit-2024-goals",
+      "seoTitle": "[2024] 10 Ways To Manage Time, Hit Goals & Still have a Life.",
+      "slug": "how-to-effectively-schedule-life-to-hit-2024-goals",
+      "title": "[2024] 10 Ways To Manage Time, Hit Goals & Still have a Life.",
+      "liveTitle": "[2024] 10 Ways To Manage Time, Hit Goals & Still have a Life.",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-how-to-execute-okrs-in-5-steps",
+      "seoTitle": "How to Execute OKRs in 5 Steps from Scratch",
+      "slug": "how-to-execute-okrs-in-5-steps",
+      "title": "How to Execute OKRs in 5 Steps from Scratch",
+      "liveTitle": "How to Execute OKRs in 5 Steps from Scratch",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-consultant",
+      "seoTitle": "monday CRM Consultant: A Complete Guide to Finding the Right One for Your Business [2025]",
+      "slug": "how-to-find-the-right-monday-crm-consultant",
+      "title": "monday CRM Consultant: A Complete Guide to Finding the Right One for Your Business [2025]",
+      "liveTitle": "monday CRM Consultant: A Complete Guide to Finding the Right One for Your Business [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-implementation",
+      "seoTitle": "How We Improve monday CRM Implementation Success Rates By Over 63%",
+      "slug": "how-to-improve-monday-crm-implementation-success",
+      "title": "How We Improve monday CRM Implementation Success Rates By Over 63%",
+      "liveTitle": "How We Improve monday CRM Implementation Success Rates By Over 63%",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-how-to-monday-com-automations",
+      "seoTitle": "How to implement monday.com Automations [In 5 minutes]",
+      "slug": "how-to-monday-com-automations",
+      "title": "How to implement monday.com Automations [In 5 minutes]",
+      "liveTitle": "How to implement monday.com Automations [In 5 minutes]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-how-to-start-a-business-in-2023",
+      "seoTitle": "How To Start A Business In 2023",
+      "slug": "how-to-start-a-business-in-2023",
+      "title": "How To Start A Business In 2023",
+      "liveTitle": "How To Start A Business In 2023",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-how-to-use-monday-com-gantt-charts-a-step-by-step-guide",
+      "seoTitle": "How to Use Monday.com Gantt Charts [A Step-by-Step Guide]",
+      "slug": "how-to-use-monday-com-gantt-charts-a-step-by-step-guide",
+      "title": "How to Use Monday.com Gantt Charts [A Step-by-Step Guide]",
+      "liveTitle": "How to Use Monday.com Gantt Charts [A Step-by-Step Guide]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-hubspot-to-monday-migration",
+      "seoTitle": "HubSpot to monday CRM Migration: How To Make The Switch in Days.",
+      "slug": "hubspot-to-monday-migration",
+      "title": "HubSpot to monday CRM Migration: How To Make The Switch in Days.",
+      "liveTitle": "HubSpot to monday CRM Migration: How To Make The Switch in Days.",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-make-com-use-cases",
+      "seoTitle": "5 Favourite Make.com Use Cases: The Unique Ways You Can Streamline Workflows",
+      "slug": "make-com-use-cases",
+      "title": "5 Favourite Make.com Use Cases: The Unique Ways You Can Streamline Workflows",
+      "liveTitle": "5 Favourite Make.com Use Cases: The Unique Ways You Can Streamline Workflows",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-makecom-use-cases-multi-step-logic",
+      "seoTitle": "How to Architect Multi-Step Logic in 2026? Advanced Make.com Use Cases",
+      "slug": "makecom-use-cases-multi-step-logic",
+      "title": "How to Architect Multi-Step Logic in 2026? Advanced Make.com Use Cases",
+      "liveTitle": "How to Architect Multi-Step Logic in 2026? Advanced Make.com Use Cases",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-makecom-vs-n8n",
+      "seoTitle": "Make.com vs n8n: Choose an Automation Tool for Your Workflows [Review 2025]",
+      "slug": "makecom-vs-n8n",
+      "title": "Make.com vs n8n: Choose an Automation Tool for Your Workflows [Review 2025]",
+      "liveTitle": "Make.com vs n8n: Choose an Automation Tool for Your Workflows [Review 2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blog-wix-manage-purchase-orders-in-mondaycom",
+      "seoTitle": "How to Manage Purchase Orders in monday.com? Your Order Management Guide for 2026",
+      "slug": "manage-purchase-orders-in-mondaycom",
+      "title": "How to Manage Purchase Orders in monday.com? Your Order Management Guide for 2026",
+      "liveTitle": "How to Manage Purchase Orders in monday.com? Your Order Management Guide for 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "drafts.blogPost-manufacturing-automation",
+      "seoTitle": "Unlocking the Potential of Automation in Manufacturing",
+      "slug": "manufacturing-automation",
+      "title": "Unlocking the Potential of Automation in Manufacturing",
+      "liveTitle": "Unlocking the Potential of Automation in Manufacturing",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blog-wix-mcp-vs-cli",
+      "seoTitle": "MCP vs CLI: Key Differences and When to Use? (2026)",
+      "slug": "mcp-vs-cli",
+      "title": "MCP vs CLI: Key Differences and When to Use? (2026)",
+      "liveTitle": "MCP vs CLI: Key Differences and When to Use? (2026)",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-meaning-challenger-sale",
+      "seoTitle": "The Challenger Sale: The Seller That Cares",
+      "slug": "meaning-challenger-sale",
+      "title": "The Challenger Sale: The Seller That Cares",
+      "liveTitle": "The Challenger Sale: The Seller That Cares",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-melbourne-buildexpo-2025-monday-crm",
+      "seoTitle": "Fruition Set to Sponsor Melbourne BuildExpo 2025: Our monday CRM for Construction Specialisation",
+      "slug": "melbourne-buildexpo-2025-monday-crm",
+      "title": "Fruition Set to Sponsor Melbourne BuildExpo 2025: Our monday CRM for Construction Specialisation",
+      "liveTitle": "Fruition Set to Sponsor Melbourne BuildExpo 2025: Our monday CRM for Construction Specialisation",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-ai-agent-factory-review",
+      "seoTitle": "monday AI Agent Factory: The Digital Workforce for All Your Business Needs [2026]",
+      "slug": "monday-ai-agent-factory-review",
+      "title": "monday AI Agent Factory: The Digital Workforce for All Your Business Needs [2026]",
+      "liveTitle": "monday AI Agent Factory: The Digital Workforce for All Your Business Needs [2026]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-ai-blocks",
+      "seoTitle": "monday AI Blocks: Your AI Business Partner",
+      "slug": "monday-ai-blocks",
+      "title": "monday AI Blocks: Your AI Business Partner",
+      "liveTitle": "monday AI Blocks: Your AI Business Partner",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blog-wix-monday-ai-credits-usage",
+      "seoTitle": "monday.com AI Token Usage in 2026: Measure monday AI Credits with Example",
+      "slug": "monday-ai-credits-usage",
+      "title": "monday.com AI Token Usage in 2026: Measure monday AI Credits with Example",
+      "liveTitle": "monday.com AI Token Usage in 2026: Measure monday AI Credits with Example",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blog-wix-monday-ai-pricing-model-2026",
+      "seoTitle": "monday AI Pricing Model for 2026: A Deep Dive Into Credit Consumption, Cost, and More",
+      "slug": "monday-ai-pricing-model-2026",
+      "title": "monday AI Pricing Model for 2026: A Deep Dive Into Credit Consumption, Cost, and More",
+      "liveTitle": "monday AI Pricing Model for 2026: A Deep Dive Into Credit Consumption, Cost, and More",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-ai-use-cases",
+      "seoTitle": "monday AI Use Cases for Work Management: A Look at Basic to Advanced Features [July 2025]",
+      "slug": "monday-ai-use-cases",
+      "title": "monday AI Use Cases for Work Management: A Look at Basic to Advanced Features [July 2025]",
+      "liveTitle": "monday AI Use Cases for Work Management: A Look at Basic to Advanced Features [July 2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-ai-work-management-updates-2026",
+      "seoTitle": "monday AI Work Management Updates 2026",
+      "slug": "monday-ai-work-management-updates-2026",
+      "title": "monday AI Work Management Updates 2026",
+      "liveTitle": "monday AI Work Management Updates 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-automation-secrets",
+      "seoTitle": "monday Automation Secrets: Advanced Workflows Only Consultants Know [2025]",
+      "slug": "monday-automation-secrets",
+      "title": "monday Automation Secrets: Advanced Workflows Only Consultants Know [2025]",
+      "liveTitle": "monday Automation Secrets: Advanced Workflows Only Consultants Know [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-campaigns",
+      "seoTitle": "monday campaigns: New CRM Feature Giving Teams Real Visibility Into Impact [2026]",
+      "slug": "monday-campaigns",
+      "title": "monday campaigns: New CRM Feature Giving Teams Real Visibility Into Impact [2026]",
+      "liveTitle": "monday campaigns: New CRM Feature Giving Teams Real Visibility Into Impact [2026]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-ai-integrations-and-linking-boards",
+      "seoTitle": "monday.com Integrations, Linking Boards, and monday AI—Maximise These Workflows with a Certified UK Partner",
+      "slug": "monday-com-ai-integrations-and-linking-boards",
+      "title": "monday.com Integrations, Linking Boards, and monday AI—Maximise These Workflows with a Certified UK Partner",
+      "liveTitle": "monday.com Integrations, Linking Boards, and monday AI—Maximise These Workflows with a Certified UK Partner",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-alternatives",
+      "seoTitle": "7 monday.com Alternatives: Are They Better? [2025 Guide]",
+      "slug": "monday-com-alternatives",
+      "title": "7 monday.com Alternatives: Are They Better? [2025 Guide]",
+      "liveTitle": "7 monday.com Alternatives: Are They Better? [2025 Guide]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-and-xero-integration-with-make-com",
+      "seoTitle": "monday.com and Xero Integration with make.com",
+      "slug": "monday-com-and-xero-integration-with-make-com",
+      "title": "monday.com and Xero Integration with make.com",
+      "liveTitle": "monday.com and Xero Integration with make.com",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-automations",
+      "seoTitle": "Automations in monday.com: Boosting Productivity with Smart Workflows",
+      "slug": "monday-com-automations",
+      "title": "Automations in monday.com: Boosting Productivity with Smart Workflows",
+      "liveTitle": "Automations in monday.com: Boosting Productivity with Smart Workflows",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-benefits-creative-forrester",
+      "seoTitle": "Why Motorolla saw 346% ROI using monday.com for Marketing & Creative [Forrester Report]",
+      "slug": "monday-com-benefits-creative-forrester",
+      "title": "Why Motorolla saw 346% ROI using monday.com for Marketing & Creative [Forrester Report]",
+      "liveTitle": "Why Motorolla saw 346% ROI using monday.com for Marketing & Creative [Forrester Report]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-board-reporting-best-practices-and-kpis-to-track",
+      "seoTitle": "monday.com Board Reporting: Best Practices and KPIs to track",
+      "slug": "monday-com-board-reporting-best-practices-and-kpis-to-track",
+      "title": "monday.com Board Reporting: Best Practices and KPIs to track",
+      "liveTitle": "monday.com Board Reporting: Best Practices and KPIs to track",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-consultant-implementation-framework",
+      "seoTitle": "monday.com Consultant Implementation Framework: Can Businesses Scale Faster?",
+      "slug": "monday-com-consultant-implementation-framework",
+      "title": "monday.com Consultant Implementation Framework: Can Businesses Scale Faster?",
+      "liveTitle": "monday.com Consultant Implementation Framework: Can Businesses Scale Faster?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-consultants-help",
+      "seoTitle": "monday.com Consultants: How We Set Your Business Up for Success?",
+      "slug": "monday-com-consultants-help",
+      "title": "monday.com Consultants: How We Set Your Business Up for Success?",
+      "liveTitle": "monday.com Consultants: How We Set Your Business Up for Success?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-crm-integrations",
+      "seoTitle": "monday.com CRM Integrations: Everything You Need to Know",
+      "slug": "monday-com-crm-integrations",
+      "title": "monday.com CRM Integrations: Everything You Need to Know",
+      "liveTitle": "monday.com CRM Integrations: Everything You Need to Know",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-crm-vs-work-management",
+      "seoTitle": "monday CRM vs monday.com Work Management: How To Create the Perfect Workflow",
+      "slug": "monday-com-crm-vs-work-management",
+      "title": "monday CRM vs monday.com Work Management: How To Create the Perfect Workflow",
+      "liveTitle": "monday CRM vs monday.com Work Management: How To Create the Perfect Workflow",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-elevate-conference-2025",
+      "seoTitle": "Fruition's Part at monday.com Elevate Conference 2025: What Can You Expect?",
+      "slug": "monday-com-elevate-conference-2025",
+      "title": "Fruition's Part at monday.com Elevate Conference 2025: What Can You Expect?",
+      "liveTitle": "Fruition's Part at monday.com Elevate Conference 2025: What Can You Expect?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-enterprise-pricing",
+      "seoTitle": "monday.com Pro vs Enterprise: Pricing Guide & Key differences [2025]",
+      "slug": "monday-com-enterprise-pricing",
+      "title": "monday.com Pro vs Enterprise: Pricing Guide & Key differences [2025]",
+      "liveTitle": "monday.com Pro vs Enterprise: Pricing Guide & Key differences [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-faq",
+      "seoTitle": "monday.com FAQ: Answered by Expert monday.com Consultants [2026]",
+      "slug": "monday-com-faq",
+      "title": "monday.com FAQ: Answered by Expert monday.com Consultants [2026]",
+      "liveTitle": "monday.com FAQ: Answered by Expert monday.com Consultants [2026]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-first-quarter-2023-results-summarised",
+      "seoTitle": "monday.com First Quarter 2023 Results - Summarised",
+      "slug": "monday-com-first-quarter-2023-results-summarised",
+      "title": "monday.com First Quarter 2023 Results - Summarised",
+      "liveTitle": "monday.com First Quarter 2023 Results - Summarised",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-for-construction",
+      "seoTitle": "monday.com for Construction: Goodbye Legacy Construction Software",
+      "slug": "monday-com-for-construction",
+      "title": "monday.com for Construction: Goodbye Legacy Construction Software",
+      "liveTitle": "monday.com for Construction: Goodbye Legacy Construction Software",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-for-retail",
+      "seoTitle": "monday.com for Retail: From Campaigns & Merchandising to Store Rollouts",
+      "slug": "monday-com-for-retail",
+      "title": "monday.com for Retail: From Campaigns & Merchandising to Store Rollouts",
+      "liveTitle": "monday.com for Retail: From Campaigns & Merchandising to Store Rollouts",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-for-solar",
+      "seoTitle": "monday.com for Solar: The Ultimate Operations Suite for Your Business",
+      "slug": "monday-com-for-solar",
+      "title": "monday.com for Solar: The Ultimate Operations Suite for Your Business",
+      "liveTitle": "monday.com for Solar: The Ultimate Operations Suite for Your Business",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-guest-access",
+      "seoTitle": "monday.com Guest Access: Unlimited Free Collaboration With Externals [2025]",
+      "slug": "monday-com-guest-access",
+      "title": "monday.com Guest Access: Unlimited Free Collaboration With Externals [2025]",
+      "liveTitle": "monday.com Guest Access: Unlimited Free Collaboration With Externals [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-hr-onboarding",
+      "seoTitle": "monday.com HR Software: Benefits, Features, and More",
+      "slug": "monday-com-hr-onboarding",
+      "title": "monday.com HR Software: Benefits, Features, and More",
+      "liveTitle": "monday.com HR Software: Benefits, Features, and More",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-implementation",
+      "seoTitle": "monday.com Implementation by Certified Experts vs Self-Service DIY [Set Up Guide]",
+      "slug": "monday-com-implementation",
+      "title": "monday.com Implementation by Certified Experts vs Self-Service DIY [Set Up Guide]",
+      "liveTitle": "monday.com Implementation by Certified Experts vs Self-Service DIY [Set Up Guide]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-implementation-certified-experts",
+      "seoTitle": "Why Every monday.com Implementation Needs Certified Experts? (& How to Find Them)",
+      "slug": "monday-com-implementation-certified-experts",
+      "title": "Why Every monday.com Implementation Needs Certified Experts? (& How to Find Them)",
+      "liveTitle": "Why Every monday.com Implementation Needs Certified Experts? (& How to Find Them)",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-integration-guide",
+      "seoTitle": "How to get started with monday.com Integrations [2023]",
+      "slug": "monday-com-integration-guide",
+      "title": "How to get started with monday.com Integrations [2023]",
+      "liveTitle": "How to get started with monday.com Integrations [2023]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-invetory-management",
+      "seoTitle": "What is monday.com Inventory Management? Comprehensive Guide [2025]",
+      "slug": "monday-com-invetory-management",
+      "title": "What is monday.com Inventory Management? Comprehensive Guide [2025]",
+      "liveTitle": "What is monday.com Inventory Management? Comprehensive Guide [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-leadership-decisions",
+      "seoTitle": "How monday.com Helps Executive Leadership Teams (ELT) Make Better Decisions",
+      "slug": "monday-com-leadership-decisions",
+      "title": "How monday.com Helps Executive Leadership Teams (ELT) Make Better Decisions",
+      "liveTitle": "How monday.com Helps Executive Leadership Teams (ELT) Make Better Decisions",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-partner-directory",
+      "seoTitle": "monday.com Partner Directory: Choose Your Implementation Expert",
+      "slug": "monday-com-partner-directory",
+      "title": "monday.com Partner Directory: Choose Your Implementation Expert",
+      "liveTitle": "monday.com Partner Directory: Choose Your Implementation Expert",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-partner-fruition-services",
+      "seoTitle": "Working with a Monday.com Partner [Key Advantages]",
+      "slug": "monday-com-partner-fruition-services",
+      "title": "Working with a Monday.com Partner [Key Advantages]",
+      "liveTitle": "Working with a Monday.com Partner [Key Advantages]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "drafts.blogPost-monday-com-partner-how-to-pick-the-right-partner-for-you-2024",
+      "seoTitle": "How to Pick the Right monday.com Partner:  2024",
+      "slug": "monday-com-partner-how-to-pick-the-right-partner-for-you-2024",
+      "title": "How to Pick the Right monday.com Partner:  2024",
+      "liveTitle": "How to Pick the Right monday.com Partner:  2024",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-pro-vs-enterprise",
+      "seoTitle": "monday.com Pro vs. Enterprise: Picking the Right Plan for You",
+      "slug": "monday-com-pro-vs-enterprise",
+      "title": "monday.com Pro vs. Enterprise: Picking the Right Plan for You",
+      "liveTitle": "monday.com Pro vs. Enterprise: Picking the Right Plan for You",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-product-management-and-development",
+      "seoTitle": "monday.com Product Management and Development: Sprint Through Development Processes",
+      "slug": "monday-com-product-management-and-development",
+      "title": "monday.com Product Management and Development: Sprint Through Development Processes",
+      "liveTitle": "monday.com Product Management and Development: Sprint Through Development Processes",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "drafts.blogPost-monday-com-resource-management-guide-2024",
+      "seoTitle": "monday.com Resource Management Guide 2024",
+      "slug": "monday-com-resource-management-guide-2024",
+      "title": "monday.com Resource Management Guide 2024",
+      "liveTitle": "monday.com Resource Management Guide 2024",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "drafts.blogPost-monday-com-stock-price-target-raised-to-246-91-post-earnings-results",
+      "seoTitle": "Monday.com Stock Price Target Raised to $246.91 Post Earnings Results",
+      "slug": "monday-com-stock-price-target-raised-to-246-91-post-earnings-results",
+      "title": "Monday.com Stock Price Target Raised to $246.91 Post Earnings Results",
+      "liveTitle": "Monday.com Stock Price Target Raised to $246.91 Post Earnings Results",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-adobe-workfront",
+      "seoTitle": "monday.com vs Adobe Workfront: Which One Is the Best Project Management Tool? [2025]",
+      "slug": "monday-com-vs-adobe-workfront",
+      "title": "monday.com vs Adobe Workfront: Which One Is the Best Project Management Tool? [2025]",
+      "liveTitle": "monday.com vs Adobe Workfront: Which One Is the Best Project Management Tool? [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-airtable",
+      "seoTitle": "monday.com vs Airtable: Democratizing databases",
+      "slug": "monday-com-vs-airtable",
+      "title": "monday.com vs Airtable: Democratizing databases",
+      "liveTitle": "monday.com vs Airtable: Democratizing databases",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-asana",
+      "seoTitle": "monday.com vs Asana: Comparing Best-in-Class Project Management Tools",
+      "slug": "monday-com-vs-asana",
+      "title": "monday.com vs Asana: Comparing Best-in-Class Project Management Tools",
+      "liveTitle": "monday.com vs Asana: Comparing Best-in-Class Project Management Tools",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-clickup",
+      "seoTitle": "Monday.com vs Clickup: A Comprehensive Comparison",
+      "slug": "monday-com-vs-clickup",
+      "title": "Monday.com vs Clickup: A Comprehensive Comparison",
+      "liveTitle": "Monday.com vs Clickup: A Comprehensive Comparison",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-clickup-1",
+      "seoTitle": "monday.com vs ClickUp: Which Project Management Tool to Choose?",
+      "slug": "monday-com-vs-clickup-1",
+      "title": "monday.com vs ClickUp: Which Project Management Tool to Choose?",
+      "liveTitle": "monday.com vs ClickUp: Which Project Management Tool to Choose?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-hubspot",
+      "seoTitle": "monday.com vs HubSpot: Total Cost of Ownership Comparison [2025 Review]",
+      "slug": "monday-com-vs-hubspot",
+      "title": "monday.com vs HubSpot: Total Cost of Ownership Comparison [2025 Review]",
+      "liveTitle": "monday.com vs HubSpot: Total Cost of Ownership Comparison [2025 Review]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-jira-integration-guide-on-how-they-can-co-exist",
+      "seoTitle": "monday.com vs Jira: Integration guide on how they can co-exist!",
+      "slug": "monday-com-vs-jira-integration-guide-on-how-they-can-co-exist",
+      "title": "monday.com vs Jira: Integration guide on how they can co-exist!",
+      "liveTitle": "monday.com vs Jira: Integration guide on how they can co-exist!",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-microsoft-planner",
+      "seoTitle": "monday.com vs Microsoft Planner [2025]",
+      "slug": "monday-com-vs-microsoft-planner",
+      "title": "monday.com vs Microsoft Planner [2025]",
+      "liveTitle": "monday.com vs Microsoft Planner [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-ms-teams",
+      "seoTitle": "monday.com vs MS Teams: Your Perfect Pick for 2025",
+      "slug": "monday-com-vs-ms-teams",
+      "title": "monday.com vs MS Teams: Your Perfect Pick for 2025",
+      "liveTitle": "monday.com vs MS Teams: Your Perfect Pick for 2025",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-notion",
+      "seoTitle": "monday.com vs Notion: Getting Work Done vs Making Work Notes [2025]",
+      "slug": "monday-com-vs-notion",
+      "title": "monday.com vs Notion: Getting Work Done vs Making Work Notes [2025]",
+      "liveTitle": "monday.com vs Notion: Getting Work Done vs Making Work Notes [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-smartsheet",
+      "seoTitle": "monday.com vs Smartsheet: Why IT Leaders Are Switching in 2025",
+      "slug": "monday-com-vs-smartsheet",
+      "title": "monday.com vs Smartsheet: Why IT Leaders Are Switching in 2025",
+      "liveTitle": "monday.com vs Smartsheet: Why IT Leaders Are Switching in 2025",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-todoist",
+      "seoTitle": "monday.com vs Todoist: The Ultimate Feature Comparison [2025]",
+      "slug": "monday-com-vs-todoist",
+      "title": "monday.com vs Todoist: The Ultimate Feature Comparison [2025]",
+      "liveTitle": "monday.com vs Todoist: The Ultimate Feature Comparison [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-trello",
+      "seoTitle": "monday.com vs Trello: Which one is better [2025 Comparison]",
+      "slug": "monday-com-vs-trello",
+      "title": "monday.com vs Trello: Which one is better [2025 Comparison]",
+      "liveTitle": "monday.com vs Trello: Which one is better [2025 Comparison]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-vs-wrike",
+      "seoTitle": "monday.com vs Wrike: Which Is The Better Project Management Tool in 2025?",
+      "slug": "monday-com-vs-wrike",
+      "title": "monday.com vs Wrike: Which Is The Better Project Management Tool in 2025?",
+      "liveTitle": "monday.com vs Wrike: Which Is The Better Project Management Tool in 2025?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-with-gmail",
+      "seoTitle": "How Do You integrate monday.com with Gmail and Outlook? [2025 Guide]",
+      "slug": "monday-com-with-gmail",
+      "title": "How Do You integrate monday.com with Gmail and Outlook? [2025 Guide]",
+      "liveTitle": "How Do You integrate monday.com with Gmail and Outlook? [2025 Guide]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-com-world-of-work-report",
+      "seoTitle": "Building a Resilient Workforce: Our Take on monday.com's World of Work Report",
+      "slug": "monday-com-world-of-work-report",
+      "title": "Building a Resilient Workforce: Our Take on monday.com's World of Work Report",
+      "liveTitle": "Building a Resilient Workforce: Our Take on monday.com's World of Work Report",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "drafts.blogPost-monday-consultants",
+      "seoTitle": "monday.com consultants: Why do you need them for a successful implementation? [Three reasons]",
+      "slug": "monday-consultants",
+      "title": "monday.com consultants: Why do you need them for a successful implementation? [Three reasons]",
+      "liveTitle": "monday.com consultants: Why do you need them for a successful implementation? [Three reasons]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-consultants-help-change-management",
+      "seoTitle": "How Can monday Consultants Help With Change Management?",
+      "slug": "monday-consultants-help-change-management",
+      "title": "How Can monday Consultants Help With Change Management?",
+      "liveTitle": "How Can monday Consultants Help With Change Management?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-advanced-reporting",
+      "seoTitle": "monday CRM Advanced Reporting: Insights Only monday.com Experts Can Unlock [2025]",
+      "slug": "monday-crm-advanced-reporting",
+      "title": "monday CRM Advanced Reporting: Insights Only monday.com Experts Can Unlock [2025]",
+      "liveTitle": "monday CRM Advanced Reporting: Insights Only monday.com Experts Can Unlock [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-ai-block-implementation",
+      "seoTitle": "monday CRM AI Blocks Implementation: Leveraging Predictive Sales Forecasting and Lead Scoring in 2026",
+      "slug": "monday-crm-ai-block-implementation",
+      "title": "monday CRM AI Blocks Implementation: Leveraging Predictive Sales Forecasting and Lead Scoring in 2026",
+      "liveTitle": "monday CRM AI Blocks Implementation: Leveraging Predictive Sales Forecasting and Lead Scoring in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-ai-sentiment-analysis",
+      "seoTitle": "monday CRM AI Sentiment Analysis: How to Extract and Analyse Sentiment from Content? [2025]",
+      "slug": "monday-crm-ai-sentiment-analysis",
+      "title": "monday CRM AI Sentiment Analysis: How to Extract and Analyse Sentiment from Content? [2025]",
+      "liveTitle": "monday CRM AI Sentiment Analysis: How to Extract and Analyse Sentiment from Content? [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-automation-tutorial",
+      "seoTitle": "monday CRM Automation Tutorial for 2026: 5 Killer Recipes Every Sales Team Needs to Master",
+      "slug": "monday-crm-automation-tutorial",
+      "title": "monday CRM Automation Tutorial for 2026: 5 Killer Recipes Every Sales Team Needs to Master",
+      "liveTitle": "monday CRM Automation Tutorial for 2026: 5 Killer Recipes Every Sales Team Needs to Master",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-challenges",
+      "seoTitle": "4 CRM Challenges of 2024 & How monday CRM Solve Them",
+      "slug": "monday-crm-challenges",
+      "title": "4 CRM Challenges of 2024 & How monday CRM Solve Them",
+      "liveTitle": "4 CRM Challenges of 2024 & How monday CRM Solve Them",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-construction",
+      "seoTitle": "monday CRM for Construction: From Lead to Turnkey [2025]",
+      "slug": "monday-crm-construction",
+      "title": "monday CRM for Construction: From Lead to Turnkey [2025]",
+      "liveTitle": "monday CRM for Construction: From Lead to Turnkey [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-consultants",
+      "seoTitle": "How monday CRM Consultants Help Supercharge Your Revenue Engines?",
+      "slug": "monday-crm-consultants",
+      "title": "How monday CRM Consultants Help Supercharge Your Revenue Engines?",
+      "liveTitle": "How monday CRM Consultants Help Supercharge Your Revenue Engines?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-contact-management-tutorial",
+      "seoTitle": "monday CRM Contact Management Tutorial for 2026: Setting Up a 360-Degree Customer View",
+      "slug": "monday-crm-contact-management-tutorial",
+      "title": "monday CRM Contact Management Tutorial for 2026: Setting Up a 360-Degree Customer View",
+      "liveTitle": "monday CRM Contact Management Tutorial for 2026: Setting Up a 360-Degree Customer View",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-dashboard-and-reporting",
+      "seoTitle": "monday CRM Dashboard and Reporting: Forecasting Sales Success",
+      "slug": "monday-crm-dashboard-and-reporting",
+      "title": "monday CRM Dashboard and Reporting: Forecasting Sales Success",
+      "liveTitle": "monday CRM Dashboard and Reporting: Forecasting Sales Success",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-data-hygiene-training-tutorial",
+      "seoTitle": "The Complete monday CRM Data Hygiene Training: Ensuring Data Integrity for Your Team in 2026",
+      "slug": "monday-crm-data-hygiene-training-tutorial",
+      "title": "The Complete monday CRM Data Hygiene Training: Ensuring Data Integrity for Your Team in 2026",
+      "liveTitle": "The Complete monday CRM Data Hygiene Training: Ensuring Data Integrity for Your Team in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-data-migration",
+      "seoTitle": "monday CRM Data Migration: How monday.com Specialists Ensure Zero Data Loss?",
+      "slug": "monday-crm-data-migration",
+      "title": "monday CRM Data Migration: How monday.com Specialists Ensure Zero Data Loss?",
+      "liveTitle": "monday CRM Data Migration: How monday.com Specialists Ensure Zero Data Loss?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-erp-integration-challenges",
+      "seoTitle": "monday CRM ERP Integration Challenges in 2026: A Complete RevOps Consultant's Guide",
+      "slug": "monday-crm-erp-integration-challenges",
+      "title": "monday CRM ERP Integration Challenges in 2026: A Complete RevOps Consultant's Guide",
+      "liveTitle": "monday CRM ERP Integration Challenges in 2026: A Complete RevOps Consultant's Guide",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-for-construction",
+      "seoTitle": "monday CRM for Construction Tender and Portfolio Management: From Bid to Execution [2025]",
+      "slug": "monday-crm-for-construction",
+      "title": "monday CRM for Construction Tender and Portfolio Management: From Bid to Execution [2025]",
+      "liveTitle": "monday CRM for Construction Tender and Portfolio Management: From Bid to Execution [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-for-manufacturing",
+      "seoTitle": "monday CRM for Manufacturing: All-In-One Product Lifecycle Management? [2025]",
+      "slug": "monday-crm-for-manufacturing",
+      "title": "monday CRM for Manufacturing: All-In-One Product Lifecycle Management? [2025]",
+      "liveTitle": "monday CRM for Manufacturing: All-In-One Product Lifecycle Management? [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-for-non-profits",
+      "seoTitle": "monday CRM for Non-Profits: Your Go-To Platform for Fundraising and Stakeholder Management",
+      "slug": "monday-crm-for-non-profits",
+      "title": "monday CRM for Non-Profits: Your Go-To Platform for Fundraising and Stakeholder Management",
+      "liveTitle": "monday CRM for Non-Profits: Your Go-To Platform for Fundraising and Stakeholder Management",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-for-professional-services",
+      "seoTitle": "monday CRM for Professional Services: The Perfect Consulting CRM [2025]",
+      "slug": "monday-crm-for-professional-services",
+      "title": "monday CRM for Professional Services: The Perfect Consulting CRM [2025]",
+      "liveTitle": "monday CRM for Professional Services: The Perfect Consulting CRM [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-for-real-estate",
+      "seoTitle": "monday CRM for Real Estate: Marketing, Stock & Property Management",
+      "slug": "monday-crm-for-real-estate",
+      "title": "monday CRM for Real Estate: Marketing, Stock & Property Management",
+      "liveTitle": "monday CRM for Real Estate: Marketing, Stock & Property Management",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-implementation-consultant",
+      "seoTitle": "Deep Dive: Implementing monday CRM for Sales Teams – Consultant Strategies",
+      "slug": "monday-crm-for-sales-teams-implementing-strategies",
+      "title": "Deep Dive: Implementing monday CRM for Sales Teams – Consultant Strategies",
+      "liveTitle": "Deep Dive: Implementing monday CRM for Sales Teams – Consultant Strategies",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-for-software-technology",
+      "seoTitle": "monday CRM for Software and Technology: The Perfect Way to Manage Your Business in 2025",
+      "slug": "monday-crm-for-software-technology",
+      "title": "monday CRM for Software and Technology: The Perfect Way to Manage Your Business in 2025",
+      "liveTitle": "monday CRM for Software and Technology: The Perfect Way to Manage Your Business in 2025",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "drafts.blogPost-monday-crm-industries",
+      "seoTitle": "monday CRM: Driving Efficiency in 3 High-Growth Industries (2024)",
+      "slug": "monday-crm-industries",
+      "title": "monday CRM: Driving Efficiency in 3 High-Growth Industries (2024)",
+      "liveTitle": "monday CRM: Driving Efficiency in 3 High-Growth Industries (2024)",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-integration-training",
+      "seoTitle": "monday CRM Integration Training for 2026: A Guide for Outlook, Gmail, and More",
+      "slug": "monday-crm-integration-training",
+      "title": "monday CRM Integration Training for 2026: A Guide for Outlook, Gmail, and More",
+      "liveTitle": "monday CRM Integration Training for 2026: A Guide for Outlook, Gmail, and More",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-package-add-ons-service-work-management",
+      "seoTitle": "monday.com Package Add-Ons: Integrating CRM, Project, and IT Service Workflows in 2026",
+      "slug": "monday-crm-package-add-ons-service-work-management",
+      "title": "monday.com Package Add-Ons: Integrating CRM, Project, and IT Service Workflows in 2026",
+      "liveTitle": "monday.com Package Add-Ons: Integrating CRM, Project, and IT Service Workflows in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-post-sales-workflow",
+      "seoTitle": "monday CRM Post-Sales Workflow for High-Client Retention: Going Beyond the Sale in 2026",
+      "slug": "monday-crm-post-sales-workflow",
+      "title": "monday CRM Post-Sales Workflow for High-Client Retention: Going Beyond the Sale in 2026",
+      "liveTitle": "monday CRM Post-Sales Workflow for High-Client Retention: Going Beyond the Sale in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-pricing-plans",
+      "seoTitle": "How is monday CRM Priced? Pro vs Enterprise",
+      "slug": "monday-crm-pricing-plans-basic-vs-standard",
+      "title": "How is monday CRM Priced? Pro vs Enterprise",
+      "liveTitle": "Which monday CRM Pricing Plan is Right for Your SMB? A Basic vs. Standard Comparison",
+      "fetchOk": true,
+      "diverges": true
+    },
+    {
+      "_id": "blogPost-monday-crm-pricing-plans-basic-vs-standard",
+      "seoTitle": "Which monday CRM Pricing Plan is Right for Your SMB? A Basic vs. Standard Comparison",
+      "slug": "monday-crm-pricing-plans-basic-vs-standard",
+      "title": "Which monday CRM Pricing Plan is Right for Your SMB? A Basic vs. Standard Comparison",
+      "liveTitle": "Which monday CRM Pricing Plan is Right for Your SMB? A Basic vs. Standard Comparison",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-quotes-invoices-proposals-2025-guide",
+      "seoTitle": "monday CRM: How To Generate Quotes and Proposals? [2025 Guide]",
+      "slug": "monday-crm-quotes-invoices-proposals-2025-guide",
+      "title": "monday CRM: How To Generate Quotes and Proposals? [2025 Guide]",
+      "liveTitle": "monday CRM: How To Generate Quotes and Proposals? [2025 Guide]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-roadmap",
+      "seoTitle": "monday CRM: Unique Features and Strategic Vision [2025]",
+      "slug": "monday-crm-roadmap",
+      "title": "monday CRM: Unique Features and Strategic Vision [2025]",
+      "liveTitle": "monday CRM: Unique Features and Strategic Vision [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-sales-dashboard-guide",
+      "seoTitle": "monday CRM Sales Dashboard Guide for 2026: Reporting Training, Sales Funnels, and More",
+      "slug": "monday-crm-sales-dashboard-guide",
+      "title": "monday CRM Sales Dashboard Guide for 2026: Reporting Training, Sales Funnels, and More",
+      "liveTitle": "monday CRM Sales Dashboard Guide for 2026: Reporting Training, Sales Funnels, and More",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-sales-pipeline",
+      "seoTitle": "How monday CRM Can Help You Convert More Sales Pipeline?",
+      "slug": "monday-crm-sales-pipeline",
+      "title": "How monday CRM Can Help You Convert More Sales Pipeline?",
+      "liveTitle": "How monday CRM Can Help You Convert More Sales Pipeline?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-sequencing-mass-email",
+      "seoTitle": "monday CRM: Email Sequencing & Mass Emailing on monday CRM: Can You Ensure Better Client Communication?",
+      "slug": "monday-crm-sequencing-mass-email",
+      "title": "monday CRM: Email Sequencing & Mass Emailing on monday CRM: Can You Ensure Better Client Communication?",
+      "liveTitle": "monday CRM: Email Sequencing & Mass Emailing on monday CRM: Can You Ensure Better Client Communication?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-service-2026-roadmap",
+      "seoTitle": "monday.com 2026 CRM and Service Roadmap: The Upcoming Features You Need to Know",
+      "slug": "monday-crm-service-2026-roadmap",
+      "title": "monday.com 2026 CRM and Service Roadmap: The Upcoming Features You Need to Know",
+      "liveTitle": "monday.com 2026 CRM and Service Roadmap: The Upcoming Features You Need to Know",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-sso-setup-guide",
+      "seoTitle": "monday CRM SSO, Audit Logs, and Multi-Level Permission Setup Guide: Enterprise Security Checklist for 2026",
+      "slug": "monday-crm-sso-setup-guide",
+      "title": "monday CRM SSO, Audit Logs, and Multi-Level Permission Setup Guide: Enterprise Security Checklist for 2026",
+      "liveTitle": "monday CRM SSO, Audit Logs, and Multi-Level Permission Setup Guide: Enterprise Security Checklist for 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-unique-features",
+      "seoTitle": "monday.com CRM: 5 Unique Features New Users Might Not Know [Updated]",
+      "slug": "monday-crm-unique-features",
+      "title": "monday.com CRM: 5 Unique Features New Users Might Not Know [Updated]",
+      "liveTitle": "monday.com CRM: 5 Unique Features New Users Might Not Know [Updated]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-updates-2025",
+      "seoTitle": "monday CRM updates of 2025: What's New and Improved?",
+      "slug": "monday-crm-updates-2025",
+      "title": "monday CRM updates of 2025: What's New and Improved?",
+      "liveTitle": "monday CRM updates of 2025: What's New and Improved?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-vs-close-crm",
+      "seoTitle": "monday CRM vs Close CRM: The Only Comparison You'll Need [2025]",
+      "slug": "monday-crm-vs-close-crm",
+      "title": "monday CRM vs Close CRM: The Only Comparison You'll Need [2025]",
+      "liveTitle": "monday CRM vs Close CRM: The Only Comparison You'll Need [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-vs-pipedrive-the-ultimate-crm-showdown",
+      "seoTitle": "monday CRM vs Pipedrive: Which Option is Future Proof? [2024 Comparison]",
+      "slug": "monday-crm-vs-pipedrive-the-ultimate-crm-showdown",
+      "title": "monday CRM vs Pipedrive: Which Option is Future Proof? [2024 Comparison]",
+      "liveTitle": "monday CRM vs Pipedrive: Which Option is Future Proof? [2024 Comparison]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-crm-vs-zoho-crm",
+      "seoTitle": "monday CRM vs Zoho CRM: Total Cost of Ownership [2025 Comparison]",
+      "slug": "monday-crm-vs-zoho-crm",
+      "title": "monday CRM vs Zoho CRM: Total Cost of Ownership [2025 Comparison]",
+      "liveTitle": "monday CRM vs Zoho CRM: Total Cost of Ownership [2025 Comparison]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-dev-vs-jira",
+      "seoTitle": "monday Dev vs Jira: Comparison Review 2025",
+      "slug": "monday-dev-vs-jira",
+      "title": "monday Dev vs Jira: Comparison Review 2025",
+      "liveTitle": "monday Dev vs Jira: Comparison Review 2025",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-enterprise-work-management",
+      "seoTitle": "monday Enterprise Work Management: The All Seeing Eye Every Business Needs",
+      "slug": "monday-enterprise-work-management",
+      "title": "monday Enterprise Work Management: The All Seeing Eye Every Business Needs",
+      "liveTitle": "monday Enterprise Work Management: The All Seeing Eye Every Business Needs",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-gartner-magic-quadrant-project-management",
+      "seoTitle": "monday.com Named Magic Quadrant Leader for Adaptive Project Management [2023]",
+      "slug": "monday-gartner-magic-quadrant-project-management",
+      "title": "monday.com Named Magic Quadrant Leader for Adaptive Project Management [2023]",
+      "liveTitle": "monday.com Named Magic Quadrant Leader for Adaptive Project Management [2023]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-partner",
+      "seoTitle": "monday.com Certified Partner",
+      "slug": "monday-partner",
+      "title": "monday.com Certified Partner",
+      "liveTitle": "monday.com Certified Partner",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-partners-us-fruition",
+      "seoTitle": "monday.com Partners with Fruition US: Expert Support for US Companies",
+      "slug": "monday-partners-us-fruition",
+      "title": "monday.com Partners with Fruition US: Expert Support for US Companies",
+      "liveTitle": "monday.com Partners with Fruition US: Expert Support for US Companies",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-platform-api",
+      "seoTitle": "What is the monday Platform API? monday.com API Guide for Custom Integrations",
+      "slug": "monday-platform-api",
+      "title": "What is the monday Platform API? monday.com API Guide for Custom Integrations",
+      "liveTitle": "What is the monday Platform API? monday.com API Guide for Custom Integrations",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-project-portfolio-management-setup",
+      "seoTitle": "monday Project Portfolio Management Setup: Structuring High-Level Dashboards in 2026",
+      "slug": "monday-project-portfolio-management-setup",
+      "title": "monday Project Portfolio Management Setup: Structuring High-Level Dashboards in 2026",
+      "liveTitle": "monday Project Portfolio Management Setup: Structuring High-Level Dashboards in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-project-risk-management-ai",
+      "seoTitle": "monday Project Risk Management AI: Automating Risk Detection and Status Reporting in 2026",
+      "slug": "monday-project-risk-management-ai",
+      "title": "monday Project Risk Management AI: Automating Risk Detection and Status Reporting in 2026",
+      "liveTitle": "monday Project Risk Management AI: Automating Risk Detection and Status Reporting in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-resource-capacity-planning",
+      "seoTitle": "monday Resource Capacity Planning: Consultant-Led Strategies for Balancing Workload View in 2026",
+      "slug": "monday-resource-capacity-planning",
+      "title": "monday Resource Capacity Planning: Consultant-Led Strategies for Balancing Workload View in 2026",
+      "liveTitle": "monday Resource Capacity Planning: Consultant-Led Strategies for Balancing Workload View in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-sales-crm-tutorial",
+      "seoTitle": "monday CRM Tutorial [2024]",
+      "slug": "monday-sales-crm-tutorial",
+      "title": "monday CRM Tutorial [2024]",
+      "liveTitle": "monday CRM Tutorial [2024]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-sales-crm-vs-salesforce",
+      "seoTitle": "monday CRM vs Salesforce: Your Top Pick CRM for Small-Mid-Sized Revenue Teams",
+      "slug": "monday-sales-crm-vs-salesforce",
+      "title": "monday CRM vs Salesforce: Your Top Pick CRM for Small-Mid-Sized Revenue Teams",
+      "liveTitle": "monday CRM vs Salesforce: Your Top Pick CRM for Small-Mid-Sized Revenue Teams",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-service-everything-you-need-to-know-2024",
+      "seoTitle": "monday Service: Everything you need to know 2024",
+      "slug": "monday-service-everything-you-need-to-know-2024",
+      "title": "monday Service: Everything you need to know 2024",
+      "liveTitle": "monday Service: Everything you need to know 2024",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-service-multi-portal-solution",
+      "seoTitle": "monday Service Multi-Portal Solution",
+      "slug": "monday-service-multi-portal-solution",
+      "title": "monday Service Multi-Portal Solution",
+      "liveTitle": "monday Service Multi-Portal Solution",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-service-ticket-management",
+      "seoTitle": "How Can monday Service Help With Ticket Management?",
+      "slug": "monday-service-ticket-management",
+      "title": "How Can monday Service Help With Ticket Management?",
+      "liveTitle": "How Can monday Service Help With Ticket Management?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-service-updates",
+      "seoTitle": "monday Service Updates: What's Introduced in This Service Management Platform?",
+      "slug": "monday-service-updates",
+      "title": "monday Service Updates: What's Introduced in This Service Management Platform?",
+      "liveTitle": "monday Service Updates: What's Introduced in This Service Management Platform?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-service-use-cases",
+      "seoTitle": "5 Top monday Service Use Cases: Features That Go Beyond Helpdesk Capabilities [2025]",
+      "slug": "monday-service-use-cases",
+      "title": "5 Top monday Service Use Cases: Features That Go Beyond Helpdesk Capabilities [2025]",
+      "liveTitle": "5 Top monday Service Use Cases: Features That Go Beyond Helpdesk Capabilities [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-service-vs-freshdesk",
+      "seoTitle": "monday Service vs Freshdesk: Choose a Help Desk Software for Your Team [2025]",
+      "slug": "monday-service-vs-freshdesk",
+      "title": "monday Service vs Freshdesk: Choose a Help Desk Software for Your Team [2025]",
+      "liveTitle": "monday Service vs Freshdesk: Choose a Help Desk Software for Your Team [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-service-vs-jira-service-management",
+      "seoTitle": "monday Service vs Jira Service Management: Which Tool Will Optimise Service Management? [2025]",
+      "slug": "monday-service-vs-jira-service-management",
+      "title": "monday Service vs Jira Service Management: Which Tool Will Optimise Service Management? [2025]",
+      "liveTitle": "monday Service vs Jira Service Management: Which Tool Will Optimise Service Management? [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-service-vs-zendesk",
+      "seoTitle": "monday Service vs Zendesk: How Are They Reshaping Customer Support Strategies? [2025]",
+      "slug": "monday-service-vs-zendesk",
+      "title": "monday Service vs Zendesk: How Are They Reshaping Customer Support Strategies? [2025]",
+      "liveTitle": "monday Service vs Zendesk: How Are They Reshaping Customer Support Strategies? [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-sidekick-ai-agentic-ai",
+      "seoTitle": "The Future of Work: Orchestrating Agentic AI with monday sidekick",
+      "slug": "monday-sidekick-ai-agentic-ai",
+      "title": "The Future of Work: Orchestrating Agentic AI with monday sidekick",
+      "liveTitle": "The Future of Work: Orchestrating Agentic AI with monday sidekick",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-vibe",
+      "seoTitle": "monday vibe: A New Way of Creating Work Apps with AI [2025]",
+      "slug": "monday-vibe",
+      "title": "monday vibe: A New Way of Creating Work Apps with AI [2025]",
+      "liveTitle": "monday vibe: A New Way of Creating Work Apps with AI [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-vs-motion",
+      "seoTitle": "monday.com vs Motion: Best Project Management Software Compared [2025]",
+      "slug": "monday-vs-motion",
+      "title": "monday.com vs Motion: Best Project Management Software Compared [2025]",
+      "liveTitle": "monday.com vs Motion: Best Project Management Software Compared [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-work-management-updates-2025",
+      "seoTitle": "monday Work Management Updates - May 2025",
+      "slug": "monday-work-management-updates-2025",
+      "title": "monday Work Management Updates - May 2025",
+      "liveTitle": "monday Work Management Updates - May 2025",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-work-management-workcanvas-2026-roadmap",
+      "seoTitle": "monday Work Management 2026 Roadmap: What New Features Can You Expect?",
+      "slug": "monday-work-management-workcanvas-2026-roadmap",
+      "title": "monday Work Management 2026 Roadmap: What New Features Can You Expect?",
+      "liveTitle": "monday Work Management 2026 Roadmap: What New Features Can You Expect?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-monday-workforms",
+      "seoTitle": "monday WorkForms: The A-to-Z of Comprehensive Data Collection to Streamline Workflows in 2026",
+      "slug": "monday-workforms",
+      "title": "monday WorkForms: The A-to-Z of Comprehensive Data Collection to Streamline Workflows in 2026",
+      "liveTitle": "monday WorkForms: The A-to-Z of Comprehensive Data Collection to Streamline Workflows in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-advanced-delivery-partner-badge-fruition",
+      "seoTitle": "monday.com Advanced Delivery Partner Badge 2026",
+      "slug": "mondaycom-advanced-delivery-partner-badge-fruition",
+      "title": "monday.com Advanced Delivery Partner Badge 2026",
+      "liveTitle": "monday.com Advanced Delivery Partner Badge 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-agile-consulting",
+      "seoTitle": "monday.com Agile Consulting: How to Implement Custom Scrum and Kanban Workflows in 2026?",
+      "slug": "mondaycom-agile-consulting",
+      "title": "monday.com Agile Consulting: How to Implement Custom Scrum and Kanban Workflows in 2026?",
+      "liveTitle": "monday.com Agile Consulting: How to Implement Custom Scrum and Kanban Workflows in 2026?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-agile-sprint-management",
+      "seoTitle": "monday.com Agile Sprint Management: Scalable Product Backlogs from Feature Request to Sprint in 2026",
+      "slug": "mondaycom-agile-sprint-management",
+      "title": "monday.com Agile Sprint Management: Scalable Product Backlogs from Feature Request to Sprint in 2026",
+      "liveTitle": "monday.com Agile Sprint Management: Scalable Product Backlogs from Feature Request to Sprint in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "drafts.blogPost-mondaycom-agile-sprint-management",
+      "seoTitle": "monday.com Agile Sprint Management: Scalable Product Backlogs from Feature Request to Sprint in 2026",
+      "slug": "mondaycom-agile-sprint-management",
+      "title": "monday.com Agile Sprint Management: Scalable Product Backlogs from Feature Request to Sprint in 2026",
+      "liveTitle": "monday.com Agile Sprint Management: Scalable Product Backlogs from Feature Request to Sprint in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-ai-feature-prioritisation-risk-detection",
+      "seoTitle": "monday.com AI Feature Prioritisation: Can You Create AI-Driven Product Strategies for Risk Detection in 2026?",
+      "slug": "mondaycom-ai-feature-prioritisation-risk-detection",
+      "title": "monday.com AI Feature Prioritisation: Can You Create AI-Driven Product Strategies for Risk Detection in 2026?",
+      "liveTitle": "monday.com AI Feature Prioritisation: Can You Create AI-Driven Product Strategies for Risk Detection in 2026?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-autopilot-hub",
+      "seoTitle": "monday.com Autopilot Hub: The Centralised Command Centre for Enterprises [2026]",
+      "slug": "mondaycom-autopilot-hub",
+      "title": "monday.com Autopilot Hub: The Centralised Command Centre for Enterprises [2026]",
+      "liveTitle": "monday.com Autopilot Hub: The Centralised Command Centre for Enterprises [2026]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-consultants-australia",
+      "seoTitle": "Top 5 monday.com Consultants in Australia (2026)",
+      "slug": "mondaycom-consultants-australia",
+      "title": "Top 5 monday.com Consultants in Australia (2026)",
+      "liveTitle": "Top 5 monday.com Consultants in Australia (2026)",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "drafts.blogPost-mondaycom-consultants-australia",
+      "seoTitle": "Top 5 monday.com Consultants in Australia (2026)",
+      "slug": "mondaycom-consultants-australia",
+      "title": "Top 5 monday.com Consultants in Australia (2026)",
+      "liveTitle": "Top 5 monday.com Consultants in Australia (2026)",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-consultants-in-the-uk",
+      "seoTitle": "monday.com Consultants in the UK: Top 5 Experts Who Can Build Workflows for You in 2026",
+      "slug": "mondaycom-consultants-in-the-uk",
+      "title": "monday.com Consultants in the UK: Top 5 Experts Who Can Build Workflows for You in 2026",
+      "liveTitle": "monday.com Consultants in the UK: Top 5 Experts Who Can Build Workflows for You in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-consulting-packages-vs-diy",
+      "seoTitle": "Hidden DIY Costs: Why monday.com Consulting Packages Save You Money in 2026?",
+      "slug": "mondaycom-consulting-packages-vs-diy",
+      "title": "Hidden DIY Costs: Why monday.com Consulting Packages Save You Money in 2026?",
+      "liveTitle": "Hidden DIY Costs: Why monday.com Consulting Packages Save You Money in 2026?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blog-wix-mondaycom-crm-pricing-plan-for-small-teams",
+      "seoTitle": "Which monday.com CRM Pricing Plan is Best for a Small Team in 2026?",
+      "slug": "mondaycom-crm-pricing-plan-for-small-teams",
+      "title": "Which monday.com CRM Pricing Plan is Best for a Small Team in 2026?",
+      "liveTitle": "Which monday.com CRM Pricing Plan is Best for a Small Team in 2026?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blog-wix-mondaycom-crm-pricing-vs-competitors",
+      "seoTitle": "How Does monday.com CRM Pricing Compare to Its Competitors? A 2026 Guide",
+      "slug": "mondaycom-crm-pricing-vs-competitors",
+      "title": "How Does monday.com CRM Pricing Compare to Its Competitors? A 2026 Guide",
+      "liveTitle": "How Does monday.com CRM Pricing Compare to Its Competitors? A 2026 Guide",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-crm-review-2023",
+      "seoTitle": "monday.com Sales CRM, is it good? [Review 2023]",
+      "slug": "mondaycom-crm-review-2023",
+      "title": "monday.com Sales CRM, is it good? [Review 2023]",
+      "liveTitle": "monday.com Sales CRM, is it good? [Review 2023]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-enterprise-automation-actions-vs-pro",
+      "seoTitle": "monday.com Automations Pro vs. Enterprise: When Does 25,000 Actions/Month Not Cut It?",
+      "slug": "mondaycom-enterprise-automation-actions-vs-pro",
+      "title": "monday.com Automations Pro vs. Enterprise: When Does 25,000 Actions/Month Not Cut It?",
+      "liveTitle": "monday.com Automations Pro vs. Enterprise: When Does 25,000 Actions/Month Not Cut It?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-enterprise-permissions",
+      "seoTitle": "Granular Permissions in monday.com Enterprise: An IT/Security Deep Dive",
+      "slug": "mondaycom-enterprise-permissions",
+      "title": "Granular Permissions in monday.com Enterprise: An IT/Security Deep Dive",
+      "liveTitle": "Granular Permissions in monday.com Enterprise: An IT/Security Deep Dive",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-enterprise-pricing-plan-vs-pro",
+      "seoTitle": "The Definitive Guide to monday.com Enterprise vs. Pro Pricing & Features for Scalability",
+      "slug": "mondaycom-enterprise-pricing-plan-vs-pro",
+      "title": "The Definitive Guide to monday.com Enterprise vs. Pro Pricing & Features for Scalability",
+      "liveTitle": "The Definitive Guide to monday.com Enterprise vs. Pro Pricing & Features for Scalability",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-implementation-process-fruition-steps",
+      "seoTitle": "The Fruition 5-Step Process for Seamless monday.com Implementation",
+      "slug": "mondaycom-implementation-process-fruition-steps",
+      "title": "The Fruition 5-Step Process for Seamless monday.com Implementation",
+      "liveTitle": "The Fruition 5-Step Process for Seamless monday.com Implementation",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-implementation-consultants",
+      "seoTitle": "The True ROI of monday.com Implementation: Consultants Value Breakdown",
+      "slug": "mondaycom-implementation-roi",
+      "title": "The True ROI of monday.com Implementation: Consultants Value Breakdown",
+      "liveTitle": "The True ROI of monday.com Implementation: Consultants Value Breakdown",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-my-work",
+      "seoTitle": "monday.com My Work: Get a High-Level Overview of Every Project",
+      "slug": "mondaycom-my-work",
+      "title": "monday.com My Work: Get a High-Level Overview of Every Project",
+      "liveTitle": "monday.com My Work: Get a High-Level Overview of Every Project",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-pivot-tables",
+      "seoTitle": "The monday.com Enterprise Reporting Advantage: Pivot Tables and Advanced Analytics",
+      "slug": "mondaycom-pivot-tables",
+      "title": "The monday.com Enterprise Reporting Advantage: Pivot Tables and Advanced Analytics",
+      "liveTitle": "The monday.com Enterprise Reporting Advantage: Pivot Tables and Advanced Analytics",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-platinum-partner-fruition",
+      "seoTitle": "monday.com Platinum Partner",
+      "slug": "mondaycom-platinum-partner-fruition",
+      "title": "monday.com Platinum Partner",
+      "liveTitle": "monday.com Platinum Partner",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-private-workspace",
+      "seoTitle": "Beyond the Basics: Leveraging monday.com Private Workspaces and Item-Level Control",
+      "slug": "mondaycom-private-workspace",
+      "title": "Beyond the Basics: Leveraging monday.com Private Workspaces and Item-Level Control",
+      "liveTitle": "Beyond the Basics: Leveraging monday.com Private Workspaces and Item-Level Control",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blog-wix-mondaycom-product-and-ai-roadmap-2026-2027",
+      "seoTitle": "monday.com Product and AI Roadmap for 2026-2027: Everything You Need to Know",
+      "slug": "mondaycom-product-and-ai-roadmap-2026-2027",
+      "title": "monday.com Product and AI Roadmap for 2026-2027: Everything You Need to Know",
+      "liveTitle": "monday.com Product and AI Roadmap for 2026-2027: Everything You Need to Know",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-product-roadmap-setup",
+      "seoTitle": "monday.com Product Roadmap Setup: Structuring High-Level Planning with Baselines and Milestones in 2026",
+      "slug": "mondaycom-product-roadmap-setup",
+      "title": "monday.com Product Roadmap Setup: Structuring High-Level Planning with Baselines and Milestones in 2026",
+      "liveTitle": "monday.com Product Roadmap Setup: Structuring High-Level Planning with Baselines and Milestones in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-project-management-demo-fundamentals",
+      "seoTitle": "monday.com Project Management Demo & Set up Guide",
+      "slug": "mondaycom-project-management-demo-fundamentals",
+      "title": "monday.com Project Management Demo & Set up Guide",
+      "liveTitle": "monday.com Project Management Demo & Set up Guide",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-quick-implementation-packages",
+      "seoTitle": "Fruition's 'Jumpstart' Package: What's Included in a 30-Day monday.com Quick Implementation?",
+      "slug": "mondaycom-quick-implementation-packages",
+      "title": "Fruition's 'Jumpstart' Package: What's Included in a 30-Day monday.com Quick Implementation?",
+      "liveTitle": "Fruition's 'Jumpstart' Package: What's Included in a 30-Day monday.com Quick Implementation?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blog-wix-mondaycom-vs-autodesk",
+      "seoTitle": "monday.com vs Autodesk: Workflow and Feature Comparison with Integration Guide (2026)",
+      "slug": "mondaycom-vs-autodesk",
+      "title": "monday.com vs Autodesk: Workflow and Feature Comparison with Integration Guide (2026)",
+      "liveTitle": "monday.com vs Autodesk: Workflow and Feature Comparison with Integration Guide (2026)",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-xero-integration-consulting-and-quickbooks",
+      "seoTitle": "monday.com Xero & QuickBooks Integration Consulting",
+      "slug": "mondaycom-xero-integration-consulting-and-quickbooks",
+      "title": "monday.com Xero & QuickBooks Integration Consulting",
+      "liveTitle": "monday.com Xero & QuickBooks Integration Consulting",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blog-wix-ms-project-to-mondaycom",
+      "seoTitle": "MS Project Online Discontinued: How to Export and Migrate Your Data to monday.com Before 30th September 2026?",
+      "slug": "ms-project-to-mondaycom",
+      "title": "MS Project Online Discontinued: How to Export and Migrate Your Data to monday.com Before 30th September 2026?",
+      "liveTitle": "MS Project Online Discontinued: How to Export and Migrate Your Data to monday.com Before 30th September 2026?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-n8n-consultant-enterpise-scale",
+      "seoTitle": "n8n Consultant Reveals: Beyond Simple Sync for Enterprise Scale in 2026",
+      "slug": "n8n-consultant-enterpise-scale",
+      "title": "n8n Consultant Reveals: Beyond Simple Sync for Enterprise Scale in 2026",
+      "liveTitle": "n8n Consultant Reveals: Beyond Simple Sync for Enterprise Scale in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-pitfalls-monday-com-implementation",
+      "seoTitle": "How to Avoid Common Pitfalls During monday.com Implementation?",
+      "slug": "pitfalls-monday-com-implementation",
+      "title": "How to Avoid Common Pitfalls During monday.com Implementation?",
+      "liveTitle": "How to Avoid Common Pitfalls During monday.com Implementation?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-planview-vs-monday-com",
+      "seoTitle": "Planview vs monday.com: Portfolio Strategy To Execution [2025]",
+      "slug": "planview-vs-monday-com",
+      "title": "Planview vs monday.com: Portfolio Strategy To Execution [2025]",
+      "liveTitle": "Planview vs monday.com: Portfolio Strategy To Execution [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-portfolio-management-on-monday-com",
+      "seoTitle": "How Small-Medium Enterprises Can Benefit from Portfolio Project Management [2025 Guide]",
+      "slug": "portfolio-management-on-monday-com",
+      "title": "How Small-Medium Enterprises Can Benefit from Portfolio Project Management [2025 Guide]",
+      "liveTitle": "How Small-Medium Enterprises Can Benefit from Portfolio Project Management [2025 Guide]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "drafts.blogPost-process-mining-vs-task-mining",
+      "seoTitle": "How to Guide: Process & Task Mining For Software Implementations",
+      "slug": "process-mining-vs-task-mining",
+      "title": "How to Guide: Process & Task Mining For Software Implementations",
+      "liveTitle": "How to Guide: Process & Task Mining For Software Implementations",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-project-management-change-management-plan-mondaycom",
+      "seoTitle": "Change Management Plan in monday.com Project Management: A Successful Project Manager's Playbook for 2026",
+      "slug": "project-management-change-management-plan-mondaycom",
+      "title": "Change Management Plan in monday.com Project Management: A Successful Project Manager's Playbook for 2026",
+      "liveTitle": "Change Management Plan in monday.com Project Management: A Successful Project Manager's Playbook for 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-rising-star-award-fruition",
+      "seoTitle": "Rising Start Award at monday.com Partner Summit",
+      "slug": "rising-star-award-fruition",
+      "title": "Rising Start Award at monday.com Partner Summit",
+      "liveTitle": "Rising Start Award at monday.com Partner Summit",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-salesforce-to-monday-crm",
+      "seoTitle": "Salesforce to monday CRM: What 500+ Specialists Learned From Real Migration Projects",
+      "slug": "salesforce-to-monday-crm",
+      "title": "Salesforce to monday CRM: What 500+ Specialists Learned From Real Migration Projects",
+      "liveTitle": "Salesforce to monday CRM: What 500+ Specialists Learned From Real Migration Projects",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-seven-ways-monday-com-ai-will-change-the-way-you-work-2024",
+      "seoTitle": "7 Ways monday AI will change the way you work in 2024",
+      "slug": "seven-ways-monday-com-ai-will-change-the-way-you-work-2024",
+      "title": "7 Ways monday AI will change the way you work in 2024",
+      "liveTitle": "7 Ways monday AI will change the way you work in 2024",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-shopify-and-monday-com-integration",
+      "seoTitle": "Shopify and monday.com Integration: Streamline Retail Management and Ecommerce Operations [2025]",
+      "slug": "shopify-and-monday-com-integration",
+      "title": "Shopify and monday.com Integration: Streamline Retail Management and Ecommerce Operations [2025]",
+      "liveTitle": "Shopify and monday.com Integration: Streamline Retail Management and Ecommerce Operations [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-for-construction-site-to-office-gap",
+      "seoTitle": "Can monday.com for Construction Solve the Site-to-Office Data Gap in 2026?",
+      "slug": "solve-site-to-office-data-gap-with-mondaycom",
+      "title": "Can monday.com for Construction Solve the Site-to-Office Data Gap in 2026?",
+      "liveTitle": "Can monday.com for Construction Solve the Site-to-Office Data Gap in 2026?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-sprint-vs-waterfall-methodology",
+      "seoTitle": "Sprint vs Waterfall Project Management Methodology: Why Not Use Both with monday Dev?",
+      "slug": "sprint-vs-waterfall-methodology",
+      "title": "Sprint vs Waterfall Project Management Methodology: Why Not Use Both with monday Dev?",
+      "liveTitle": "Sprint vs Waterfall Project Management Methodology: Why Not Use Both with monday Dev?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blog-wix-start-from-the-chart-not-the-data-11-visual-crm-dashboard-outputs-every-sales-manager-needs-in-2",
+      "seoTitle": "Start From the Chart, Not the Data: [11 Visual] CRM Dashboard Outputs Every Sales Manager Needs in 2026",
+      "slug": "start-from-the-chart-not-the-data-11-visual-crm-dashboard-outputs-every-sales-manager-needs-in-2",
+      "title": "Start From the Chart, Not the Data: [11 Visual] CRM Dashboard Outputs Every Sales Manager Needs in 2026",
+      "liveTitle": "Start From the Chart, Not the Data: [11 Visual] CRM Dashboard Outputs Every Sales Manager Needs in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-swms-software-construction",
+      "seoTitle": "Automating SWMS Software for Construction Using monday.com AI in 2026",
+      "slug": "swms-software-construction",
+      "title": "Automating SWMS Software for Construction Using monday.com AI in 2026",
+      "liveTitle": "Automating SWMS Software for Construction Using monday.com AI in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-team-collaboration-with-monday-com",
+      "seoTitle": "How Do Thriving Remote Teams Build Trust & Accountability with monday.com?",
+      "slug": "team-collaboration-with-monday-com",
+      "title": "How Do Thriving Remote Teams Build Trust & Accountability with monday.com?",
+      "liveTitle": "How Do Thriving Remote Teams Build Trust & Accountability with monday.com?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-the-7-step-monday-crm-data-migration-checklist",
+      "seoTitle": "The 7-Step monday CRM Data Migration Checklist for 2026: Chaos to Clarity",
+      "slug": "the-7-step-monday-crm-data-migration-checklist",
+      "title": "The 7-Step monday CRM Data Migration Checklist for 2026: Chaos to Clarity",
+      "liveTitle": "The 7-Step monday CRM Data Migration Checklist for 2026: Chaos to Clarity",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-the-future-of-productivity-5-key-trends-to-look-out-for-in-2024",
+      "seoTitle": "The Future of Productivity: 5 Key Trends to Look Out for in 2024",
+      "slug": "the-future-of-productivity-5-key-trends-to-look-out-for-in-2024",
+      "title": "The Future of Productivity: 5 Key Trends to Look Out for in 2024",
+      "liveTitle": "The Future of Productivity: 5 Key Trends to Look Out for in 2024",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-the-new-oil-ai-tokens-explained",
+      "seoTitle": "The New Oil: AI Tokens Explained",
+      "slug": "the-new-oil-ai-tokens-explained",
+      "title": "The New Oil: AI Tokens Explained",
+      "liveTitle": "The New Oil: AI Tokens Explained",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-timesheets-in-monday-com",
+      "seoTitle": "Timesheets in monday.com: How Can You Track Your Employees?",
+      "slug": "timesheets-in-monday-com",
+      "title": "Timesheets in monday.com: How Can You Track Your Employees?",
+      "liveTitle": "Timesheets in monday.com: How Can You Track Your Employees?",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blog-wix-top-5-sales-outbound-tools-for-2026",
+      "seoTitle": "Top 5 Sales Outbound Tools for 2026",
+      "slug": "top-5-sales-outbound-tools-for-2026",
+      "title": "Top 5 Sales Outbound Tools for 2026",
+      "liveTitle": "Top 5 Sales Outbound Tools for 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-top-marketing-challenges",
+      "seoTitle": "Top 8 Marketing Challenges & Solutions With monday.com 2023",
+      "slug": "top-marketing-challenges",
+      "title": "Top 8 Marketing Challenges & Solutions With monday.com 2023",
+      "liveTitle": "Top 8 Marketing Challenges & Solutions With monday.com 2023",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blog-wix-top-tools-to-manage-ai-tokens",
+      "seoTitle": "Manage AI Tokens Across Multiple LLM Providers: Top Tools to Measure Effectiveness of Tokens Used in 2026",
+      "slug": "top-tools-to-manage-ai-tokens",
+      "title": "Manage AI Tokens Across Multiple LLM Providers: Top Tools to Measure Effectiveness of Tokens Used in 2026",
+      "liveTitle": "Manage AI Tokens Across Multiple LLM Providers: Top Tools to Measure Effectiveness of Tokens Used in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-upgrade-mondaycom-pro-to-enterprise",
+      "seoTitle": "monday.com Plan Migration: A Certified Consultant's Guide to Upgrading Pro to Enterprise",
+      "slug": "upgrade-mondaycom-pro-to-enterprise",
+      "title": "monday.com Plan Migration: A Certified Consultant's Guide to Upgrading Pro to Enterprise",
+      "liveTitle": "monday.com Plan Migration: A Certified Consultant's Guide to Upgrading Pro to Enterprise",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-vanguard-blackrock-major-hedge-funds-acquire-shares-in-monday-com",
+      "seoTitle": "Vanguard, Blackrock & major Hedge funds acquire shares in monday.com",
+      "slug": "vanguard-blackrock-major-hedge-funds-acquire-shares-in-monday-com",
+      "title": "Vanguard, Blackrock & major Hedge funds acquire shares in monday.com",
+      "liveTitle": "Vanguard, Blackrock & major Hedge funds acquire shares in monday.com",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-what-is-make-grid",
+      "seoTitle": "What is Make Grid? A New Way to Visualise Connected Data Systems and Workflows",
+      "slug": "what-is-make-grid",
+      "title": "What is Make Grid? A New Way to Visualise Connected Data Systems and Workflows",
+      "liveTitle": "What is Make Grid? A New Way to Visualise Connected Data Systems and Workflows",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-what-is-monday-ai",
+      "seoTitle": "monday AI? The Complete Guide [2026 Updated]",
+      "slug": "what-is-monday-ai-2026",
+      "title": "monday AI? The Complete Guide [2026 Updated]",
+      "liveTitle": "monday AI? The Complete Guide [2026 Updated]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-what-is-monday-db-for-enterprises",
+      "seoTitle": "What is mondayDB? CTO's Guide to Architectural Impacts on Enterprise Speed in 2026",
+      "slug": "what-is-monday-db-for-enterprises",
+      "title": "What is mondayDB? CTO's Guide to Architectural Impacts on Enterprise Speed in 2026",
+      "liveTitle": "What is mondayDB? CTO's Guide to Architectural Impacts on Enterprise Speed in 2026",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-what-is-monday-magic",
+      "seoTitle": "What is monday magic? Transforming AI Prompts into Ready-to-Use Work Solutions [2025]",
+      "slug": "what-is-monday-magic",
+      "title": "What is monday magic? Transforming AI Prompts into Ready-to-Use Work Solutions [2025]",
+      "liveTitle": "What is monday magic? Transforming AI Prompts into Ready-to-Use Work Solutions [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-what-is-monday-mcp",
+      "seoTitle": "monday.com MCP Integration Guide: Connect AI Agents to Your Workspace (2025)",
+      "slug": "what-is-monday-mcp",
+      "title": "monday.com MCP Integration Guide: Connect AI Agents to Your Workspace (2025)",
+      "liveTitle": "monday.com MCP Integration Guide: Connect AI Agents to Your Workspace (2025)",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-what-is-monday-sidekick",
+      "seoTitle": "What is monday sidekick? The AI Assistant That Does It All [2025]",
+      "slug": "what-is-monday-sidekick",
+      "title": "What is monday sidekick? The AI Assistant That Does It All [2025]",
+      "liveTitle": "What is monday sidekick? The AI Assistant That Does It All [2025]",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-what-is-mondaydb",
+      "seoTitle": "What Is mondayDB? The quick guide by Fruition",
+      "slug": "what-is-mondaydb",
+      "title": "What Is mondayDB? The quick guide by Fruition",
+      "liveTitle": "What Is mondayDB? The quick guide by Fruition",
+      "fetchOk": true,
+      "diverges": false
+    },
+    {
+      "_id": "blogPost-mondaycom-for-construction-australia",
+      "seoTitle": "monday.com for Construction Australia: Why Companies are Migrating to monday WorkOS in 2026?",
+      "slug": "why-construction-companies-in-australia-migrating-to-monday-workos",
+      "title": "monday.com for Construction Australia: Why Companies are Migrating to monday WorkOS in 2026?",
+      "liveTitle": "monday.com for Construction Australia: Why Companies are Migrating to monday WorkOS in 2026?",
+      "fetchOk": true,
+      "diverges": false
+    }
+  ]
+}

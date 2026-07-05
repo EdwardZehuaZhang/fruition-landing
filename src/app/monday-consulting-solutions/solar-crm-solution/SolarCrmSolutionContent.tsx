@@ -51,10 +51,10 @@ function KeyFeaturesSection({
 }) {
   if (features.length === 0 && services.length === 0) return null
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto grid grid-cols-1 md:grid-cols-2" style={{ maxWidth: 1100, gap: 48 }}>
         <div>
-          <h2 className="font-bold" style={{ color: "#10003a", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
+          <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
             {featuresHeadingPart1}
             {featuresHeadingAccent && (
               <span style={{ color: "#8015e8" }}>{featuresHeadingAccent}</span>
@@ -64,7 +64,7 @@ function KeyFeaturesSection({
             {features.map((f, i) => (
               <li key={f.title || i} className="flex items-start" style={{ gap: 10 }}>
                 <Check size={16} color="#8015e8" style={{ flexShrink: 0 }} aria-hidden />
-                <p style={{ fontSize: 15, lineHeight: "24px", color: "#222" }}>
+                <p style={{ fontSize: 15, lineHeight: "24px", color: "var(--text-body)" }}>
                   <span className="font-bold">{f.title}:</span> {f.body}
                 </p>
               </li>
@@ -72,7 +72,7 @@ function KeyFeaturesSection({
           </ul>
         </div>
         <div>
-          <h2 className="font-bold" style={{ color: "#10003a", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
+          <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
             {servicesHeadingPart1}
             {servicesHeadingAccent && (
               <span style={{ color: "#8015e8" }}>{servicesHeadingAccent}</span>
@@ -82,7 +82,7 @@ function KeyFeaturesSection({
             {services.map((s, i) => (
               <li key={s || i} className="flex items-start" style={{ gap: 10 }}>
                 <Check size={16} color="#8015e8" style={{ flexShrink: 0 }} aria-hidden />
-                <p style={{ fontSize: 15, lineHeight: "24px", color: "#222" }}>{s}</p>
+                <p style={{ fontSize: 15, lineHeight: "24px", color: "var(--text-body)" }}>{s}</p>
               </li>
             ))}
           </ul>
@@ -138,7 +138,7 @@ function ReturnsBannerSection({
           {testimonials.map((t, i) => (
             <figure
               key={t.name || i}
-              className="bg-white"
+              className="bg-surface"
               style={{ borderRadius: 16, padding: 24, display: "flex", flexDirection: "column", gap: 16 }}
             >
               <blockquote style={{ fontSize: 14, lineHeight: "22px", color: "#222" }}>
@@ -209,7 +209,7 @@ function ReturnsBannerSection({
 function FinalStatsSection({ stats }: { stats: JoinStat[] }) {
   if (stats.length === 0) return null
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 60, paddingBottom: 100 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 60, paddingBottom: 100 }}>
       <div
         className="mx-auto grid grid-cols-2 md:grid-cols-4 text-center"
         style={{ maxWidth: 1100, gap: 24 }}
@@ -219,7 +219,7 @@ function FinalStatsSection({ stats }: { stats: JoinStat[] }) {
             <p className="font-bold" style={{ color: "#8015e8", fontSize: 28, lineHeight: "34px" }}>
               {s.value}
             </p>
-            <p style={{ color: "#10003a", fontSize: 14, marginTop: 6 }}>{s.label}</p>
+            <p style={{ color: "var(--text-body)", fontSize: 14, marginTop: 6 }}>{s.label}</p>
           </div>
         ))}
       </div>
@@ -267,8 +267,8 @@ export default function SolarCrmSolutionContent({ page, siteSettings }: Props) {
 
       {/* "Trusted by 300+ businesses worldwide" caption */}
       {page.trustedByCaption && (
-        <section className="bg-white px-4" style={{ paddingTop: 0, paddingBottom: 24 }}>
-          <p className="text-center" style={{ color: "#10003a", fontSize: 14, fontWeight: 600 }}>
+        <section className="bg-surface px-4" style={{ paddingTop: 0, paddingBottom: 24 }}>
+          <p className="text-center" style={{ color: "var(--text-body)", fontSize: 14, fontWeight: 600 }}>
             {page.trustedByCaption}
           </p>
         </section>

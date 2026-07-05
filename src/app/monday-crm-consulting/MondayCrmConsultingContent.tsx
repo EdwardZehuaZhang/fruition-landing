@@ -102,7 +102,7 @@ export default function MondayCrmConsultingContent({
     <div>
       <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* 1. Hero */}
-      <section className="bg-white">
+      <section className="bg-surface">
         <div
           className="mx-auto flex flex-col items-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-[120px] 2xl:px-[273px] max-w-[1588px] w-full"
           style={{ paddingTop: 80, paddingBottom: 80 }}
@@ -147,7 +147,7 @@ export default function MondayCrmConsultingContent({
             className="text-display text-center"
             style={{ marginTop: page.heroEyebrow ? 16 : 42, maxWidth: 924 }}
           >
-            <span className="text-black">
+            <span className="text-body">
               {page.heroHeading || page.title || ""}
             </span>
           </h1>
@@ -155,7 +155,7 @@ export default function MondayCrmConsultingContent({
           {/* Subheading */}
           {!page.hideHeroSubheading && page.heroSubheading && (
             <p
-              className="text-body-lead text-center text-black"
+              className="text-body-lead text-center text-body"
               style={{
                 marginTop: 31,
                 maxWidth: 859,
@@ -236,7 +236,7 @@ export default function MondayCrmConsultingContent({
 
       {/* 3. Video (underneath logo scroll) */}
       {heroVideoEmbedSrc && (
-        <section className="bg-white" style={{ paddingBottom: 80 }}>
+        <section className="bg-surface" style={{ paddingBottom: 80 }}>
           <div className="mx-auto" style={{ maxWidth: 1042 }}>
             <div
               className="rounded-card overflow-hidden"
@@ -348,7 +348,7 @@ export default function MondayCrmConsultingContent({
 
       {/* 9. Bottom video (under capabilities) */}
       {bottomVideoEmbedSrc && (
-        <section className="bg-white" style={{ paddingBottom: 80 }}>
+        <section className="bg-surface" style={{ paddingBottom: 80 }}>
           <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
             <div
               className="rounded-card overflow-hidden"

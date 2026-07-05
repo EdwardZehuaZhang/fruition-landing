@@ -6,6 +6,7 @@ import { getAllSolutionPages, getPageBySlug, getSiteSettings } from "@/sanity/qu
 export async function generateMetadata() {
   const page = await getPageBySlug("monday-consulting-solutions")
   return {
+    alternates: { canonical: "/monday-consulting-solutions" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }
@@ -34,10 +35,10 @@ export default async function SolutionsPage() {
           <Link
             key={s.slug}
             href={`/monday-consulting-solutions/${s.slug}`}
-            className="p-6 border border-gray-200 rounded-xl hover:border-blue-400 hover:shadow-md transition-all"
+            className="p-6 border border-ui rounded-xl hover:border-blue-400 hover:shadow-md transition-all"
           >
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">{s.title}</h3>
-            {s.heroSubheading && <p className="text-gray-600 text-sm">{s.heroSubheading}</p>}
+            <h3 className="text-xl font-semibold text-body mb-2">{s.title}</h3>
+            {s.heroSubheading && <p className="text-muted text-sm">{s.heroSubheading}</p>}
           </Link>
         ))}
       </div>

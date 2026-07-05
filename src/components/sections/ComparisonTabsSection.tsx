@@ -73,7 +73,7 @@ function renderItemText(item: ComparisonTabItem) {
         style={{
           fontSize: 15,
           lineHeight: "22px",
-          color: "#111",
+          color: "var(--text-body)",
         }}
       >
         <span style={{ fontWeight: 700 }}>{number}</span>
@@ -86,7 +86,7 @@ function renderItemText(item: ComparisonTabItem) {
       style={{
         fontSize: 15,
         lineHeight: "22px",
-        color: "#111",
+        color: "var(--text-body)",
       }}
     >
       {description}
@@ -106,9 +106,9 @@ export default function ComparisonTabsSection({
   if (tabs.length === 0) return null
   const isDark = theme === "dark"
 
-  const sectionBg = isDark ? DARK_BG : "#ffffff"
-  const headingColor = isDark ? "#ffffff" : "#000000"
-  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "#000000"
+  const sectionBg = isDark ? DARK_BG : "var(--surface)"
+  const headingColor = isDark ? "#ffffff" : "var(--text-body)"
+  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "var(--text-body)"
 
   if (layout === "sideBySide" && tabs.length >= 2) {
     const beforeItems = tabs[0]?.items ?? []
@@ -173,7 +173,7 @@ export default function ComparisonTabsSection({
   }
 
   const active = tabs[activeIndex]
-  const cardBg = "#ffffff"
+  const cardBg = "var(--surface-raised)"
 
   return (
     <section
@@ -217,12 +217,12 @@ export default function ComparisonTabsSection({
         {/* Tab pills + content card */}
         <div className="flex flex-col gap-[24px] items-center w-full max-w-[816px]">
           {/* Tab buttons — allow overflow beyond the 816px content card */}
-          <div className="flex justify-center gap-[12px] flex-wrap" style={{ overflow: "visible", width: "max-content", maxWidth: "100vw" }}>
+          <div className="flex justify-center gap-[12px] flex-wrap w-full" style={{ overflow: "visible" }}>
             {tabs.map((tab, i) => {
               const isActive = i === activeIndex
               const inactiveClass = isDark
                 ? "bg-white/10 text-white border border-white/20 hover:border-white/60"
-                : "bg-white text-[#2b074d] border border-[#e8e6e6] hover:border-[#8015e8]"
+                : "bg-surface-raised text-body border border-ui hover:border-[#8015e8]"
               return (
                 <button
                   key={tab._key || tab.label || i}
@@ -244,7 +244,7 @@ export default function ComparisonTabsSection({
             className="w-full rounded-card border py-[12px]"
             style={{
               backgroundColor: cardBg,
-              borderColor: isDark ? "transparent" : "#e8e6e6",
+              borderColor: isDark ? "transparent" : "var(--border-ui)",
             }}
           >
             <NumberedStepList

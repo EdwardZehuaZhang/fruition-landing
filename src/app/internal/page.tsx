@@ -1,7 +1,26 @@
 import Link from "next/link"
 import { requirePortalUser, getPortalAdmin } from "@/lib/portalAuth"
-import { getBlogPosts } from "@/sanity/queries"
+import { getGa4Overview, getGscClicksByPage } from "@/lib/googleAnalytics"
 import PortalShell from "@/components/internal/PortalShell"
+import { SectionCards } from "@/components/section-cards"
+import { ChartAreaInteractive } from "@/components/chart-area-interactive"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import { FileText } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
@@ -9,13 +28,6 @@ interface DraftRow {
   id: string
   title: string | null
   updated_at: string
-}
-interface PostRow {
-  _id: string
-  title: string
-  slug: string
-  publishedAt?: string
-  author?: string
 }
 
 function fmt(d?: string): string {
@@ -43,37 +55,72 @@ export default async function DashboardPage() {
     // Portal DB not reachable — show an empty drafts state rather than 500.
   }
 
-  const posts = ((await getBlogPosts(8, 0).catch(() => [])) as PostRow[]) ?? []
+  // Analytics (null until the Google service-account secret is set).
+  const [ga4, gsc] = await Promise.all([
+    getGa4Overview(28).catch(() => null),
+    getGscClicksByPage(28).catch(() => null),
+  ])
+  const nf = (n: number) => n.toLocaleString()
 
   return (
     <PortalShell email={user.email} active="dashboard">
-      <div className="rounded-card bg-white p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h1 className="text-2xl font-semibold text-[#10003a]">
-              Welcome{user.user_metadata?.full_name ? `, ${user.user_metadata.full_name}` : ""}
-            </h1>
-            <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
-              Write and publish blog posts. No Sanity account needed.
-            </p>
-          </div>
-          <Link
-            href="/internal/blog/new"
-            className="rounded-pill px-4 py-2.5 text-sm font-semibold text-white"
-            style={{ backgroundColor: "var(--purple-primary)" }}
-          >
-            New blog post
-          </Link>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold text-ink-heading">
+            Welcome{user.user_metadata?.full_name ? `, ${user.user_metadata.full_name}` : ""}
+          </h1>
+          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
+            Write and publish blog posts. No Sanity account needed.
+          </p>
         </div>
+        <Button
+          render={<Link href="/internal/blog/new" />}
+          className="bg-[var(--purple-primary)] text-white hover:bg-[var(--purple-primary)]/90"
+        >
+          New blog post
+        </Button>
+      </div>
 
-        <Section title="Your drafts">
+      <SectionCards
+        connected={Boolean(ga4)}
+        totalVisitors={ga4 ? nf(ga4.totalUsers) : undefined}
+        pageViews={ga4 ? nf(ga4.pageViews) : undefined}
+        conversions={ga4 ? nf(ga4.conversions) : undefined}
+        searchClicks={gsc ? nf(gsc.totalClicks) : undefined}
+      />
+
+      <div className="px-1">
+        <ChartAreaInteractive />
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent drafts</CardTitle>
+          <CardDescription>Your latest unpublished posts.</CardDescription>
+        </CardHeader>
+        <CardContent>
           {drafts.length === 0 ? (
-            <Empty>No drafts yet. Start a new post and hit “Save draft”.</Empty>
+            <Empty className="border-0">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <FileText />
+                </EmptyMedia>
+                <EmptyTitle>No drafts yet</EmptyTitle>
+                <EmptyDescription>
+                  Start a new post and hit “Save draft” — it’ll show up here.
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <Button render={<Link href="/internal/blog/new" />}>
+                  New blog post
+                </Button>
+              </EmptyContent>
+            </Empty>
           ) : (
             <ul className="divide-y" style={{ borderColor: "var(--color-border)" }}>
               {drafts.map((d) => (
                 <li key={d.id} className="flex items-center justify-between gap-4 py-3">
-                  <span className="text-sm font-medium text-[#10003a]">
+                  <span className="text-sm font-medium text-ink-heading">
                     {d.title || "Untitled draft"}
                   </span>
                   <span className="flex items-center gap-4 text-xs text-[var(--color-text-secondary)]">
@@ -89,58 +136,8 @@ export default async function DashboardPage() {
               ))}
             </ul>
           )}
-        </Section>
-
-        <Section title="Recent published posts">
-          {posts.length === 0 ? (
-            <Empty>No published posts found.</Empty>
-          ) : (
-            <ul className="divide-y" style={{ borderColor: "var(--color-border)" }}>
-              {posts.map((p) => (
-                <li key={p._id} className="flex items-center justify-between gap-4 py-3">
-                  <span className="text-sm font-medium text-[#10003a]">{p.title}</span>
-                  <span className="flex items-center gap-4 text-xs text-[var(--color-text-secondary)]">
-                    <span>
-                      {p.author ? `${p.author} · ` : ""}
-                      {fmt(p.publishedAt)}
-                    </span>
-                    <a
-                      href={`/post/${p.slug}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="font-medium text-[var(--purple-primary)]"
-                    >
-                      View →
-                    </a>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Section>
-      </div>
+        </CardContent>
+      </Card>
     </PortalShell>
-  )
-}
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="mt-8 first:mt-0">
-      <h2 className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--purple-primary)]">
-        {title}
-      </h2>
-      {children}
-    </section>
-  )
-}
-
-function Empty({ children }: { children: React.ReactNode }) {
-  return (
-    <p
-      className="rounded-chip px-4 py-6 text-center text-sm text-[var(--color-text-secondary)]"
-      style={{ backgroundColor: "var(--light-section-bg)" }}
-    >
-      {children}
-    </p>
   )
 }

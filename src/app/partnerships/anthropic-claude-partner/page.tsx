@@ -6,6 +6,7 @@ const SLUG = "anthropic-claude-partner"
 export async function generateMetadata() {
   const page = await getAiPartnerPageBySlug(SLUG)
   return {
+    alternates: { canonical: "/partnerships/anthropic-claude-partner" },
     title: page?.seoTitle || page?.title || SLUG,
     description: page?.seoDescription,
   }

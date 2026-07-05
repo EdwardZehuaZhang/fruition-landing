@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { Rocket, Play } from "lucide-react"
+import FramedMedia from "@/components/common/FramedMedia"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -34,7 +35,7 @@ type RoiStat = { value?: string; label?: string }
 
 function FeatureBlocksSection({ blocks }: { blocks: FeatureBlock[] }) {
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto" style={{ maxWidth: 1100 }}>
         <div className="flex flex-col" style={{ gap: 56 }}>
           {blocks.map((b, i) => (
@@ -44,8 +45,8 @@ function FeatureBlocksSection({ blocks }: { blocks: FeatureBlock[] }) {
               style={{ gap: 40, flexDirection: i % 2 === 0 ? "row" : "row-reverse" }}
             >
               <div style={{ flex: 1, minWidth: 0 }}>
-                <h3 className="font-bold" style={{ color: "#10003a", fontSize: 26, lineHeight: "34px", marginBottom: 14 }}>{b.title}</h3>
-                <p style={{ color: "#444", fontSize: 15, lineHeight: "24px", whiteSpace: "pre-line" }}>{b.body}</p>
+                <h3 className="font-bold" style={{ color: "var(--text-body)", fontSize: 26, lineHeight: "34px", marginBottom: 14 }}>{b.title}</h3>
+                <p style={{ color: "var(--text-muted-fg)", fontSize: 15, lineHeight: "24px", whiteSpace: "pre-line" }}>{b.body}</p>
                 <Link
                   href={b.ctaUrl || "#"}
                   className="inline-flex items-center font-semibold"
@@ -54,13 +55,13 @@ function FeatureBlocksSection({ blocks }: { blocks: FeatureBlock[] }) {
                   {b.ctaLabel} →
                 </Link>
               </div>
-              <div
-                className="rounded-card overflow-hidden bg-white"
+              <FramedMedia
+                className="rounded-card overflow-hidden bg-surface-raised dark:shadow-none"
                 style={{ flex: 1, aspectRatio: "16 / 10", border: "1px solid #ece7fb", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={b.image} alt={b.title || ""} className="w-full h-full object-cover" />
-              </div>
+              </FramedMedia>
             </div>
           ))}
         </div>
@@ -71,9 +72,9 @@ function FeatureBlocksSection({ blocks }: { blocks: FeatureBlock[] }) {
 
 function PartnerSectionCta({ calendlyUrl }: { calendlyUrl: string }) {
   return (
-    <section className="bg-white px-4" style={{ paddingTop: 24, paddingBottom: 80 }}>
+    <section className="bg-surface px-4" style={{ paddingTop: 24, paddingBottom: 80 }}>
       <div className="mx-auto text-center" style={{ maxWidth: 920 }}>
-        <h2 className="font-bold" style={{ color: "#10003a", fontSize: 28, lineHeight: "36px", marginBottom: 22 }}>
+        <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 28, lineHeight: "36px", marginBottom: 22 }}>
           Work with a certified <span style={{ color: "#8015e8" }}>monday.com partner</span> today
         </h2>
         <div className="flex flex-wrap justify-center" style={{ gap: 14 }}>

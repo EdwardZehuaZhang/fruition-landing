@@ -9,6 +9,7 @@ import AboutModern from "./AboutModern"
 export async function generateMetadata() {
   const page = await getPageBySlug("about-us")
   return {
+    alternates: { canonical: "/about-us" },
     title: page?.seoTitle,
     description: page?.seoDescription,
   }

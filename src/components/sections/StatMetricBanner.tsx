@@ -28,7 +28,7 @@ export default function StatMetricBanner({
         paddingBottom: 64,
         background: dark
           ? "linear-gradient(-38deg, rgb(128,21,232) 0%, rgb(16,0,58) 100%)"
-          : "#f0ecfe",
+          : "var(--surface-subtle)",
       }}
     >
       <div className="mx-auto text-center" style={{ maxWidth: 980 }}>
@@ -36,10 +36,10 @@ export default function StatMetricBanner({
           <p
             className="font-bold"
             style={{
-              fontSize: 24,
-              lineHeight: "34px",
+              fontSize: "clamp(19px, 4.5vw, 24px)",
+              lineHeight: 1.4,
               letterSpacing: "-0.01em",
-              color: dark ? "#fff" : "#10003a",
+              color: dark ? "#fff" : "var(--text-body)",
             }}
           >
             {statement}
@@ -49,10 +49,10 @@ export default function StatMetricBanner({
           <div className="mt-8 flex flex-wrap items-start justify-center gap-x-8 gap-y-6 md:gap-12">
             {metrics.map((m, i) => (
               <div key={m._key || i} className="flex flex-col items-center" style={{ minWidth: 140 }}>
-                <span className="font-bold" style={{ fontSize: 40, lineHeight: "44px", color: dark ? "#fff" : "var(--purple-primary)" }}>
+                <span className="font-bold" style={{ fontSize: "clamp(30px, 8vw, 40px)", lineHeight: 1.1, color: dark ? "#fff" : "var(--purple-primary)" }}>
                   {m.value}
                 </span>
-                <span style={{ fontSize: 14, lineHeight: "20px", color: dark ? "rgba(255,255,255,0.72)" : "#686b82", marginTop: 6 }}>
+                <span style={{ fontSize: 14, lineHeight: "20px", color: dark ? "rgba(255,255,255,0.72)" : "var(--text-muted-fg)", marginTop: 6 }}>
                   {m.text}
                 </span>
               </div>

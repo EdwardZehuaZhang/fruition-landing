@@ -33,7 +33,7 @@ export default function IndustryTabsSection({
   return (
     <section
       style={{
-        background: "linear-gradient(135deg, #1c024c 0%, #7d14e3 100%)",
+        background: "linear-gradient(135deg, #1c024c 0%, var(--purple-hover) 100%)",
         paddingTop: 80,
         paddingBottom: 80,
       }}
@@ -69,13 +69,13 @@ export default function IndustryTabsSection({
                   cursor: "pointer",
                   ...(isActive
                     ? {
-                        backgroundColor: "white",
-                        color: "#8015e8",
+                        backgroundColor: "var(--white)",
+                        color: "var(--brand)",
                         boxShadow: "0px 2px 8px rgba(128,21,232,0.35)",
                       }
                     : {
                         backgroundColor: "rgba(255,255,255,0.15)",
-                        color: "white",
+                        color: "var(--white)",
                         border: "1px solid rgba(255,255,255,0.3)",
                       }),
                 }}
@@ -123,7 +123,7 @@ export default function IndustryTabsSection({
             <>
               <p
                 className="font-semibold"
-                style={{ fontSize: 16, color: "#ba83f0", marginBottom: 16 }}
+                style={{ fontSize: 16, color: "var(--purple-light)", marginBottom: 16 }}
               >
                 Benefits
               </p>
@@ -144,7 +144,7 @@ export default function IndustryTabsSection({
                       style={{
                         fontSize: 14,
                         lineHeight: "20px",
-                        color: "white",
+                        color: "var(--white)",
                       }}
                     >
                       {b.text}

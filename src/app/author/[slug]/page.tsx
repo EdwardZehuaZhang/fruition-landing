@@ -41,6 +41,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!author) return {}
   const member = await getTeamMemberByName(author.name)
   return {
+    alternates: { canonical: `/author/${slug}` },
     title: `${author.name} — Fruition Blog`,
     description:
       member?.bio?.slice(0, 155) || `Articles written by ${author.name} on the Fruition consulting blog.`,

@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
+import FramedMedia from "@/components/common/FramedMedia"
 import type { SanityImageRef } from "./types"
 
 interface SolutionCard {
@@ -31,7 +32,7 @@ export default function SolutionCardsSection({
   if (cards.length === 0) return null
 
   return (
-    <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
         <div className="flex flex-col" style={{ gap: 60 }}>
           {cards.map((card, i) => {
@@ -63,7 +64,7 @@ export default function SolutionCardsSection({
                       style={{
                         fontSize: 28,
                         fontWeight: 600,
-                        color: "#2b074d",
+                        color: "var(--text-body)",
                         marginTop: card.eyebrow ? 8 : 0,
                       }}
                     >
@@ -75,7 +76,7 @@ export default function SolutionCardsSection({
                       style={{
                         fontSize: 16,
                         lineHeight: "25.6px",
-                        color: "black",
+                        color: "var(--text-body)",
                         marginTop: 20,
                         whiteSpace: "pre-line",
                       }}
@@ -102,8 +103,8 @@ export default function SolutionCardsSection({
                   )}
                 </div>
                 {imageSrc && (
-                  <div
-                    className="rounded-card overflow-hidden shadow-whisper bg-white flex items-center justify-center"
+                  <FramedMedia
+                    className="rounded-card overflow-hidden shadow-whisper bg-surface-raised flex items-center justify-center dark:shadow-none"
                     style={{ flex: 1, aspectRatio: "16 / 10" }}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -112,7 +113,7 @@ export default function SolutionCardsSection({
                       alt={card.heading || ""}
                       className="w-full h-full object-contain"
                     />
-                  </div>
+                  </FramedMedia>
                 )}
               </div>
             )

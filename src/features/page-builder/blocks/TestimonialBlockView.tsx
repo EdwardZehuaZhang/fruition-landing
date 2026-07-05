@@ -23,10 +23,10 @@ export default function TestimonialBlockView({ quote, authorName, authorRole, co
       <div className="flex items-start justify-between px-8 pb-4 pt-7">
         <div>
           {authorName && (
-            <p className="text-[20px] font-semibold leading-[1.45] text-[#2b074d]">{authorName}</p>
+            <p className="text-[20px] font-semibold leading-[1.45] text-body">{authorName}</p>
           )}
           {(authorRole || company) && (
-            <p className="text-caption font-normal text-[#595959]">
+            <p className="text-caption font-normal text-muted">
               {authorRole}{authorRole && company ? ', ' : ''}{company}
             </p>
           )}
@@ -47,7 +47,7 @@ export default function TestimonialBlockView({ quote, authorName, authorRole, co
       </div>
 
       <div className="flex-1 px-8">
-        <p className="text-body-sm text-black">
+        <p className="text-body-sm text-body">
           {quote}
         </p>
       </div>

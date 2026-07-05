@@ -7,6 +7,7 @@ import MondayServicePage from "./MondayServicePage"
 export async function generateMetadata() {
   const page = await getSolutionPageBySlug("monday-service")
   return {
+    alternates: { canonical: "/monday-consulting-solutions/monday-service" },
     title: page?.seoTitle || page?.title || "monday Service",
     description: page?.seoDescription,
   }

@@ -10,7 +10,7 @@ export default function CatalogCta({ calendlyUrl }: CatalogCtaProps) {
           className="rounded-[var(--radius-card)] p-10 lg:p-14 text-center text-white shadow-card"
           style={{
             background:
-              "linear-gradient(135deg, #550e9b 0%, #8015e8 60%, #ba83f0 100%)",
+              "linear-gradient(135deg, var(--purple-dark) 0%, var(--purple-primary) 60%, var(--purple-light) 100%)",
           }}
         >
           <h2 className="text-section-h2 text-white">

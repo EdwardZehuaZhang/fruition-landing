@@ -10,6 +10,7 @@ import MondayForFinanceContent from "./MondayForFinanceContent"
 export async function generateMetadata() {
   const page = await getSolutionPageBySlug("monday-for-finance")
   return {
+    alternates: { canonical: "/monday-consulting-solutions/monday-for-finance" },
     title: page?.seoTitle || page?.title || "monday.com for Finance",
     description: page?.seoDescription,
   }

@@ -10,6 +10,7 @@ import MondayTrainingContent from "./MondayTrainingContent"
 export async function generateMetadata() {
   const data = await getMondayTrainingPage()
   return {
+    alternates: { canonical: "/monday-training" },
     title: data?.seoTitle,
     description: data?.seoDescription,
   }

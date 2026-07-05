@@ -151,3 +151,21 @@ export async function bylineFor(user: User): Promise<string> {
     "Fruition Editorial"
   )
 }
+
+/**
+ * Best human name for the signed-in user, shown as the default blog byline in
+ * the editor. Prefers the team-member link (byline) set on the Team page, then
+ * the Google profile name, then the email local-part. Never "Fruition
+ * Editorial" — this is meant to read as *your* name.
+ */
+export async function authorDisplayName(user: User): Promise<string> {
+  const profile = await getAuthorProfile(user.id)
+  return (
+    profile?.byline ||
+    profile?.display_name ||
+    (user.user_metadata?.full_name as string | undefined) ||
+    (user.user_metadata?.name as string | undefined) ||
+    user.email?.split("@")[0] ||
+    "You"
+  )
+}

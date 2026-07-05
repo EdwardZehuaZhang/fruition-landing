@@ -77,16 +77,16 @@ export default function RoiCalculator({ config = {} }: RoiCalculatorProps) {
       `}</style>
       <div className="mx-auto" style={{ maxWidth: 920 }}>
         <div className="text-center" style={{ marginBottom: 36 }}>
-          <h2 className="text-section-h2 text-black">{heading}</h2>
+          <h2 className="text-section-h2 text-body">{heading}</h2>
           {subheading && (
-            <p style={{ color: "#686b82", fontSize: 17, lineHeight: "26px", marginTop: 12 }}>{subheading}</p>
+            <p style={{ color: "var(--text-muted-fg)", fontSize: 17, lineHeight: "26px", marginTop: 12 }}>{subheading}</p>
           )}
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 md:items-stretch">
           {/* Inputs */}
           <div
-            className="rounded-card bg-white flex flex-col justify-center h-full"
+            className="rounded-card bg-surface-raised flex flex-col justify-center h-full dark:shadow-none dark:border dark:border-ui"
             style={{ padding: 36, border: "1px solid #ece7fb", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
           >
             <Slider
@@ -121,7 +121,7 @@ export default function RoiCalculator({ config = {} }: RoiCalculatorProps) {
           >
             <Result big value={`${fmt(yearlyHours)} hrs`} label="reclaimed per year" />
             <div style={{ height: 20 }} />
-            <div className="flex gap-8">
+            <div className="flex flex-wrap gap-x-8 gap-y-4">
               <Result value={`${fmt(weeklyHours)} hrs`} label="per week" />
               <Result value={`${currencySymbol}${fmt(yearlyDollars)}`} label="saved per year" />
             </div>
@@ -157,11 +157,11 @@ function Slider({
   return (
     <div>
       <div className="flex items-baseline justify-between gap-4" style={{ marginBottom: 14 }}>
-        <label htmlFor={id} className="font-medium" style={{ fontSize: 17, lineHeight: "24px", color: "#10003a", maxWidth: "65%" }}>
+        <label htmlFor={id} className="font-medium" style={{ fontSize: 17, lineHeight: "24px", color: "var(--text-body)", maxWidth: "65%" }}>
           {label}
         </label>
         <span className="font-bold shrink-0" style={{ fontSize: 28, lineHeight: "30px", color: "#8015e8" }}>
-          {value} <span style={{ fontSize: 15, fontWeight: 500, color: "#686b82" }}>{suffix}</span>
+          {value} <span style={{ fontSize: 15, fontWeight: 500, color: "var(--text-muted-fg)" }}>{suffix}</span>
         </span>
       </div>
       <input
@@ -180,7 +180,7 @@ function Slider({
 function Result({ value, label, big = false }: { value: string; label: string; big?: boolean }) {
   return (
     <div>
-      <div className="font-bold" style={{ fontSize: big ? 44 : 26, lineHeight: big ? "48px" : "30px" }}>
+      <div className="font-bold" style={{ fontSize: big ? "clamp(28px, 8vw, 44px)" : "clamp(20px, 5vw, 26px)", lineHeight: 1.1, wordBreak: "break-word" }}>
         {value}
       </div>
       <div style={{ fontSize: 13, lineHeight: "18px", color: "rgba(255,255,255,0.72)", marginTop: 4 }}>{label}</div>

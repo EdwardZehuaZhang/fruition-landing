@@ -47,7 +47,7 @@ export default function TabSectionBlockView({
   const isImplementSection = manyTabs
 
   return (
-    <section className="bg-white pt-[80px] pb-[120px] px-4 relative">
+    <section className="bg-surface pt-[80px] pb-[120px] px-4 relative">
       {/* Decorative squiggle bg — only for the "Implement monday.com for any team" section */}
       {isImplementSection && (
         // eslint-disable-next-line @next/next/no-img-element
@@ -61,12 +61,13 @@ export default function TabSectionBlockView({
       <div className="relative mx-auto max-w-[959px] flex flex-col items-center gap-[24px]">
         {/* Heading */}
         {heading && (
-          <h2 className="text-center text-[35px] font-medium text-black leading-[49px]">
+          <h2 className="text-center text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">
+
             {heading}
           </h2>
         )}
         {subheading && (
-          <p className="text-center text-[20px] text-black max-w-[959px]">
+          <p className="text-center text-[20px] text-body max-w-[959px]">
             {subheading}
           </p>
         )}
@@ -82,7 +83,7 @@ export default function TabSectionBlockView({
                 className={`relative inline-flex items-center justify-center rounded-[99px] px-[27px] py-[7px] text-[16px] leading-[1.2] transition-all ${
                   i === activeIndex
                     ? 'bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]'
-                    : 'bg-white text-[#10003a] border border-[#e8e6e6] hover:border-[#8015e8]'
+                    : 'bg-surface-raised text-body border border-ui hover:border-[#8015e8]'
                 }`}
               >
                 {tab.label}
@@ -101,7 +102,7 @@ export default function TabSectionBlockView({
                     className={`relative inline-flex items-center justify-center rounded-[99px] px-[27px] py-[7px] text-[16px] leading-[1.2] transition-all ${
                       idx === activeIndex
                         ? 'bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]'
-                        : 'bg-white text-[#10003a] border border-[#e8e6e6] hover:border-[#8015e8]'
+                        : 'bg-surface-raised text-body border border-ui hover:border-[#8015e8]'
                     }`}
                   >
                     {tab.label}
@@ -113,13 +114,13 @@ export default function TabSectionBlockView({
         </div>
 
         {/* Tab content card — 816px wide */}
-        <div className="w-full max-w-[816px] rounded-card border border-[#e8e6e6] bg-white p-[24px]">
+        <div className="w-full max-w-[816px] rounded-card border border-ui bg-surface-raised p-[24px]">
           {isImplementSection ? (
             /* "Implement monday.com" layout: heading + button row, body text, emoji features grid */
             <div className="flex flex-col gap-[24px]">
-              <div className="flex items-start justify-between w-full">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between w-full">
                 {active?.heading && (
-                  <h3 className="text-[24px] font-medium text-[#2b074d] leading-[33.6px] max-w-[487px]">
+                  <h3 className="text-[24px] font-medium text-body leading-[33.6px] max-w-[487px]">
                     {active.heading}
                   </h3>
                 )}
@@ -136,7 +137,7 @@ export default function TabSectionBlockView({
                 )}
               </div>
               {active?.body && (
-                <p className="text-[16px] text-black leading-[22.4px]">{active.body}</p>
+                <p className="text-[16px] text-body leading-[22.4px]">{active.body}</p>
               )}
               {active?.features && active.features.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-[20px] gap-y-[12px]">
@@ -145,7 +146,7 @@ export default function TabSectionBlockView({
                       <span className="text-[24px] font-semibold text-[#7a14e1]">
                         {f.icon || <BarChart3 size={22} aria-hidden />}
                       </span>
-                      <span className="text-[14px] text-black">{f.label}</span>
+                      <span className="text-[14px] text-body">{f.label}</span>
                     </div>
                   ))}
                 </div>

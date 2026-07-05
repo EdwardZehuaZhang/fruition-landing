@@ -10,6 +10,7 @@ import MondayProductManagementContent from "./MondayProductManagementContent"
 export async function generateMetadata() {
   const page = await getSolutionPageBySlug("monday-product-management")
   return {
+    alternates: { canonical: "/monday-consulting-solutions/monday-product-management" },
     title:
       page?.seoTitle ||
       page?.title ||

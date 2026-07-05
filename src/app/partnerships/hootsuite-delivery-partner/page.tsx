@@ -12,6 +12,7 @@ const SLUG = "hootsuite-delivery-partner"
 export async function generateMetadata() {
   const page = await getPartnershipPageBySlug(SLUG)
   return {
+    alternates: { canonical: "/partnerships/hootsuite-delivery-partner" },
     title: page?.seoTitle || page?.title || SLUG,
     description: page?.seoDescription,
   }
