@@ -43,10 +43,10 @@ const montserrat = Montserrat({
   weight: ["400", "500", "600", "700"],
 })
 
-// Declare support for both schemes so browsers (notably mobile Chrome/Android)
-// stop auto-inverting the page and let our own prefers-color-scheme dark theme own it.
+// Light-only: declaring a single scheme also stops browsers (notably mobile
+// Chrome/Android) from auto-inverting the page.
 export const viewport: Viewport = {
-  colorScheme: "light dark",
+  colorScheme: "light",
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -166,9 +166,9 @@ export default async function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           <NavigationProgress />
           <SiteFrame
-            header={<Navbar siteSettings={siteSettings} />}
-            footer={<Footer siteSettings={siteSettings} />}
-            cookie={<CookieNotice />}
+            header={<Navbar key="site-header" siteSettings={siteSettings} />}
+            footer={<Footer key="site-footer" siteSettings={siteSettings} />}
+            cookie={<CookieNotice key="site-cookie" />}
           >
             {children}
           </SiteFrame>

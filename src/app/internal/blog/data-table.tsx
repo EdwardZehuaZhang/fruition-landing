@@ -14,7 +14,16 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 
+import { Newspaper } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
 import { Input } from "@/components/ui/input"
 import {
   DropdownMenu,
@@ -134,12 +143,19 @@ export function DataTable<TData, TValue>({
                 </TableRow>
               ))
             ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center text-muted-foreground"
-                >
-                  No results.
+              <TableRow className="hover:bg-transparent">
+                <TableCell colSpan={columns.length} className="p-0">
+                  <Empty className="border-0 py-12">
+                    <EmptyHeader>
+                      <EmptyMedia variant="icon">
+                        <Newspaper />
+                      </EmptyMedia>
+                      <EmptyTitle>No posts found</EmptyTitle>
+                      <EmptyDescription>
+                        No blog posts match your filters yet.
+                      </EmptyDescription>
+                    </EmptyHeader>
+                  </Empty>
                 </TableCell>
               </TableRow>
             )}

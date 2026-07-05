@@ -5,6 +5,19 @@ import Link from "next/link"
 import { urlFor } from "@/sanity/image"
 import { authorSlug } from "@/sanity/authorSlug"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
+import { parseVideoUrl, videoEmbedSrc } from "@/lib/videoEmbed"
+
+// Hosts allowed to embed players (Twitch rejects unknown `parent`s). Derived
+// from the deployed site URL, plus the apex + localhost for dev/preview.
+const EMBED_PARENTS = (() => {
+  let host = "www.fruitionservices.io"
+  try {
+    host = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.fruitionservices.io").hostname
+  } catch {
+    /* keep default */
+  }
+  return [...new Set([host, host.replace(/^www\./, ""), "localhost"])]
+})()
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -77,11 +90,6 @@ function authorInitials(name?: string): string {
   const parts = name.trim().split(/\s+/)
   if (parts.length === 1) return parts[0][0]?.toUpperCase() ?? "F"
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-}
-
-function getYouTubeEmbedUrl(url: string): string | null {
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
-  return match ? `https://www.youtube.com/embed/${match[1]}` : null
 }
 
 /** Plain text of a portable-text block (joined span text). */
@@ -247,7 +255,82 @@ const blogPortableTextComponents: PortableTextComponents = {
         </figure>
       )
     },
+    // Inline video player, placed exactly where the author dropped the URL.
+    videoEmbed: ({ value }) => <BodyVideoEmbed url={value?.url} caption={value?.caption} />,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    table: ({ value }: any) => <BodyTable rows={value?.rows} />,
   },
+}
+
+/** Renders a blog `table` block. First row is treated as the header. */
+function BodyTable({ rows }: { rows?: { cells?: string[] }[] }) {
+  if (!rows?.length) return null
+  const [head, ...body] = rows
+  return (
+    <figure className="w-full overflow-x-auto pt-[27.5px]">
+      <table className="w-full border-collapse font-montserrat text-[16px] leading-[24px] text-body">
+        {head?.cells?.length ? (
+          <thead>
+            <tr>
+              {head.cells.map((c, i) => (
+                <th
+                  key={i}
+                  className="border border-ui bg-surface-raised p-[10px] text-left font-bold align-top"
+                >
+                  {c}
+                </th>
+              ))}
+            </tr>
+          </thead>
+        ) : null}
+        <tbody>
+          {body.map((r, ri) => (
+            <tr key={ri}>
+              {(r.cells ?? []).map((c, ci) => (
+                <td key={ci} className="border border-ui p-[10px] align-top">
+                  {c}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </figure>
+  )
+}
+
+/** Inline body video: YouTube uses the click-to-load facade (perf + SEO);
+ *  Vimeo/Twitch/Loom render a lazy iframe via the shared embed helper. */
+function BodyVideoEmbed({ url, caption }: { url?: string; caption?: string }) {
+  if (!url) return null
+  const parsed = parseVideoUrl(url)
+  if (!parsed) return null
+  return (
+    <figure className="w-full flex flex-col items-start pt-[27.5px]">
+      <div className="aspect-video w-full overflow-hidden rounded-card">
+        {parsed.provider === "youtube" ? (
+          <YouTubeEmbed url={parsed.canonicalUrl} title={caption || "Video"} className="w-full h-full" />
+        ) : (
+          <iframe
+            src={videoEmbedSrc(parsed, { parents: EMBED_PARENTS })}
+            title={caption || "Video"}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
+            style={{ border: 0 }}
+          />
+        )}
+      </div>
+      {caption && (
+        <figcaption className="w-full flex items-center justify-center p-[16px]">
+          <span className="font-montserrat font-normal text-[14px] leading-[27px] text-body text-center">
+            {caption}
+          </span>
+        </figcaption>
+      )}
+    </figure>
+  )
 }
 
 /* ------------------------------------------------------------------ */
@@ -361,15 +444,25 @@ function CoverFigure({
 }
 
 function VideoEmbeds({ urls }: { urls: string[] }) {
-  const embeds = urls
-    .map((u) => ({ url: u, embed: getYouTubeEmbedUrl(u) }))
-    .filter((v): v is { url: string; embed: string } => !!v.embed)
+  const embeds = urls.map((u) => parseVideoUrl(u)).filter((v): v is NonNullable<typeof v> => !!v)
   if (embeds.length === 0) return null
   return (
     <div className="w-full flex flex-col gap-[24px] pt-[27.5px]">
       {embeds.map((v, i) => (
         <div key={i} className="aspect-video w-full overflow-hidden rounded-card">
-          <YouTubeEmbed url={v.embed} title={`Video ${i + 1}`} />
+          {v.provider === "youtube" ? (
+            <YouTubeEmbed url={v.canonicalUrl} title={`Video ${i + 1}`} className="w-full h-full" />
+          ) : (
+            <iframe
+              src={videoEmbedSrc(v, { parents: EMBED_PARENTS })}
+              title={`Video ${i + 1}`}
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+              style={{ border: 0 }}
+            />
+          )}
         </div>
       ))}
     </div>

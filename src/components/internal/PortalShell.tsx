@@ -23,7 +23,7 @@ export default function PortalShell({ email, active, title, children }: Props) {
 
   return (
     <TooltipProvider>
-      <SidebarProvider>
+      <SidebarProvider className="portal-theme">
         <AppSidebar email={email} />
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 border-b border-[var(--color-border)] px-4">
