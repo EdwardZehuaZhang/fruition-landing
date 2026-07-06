@@ -1,4 +1,5 @@
 import { getPageBySlug } from "@/sanity/queries"
+import { GOVERNING_DOCS } from "./documents"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("terms-and-conditions")
@@ -9,16 +10,22 @@ export async function generateMetadata() {
   }
 }
 
-interface DocItem {
+interface SanityDoc {
   _key?: string
-  label?: string
   fileUrl?: string
 }
 
 export default async function TermsPage() {
   const page = await getPageBySlug("terms-and-conditions")
 
-  const docs: DocItem[] = page?.documents || []
+  const sanityDocs: SanityDoc[] = page?.documents || []
+
+  // Render the governing docs in a fixed order with clean, on-domain URLs.
+  // Each tile links to /terms-and-conditions/<slug> (see ./[file]/route.ts),
+  // and we skip any doc whose backing Sanity file is missing.
+  const docs = GOVERNING_DOCS.filter((doc) =>
+    sanityDocs.some((s) => s._key === doc.key && s.fileUrl)
+  )
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-16">
@@ -34,13 +41,11 @@ export default async function TermsPage() {
 
       {docs.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          {docs.map((doc, i) => {
-            const fileUrl = doc.fileUrl
-            if (!fileUrl) return null
+          {docs.map((doc) => {
             return (
               <a
-                key={doc._key || i}
-                href={fileUrl}
+                key={doc.slug}
+                href={`/terms-and-conditions/${doc.slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-col items-center gap-4 rounded-xl border border-gray-200 p-8 transition-colors hover:border-gray-400 hover:bg-gray-50"
