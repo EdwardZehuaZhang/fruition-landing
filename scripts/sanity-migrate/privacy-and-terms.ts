@@ -4,7 +4,7 @@
  *   npx tsx scripts/sanity-migrate/privacy-and-terms.ts
  *
  * - data-privacy        → full Privacy Policy portable text (headings + bullets)
- * - terms-and-conditions → two PDF documents (Terms & Conditions, Service Agreement),
+ * - terms-and-conditions → two PDF documents (Service Agreement UK, Service Agreement APAC),
  *                          body cleared so the page is just the two PDF tiles.
  */
 import * as fs from 'fs'
@@ -380,13 +380,15 @@ async function run() {
   console.log('Uploading Terms & Conditions PDFs…')
   const termsRef = await uploadPdf(
     'fruition-terms-conditions.pdf',
-    'Fruition-Terms-and-Conditions.pdf'
+    'Fruition-Service-Agreement-UK.pdf'
   )
   const agreementRef = await uploadPdf(
     'fruition-service-agreement.pdf',
-    'Fruition-Service-Agreement.pdf'
+    'Fruition-Service-Agreement-APAC.pdf'
   )
 
+  // Keep `_key` values stable — the public /terms-and-conditions/<slug> URLs are
+  // mapped to these keys in src/app/terms-and-conditions/documents.ts.
   await writeClient
     .patch('page-terms-and-conditions')
     .set({
@@ -394,12 +396,12 @@ async function run() {
       documents: [
         {
           _key: 'doc-terms',
-          label: 'Terms & Conditions',
+          label: 'Service Agreement (UK)',
           file: { _type: 'file', asset: termsRef },
         },
         {
           _key: 'doc-agreement',
-          label: 'Service Agreement',
+          label: 'Service Agreement (APAC)',
           file: { _type: 'file', asset: agreementRef },
         },
       ],
