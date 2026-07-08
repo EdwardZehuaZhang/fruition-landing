@@ -164,6 +164,23 @@
     line-height: 1.4;
     letter-spacing: 0.02em;
   }
+
+  /* Heading guard: headings frequently wrap their text in a `text-body` span to
+     borrow the body color — but `.text-body` also carries font-size:16px /
+     font-weight:400 / line-height:1.55, which then shrinks the heading text to
+     body size. The page already inherits the body color from `body`, so force
+     any span inside a heading to inherit the heading's own type scale. Explicit
+     size utilities (e.g. text-[24px]) and inline styles remain more specific /
+     in a later layer, so intentional overrides still win. */
+  .text-display span,
+  .text-section-h2 span,
+  .text-section-h3 span,
+  .text-card-title span {
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+  }
 }
 
 /* Custom UI component classes stay in the utilities layer so their precedence
