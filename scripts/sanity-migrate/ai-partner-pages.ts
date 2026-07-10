@@ -160,7 +160,7 @@ const anthropic = {
   operatorEyebrow: "Who you'll work with",
   operatorHeading: 'Built by operators, not evangelists.',
   operatorHeadingAccent: 'not',
-  operatorName: 'Josh Roszler',
+  operatorName: 'Josh Jebathilak',
   operatorRole: 'Managing Director · Fruition Services',
   operatorBody: [
     "Six years building enterprise SaaS at monday.com followed by three years scaling Fruition from a one-person consultancy to a multi-entity firm operating across Australia, the UK and the US. Fruition was named monday.com's Rising Star Partner of the Year at the 2026 Prague Partner Summit and is one of a small number of monday.com Platinum partners globally.",
@@ -370,7 +370,7 @@ const openai = {
   operatorEyebrow: "// who you'll work with",
   operatorHeading: 'Operators with scars, not slidedecks.',
   operatorHeadingAccent: 'scars',
-  operatorName: 'Josh Roszler',
+  operatorName: 'Josh Jebathilak',
   operatorRole: 'MD, Fruition',
   operatorBody: [
     "Josh founded Fruition three years ago after six years at monday.com. The firm has been building production OpenAI systems since the GPT-3 era and was named monday.com's Rising Star Partner of the Year at the 2026 Prague Partner Summit.",
@@ -582,7 +582,7 @@ const openclaw = {
   operatorEyebrow: 'operator/',
   operatorHeading: 'Built by people who ship.',
   operatorHeadingAccent: 'ship',
-  operatorName: 'Josh Roszler',
+  operatorName: 'Josh Jebathilak',
   operatorRole: 'MD · Fruition',
   operatorBody: [
     "Josh founded Fruition three years ago after six years at monday.com. Fruition was named monday.com's Rising Star Partner of the Year at the 2026 Prague Partner Summit and is one of a small number of monday.com Platinum partners globally.",

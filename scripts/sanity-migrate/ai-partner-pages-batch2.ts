@@ -172,10 +172,10 @@ const aws = {
   operatorEyebrow: 'Who leads it',
   operatorHeading: 'AWS engineering led by practitioners.',
   operatorHeadingAccent: 'practitioners.',
-  operatorName: 'Josh Roszler',
+  operatorName: 'Josh Jebathilak',
   operatorRole: 'Managing Director · Fruition',
   operatorBody: [
-    'Josh Roszler, Managing Director, leads enterprise AWS engagements personally. Six years at monday.com before founding Fruition. 500+ implementations across the major cloud and AI platforms — AWS, Google, Microsoft, OpenAI, Anthropic.',
+    'Josh Jebathilak, Managing Director, leads enterprise AWS engagements personally. Six years at monday.com before founding Fruition. 500+ implementations across the major cloud and AI platforms — AWS, Google, Microsoft, OpenAI, Anthropic.',
     'Our AWS practice combines deep platform engineering with the migration, security, and FinOps discipline that determines whether a cloud investment actually delivers the business case.',
   ],
   operatorPanel: withKeys([
@@ -358,10 +358,10 @@ const googleCloud = {
   operatorEyebrow: 'Who leads it',
   operatorHeading: 'Cloud engineering led by practitioners.',
   operatorHeadingAccent: 'practitioners.',
-  operatorName: 'Josh Roszler',
+  operatorName: 'Josh Jebathilak',
   operatorRole: 'Managing Director · Fruition',
   operatorBody: [
-    'Josh Roszler, Managing Director, leads enterprise Google Cloud engagements personally. Six years at monday.com before founding Fruition. 500+ implementations across the major cloud and AI platforms.',
+    'Josh Jebathilak, Managing Director, leads enterprise Google Cloud engagements personally. Six years at monday.com before founding Fruition. 500+ implementations across the major cloud and AI platforms.',
     'Our GCP practice combines deep platform engineering with the migration and FinOps discipline that determines whether a cloud move actually delivers the business case.',
   ],
   operatorPanel: withKeys([
@@ -542,10 +542,10 @@ const gemini = {
   operatorEyebrow: 'Who leads it',
   operatorHeading: 'Practitioners who actually ship Gemini workloads.',
   operatorHeadingAccent: 'actually ship',
-  operatorName: 'Josh Roszler',
+  operatorName: 'Josh Jebathilak',
   operatorRole: 'Managing Director · Fruition',
   operatorBody: [
-    'Josh Roszler, Managing Director, leads enterprise Gemini and Vertex AI engagements. Six years at monday.com before founding Fruition. 500+ implementations across the major AI platforms — Google, Microsoft, OpenAI, Anthropic, and AWS.',
+    'Josh Jebathilak, Managing Director, leads enterprise Gemini and Vertex AI engagements. Six years at monday.com before founding Fruition. 500+ implementations across the major AI platforms — Google, Microsoft, OpenAI, Anthropic, and AWS.',
     'Our Vertex AI practice combines product-engineering rigour with the governance and change-management discipline that determines whether an AI workload survives past pilot.',
   ],
   operatorPanel: withKeys([
@@ -726,10 +726,10 @@ const copilot = {
   operatorEyebrow: 'Who leads it',
   operatorHeading: 'Implementations led by practitioners with Microsoft platform depth.',
   operatorHeadingAccent: 'practitioners',
-  operatorName: 'Josh Roszler',
+  operatorName: 'Josh Jebathilak',
   operatorRole: 'Managing Director · Fruition',
   operatorBody: [
-    'Josh Roszler, Managing Director at Fruition, leads enterprise Copilot engagements personally. Six years at monday.com before founding Fruition, with 500+ implementations across the major productivity platforms — Microsoft, Google, and adjacent ecosystems.',
+    'Josh Jebathilak, Managing Director at Fruition, leads enterprise Copilot engagements personally. Six years at monday.com before founding Fruition, with 500+ implementations across the major productivity platforms — Microsoft, Google, and adjacent ecosystems.',
     'Our Copilot practice combines deep Microsoft 365 platform expertise with the change-management discipline that determines whether Copilot survives past the pilot.',
   ],
   operatorPanel: withKeys([
@@ -896,10 +896,10 @@ const assessment = {
   operatorEyebrow: 'Who leads it',
   operatorHeading: 'The assessment is led by practitioners, not strategists.',
   operatorHeadingAccent: 'practitioners, not strategists.',
-  operatorName: 'Josh Roszler',
+  operatorName: 'Josh Jebathilak',
   operatorRole: 'Managing Director · Fruition',
   operatorBody: [
-    'Josh Roszler, Managing Director at Fruition, leads every Capability Assessment. He spent six years at monday.com before founding Fruition, and has led over 500 implementations across financial services, healthcare, professional services, and government.',
+    'Josh Jebathilak, Managing Director at Fruition, leads every Capability Assessment. He spent six years at monday.com before founding Fruition, and has led over 500 implementations across financial services, healthcare, professional services, and government.',
     "The assessment team is hands-on. We don't outsource the work to junior associates. The person who scopes your roadmap is the person who would deliver it.",
   ],
   operatorPanel: withKeys([
