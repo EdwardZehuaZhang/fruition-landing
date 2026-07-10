@@ -175,7 +175,10 @@
   .text-display span,
   .text-section-h2 span,
   .text-section-h3 span,
-  .text-card-title span {
+  .text-card-title span,
+  h1 :is(.text-body, .text-body-lead, .text-body-sm),
+  h2 :is(.text-body, .text-body-lead, .text-body-sm),
+  h3 :is(.text-body, .text-body-lead, .text-body-sm) {
     font-size: inherit;
     font-weight: inherit;
     line-height: inherit;
