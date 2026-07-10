@@ -1,8 +1,6 @@
 // The slack-blog mention bot routes through OpenRouter rather than the
 // Anthropic SDK directly, so we can swap models (or providers) without
 // touching code and so billing rolls up under one OpenRouter account.
-// The Marketa harness in scripts/marketa-harness/ still uses the Anthropic
-// SDK directly because it runs from a laptop with a personal key.
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 const DEFAULT_MODEL = process.env.CLAUDE_BOT_MODEL ?? "anthropic/claude-haiku-4.5"
