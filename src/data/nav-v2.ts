@@ -1,11 +1,20 @@
 /**
- * Site Architecture v2.1 — proposed 5-tab navigation (Phase 1).
+ * Site Architecture v2.1 — proposed 5-tab navigation (Phases 1–2).
  *
- * Source: https://fruition-site-architecture.vercel.app/ §04 "Menu Bar Architecture",
- * mapped onto URLs that exist on the site TODAY so the nav can ship before any
- * content backfill (zero new 404s). New-hub links (/ai-consulting/,
- * /atlassian-consulting/, /hubspot-consulting/, /integrations/) swap in as those
- * pages are built in Phase 2.
+ * Source: https://fruition-site-architecture.vercel.app/ §04 "Menu Bar Architecture".
+ * Every href resolves: either a page that already exists on the live site, or one
+ * of the new practice-cluster pages built in this branch (/ai-consulting/*,
+ * /atlassian-consulting/*, /hubspot-consulting/*, /integrations/*,
+ * /monday-products/*). Every item carries a description so the mega-menu tiles
+ * render uniformly.
+ *
+ * Deliberate deviations from the mockup (no page exists yet):
+ *  - AI services "AI-Ready Data Foundations", use cases "Knowledge Retrieval" /
+ *    "Document Intelligence" (retrieval is covered by RAG & Knowledge Systems)
+ *  - monday "Managed Services" (Implementation Packages shown instead)
+ *  - HubSpot "Marketing Hub"
+ *  - Resources "Guides", "Videos", "Webinars", "ROI Calculator"
+ *  - About "Awards & Recognition"
  *
  * Consumed by:
  *  - scripts/seed-nav-v2.ts   → writes this structure to Sanity siteSettings.navigation
@@ -50,25 +59,117 @@ export const NAV_V2: NavV2Item[] = [
             featured: true,
           },
           {
-            label: 'AI Strategy & Execution',
+            label: 'AI Consulting Overview',
+            href: '/ai-consulting',
+            icon: 'list',
+            description: 'The full AI practice — services, platforms & use cases',
+          },
+          {
+            label: 'Strategy & Roadmap',
             href: '/ai-strategy-and-execution',
             icon: 'bulb',
             description: 'From use-case discovery to deployed agents',
           },
+          {
+            label: 'Agent Development',
+            href: '/ai-consulting/agent-development',
+            icon: 'zap',
+            description: 'Autonomous agents built for production, not demos',
+          },
+          {
+            label: 'RAG & Knowledge Systems',
+            href: '/ai-consulting/rag-knowledge-systems',
+            icon: 'layers',
+            description: 'Retrieval systems grounded in your own knowledge',
+          },
+          {
+            label: 'Governance & Compliance',
+            href: '/ai-consulting/governance-and-compliance',
+            icon: 'shield',
+            description: 'AI policy, risk & compliance frameworks',
+          },
         ],
       },
       {
-        heading: 'AI Platform Partners',
-        columns: 2,
+        heading: 'AI Platforms',
         items: [
-          { label: 'Anthropic Claude', href: '/partnerships/anthropic-claude-partner', icon: 'anthropic' },
-          { label: 'OpenAI ChatGPT', href: '/partnerships/openai-chatgpt-partner', icon: 'openai' },
-          { label: 'Microsoft Copilot', href: '/partnerships/microsoft-copilot-partner', icon: 'zap' },
-          { label: 'Google Gemini & Vertex AI', href: '/partnerships/google-gemini-vertex-ai-partner', icon: 'sparkle' },
-          { label: 'Google Cloud', href: '/partnerships/google-cloud-partner', icon: 'globe' },
-          { label: 'AWS', href: '/partnerships/aws-partner', icon: 'layers' },
-          { label: 'n8n', href: '/partnerships/n8n-integration-partner', icon: 'link' },
-          { label: 'Openclaw', href: '/partnerships/openclaw-partner', icon: 'openclaw' },
+          {
+            label: 'Anthropic Claude',
+            href: '/partnerships/anthropic-claude-partner',
+            icon: 'anthropic',
+            description: 'Enterprise Claude deployments & Claude Code',
+          },
+          {
+            label: 'OpenAI ChatGPT',
+            href: '/partnerships/openai-chatgpt-partner',
+            icon: 'openai',
+            description: 'ChatGPT Enterprise, custom GPTs & Assistants',
+          },
+          {
+            label: 'Microsoft Copilot',
+            href: '/partnerships/microsoft-copilot-partner',
+            icon: 'zap',
+            description: 'Copilot rollout across Microsoft 365',
+          },
+          {
+            label: 'Google Gemini & Vertex AI',
+            href: '/partnerships/google-gemini-vertex-ai-partner',
+            icon: 'sparkle',
+            description: 'Gemini models on Google’s AI stack',
+          },
+          {
+            label: 'Google Cloud',
+            href: '/partnerships/google-cloud-partner',
+            icon: 'globe',
+            description: 'AI workloads on Google Cloud',
+          },
+          {
+            label: 'AWS',
+            href: '/partnerships/aws-partner',
+            icon: 'layers',
+            description: 'Bedrock & the AWS AI stack',
+          },
+          {
+            label: 'n8n',
+            href: '/partnerships/n8n-integration-partner',
+            icon: 'link',
+            description: 'Self-hosted workflow automation',
+          },
+          {
+            label: 'Openclaw',
+            href: '/partnerships/openclaw-partner',
+            icon: 'openclaw',
+            description: 'Autonomous AI agents & orchestration',
+          },
+        ],
+      },
+      {
+        heading: 'Use Cases',
+        items: [
+          {
+            label: 'Marketing Automation',
+            href: '/ai-consulting/marketing-automation',
+            icon: 'megaphone',
+            description: 'AI across content, campaigns & attribution',
+          },
+          {
+            label: 'Sales & Outbound',
+            href: '/ai-consulting/sales-outbound',
+            icon: 'chart',
+            description: 'AI-assisted prospecting & pipeline',
+          },
+          {
+            label: 'Customer Service',
+            href: '/ai-consulting/customer-service',
+            icon: 'heart',
+            description: 'Support automation that keeps CSAT',
+          },
+          {
+            label: 'Operations & Back-office',
+            href: '/ai-consulting/operations-back-office',
+            icon: 'wrench',
+            description: 'Document, finance & ops automation',
+          },
         ],
       },
     ],
@@ -89,21 +190,82 @@ export const NAV_V2: NavV2Item[] = [
             description: '500+ implementations delivered',
             featured: true,
           },
-          { label: 'monday CRM Consulting', href: '/monday-crm-consulting', icon: 'chart' },
-          { label: 'Implementation Packages', href: '/implementation-packages', icon: 'package' },
-          { label: 'Training & Enablement', href: '/monday-training', icon: 'graduation' },
-          { label: 'Solutions Catalog', href: '/monday-consulting-solutions/catalog', icon: 'list' },
-          { label: 'Partner Credentials', href: '/partnerships/monday-consulting-partner', icon: 'handshake' },
+          {
+            label: 'monday Work Management',
+            href: '/monday-products/work-management',
+            icon: 'list',
+            description: 'Projects, portfolios & workflows',
+          },
+          {
+            label: 'monday CRM',
+            href: '/monday-products/crm',
+            icon: 'chart',
+            description: 'Sales pipeline & customer management',
+          },
+          {
+            label: 'monday Dev',
+            href: '/monday-products/dev',
+            icon: 'layers',
+            description: 'Sprints, roadmaps & GitHub integration',
+          },
+          {
+            label: 'monday Service',
+            href: '/monday-products/service',
+            icon: 'heart',
+            description: 'Ticketing, SLAs & service delivery',
+          },
+          {
+            label: 'monday AI',
+            href: '/monday-products/ai',
+            icon: 'sparkle',
+            description: 'AI inside monday.com — bridges to our AI practice',
+          },
+          {
+            label: 'Training & Enablement',
+            href: '/monday-training',
+            icon: 'graduation',
+            description: 'Role-based monday.com training',
+          },
+          {
+            label: 'Implementation Packages',
+            href: '/implementation-packages',
+            icon: 'package',
+            description: 'Fixed-fee packages & pricing',
+          },
         ],
       },
       {
         heading: 'Atlassian',
         items: [
           {
-            label: 'Certified Atlassian Partner',
-            href: '/partnerships/certified-atlassian-partner',
+            label: 'Jira',
+            href: '/atlassian-consulting/jira',
+            icon: 'layers',
+            description: 'Implementation, optimisation & workflow rescue',
+          },
+          {
+            label: 'Confluence',
+            href: '/atlassian-consulting/confluence',
+            icon: 'document',
+            description: 'Knowledge architecture & governance',
+          },
+          {
+            label: 'Jira Service Management',
+            href: '/atlassian-consulting/jira-service-management',
             icon: 'shield',
-            description: 'Jira, Confluence & JSM consulting',
+            description: 'ITSM, service desks & SLA automation',
+          },
+          {
+            label: 'Jira → monday Migration',
+            href: '/atlassian-consulting/jira-to-monday-migration',
+            icon: 'zap',
+            description: 'The structured cross-platform migration playbook',
+          },
+          {
+            label: 'All Atlassian services',
+            href: '/atlassian-consulting',
+            icon: 'list',
+            description: 'The full Atlassian consulting practice',
           },
         ],
       },
@@ -111,23 +273,76 @@ export const NAV_V2: NavV2Item[] = [
         heading: 'HubSpot',
         items: [
           {
-            label: 'Certified HubSpot Partner',
-            href: '/partnerships/certified-hubspot-partner',
-            icon: 'megaphone',
-            description: 'CRM & Marketing Hub implementation',
+            label: 'HubSpot Implementation',
+            href: '/hubspot-consulting/implementation',
+            icon: 'wrench',
+            description: 'CRM & Marketing Hub, implemented right',
+          },
+          {
+            label: 'Breeze AI',
+            href: '/hubspot-consulting/breeze-ai',
+            icon: 'sparkle',
+            description: 'HubSpot’s AI, deployed with governance',
+          },
+          {
+            label: 'monday ↔ HubSpot Integration',
+            href: '/hubspot-consulting/monday-hubspot-integration',
+            icon: 'link',
+            description: 'Two platforms, one pipeline',
+          },
+          {
+            label: 'HubSpot → monday Migration',
+            href: '/hubspot-consulting/hubspot-to-monday-migration',
+            icon: 'zap',
+            description: 'Move CRM without losing history',
+          },
+          {
+            label: 'All HubSpot services',
+            href: '/hubspot-consulting',
+            icon: 'list',
+            description: 'The full HubSpot consulting practice',
           },
         ],
       },
       {
         heading: 'Supporting Tools',
         items: [
-          { label: 'Aircall', href: '/partnerships/aircall-partner', icon: 'phone' },
-          { label: 'Make', href: '/partnerships/make-partners', icon: 'zap' },
-          { label: 'n8n', href: '/partnerships/n8n-integration-partner', icon: 'link' },
-          { label: 'ClickUp', href: '/partnerships/certified-clickup-partner', icon: 'layers' },
-          { label: 'Hootsuite', href: '/partnerships/hootsuite-delivery-partner', icon: 'megaphone' },
-          { label: 'Guidde', href: '/partnerships/certified-guidde-partner', icon: 'video' },
-          { label: 'All partnerships', href: '/partnerships', icon: 'handshake' },
+          {
+            label: 'Aircall',
+            href: '/integrations/aircall',
+            icon: 'phone',
+            description: 'Telephony wired into monday.com',
+          },
+          {
+            label: 'Twilio',
+            href: '/integrations/twilio',
+            icon: 'zap',
+            description: 'SMS & voice workflow automation',
+          },
+          {
+            label: 'Make',
+            href: '/integrations/make',
+            icon: 'link',
+            description: 'Visual automation across your stack',
+          },
+          {
+            label: 'n8n',
+            href: '/partnerships/n8n-integration-partner',
+            icon: 'link',
+            description: 'Self-hosted automation & AI workflows',
+          },
+          {
+            label: 'Zapier',
+            href: '/integrations/zapier',
+            icon: 'zap',
+            description: 'Quick connections between tools',
+          },
+          {
+            label: 'All integrations',
+            href: '/integrations',
+            icon: 'list',
+            description: 'Every supporting tool we implement',
+          },
         ],
       },
     ],
@@ -139,28 +354,108 @@ export const NAV_V2: NavV2Item[] = [
       {
         heading: 'By Department',
         items: [
-          { label: 'Solutions Catalog', href: '/monday-consulting-solutions/catalog', icon: 'list' },
-          { label: 'CRM & Sales', href: '/monday-crm-consulting', icon: 'chart' },
-          { label: 'Project Management', href: '/monday-consulting-solutions/monday-project-management', icon: 'layers' },
-          { label: 'Service & Support', href: '/monday-consulting-solutions/monday-service', icon: 'heart' },
-          { label: 'Finance & Accounting', href: '/monday-consulting-solutions/monday-for-finance', icon: 'dollar' },
-          { label: 'Product Management', href: '/monday-consulting-solutions/monday-product-management', icon: 'bulb' },
-          { label: 'HR & Recruitment', href: '/monday-consulting-solutions/monday-for-hr', icon: 'users' },
+          {
+            label: 'Solutions Catalog',
+            href: '/monday-consulting-solutions/catalog',
+            icon: 'list',
+            description: 'Browse every prebuilt solution',
+          },
+          {
+            label: 'CRM & Sales',
+            href: '/monday-crm-consulting',
+            icon: 'chart',
+            description: 'Pipeline & sales process solutions',
+          },
+          {
+            label: 'Project Management',
+            href: '/monday-consulting-solutions/monday-project-management',
+            icon: 'layers',
+            description: 'Delivery, portfolios & PMO',
+          },
+          {
+            label: 'Service & Support',
+            href: '/monday-consulting-solutions/monday-service',
+            icon: 'heart',
+            description: 'Service desks & ticketing',
+          },
+          {
+            label: 'Finance & Accounting',
+            href: '/monday-consulting-solutions/monday-for-finance',
+            icon: 'dollar',
+            description: 'Approvals, budgeting & reporting',
+          },
+          {
+            label: 'Product Management',
+            href: '/monday-consulting-solutions/monday-product-management',
+            icon: 'bulb',
+            description: 'Roadmaps & product ops',
+          },
+          {
+            label: 'HR & Recruitment',
+            href: '/monday-consulting-solutions/monday-for-hr',
+            icon: 'users',
+            description: 'Hiring pipelines & onboarding',
+          },
         ],
       },
       {
         heading: 'By Industry',
         columns: 2,
         items: [
-          { label: 'Construction', href: '/monday-for-construction', icon: 'building' },
-          { label: 'Manufacturing', href: '/monday-for-manufacturing', icon: 'factory' },
-          { label: 'Retail', href: '/monday-for-retail', icon: 'bag' },
-          { label: 'Professional Services', href: '/monday-for-professional-services', icon: 'briefcase' },
-          { label: 'Government', href: '/monday-for-government', icon: 'flag' },
-          { label: 'Marketing & Creative', href: '/monday-for-marketing', icon: 'megaphone' },
-          { label: 'Real Estate', href: '/monday-for-real-estate', icon: 'home' },
-          { label: 'Solar & Renewables', href: '/monday-consulting-solutions/solar-crm-solution', icon: 'sun' },
-          { label: 'Installation & Renovation', href: '/monday-consulting-solutions/monday-for-cabinetry-renovation', icon: 'wrench' },
+          {
+            label: 'Construction',
+            href: '/monday-for-construction',
+            icon: 'building',
+            description: 'Project & site delivery workflows',
+          },
+          {
+            label: 'Manufacturing',
+            href: '/monday-for-manufacturing',
+            icon: 'factory',
+            description: 'Production planning & operations',
+          },
+          {
+            label: 'Retail',
+            href: '/monday-for-retail',
+            icon: 'bag',
+            description: 'Store ops & merchandising',
+          },
+          {
+            label: 'Professional Services',
+            href: '/monday-for-professional-services',
+            icon: 'briefcase',
+            description: 'Client delivery & resourcing',
+          },
+          {
+            label: 'Government',
+            href: '/monday-for-government',
+            icon: 'flag',
+            description: 'Secure public-sector delivery',
+          },
+          {
+            label: 'Marketing & Creative',
+            href: '/monday-for-marketing',
+            icon: 'megaphone',
+            description: 'Campaigns & creative production',
+          },
+          {
+            label: 'Real Estate',
+            href: '/monday-for-real-estate',
+            icon: 'home',
+            description: 'Listings, deals & property ops',
+          },
+          {
+            label: 'Solar & Renewables',
+            href: '/monday-consulting-solutions/solar-crm-solution',
+            icon: 'sun',
+            description: 'Solar CRM & work management',
+          },
+          {
+            label: 'Installation & Renovation',
+            href: '/monday-consulting-solutions/monday-for-cabinetry-renovation',
+            icon: 'wrench',
+            description: 'Quoting to install handover',
+          },
         ],
       },
     ],
@@ -172,15 +467,35 @@ export const NAV_V2: NavV2Item[] = [
       {
         heading: 'Learn',
         items: [
-          { label: 'Blog', href: '/consulting-blog', icon: 'edit', description: '100+ articles on monday.com, AI & automation' },
-          { label: 'Training Centre', href: '/monday-training', icon: 'graduation' },
-          { label: 'FAQs', href: '/faqs', icon: 'question' },
+          {
+            label: 'Blog',
+            href: '/consulting-blog',
+            icon: 'edit',
+            description: '100+ articles on monday.com, AI & automation',
+          },
+          {
+            label: 'Training Centre',
+            href: '/monday-training',
+            icon: 'graduation',
+            description: 'monday.com training & enablement',
+          },
+          {
+            label: 'FAQs',
+            href: '/faqs',
+            icon: 'question',
+            description: 'Direct answers to common questions',
+          },
         ],
       },
       {
         heading: 'Proof',
         items: [
-          { label: 'Case Studies', href: '/customer-testimonials', icon: 'document', description: 'Customer stories & testimonials' },
+          {
+            label: 'Case Studies',
+            href: '/customer-testimonials',
+            icon: 'document',
+            description: 'Customer stories & testimonials',
+          },
         ],
       },
     ],
@@ -192,10 +507,30 @@ export const NAV_V2: NavV2Item[] = [
       {
         heading: 'Company',
         items: [
-          { label: 'About Us', href: '/about-us', icon: 'info' },
-          { label: 'Meet the Team', href: '/fruition-team', icon: 'users' },
-          { label: 'Careers', href: '/careers', icon: 'briefcase' },
-          { label: 'Contact Us', href: '/contact-us', icon: 'phone' },
+          {
+            label: 'About Us',
+            href: '/about-us',
+            icon: 'info',
+            description: 'Who we are & how we work',
+          },
+          {
+            label: 'Meet the Team',
+            href: '/fruition-team',
+            icon: 'users',
+            description: 'The consultants behind Fruition',
+          },
+          {
+            label: 'Careers',
+            href: '/careers',
+            icon: 'briefcase',
+            description: 'Open roles at Fruition',
+          },
+          {
+            label: 'Contact Us',
+            href: '/contact-us',
+            icon: 'phone',
+            description: 'Talk to the team',
+          },
         ],
       },
       {
@@ -205,19 +540,49 @@ export const NAV_V2: NavV2Item[] = [
             label: 'Partners & Certifications',
             href: '/partnerships',
             icon: 'handshake',
-            description: 'monday.com Platinum, Atlassian, HubSpot, AI platforms',
+            description: 'monday.com Platinum, Atlassian, HubSpot & AI platforms',
           },
         ],
       },
       {
         heading: 'Regions',
         items: [
-          { label: 'Australia', href: '/monday-partner-australia', icon: 'globe' },
-          { label: 'United Kingdom', href: '/monday-partner-uk', icon: 'globe' },
-          { label: 'United States', href: '/monday-partner-us', icon: 'globe' },
-          { label: 'Singapore', href: '/monday-partner-singapore', icon: 'globe' },
-          { label: 'India', href: '/monday-partner-india', icon: 'globe' },
-          { label: 'Philippines', href: '/monday-partner-philippines', icon: 'globe' },
+          {
+            label: 'Australia',
+            href: '/monday-partner-australia',
+            icon: 'globe',
+            description: 'Sydney HQ — APAC delivery',
+          },
+          {
+            label: 'United Kingdom',
+            href: '/monday-partner-uk',
+            icon: 'globe',
+            description: 'London delivery centre',
+          },
+          {
+            label: 'United States',
+            href: '/monday-partner-us',
+            icon: 'globe',
+            description: 'New York delivery centre',
+          },
+          {
+            label: 'Singapore',
+            href: '/monday-partner-singapore',
+            icon: 'globe',
+            description: 'APAC delivery',
+          },
+          {
+            label: 'India',
+            href: '/monday-partner-india',
+            icon: 'globe',
+            description: 'APAC delivery',
+          },
+          {
+            label: 'Philippines',
+            href: '/monday-partner-philippines',
+            icon: 'globe',
+            description: 'APAC delivery',
+          },
         ],
       },
     ],

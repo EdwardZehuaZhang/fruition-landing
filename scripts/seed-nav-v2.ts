@@ -9,6 +9,11 @@
  *   npx tsx scripts/seed-nav-v2.ts --check-urls   # dry run + HEAD-checks every href on the live site
  *   npx tsx scripts/seed-nav-v2.ts --apply        # backs up the current nav, then writes to Sanity
  *
+ * DEPLOY ORDER: the nav links to the new practice-cluster pages, so merge and
+ * deploy this branch BEFORE running --apply. Run --check-urls first — it fails
+ * while any nav target still 404s on the live site, which is the guard against
+ * applying the nav too early.
+ *
  * Rollback: npx tsx scripts/seed-nav-v2.ts --restore scripts/nav-backups/<file>.json
  */
 import fs from 'node:fs'
