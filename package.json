@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:nav-v2": "NAV_V2_PREVIEW=1 next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

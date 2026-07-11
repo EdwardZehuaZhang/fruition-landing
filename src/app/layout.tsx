@@ -101,6 +101,13 @@ export default async function RootLayout({
 }>) {
   const siteSettings = await getSiteSettings()
 
+  // Local preview of the Site Architecture v2.1 nav without writing to Sanity:
+  // NAV_V2_PREVIEW=1 npm run dev  (see scripts/seed-nav-v2.ts for the real rollout)
+  if (process.env.NAV_V2_PREVIEW === '1' && siteSettings) {
+    const { NAV_V2 } = await import('@/data/nav-v2')
+    siteSettings.navigation = NAV_V2
+  }
+
   const BASE =
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.fruitionservices.io"
   const socials = Array.isArray(siteSettings?.socialLinks)
