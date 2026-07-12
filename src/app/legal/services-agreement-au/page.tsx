@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 
-const serviceAgreementUrl =
-  "https://docs.google.com/document/d/1oWTCDeckG94TYOKJAU2UaCM86HEfpZNn0ffvOhxi2oY/edit?tab=t.0"
+const pdfUrl = "/fruition-service-agreement.pdf"
 
 export const metadata: Metadata = {
   title: "Service Agreement AU | Fruition Services",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function ServicesAgreementAuPage() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-16">
+    <main className="mx-auto max-w-5xl px-4 py-16">
       <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">
         Legal
       </p>
@@ -26,22 +26,35 @@ export default function ServicesAgreementAuPage() {
         agreements. Effective timestamp: 30/06/2026.
       </p>
 
-      <section className="rounded-lg border border-ui bg-surface-subtle p-6">
+      <section className="rounded-lg border border-ui bg-surface-subtle p-6 mb-8">
         <h2 className="mb-3 text-xl font-semibold text-body">
           June 2026 Service Agreement
         </h2>
-        <p className="mb-6 text-sm leading-6 text-muted">
-          View the current Service Agreement for Australian work order
-          agreements.
-        </p>
-        <a
-          href={serviceAgreementUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
-        >
-          Open Service Agreement
-        </a>
+        <div className="flex flex-wrap gap-4">
+          <a
+            href={pdfUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+          >
+            Open PDF (new tab)
+          </a>
+          <a
+            href={pdfUrl}
+            download="Fruition-Service-Agreement-June-2026.pdf"
+            className="inline-flex items-center justify-center rounded-md border border-ui bg-surface px-5 py-3 text-sm font-semibold text-body transition hover:bg-surface-hover"
+          >
+            Download PDF
+          </a>
+        </div>
+      </section>
+
+      <section className="rounded-lg border border-ui bg-white">
+        <iframe
+          src={pdfUrl}
+          className="h-[80vh] w-full"
+          title="Fruition Services Agreement June 2026"
+        />
       </section>
     </main>
   )
