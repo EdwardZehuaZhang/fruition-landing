@@ -7,6 +7,11 @@ import { wixRedirects } from "./src/redirects";
 // entries here instead.
 const auditRedirects: Redirect[] = [
   {
+    source: "/_files/ugd/39b8ef_1dc32166aa204f2f997e63c60548c9dd.pdf",
+    destination: "/legal/services-agreement-au",
+    permanent: true,
+  },
+  {
     source: "/solutions/monday-com-manufacturing",
     destination: "/monday-for-manufacturing",
     permanent: true,
