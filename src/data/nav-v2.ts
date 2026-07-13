@@ -352,6 +352,7 @@ export const NAV_V2: NavV2Item[] = [
     sections: [
       {
         heading: 'By Department',
+        columns: 2,
         items: [
           {
             label: 'Solutions Catalog',
