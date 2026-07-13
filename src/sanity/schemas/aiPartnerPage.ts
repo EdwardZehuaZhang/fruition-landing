@@ -32,12 +32,6 @@ export default {
     { name: 'accentColor', title: 'Accent Colour (hex)', type: 'string' },
     { name: 'accentColorDeep', title: 'Accent Colour — Deep (hex)', type: 'string' },
     { name: 'accentColorSoft', title: 'Accent Colour — Soft (rgba/hex)', type: 'string' },
-    {
-      name: 'serifAccent',
-      title: 'Use serif (Fraunces) for accent headings',
-      type: 'boolean',
-      initialValue: false,
-    },
 
     // ── Hero ──────────────────────────────────────────────────────
     { name: 'heroEyebrow', title: 'Hero Eyebrow', type: 'string' },

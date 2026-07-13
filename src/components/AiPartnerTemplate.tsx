@@ -70,8 +70,6 @@ export default function AiPartnerTemplate({
       page.accentColorSoft || "rgba(128,21,232,0.08)",
   } as CSSProperties
 
-  const serifClass = page.serifAccent ? "serif-accent" : ""
-
   const cta = (label?: string, url?: string, kind: "primary" | "secondary" = "primary") => {
     if (!label) return null
     const href = url || calendly
@@ -89,7 +87,7 @@ export default function AiPartnerTemplate({
   }
 
   return (
-    <div className={`aipartner ${serifClass}`} style={rootStyle}>
+    <div className="aipartner" style={rootStyle}>
       {/* HERO */}
       <header className="ap-hero">
         <div className="ap-wrap">
@@ -438,7 +436,6 @@ const CSS = `
   --ink-soft: var(--text-muted-fg);
   --rule: var(--border-ui);
   --paper: var(--surface-subtle);
-  --serif: 'Fraunces', 'Instrument Serif', Georgia, serif;
   --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
   --purple: #8015e8;
   --purple-light: #ba83f0;
@@ -449,7 +446,6 @@ const CSS = `
 }
 .aipartner .ap-wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
 .aipartner .accent { color: var(--accent); }
-.aipartner.serif-accent .accent { font-family: var(--serif); font-style: italic; font-weight: 500; }
 .aipartner .strike { position: relative; color: var(--ink-soft); white-space: nowrap; }
 .aipartner .strike::after { content: ""; position: absolute; left: 0; right: 0; top: 55%; height: 4px; background: var(--accent); transform: skewY(-2deg); }
 .aipartner .eyebrow {
@@ -475,7 +471,6 @@ const CSS = `
 .aipartner .hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 56px; align-items: end; }
 .aipartner .hero-grid-single { grid-template-columns: 1fr; max-width: 60ch; }
 .aipartner .hero-h1 { font-size: clamp(32px, 6vw, 78px); font-weight: 700; line-height: 1.05; letter-spacing: -0.035em; }
-.aipartner.serif-accent .hero-h1 { font-weight: 600; letter-spacing: -0.025em; }
 .aipartner .hero-lead { font-size: 19px; color: var(--ink-soft); max-width: 56ch; margin-top: 26px; }
 
 /* Hero side: log */
@@ -526,7 +521,6 @@ const CSS = `
 .aipartner .section-alt { background: var(--paper); }
 .aipartner .section-head { max-width: 780px; margin-bottom: 56px; }
 .aipartner .ap-section h2 { font-size: clamp(32px, 4vw, 56px); font-weight: 700; line-height: 1.04; letter-spacing: -0.03em; margin-bottom: 18px; }
-.aipartner.serif-accent .ap-section h2 { font-weight: 600; letter-spacing: -0.02em; }
 .aipartner .section-lead { font-size: 18px; color: var(--ink-soft); max-width: 64ch; }
 
 /* CAPABILITIES */
