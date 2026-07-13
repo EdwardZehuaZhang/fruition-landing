@@ -506,6 +506,7 @@ export const NAV_V2: NavV2Item[] = [
     sections: [
       {
         heading: 'Company',
+        columns: 2,
         items: [
           {
             label: 'About Us',

@@ -11,10 +11,9 @@ import {
  * (/atlassian-consulting, /hubspot-consulting, /ai-consulting, /integrations,
  * /monday-products). Sections mirror Josh's approved mockups: hero, numbered
  * approach, services, child pages, geographic coverage, practice leader,
- * FAQ (with FAQPage + BreadcrumbList JSON-LD), closing CTA.
+ * FAQ (with FAQPage JSON-LD), closing CTA. The breadcrumb bar and its
+ * BreadcrumbList JSON-LD render site-wide via SiteFrame > Breadcrumbs.
  */
-
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.fruitionservices.io'
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
@@ -57,47 +56,15 @@ export default function PracticePageTemplate({ page }: { page: PracticePage }) {
       acceptedAnswer: { '@type': 'Answer', text: f.a },
     })),
   }
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
-      ...page.breadcrumb.map((b, i) => ({
-        '@type': 'ListItem',
-        position: i + 2,
-        name: b.label,
-        item: `${BASE}${b.href}`,
-      })),
-    ],
-  }
-
   return (
     // <div>, not <main> — SiteFrame already wraps marketing pages in <main>
     <div className="bg-surface text-body">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
       {/* Hero */}
       <section className="border-b border-ui">
+        {/* Breadcrumb trail renders site-wide via SiteFrame > Breadcrumbs */}
         <div className="max-w-[1148px] mx-auto px-4 pt-10 pb-16">
-          <nav aria-label="Breadcrumb" className="text-xs text-muted mb-8">
-            <ol className="flex flex-wrap items-center gap-1.5">
-              <li>
-                <Link href="/" className="hover:text-[#8015e8]">Home</Link>
-              </li>
-              {page.breadcrumb.map((b, i) => (
-                <li key={b.href} className="flex items-center gap-1.5">
-                  <span aria-hidden>/</span>
-                  {i === page.breadcrumb.length - 1 ? (
-                    <span className="text-body">{b.label}</span>
-                  ) : (
-                    <Link href={b.href} className="hover:text-[#8015e8]">{b.label}</Link>
-                  )}
-                </li>
-              ))}
-            </ol>
-          </nav>
-
           <span className="inline-flex items-center rounded-full bg-[#f5edfd] text-[#8015e8] text-xs font-semibold px-3 py-1 mb-5">
             {page.eyebrow}
           </span>

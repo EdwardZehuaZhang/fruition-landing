@@ -1,6 +1,7 @@
 "use client"
 
 import { usePathname } from "next/navigation"
+import Breadcrumbs from "./Breadcrumbs"
 
 /**
  * Wraps the marketing site chrome. The internal portal (/internal) renders its
@@ -27,6 +28,7 @@ export default function SiteFrame({
   return (
     <>
       {header}
+      <Breadcrumbs />
       <main>{children}</main>
       {footer}
       {cookie}
