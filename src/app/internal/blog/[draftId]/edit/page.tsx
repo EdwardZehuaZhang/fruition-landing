@@ -24,11 +24,13 @@ export default async function EditDraftPage({
   const { draftId } = await params
   const user = await requirePortalUser({ next: `/internal/blog/${draftId}/edit` })
 
+  // Drafts are a shared team workspace: any signed-in portal user can open any
+  // draft by its link. The portal is already domain-locked to
+  // @fruitionservices.io (requirePortalUser above), so there's no per-author gate.
   const { data } = await getPortalAdmin()
     .from("portal_drafts")
     .select("id, title, body_markdown, metadata")
     .eq("id", draftId)
-    .eq("author_id", user.id)
     .maybeSingle()
 
   const draft = data as DraftRow | null

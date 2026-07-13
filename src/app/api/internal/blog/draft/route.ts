@@ -5,8 +5,9 @@ export const runtime = "nodejs"
 
 /**
  * Save (create or update) an editorial draft in the portal_drafts table.
- * Drafts are private to their author. Publishing is a separate step
- * (POST /api/internal/blog), which writes to Sanity.
+ * Drafts are a shared team workspace — any signed-in portal user can edit any
+ * draft (the portal is domain-locked to @fruitionservices.io). Publishing is a
+ * separate step (POST /api/internal/blog), which writes to Sanity.
  */
 export async function POST(req: Request) {
   const user = await getPortalApiUser()
@@ -25,8 +26,7 @@ export async function POST(req: Request) {
   }
 
   const admin = getPortalAdmin()
-  const row = {
-    author_id: user.id,
+  const payload = {
     title: body.title ?? null,
     body_markdown: body.body_markdown ?? null,
     metadata: body.metadata ?? {},
@@ -34,11 +34,12 @@ export async function POST(req: Request) {
   }
 
   if (body.id) {
+    // Shared workspace: any signed-in portal user can update any draft. Don't
+    // reassign author_id on save — preserve the original creator.
     const { data, error } = await admin
       .from("portal_drafts")
-      .update(row)
+      .update(payload)
       .eq("id", body.id)
-      .eq("author_id", user.id) // can only edit your own draft
       .select("id")
       .maybeSingle()
     if (error) return NextResponse.json({ error: error.message }, { status: 502 })
@@ -48,7 +49,7 @@ export async function POST(req: Request) {
 
   const { data, error } = await admin
     .from("portal_drafts")
-    .insert(row)
+    .insert({ ...payload, author_id: user.id })
     .select("id")
     .single()
   if (error) return NextResponse.json({ error: error.message }, { status: 502 })
