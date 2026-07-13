@@ -44,10 +44,10 @@ export default async function DashboardPage() {
 
   let drafts: DraftRow[] = []
   try {
+    // Shared team workspace — surface everyone's drafts, not just your own.
     const { data } = await getPortalAdmin()
       .from("portal_drafts")
       .select("id, title, updated_at")
-      .eq("author_id", user.id)
       .order("updated_at", { ascending: false })
       .limit(25)
     drafts = (data as DraftRow[] | null) ?? []
@@ -96,7 +96,7 @@ export default async function DashboardPage() {
       <Card>
         <CardHeader>
           <CardTitle>Recent drafts</CardTitle>
-          <CardDescription>Your latest unpublished posts.</CardDescription>
+          <CardDescription>The team&rsquo;s latest unpublished posts.</CardDescription>
         </CardHeader>
         <CardContent>
           {drafts.length === 0 ? (
