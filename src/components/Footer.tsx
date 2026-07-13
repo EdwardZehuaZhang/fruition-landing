@@ -76,6 +76,12 @@ function PhoneIcon() {
   )
 }
 
+/** Placeholder numbers seeded as all zeros (e.g. "+91 00000 00000") are never rendered. */
+function isRealPhone(phone?: string): boolean {
+  if (!phone) return false
+  return !/0{6,}/.test(phone.replace(/\D/g, ''))
+}
+
 export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsProp | null }) {
   const calendlyUrl = siteSettings?.calendlyLink || ''
   const offices = siteSettings?.offices ?? []
@@ -138,11 +144,11 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
             </a>
           )}
 
-          {/* Phone numbers (one per office) */}
+          {/* Phone numbers (one per office; placeholder numbers hidden) */}
           <div className="flex items-start gap-2">
             <PhoneIcon />
-            <div className="flex flex-col text-[13px] leading-[20px] text-white">
-              {offices.map((o) => (
+            <div className="flex flex-col gap-y-0.5 sm:flex-row sm:flex-wrap sm:gap-x-6 text-[13px] leading-[20px] text-white">
+              {offices.filter((o) => isRealPhone(o.phone)).map((o) => (
                 <a
                   key={o.phoneTel || o.phone}
                   href={`tel:${o.phoneTel || (o.phone || '').replace(/\s/g, '')}`}
@@ -160,7 +166,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
           {siteSettings?.footerPartnerExpertiseHeading && (
             <h4 className="text-white font-semibold text-[16px] mb-3">{siteSettings.footerPartnerExpertiseHeading}</h4>
           )}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[40px] gap-y-[7px]">
+          <div className="grid grid-cols-2 gap-x-6 sm:gap-x-[40px] gap-y-[10px] sm:gap-y-[7px]">
             {partnerLogos.map((p, i) => {
               const w = p.width ?? 110
               const h = p.height ?? 38
@@ -229,8 +235,8 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
       {/*  RIGHT PANEL - dark background                               */}
       {/* ============================================================ */}
       <div className="flex-1 bg-black py-12 lg:py-16 px-8 sm:px-12 lg:px-16">
-        {/* Three link columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-8">
+        {/* Three link columns — two-up on phones so the footer doesn't become one long stack */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 lg:gap-8">
           {/* Services */}
           <div>
             {siteSettings?.footerServicesHeading && (
@@ -291,7 +297,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
           {siteSettings?.footerOurLocationsHeading && (
             <h4 className="text-white font-semibold text-[16px] mb-5">{siteSettings.footerOurLocationsHeading}</h4>
           )}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6">
             {offices.map((loc, i) => (
               <div key={`${loc.phoneTel}-${i}`}>
                 <div className="flex items-center gap-2 mb-1">
@@ -316,12 +322,14 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
                 ) : (
                   <p className="text-white text-[12px] leading-[18px] mb-1">{loc.address}</p>
                 )}
-                <a
-                  href={`tel:${loc.phoneTel || (loc.phone || '').replace(/\s/g, '')}`}
-                  className="text-white text-[12px] hover:opacity-80 transition-opacity"
-                >
-                  {loc.phone}
-                </a>
+                {isRealPhone(loc.phone) && (
+                  <a
+                    href={`tel:${loc.phoneTel || (loc.phone || '').replace(/\s/g, '')}`}
+                    className="text-white text-[12px] hover:opacity-80 transition-opacity"
+                  >
+                    {loc.phone}
+                  </a>
+                )}
               </div>
             ))}
           </div>

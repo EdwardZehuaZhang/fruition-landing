@@ -19,7 +19,7 @@ export default function TestimonialBlockView({ quote, authorName, authorRole, co
   const src = photoUrl(profilePhoto)
 
   return (
-    <div className="ui-surface-panel relative flex w-full max-w-[437px] min-h-[300px] flex-col">
+    <div className="ui-surface-panel relative flex w-full max-w-none lg:max-w-[437px] min-h-[300px] flex-col">
       <div className="flex items-start justify-between px-8 pb-4 pt-7">
         <div>
           {authorName && (

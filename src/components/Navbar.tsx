@@ -49,11 +49,13 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null)
+  const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null)
   const pathname = usePathname()
 
   const closeMobile = () => {
     setMobileOpen(false)
     setMobileExpanded(null)
+    setMobileExpandedSection(null)
   }
 
   const calendlyUrl = siteSettings?.calendlyLink || ''
@@ -196,7 +198,10 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                   <button
                     type="button"
                     aria-expanded={expanded}
-                    onClick={() => setMobileExpanded(expanded ? null : item.label || null)}
+                    onClick={() => {
+                      setMobileExpanded(expanded ? null : item.label || null)
+                      setMobileExpandedSection(null)
+                    }}
                     className={`w-full flex items-center justify-between gap-3 px-2 py-3 text-left transition-colors ${
                       expanded || active ? 'text-[#8015e8]' : 'text-body hover:text-[#8015e8]'
                     }`}
@@ -210,22 +215,42 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                     </svg>
                   </button>
 
-                  {/* Level 2: sub-sections + pages (revealed when expanded) */}
+                  {/* Level 2: sub-sections as their own accordions */}
                   {expanded && (
                     <div className="pb-2">
-                      {item.sections?.map((section, sIdx) => (
-                        <div key={`${section.heading}-${sIdx}`} className="mb-2">
+                      {item.sections?.map((section, sIdx) => {
+                        const sectionKey = `${item.label}-${section.heading}-${sIdx}`
+                        const sectionOpen = !section.heading || mobileExpandedSection === sectionKey
+                        return (
+                        <div key={`${section.heading}-${sIdx}`} className="mb-1">
                           {section.heading && (
-                            <p className="text-xs font-semibold text-[#8015e8] uppercase tracking-wider px-3 mb-1 flex items-center gap-2">
-                              {section.heading}
-                              {section.badge && (
-                                <span className="inline-flex items-center rounded-full bg-[#8015e8] text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 whitespace-nowrap">
-                                  {section.badge}
-                                </span>
-                              )}
-                            </p>
+                            <button
+                              type="button"
+                              aria-expanded={sectionOpen}
+                              onClick={() =>
+                                setMobileExpandedSection(
+                                  mobileExpandedSection === sectionKey ? null : sectionKey,
+                                )
+                              }
+                              className="w-full flex items-center justify-between gap-2 px-3 py-2 text-left"
+                            >
+                              <span className="text-xs font-semibold text-[#8015e8] uppercase tracking-wider flex items-center gap-2">
+                                {section.heading}
+                                {section.badge && (
+                                  <span className="inline-flex items-center rounded-full bg-[#8015e8] text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 whitespace-nowrap">
+                                    {section.badge}
+                                  </span>
+                                )}
+                              </span>
+                              <svg
+                                className={`shrink-0 text-[#8015e8] transition-transform duration-200 ${sectionOpen ? 'rotate-180' : ''}`}
+                                width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                              >
+                                <path d="M6 9l6 6 6-6" />
+                              </svg>
+                            </button>
                           )}
-                          {section.items?.map((sub) => {
+                          {sectionOpen && section.items?.map((sub) => {
                             const isActive = sub.href && pathname === sub.href
                             return (
                               <Link
@@ -255,7 +280,8 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                             )
                           })}
                         </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   )}
                 </div>

@@ -174,18 +174,18 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
             <p className="mb-12 text-center text-[19px] sm:text-[25px] font-extralight italic text-white">{stepsSubheading}</p>
           )}
 
-          <div className="flex flex-wrap gap-0 w-full justify-center">
+          <div className="flex flex-wrap gap-y-10 sm:gap-y-0 gap-x-0 w-full justify-center">
             {features?.map((f, i) => (
               <div
                 key={f._key ?? i}
-                className="group w-[237px] text-center cursor-default transition-transform duration-300 ease-out hover:-translate-y-1"
+                className="group w-full sm:w-[237px] text-center cursor-default transition-transform duration-300 ease-out hover:-translate-y-1"
               >
-                <p className="text-[48px] font-light text-[#b162fe] leading-[67.2px] transition-all duration-300 ease-out group-hover:font-bold group-hover:text-white">
+                <p className="text-[40px] sm:text-[48px] font-light text-[#b162fe] leading-[1.4] transition-all duration-300 ease-out group-hover:font-bold group-hover:text-white">
                   {String(i + 1).padStart(2, '0')}
                 </p>
-                <p className="text-[14px] font-medium text-white mb-2 transition-all duration-300 ease-out group-hover:font-bold">{f.title}</p>
+                <p className="text-[15px] sm:text-[14px] font-medium text-white mb-2 transition-all duration-300 ease-out group-hover:font-bold">{f.title}</p>
                 {f.description && (
-                  <p className="text-[14px] font-light text-white leading-[22.4px] mx-auto max-w-[190px]">{f.description}</p>
+                  <p className="text-[14px] font-light text-white/90 leading-[22.4px] mx-auto max-w-[280px] sm:max-w-[190px]">{f.description}</p>
                 )}
               </div>
             ))}

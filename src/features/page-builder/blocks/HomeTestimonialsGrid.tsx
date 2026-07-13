@@ -68,7 +68,7 @@ export default function HomeTestimonialsGrid({
                 key={pageIdx}
                 className="flex flex-wrap gap-x-[16px] gap-y-[18px] w-full shrink-0"
               >
-                <div className="relative w-full max-w-[437px] bg-[#10003a] rounded-card shadow-card flex flex-col px-[38px]">
+                <div className="relative w-full max-w-none lg:max-w-[437px] bg-[#10003a] rounded-card shadow-card flex flex-col px-[38px]">
                   <div className="pt-[23px] pb-[30px]">
                     <p className="font-semibold text-[40px] text-[#ba83f0] leading-[60px]">500+</p>
                     <p className="font-light text-[24px] text-white leading-[36px]">
