@@ -164,7 +164,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
         {/* Partner Expertise */}
         <div>
           {siteSettings?.footerPartnerExpertiseHeading && (
-            <h4 className="text-white font-semibold text-[16px] mb-3">{siteSettings.footerPartnerExpertiseHeading}</h4>
+            <h4 className="text-white font-semibold text-[16px] leading-tight mb-3">{siteSettings.footerPartnerExpertiseHeading}</h4>
           )}
           <div className="grid grid-cols-2 gap-x-6 sm:gap-x-[40px] gap-y-[10px] sm:gap-y-[7px]">
             {partnerLogos.map((p, i) => {
@@ -240,14 +240,14 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
           {/* Services */}
           <div>
             {siteSettings?.footerServicesHeading && (
-              <h4 className="text-white font-semibold text-[16px] mb-4">{siteSettings.footerServicesHeading}</h4>
+              <h4 className="text-white font-semibold text-[16px] leading-tight mb-4">{siteSettings.footerServicesHeading}</h4>
             )}
             <div className="flex flex-col">
               {servicesLinks.map((link, i) => (
                 <Link
                   key={`${link.href}-${i}`}
                   href={link.href || '#'}
-                  className="text-white text-[12px] leading-[28px] hover:opacity-80 transition-opacity"
+                  className="text-white text-[12px] leading-[17px] py-[5.5px] hover:opacity-80 transition-opacity"
                 >
                   {link.label}
                 </Link>
@@ -258,14 +258,14 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
           {/* Department Solutions */}
           <div>
             {siteSettings?.footerDepartmentSolutionsHeading && (
-              <h4 className="text-white font-semibold text-[16px] mb-4">{siteSettings.footerDepartmentSolutionsHeading}</h4>
+              <h4 className="text-white font-semibold text-[16px] leading-tight mb-4">{siteSettings.footerDepartmentSolutionsHeading}</h4>
             )}
             <div className="flex flex-col">
               {departmentLinks.map((link, i) => (
                 <Link
                   key={`${link.href}-${i}`}
                   href={link.href || '#'}
-                  className="text-white text-[12px] leading-[28px] hover:opacity-80 transition-opacity"
+                  className="text-white text-[12px] leading-[17px] py-[5.5px] hover:opacity-80 transition-opacity"
                 >
                   {link.label}
                 </Link>
@@ -276,14 +276,14 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
           {/* Industry Solutions */}
           <div>
             {siteSettings?.footerIndustrySolutionsHeading && (
-              <h4 className="text-white font-semibold text-[16px] mb-4">{siteSettings.footerIndustrySolutionsHeading}</h4>
+              <h4 className="text-white font-semibold text-[16px] leading-tight mb-4">{siteSettings.footerIndustrySolutionsHeading}</h4>
             )}
             <div className="flex flex-col">
               {industryLinks.map((link, i) => (
                 <Link
                   key={`${link.href}-${i}`}
                   href={link.href || '#'}
-                  className="text-white text-[12px] leading-[28px] hover:opacity-80 transition-opacity"
+                  className="text-white text-[12px] leading-[17px] py-[5.5px] hover:opacity-80 transition-opacity"
                 >
                   {link.label}
                 </Link>
@@ -295,7 +295,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
         {/* Our Locations */}
         <div className="mt-12">
           {siteSettings?.footerOurLocationsHeading && (
-            <h4 className="text-white font-semibold text-[16px] mb-5">{siteSettings.footerOurLocationsHeading}</h4>
+            <h4 className="text-white font-semibold text-[16px] leading-tight mb-5">{siteSettings.footerOurLocationsHeading}</h4>
           )}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6">
             {offices.map((loc, i) => (
