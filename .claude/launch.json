@@ -12,8 +12,8 @@
       "name": "dev-nav-v2",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev:nav-v2"],
-      "port": 3000,
-      "autoPort": true
+      "port": 3005,
+      "autoPort": false
     }
   ]
 }
