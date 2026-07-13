@@ -25,6 +25,34 @@ const LINKABLE_PARENTS = new Set([
   '/consulting-blog',
 ])
 
+/**
+ * Virtual hierarchy for flat legacy URLs: the crumb trail shows the logical
+ * cluster (Home / Industries / …) without moving any ranked URL — §07 of the
+ * v2.1 proposal forbids touching ranking monday.com slugs. Parents without an
+ * href render as plain text and are omitted from the JSON-LD.
+ */
+const INDUSTRIES_PARENT = { label: 'Industries' }
+const REGIONS_PARENT = { label: 'Regions' }
+const AI_PARENT = { label: 'AI Consulting', href: '/ai-consulting' }
+
+const VIRTUAL_PARENTS: Record<string, { label: string; href?: string }> = {
+  '/monday-for-construction': INDUSTRIES_PARENT,
+  '/monday-for-manufacturing': INDUSTRIES_PARENT,
+  '/monday-for-retail': INDUSTRIES_PARENT,
+  '/monday-for-professional-services': INDUSTRIES_PARENT,
+  '/monday-for-government': INDUSTRIES_PARENT,
+  '/monday-for-marketing': INDUSTRIES_PARENT,
+  '/monday-for-real-estate': INDUSTRIES_PARENT,
+  '/monday-partner-australia': REGIONS_PARENT,
+  '/monday-partner-uk': REGIONS_PARENT,
+  '/monday-partner-us': REGIONS_PARENT,
+  '/monday-partner-singapore': REGIONS_PARENT,
+  '/monday-partner-india': REGIONS_PARENT,
+  '/monday-partner-philippines': REGIONS_PARENT,
+  '/ai-capability-assessment': AI_PARENT,
+  '/ai-strategy-and-execution': AI_PARENT,
+}
+
 const LABELS: Record<string, string> = {
   'consulting-blog': 'Blog',
   'customer-testimonials': 'Case Studies',
@@ -93,15 +121,20 @@ export default function Breadcrumbs() {
   const segments = pathname.split('/').filter(Boolean)
   if (segments.length === 0) return null
 
-  const crumbs = segments.map((segment, i) => {
+  const pathCrumbs = segments.map((segment, i) => {
     const href = '/' + segments.slice(0, i + 1).join('/')
     return {
       label: labelFor(segment),
-      href,
+      href: href as string | undefined,
       isLast: i === segments.length - 1,
       linkable: i === segments.length - 1 ? false : LINKABLE_PARENTS.has(href),
     }
   })
+
+  const virtualParent = VIRTUAL_PARENTS[pathname]
+  const crumbs = virtualParent
+    ? [{ label: virtualParent.label, href: virtualParent.href, isLast: false, linkable: !!virtualParent.href }, ...pathCrumbs]
+    : pathCrumbs
 
   const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.fruitionservices.io'
   const jsonLd = {
@@ -109,29 +142,34 @@ export default function Breadcrumbs() {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
-      ...crumbs.map((c, i) => ({
-        '@type': 'ListItem',
-        position: i + 2,
-        name: c.label,
-        item: `${BASE}${c.href}`,
-      })),
+      // virtual parents without a real page are visual-only — kept out of the schema
+      ...crumbs
+        .filter((c) => c.href)
+        .map((c, i) => ({
+          '@type': 'ListItem',
+          position: i + 2,
+          name: c.label,
+          item: `${BASE}${c.href}`,
+        })),
     ],
   }
 
   return (
     <div className="bg-surface">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <nav aria-label="Breadcrumb" className="max-w-[1348px] mx-auto px-4 xl:px-0 pt-5">
+      {/* max-w-[1148px] px-4 matches the practice-page content container so the
+          trail left-aligns with page copy rather than the wider navbar chrome */}
+      <nav aria-label="Breadcrumb" className="max-w-[1148px] mx-auto px-4 pt-5">
         <ol className="flex flex-wrap items-center gap-1.5 text-xs text-muted">
           <li>
             <Link href="/" className="hover:text-[#8015e8] transition-colors">Home</Link>
           </li>
           {crumbs.map((c) => (
-            <li key={c.href} className="flex items-center gap-1.5">
+            <li key={`${c.label}-${c.href ?? 'virtual'}`} className="flex items-center gap-1.5">
               <span aria-hidden>/</span>
               {c.isLast ? (
                 <span className="text-body font-medium">{c.label}</span>
-              ) : c.linkable ? (
+              ) : c.linkable && c.href ? (
                 <Link href={c.href} className="hover:text-[#8015e8] transition-colors">{c.label}</Link>
               ) : (
                 <span>{c.label}</span>
