@@ -188,7 +188,6 @@ export const NAV_V2: NavV2Item[] = [
             href: '/monday-implementation-consultants',
             icon: 'wrench',
             description: '500+ implementations delivered',
-            featured: true,
           },
           {
             label: 'monday Work Management',
@@ -531,11 +530,6 @@ export const NAV_V2: NavV2Item[] = [
             icon: 'phone',
             description: 'Talk to the team',
           },
-        ],
-      },
-      {
-        heading: 'Credentials',
-        items: [
           {
             label: 'Partners & Certifications',
             href: '/partnerships',
@@ -546,6 +540,7 @@ export const NAV_V2: NavV2Item[] = [
       },
       {
         heading: 'Regions',
+        columns: 2,
         items: [
           {
             label: 'Australia',
