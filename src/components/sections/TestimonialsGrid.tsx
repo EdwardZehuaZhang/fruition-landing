@@ -89,7 +89,7 @@ export default function TestimonialsGrid({
                 className="flex flex-wrap gap-x-[16px] gap-y-[18px] w-full shrink-0"
               >
                 {/* Stat card (repeats on every page) */}
-                <div className="relative flex w-full max-w-[437px] flex-col rounded-card bg-[#10003a] px-[38px] shadow-card">
+                <div className="relative flex w-full max-w-none lg:max-w-[437px] flex-col rounded-card bg-[#10003a] px-[38px] shadow-card">
                   <div className="pt-[23px] pb-[30px]">
                     <p className="font-semibold text-[32px] sm:text-[40px] text-[#ba83f0] leading-[1.2]">{statCardValue}</p>
                     <p className="font-normal text-white text-[19px] sm:text-[24px] leading-[1.4]" style={{ whiteSpace: "pre-line" }}>
@@ -110,7 +110,7 @@ export default function TestimonialsGrid({
                 {pageItems.map((t, ti) => (
                   <div
                     key={t.id || `${t.name}-${ti}`}
-                    className="ui-surface-panel relative flex w-full max-w-[437px] min-h-[300px] flex-col"
+                    className="ui-surface-panel relative flex w-full max-w-none lg:max-w-[437px] min-h-[300px] flex-col"
                   >
                     <div className="flex items-start justify-between px-[38px] pt-[29px] pb-[18px]">
                       <div>

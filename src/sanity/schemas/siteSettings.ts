@@ -69,6 +69,14 @@ export default {
           fields: [
             { name: 'label', title: 'Label', type: 'string' },
             {
+              name: 'layout',
+              title: 'Dropdown layout',
+              type: 'string',
+              options: { list: ['stacked', 'columns'] },
+              description:
+                '"stacked": sections stack vertically, items in a 3-col grid (legacy default). "columns": sections render as side-by-side mega-menu columns.',
+            },
+            {
               name: 'sections',
               title: 'Sections',
               type: 'array',
@@ -78,6 +86,24 @@ export default {
                   name: 'navSection',
                   fields: [
                     { name: 'heading', title: 'Heading', type: 'string' },
+                    {
+                      name: 'columns',
+                      title: 'Item columns',
+                      type: 'number',
+                      description: 'Grid columns for items inside this section. Defaults: 3 (stacked layout) / 1 (columns layout).',
+                    },
+                    {
+                      name: 'highlight',
+                      title: 'Highlight section',
+                      type: 'boolean',
+                      description: 'Visually dominant column (tinted panel) — e.g. monday.com in the Platforms menu.',
+                    },
+                    {
+                      name: 'badge',
+                      title: 'Badge',
+                      type: 'string',
+                      description: 'Small pill rendered next to the heading, e.g. "Platinum Partner".',
+                    },
                     {
                       name: 'items',
                       title: 'Items',
@@ -90,6 +116,12 @@ export default {
                             { name: 'label', title: 'Label', type: 'string' },
                             { name: 'href', title: 'Href', type: 'string' },
                             { name: 'description', title: 'Description', type: 'string' },
+                            {
+                              name: 'featured',
+                              title: 'Featured',
+                              type: 'boolean',
+                              description: 'Emphasised card styling within its column.',
+                            },
                             {
                               name: 'icon',
                               title: 'Icon (key)',

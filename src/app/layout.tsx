@@ -101,6 +101,13 @@ export default async function RootLayout({
 }>) {
   const siteSettings = await getSiteSettings()
 
+  // Local preview of the Site Architecture v2.1 nav without writing to Sanity:
+  // NAV_V2_PREVIEW=1 npm run dev  (see scripts/seed-nav-v2.ts for the real rollout)
+  if (process.env.NAV_V2_PREVIEW === '1' && siteSettings) {
+    const { NAV_V2 } = await import('@/data/nav-v2')
+    siteSettings.navigation = NAV_V2
+  }
+
   const BASE =
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.fruitionservices.io"
   const socials = Array.isArray(siteSettings?.socialLinks)
@@ -124,7 +131,55 @@ export default async function RootLayout({
         url: BASE,
         logo: logoUrl,
         description:
-          "monday.com Partner certified. Fruition is an expert in monday.com implementation, integration and automation.",
+          "Fruition is a consulting and implementation firm across monday.com (Platinum Partner), Atlassian, HubSpot, and AI platforms — serving Australia, the UK, and the US.",
+        // §05 AEO: entity signals for every practice, not just monday.com
+        knowsAbout: [
+          "monday.com",
+          "monday CRM",
+          "Atlassian",
+          "Jira",
+          "Confluence",
+          "Jira Service Management",
+          "HubSpot",
+          "AI consulting",
+          "Anthropic Claude",
+          "OpenAI ChatGPT",
+          "Microsoft Copilot",
+          "Google Gemini",
+          "Google Cloud",
+          "AWS Bedrock",
+          "n8n",
+          "Make",
+          "Zapier",
+          "Aircall",
+          "Twilio",
+        ],
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Consulting services",
+          itemListElement: [
+            {
+              "@type": "Offer",
+              itemOffered: { "@type": "Service", name: "monday.com consulting & implementation", url: `${BASE}/monday-implementation-consultants` },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: { "@type": "Service", name: "AI consulting & implementation", url: `${BASE}/ai-consulting` },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: { "@type": "Service", name: "Atlassian consulting", url: `${BASE}/atlassian-consulting` },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: { "@type": "Service", name: "HubSpot consulting", url: `${BASE}/hubspot-consulting` },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: { "@type": "Service", name: "Integration & automation services", url: `${BASE}/integrations` },
+            },
+          ],
+        },
         ...(socials.length ? { sameAs: socials } : {}),
       },
       {

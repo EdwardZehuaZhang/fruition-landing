@@ -12,16 +12,20 @@ interface NavLink {
   href?: string
   description?: string
   icon?: string
+  featured?: boolean
 }
 
 interface NavSubSection {
   heading?: string
   items?: NavLink[]
   columns?: number
+  highlight?: boolean
+  badge?: string
 }
 
 interface NavItem {
   label?: string
+  layout?: 'stacked' | 'columns'
   sections?: NavSubSection[]
 }
 
@@ -45,11 +49,13 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null)
+  const [mobileExpandedSection, setMobileExpandedSection] = useState<string | null>(null)
   const pathname = usePathname()
 
   const closeMobile = () => {
     setMobileOpen(false)
     setMobileExpanded(null)
+    setMobileExpandedSection(null)
   }
 
   const calendlyUrl = siteSettings?.calendlyLink || ''
@@ -192,7 +198,10 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                   <button
                     type="button"
                     aria-expanded={expanded}
-                    onClick={() => setMobileExpanded(expanded ? null : item.label || null)}
+                    onClick={() => {
+                      setMobileExpanded(expanded ? null : item.label || null)
+                      setMobileExpandedSection(null)
+                    }}
                     className={`w-full flex items-center justify-between gap-3 px-2 py-3 text-left transition-colors ${
                       expanded || active ? 'text-[#8015e8]' : 'text-body hover:text-[#8015e8]'
                     }`}
@@ -206,17 +215,42 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                     </svg>
                   </button>
 
-                  {/* Level 2: sub-sections + pages (revealed when expanded) */}
+                  {/* Level 2: sub-sections as their own accordions */}
                   {expanded && (
                     <div className="pb-2">
-                      {item.sections?.map((section, sIdx) => (
-                        <div key={`${section.heading}-${sIdx}`} className="mb-2">
+                      {item.sections?.map((section, sIdx) => {
+                        const sectionKey = `${item.label}-${section.heading}-${sIdx}`
+                        const sectionOpen = !section.heading || mobileExpandedSection === sectionKey
+                        return (
+                        <div key={`${section.heading}-${sIdx}`} className="mb-1">
                           {section.heading && (
-                            <p className="text-xs font-semibold text-[#8015e8] uppercase tracking-wider px-3 mb-1">
-                              {section.heading}
-                            </p>
+                            <button
+                              type="button"
+                              aria-expanded={sectionOpen}
+                              onClick={() =>
+                                setMobileExpandedSection(
+                                  mobileExpandedSection === sectionKey ? null : sectionKey,
+                                )
+                              }
+                              className="w-full flex items-center justify-between gap-2 px-3 py-2 text-left"
+                            >
+                              <span className="text-xs font-semibold text-[#8015e8] uppercase tracking-wider flex items-center gap-2">
+                                {section.heading}
+                                {section.badge && (
+                                  <span className="inline-flex items-center rounded-full bg-[#8015e8] text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 whitespace-nowrap">
+                                    {section.badge}
+                                  </span>
+                                )}
+                              </span>
+                              <svg
+                                className={`shrink-0 text-[#8015e8] transition-transform duration-200 ${sectionOpen ? 'rotate-180' : ''}`}
+                                width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                              >
+                                <path d="M6 9l6 6 6-6" />
+                              </svg>
+                            </button>
                           )}
-                          {section.items?.map((sub) => {
+                          {sectionOpen && section.items?.map((sub) => {
                             const isActive = sub.href && pathname === sub.href
                             return (
                               <Link
@@ -246,7 +280,8 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                             )
                           })}
                         </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   )}
                 </div>
@@ -292,17 +327,40 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
       {openMenu && (() => {
         const activeItem = navItems.find((item) => item.label === openMenu)
         if (!activeItem?.sections?.length) return null
+        const columnsLayout = activeItem.layout === 'columns'
         return (
           <div className="hidden lg:block absolute left-0 right-0 top-full border-t border-ui bg-surface-raised shadow-lg z-50">
             <div className="max-w-[1348px] mx-auto px-4 xl:px-0 py-8">
-              <div className="flex flex-col gap-6">
+              <div className={columnsLayout ? 'flex flex-row items-stretch gap-6' : 'flex flex-col gap-6'}>
                 {activeItem.sections.map((section, sIdx) => {
-                  const cols = section.columns ?? 3
+                  const cols = section.columns ?? (columnsLayout ? 1 : 3)
                   return (
-                    <div key={`${section.heading}-${sIdx}`} className="min-w-0">
+                    <div
+                      key={`${section.heading}-${sIdx}`}
+                      className={`min-w-0 ${
+                        columnsLayout
+                          ? section.highlight
+                            ? 'flex-[1.3] rounded-xl bg-[#f5edfd] dark:bg-white/5 ring-1 ring-[#d9bff5] dark:ring-white/10 p-4'
+                            : 'flex-1'
+                          : ''
+                      }`}
+                    >
                       {section.heading && (
-                        <p className="text-xs font-medium text-muted pb-3 border-b border-ui mb-3">
+                        <p
+                          className={`text-xs pb-3 border-b mb-3 flex items-center gap-2 ${
+                            columnsLayout ? 'font-semibold uppercase tracking-wider' : 'font-medium'
+                          } ${
+                            section.highlight
+                              ? 'text-[#8015e8] dark:text-[#ba83f0] border-[#d9bff5] dark:border-white/10'
+                              : 'text-muted border-ui'
+                          }`}
+                        >
                           {section.heading}
+                          {section.badge && (
+                            <span className="inline-flex items-center rounded-full bg-[#8015e8] text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 whitespace-nowrap">
+                              {section.badge}
+                            </span>
+                          )}
                         </p>
                       )}
                       <div
@@ -316,7 +374,11 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                               key={sub.href}
                               href={sub.href || '#'}
                               className={`group flex items-start gap-3 rounded-lg p-3 transition-colors ${
-                                isActive ? 'bg-[#f5edfd] dark:bg-white/10' : 'hover:bg-black/5 dark:hover:bg-white/5'
+                                isActive
+                                  ? 'bg-[#f5edfd] dark:bg-white/10'
+                                  : sub.featured
+                                    ? 'bg-surface-raised ring-1 ring-[#d9bff5] dark:ring-white/15 shadow-sm hover:ring-[#8015e8] dark:hover:ring-[#ba83f0]'
+                                    : 'hover:bg-black/5 dark:hover:bg-white/5'
                               }`}
                               onClick={() => setOpenMenu(null)}
                             >
