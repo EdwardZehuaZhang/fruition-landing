@@ -3,7 +3,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { urlFor } from '@/sanity/image'
 import PaperPlaneIcon from '@/components/common/icons/PaperPlaneIcon'
 import { NavIcon } from '@/components/common/icons/NavIcons'
 
@@ -25,6 +24,7 @@ interface NavSubSection {
 
 interface NavItem {
   label?: string
+  href?: string
   layout?: 'stacked' | 'columns'
   sections?: NavSubSection[]
 }
@@ -61,7 +61,6 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
   const calendlyUrl = siteSettings?.calendlyLink || ''
   const phoneAu = siteSettings?.phone
   const navItems: NavItem[] = siteSettings?.navigation || []
-  const partnerBadges: PartnerBadge[] = siteSettings?.navbarPartnerBadges ?? []
   const ctaLabel = siteSettings?.navbarCtaLabel || ''
 
   const isNavItemActive = (item: NavItem) =>
@@ -97,6 +96,24 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
           <div className="hidden lg:flex items-center gap-3 xl:gap-6">
             {navItems.map((item) => {
               const active = isNavItemActive(item)
+              // Direct-link tab (e.g. Contact): a plain link, no dropdown.
+              if (item.href && !item.sections?.length) {
+                const linkActive = pathname === item.href
+                return (
+                  <div key={item.label} onMouseEnter={() => setOpenMenu(null)}>
+                    <Link
+                      href={item.href}
+                      className={`block font-medium text-sm py-1.5 px-3 transition-colors border border-transparent whitespace-nowrap ${
+                        linkActive
+                          ? 'text-[#8015e8] dark:text-[#ba83f0]'
+                          : 'text-body hover:text-[#8015e8] dark:hover:text-[#ba83f0]'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  </div>
+                )
+              }
               return (
                 <div
                   key={item.label}
@@ -117,29 +134,9 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
               )
             })}
 
-            {/* Partner badges + phone icon + CTA */}
+            {/* Phone icon + CTA (partner badges removed from nav — they crowded
+                the six-tab row and overlapped the Contact tab) */}
             <div className="flex items-center gap-2 xl:gap-[12px] border-l border-ui pl-3 xl:pl-4" onMouseEnter={() => setOpenMenu(null)}>
-              <div className="hidden xl:flex items-center gap-3">
-                {partnerBadges.map((badge, i) => {
-                  const h = badge.height ?? 32
-                  const src = badge.image
-                    ? urlFor(badge.image).height(h * 2).fit('max').url()
-                    : null
-                  if (!src) return null
-                  return (
-                    <Image
-                      key={`${badge.name}-${i}`}
-                      src={src}
-                      alt={badge.name || 'Partner badge'}
-                      width={h * 4}
-                      height={h}
-                      className="h-7 w-auto"
-                      unoptimized
-                    />
-                  )
-                })}
-              </div>
-
               {/* Phone icon */}
               {phoneAu && (
                 <a
@@ -192,6 +189,22 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
             {navItems.map((item) => {
               const expanded = mobileExpanded === item.label
               const active = isNavItemActive(item)
+              // Direct-link tab (e.g. Contact): a plain row, no accordion.
+              if (item.href && !item.sections?.length) {
+                return (
+                  <div key={item.label} className="border-b border-ui last:border-b-0">
+                    <Link
+                      href={item.href}
+                      onClick={closeMobile}
+                      className={`block px-2 py-3 text-[15px] font-semibold ${
+                        pathname === item.href ? 'text-[#8015e8]' : 'text-body hover:text-[#8015e8]'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  </div>
+                )
+              }
               return (
                 <div key={item.label} className="border-b border-ui last:border-b-0">
                   {/* Level 1: category header (tap to expand) */}
@@ -287,27 +300,6 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                 </div>
               )
             })}
-            {/* Partner badges mobile */}
-            <div className="flex flex-wrap items-center gap-3 px-2 py-3 border-t border-ui">
-              {partnerBadges.map((badge, i) => {
-                const h = Math.round((badge.height ?? 32) * 0.75)
-                const src = badge.image
-                  ? urlFor(badge.image).height(h * 2).fit('max').url()
-                  : null
-                if (!src) return null
-                return (
-                  <Image
-                    key={`m-${badge.name}-${i}`}
-                    src={src}
-                    alt={badge.name || 'Partner badge'}
-                    width={h * 4}
-                    height={h}
-                    className="h-6 w-auto"
-                    unoptimized
-                  />
-                )
-              })}
-            </div>
             {ctaLabel && calendlyUrl && (
               <a
                 href={calendlyUrl}
