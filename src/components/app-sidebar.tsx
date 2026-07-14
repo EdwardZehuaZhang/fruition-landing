@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, PenSquare, Users, UserPlus, FileText, Newspaper, Palette, Sparkles } from "lucide-react"
+import { LayoutDashboard, PenSquare, Users, UserPlus, FileText, Newspaper, Palette, Sparkles, Receipt, PlusCircle } from "lucide-react"
 
 import {
   Sidebar,
@@ -41,6 +41,13 @@ const MODULES: { label: string; items: NavItem[] }[] = [
     items: [
       { title: "Documents", href: "/internal/design", icon: Palette, match: "exact" },
       { title: "New document", href: "/internal/design/new", icon: Sparkles, match: "prefix" },
+    ],
+  },
+  {
+    label: "Invoicing",
+    items: [
+      { title: "Invoices", href: "/internal/invoices", icon: Receipt, match: "exact" },
+      { title: "New Invoice", href: "/internal/invoices/new", icon: PlusCircle, match: "prefix" },
     ],
   },
   {
