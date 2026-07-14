@@ -8,11 +8,12 @@ const TITLES: Record<string, string> = {
   new: "New post",
   profile: "My profile",
   team: "Team Management",
+  blog: "Blog drafts",
 }
 
 interface Props {
   email?: string | null
-  active?: "dashboard" | "new" | "profile" | "team"
+  active?: "dashboard" | "new" | "profile" | "team" | "blog"
   /** Overrides the header title derived from `active`. */
   title?: string
   children: React.ReactNode
