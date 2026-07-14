@@ -1,9 +1,9 @@
 /**
- * Replace siteSettings.navigation with the Site Architecture v2.1 five-tab nav
- * (AI Consulting · Platforms · Solutions · Resources · About).
+ * Replace siteSettings.navigation with the six-tab reorganisation nav
+ * (Services · Partnerships · Industries · Insights · About · Contact).
  *
  * The structure lives in src/data/nav-v2.ts — every href maps to a page that
- * already exists, so this can ship before any content backfill.
+ * exists (existing routes + the practice/industry/proof/pricing pages).
  *
  *   npx tsx scripts/seed-nav-v2.ts                # dry run: prints the new tree
  *   npx tsx scripts/seed-nav-v2.ts --check-urls   # dry run + HEAD-checks every href on the live site
@@ -33,8 +33,9 @@ function toSanityNav() {
     withKey({
       _type: 'navItem',
       label: item.label,
+      ...(item.href ? { href: item.href } : {}),
       ...(item.layout ? { layout: item.layout } : {}),
-      sections: item.sections.map((section) =>
+      sections: (item.sections ?? []).map((section) =>
         withKey({
           _type: 'navSection',
           heading: section.heading,
@@ -59,8 +60,12 @@ function toSanityNav() {
 
 function printTree() {
   for (const item of NAV_V2) {
+    if (item.href && !item.sections?.length) {
+      console.log(`\n${item.label}  → ${item.href}  (direct link)`)
+      continue
+    }
     console.log(`\n${item.label}  [${item.layout ?? 'stacked'}]`)
-    for (const s of item.sections) {
+    for (const s of item.sections ?? []) {
       const flags = [s.highlight && 'highlight', s.badge && `badge:"${s.badge}"`, s.columns && `cols:${s.columns}`]
         .filter(Boolean)
         .join(' · ')
@@ -71,7 +76,12 @@ function printTree() {
 }
 
 async function checkUrls() {
-  const hrefs = [...new Set(NAV_V2.flatMap((i) => i.sections.flatMap((s) => s.items.map((l) => l.href))))]
+  const hrefs = [
+    ...new Set([
+      ...NAV_V2.flatMap((i) => (i.href ? [i.href] : [])),
+      ...NAV_V2.flatMap((i) => (i.sections ?? []).flatMap((s) => s.items.map((l) => l.href))),
+    ]),
+  ]
   console.log(`\nChecking ${hrefs.length} unique hrefs against ${LIVE_ORIGIN} …`)
   let failures = 0
   for (const href of hrefs) {

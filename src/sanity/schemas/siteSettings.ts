@@ -69,6 +69,13 @@ export default {
           fields: [
             { name: 'label', title: 'Label', type: 'string' },
             {
+              name: 'href',
+              title: 'Direct link (optional)',
+              type: 'string',
+              description:
+                'If set and the item has no sections, this tab is a plain link (e.g. Contact) instead of a dropdown.',
+            },
+            {
               name: 'layout',
               title: 'Dropdown layout',
               type: 'string',
