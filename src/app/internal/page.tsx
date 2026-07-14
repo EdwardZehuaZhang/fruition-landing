@@ -3,7 +3,7 @@ import { requirePortalUser, getPortalAdmin } from "@/lib/portalAuth"
 import { getGa4Overview, getGscClicksByPage } from "@/lib/googleAnalytics"
 import PortalShell from "@/components/internal/PortalShell"
 import { SectionCards } from "@/components/section-cards"
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
+import { ChartAreaInteractive } from "@/components/chart-area-interactive-dynamic"
 import { Button } from "@/components/ui/button"
 import {
   Card,

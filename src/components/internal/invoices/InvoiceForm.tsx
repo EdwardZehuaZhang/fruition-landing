@@ -16,7 +16,6 @@ import ProjectSelector from './ProjectSelector'
 import LineItemRow from './LineItemRow'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { exportInvoiceToPDF } from '@/lib/invoicePdf'
 
 const monthOptions = generateMonthOptions()
 
@@ -169,12 +168,14 @@ export default function InvoiceForm({ profile, onSave }: Props) {
     }
   }
 
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     if (!consultantName || !region || lineItems.length === 0) {
       alert('Please fill in all required fields')
       return
     }
-    exportInvoiceToPDF(buildInvoice())
+    // Lazy-load pdfmake client-side only — keeps it out of the edge Worker bundle.
+    const { exportInvoiceToPDF } = await import('@/lib/invoicePdf')
+    await exportInvoiceToPDF(buildInvoice())
   }
 
   const invoice = buildInvoice()
