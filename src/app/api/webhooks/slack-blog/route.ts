@@ -1,6 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto"
 import { after, NextResponse } from "next/server"
-import { buildIdeaQueuedBlocks } from "@/lib/marketa/blogSlackBlocks"
 import { generateBotReply, type ChatTurn } from "@/lib/claudeClient"
 import { BOT_TOOLS, botToolExecutor } from "@/lib/botTools"
 import {
@@ -818,6 +817,49 @@ function sourceLine(event: SlackMessageEvent): string {
 
 function mondayItemUrl(pulseId: string): string {
   return `https://fruitionservices.monday.com/boards/${BOARD_ID}/pulses/${pulseId}`
+}
+
+// Inlined from the former @/lib/marketa/blogSlackBlocks when Marketa was
+// extracted to its own repo (2026-07-10). slack-blog is a general blog-idea
+// bot and only needed this one "queued" thread-reply builder, so it lives here
+// rather than pulling the whole Marketa lib back in.
+function blogIdeaMetaLine(args: { industry?: string; targetKeyword?: string }): string {
+  const parts: string[] = []
+  if (args.industry) parts.push(`:label: ${args.industry}`)
+  if (args.targetKeyword) parts.push(`:dart: ${args.targetKeyword}`)
+  return parts.join("  ·  ")
+}
+
+function blogIdeaMondayButton(pulseId: string, label: string): Record<string, unknown> {
+  return {
+    type: "button",
+    text: { type: "plain_text", text: label, emoji: true },
+    url: mondayItemUrl(pulseId),
+  }
+}
+
+function buildIdeaQueuedBlocks(args: {
+  pulseId: string
+  title: string
+  industry?: string
+  targetKeyword?: string
+}): { fallbackText: string; blocks: Record<string, unknown>[] } {
+  const blocks: Record<string, unknown>[] = []
+  blocks.push({
+    type: "header",
+    text: { type: "plain_text", text: ":hourglass_flowing_sand: Queued", emoji: true },
+  })
+  blocks.push({
+    type: "section",
+    text: { type: "mrkdwn", text: `*<${mondayItemUrl(args.pulseId)}|${args.title}>*` },
+  })
+  const meta = blogIdeaMetaLine({ industry: args.industry, targetKeyword: args.targetKeyword })
+  if (meta) blocks.push({ type: "context", elements: [{ type: "mrkdwn", text: meta }] })
+  blocks.push({
+    type: "actions",
+    elements: [blogIdeaMondayButton(args.pulseId, "Open in monday :clipboard:")],
+  })
+  return { fallbackText: `:hourglass_flowing_sand: Queued: ${args.title}`, blocks }
 }
 
 function escapeRegex(value: string): string {
