@@ -5,7 +5,6 @@ import { Download, ArrowLeft } from 'lucide-react'
 import type { Invoice } from '@/types/invoice'
 import InvoicePreview from '@/components/internal/invoices/InvoicePreview'
 import { Button } from '@/components/ui/button'
-import { exportInvoiceToPDF } from '@/lib/invoicePdf'
 import Link from 'next/link'
 
 interface Props {
@@ -15,8 +14,10 @@ interface Props {
 export default function InvoiceDetailClient({ invoice }: Props) {
   const router = useRouter()
 
-  const handleExport = () => {
-    exportInvoiceToPDF(invoice)
+  const handleExport = async () => {
+    // Lazy-load pdfmake client-side only — keeps it out of the edge Worker bundle.
+    const { exportInvoiceToPDF } = await import('@/lib/invoicePdf')
+    await exportInvoiceToPDF(invoice)
   }
 
   return (

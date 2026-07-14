@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Invoice } from '@/types/invoice'
 import InvoiceTable from '@/components/internal/invoices/InvoiceTable'
-import { exportInvoiceToPDF } from '@/lib/invoicePdf'
 
 interface Props {
   userId: string
@@ -40,8 +39,10 @@ export default function InvoiceListClient({ userId: _userId }: Props) {
     setInvoices((prev) => prev.filter((inv) => inv.id !== id))
   }
 
-  const handleExportPdf = (invoice: Invoice) => {
-    exportInvoiceToPDF(invoice)
+  const handleExportPdf = async (invoice: Invoice) => {
+    // Lazy-load pdfmake client-side only — keeps it out of the edge Worker bundle.
+    const { exportInvoiceToPDF } = await import('@/lib/invoicePdf')
+    await exportInvoiceToPDF(invoice)
   }
 
   return (

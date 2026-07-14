@@ -19,6 +19,18 @@ const auditRedirects: Redirect[] = [
 ];
 
 const nextConfig: NextConfig = {
+  // Barrel-file tree-shaking for heavy libraries — keeps only the icons/charts
+  // actually used out of the server bundle (Cloudflare Worker 10 MiB limit).
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "react-icons",
+      "recharts",
+      "@sanity/ui",
+      "@sanity/icons",
+      "date-fns",
+    ],
+  },
   async redirects() {
     return [...wixRedirects, ...auditRedirects];
   },
