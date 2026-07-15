@@ -11,6 +11,7 @@
  * (see commit 3b650e8) — all ported copy uses the corrected name.
  */
 import type { Metadata } from 'next'
+import { buildOgMetadata } from '@/lib/metadata'
 
 export interface PracticeLink {
   label: string
@@ -85,5 +86,10 @@ export function practiceMetadata(page: PracticePage): Metadata {
     title: page.seoTitle,
     description: page.seoDescription,
     alternates: { canonical: page.path },
+    ...buildOgMetadata({
+      title: page.seoTitle,
+      description: page.seoDescription,
+      path: page.path,
+    }),
   }
 }

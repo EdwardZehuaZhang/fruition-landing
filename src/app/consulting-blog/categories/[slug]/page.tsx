@@ -1,9 +1,20 @@
 ﻿import type { Metadata } from "next"
 import { getBlogPosts, getBlogCategories } from "@/sanity/queries"
 import BlogCard from "@/components/BlogCard"
+import { buildOgMetadata } from "@/lib/metadata"
 
-export const metadata: Metadata = {
-  robots: { index: false, follow: true },
+export async function generateMetadata(): Promise<Metadata> {
+  const firstPost = (await getBlogPosts(1, 0))[0]
+  const ogImageSource = firstPost?.coverImage
+  return buildOgMetadata({
+    title: "Category",
+    description: "Fruition consulting blog category page.",
+    path: "/consulting-blog/categories",
+    ogImageSource: ogImageSource,
+    extra: {
+      robots: { index: false, follow: true },
+    },
+  })
 }
 
 interface BlogCategoryRef { slug: string }

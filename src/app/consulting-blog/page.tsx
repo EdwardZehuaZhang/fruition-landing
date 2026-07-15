@@ -1,4 +1,5 @@
 import { getBlogPosts, getBlogCategories, getPageBySlug } from "@/sanity/queries"
+import { buildOgMetadata } from "@/lib/metadata"
 import BlogFilterableList from "@/components/BlogFilterableList"
 
 interface BlogCategory {
@@ -10,11 +11,13 @@ const INITIAL_PAGE_SIZE = 12
 
 export async function generateMetadata() {
   const page = await getPageBySlug("consulting-blog")
-  return {
-    alternates: { canonical: "/consulting-blog" },
-    title: page?.seoTitle,
-    description: page?.seoDescription,
-  }
+  const title = page?.seoTitle ?? "Consulting Blog — Fruition"
+  const description = page?.seoDescription ?? "Expert insights on monday.com, AI consulting, Atlassian, HubSpot, and workflow automation."
+  return buildOgMetadata({
+    title,
+    description,
+    path: "/consulting-blog",
+  })
 }
 
 export default async function BlogPage() {

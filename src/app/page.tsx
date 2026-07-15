@@ -1,14 +1,17 @@
 import type { Metadata } from 'next'
 import BlockRenderer from '@/features/page-builder/BlockRenderer'
 import { getHomePage, getSiteSettings } from '@/features/content/loaders'
+import { buildOgMetadata } from '@/lib/metadata'
 
 export async function generateMetadata(): Promise<Metadata> {
   const homePage = await getHomePage()
-  return {
-    alternates: { canonical: '/' },
-    title: homePage?.seoTitle,
-    description: homePage?.seoDescription,
-  }
+  const title = homePage?.seoTitle ?? "Fruition | monday.com Platinum Partners | monday CRM Experts"
+  const description = homePage?.seoDescription ?? "monday.com Partner certified — Fruition is an expert in Monday implementation and integration."
+  return buildOgMetadata({
+    title,
+    description,
+    path: "/",
+  })
 }
 
 export default async function Home() {

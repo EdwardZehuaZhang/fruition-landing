@@ -10,6 +10,7 @@ import SiteFrame from "@/components/SiteFrame"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { getSiteSettings } from "@/sanity/queries"
 import { urlFor } from "@/sanity/image"
+import { defaultOgImage } from "@/lib/metadata"
 
 
 
@@ -50,7 +51,7 @@ export const viewport: Viewport = {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const s = await getSiteSettings()
+  const [s, ogImage] = await Promise.all([getSiteSettings(), defaultOgImage()])
   const ogTitle =
     "Fruition | monday.com Platinum Partners | monday CRM Experts"
   const ogDescription =
@@ -67,11 +68,13 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: "en_US",
       title: ogTitle,
       description: ogDescription,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: ogTitle }],
     },
     twitter: {
       card: "summary_large_image",
       title: ogTitle,
       description: ogDescription,
+      images: [ogImage],
     },
     robots: {
       index: true,
