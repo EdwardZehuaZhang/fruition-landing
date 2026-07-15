@@ -53,7 +53,14 @@ export default function StickyCtaBar({
           Ready to scale your workflows?
         </span>
         <div className="flex items-center gap-2">
-          <CtaButton href={href} label={label} variant="onDarkPrimary" style={{ height: 40, fontSize: 13, padding: "0 18px" }} />
+          <CtaButton
+            href={href}
+            label={label}
+            variant="onDarkPrimary"
+            // No fixed height — let .cta-btn CSS handle sizing per breakpoint
+            // so the full label text stays visible on mobile.
+            style={{ fontSize: 13, padding: "0 18px" }}
+          />
           <button
             type="button"
             aria-label="Dismiss"
