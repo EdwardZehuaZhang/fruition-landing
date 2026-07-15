@@ -426,7 +426,7 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
 
   return (
     <div>
-      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar mobileLabel="Book a call" label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* 1. Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow || "monday.com Expert Consultants"}

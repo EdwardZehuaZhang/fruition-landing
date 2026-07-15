@@ -23,7 +23,7 @@ export default async function SolutionsPage() {
 
   return (
     <div>
-      <StickyCtaBar label={page?.croSections?.stickyCtaLabel} href={page?.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar mobileLabel="Book a call" label={page?.croSections?.stickyCtaLabel} href={page?.croSections?.stickyCtaUrl || calendlyUrl} />
       <HeroSection
         heading={page.heroHeading || ""}
         subheading={page.heroSubheading}

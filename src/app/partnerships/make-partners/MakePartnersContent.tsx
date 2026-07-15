@@ -484,7 +484,7 @@ export default function MakePartnersContent({
 
   return (
     <div>
-      <StickyCtaBar label={pageData?.croSections?.stickyCtaLabel} href={pageData?.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar mobileLabel="Book a call" label={pageData?.croSections?.stickyCtaLabel} href={pageData?.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* 1. Hero */}
       <section className="bg-surface">
         <div className="mx-auto flex flex-col items-center px-6 md:px-16 lg:px-[273px] py-[80px]">

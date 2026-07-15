@@ -172,7 +172,7 @@ export default function MondayPartnerUsContent({
 
   return (
     <div>
-      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar mobileLabel="Book a call" label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow}

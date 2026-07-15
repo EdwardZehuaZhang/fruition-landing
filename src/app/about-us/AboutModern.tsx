@@ -1380,7 +1380,7 @@ export default function AboutModern(props: AboutModernProps) {
 
   return (
     <div>
-      <StickyCtaBar label={croSections?.stickyCtaLabel} href={croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar mobileLabel="Book a call" label={croSections?.stickyCtaLabel} href={croSections?.stickyCtaUrl || calendlyUrl} />
       <HeroSection
         eyebrow={heroEyebrow}
         headingPart1={heroHeadingPart1}

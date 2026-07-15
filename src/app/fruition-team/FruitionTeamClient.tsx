@@ -111,7 +111,7 @@ export default function FruitionTeamClient({
 
   return (
     <div>
-      <StickyCtaBar label={croSections?.stickyCtaLabel} href={croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar mobileLabel="Book a call" label={croSections?.stickyCtaLabel} href={croSections?.stickyCtaUrl || calendlyUrl} />
       {/* Hero */}
       <section className="bg-surface">
         <div

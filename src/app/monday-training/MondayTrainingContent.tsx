@@ -294,7 +294,7 @@ export default function MondayTrainingContent({
 
   return (
     <div>
-      <StickyCtaBar label={data?.croSections?.stickyCtaLabel} href={data?.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar mobileLabel="Book a call" label={data?.croSections?.stickyCtaLabel} href={data?.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* ============================================================ */}
       {/* SECTION 1 -- Hero                                            */}
       {/* ============================================================ */}
