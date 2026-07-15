@@ -330,39 +330,41 @@ function extractContext(snapshot: MondayItemSnapshot | null): {
 }
 
 /**
- * Dispatch for STAGE_DRAFT_READY. Branches based on whether the item came
- * from Slack (slack-blog route stamped COL_SLACK_ORIGIN at creation) or
- * from the regular monday Stage flow.
+ * Dispatch for STAGE_DRAFT_READY. Runs the auto-docs flow for EVERY draft-ready
+ * item (LinkedIn + 2 Google Docs + write back monday columns), regardless of
+ * origin. If the item carries COL_SLACK_ORIGIN (stamped by the slack-blog route
+ * at creation) the ready notification is a thread reply on the original Slack
+ * message; otherwise it's a fresh Block Kit post to #fruition-blogs. On failure
+ * we post an error notification the same way and acknowledge the webhook (200)
+ * so monday doesn't retry-storm.
  *
- * - Slack-origin: run the auto-docs flow (LinkedIn + 2 Google Docs + Slack
- *   thread reply + write back monday columns). Falls back to a Slack thread
- *   error reply if the auto-docs work throws.
- * - Otherwise: existing pingHumanInLoop behavior (Block Kit notification to
- *   #fruition-blogs).
+ * CHANGED 2026-07-16: Google Docs are now created for ALL draft-ready items,
+ * not just Slack-originated ones. Non-slack items post to #fruition-blogs as
+ * top-level messages instead of thread replies.
  */
 async function handleDraftReady(pulseId: string): Promise<NextResponse> {
   const snapshot = await getItemForWebhook(pulseId)
   const slackOriginRaw = snapshot
     ? colText(snapshot.columns[COL_SLACK_ORIGIN])
     : undefined
-  const slackOrigin = parseSlackOrigin(slackOriginRaw)
-
-  if (!slackOrigin) {
-    return pingHumanInLoop(pulseId, "draft-ready")
-  }
+  const slackOrigin = parseSlackOrigin(slackOriginRaw) ?? undefined
 
   try {
-    return await autoDocsForSlackOrigin(pulseId, snapshot, slackOrigin)
+    return await autoDocsForDraft(pulseId, snapshot, slackOrigin)
   } catch (err) {
     const detail = errMsg(err)
     console.error("[monday-blog] auto-docs failed", detail)
-    // Best-effort thread reply so the requester isn't left hanging.
-    await postThreadReply(
-      slackOrigin,
-      `:warning: Draft is ready for *${snapshot?.name?.trim() || "(untitled)"}*, but the auto-docs step failed: \`${detail.slice(0, 200)}\`. Review the item in monday and ping Edward if it keeps happening.`,
-    ).catch((postErr) => {
-      console.error("[monday-blog] thread error-reply also failed", errMsg(postErr))
-    })
+    // Best-effort error notification so the requester isn't left hanging.
+    const errorMsg = `:warning: Draft is ready for *${snapshot?.name?.trim() || "(untitled)"}*, but the auto-docs step failed: \`${detail.slice(0, 200)}\`. Review the item in monday and ping Edward if it keeps happening.`
+    if (slackOrigin) {
+      await postThreadReply(slackOrigin, errorMsg).catch((postErr) => {
+        console.error("[monday-blog] thread error-reply also failed", errMsg(postErr))
+      })
+    } else {
+      await notifySlack({ text: errorMsg }).catch((notifyErr) => {
+        console.error("[monday-blog] slack notify error-reply also failed", errMsg(notifyErr))
+      })
+    }
     // Return 200, NOT 500: monday retries failed webhook deliveries every ~minute,
     // which turned a single auto-docs failure into a retry storm (each retry
     // re-runs the whole flow). We've already logged + posted a Slack alert, so
@@ -483,10 +485,10 @@ function boldPrimaryKeyword(article: string, keyword: string | undefined): strin
   return lines.join("\n")
 }
 
-async function autoDocsForSlackOrigin(
+async function autoDocsForDraft(
   pulseId: string,
   snapshot: MondayItemSnapshot | null,
-  origin: SlackOrigin,
+  origin?: SlackOrigin,
 ): Promise<NextResponse> {
   const folderId = process.env.MARKETA_DRAFTS_FOLDER_ID
   if (!folderId) {
@@ -591,11 +593,15 @@ async function autoDocsForSlackOrigin(
     blogDocUrl: blogDoc.docUrl,
     linkedInDocUrl: linkedInDoc.docUrl,
   })
-  await postSlackMessage(origin.channel, built.blocks, built.fallbackText, {
-    threadTs: origin.ts,
-    unfurlLinks: false,
-    unfurlMedia: false,
-  })
+  if (origin) {
+    await postSlackMessage(origin.channel, built.blocks, built.fallbackText, {
+      threadTs: origin.ts,
+      unfurlLinks: false,
+      unfurlMedia: false,
+    })
+  } else {
+    await notifySlack({ text: built.fallbackText, blocks: built.blocks })
+  }
 
   return NextResponse.json({
     ok: true,

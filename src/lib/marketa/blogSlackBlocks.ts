@@ -9,7 +9,7 @@ function mondayItemUrl(pulseId: string): string {
 
 function portalEditUrl(pulseId: string): string {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.fruitionservices.io"
-  return `${base.replace(/\/+$/, "")}/internal/blog/${pulseId}/edit`
+  return `${base.replace(/\/+$/, "")}/internal/blog/monday/${pulseId}/edit`
 }
 
 // Every actions row leads with this portal link; the external buttons
