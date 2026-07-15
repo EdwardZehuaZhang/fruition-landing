@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { getPortalApiUser, bylineFor } from "@/lib/portalAuth"
-import { upsertBlogPost, uploadImageAsset } from "@/lib/sanityWriteClient"
+import { upsertBlogPost, uploadImageAsset, deleteDocument } from "@/lib/sanityWriteClient"
 
 export const runtime = "nodejs"
 export const maxDuration = 60
@@ -128,6 +128,28 @@ export async function POST(req: Request) {
   } catch (err) {
     return NextResponse.json(
       { error: `Publish failed: ${err instanceof Error ? err.message : String(err)}` },
+      { status: 502 },
+    )
+  }
+}
+
+/**
+ * Delete (unpublish) a blog post from Sanity by document id. Removes the post
+ * from the live site — the portal shows a confirm dialog before calling this.
+ */
+export async function DELETE(req: Request) {
+  const user = await getPortalApiUser()
+  if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 })
+
+  const docId = new URL(req.url).searchParams.get("docId")
+  if (!docId) return NextResponse.json({ error: "Missing docId." }, { status: 400 })
+
+  try {
+    await deleteDocument(docId)
+    return NextResponse.json({ ok: true })
+  } catch (err) {
+    return NextResponse.json(
+      { error: `Delete failed: ${err instanceof Error ? err.message : String(err)}` },
       { status: 502 },
     )
   }

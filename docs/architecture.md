@@ -91,6 +91,29 @@ Markdown editor ─▶ bodyToPortableText() ─▶ upsertBlogPost() ─▶ Sanit
 onboarding flow (`src/app/api/internal/onboarding/route.ts`) already creates `teamMember` docs +
 uploads photos, so it doubles as author-profile management.
 
+### Portal UI rule: shadcn/ui ONLY — never hand-rolled components
+
+**Every interactive element in `/internal` MUST be a shadcn/ui component from
+`src/components/ui/` (style `base-nova`, built on `@base-ui/react`). Never hand-roll a
+`<select>`, `<table>`, dropdown, dialog, checkbox, or styled `<button>`/`<input>` with bespoke
+Tailwind classes.** Hand-rolled controls have repeatedly shipped broken (the raw `<select>` on
+`/internal/team` being the canonical example) because they miss the theming, focus/keyboard
+handling, and portal/z-index behaviour the shadcn components already solve.
+
+Concretely:
+
+- **Lists of records** → `DataTable` (`src/components/internal/DataTable.tsx`): a shared
+  shadcn table with search, dropdown facet filters, sortable columns and pagination. All
+  `/internal` list views (blog posts, team, invoices) use it or the `ui/table` primitives.
+- **Dropdowns** → `ui/select` (single choice) or `ui/dropdown-menu` (actions).
+- **Confirmations** → `ui/alert-dialog`. Modals → `ui/dialog`.
+- **Forms** → `ui/input`, `ui/textarea`, `ui/label`, `ui/checkbox`, `ui/button`.
+- A missing component gets added via `npx shadcn@latest add <name>` (never written from
+  scratch). NOTE: the CLI may try to overwrite existing `ui/` files — review the diff and keep
+  local customisations (e.g. `button.tsx`'s `render`/`nativeButton` handling).
+- `Button` supports `render={<Link href=… />}` for link-styled buttons — use that instead of a
+  styled `<a>`/`<Link>`.
+
 ---
 
 ## 4. Authentication

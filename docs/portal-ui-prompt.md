@@ -1,5 +1,14 @@
 # Claude-Design prompt — Internal CMS Portal UI
 
+> ## ⚠️ Component rule (applies to ALL `/internal` work, including this prompt's output)
+> The portal uses **shadcn/ui only** (style `base-nova` on `@base-ui/react`, components in
+> `src/components/ui/`). **Never build customised one-off components** — no hand-rolled
+> `<select>`s, tables, dropdowns, dialogs, or bespoke-Tailwind buttons/inputs. Use the shared
+> `DataTable` (`src/components/internal/DataTable.tsx`) for every list of records, `ui/select`
+> for dropdowns, `ui/alert-dialog` for confirmations. Missing components are added with
+> `npx shadcn@latest add <name>`, not written by hand. See `architecture.md` §3
+> "Portal UI rule" for the full rationale (hand-rolled controls have shipped broken before).
+
 Paste the prompt below into **Claude Design** (or Claude with the design skill) to generate the internal
 portal's UI. It bakes in the brand tokens harvested from the existing `/internal` pages so the output
 matches the live site. After generation, the screens get wired to the backend described in

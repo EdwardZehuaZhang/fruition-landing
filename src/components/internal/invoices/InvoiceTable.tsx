@@ -13,6 +13,14 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 
 interface Props {
   invoices: Invoice[]
@@ -63,42 +71,40 @@ export default function InvoiceTable({ invoices, loading, onDelete, onExportPdf 
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="overflow-x-auto rounded-xl border">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b bg-muted/50">
-              <th className="px-4 py-3 text-left font-medium">Invoice No.</th>
-              <th className="px-4 py-3 text-left font-medium">Date</th>
-              <th className="px-4 py-3 text-left font-medium">Consultant</th>
-              <th className="px-4 py-3 text-left font-medium">Region</th>
-              <th className="px-4 py-3 text-left font-medium">Billing Period</th>
-              <th className="px-4 py-3 text-right font-medium">Total</th>
-              <th className="px-4 py-3 text-center font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
+      <div className="overflow-x-auto rounded-lg border border-[var(--color-border)]">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Invoice No.</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Consultant</TableHead>
+              <TableHead>Region</TableHead>
+              <TableHead>Billing Period</TableHead>
+              <TableHead className="text-right">Total</TableHead>
+              <TableHead className="text-center">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {invoices.map((invoice) => {
               const total = invoice.line_items.reduce((sum, item) => sum + item.total, 0)
               return (
-                <tr
-                  key={invoice.id}
-                  className="border-b transition-colors hover:bg-muted/30"
-                >
-                  <td className="px-4 py-3 font-medium">{invoice.invoice_no}</td>
-                  <td className="px-4 py-3">{invoice.invoice_date}</td>
-                  <td className="px-4 py-3">{invoice.consultant_name}</td>
-                  <td className="px-4 py-3">
+                <TableRow key={invoice.id}>
+                  <TableCell className="font-medium">{invoice.invoice_no}</TableCell>
+                  <TableCell>{invoice.invoice_date}</TableCell>
+                  <TableCell>{invoice.consultant_name}</TableCell>
+                  <TableCell>
                     <Badge variant="outline">{invoice.region}</Badge>
-                  </td>
-                  <td className="px-4 py-3">{invoice.billing_period}</td>
-                  <td className="px-4 py-3 text-right font-medium">
+                  </TableCell>
+                  <TableCell>{invoice.billing_period}</TableCell>
+                  <TableCell className="text-right font-medium">
                     {invoice.currency || 'USD'} {total.toFixed(2)}
-                  </td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell>
                     <div className="flex items-center justify-center gap-1">
                       <Button
                         size="icon"
                         variant="ghost"
+                        aria-label="View invoice"
                         onClick={() => handleView(invoice)}
                       >
                         <Eye className="size-4" />
@@ -106,6 +112,7 @@ export default function InvoiceTable({ invoices, loading, onDelete, onExportPdf 
                       <Button
                         size="icon"
                         variant="ghost"
+                        aria-label="Export PDF"
                         onClick={() => onExportPdf(invoice)}
                       >
                         <Download className="size-4" />
@@ -113,17 +120,18 @@ export default function InvoiceTable({ invoices, loading, onDelete, onExportPdf 
                       <Button
                         size="icon"
                         variant="ghost"
+                        aria-label="Delete invoice"
                         onClick={() => handleDelete(invoice.id!)}
                       >
                         <Trash2 className="size-4 text-destructive" />
                       </Button>
                     </div>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               )
             })}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
       <Dialog open={viewOpen} onOpenChange={setViewOpen}>

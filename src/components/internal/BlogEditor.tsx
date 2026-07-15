@@ -10,6 +10,8 @@ export interface CategoryOption {
 
 export interface BlogEditorInitial {
   draftId?: string
+  /** Sanity doc id — editing a published post updates it in place on publish. */
+  docId?: string
   title?: string
   slug?: string
   excerpt?: string
@@ -138,6 +140,7 @@ export default function BlogEditor({
     fd.set("seoTitle", seoTitle.trim())
     fd.set("seoDescription", seoDescription.trim())
     if (publishedAt) fd.set("publishedAt", new Date(publishedAt).toISOString())
+    if (initial?.docId) fd.set("docId", initial.docId)
     categoryIds.forEach((id) => fd.append("categoryIds", id))
     if (cover) fd.set("coverImage", cover)
 

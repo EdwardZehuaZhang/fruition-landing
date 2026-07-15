@@ -94,6 +94,27 @@ export async function upsertTeamMember(input: CreateTeamMemberInput): Promise<{ 
   return { id: input.docId }
 }
 
+/**
+ * Partial update of an existing document — only the given fields change
+ * (unlike createOrReplace, which drops everything not re-sent, e.g. a team
+ * member's photo). `unsetFields` removes fields entirely.
+ */
+export async function patchDocument(
+  docId: string,
+  set: Record<string, unknown>,
+  unsetFields: string[] = [],
+): Promise<void> {
+  const patch: Record<string, unknown> = { id: docId }
+  if (Object.keys(set).length > 0) patch.set = set
+  if (unsetFields.length > 0) patch.unset = unsetFields
+  await mutate([{ patch }])
+}
+
+/** Delete a document by id (e.g. unpublish a blog post, remove a team member). */
+export async function deleteDocument(docId: string): Promise<void> {
+  await mutate([{ delete: { id: docId } }])
+}
+
 export interface UpsertBlogPostInput {
   /** Stable doc id, e.g. `blog-monday-<pulseId>`. Allows re-publish to update in place. */
   docId: string
@@ -165,7 +186,27 @@ interface TableBlock {
   rows: TableRow[]
 }
 
-type BodyBlock = PortableTextBlock | VideoEmbedBlock | TableBlock
+interface ImageBlock {
+  _type: "image"
+  _key: string
+  asset: { _type: "reference"; _ref: string }
+  alt?: string
+}
+
+type BodyBlock = PortableTextBlock | VideoEmbedBlock | TableBlock | ImageBlock
+
+/**
+ * If a line is a lone markdown image pointing at the Sanity CDN, return the
+ * asset reference (`image-<hash>-<WxH>-<fmt>`) + alt. Round-trips body images
+ * on posts loaded back into the editor via portableTextToMarkdown.
+ */
+function loneSanityImage(line: string): { ref: string; alt: string } | null {
+  const m = /^!\[([^\]]*)\]\(https:\/\/cdn\.sanity\.io\/images\/[^/)]+\/[^/)]+\/([A-Za-z0-9]+)-(\d+x\d+)\.([a-z0-9]+)\)$/.exec(
+    line,
+  )
+  if (!m) return null
+  return { ref: `image-${m[2]}-${m[3]}-${m[4]}`, alt: m[1] }
+}
 
 /**
  * If a line is nothing but a YouTube / Vimeo / Twitch / Loom URL, return that
@@ -289,8 +330,10 @@ function makeBlock(
  *   - Blank-line-separated paragraphs (soft-wrapped lines are joined)
  *   - GFM pipe tables (header row + `---` separator) → a `table` block
  *
- * Nested lists and images-in-body are out of scope (cover image is handled
- * separately); raw HTML passes through as plain text.
+ * Nested lists are out of scope; raw HTML passes through as plain text. Body
+ * images round-trip only as lone `![alt](sanity-cdn-url)` lines (see
+ * loneSanityImage) — the editor has no image upload for the body, the cover
+ * image is handled separately.
  */
 export function bodyToPortableText(body: string): BodyBlock[] {
   const blocks: BodyBlock[] = []
@@ -338,6 +381,17 @@ export function bodyToPortableText(body: string): BodyBlock[] {
     if (videoUrl) {
       flushParagraph()
       blocks.push({ _type: "videoEmbed", _key: nextKey(), url: videoUrl })
+      continue
+    }
+    const image = loneSanityImage(line)
+    if (image) {
+      flushParagraph()
+      blocks.push({
+        _type: "image",
+        _key: nextKey(),
+        asset: { _type: "reference", _ref: image.ref },
+        ...(image.alt ? { alt: image.alt } : {}),
+      })
       continue
     }
     const heading = /^(#{1,4})\s+(.*)$/.exec(line)
@@ -401,11 +455,57 @@ function buildBlogPostDoc(input: UpsertBlogPostInput): Record<string, unknown> {
   return doc
 }
 
+async function documentExists(docId: string): Promise<boolean> {
+  const url = `${base()}/data/query/${DATASET}?query=${encodeURIComponent(
+    "*[_id == $id][0]._id",
+  )}&%24id=${encodeURIComponent(JSON.stringify(docId))}`
+  const r = await fetch(url, { headers: { Authorization: `Bearer ${getToken()}` } })
+  if (!r.ok) throw new Error(`sanity query ${r.status} ${await r.text()}`)
+  const j = (await r.json()) as { result?: string | null }
+  return Boolean(j.result)
+}
+
 export async function upsertBlogPost(
   input: UpsertBlogPostInput,
 ): Promise<{ id: string; slug: string }> {
+  const slug = input.slug || slugify(input.title)
+
+  // Republishing an existing post must PATCH, not replace: createOrReplace
+  // would drop every field the editor doesn't resend — the cover image (when
+  // no new file was uploaded), legacy fields like videoUrls/mainImage, etc.
+  if (await documentExists(input.docId)) {
+    const set: Record<string, unknown> = {
+      title: input.title,
+      slug: { _type: "slug", current: slug },
+      body: bodyToPortableText(input.body),
+      author: input.author ?? "Fruition Editorial",
+    }
+    // Optional fields only overwrite when the editor sent a value; an edit
+    // without an explicit publish date keeps the original one.
+    if (input.publishedAt) set.publishedAt = input.publishedAt
+    if (input.excerpt) set.excerpt = input.excerpt
+    if (input.industry) set.industry = input.industry
+    if (input.seoTitle) set.seoTitle = input.seoTitle
+    if (input.seoDescription) set.seoDescription = input.seoDescription
+    if (input.mondayItemId) set.mondayItemId = input.mondayItemId
+    if (input.categoryIds && input.categoryIds.length > 0) {
+      set.categories = input.categoryIds.map((id) => ({
+        _type: "reference",
+        _key: nextKey(),
+        _ref: id,
+      }))
+    }
+    if (input.coverImageAssetId) {
+      set.coverImage = {
+        _type: "image",
+        asset: { _type: "reference", _ref: input.coverImageAssetId },
+      }
+    }
+    await patchDocument(input.docId, set)
+    return { id: input.docId, slug }
+  }
+
   const doc = buildBlogPostDoc(input)
   await mutate([{ createOrReplace: doc }])
-  const slug = (doc.slug as { current: string }).current
   return { id: input.docId, slug }
 }

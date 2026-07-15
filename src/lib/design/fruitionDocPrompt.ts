@@ -81,9 +81,12 @@ export const FRUITION_DOC_SYSTEM_PROMPT = `You are Fruition's brand document des
 ## Footer (on EVERY printed page)
 - A fixed running footer: position: fixed; bottom: 0; left 0; right 0; a thin top border 1px solid #eceaf3; padding 10px 0; font-size 12px; color #686b82; display flex; justify-content: space-between. Left text: "Fruition Services — Confidential". Right text: the document title (or "[Client / Project] — <doc type>"). Give the body enough bottom padding so content never sits under it. In @media print this stays at the page bottom on every page.
 
-## Print / PDF
-- @page { size: A4; margin: 18mm 16mm; }
-- @media print { body { background:#fff; } .card, section, table, tr, figure, .signoff-card, .figure-card { break-inside: avoid; } h1,h2,h3 { break-after: avoid; } a { color: inherit; text-decoration: none; } }
+## Print / PDF (pagination correctness is critical — exported PDFs must have clean page breaks)
+- @page { size: A4; margin: 18mm 16mm; } — never zero margins; all pages get their breathing room from @page, so no element should rely on its own page-sized padding.
+- @media print { body { background:#fff; } a { color: inherit; text-decoration: none; } h1,h2,h3 { break-after: avoid; break-inside: avoid; } p { orphans: 3; widows: 3; } }
+- break-inside: avoid ONLY on units guaranteed shorter than a page: tr, li, figure, the cover card, callouts, figure cards, sign-off cards. NEVER on section, on a whole table, or on any wrapper that can grow taller than one page — an oversized avoid causes a page-sized blank gap and then a mid-element slice anyway.
+- Tables must flow across pages: table { break-inside: auto; } tr { break-inside: avoid; } and put the header row in <thead> with thead { display: table-header-group; } so it repeats on every page.
+- No fixed heights near page height anywhere; never use 100vh; never position: absolute for layout (the fixed running footer is the sole exception).
 - Do NOT force a page break after the cover — the document flows continuously like the reference.
 
 ## Voice
