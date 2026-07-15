@@ -232,7 +232,7 @@ const blogPortableTextComponents: PortableTextComponents = {
   types: {
     image: ({ value }) => {
       if (!value?.asset?._ref) return null
-      const src = urlFor(value).width(1480).url()
+      const src = urlFor(value).auto("format").quality(90).url()
       return (
         <figure className="w-full flex flex-col items-start pt-[27.5px] isolate">
           <div className="relative w-full overflow-hidden">
@@ -241,6 +241,7 @@ const blogPortableTextComponents: PortableTextComponents = {
               alt={value.alt || ""}
               width={740}
               height={416}
+              quality={90}
               className="w-full h-auto"
               sizes="(max-width: 924px) 100vw, 740px"
             />
@@ -425,7 +426,7 @@ function CoverFigure({
   alt: string
 }) {
   if (!image?.asset?._ref) return null
-  const src = urlFor(image).width(1480).url()
+  const src = urlFor(image).auto("format").quality(90).url()
   return (
     <figure className="w-full flex flex-col items-start pt-[27.5px] isolate">
       <div className="relative w-full overflow-hidden">
@@ -435,6 +436,7 @@ function CoverFigure({
           width={740}
           height={416}
           priority
+          quality={90}
           className="w-full h-auto"
           sizes="(max-width: 924px) 100vw, 740px"
         />
