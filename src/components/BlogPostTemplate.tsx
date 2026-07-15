@@ -232,17 +232,17 @@ const blogPortableTextComponents: PortableTextComponents = {
   types: {
     image: ({ value }) => {
       if (!value?.asset?._ref) return null
-      const src = urlFor(value).width(1480).url()
+      const src = urlFor(value).width(1848).auto("format").url()
       return (
         <figure className="w-full flex flex-col items-start pt-[27.5px] isolate">
           <div className="relative w-full overflow-hidden">
             <Image
               src={src}
               alt={value.alt || ""}
-              width={740}
-              height={416}
+              width={924}
+              height={520}
               className="w-full h-auto"
-              sizes="(max-width: 924px) 100vw, 740px"
+              sizes="(max-width: 924px) 100vw, 924px"
             />
           </div>
           {value.caption && (
@@ -425,18 +425,18 @@ function CoverFigure({
   alt: string
 }) {
   if (!image?.asset?._ref) return null
-  const src = urlFor(image).width(1480).url()
+  const src = urlFor(image).width(1848).auto("format").url()
   return (
     <figure className="w-full flex flex-col items-start pt-[27.5px] isolate">
       <div className="relative w-full overflow-hidden">
         <Image
           src={src}
           alt={alt}
-          width={740}
-          height={416}
+          width={924}
+          height={520}
           priority
           className="w-full h-auto"
-          sizes="(max-width: 924px) 100vw, 740px"
+          sizes="(max-width: 924px) 100vw, 924px"
         />
       </div>
     </figure>
