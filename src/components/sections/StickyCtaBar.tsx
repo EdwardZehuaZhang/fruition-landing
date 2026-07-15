@@ -8,8 +8,6 @@ interface StickyCtaBarProps {
   /** Shorter CTA label shown on mobile (below md). Falls back to `label`. */
   mobileLabel?: string
   href?: string
-  /** Shorter label for mobile screens. Falls back to `label` when omitted. */
-  mobileLabel?: string
   /** px scrolled before the bar appears */
   showAfter?: number
 }
@@ -23,7 +21,6 @@ export default function StickyCtaBar({
   mobileLabel,
   href,
   showAfter = 600,
-  mobileLabel,
 }: StickyCtaBarProps) {
   const [visible, setVisible] = useState(false)
   const [dismissed, setDismissed] = useState(false)
@@ -59,7 +56,7 @@ export default function StickyCtaBar({
           Ready to scale your workflows?
         </span>
         <div className="flex items-center justify-between gap-2 md:justify-end">
-          {/* Mobile: short label; hidden on desktop */}
+          {/* Mobile: short label (or full label if no mobileLabel); hidden on md+ */}
           <CtaButton
             href={href}
             label={mobileLabel ?? label}
@@ -67,11 +64,10 @@ export default function StickyCtaBar({
             className="md:hidden"
             style={{ fontSize: 13, padding: "0 16px" }}
           />
-          {/* Desktop: full label; hidden on mobile */}
+          {/* Desktop: full label; hidden below md */}
           <CtaButton
             href={href}
             label={label}
-            mobileLabel={mobileLabel}
             variant="onDarkPrimary"
             className="hidden md:inline-flex"
             style={{ fontSize: 13, padding: "0 18px" }}
