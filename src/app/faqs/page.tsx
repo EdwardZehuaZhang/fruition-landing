@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { getFaqItems, getPageBySlug, getSiteSettings } from "@/sanity/queries"
+import { generateFaqJsonLd } from "@/lib/faqSchema"
 import FaqList, { type FaqItem } from "./FaqList"
 
 export async function generateMetadata() {
@@ -19,6 +20,7 @@ export default async function FaqsPage() {
   ])
 
   const calendlyUrl = siteSettings?.calendlyLink || ""
+  const faqJsonLd = generateFaqJsonLd(faqs ?? [])
 
   return (
     <div className="bg-surface">
@@ -70,6 +72,11 @@ export default async function FaqsPage() {
           </div>
         </section>
       )}
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
     </div>
   )
 }

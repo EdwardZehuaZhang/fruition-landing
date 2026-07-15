@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { PortableText, type PortableTextBlock } from "@portabletext/react"
 import { portableTextComponents } from "@/components/PortableTextComponents"
+import { answerToPlainText } from "@/lib/faqSchema"
 
 export interface FaqItem {
   _id: string
@@ -159,17 +160,6 @@ function GroupIcon({ group, className }: { group: GroupKey; className?: string }
 
 function cleanQuestion(q: string): string {
   return q.replace(/^#+\s*/, "").trim()
-}
-
-function answerToPlainText(answer: PortableTextBlock[] | undefined): string {
-  if (!Array.isArray(answer)) return ""
-  return answer
-    .map((block) => {
-      if (block?._type !== "block" || !Array.isArray((block as { children?: unknown }).children)) return ""
-      const children = (block as { children: Array<{ text?: string }> }).children
-      return children.map((c) => c.text ?? "").join(" ")
-    })
-    .join(" ")
 }
 
 interface NormItem extends FaqItem {
