@@ -7,11 +7,16 @@ export async function generateMetadata(): Promise<Metadata> {
   const homePage = await getHomePage()
   const title = homePage?.seoTitle ?? "Fruition | monday.com Platinum Partners | monday CRM Experts"
   const description = homePage?.seoDescription ?? "monday.com Partner certified — Fruition is an expert in Monday implementation and integration."
-  return buildOgMetadata({
+  return {
+    alternates: { canonical: '/' },
     title,
     description,
-    path: "/",
-  })
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/",
+    }),
+  }
 }
 
 export default async function Home() {

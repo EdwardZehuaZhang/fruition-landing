@@ -1,15 +1,18 @@
-import type { Metadata } from "next"
 import Image from "next/image"
+import { buildOgMetadata } from "@/lib/metadata"
 
 const pdfUrl = "/fruition-service-agreement.pdf"
 
-export const metadata: Metadata = {
-  title: "Service Agreement AU | Fruition Services",
-  description:
-    "Fruition Services Australia service agreement for work order agreements, effective 30/06/2026.",
-  alternates: {
-    canonical: "/legal/services-agreement-au",
-  },
+export async function generateMetadata() {
+  const title = "Service Agreement AU | Fruition Services"
+  const description =
+    "Fruition Services Australia service agreement for work order agreements, effective 30/06/2026."
+  return {
+    title,
+    description,
+    alternates: { canonical: "/legal/services-agreement-au" },
+    ...buildOgMetadata({ title, description, path: "/legal/services-agreement-au" }),
+  }
 }
 
 export default function ServicesAgreementAuPage() {

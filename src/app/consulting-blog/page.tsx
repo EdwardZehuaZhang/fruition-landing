@@ -13,11 +13,16 @@ export async function generateMetadata() {
   const page = await getPageBySlug("consulting-blog")
   const title = page?.seoTitle ?? "Consulting Blog — Fruition"
   const description = page?.seoDescription ?? "Expert insights on monday.com, AI consulting, Atlassian, HubSpot, and workflow automation."
-  return buildOgMetadata({
+  return {
+    alternates: { canonical: "/consulting-blog" },
     title,
     description,
-    path: "/consulting-blog",
-  })
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/consulting-blog",
+    }),
+  }
 }
 
 export default async function BlogPage() {

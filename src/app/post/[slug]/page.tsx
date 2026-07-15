@@ -1,5 +1,5 @@
 import { getBlogPostBySlug, getBlogPosts, getRelatedBlogPosts } from "@/sanity/queries"
-import { buildOgMetadata } from "@/lib/metadata"
+import { buildOgMetadata, buildOgImage } from "@/lib/metadata"
 import BlogPostTemplate from "@/components/BlogPostTemplate"
 import { notFound } from "next/navigation"
 
@@ -30,16 +30,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!post) return {}
   const title = post.seoTitle || post.title || slug
   const description = post.seoDescription || post.excerpt || ""
-  return buildOgMetadata({
+  return {
+    alternates: { canonical: `/post/${slug}` },
     title,
     description,
-    path: "/post/" + slug,
-    ogImageSource: post.coverImage,
-    extra: {
-      openGraph: {
-        type: "article",
-        publishedTime: post.publishedAt,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: `/post/${slug}`,
+      ogImageSource: post.coverImage,
+      extra: {
+        openGraph: {
+          type: "article",
+          publishedTime: post.publishedAt,
+        },
       },
-    },
-  })
+    }),
+  }
 }

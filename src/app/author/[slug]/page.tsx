@@ -43,10 +43,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const member = await getTeamMemberByName(author.name)
   const description = member?.bio?.slice(0, 155) || "Articles written by " + author.name + " on the Fruition consulting blog."
   const ogImageSource = member?.photo ?? undefined
-  return buildOgMetadata({
-    title: author.name + " — Fruition Blog",
+  const title = author.name + " — Fruition Blog"
+  return {
+    alternates: { canonical: `/author/${slug}` },
+    title,
     description,
-    path: "/author/" + slug,
-    ogImageSource,
-  })
+    ...buildOgMetadata({
+      title,
+      description,
+      path: `/author/${slug}`,
+      ogImageSource,
+    }),
+  }
 }

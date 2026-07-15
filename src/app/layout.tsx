@@ -10,7 +10,7 @@ import SiteFrame from "@/components/SiteFrame"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { getSiteSettings } from "@/sanity/queries"
 import { urlFor } from "@/sanity/image"
-import { defaultOgImage } from "@/lib/metadata"
+import { buildOgMetadata, defaultOgImage } from "@/lib/metadata"
 
 
 
@@ -52,30 +52,18 @@ export const viewport: Viewport = {
 
 export async function generateMetadata(): Promise<Metadata> {
   const [s, ogImage] = await Promise.all([getSiteSettings(), defaultOgImage()])
-  const ogTitle =
-    "Fruition | monday.com Platinum Partners | monday CRM Experts"
-  const ogDescription =
-    "monday.com Partner certified - Fruition is an expert in Monday implementation and integration. Our monday.com consultants partners with you to integrate and automate Sales, Projects & Operations"
   return {
     metadataBase: new URL(
       process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.fruitionservices.io",
     ),
     title: s?.defaultSeoTitle,
     description: s?.defaultSeoDescription,
-    openGraph: {
-      type: "website",
-      siteName: "Fruition",
-      locale: "en_US",
-      title: ogTitle,
-      description: ogDescription,
-      images: [{ url: ogImage, width: 1200, height: 630, alt: ogTitle }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: ogTitle,
-      description: ogDescription,
-      images: [ogImage],
-    },
+    ...buildOgMetadata({
+      title: s?.defaultSeoTitle,
+      description: s?.defaultSeoDescription,
+      path: "/",
+      image: ogImage,
+    }),
     robots: {
       index: true,
       follow: true,
