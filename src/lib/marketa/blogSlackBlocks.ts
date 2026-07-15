@@ -7,6 +7,22 @@ function mondayItemUrl(pulseId: string): string {
   return `https://fruitionservices.monday.com/boards/${MONDAY_BOARD_ID}/pulses/${pulseId}`
 }
 
+function portalEditUrl(pulseId: string): string {
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.fruitionservices.io"
+  return `${base.replace(/\/+$/, "")}/internal/blog/${pulseId}/edit`
+}
+
+// Every actions row leads with this portal link; the external buttons
+// (Google Docs, LinkedIn, monday) follow it.
+function openInPortalButton(pulseId: string, label: string): Record<string, unknown> {
+  return {
+    type: "button",
+    style: "primary",
+    text: { type: "plain_text", text: label, emoji: true },
+    url: portalEditUrl(pulseId),
+  }
+}
+
 function clip(text: string, max: number): string {
   const t = text.trim().replace(/\s+/g, " ")
   if (t.length <= max) return t
@@ -44,7 +60,10 @@ export function buildIdeaProposedBlocks(args: CommonArgs): {
   if (meta) blocks.push({ type: "context", elements: [{ type: "mrkdwn", text: meta }] })
   blocks.push({
     type: "actions",
-    elements: [openInMondayButton(args.pulseId, "Review in monday", true)],
+    elements: [
+      openInPortalButton(args.pulseId, "Review in Portal"),
+      openInMondayButton(args.pulseId, "Review in monday", false),
+    ],
   })
   return { fallbackText: `:bulb: New blog idea: ${args.title}`, blocks }
 }
@@ -75,7 +94,10 @@ export function buildDraftReadyBlocks(
   }
   blocks.push({
     type: "actions",
-    elements: [openInMondayButton(args.pulseId, "Review draft", true)],
+    elements: [
+      openInPortalButton(args.pulseId, "Review in Portal"),
+      openInMondayButton(args.pulseId, "Open in monday", false),
+    ],
   })
   return { fallbackText: `:memo: Draft ready: ${args.title}`, blocks }
 }
@@ -85,7 +107,7 @@ export function buildDraftReadyBlocks(
  * items, posted by slack-blog right after the monday item is created. Same
  * shape as buildAutoDocsReadyBlocks so the two replies in the thread feel
  * like a matched pair: header → linked title → industry/keyword meta →
- * single "Open in monday" button.
+ * portal link + "Open in monday" buttons.
  */
 export function buildIdeaQueuedBlocks(args: {
   pulseId: string
@@ -109,7 +131,10 @@ export function buildIdeaQueuedBlocks(args: {
   if (meta) blocks.push({ type: "context", elements: [{ type: "mrkdwn", text: meta }] })
   blocks.push({
     type: "actions",
-    elements: [openInMondayButton(args.pulseId, "Open in monday :clipboard:", false)],
+    elements: [
+      openInPortalButton(args.pulseId, "Review in Portal"),
+      openInMondayButton(args.pulseId, "Open in monday :clipboard:", false),
+    ],
   })
   return { fallbackText: `:hourglass_flowing_sand: Queued: ${args.title}`, blocks }
 }
@@ -117,9 +142,9 @@ export function buildIdeaQueuedBlocks(args: {
 /**
  * Block Kit for the auto-docs thread reply on Slack-originated blog items.
  * Renders as: header, section with the title link, optional industry/keyword
- * meta line, action row with three URL buttons (blog doc, LinkedIn doc,
- * monday item). No word-count tags, no preview snippet — the docs themselves
- * are one click away.
+ * meta line, action row with four URL buttons (portal editor, blog doc,
+ * LinkedIn doc, monday item). No word-count tags, no preview snippet — the
+ * docs themselves are one click away.
  */
 export function buildAutoDocsReadyBlocks(args: {
   pulseId: string
@@ -146,9 +171,9 @@ export function buildAutoDocsReadyBlocks(args: {
   blocks.push({
     type: "actions",
     elements: [
+      openInPortalButton(args.pulseId, "Review in Portal"),
       {
         type: "button",
-        style: "primary",
         text: { type: "plain_text", text: "Open blog draft :pencil:", emoji: true },
         url: args.blogDocUrl,
       },
@@ -182,9 +207,9 @@ export function buildPublishedBlocks(
   blocks.push({
     type: "actions",
     elements: [
+      openInPortalButton(args.pulseId, "Review in Portal"),
       {
         type: "button",
-        style: "primary",
         text: { type: "plain_text", text: "Read post :rocket:", emoji: true },
         url: args.publishedUrl,
       },
