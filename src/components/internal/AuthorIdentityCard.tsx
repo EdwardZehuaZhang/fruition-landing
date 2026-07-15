@@ -2,14 +2,21 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { Loader2 } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export interface MemberOption {
   _id: string
   name: string
 }
-
-const inputClass =
-  "block w-full rounded-chip border border-[var(--color-border)] bg-surface px-4 py-3 text-sm text-ink-heading outline-none transition hover:border-[var(--purple-light)] focus:border-[var(--purple-primary)] focus:ring-2 focus:ring-[rgba(128,21,232,0.18)]"
 
 /**
  * Lets the signed-in user link their Google login to a team member ("this is
@@ -28,12 +35,12 @@ export default function AuthorIdentityCard({
   currentByline?: string | null
 }) {
   const router = useRouter()
-  const [selected, setSelected] = useState(currentMemberId ?? "")
+  const [selected, setSelected] = useState<string | null>(currentMemberId ?? null)
   const [saving, setSaving] = useState(false)
   const [status, setStatus] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const dirty = selected !== (currentMemberId ?? "")
+  const dirty = (selected ?? "") !== (currentMemberId ?? "")
 
   async function save() {
     setSaving(true)
@@ -79,28 +86,25 @@ export default function AuthorIdentityCard({
       </p>
 
       <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <select
-          value={selected}
-          onChange={(e) => setSelected(e.target.value)}
-          className={`${inputClass} sm:max-w-xs`}
-          aria-label="Team member"
-        >
-          <option value="">— not linked —</option>
-          {members.map((m) => (
-            <option key={m._id} value={m._id}>
-              {m.name}
-            </option>
-          ))}
-        </select>
-        <button
-          type="button"
-          onClick={save}
-          disabled={saving || !dirty}
-          className="rounded-pill px-5 py-2.5 text-sm font-semibold text-white transition disabled:opacity-50"
-          style={{ backgroundColor: "var(--purple-primary)" }}
-        >
+        <Select value={selected} onValueChange={(v) => setSelected(v)}>
+          <SelectTrigger className="w-full sm:max-w-xs" aria-label="Team member">
+            <SelectValue placeholder="— not linked —">
+              {selected ? members.find((m) => m._id === selected)?.name ?? selected : "— not linked —"}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={null}>— not linked —</SelectItem>
+            {members.map((m) => (
+              <SelectItem key={m._id} value={m._id}>
+                {m.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Button onClick={save} disabled={saving || !dirty}>
+          {saving && <Loader2 className="size-4 animate-spin" />}
           {saving ? "Saving…" : "Save"}
-        </button>
+        </Button>
       </div>
 
       {error && (

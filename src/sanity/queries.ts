@@ -122,6 +122,26 @@ export async function getBlogCategories() {
   )
 }
 
+/** Every published post, in the shape the internal portal's blog table needs. */
+export async function getAllBlogPostsForPortal() {
+  return client.fetch(
+    `*[_type == "blogPost"] | order(coalesce(publishedAt, _updatedAt) desc) {
+      _id, title, "slug": slug.current, publishedAt, _updatedAt, author, industry, excerpt
+    }`
+  )
+}
+
+/** One post with everything the portal editor needs to re-edit it. */
+export async function getBlogPostForPortalEdit(docId: string) {
+  return client.fetch(
+    `*[_type == "blogPost" && _id == $docId][0] {
+      _id, title, "slug": slug.current, publishedAt, author, industry, excerpt,
+      seoTitle, seoDescription, body, "categoryIds": categories[]._ref
+    }`,
+    { docId }
+  )
+}
+
 /* ================================================================== */
 /*  Page docs (industry / location / partnership / service / solution) */
 /* ================================================================== */
@@ -549,6 +569,17 @@ export async function getSiteSettings() {
 export async function getTeamMembers() {
   return client.fetch(
     `*[_type == "teamMember"] | order(order asc) { _id, name, role, emoji, photo, bio, linkedinUrl, regions, order, certifications }`
+  )
+}
+
+/** One team member by id, with a resolved photo URL for the portal edit form. */
+export async function getTeamMemberById(id: string) {
+  return client.fetch(
+    `*[_type == "teamMember" && _id == $id][0] {
+      _id, name, role, emoji, bio, linkedinUrl, regions, order, certifications,
+      "photoUrl": photo.asset->url
+    }`,
+    { id }
   )
 }
 

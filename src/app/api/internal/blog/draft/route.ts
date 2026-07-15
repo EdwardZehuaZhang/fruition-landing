@@ -55,3 +55,23 @@ export async function POST(req: Request) {
   if (error) return NextResponse.json({ error: error.message }, { status: 502 })
   return NextResponse.json({ ok: true, id: data.id })
 }
+
+/** Delete a draft. Shared workspace — any signed-in portal user can delete. */
+export async function DELETE(req: Request) {
+  const user = await getPortalApiUser()
+  if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 })
+
+  const id = new URL(req.url).searchParams.get("id")
+  if (!id) return NextResponse.json({ error: "Missing id." }, { status: 400 })
+
+  const admin = getPortalAdmin()
+  const { data, error } = await admin
+    .from("portal_drafts")
+    .delete()
+    .eq("id", id)
+    .select("id")
+    .maybeSingle()
+  if (error) return NextResponse.json({ error: error.message }, { status: 502 })
+  if (!data) return NextResponse.json({ error: "Draft not found." }, { status: 404 })
+  return NextResponse.json({ ok: true })
+}
