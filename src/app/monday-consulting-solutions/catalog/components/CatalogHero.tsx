@@ -33,7 +33,7 @@ export default function CatalogHero({ advisorSlot }: CatalogHeroProps) {
               2026 Solutions Atlas · Global · 2024 to 2026
             </span>
 
-            <h1 className="text-section-h2 mt-4 max-w-[560px]">
+            <h1 className="text-2xl sm:text-section-h2 mt-4 max-w-[560px]">
               The full map of what Fruition builds on{" "}
               <span className="text-[var(--purple-primary)]">monday.com</span>.
             </h1>

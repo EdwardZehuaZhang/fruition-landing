@@ -155,7 +155,8 @@ export default function SolutionsAdvisor({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-[var(--purple-primary)] text-white px-5 py-3 text-caption font-semibold shadow-card hover:bg-[var(--purple-dark)] lg:hidden"
+        style={{ bottom: "calc(1.25rem + env(safe-area-inset-bottom))" }}
+        className="fixed right-5 z-40 inline-flex items-center gap-2 rounded-full bg-[var(--purple-primary)] text-white px-5 py-3 text-caption font-semibold shadow-card hover:bg-[var(--purple-dark)] lg:hidden"
       >
         <span className="relative inline-block w-2 h-2 rounded-full bg-[#22ee8a]">
           <span className="absolute inset-0 rounded-full bg-[#22ee8a] opacity-60 animate-ping" />
