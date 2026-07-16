@@ -1,12 +1,20 @@
 import { getPageBySlug } from "@/sanity/queries"
 import { GOVERNING_DOCS } from "./documents"
+import { buildOgMetadata } from "@/lib/metadata"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("terms-and-conditions")
+  const title = page?.seoTitle
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/terms-and-conditions" },
-    title: page?.seoTitle,
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/terms-and-conditions",
+    }),
   }
 }
 

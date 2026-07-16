@@ -6,16 +6,23 @@ import {
 } from "@/sanity/queries"
 import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
 import MondayForCabinetryRenovationContent from "./MondayForCabinetryRenovationContent"
+import { buildOgMetadata } from "@/lib/metadata"
 
 export async function generateMetadata() {
   const page = await getSolutionPageBySlug("monday-for-cabinetry-renovation")
+  const title = page?.seoTitle ||
+      page?.title ||
+      "monday.com for Cabinetry & Renovation"
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/monday-consulting-solutions/monday-for-cabinetry-renovation" },
-    title:
-      page?.seoTitle ||
-      page?.title ||
-      "monday.com for Cabinetry & Renovation",
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/monday-consulting-solutions/monday-for-cabinetry-renovation",
+    }),
   }
 }
 

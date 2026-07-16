@@ -1,14 +1,21 @@
 import { getSiteSettings } from "@/sanity/queries"
 import ContactSection, { type ContactOffice } from "@/components/sections/ContactSection"
+import { buildOgMetadata } from "@/lib/metadata"
 
 const SALES_EMAIL = "contact@fruitionservices.io"
 
 export async function generateMetadata() {
+  const title = "Contact Us | Fruition"
+  const description = "Talk to the Fruition team. Reach sales or support by email, call us, or find the office nearest you across our six locations worldwide."
   return {
     alternates: { canonical: "/contact-us" },
-    title: "Contact Us | Fruition",
-    description:
-      "Talk to the Fruition team. Reach sales or support by email, call us, or find the office nearest you across our six locations worldwide.",
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/contact-us",
+    }),
   }
 }
 

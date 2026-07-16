@@ -6,16 +6,23 @@ import {
 } from "@/sanity/queries"
 import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
 import MondayProductManagementContent from "./MondayProductManagementContent"
+import { buildOgMetadata } from "@/lib/metadata"
 
 export async function generateMetadata() {
   const page = await getSolutionPageBySlug("monday-product-management")
+  const title = page?.seoTitle ||
+      page?.title ||
+      "monday.com for Product Management"
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/monday-consulting-solutions/monday-product-management" },
-    title:
-      page?.seoTitle ||
-      page?.title ||
-      "monday.com for Product Management",
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/monday-consulting-solutions/monday-product-management",
+    }),
   }
 }
 

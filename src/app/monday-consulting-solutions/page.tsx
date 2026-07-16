@@ -2,13 +2,21 @@ import Link from "next/link"
 import HeroSection from "@/components/HeroSection"
 import { CroSections, StickyCtaBar } from "@/components/sections"
 import { getAllSolutionPages, getPageBySlug, getSiteSettings } from "@/sanity/queries"
+import { buildOgMetadata } from "@/lib/metadata"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("monday-consulting-solutions")
+  const title = page?.seoTitle
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/monday-consulting-solutions" },
-    title: page?.seoTitle,
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/monday-consulting-solutions",
+    }),
   }
 }
 

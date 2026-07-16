@@ -2,13 +2,21 @@ import Link from "next/link"
 import { getFaqItems, getPageBySlug, getSiteSettings } from "@/sanity/queries"
 import { generateFaqJsonLd } from "@/lib/faqSchema"
 import FaqList, { type FaqItem } from "./FaqList"
+import { buildOgMetadata } from "@/lib/metadata"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("faqs")
+  const title = page?.seoTitle
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/faqs" },
-    title: page?.seoTitle,
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/faqs",
+    }),
   }
 }
 
