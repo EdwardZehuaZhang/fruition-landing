@@ -1,13 +1,21 @@
 import Link from "next/link"
 import HeroSection from "@/components/HeroSection"
 import { getAllPartnershipPages, getPageBySlug, getSiteSettings } from "@/sanity/queries"
+import { buildOgMetadata } from "@/lib/metadata"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("partnerships")
+  const title = page?.seoTitle
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/partnerships" },
-    title: page?.seoTitle,
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/partnerships",
+    }),
   }
 }
 

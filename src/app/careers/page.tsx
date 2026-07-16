@@ -12,6 +12,7 @@ import {
 } from "@/components/sections"
 import type { Partner } from "@/components/sections/PartnerEcosystemSection"
 import type { SanityImageRef } from "@/components/sections/types"
+import { buildOgMetadata } from "@/lib/metadata"
 
 function safeImageUrl(ref: SanityImageRef): string | null {
   if (!ref?.asset?._ref) return null
@@ -20,10 +21,17 @@ function safeImageUrl(ref: SanityImageRef): string | null {
 
 export async function generateMetadata() {
   const page = await getPageBySlug("careers")
+  const title = page?.seoTitle
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/careers" },
-    title: page?.seoTitle,
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/careers",
+    }),
   }
 }
 

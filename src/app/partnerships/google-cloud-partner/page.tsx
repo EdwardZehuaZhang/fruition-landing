@@ -1,14 +1,22 @@
 import { getAiPartnerPageBySlug, getSiteSettings } from "@/sanity/queries"
 import AiPartnerTemplate from "@/components/AiPartnerTemplate"
+import { buildOgMetadata } from "@/lib/metadata"
 
 const SLUG = "google-cloud-partner"
 
 export async function generateMetadata() {
   const page = await getAiPartnerPageBySlug(SLUG)
+  const title = page?.seoTitle || page?.title || SLUG
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/partnerships/google-cloud-partner" },
-    title: page?.seoTitle || page?.title || SLUG,
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/partnerships/google-cloud-partner",
+    }),
   }
 }
 

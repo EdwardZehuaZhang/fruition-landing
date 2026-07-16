@@ -6,15 +6,23 @@ import {
 } from "@/sanity/queries"
 import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
 import MondayConsultingPartnerContent from "./MondayConsultingPartnerContent"
+import { buildOgMetadata } from "@/lib/metadata"
 
 const SLUG = "monday-consulting-partner"
 
 export async function generateMetadata() {
   const page = await getPartnershipPageBySlug(SLUG)
+  const title = page?.seoTitle || page?.title || SLUG
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/partnerships/monday-consulting-partner" },
-    title: page?.seoTitle || page?.title || SLUG,
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/partnerships/monday-consulting-partner",
+    }),
   }
 }
 
