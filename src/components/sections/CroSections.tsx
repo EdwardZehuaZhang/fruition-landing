@@ -25,6 +25,8 @@ export interface CroSectionsData {
   dualCtaSecondaryUrl?: string
   stickyCtaLabel?: string
   stickyCtaUrl?: string
+  /** Short label for the sticky CTA on mobile screens */
+  stickyCtaMobileLabel?: string
   beforeAfter?: {
     heading?: string
     beforeLabel?: string

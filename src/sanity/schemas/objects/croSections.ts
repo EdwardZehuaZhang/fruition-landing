@@ -43,6 +43,7 @@ export default defineType({
     // Sticky floating CTA
     defineField({ name: 'stickyCtaLabel', title: 'Sticky CTA Label', type: 'string' }),
     defineField({ name: 'stickyCtaUrl', title: 'Sticky CTA URL', type: 'string' }),
+    defineField({ name: 'stickyCtaMobileLabel', title: 'Sticky CTA Mobile Label', description: 'Shorter label for small screens. Falls back to Sticky CTA Label when empty.', type: 'string' }),
 
     // Before / After
     defineField({

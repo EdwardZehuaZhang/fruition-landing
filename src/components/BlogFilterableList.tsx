@@ -92,11 +92,13 @@ export default function BlogFilterableList({
     fetchNext()
   }, [activeSlug, hasMore, loading, fetchNext])
 
-  const pillBase = "px-3 py-1 rounded-full text-sm transition-colors"
+  const pillBase =
+    "shrink-0 px-3 py-1 rounded-full text-sm transition-colors whitespace-nowrap"
 
   return (
     <>
-      <div className="flex flex-wrap gap-2 mb-10">
+      {/* Filter pills — horizontal scroll with hidden scrollbar on mobile */}
+      <div className="flex overflow-x-auto gap-2 mb-10 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <button
           type="button"
           onClick={() => setActiveSlug("all")}

@@ -1,18 +1,22 @@
 import type { PortableTextComponents } from "@portabletext/react"
 import Image from "next/image"
 import Link from "next/link"
+import { urlFor } from "@/sanity/image"
 
 export const portableTextComponents: PortableTextComponents = {
   types: {
     image: ({ value }) => {
       if (!value?.asset?._ref) return null
       return (
-        <div className="my-8 relative w-full aspect-[16/9] rounded-xl overflow-hidden">
+        <div className="my-8 relative w-full rounded-xl overflow-hidden">
           <Image
-            src={`https://cdn.sanity.io/images/bt6nb58h/production/${value.asset._ref.replace("image-", "").replace(/-(\w+)$/, ".$1")}`}
+            src={urlFor(value).auto("format").quality(90).url()}
             alt={value.alt || ""}
-            fill
-            className="object-cover"
+            width={740}
+            height={416}
+            quality={90}
+            className="w-full h-auto"
+            sizes="(max-width: 924px) 100vw, 740px"
           />
         </div>
       )
