@@ -12,6 +12,12 @@ const auditRedirects: Redirect[] = [
     permanent: true,
   },
   {
+    // NAM Master Services Agreement (v2.0) — replaces the old Wix-hosted PDF.
+    source: "/_files/ugd/39b8ef_a6e9b1be0e754503b1a0df07e3d81e6d.pdf",
+    destination: "/fruition-master-services-agreement.pdf",
+    permanent: true,
+  },
+  {
     source: "/solutions/monday-com-manufacturing",
     destination: "/monday-for-manufacturing",
     permanent: true,
