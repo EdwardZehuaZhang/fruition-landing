@@ -5,7 +5,8 @@ import CtaButton from "@/components/CtaButton"
 
 interface StickyCtaBarProps {
   label?: string
-  /** Shorter CTA label shown on mobile (below md). Falls back to `label`. */
+  /** Shorter CTA label shown on mobile (below md) so the long CMS label can't
+   *  wrap/overflow the button. Defaults to "Schedule a call". */
   mobileLabel?: string
   href?: string
   /** px scrolled before the bar appears */
@@ -18,7 +19,7 @@ interface StickyCtaBarProps {
  */
 export default function StickyCtaBar({
   label,
-  mobileLabel,
+  mobileLabel = "Schedule a call",
   href,
   showAfter = 600,
 }: StickyCtaBarProps) {
