@@ -18,6 +18,8 @@ interface CtaButtonProps {
   icon?: ReactNode
   className?: string
   style?: CSSProperties
+  /** Shorter label for mobile screens (sm breakpoint). When set, the full label only shows on sm+. */
+  mobileLabel?: string
 }
 
 const ROCKET = <Rocket size={18} aria-hidden />
@@ -38,7 +40,7 @@ function inferIcon(text: string, variant: CtaVariant): ReactNode {
 }
 
 const LEADING_EMOJI_RE =
-  /^[\s]*(?:(?:\p{Extended_Pictographic}|[☀-➿])(?:️|‍|\p{Extended_Pictographic})*)+\s*/u
+  /^[\s]*(?:(?:\p{Extended_Pictographic}|[☀-➿])(?:️||\p{Extended_Pictographic})*)+\s*/u
 
 function stripLeadingEmoji(text: string): string {
   return text.replace(LEADING_EMOJI_RE, "")
@@ -52,6 +54,7 @@ export default function CtaButton({
   icon,
   className = "",
   style,
+  mobileLabel,
 }: CtaButtonProps) {
   const rawText =
     typeof label === "string"
@@ -74,7 +77,16 @@ export default function CtaButton({
       <span className="cta-btn-icon" aria-hidden="true">
         {emoji}
       </span>
-      <span className="cta-btn-label">{content}</span>
+      <span className="cta-btn-label">
+        {mobileLabel ? (
+          <>
+            <span className="sm:hidden">{mobileLabel}</span>
+            <span className="hidden sm:inline">{content}</span>
+          </>
+        ) : (
+          content
+        )}
+      </span>
     </Link>
   )
 }
