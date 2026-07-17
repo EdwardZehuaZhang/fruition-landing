@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { buildOgMetadata } from "@/lib/metadata"
 
-const pdfUrl = "/fruition-service-agreement.pdf"
+const pdfUrl = "/fruition-service-agreement-au.pdf"
 
 export async function generateMetadata() {
   const title = "Service Agreement AU | Fruition Services"
