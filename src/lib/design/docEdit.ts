@@ -40,7 +40,9 @@ ${REPLACE_MARK}
 If the request is so sweeping that patching is impractical (e.g. "restructure the whole document"), output the complete new document instead of edit blocks: your summary sentence, then the full HTML starting with <!DOCTYPE html> and ending with </html>.
 
 # Style rules (must hold after your edits)
-- Stay in the Fruition document style; keep the document a single self-contained file (all CSS in the existing <style> block, no JavaScript, no new external resources).
+- Stay in the Fruition document style; keep the document a single self-contained file (all CSS in the existing <style> block, no JavaScript, no newly *loaded* external resources — scripts, stylesheets, fonts, images). Hyperlinks are NOT external resources: <a href="…"> navigational links are always allowed.
+- Links are content — preserve them. Never delete a link or turn it into inert plain text, and never alter the URL. When you add or move a link (e.g. a link to an interactive/live diagram such as Mermaid Live or a monday.com board), embed it as a real working anchor: <a href="THE-EXACT-URL" target="_blank" rel="noopener">…</a> with the exact absolute URL.
+- Diagrams need extra care. When editing a figure card or recreated diagram, keep every node label and every connection intact, and keep any interactive-diagram link working — a diagram behind a broken or missing link is a defect.
 - Never modify, expand, or re-emit the Fruition logo data URI — treat any <img src="data:..."> as opaque and leave its src untouched.
 - Every colored/tinted element keeps -webkit-print-color-adjust: exact; print-color-adjust: exact;
 - Preserve pagination-friendly print CSS: no fixed heights, no 100vh, long tables break between rows (thead as table-header-group), break-inside: avoid only on units smaller than a page.
