@@ -88,6 +88,13 @@ export async function POST(req: Request) {
     model: DESIGN_DOC_MODEL,
     max_tokens: MAX_OUTPUT_TOKENS,
     stream: true,
+    // OpenRouter multiplexes this model across Anthropic, Bedrock, Azure and
+    // Google. Bedrock (and other cloud) endpoints are region-gated and return
+    // "This model is not available in your region" when OpenRouter routes there
+    // from the Cloudflare Worker's edge region. Anthropic's first-party API has
+    // no such per-region model gating, so route there first; fallbacks remain
+    // enabled for resilience if Anthropic is briefly unavailable.
+    provider: { order: ["anthropic"], allow_fallbacks: true },
     // Use Claude's native PDF understanding rather than an OCR pre-pass.
     plugins: [{ id: "file-parser", pdf: { engine: "native" } }],
     messages: [
