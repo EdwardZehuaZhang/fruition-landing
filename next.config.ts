@@ -1,20 +1,25 @@
-﻿import type { NextConfig } from "next";
+import type { NextConfig } from "next";
 import type { Redirect } from "next/dist/lib/load-custom-routes";
 import { wixRedirects } from "./src/redirects";
 
 // Redirects added after the Wix migration (e.g. from SEO/technical audits).
 // src/redirects.ts is auto-generated from the migration import — add new
-// entries here instead.
+// entries here instead. Placed BEFORE wixRedirects so audits override.
 const auditRedirects: Redirect[] = [
+  // WFO legal PDF links → dedicated legal pages
   {
-    source: "/_files/ugd/39b8ef_1dc32166aa204f2f997e63c60548c9dd.pdf",
+    source: "/_files/ugd/39b8ef_a6e9b1be0e754503b1a0df07e3d81e6d.pdf",
     destination: "/legal/services-agreement-au",
     permanent: true,
   },
   {
-    // NAM Master Services Agreement (v2.0) — replaces the old Wix-hosted PDF.
-    source: "/_files/ugd/39b8ef_a6e9b1be0e754503b1a0df07e3d81e6d.pdf",
-    destination: "/fruition-master-services-agreement.pdf",
+    source: "/_files/ugd/39b8ef_1dc32166aa204f2f997e63c60548c9dd.pdf",
+    destination: "/legal/services-agreement-us",
+    permanent: true,
+  },
+  {
+    source: "/_files/ugd/a280a5_11fba06999d94082af98412eb473461c.pdf",
+    destination: "/legal/services-agreement-uk",
     permanent: true,
   },
   {
@@ -38,7 +43,7 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
-    return [...wixRedirects, ...auditRedirects];
+    return [...auditRedirects, ...wixRedirects];
   },
   images: {
     remotePatterns: [
