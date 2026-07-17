@@ -4,6 +4,8 @@ import { buildDailyDraftBlocks } from "@/lib/marketa/blogSlackBlocks"
 import { createDraftDoc, createSubfolder, wordCount } from "@/lib/googleDocs"
 import { generateLinkedInPost } from "@/lib/marketa/marketaLinkedIn"
 import { createSocialDraft } from "@/lib/marketa/zernio"
+import { createItem, changeColumnValues } from "@/lib/mondayClient"
+import { saveFullDraft } from "@/lib/marketa/brain"
 import { postSlackMessage } from "@/lib/slackClient"
 
 export const runtime = "nodejs"
@@ -14,6 +16,18 @@ const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || ""
 const GEMINI_KEY = process.env.GEMINI_API_KEY || ""
 // #fruition-blogs. Overridable so the channel can move without a code change.
 const SLACK_BLOG_CHANNEL_ID = process.env.SLACK_BLOG_CHANNEL_ID || "C0B4NFVDJKY"
+
+// Website Blogs board (same one the Slack-intake flow uses). Column ids match
+// src/app/api/webhooks/slack-blog/route.ts.
+const MONDAY_BOARD_ID = 5028637584
+const MONDAY_GROUP_TOPICS = "topics"
+const COL_STAGE = "dropdown_mm3jh58b"
+const COL_BRIEF = "long_text_mm3grk84"
+const COL_TARGET_KW = "text_mm3gzj88"
+const COL_INDUSTRY = "dropdown_mm3gb7wm"
+const COL_DRAFT_BODY = "long_text_mm3gj0s8"
+const COL_BLOG_DOC_URL = "link_mm3nw491"
+const COL_LINKEDIN_DOC_URL = "link_mm3na3pz"
 
 const TOPICS = [
   "monday.com workflow automation best practices for professional services firms",
@@ -70,15 +84,35 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 })
   }
 
-  // Allow custom topic override. `notify: false` suppresses the Google Docs +
-  // Slack side effects (useful for manual/test generations).
-  let body: { topic?: string; notify?: boolean } = {}
+  // Two modes:
+  //  - Daily mode (no pulseId): rotating/custom topic → portal draft + docs +
+  //    monday item + Zernio + Slack. `notify:false` suppresses the side effects.
+  //  - monday mode (pulseId set, forwarded by the make.com draft scenario from
+  //    the slack-blog intake): generate for the EXISTING monday item, save the
+  //    full draft to blog_drafts, patch the item to "Draft ready" — the
+  //    monday-blog webhook then runs auto-docs + the threaded Slack reply.
+  let body: {
+    topic?: string
+    notify?: boolean
+    pulseId?: string
+    title?: string
+    brief?: string
+    target_keyword?: string
+    industry?: string
+  } = {}
   try { body = await req.json() } catch {}
   const notify = body.notify !== false
+  const pulseId = body.pulseId ? String(body.pulseId) : null
 
-  const { topic, industry, keyword } = body.topic
-    ? { topic: body.topic, industry: extractIndustry(body.topic), keyword: body.topic.split(":")[0] || body.topic.slice(0, 60) }
-    : getDailyTopic()
+  const { topic, industry, keyword } = pulseId
+    ? {
+        topic: (body.title || "").trim() || "(untitled blog draft)",
+        industry: body.industry?.trim() || extractIndustry(body.title || ""),
+        keyword: body.target_keyword?.trim() || (body.title || "").slice(0, 60),
+      }
+    : body.topic
+      ? { topic: body.topic, industry: extractIndustry(body.topic), keyword: body.topic.split(":")[0] || body.topic.slice(0, 60) }
+      : getDailyTopic()
 
   if (!OPENROUTER_KEY) {
     return NextResponse.json({ error: "OPENROUTER_API_KEY not configured" }, { status: 500 })
@@ -90,8 +124,9 @@ export async function POST(req: Request) {
   // direct), and the CF colo (hence egress region) varies per request, so the
   // Anthropic model is unreliable here. We keep Claude first for quality and
   // fall back to a globally-available model so generation never hard-fails.
-  console.log(`Generating blog: "${topic}"`)
-  const userPrompt = `Write a 1000-1200 word blog post: "${topic}". Focus on practical, actionable advice for ${industry} teams. Use H2 headings. Output clean markdown.`
+  console.log(`Generating blog: "${topic}"${pulseId ? ` (monday item ${pulseId})` : ""}`)
+  const briefBlock = pulseId && body.brief?.trim() ? `\n\nBrief / context from the requester:\n${body.brief.trim()}` : ""
+  const userPrompt = `Write a 1000-1200 word blog post: "${topic}". Focus on practical, actionable advice for ${industry} teams. Use H2 headings. Output clean markdown.${briefBlock}`
   const MODELS = (process.env.MARKETA_BLOG_MODELS || "anthropic/claude-sonnet-5,openai/gpt-4o,google/gemini-2.5-pro")
     .split(",").map((s) => s.trim()).filter(Boolean)
   let bodyMarkdown = ""
@@ -160,6 +195,23 @@ export async function POST(req: Request) {
 
   if (!bodyMarkdown) {
     return NextResponse.json({ error: "blog generation failed", detail: genErr.slice(0, 1400) }, { status: 502 })
+  }
+
+  // monday mode: attach the draft to the existing item and hand off to the
+  // monday-blog webhook (auto-docs + threaded Slack reply fire on the stage
+  // change to "Draft ready"). No portal draft, no direct Slack/docs here.
+  if (pulseId) {
+    try {
+      await saveFullDraft(pulseId, bodyMarkdown)
+    } catch (saveErr) {
+      // Non-fatal: auto-docs falls back to the (truncated) monday column.
+      console.error("[blog/generate] blog_drafts upsert failed (non-fatal):", saveErr)
+    }
+    await changeColumnValues(MONDAY_BOARD_ID, pulseId, {
+      [COL_DRAFT_BODY]: { text: bodyMarkdown },
+      [COL_STAGE]: { labels: ["Draft ready"] },
+    })
+    return NextResponse.json({ ok: true, pulseId, stage: "Draft ready", words: wordCount(bodyMarkdown) })
   }
 
   // Extract excerpt (first non-heading paragraph)
@@ -247,6 +299,35 @@ export async function POST(req: Request) {
     if (updErr) console.error("[blog/generate] metadata update failed (non-fatal):", updErr.message)
   }
 
+  // Create a monday item on the Website Blogs board so the draft is visible in
+  // the same pipeline as Slack-intake topics. Stage "Drafting" deliberately —
+  // NOT "Draft ready" — so the monday-blog webhook's auto-docs path can't fire
+  // a second docs+Slack run for this item. Best-effort like everything below.
+  let mondayItemUrl: string | null = null
+  let mondayItemId: string | null = null
+  if (notify) {
+    try {
+      mondayItemId = await createItem(MONDAY_BOARD_ID, MONDAY_GROUP_TOPICS, topic)
+      await changeColumnValues(
+        MONDAY_BOARD_ID,
+        mondayItemId,
+        {
+          [COL_STAGE]: { labels: ["Drafting"] },
+          [COL_BRIEF]: { text: excerpt },
+          [COL_TARGET_KW]: keyword,
+          [COL_INDUSTRY]: { labels: [industry] },
+          [COL_DRAFT_BODY]: { text: bodyMarkdown },
+          ...(googleDocUrl ? { [COL_BLOG_DOC_URL]: { url: googleDocUrl, text: "Blog draft (Google Doc)" } } : {}),
+          ...(linkedinDocUrl ? { [COL_LINKEDIN_DOC_URL]: { url: linkedinDocUrl, text: "LinkedIn post (Google Doc)" } } : {}),
+        },
+        { createLabelsIfMissing: true },
+      )
+      mondayItemUrl = `https://fruitionservices.monday.com/boards/${MONDAY_BOARD_ID}/pulses/${mondayItemId}`
+    } catch (mondayErr) {
+      console.error("[blog/generate] monday item creation failed (non-fatal):", mondayErr)
+    }
+  }
+
   // Create a Zernio DRAFT social post (X + Google Business) for human review.
   // Dormant unless ZERNIO_API_KEY is set; best-effort — never break the pipeline.
   let socialUrl: string | null = null
@@ -273,6 +354,7 @@ export async function POST(req: Request) {
         blogDocUrl: googleDocUrl,
         linkedInDocUrl: linkedinDocUrl,
         socialUrl,
+        mondayUrl: mondayItemUrl,
       })
       await postSlackMessage(SLACK_BLOG_CHANNEL_ID, built.blocks, built.fallbackText, { unfurlLinks: false, unfurlMedia: false })
     } catch (slackErr) {
@@ -290,6 +372,9 @@ export async function POST(req: Request) {
     internalUrl,
     googleDocUrl,
     linkedinDocUrl,
+    mondayItemId,
+    mondayItemUrl,
+    socialUrl,
   })
 }
 
