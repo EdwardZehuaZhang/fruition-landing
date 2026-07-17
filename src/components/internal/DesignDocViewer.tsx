@@ -207,11 +207,13 @@ export default function DesignDocViewer({ id, title: initialTitle, html: initial
           className="rounded-card bg-surface p-2 sm:p-3"
           style={{ boxShadow: "var(--shadow-card)" }}
         >
-          {/* same-origin needed so Export PDF can call contentWindow.print(); no scripts allowed */}
+          {/* same-origin needed so Export PDF can call contentWindow.print(); no scripts allowed.
+              allow-popups(+escape) lets embedded links (e.g. an interactive-diagram URL) open in a
+              new tab — without it the sandbox silently swallows the click. */}
           <iframe
             ref={iframeRef}
             title={title}
-            sandbox="allow-same-origin allow-modals"
+            sandbox="allow-same-origin allow-modals allow-popups allow-popups-to-escape-sandbox"
             srcDoc={withPrintFixes(html)}
             className="h-[80vh] w-full rounded-[calc(var(--radius-card)-8px)] border border-[var(--color-border)] bg-white"
           />
