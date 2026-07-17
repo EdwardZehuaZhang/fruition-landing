@@ -6,6 +6,12 @@ import { wixRedirects } from "./src/redirects";
 // src/redirects.ts is auto-generated from the migration import — add new
 // entries here instead. Placed BEFORE wixRedirects so audits override.
 const auditRedirects: Redirect[] = [
+  {
+    source: "/_files/ugd/a280a5_11fba06999d94082af98412eb473461c.pdf",
+    destination: "/legal/deprecated/uk",
+    permanent: true,
+  },
+
   // WFO Legal agreements → Google Docs
   {
     source: "/legal/wfo-agreement-au",
