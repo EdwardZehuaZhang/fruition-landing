@@ -6,6 +6,40 @@ import { wixRedirects } from "./src/redirects";
 // src/redirects.ts is auto-generated from the migration import — add new
 // entries here instead. Placed BEFORE wixRedirects so audits override.
 const auditRedirects: Redirect[] = [
+  // WFO Legal agreements → Google Docs
+  {
+    source: "/legal/wfo-agreement-au",
+    destination: "https://docs.google.com/document/d/1LPRN-5sS-dRKTsOgD-sAn6vH3_PpprTdchu_kqj-hgQ/edit?tab=t.0",
+    permanent: true,
+  },
+  {
+    source: "/legal/wfo-agreement-uk",
+    destination: "https://docs.google.com/document/d/1C8SdBihVPCeWI4Fshs15mlpmNbAVcEz8YLPkdcEjrEE/edit?tab=t.0",
+    permanent: true,
+  },
+  {
+    source: "/legal/wfo-agreement-us",
+    destination: "https://docs.google.com/document/d/1Pq-BsYgWVZhSGP3ZaTLiUQMdA7BbY6eE1K4wFwUJi5M/edit?tab=t.0",
+    permanent: true,
+  },
+  // Managed Service agreements → Google Docs
+  {
+    source: "/legal/managed-service-agreement-au",
+    destination: "https://docs.google.com/document/d/1knbbSPyIGg1CxfbPBjrwPuD6E6O38qgG7M7g5chu-JE/edit?tab=t.0",
+    permanent: true,
+  },
+  {
+    source: "/legal/managed-service-agreement-uk",
+    destination: "https://docs.google.com/document/d/1g2pckxr4Ig1o_TZdkLfNy1Z_H-QUhSA5ulK10eWTLTk/edit?tab=t.0",
+    permanent: true,
+  },
+  {
+    source: "/legal/managed-service-agreement-us",
+    destination: "https://docs.google.com/document/d/1WsFnSKy1XK4W75tDVQLBAxw_YbJrLG_IVGw7rgOgiiw/edit?tab=t.0",
+    permanent: true,
+  },
+  //
+
   {
     source: "/solutions/monday-com-manufacturing",
     destination: "/monday-for-manufacturing",
