@@ -7,6 +7,10 @@ function mondayItemUrl(pulseId: string): string {
   return `https://fruitionservices.monday.com/boards/${MONDAY_BOARD_ID}/pulses/${pulseId}`
 }
 
+function mondayBoardUrl(): string {
+  return `https://fruitionservices.monday.com/boards/${MONDAY_BOARD_ID}`
+}
+
 function portalEditUrl(pulseId: string): string {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.fruitionservices.io"
   return `${base.replace(/\/+$/, "")}/internal/blog/monday/${pulseId}/edit`
@@ -186,6 +190,89 @@ export function buildAutoDocsReadyBlocks(args: {
     ],
   })
   return { fallbackText: `:memo: Draft ready: ${args.title}`, blocks }
+}
+
+/**
+ * Block Kit for the daily auto-generated draft posted to #fruition-blogs by
+ * /api/internal/blog/generate (the make.com/n8n-triggered daily cron). Unlike
+ * the Slack-origin auto-docs reply, there is no monday item, so the primary
+ * action is "Review in portal" (the /internal editor). Google Doc buttons are
+ * only added when their URLs exist — Slack rejects a button with an empty
+ * `url`, so omitting them is what prevents the dead-button bug this replaces.
+ */
+export function buildDailyDraftBlocks(args: {
+  title: string
+  excerpt?: string
+  industry?: string
+  targetKeyword?: string
+  words?: number
+  portalUrl: string
+  blogDocUrl?: string | null
+  linkedInDocUrl?: string | null
+  socialUrl?: string | null
+  mondayUrl?: string | null
+}): { fallbackText: string; blocks: Record<string, unknown>[] } {
+  const blocks: Record<string, unknown>[] = []
+  blocks.push({
+    type: "header",
+    text: { type: "plain_text", text: ":memo: Daily blog draft", emoji: true },
+  })
+  const sectionLines = [`*${args.title}*`]
+  if (args.excerpt) sectionLines.push(clip(args.excerpt, 260))
+  blocks.push({
+    type: "section",
+    text: { type: "mrkdwn", text: sectionLines.join("\n") },
+  })
+  const metaParts: string[] = []
+  if (typeof args.words === "number" && args.words > 0) {
+    metaParts.push(`:bar_chart: ~${args.words.toLocaleString()} words`)
+  }
+  const baseMeta = metaLine({ industry: args.industry, targetKeyword: args.targetKeyword })
+  if (baseMeta) metaParts.push(baseMeta)
+  if (metaParts.length) {
+    blocks.push({
+      type: "context",
+      elements: [{ type: "mrkdwn", text: metaParts.join("  ·  ") }],
+    })
+  }
+  const actions: Record<string, unknown>[] = [
+    {
+      type: "button",
+      style: "primary",
+      text: { type: "plain_text", text: "Review in portal", emoji: true },
+      url: args.portalUrl,
+    },
+  ]
+  if (args.blogDocUrl) {
+    actions.push({
+      type: "button",
+      text: { type: "plain_text", text: "Open blog draft :pencil:", emoji: true },
+      url: args.blogDocUrl,
+    })
+  }
+  if (args.linkedInDocUrl) {
+    actions.push({
+      type: "button",
+      text: { type: "plain_text", text: "Open LinkedIn post :linkedin:", emoji: true },
+      url: args.linkedInDocUrl,
+    })
+  }
+  if (args.socialUrl) {
+    actions.push({
+      type: "button",
+      text: { type: "plain_text", text: "Review social post :bird:", emoji: true },
+      url: args.socialUrl,
+    })
+  }
+  // "Open in monday" — links to the item when we have one, else the board.
+  // Slack rejects empty button URLs, so `mondayBoardUrl()` always returns a URL.
+  actions.push({
+    type: "button",
+    text: { type: "plain_text", text: "Open in monday :clipboard:", emoji: true },
+    url: args.mondayUrl || mondayBoardUrl(),
+  })
+  blocks.push({ type: "actions", elements: actions })
+  return { fallbackText: `:memo: Daily blog draft: ${args.title}`, blocks }
 }
 
 export function buildPublishedBlocks(
