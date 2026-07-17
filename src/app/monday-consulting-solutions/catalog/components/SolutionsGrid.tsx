@@ -345,7 +345,7 @@ function SolutionCard({
       <div className="text-[10px] uppercase tracking-wider font-semibold text-[var(--purple-primary)] mb-2">
         {solution.tag}
       </div>
-      <h3 className="text-card-title text-[var(--text-dark)] leading-tight pr-12">
+      <h3 className="text-base sm:text-card-title text-[var(--text-dark)] leading-tight pr-10 sm:pr-12">
         {solution.title}
       </h3>
       <p className="text-body-sm text-[var(--color-text-secondary)] mt-2 leading-relaxed">

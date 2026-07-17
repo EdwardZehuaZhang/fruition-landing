@@ -95,37 +95,39 @@ function PillRow<T extends string>({
   onSelect,
 }: PillRowProps<T>) {
   return (
-    <div className="flex items-start gap-2 flex-wrap py-1">
+    <div className="flex items-start gap-2 py-1">
       <span className="text-caption text-[var(--color-text-secondary)] font-semibold whitespace-nowrap pr-1 pt-1.5 min-w-[88px]">
         {label}
       </span>
-      {pills.map((p) => {
-        const isActive = p.value === active
-        const count = counts[p.value] ?? 0
-        return (
-          <button
-            key={p.value}
-            type="button"
-            onClick={() => onSelect(p.value)}
-            className={`shrink-0 inline-flex items-center gap-1.5 text-caption px-3 py-1.5 rounded-full border transition-colors ${
-              isActive
-                ? "bg-[var(--purple-primary)] text-white border-[var(--purple-primary)]"
-                : "bg-surface-raised text-[var(--color-text-secondary)] border-[var(--color-border)] hover:border-[var(--purple-light)] hover:text-[var(--purple-primary)]"
-            }`}
-          >
-            <span>{p.label}</span>
-            <span
-              className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+      <div className="flex items-start gap-2 flex-nowrap sm:flex-wrap overflow-x-auto pb-1 -mx-1 px-1 scrollbar-thin">
+        {pills.map((p) => {
+          const isActive = p.value === active
+          const count = counts[p.value] ?? 0
+          return (
+            <button
+              key={p.value}
+              type="button"
+              onClick={() => onSelect(p.value)}
+              className={`shrink-0 inline-flex items-center gap-1.5 text-caption px-3 py-1.5 rounded-full border transition-colors ${
                 isActive
-                  ? "bg-white/25 text-white"
-                  : "bg-[rgba(128,21,232,0.08)] text-[var(--purple-primary)]"
+                  ? "bg-[var(--purple-primary)] text-white border-[var(--purple-primary)]"
+                  : "bg-surface-raised text-[var(--color-text-secondary)] border-[var(--color-border)] hover:border-[var(--purple-light)] hover:text-[var(--purple-primary)]"
               }`}
             >
-              {count}
-            </span>
-          </button>
-        )
-      })}
+              <span>{p.label}</span>
+              <span
+                className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                  isActive
+                    ? "bg-white/25 text-white"
+                    : "bg-[rgba(128,21,232,0.08)] text-[var(--purple-primary)]"
+                }`}
+              >
+                {count}
+              </span>
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }

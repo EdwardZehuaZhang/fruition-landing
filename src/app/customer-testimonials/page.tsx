@@ -4,13 +4,21 @@ import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
 import FramedMedia from "@/components/common/FramedMedia"
+import { buildOgMetadata } from "@/lib/metadata"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("customer-testimonials")
+  const title = page?.seoTitle
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/customer-testimonials" },
-    title: page?.seoTitle,
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/customer-testimonials",
+    }),
   }
 }
 

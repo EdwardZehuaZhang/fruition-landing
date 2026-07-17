@@ -5,6 +5,9 @@ import CtaButton from "@/components/CtaButton"
 
 interface StickyCtaBarProps {
   label?: string
+  /** Shorter CTA label shown on mobile (below md) so the long CMS label can't
+   *  wrap/overflow the button. Defaults to "Schedule a call". */
+  mobileLabel?: string
   href?: string
   /** px scrolled before the bar appears */
   showAfter?: number
@@ -16,6 +19,7 @@ interface StickyCtaBarProps {
  */
 export default function StickyCtaBar({
   label,
+  mobileLabel = "Schedule a call",
   href,
   showAfter = 600,
 }: StickyCtaBarProps) {
@@ -33,7 +37,7 @@ export default function StickyCtaBar({
 
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-50 px-4 transition-all duration-300"
+      className="fixed inset-x-0 bottom-0 z-50 px-4 pb-[env(safe-area-inset-bottom,0px)] transition-all duration-300"
       style={{
         transform: visible ? "translateY(0)" : "translateY(120%)",
         opacity: visible ? 1 : 0,
@@ -41,7 +45,7 @@ export default function StickyCtaBar({
       }}
     >
       <div
-        className="mx-auto mb-4 flex items-center justify-between gap-4 px-5 py-3"
+        className="mx-auto mb-4 flex flex-col items-stretch gap-3 px-4 py-3 md:flex-row md:items-center md:justify-between md:gap-4 md:px-5"
         style={{
           maxWidth: 720,
           borderRadius: 16,
@@ -49,17 +53,33 @@ export default function StickyCtaBar({
           boxShadow: "0 18px 40px -16px rgba(64,12,140,0.55)",
         }}
       >
-        <span className="font-semibold text-white" style={{ fontSize: 14 }}>
+        <span className="font-semibold text-white text-[13px] md:text-sm">
           Ready to scale your workflows?
         </span>
-        <div className="flex items-center gap-2">
-          <CtaButton href={href} label={label} variant="onDarkPrimary" style={{ height: 40, fontSize: 13, padding: "0 18px" }} />
+        <div className="flex items-center justify-between gap-2 md:justify-end">
+          {/* Mobile: short label; hidden on desktop */}
+          <CtaButton
+            href={href}
+            label={mobileLabel ?? label}
+            variant="onDarkPrimary"
+            className="md:hidden"
+            style={{ fontSize: 13, padding: "0 16px" }}
+          />
+          {/* Desktop: full label; hidden on mobile */}
+          <CtaButton
+            href={href}
+            label={label}
+            mobileLabel={mobileLabel}
+            variant="onDarkPrimary"
+            className="hidden md:inline-flex"
+            style={{ fontSize: 13, padding: "0 18px" }}
+          />
           <button
             type="button"
             aria-label="Dismiss"
             onClick={() => setDismissed(true)}
-            className="shrink-0 text-white/70 hover:text-white"
-            style={{ fontSize: 20, lineHeight: 1, padding: "0 4px" }}
+            className="flex shrink-0 items-center justify-center text-white/70 hover:text-white"
+            style={{ minWidth: 44, minHeight: 44, fontSize: 22, lineHeight: 1 }}
           >
             ×
           </button>

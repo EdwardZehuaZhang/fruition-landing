@@ -10,6 +10,7 @@ import SiteFrame from "@/components/SiteFrame"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { getSiteSettings } from "@/sanity/queries"
 import { urlFor } from "@/sanity/image"
+import { buildOgMetadata, defaultOgImage } from "@/lib/metadata"
 
 
 
@@ -49,30 +50,39 @@ export const viewport: Viewport = {
   colorScheme: "light",
 }
 
+// Cap the CDN cache TTL for the whole site.
+//
+// Fully-static (prerendered) pages otherwise ship `Cache-Control:
+// s-maxage=31536000` (one year), so Cloudflare keeps serving the build-time
+// HTML and NEW deploys don't appear live until the entry is evicted or the
+// cache is purged by hand — that's why sticky-CTA/content fixes lagged prod.
+// Setting a route-segment `revalidate` turns these into ISR and lowers the
+// header to `s-maxage=60, stale-while-revalidate=...`, so a deploy self-heals
+// within ~a minute. Because the lowest `revalidate` in a route wins, this
+// applies site-wide from the root layout (a new page can't re-introduce the
+// 1-year cache by forgetting to set it). `force-dynamic` routes (the /internal
+// admin) are unaffected. Blog post/author pages drop from 3600s to 60s —
+// harmless (fresher, negligible extra revalidation).
+//
+// NOTE: this only governs cache entries written from here on. Existing 1-year
+// entries must be cleared once with a Cloudflare "Purge Everything" AFTER this
+// ships; thereafter the site stays fresh on its own.
+export const revalidate = 60
+
 export async function generateMetadata(): Promise<Metadata> {
-  const s = await getSiteSettings()
-  const ogTitle =
-    "Fruition | monday.com Platinum Partners | monday CRM Experts"
-  const ogDescription =
-    "monday.com Partner certified - Fruition is an expert in Monday implementation and integration. Our monday.com consultants partners with you to integrate and automate Sales, Projects & Operations"
+  const [s, ogImage] = await Promise.all([getSiteSettings(), defaultOgImage()])
   return {
     metadataBase: new URL(
       process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.fruitionservices.io",
     ),
     title: s?.defaultSeoTitle,
     description: s?.defaultSeoDescription,
-    openGraph: {
-      type: "website",
-      siteName: "Fruition",
-      locale: "en_US",
-      title: ogTitle,
-      description: ogDescription,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: ogTitle,
-      description: ogDescription,
-    },
+    ...buildOgMetadata({
+      title: s?.defaultSeoTitle,
+      description: s?.defaultSeoDescription,
+      path: "/",
+      image: ogImage,
+    }),
     robots: {
       index: true,
       follow: true,

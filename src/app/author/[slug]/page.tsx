@@ -1,6 +1,7 @@
 import { getBlogAuthors, getPostsByAuthor, getTeamMemberByName } from "@/sanity/queries"
 import AuthorProfileTemplate from "@/components/AuthorProfileTemplate"
 import { notFound } from "next/navigation"
+import { buildOgMetadata } from "@/lib/metadata"
 
 export const revalidate = 3600
 export const dynamicParams = true
@@ -40,10 +41,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const author = await resolveAuthor(slug)
   if (!author) return {}
   const member = await getTeamMemberByName(author.name)
+  const description = member?.bio?.slice(0, 155) || "Articles written by " + author.name + " on the Fruition consulting blog."
+  const ogImageSource = member?.photo ?? undefined
+  const title = author.name + " — Fruition Blog"
   return {
     alternates: { canonical: `/author/${slug}` },
-    title: `${author.name} — Fruition Blog`,
-    description:
-      member?.bio?.slice(0, 155) || `Articles written by ${author.name} on the Fruition consulting blog.`,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: `/author/${slug}`,
+      ogImageSource,
+    }),
   }
 }

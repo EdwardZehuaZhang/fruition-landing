@@ -15,13 +15,21 @@ import {
 } from "@/components/sections"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import CtaButton from "@/components/CtaButton"
+import { buildOgMetadata } from "@/lib/metadata"
 
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-real-estate")
+  const title = page?.seoTitle
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/monday-for-real-estate" },
-    title: page?.seoTitle,
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/monday-for-real-estate",
+    }),
   }
 }
 

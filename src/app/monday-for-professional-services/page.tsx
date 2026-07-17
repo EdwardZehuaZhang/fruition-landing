@@ -17,13 +17,21 @@ import {
   ServicesWorkflowTabs,
 } from "@/components/sections"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
+import { buildOgMetadata } from "@/lib/metadata"
 
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-professional-services")
+  const title = page?.seoTitle
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/monday-for-professional-services" },
-    title: page?.seoTitle,
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/monday-for-professional-services",
+    }),
   }
 }
 
