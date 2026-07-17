@@ -8,6 +8,12 @@ import { wixRedirects } from "./src/redirects";
 const auditRedirects: Redirect[] = [
   // WFO legal PDF links → dedicated legal pages
   {
+    source: "/fruition-master-services-agreement.pdf",
+    destination: "/legal/services-agreement-au",
+    permanent: true,
+  },
+
+  {
     source: "/_files/ugd/39b8ef_a6e9b1be0e754503b1a0df07e3d81e6d.pdf",
     destination: "/legal/services-agreement-au",
     permanent: true,
