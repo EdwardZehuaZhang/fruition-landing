@@ -72,9 +72,9 @@ export default function HootsuiteDeliveryPartnerContent({
       )}
 
       {/* YouTube video below tab section */}
-      <section className="bg-surface px-4" style={{ paddingTop: 24, paddingBottom: 80 }}>
-        <div className="mx-auto" style={{ maxWidth: 980 }}>
-          <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
+      <section className="bg-surface px-4 pt-6 pb-14 md:pb-24">
+        <div className="mx-auto w-full max-w-[980px]">
+          <div className="rounded-card overflow-hidden aspect-video">
             <YouTubeEmbed
               url={page.bottomVideoUrl || undefined}
               videoId={page.bottomVideoUrl ? undefined : "7zC5uxk0lc8"}

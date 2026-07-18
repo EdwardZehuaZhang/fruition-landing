@@ -78,27 +78,21 @@ export default function LeadForm({
   }
 
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 72, paddingBottom: 72 }}>
-      <div
-        className="mx-auto rounded-card bg-surface-raised dark:shadow-none dark:border dark:border-ui"
-        style={{ maxWidth: 620, padding: 32, border: "1px solid #ece7fb", boxShadow: "0 24px 48px -32px rgba(64,12,140,0.28)" }}
-      >
-        <h2 className="text-section-h2 text-body" style={{ marginBottom: subheading ? 12 : 24 }}>
+    <section className="bg-surface px-4 py-[72px]">
+      <div className="mx-auto rounded-card bg-surface-raised max-w-[620px] p-8 border border-brand-soft shadow-[0_24px_48px_-32px_rgba(64,12,140,0.28)] dark:shadow-none dark:border dark:border-ui">
+        <h2 className={`text-section-h2 text-body ${subheading ? "mb-3" : "mb-6"}`}>
           {heading}
         </h2>
         {subheading && (
-          <p style={{ color: "var(--text-muted-fg)", fontSize: 15, lineHeight: "22px", marginBottom: 22 }}>{subheading}</p>
+          <p className="text-muted text-[15px] leading-[22px] mb-[22px]">{subheading}</p>
         )}
 
         {status === "done" ? (
-          <div
-            className="rounded-card"
-            style={{ background: "#f5fbf6", border: "1px solid #d6ecd9", padding: 20, color: "#1e8449", fontSize: 16 }}
-          >
+          <div className="rounded-card bg-[#f5fbf6] border border-[#d6ecd9] p-5 text-[#1e8449] text-base">
             {successMessage}
           </div>
         ) : (
-          <form onSubmit={onSubmit} className="flex flex-col" style={{ gap: 16 }}>
+          <form onSubmit={onSubmit} className="flex flex-col gap-4">
             <Field name="name" label="Full name" required />
             <Field name="email" label="Work email" type="email" required />
             <Field name="company" label="Company" />
@@ -119,18 +113,17 @@ export default function LeadForm({
               tabIndex={-1}
               autoComplete="off"
               aria-hidden="true"
-              style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+              className="absolute -left-[9999px] w-px h-px opacity-0"
             />
 
             {status === "error" && (
-              <p role="alert" style={{ color: "#c0392b", fontSize: 14 }}>{error}</p>
+              <p role="alert" className="text-[#c0392b] text-sm">{error}</p>
             )}
 
             <button
               type="submit"
               disabled={status === "sending"}
-              className="cta-btn cta-btn-primary"
-              style={{ alignSelf: "flex-start", opacity: status === "sending" ? 0.7 : 1 }}
+              className={`cta-btn cta-btn-primary self-start ${status === "sending" ? "opacity-70" : ""}`}
             >
               <span className="cta-btn-label">{status === "sending" ? "Sending…" : submitLabel}</span>
             </button>
@@ -141,20 +134,13 @@ export default function LeadForm({
   )
 }
 
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  border: "1px solid var(--border-ui)",
-  borderRadius: 10,
-  padding: "11px 14px",
-  fontSize: 15,
-  color: "var(--text-body)",
-  background: "var(--surface-raised)",
-}
+/* Canonical shared field style — .form-field in globals.css (DESIGN.md Inputs) */
+const inputClass = "form-field"
 
 function Labeled({ label, children }: { label?: string; children: React.ReactNode }) {
   return (
-    <label className="flex flex-col" style={{ gap: 6 }}>
-      {label && <span style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600 }}>{label}</span>}
+    <label className="flex flex-col gap-1.5">
+      {label && <span className="text-[13px] text-body font-semibold">{label}</span>}
       {children}
     </label>
   )
@@ -173,7 +159,7 @@ function Field({
 }) {
   return (
     <Labeled label={label}>
-      <input name={name} type={type} required={required} style={inputStyle} />
+      <input name={name} type={type} required={required} className={inputClass} />
     </Labeled>
   )
 }
@@ -181,7 +167,7 @@ function Field({
 function TextArea({ name, label, required }: { name: string; label?: string; required?: boolean }) {
   return (
     <Labeled label={label}>
-      <textarea name={name} required={required} rows={3} style={{ ...inputStyle, resize: "vertical" }} />
+      <textarea name={name} required={required} rows={3} className={`${inputClass} resize-y`} />
     </Labeled>
   )
 }
@@ -199,7 +185,7 @@ function Select({
 }) {
   return (
     <Labeled label={label}>
-      <select name={name} required={required} defaultValue="" style={inputStyle}>
+      <select name={name} required={required} defaultValue="" className={inputClass}>
         <option value="" disabled>
           Select…
         </option>

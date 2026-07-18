@@ -33,25 +33,16 @@ export default function LogoCloudMarquee({
         <div className="w-full flex flex-col gap-[35px] items-center max-w-[1348px] mx-auto px-4">
           <p className="text-section-h3 text-center">
             <span className="text-body">{headingPart1}</span>
-            <span style={{ color: "var(--purple-primary)" }}>{headingAccent}</span>
+            <span className="text-brand">{headingAccent}</span>
           </p>
           {description && (
-            <p
-              className="text-center"
-              style={{
-                fontSize: 16,
-                lineHeight: "25.6px",
-                color: "var(--text-muted-fg)",
-                maxWidth: 860,
-                whiteSpace: "pre-line",
-              }}
-            >
+            <p className="text-center text-base leading-[1.6] text-muted max-w-[860px] whitespace-pre-line">
               {description}
             </p>
           )}
         </div>
         <div className="relative left-1/2 -translate-x-1/2 w-screen">
-          <div className="flex items-center gap-[65px] animate-marquee" style={{ width: "max-content" }}>
+          <div className="flex items-center gap-[65px] animate-marquee w-max">
             {duplicatedLogos.map((logo, i) => (
               <FramedMedia key={`${logo.key}-${i}`} className="flex items-center justify-center shrink-0 h-[65px]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}

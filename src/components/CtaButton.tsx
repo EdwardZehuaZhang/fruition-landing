@@ -80,8 +80,8 @@ export default function CtaButton({
       <span className="cta-btn-label">
         {mobileLabel ? (
           <>
-            <span className="sm:hidden">{mobileLabel}</span>
-            <span className="hidden sm:inline">{content}</span>
+            <span className="md:hidden">{mobileLabel}</span>
+            <span className="hidden md:inline">{content}</span>
           </>
         ) : (
           content

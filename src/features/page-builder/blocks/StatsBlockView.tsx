@@ -70,11 +70,11 @@ export default function StatsBlockView({
     : '/images/badge-forrester.png'
 
   return (
-    <section className="bg-surface py-16 sm:py-20 lg:py-24 px-4">
+    <section className="bg-surface py-16 md:py-20 lg:py-24 px-4">
       <div className="mx-auto max-w-[1040px] flex flex-col items-center gap-8">
         {/* Heading */}
         {heading && (
-          <h2 className="text-center text-2xl sm:text-3xl lg:text-[36px] font-semibold leading-snug max-w-[720px]">
+          <h2 className="text-center text-2xl md:text-3xl lg:text-[36px] font-semibold leading-snug max-w-[720px]">
             {renderHeadingWithAccent(heading, headingAccent)}
           </h2>
         )}
@@ -89,13 +89,13 @@ export default function StatsBlockView({
               <img src={mondayPartnersBadgeSrc} alt="monday.com partners" width={148} height={23} className="h-[23px] w-auto" />
             </div>
           ) : (
-            <p className="text-base sm:text-lg text-center text-muted max-w-[600px]">{subheading}</p>
+            <p className="text-base md:text-lg text-center text-muted max-w-[600px]">{subheading}</p>
           )
         )}
 
         {/* Stats row */}
         {stats && stats.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-8 sm:gap-12 lg:gap-16 mt-4">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-12 lg:gap-16 mt-4">
             {stats.map((stat, i) => (
               <div key={stat._key ?? i} className="flex flex-col items-center gap-1 min-w-[120px]">
                 {stat.icon?.asset ? (
@@ -103,7 +103,7 @@ export default function StatsBlockView({
                   <img
                     src={urlFor(stat.icon).width(64).height(64).url()}
                     alt=""
-                    className="w-[56px] h-[56px] sm:w-[64px] sm:h-[64px] mb-2"
+                    className="w-[56px] h-[56px] md:w-[64px] md:h-[64px] mb-2"
                   />
                 ) : (
                   <Image
@@ -111,13 +111,13 @@ export default function StatsBlockView({
                     alt=""
                     width={64}
                     height={64}
-                    className="w-[56px] h-[56px] sm:w-[64px] sm:h-[64px] mb-2"
+                    className="w-[56px] h-[56px] md:w-[64px] md:h-[64px] mb-2"
                   />
                 )}
-                <span className="text-3xl sm:text-4xl lg:text-[44px] font-bold text-[#6b16c1] leading-tight whitespace-nowrap">
+                <span className="text-3xl md:text-4xl lg:text-[44px] font-bold text-[#6b16c1] leading-tight whitespace-nowrap">
                   {stat.value}
                 </span>
-                <span className="text-sm sm:text-[15px] text-[#333] leading-snug text-center mt-1">{stat.label}</span>
+                <span className="text-sm md:text-[15px] text-[#333] leading-snug text-center mt-1">{stat.label}</span>
               </div>
             ))}
           </div>
@@ -142,7 +142,7 @@ export default function StatsBlockView({
         {ctaLabel && ctaUrl && (
           <Link
             href={ctaUrl}
-            className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-[#579bfc] hover:bg-none text-white text-lg sm:text-xl font-bold tracking-wide hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-purple-500/20 mt-2"
+            className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-brand-dark hover:bg-none text-white text-lg md:text-xl font-bold tracking-wide hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-purple-500/20 mt-2"
           >
             <PaperPlaneIcon size={20} />
             {ctaLabel}

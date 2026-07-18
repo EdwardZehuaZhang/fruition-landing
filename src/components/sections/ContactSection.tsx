@@ -32,15 +32,8 @@ const SERVICE_OPTIONS = [
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  border: "1px solid var(--border-ui)",
-  borderRadius: 10,
-  padding: "12px 14px",
-  fontSize: 15,
-  color: "var(--text-body)",
-  background: "var(--surface-raised)",
-}
+/* Canonical shared field style — .form-field in globals.css (DESIGN.md Inputs) */
+const inputClass = "form-field"
 
 export default function ContactSection({
   offices,
@@ -66,58 +59,28 @@ function ContactHero({ offices, salesEmail, supportEmail, phone, phoneTel }: Con
   const sameInbox = salesEmail.toLowerCase() === supportEmail.toLowerCase()
   return (
     <section className="bg-surface px-4">
-      <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1100, paddingTop: 104, paddingBottom: 24 }}>
-        <span
-          className="inline-flex items-center rounded-full"
-          style={{
-            backgroundColor: "#f4ecff",
-            color: "var(--purple-primary)",
-            padding: "8px 16px",
-            fontSize: 13,
-            fontWeight: 700,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            border: "1px solid #e4d6fb",
-          }}
-        >
+      <div className="mx-auto flex flex-col items-center max-w-[1100px] pt-26 pb-6">
+        <span className="inline-flex items-center rounded-full bg-brand-soft text-brand border border-brand/30 font-mono text-xs font-semibold uppercase tracking-[0.14em] px-4 py-2">
           Contact us
         </span>
 
-        <h1
-          className="text-center"
-          style={{
-            marginTop: 24,
-            maxWidth: 860,
-            fontSize: "clamp(2.4rem, 5vw, 4rem)",
-            fontWeight: 600,
-            lineHeight: 1.08,
-            letterSpacing: "-0.03em",
-            color: "var(--text-body)",
-            textWrap: "balance",
-          }}
-        >
+        <h1 className="text-center mt-6 max-w-[860px] text-[clamp(2.4rem,5vw,4rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-body text-balance">
           We&rsquo;d love to hear from you
         </h1>
 
-        <p
-          className="text-center text-body-lead"
-          style={{ marginTop: 20, maxWidth: 600, color: "var(--text-muted-fg)", textWrap: "pretty" }}
-        >
+        <p className="text-center text-body-lead mt-5 max-w-[600px] text-muted text-pretty">
           Reach the team directly, or find the office nearest you. We answer every message within one business day.
         </p>
       </div>
 
       {/* World map */}
-      <div className="mx-auto px-4" style={{ maxWidth: 1100, paddingTop: 12, paddingBottom: 16 }}>
+      <div className="mx-auto px-4 max-w-[1100px] pt-3 pb-4">
         <WorldMap offices={offices} />
       </div>
 
       {/* Channels */}
-      <div className="mx-auto px-4" style={{ maxWidth: 1000, paddingTop: 24, paddingBottom: 88 }}>
-        <div
-          className="grid"
-          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 24, textAlign: "center" }}
-        >
+      <div className="mx-auto px-4 max-w-[1000px] pt-6 pb-22">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6 text-center">
           {sameInbox ? (
             <Channel
               title="Email"
@@ -161,18 +124,18 @@ function ContactHero({ offices, salesEmail, supportEmail, phone, phoneTel }: Con
 
 function Channel({ title, blurb, value, href }: { title: string; blurb: string; value: string; href?: string }) {
   return (
-    <div className="flex flex-col items-center" style={{ gap: 6 }}>
-      <h2 style={{ fontSize: 17, fontWeight: 600, color: "var(--text-body)" }}>{title}</h2>
-      <p style={{ fontSize: 14, color: "var(--text-muted-fg)", lineHeight: "20px", maxWidth: 240 }}>{blurb}</p>
+    <div className="flex flex-col items-center gap-1.5">
+      <h2 className="text-[17px] font-semibold text-body">{title}</h2>
+      <p className="text-sm text-muted leading-5 max-w-[240px]">{blurb}</p>
       {href ? (
         <a
           href={href}
-          style={{ fontSize: 15, fontWeight: 600, color: "var(--purple-primary)", marginTop: 2, wordBreak: "break-word" }}
+          className="text-[15px] font-semibold text-brand mt-0.5 [word-break:break-word]"
         >
           {value}
         </a>
       ) : (
-        <span style={{ fontSize: 15, fontWeight: 600, color: "var(--text-muted-fg)", marginTop: 2 }}>{value}</span>
+        <span className="text-[15px] font-semibold text-muted mt-0.5">{value}</span>
       )}
     </div>
   )
@@ -182,36 +145,28 @@ function Channel({ title, blurb, value, href }: { title: string; blurb: string; 
 
 function OfficeBand({ offices }: { offices: ContactOffice[] }) {
   return (
-    <section
-      style={{
-        background: "linear-gradient(135deg, #10003a 0%, #2b074d 55%, #550e9b 100%)",
-        padding: "96px 0",
-      }}
-    >
-      <div className="mx-auto px-4 fr-office-band" style={{ maxWidth: 1280 }}>
+    <section className="py-24 bg-[linear-gradient(135deg,var(--color-surface-dark)_0%,var(--color-surface-dark-2)_55%,var(--color-brand-dark)_100%)]">
+      <div className="mx-auto flex max-w-[1280px] flex-col gap-12 px-4 lg:flex-row lg:items-start lg:gap-16">
         {/* Heading column */}
-        <div style={{ maxWidth: 360, minWidth: 0 }}>
-          <p style={{ color: "#d9bff5", fontSize: 16, fontWeight: 600, lineHeight: "24px" }}>
+        <div className="max-w-[360px] min-w-0 lg:flex-none">
+          <p className="text-brand-light text-base font-semibold leading-6">
             Our locations
           </p>
-          <h2
-            className="text-section-h2"
-            style={{ color: "#ffffff", marginTop: 12, textWrap: "balance" }}
-          >
+          <h2 className="text-section-h2 text-white mt-3 text-balance">
             Visit our offices
           </h2>
-          <p style={{ color: "rgba(255,255,255,0.72)", fontSize: 20, lineHeight: "30px", marginTop: 20 }}>
+          <p className="text-white/[0.72] text-xl leading-[30px] mt-5">
             Local teams across {offices.length} cities, working in your timezone.
           </p>
         </div>
 
         {/* Office list */}
-        <div className="fr-office-list">
+        <div className="flex flex-1 flex-wrap gap-8 lg:gap-x-16 lg:gap-y-8">
           {offices.map((o, i) => (
-            <div key={`${o.city}-${i}`} className="fr-office-item">
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                {o.flag && <span style={{ fontSize: 18, lineHeight: 1 }}>{o.flag}</span>}
-                <span style={{ fontSize: 18, fontWeight: 600, color: "#ffffff", lineHeight: "28px" }}>{o.city}</span>
+            <div key={`${o.city}-${i}`} className="min-w-[240px] max-w-[320px] flex-[1_0_0]">
+              <div className="flex items-center gap-2">
+                {o.flag && <span className="text-lg leading-none">{o.flag}</span>}
+                <span className="text-lg font-semibold text-white leading-7">{o.city}</span>
               </div>
               {o.address &&
                 (o.addressUrl ? (
@@ -219,19 +174,19 @@ function OfficeBand({ offices }: { offices: ContactOffice[] }) {
                     href={o.addressUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ display: "block", fontSize: 16, lineHeight: "24px", color: "rgba(255,255,255,0.72)", marginTop: 4 }}
+                    className="block text-base leading-6 text-white/[0.72] mt-1"
                   >
                     {o.address}
                   </a>
                 ) : (
-                  <p style={{ fontSize: 16, lineHeight: "24px", color: "rgba(255,255,255,0.72)", marginTop: 4 }}>
+                  <p className="text-base leading-6 text-white/[0.72] mt-1">
                     {o.address}
                   </p>
                 ))}
               {o.phone && (
                 <a
                   href={`tel:${o.phoneTel || o.phone.replace(/[^\d+]/g, "")}`}
-                  style={{ display: "block", fontSize: 16, color: "rgba(255,255,255,0.72)", marginTop: 4 }}
+                  className="block text-base text-white/[0.72] mt-1"
                 >
                   {o.phone}
                 </a>
@@ -241,28 +196,6 @@ function OfficeBand({ offices }: { offices: ContactOffice[] }) {
         </div>
       </div>
 
-      <style>{`
-        .fr-office-band {
-          display: flex;
-          flex-direction: column;
-          gap: 48px;
-        }
-        .fr-office-list {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 32px;
-        }
-        .fr-office-item {
-          flex: 1 0 0;
-          min-width: 240px;
-          max-width: 320px;
-        }
-        @media (min-width: 900px) {
-          .fr-office-band { flex-direction: row; align-items: flex-start; gap: 64px; }
-          .fr-office-band > div:first-child { flex: 0 0 auto; }
-          .fr-office-list { flex: 1 1 0; gap: 32px 64px; }
-        }
-      `}</style>
     </section>
   )
 }
@@ -321,60 +254,49 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
   }
 
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 96 }}>
-      <div
-        className="mx-auto grid bg-surface-raised dark:shadow-none dark:border dark:border-ui"
-        style={{ maxWidth: 1100, gap: 0, gridTemplateColumns: "minmax(0, 1fr)", overflow: "hidden", borderRadius: 24, border: "1px solid #ece7fb", boxShadow: "0 30px 70px -50px rgba(64,12,140,0.4)" }}
-      >
-        <div className="fr-form-grid">
+    <section className="bg-surface px-4 pt-20 pb-24">
+      <div className="mx-auto grid bg-surface-raised dark:shadow-none dark:border dark:border-ui max-w-[1100px] gap-0 grid-cols-[minmax(0,1fr)] overflow-hidden rounded-[24px] border border-[#ece7fb] shadow-[0_30px_70px_-50px_rgba(64,12,140,0.4)]">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr]">
           {/* Left: form */}
-          <div style={{ padding: "clamp(28px, 4vw, 48px)" }}>
-            <h2 className="text-section-h3" style={{ color: "var(--text-body)" }}>
+          <div className="p-[clamp(28px,4vw,48px)]">
+            <h2 className="text-section-h3 text-body">
               Tell us what you&rsquo;re building
             </h2>
-            <p style={{ color: "var(--text-muted-fg)", fontSize: 15, lineHeight: "22px", marginTop: 10, marginBottom: 26 }}>
+            <p className="text-muted text-[15px] leading-[22px] mt-2.5 mb-[26px]">
               A specialist reads every message and replies within one business day.
             </p>
 
             {status === "done" ? (
               <div
-                className="rounded-card"
-                style={{ background: "#f5fbf6", border: "1px solid #d6ecd9", padding: 22, color: "#1e7a40", fontSize: 16, lineHeight: "24px" }}
+                className="rounded-card bg-[#f5fbf6] border border-[#d6ecd9] p-[22px] text-[#1e7a40] text-base leading-6"
                 role="status"
               >
                 Thanks for reaching out. Your message is on its way to {salesEmail} and we&rsquo;ll be in touch within one business day.
               </div>
             ) : (
-              <form onSubmit={onSubmit} noValidate className="flex flex-col" style={{ gap: 16 }}>
-                <div className="fr-name-row" style={{ display: "grid", gap: 16 }}>
+              <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+                <div className="grid gap-4 md:grid-cols-2">
                   <Field name="firstName" label="First name" required invalid={fieldErrors.firstName} />
                   <Field name="lastName" label="Last name" />
                 </div>
                 <Field name="email" label="Email" type="email" required invalid={fieldErrors.email} />
                 <Field name="phone" label="Phone (optional)" type="tel" />
 
-                <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
-                  <legend style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600, marginBottom: 8 }}>
+                <fieldset className="border-0 p-0 m-0">
+                  <legend className="text-[13px] text-body font-semibold mb-2">
                     What can we help with?
                   </legend>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  <div className="flex flex-wrap gap-2">
                     {SERVICE_OPTIONS.map((opt) => {
                       const selected = service === opt
                       return (
                         <label
                           key={opt}
+                          className="inline-flex items-center px-3.5 py-2 rounded-full text-[13.5px] font-medium cursor-pointer transition-colors"
                           style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            padding: "8px 14px",
-                            borderRadius: 9999,
-                            fontSize: 13.5,
-                            fontWeight: 500,
-                            cursor: "pointer",
                             border: `1px solid ${selected ? "var(--purple-primary)" : "var(--border-ui)"}`,
-                            background: selected ? "#f4ecff" : "var(--surface-raised)",
+                            background: selected ? "var(--purple-soft)" : "var(--surface-raised)",
                             color: selected ? "var(--purple-dark)" : "var(--text-body)",
-                            transition: "border-color 0.18s ease, background 0.18s ease, color 0.18s ease",
                           }}
                         >
                           <input
@@ -383,7 +305,7 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
                             value={opt}
                             checked={selected}
                             onChange={() => setService(opt)}
-                            style={{ position: "absolute", opacity: 0, width: 1, height: 1 }}
+                            className="absolute opacity-0 w-px h-px"
                           />
                           {opt}
                         </label>
@@ -405,7 +327,7 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
                 />
 
                 {status === "error" && (
-                  <p role="alert" style={{ color: "#c0392b", fontSize: 14 }}>
+                  <p role="alert" className="text-[#c0392b] text-sm">
                     {error}
                   </p>
                 )}
@@ -413,8 +335,8 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="cta-btn cta-btn-primary"
-                  style={{ alignSelf: "flex-start", marginTop: 4, opacity: status === "sending" ? 0.7 : 1 }}
+                  className="cta-btn cta-btn-primary self-start mt-1"
+                  style={{ opacity: status === "sending" ? 0.7 : 1 }}
                 >
                   <span className="cta-btn-label">{status === "sending" ? "Sending…" : "Send message"}</span>
                 </button>
@@ -423,63 +345,34 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
           </div>
 
           {/* Right: brand panel */}
-          <aside
-            className="fr-form-aside"
-            style={{
-              background: "linear-gradient(150deg, #550e9b 0%, #8015e8 60%, #ba83f0 100%)",
-              padding: "clamp(28px, 4vw, 48px)",
-              color: "#fff",
-              position: "relative",
-              overflow: "hidden",
-            }}
-          >
+          <aside className="relative overflow-hidden text-white p-[clamp(28px,4vw,48px)] bg-[linear-gradient(150deg,var(--color-brand-dark)_0%,var(--color-brand)_60%,var(--color-brand-light)_100%)]">
             <div
               aria-hidden="true"
-              style={{
-                position: "absolute",
-                width: 360,
-                height: 360,
-                right: -120,
-                top: -120,
-                borderRadius: "9999px",
-                background: "radial-gradient(circle, rgba(255,255,255,0.22), rgba(255,255,255,0))",
-              }}
+              className="absolute w-[360px] h-[360px] right-[-120px] top-[-120px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.22),rgba(255,255,255,0))]"
             />
-            <div style={{ position: "relative" }}>
-              <h3 style={{ fontSize: 22, fontWeight: 600, lineHeight: 1.3 }}>What happens next</h3>
-              <ol style={{ marginTop: 22, display: "flex", flexDirection: "column", gap: 20, listStyle: "none", padding: 0 }}>
+            <div className="relative">
+              <h3 className="text-[22px] font-semibold leading-[1.3]">What happens next</h3>
+              <ol className="mt-[22px] flex flex-col gap-5 list-none p-0">
                 {[
                   ["We read your message", "A real person on the team, not a queue."],
                   ["You hear back within a day", "We reply with next steps or a few clarifying questions."],
                   ["We map out the work together", "A short call if it helps, scoped to what you need."],
                 ].map(([title, body], i) => (
-                  <li key={i} style={{ display: "flex", gap: 14 }}>
-                    <span
-                      style={{
-                        flexShrink: 0,
-                        width: 30,
-                        height: 30,
-                        borderRadius: 9999,
-                        background: "rgba(255,255,255,0.16)",
-                        display: "grid",
-                        placeItems: "center",
-                        fontSize: 14,
-                        fontWeight: 700,
-                      }}
-                    >
+                  <li key={i} className="flex gap-3.5">
+                    <span className="shrink-0 w-[30px] h-[30px] rounded-full bg-white/[0.16] grid place-items-center text-sm font-bold">
                       {i + 1}
                     </span>
                     <div>
-                      <div style={{ fontWeight: 600, fontSize: 15.5 }}>{title}</div>
-                      <div style={{ fontSize: 14, lineHeight: "20px", color: "rgba(255,255,255,0.8)", marginTop: 2 }}>{body}</div>
+                      <div className="font-semibold text-[15.5px]">{title}</div>
+                      <div className="text-sm leading-5 text-white/80 mt-0.5">{body}</div>
                     </div>
                   </li>
                 ))}
               </ol>
 
-              <div style={{ marginTop: 36, paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.18)" }}>
-                <div style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>Prefer email?</div>
-                <a href={`mailto:${salesEmail}`} style={{ fontSize: 16, fontWeight: 600, color: "#fff" }}>
+              <div className="mt-9 pt-6 border-t border-white/[0.18]">
+                <div className="text-[13px] text-white/70">Prefer email?</div>
+                <a href={`mailto:${salesEmail}`} className="text-base font-semibold text-white">
                   {salesEmail}
                 </a>
               </div>
@@ -488,24 +381,14 @@ function ContactForm({ salesEmail }: { salesEmail: string }) {
         </div>
       </div>
 
-      <style>{`
-        .fr-form-grid { display: grid; grid-template-columns: 1fr; }
-        .fr-name-row { grid-template-columns: 1fr; }
-        @media (min-width: 600px) {
-          .fr-name-row { grid-template-columns: 1fr 1fr; }
-        }
-        @media (min-width: 880px) {
-          .fr-form-grid { grid-template-columns: 1.15fr 0.85fr; }
-        }
-      `}</style>
     </section>
   )
 }
 
 function FieldLabel({ label, children }: { label?: string; children: React.ReactNode }) {
   return (
-    <label className="flex flex-col" style={{ gap: 6 }}>
-      {label && <span style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600 }}>{label}</span>}
+    <label className="flex flex-col gap-1.5">
+      {label && <span className="text-[13px] text-body font-semibold">{label}</span>}
       {children}
     </label>
   )
@@ -531,7 +414,7 @@ function Field({
         type={type}
         required={required}
         aria-invalid={invalid || undefined}
-        style={{ ...inputStyle, borderColor: invalid ? "#e0708a" : "var(--border-ui)" }}
+        className={inputClass}
       />
     </FieldLabel>
   )
@@ -545,7 +428,7 @@ function TextArea({ name, label, required, invalid }: { name: string; label?: st
         required={required}
         rows={4}
         aria-invalid={invalid || undefined}
-        style={{ ...inputStyle, resize: "vertical", borderColor: invalid ? "#e0708a" : "var(--border-ui)" }}
+        className={`${inputClass} resize-y`}
       />
     </FieldLabel>
   )

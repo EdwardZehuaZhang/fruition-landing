@@ -8,23 +8,30 @@
  * See docs/marketa-auto-docs-plan.md (Phase 3a). Setup steps for the env
  * vars live in docs/phase2-handoff.md.
  */
-// Use the per-API packages (@googleapis/docs, @googleapis/drive) instead of the
-// monolithic `googleapis` package. The full package bundles thousands of API
-// definitions (~40+ MiB) into the Cloudflare Worker and blows past the size
-// limit; these two pull in only Docs v1 + Drive v3. Behaviour is identical.
-import { docs as makeDocs, docs_v1 } from "@googleapis/docs"
-import { drive as makeDrive, drive_v3 } from "@googleapis/drive"
-import { JWT } from "google-auth-library"
+// Auth + API calls use `fetch` + Web Crypto (both native to the Cloudflare
+// Workers runtime) instead of `google-auth-library`/`@googleapis/*`. Those
+// libraries do their OAuth token exchange over Node's `http`, and OpenNext's
+// `unenv` polyfill doesn't implement `http.validateHeaderName` on the Worker —
+// so token fetch throws "[unenv] http.validateHeaderName is not implemented".
+// Docs worked on Vercel (real Node) but silently failed after the CF migration
+// for this exact reason. The REST calls below avoid node:http entirely.
 
 const SCOPES = [
   "https://www.googleapis.com/auth/drive",
   "https://www.googleapis.com/auth/documents",
 ]
 
-let cachedClient: JWT | null = null
+interface ServiceAccountKey {
+  client_email: string
+  private_key: string
+}
 
-function getAuthClient(): JWT {
-  if (cachedClient) return cachedClient
+function parseServiceAccountKey(): ServiceAccountKey {
+  // Docs are created by the DEDICATED `marketa-auto-docs` service account, read
+  // from GOOGLE_SERVICE_ACCOUNT_JSON_B64 — NOT the GA4 `analytics-reader` SA in
+  // GOOGLE_SA_KEY_B64 (that one has no Drive storage quota and cannot create
+  // Docs). Keep these separate: falling back to the analytics key would fail
+  // with a confusing "storage quota exceeded" instead of a clear "key missing".
   const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_B64
   if (!raw) {
     throw new Error("GOOGLE_SERVICE_ACCOUNT_JSON_B64 missing")
@@ -45,20 +52,103 @@ function getAuthClient(): JWT {
       "GOOGLE_SERVICE_ACCOUNT_JSON_B64 missing client_email or private_key",
     )
   }
-  cachedClient = new JWT({
-    email: parsed.client_email,
-    key: parsed.private_key,
-    scopes: SCOPES,
+  return { client_email: parsed.client_email, private_key: parsed.private_key }
+}
+
+function base64UrlEncode(input: string | ArrayBuffer): string {
+  let bin = ""
+  if (typeof input === "string") {
+    bin = input
+  } else {
+    const bytes = new Uint8Array(input)
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i])
+  }
+  return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")
+}
+
+function pemToPkcs8(pem: string): ArrayBuffer {
+  const body = pem
+    .replace(/-----BEGIN PRIVATE KEY-----/, "")
+    .replace(/-----END PRIVATE KEY-----/, "")
+    .replace(/\s+/g, "")
+  const bin = atob(body)
+  const buf = new Uint8Array(bin.length)
+  for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i)
+  return buf.buffer
+}
+
+let cachedToken: { token: string; exp: number } | null = null
+
+/**
+ * Mint (and cache) a Google OAuth access token for the service account using
+ * the JWT-bearer grant — signed with Web Crypto (RS256), exchanged over fetch.
+ */
+async function getAccessToken(): Promise<string> {
+  const now = Math.floor(Date.now() / 1000)
+  if (cachedToken && cachedToken.exp - 60 > now) return cachedToken.token
+
+  const { client_email, private_key } = parseServiceAccountKey()
+  const header = { alg: "RS256", typ: "JWT" }
+  const claim = {
+    iss: client_email,
+    scope: SCOPES.join(" "),
+    aud: "https://oauth2.googleapis.com/token",
+    iat: now,
+    exp: now + 3600,
+  }
+  const unsigned = `${base64UrlEncode(JSON.stringify(header))}.${base64UrlEncode(
+    JSON.stringify(claim),
+  )}`
+  const key = await crypto.subtle.importKey(
+    "pkcs8",
+    pemToPkcs8(private_key),
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
+    false,
+    ["sign"],
+  )
+  const sig = await crypto.subtle.sign(
+    "RSASSA-PKCS1-v1_5",
+    key,
+    new TextEncoder().encode(unsigned),
+  )
+  const assertion = `${unsigned}.${base64UrlEncode(sig)}`
+
+  const res = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+      assertion,
+    }).toString(),
   })
-  return cachedClient
+  if (!res.ok) {
+    throw new Error(`Google token exchange failed (${res.status}): ${await res.text()}`)
+  }
+  const json = (await res.json()) as { access_token?: string; expires_in?: number }
+  if (!json.access_token) throw new Error("Google token exchange returned no access_token")
+  cachedToken = { token: json.access_token, exp: now + (json.expires_in ?? 3600) }
+  return cachedToken.token
 }
 
-function getDocs(): docs_v1.Docs {
-  return makeDocs({ version: "v1", auth: getAuthClient() })
-}
-
-function getDrive(): drive_v3.Drive {
-  return makeDrive({ version: "v3", auth: getAuthClient() })
+/** Authenticated JSON fetch against a Google REST endpoint. */
+async function googleFetch(
+  url: string,
+  init: { method: string; body?: unknown },
+): Promise<Record<string, unknown>> {
+  const token = await getAccessToken()
+  const res = await fetch(url, {
+    method: init.method,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: init.body === undefined ? undefined : JSON.stringify(init.body),
+  })
+  const text = await res.text()
+  if (!res.ok) {
+    throw new Error(`Google API ${init.method} ${url} failed (${res.status}): ${text.slice(0, 400)}`)
+  }
+  return text ? (JSON.parse(text) as Record<string, unknown>) : {}
 }
 
 export interface CreatedDoc {
@@ -88,22 +178,21 @@ export async function createDraftDoc({
   if (!folderId) throw new Error("createDraftDoc: folderId required")
   if (!title) throw new Error("createDraftDoc: title required")
 
-  const drive = getDrive()
-  const docs = getDocs()
-
   // Create the file directly in the target folder. Using Drive's files.create
   // (not Docs' documents.create) so we can set `parents` in one call instead
   // of creating then moving.
-  const created = await drive.files.create({
-    requestBody: {
-      name: title,
-      mimeType: "application/vnd.google-apps.document",
-      parents: [folderId],
+  const created = await googleFetch(
+    "https://www.googleapis.com/drive/v3/files?fields=id&supportsAllDrives=true",
+    {
+      method: "POST",
+      body: {
+        name: title,
+        mimeType: "application/vnd.google-apps.document",
+        parents: [folderId],
+      },
     },
-    fields: "id",
-    supportsAllDrives: true,
-  })
-  const docId = created.data.id
+  )
+  const docId = created.id as string | undefined
   if (!docId) {
     throw new Error("Drive files.create returned no id")
   }
@@ -113,15 +202,18 @@ export async function createDraftDoc({
     // style requests (heading paragraph styles, bold/italic character runs,
     // hyperlinks). See renderMarkdownForDocs below.
     const { text, requests } = renderMarkdownForDocs(body)
-    await docs.documents.batchUpdate({
-      documentId: docId,
-      requestBody: {
-        requests: [
-          { insertText: { location: { index: 1 }, text } },
-          ...requests,
-        ],
+    await googleFetch(
+      `https://docs.googleapis.com/v1/documents/${docId}:batchUpdate`,
+      {
+        method: "POST",
+        body: {
+          requests: [
+            { insertText: { location: { index: 1 }, text } },
+            ...requests,
+          ],
+        },
       },
-    })
+    )
   }
 
   // Share with the Fruition workspace domain so anyone signed in to
@@ -133,16 +225,13 @@ export async function createDraftDoc({
     process.env.MARKETA_DOC_SHARE_DOMAIN ?? "fruitionservices.io"
   if (shareDomain) {
     try {
-      await drive.permissions.create({
-        fileId: docId,
-        supportsAllDrives: true,
-        sendNotificationEmail: false,
-        requestBody: {
-          type: "domain",
-          domain: shareDomain,
-          role: "writer",
+      await googleFetch(
+        `https://www.googleapis.com/drive/v3/files/${docId}/permissions?supportsAllDrives=true&sendNotificationEmail=false`,
+        {
+          method: "POST",
+          body: { type: "domain", domain: shareDomain, role: "writer" },
         },
-      })
+      )
     } catch (err) {
       console.warn(
         `[googleDocs] domain share for ${docId} → ${shareDomain} failed:`,
@@ -168,17 +257,18 @@ export async function createSubfolder(
 ): Promise<string> {
   if (!parentId) throw new Error("createSubfolder: parentId required")
   if (!name) throw new Error("createSubfolder: name required")
-  const drive = getDrive()
-  const created = await drive.files.create({
-    requestBody: {
-      name,
-      mimeType: "application/vnd.google-apps.folder",
-      parents: [parentId],
+  const created = await googleFetch(
+    "https://www.googleapis.com/drive/v3/files?fields=id&supportsAllDrives=true",
+    {
+      method: "POST",
+      body: {
+        name,
+        mimeType: "application/vnd.google-apps.folder",
+        parents: [parentId],
+      },
     },
-    fields: "id",
-    supportsAllDrives: true,
-  })
-  const id = created.data.id
+  )
+  const id = created.id as string | undefined
   if (!id) throw new Error("Drive files.create (folder) returned no id")
   return id
 }

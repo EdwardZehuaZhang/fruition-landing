@@ -159,34 +159,19 @@ type FruitionAdvantageItem = string
 
 function CertifiedExcellenceSection({ calendlyUrl }: { calendlyUrl: string }) {
   return (
-    <section
-      className="px-4"
-      style={{
-        paddingTop: 96,
-        paddingBottom: 96,
-        background: "linear-gradient(160deg, #2b074d 0%, #10003a 100%)",
-      }}
-    >
-      <div className="mx-auto text-center" style={{ maxWidth: 920 }}>
-        <h2 className="font-bold" style={{ color: "white", fontSize: 36, lineHeight: "44px", marginBottom: 16 }}>
+    <section className="px-4 py-14 md:py-24 bg-gradient-to-b from-surface-dark-2 to-surface-dark">
+      <div className="mx-auto text-center max-w-[920px]">
+        <h2 className="text-section-h2 text-white mb-4">
           Certified monday.com Partners Delivering Global Excellence
         </h2>
-        <p style={{ color: "rgba(255,255,255,0.82)", fontSize: 16, lineHeight: "26px", marginBottom: 32 }}>
+        <p className="text-base leading-relaxed text-white/80 mb-8">
           Transform your business operations with Fruition. As trusted monday.com Partners, our certified consultants help organisations worldwide harness the full power of monday.com.
         </p>
-        <div className="flex flex-wrap justify-center" style={{ gap: 16 }}>
-          <Link
-            href={calendlyUrl}
-            className="inline-flex items-center justify-center gap-2 font-semibold"
-            style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", fontSize: 15 }}
-          >
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link href={calendlyUrl} className="cta-btn cta-btn-on-dark-primary">
             <Rocket size={16} aria-hidden /> Book a Consultation
           </Link>
-          <Link
-            href="https://monday.com"
-            className="inline-flex items-center justify-center gap-2 font-semibold"
-            style={{ height: 50, padding: "0 26px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.6)", color: "white", fontSize: 15 }}
-          >
+          <Link href="https://monday.com" className="cta-btn cta-btn-on-dark-outline">
             <Play size={16} aria-hidden /> Get Started with monday.com
           </Link>
         </div>
@@ -197,20 +182,19 @@ function CertifiedExcellenceSection({ calendlyUrl }: { calendlyUrl: string }) {
 
 function WhyFruitionSection({ items }: { items: WhyFruitionItem[] }) {
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 64, paddingBottom: 64 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 32, lineHeight: "40px", marginBottom: 32 }}>
-          Why Choose Fruition for <span style={{ color: "#8015e8" }}>monday.com?</span>
+    <section className="bg-surface px-4 py-10 md:py-16">
+      <div className="mx-auto max-w-[1100px]">
+        <h2 className="text-section-h2 text-body text-center mb-8">
+          Why Choose Fruition for <span className="text-brand">monday.com?</span>
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4" style={{ gap: 16 }}>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {items.map((reason: WhyFruitionItem, i: number) => (
             <div
               key={reason || i}
-              className="flex items-center rounded-card"
-              style={{ gap: 12, padding: 20, background: "var(--surface-raised)", border: "1px solid var(--border-ui)" }}
+              className="flex items-center gap-3 rounded-card shadow-whisper ring-1 ring-ui bg-surface-raised p-5"
             >
-              <Check size={22} color="#8015e8" aria-hidden />
-              <p className="font-semibold" style={{ color: "var(--text-body)", fontSize: 14 }}>{reason}</p>
+              <Check size={22} aria-hidden className="shrink-0 text-brand" />
+              <p className="font-semibold text-sm text-body">{reason}</p>
             </div>
           ))}
         </div>
@@ -221,30 +205,20 @@ function WhyFruitionSection({ items }: { items: WhyFruitionItem[] }) {
 
 function ImplementationServicesSection({ items }: { items: ImplementationServiceItem[] }) {
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 64 }}>
-      <div className="mx-auto" style={{ maxWidth: 1000 }}>
-        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 30, lineHeight: "40px", marginBottom: 32 }}>
-          Our monday.com Expert <span style={{ color: "#8015e8" }}>Implementation Services</span>
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto max-w-[1000px]">
+        <h2 className="text-section-h2 text-body text-center mb-8">
+          Our monday.com Expert <span className="text-brand">Implementation Services</span>
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {items.map((s: ImplementationServiceItem, i: number) => (
             <div
               key={s.title || i}
-              className="dark:shadow-none"
-              style={{
-                padding: 24,
-                borderRadius: 16,
-                background: "var(--surface-raised)",
-                border: "1px solid var(--border-ui)",
-                display: "flex",
-                flexDirection: "column",
-                gap: 10,
-                boxShadow: "0 8px 24px -20px rgba(64,12,140,0.18)",
-              }}
+              className="dark:shadow-none rounded-card shadow-whisper ring-1 ring-ui bg-surface-raised p-6 flex flex-col gap-2.5"
             >
-              <span style={{ fontSize: 28 }}>{s.emoji}</span>
-              <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 16 }}>{s.title}</p>
-              <p style={{ color: "var(--text-muted-fg)", fontSize: 13, lineHeight: "20px" }}>{s.body}</p>
+              <span className="text-[28px] leading-none">{s.emoji}</span>
+              <p className="text-lg font-semibold text-body">{s.title}</p>
+              <p className="text-sm text-muted leading-relaxed">{s.body}</p>
             </div>
           ))}
         </div>
@@ -266,65 +240,46 @@ function PartnerWrapUpSection({
   fruitionAdvantages: FruitionAdvantageItem[]
 }) {
   return (
-    <section
-      className="px-4"
-      style={{ paddingTop: 64, paddingBottom: 96, background: "linear-gradient(180deg, #faf6ff 0%, #ebd9ff 100%)" }}
-    >
-      <div className="mx-auto" style={{ maxWidth: 1000 }}>
+    <section className="px-4 py-14 md:py-24 bg-gradient-to-b from-surface to-brand-soft">
+      <div className="mx-auto max-w-[1000px]">
         {/* CRM Expertise eyebrow header */}
-        <div className="flex flex-col items-center text-center" style={{ marginBottom: 40 }}>
-          <h2 className="font-bold" style={{ color: "#10003a", fontSize: 34, lineHeight: "44px", marginBottom: 12 }}>
-            <span style={{ color: "#8015e8" }}>monday CRM</span> Consulting Expertise
+        <div className="flex flex-col items-center text-center mb-10">
+          <h2 className="text-section-h2 text-body mb-3">
+            <span className="text-brand">monday CRM</span> Consulting Expertise
           </h2>
-          <p style={{ color: "#4a4a4a", fontSize: 15, lineHeight: "24px", maxWidth: 640 }}>
+          <p className="text-body-sm text-muted max-w-[640px]">
             Streamline your customer relationships with custom CRM implementations tailored to your business needs.
           </p>
         </div>
 
         {/* Industry Solutions + Global Reach side by side */}
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20, marginBottom: 36 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-9">
           {/* Industry Solutions card */}
-          <div
-            className="bg-white"
-            style={{
-              borderRadius: 18,
-              padding: 24,
-              border: "1px solid rgba(128,21,232,0.08)",
-              boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)",
-            }}
-          >
-            <p className="font-bold" style={{ color: "#8015e8", fontSize: 16, marginBottom: 14 }}>
+          <div className="rounded-card shadow-whisper ring-1 ring-ui bg-surface-raised p-6">
+            <p className="text-base font-bold text-brand mb-3.5">
               Industry Solutions
             </p>
-            <ul className="flex flex-col" style={{ gap: 10 }}>
+            <ul className="flex flex-col gap-2.5">
               {industrySolutions.map((s: IconLabelItem, i: number) => (
-                <li key={s.label || i} className="flex items-center" style={{ gap: 10 }}>
-                  <span style={{ fontSize: 18 }}>{s.emoji}</span>
-                  <span style={{ color: "#10003a", fontSize: 13 }}>{s.label}</span>
+                <li key={s.label || i} className="flex items-center gap-2.5">
+                  <span className="text-lg leading-none">{s.emoji}</span>
+                  <span className="text-sm text-body">{s.label}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* Global Reach card */}
-          <div
-            className="bg-white"
-            style={{
-              borderRadius: 18,
-              padding: 24,
-              border: "1px solid rgba(128,21,232,0.08)",
-              boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)",
-            }}
-          >
-            <p className="font-bold" style={{ color: "#8015e8", fontSize: 16, marginBottom: 4 }}>
+          <div className="rounded-card shadow-whisper ring-1 ring-ui bg-surface-raised p-6">
+            <p className="text-base font-bold text-brand mb-1">
               Global Reach, Local Expertise
             </p>
-            <p style={{ color: "#666", fontSize: 12, marginBottom: 14 }}>Serving clients across:</p>
-            <ul className="flex flex-col" style={{ gap: 10 }}>
+            <p className="text-xs text-muted mb-3.5">Serving clients across:</p>
+            <ul className="flex flex-col gap-2.5">
               {countries.map((c: IconLabelItem, i: number) => (
-                <li key={c.label || i} className="flex items-center" style={{ gap: 10 }}>
-                  <span style={{ fontSize: 18 }}>{c.emoji}</span>
-                  <span style={{ color: "#10003a", fontSize: 13 }}>{c.label}</span>
+                <li key={c.label || i} className="flex items-center gap-2.5">
+                  <span className="text-lg leading-none">{c.emoji}</span>
+                  <span className="text-sm text-body">{c.label}</span>
                 </li>
               ))}
             </ul>
@@ -332,59 +287,26 @@ function PartnerWrapUpSection({
         </div>
 
         {/* Fruition Advantage purple banner */}
-        <div
-          className="overflow-hidden relative"
-          style={{
-            borderRadius: 20,
-            padding: 28,
-            background: "linear-gradient(135deg, #2b074d 0%, #6a18c7 60%, #8015e8 100%)",
-            boxShadow: "0 24px 40px -28px rgba(64,12,140,0.5)",
-          }}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 28 }}>
+        <div className="overflow-hidden relative rounded-card p-7 bg-gradient-to-br from-surface-dark-2 via-brand-dark to-brand shadow-card">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
             <div>
-              <p className="font-bold" style={{ color: "white", fontSize: 18, marginBottom: 14 }}>The Fruition Advantage</p>
-              <ul className="flex flex-col" style={{ gap: 10 }}>
+              <p className="text-lg font-bold text-white mb-3.5">The Fruition Advantage</p>
+              <ul className="flex flex-col gap-2.5">
                 {fruitionAdvantages.map((adv: FruitionAdvantageItem, i: number) => (
-                  <li key={adv || i} className="flex items-start" style={{ gap: 10, color: "rgba(255,255,255,0.92)" }}>
-                    <span
-                      style={{
-                        flexShrink: 0,
-                        width: 22,
-                        height: 22,
-                        borderRadius: 999,
-                        background: "rgba(255,255,255,0.18)",
-                        color: "white",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 11,
-                        fontWeight: 700,
-                      }}
-                    >
+                  <li key={adv || i} className="flex items-start gap-2.5 text-white/90">
+                    <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-white/20 font-mono text-[11px] font-semibold text-white">
                       {i + 1}
                     </span>
-                    <span style={{ fontSize: 13, lineHeight: "20px" }}>{adv}</span>
+                    <span className="text-sm leading-5">{adv}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="flex flex-col items-start md:items-end justify-between" style={{ gap: 20 }}>
-              <p style={{ color: "white", fontSize: 14, lineHeight: "22px", textAlign: "right", maxWidth: 280 }}>
+            <div className="flex flex-col items-start md:items-end justify-between gap-5">
+              <p className="text-sm leading-relaxed text-white text-left md:text-right max-w-[280px]">
                 Learn about how monday.com is the right fit for you
               </p>
-              <Link
-                href={calendlyUrl}
-                className="inline-flex items-center justify-center gap-2 font-semibold"
-                style={{
-                  height: 46,
-                  padding: "0 22px",
-                  borderRadius: 999,
-                  background: "white",
-                  color: "#8015e8",
-                  fontSize: 14,
-                }}
-              >
+              <Link href={calendlyUrl} className="cta-btn cta-btn-on-dark-primary">
                 <Rocket size={16} aria-hidden /> Schedule a Meeting
               </Link>
             </div>
@@ -486,9 +408,9 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
       <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
 
       {/* 6b. Video below FAQ */}
-      <section className="bg-surface px-4" style={{ paddingTop: 24, paddingBottom: 80 }}>
-        <div className="mx-auto" style={{ maxWidth: 980 }}>
-          <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
+      <section className="bg-surface px-4 pt-6 pb-14 md:pb-24">
+        <div className="mx-auto max-w-[980px]">
+          <div className="rounded-card overflow-hidden aspect-video">
             <YouTubeEmbed videoId="_0MhMjicbIM" title="monday.com consulting partner overview" />
           </div>
         </div>

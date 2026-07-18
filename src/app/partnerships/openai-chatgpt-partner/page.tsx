@@ -1,4 +1,5 @@
-import { getAiPartnerPageBySlug, getSiteSettings } from "@/sanity/queries"
+import { getAiPartnerPageBySlug, getSiteSettings, getFaqItemsForPageStrict, getClosingCtaForPage } from "@/sanity/queries"
+import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
 import AiPartnerTemplate from "@/components/AiPartnerTemplate"
 import { buildOgMetadata } from "@/lib/metadata"
 
@@ -21,9 +22,11 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const [page, siteSettings] = await Promise.all([
+  const [page, siteSettings, centralFaqs, closingCta] = await Promise.all([
     getAiPartnerPageBySlug(SLUG),
     getSiteSettings(),
+    getFaqItemsForPageStrict("partnerships/openai-chatgpt-partner"),
+    getClosingCtaForPage("partnerships/openai-chatgpt-partner"),
   ])
-  return <AiPartnerTemplate page={page} siteSettings={siteSettings} />
+  return <AiPartnerTemplate page={page} siteSettings={siteSettings} faqTabs={groupFaqsIntoTabs(centralFaqs)} closingCta={closingCta} />
 }

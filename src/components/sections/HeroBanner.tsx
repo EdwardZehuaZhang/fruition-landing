@@ -92,14 +92,13 @@ export default function HeroBanner({
     return (
       <section className="bg-surface">
         <div
-          className="mx-auto px-4 sm:px-8 md:px-16 lg:px-24 xl:px-[120px] 2xl:px-[273px] max-w-[1588px] w-full"
-          style={{ paddingTop: 80, paddingBottom: 80 }}
+          className="mx-auto px-4 md:px-16 lg:px-24 max-w-[1588px] w-full py-20"
         >
           <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
             {/* Left: text */}
             <div className="flex-1 flex flex-col items-start text-left max-w-[640px] w-full">
               {showPartnerBadges && (
-                <div className="flex items-center flex-wrap" style={{ gap: 22, marginBottom: 32 }}>
+                <div className="flex items-center flex-wrap gap-[22px] mb-8">
                   {partnerBadges.map((badge, i) => {
                     const cmsSrc = safeImageUrl(badge.image)
                     const src = getDarkBadgeSrc(badge.name, cmsSrc)
@@ -119,34 +118,25 @@ export default function HeroBanner({
                 </div>
               )}
               {eyebrow && (
-                <div
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: "var(--purple-primary)",
-                    marginBottom: 16,
-                  }}
-                >
+                <div className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand mb-4">
                   {eyebrow}
                 </div>
               )}
-              <h1 className="text-display" style={{ marginTop: 0 }}>
+              <h1 className="text-display mt-0">
                 <span className="text-body">{headingPart1}</span>
                 {headingAccent && (
-                  <span style={{ color: "var(--purple-primary)", display: accentBlock ? "block" : undefined }}>
+                  <span className={accentBlock ? "text-brand block" : "text-brand"}>
                     {headingAccent}
                   </span>
                 )}
                 {headingPart2 && <span className="text-body">{headingPart2}</span>}
               </h1>
               {subheading && (
-                <p className="text-body-lead text-body" style={{ marginTop: 24, whiteSpace: "pre-line" }}>
+                <p className="text-body-lead text-muted mt-6 whitespace-pre-line">
                   {subheading}
                 </p>
               )}
-              <div className="flex flex-col items-stretch w-full max-w-[330px]" style={{ gap: 16, marginTop: 32 }}>
+              <div className="flex flex-col items-stretch w-full max-w-[330px] gap-4 mt-8">
                 {primaryCtaLabel && primaryCtaUrl && (
                   <CtaButton
                     href={primaryCtaUrl}
@@ -175,8 +165,7 @@ export default function HeroBanner({
                     loop
                     playsInline
                     preload="metadata"
-                    className="rounded-card object-contain bg-surface w-full"
-                    style={{ height: "auto" }}
+                    className="rounded-card object-contain bg-surface w-full h-auto"
                   >
                     <source src={heroVideoSrc} type="video/mp4" />
                   </video>
@@ -187,8 +176,7 @@ export default function HeroBanner({
                   <img
                     src={heroImageSrc}
                     alt="Hero"
-                    className="rounded-card bg-surface w-full"
-                    style={{ height: "auto", objectFit: "contain" }}
+                    className="rounded-card bg-surface w-full h-auto object-contain"
                   />
                 </FramedMedia>
               ) : null}
@@ -202,12 +190,11 @@ export default function HeroBanner({
   return (
     <section className="bg-surface">
       <div
-        className="mx-auto flex flex-col items-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-[120px] 2xl:px-[273px] max-w-[1588px] w-full"
-        style={{ paddingTop: 80, paddingBottom: 80 }}
+        className="mx-auto flex flex-col items-center px-4 md:px-16 lg:px-24 max-w-[1588px] w-full py-20"
       >
         {/* Partner badges — hidden when a single partnerImageUrl is used or hidePartnerBadges flag is set */}
         {showPartnerBadges && (
-          <div className="flex flex-wrap items-center justify-center" style={{ gap: 22 }}>
+          <div className="flex flex-wrap items-center justify-center gap-[22px]">
             {partnerBadges.map((badge, i) => {
               const cmsSrc = safeImageUrl(badge.image)
               const src = getDarkBadgeSrc(badge.name, cmsSrc)
@@ -230,14 +217,7 @@ export default function HeroBanner({
         {/* Eyebrow */}
         {eyebrow && (
           <div
-            style={{
-              marginTop: showPartnerBadges ? 32 : 0,
-              fontSize: 14,
-              fontWeight: 700,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "var(--purple-primary)",
-            }}
+            className={`font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand ${showPartnerBadges ? "mt-8" : "mt-0"}`}
           >
             {eyebrow}
           </div>
@@ -245,17 +225,11 @@ export default function HeroBanner({
 
         {/* Heading */}
         <h1
-          className="text-display text-center"
-          style={{ marginTop: eyebrow ? 16 : 42, maxWidth: 924 }}
+          className={`text-display text-center max-w-[924px] ${eyebrow ? "mt-4" : "mt-[42px]"}`}
         >
           <span className="text-body">{headingPart1}</span>
           {headingAccent && (
-            <span
-              style={{
-                color: "var(--purple-primary)",
-                display: accentBlock ? "block" : undefined,
-              }}
-            >
+            <span className={accentBlock ? "text-brand block" : "text-brand"}>
               {headingAccent}
             </span>
           )}
@@ -264,31 +238,31 @@ export default function HeroBanner({
 
         {/* Subheading */}
         {subheading && (
-          <p className="text-body-lead text-center text-body" style={{ marginTop: 31, maxWidth: 859, whiteSpace: "pre-line" }}>
+          <p className="text-body-lead text-center text-muted mt-[31px] max-w-[859px] whitespace-pre-line">
             {subheading}
           </p>
         )}
 
         {/* Partner image — shown below hero text when partnerImageUrl is resolved */}
         {partnerImageUrl && (
-          <div style={{ marginTop: 40 }}>
+          <div className="mt-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={partnerImageUrl}
               alt="monday.com partner certifications"
-              style={{ width: "100%", maxWidth: 700, height: "auto" }}
+              className="w-full max-w-[700px] h-auto"
             />
           </div>
         )}
 
         {/* CTA buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center w-full max-w-[680px]" style={{ gap: 20, marginTop: 40 }}>
+        <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-[680px] gap-5 mt-10">
           {primaryCtaLabel && primaryCtaUrl && (
             <CtaButton
               href={primaryCtaUrl}
               label={primaryCtaLabel}
               variant={secondaryCtaLabel ? "outline" : "primary"}
-              className="w-full sm:flex-1 sm:max-w-[330px]"
+              className="w-full md:flex-1 md:max-w-[330px]"
             />
           )}
           {secondaryCtaLabel && secondaryCtaUrl && (
@@ -296,42 +270,33 @@ export default function HeroBanner({
               href={secondaryCtaUrl}
               label={secondaryCtaLabel}
               variant="primary"
-              className="w-full sm:flex-1 sm:max-w-[330px]"
+              className="w-full md:flex-1 md:max-w-[330px]"
             />
           )}
         </div>
 
         {/* Hero media — video takes precedence over image */}
         {heroVideoSrc ? (
-          <FramedMedia className="w-full max-w-[1042px]" style={{ marginTop: 40 }}>
+          <FramedMedia className="w-full max-w-[1042px] mt-10">
             <video
               autoPlay
               muted
               loop
               playsInline
               preload="metadata"
-              className="rounded-card object-contain bg-surface w-full"
-              style={{ height: "auto", aspectRatio: "1042 / 312" }}
+              className="rounded-card object-contain bg-surface w-full h-auto aspect-[1042/312]"
             >
               <source src={heroVideoSrc} type="video/mp4" />
             </video>
           </FramedMedia>
         ) : heroImageSrc ? (
-          <FramedMedia className="w-full max-w-[1042px]" style={{ marginTop: 40 }}>
+          <FramedMedia className="w-full max-w-[1042px] mt-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={heroImageSrc}
               alt="Hero"
-              className="rounded-card bg-surface w-full"
-              style={
-                heroImageContain
-                  ? {
-                      maxHeight: heroImageMaxHeight ?? 520,
-                      height: "auto",
-                      objectFit: "contain",
-                    }
-                  : { height: "auto", aspectRatio: "1042 / 312", objectFit: "contain" }
-              }
+              className={`rounded-card bg-surface w-full h-auto object-contain ${heroImageContain ? "" : "aspect-[1042/312]"}`}
+              style={heroImageContain ? { maxHeight: heroImageMaxHeight ?? 520 } : undefined}
             />
           </FramedMedia>
         ) : null}

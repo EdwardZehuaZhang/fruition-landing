@@ -45,75 +45,40 @@ export default function IndustryCaseStudy({
   const hasImage = !!imageSrc
 
   return (
-    <section style={{ backgroundColor: "var(--navy-700)", paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
+    <section className="bg-surface-dark-2 py-20">
+      <div className="mx-auto px-4 max-w-[1200px]">
         <div
-          className={`flex flex-col ${hasImage ? "lg:flex-row" : ""} items-stretch`}
-          style={{ gap: 48 }}
+          className={`flex flex-col ${hasImage ? "lg:flex-row" : ""} items-stretch gap-12`}
         >
           {/* Text content */}
-          <div className="flex flex-col justify-between" style={{ flex: 1 }}>
+          <div className="flex flex-col justify-between flex-1">
             <div>
               {eyebrow && (
-                <p
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: "var(--purple-light)",
-                    marginBottom: 12,
-                  }}
-                >
+                <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand-light mb-3">
                   {eyebrow}
                 </p>
               )}
 
               {companyName && (
-                <h3
-                  style={{
-                    fontSize: 28,
-                    fontWeight: 700,
-                    color: "var(--white)",
-                    marginBottom: 8,
-                    letterSpacing: "0.04em",
-                  }}
-                >
+                <h3 className="text-[28px] font-bold text-white mb-2 tracking-[0.04em]">
                   {companyName}
                 </h3>
               )}
 
               {description && (
-                <p
-                  style={{
-                    fontSize: 15,
-                    lineHeight: "24px",
-                    color: "rgba(255,255,255,0.85)",
-                    marginBottom: 24,
-                  }}
-                >
+                <p className="text-[15px] leading-6 text-white/85 mb-6">
                   {description}
                 </p>
               )}
 
               {quote && (
-                <blockquote
-                  style={{
-                    fontSize: 16,
-                    lineHeight: "26px",
-                    color: "var(--purple-light)",
-                    fontStyle: "italic",
-                    borderLeft: "3px solid var(--purple-light)",
-                    paddingLeft: 16,
-                    marginBottom: 16,
-                  }}
-                >
+                <blockquote className="text-base leading-[26px] text-brand-light italic border-l-[3px] border-brand-light pl-4 mb-4">
                   &ldquo;{quote}&rdquo;
                 </blockquote>
               )}
 
               {attribution && (
-                <p style={{ fontSize: 14, color: "rgba(255,255,255,0.7)" }}>
+                <p className="text-sm text-white/70">
                   {attribution}
                 </p>
               )}
@@ -121,22 +86,13 @@ export default function IndustryCaseStudy({
 
             {/* Stats row */}
             {stats.length > 0 && (
-              <div
-                className="flex flex-wrap items-end"
-                style={{ marginTop: 40, gap: 24 }}
-              >
+              <div className="flex flex-wrap items-end mt-10 gap-6">
                 {stats.map((stat, i) => (
                   <div key={i} className="text-center">
-                    <p
-                      style={{
-                        fontSize: 36,
-                        fontWeight: 700,
-                        color: i === 0 ? "var(--purple-light)" : "var(--white)",
-                      }}
-                    >
+                    <p className={`text-4xl font-bold ${i === 0 ? "text-brand-light" : "text-white"}`}>
                       {stat.value}
                     </p>
-                    <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>
+                    <p className="text-[13px] text-white/70">
                       {stat.label}
                     </p>
                   </div>
@@ -146,19 +102,8 @@ export default function IndustryCaseStudy({
 
             {/* CTA button */}
             {ctaLabel && ctaHref && (
-              <div style={{ marginTop: 32 }}>
-                <Link
-                  href={ctaHref}
-                  className="inline-flex items-center justify-center font-bold text-white"
-                  style={{
-                    height: 53,
-                    borderRadius: 100,
-                    background: "linear-gradient(to right, var(--purple-primary), var(--purple-light))",
-                    fontSize: 16,
-                    paddingLeft: 40,
-                    paddingRight: 40,
-                  }}
-                >
+              <div className="mt-8">
+                <Link href={ctaHref} className="cta-btn cta-btn-primary">
                   {ctaLabel}
                 </Link>
               </div>
@@ -167,10 +112,7 @@ export default function IndustryCaseStudy({
 
           {/* Right: image */}
           {hasImage && (
-            <div
-              className="rounded-card overflow-hidden bg-white"
-              style={{ flex: 1, minHeight: 340 }}
-            >
+            <div className="rounded-card overflow-hidden bg-white flex-1 min-h-[340px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={imageSrc}

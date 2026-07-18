@@ -26,22 +26,16 @@ export default function ServicesWorkflowTabs({ heading, tabs }: ServicesWorkflow
   const active = tabs[activeIndex]
 
   return (
-    <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
+    <section className="bg-surface py-20">
+      <div className="mx-auto px-4 max-w-[1200px]">
         {heading && (
-          <h2
-            className="text-section-h2 text-center"
-            style={{ color: "var(--text-body)", marginBottom: 32 }}
-          >
+          <h2 className="text-section-h2 text-center mb-8">
             {heading}
           </h2>
         )}
 
         {/* Tab pills */}
-        <div
-          className="flex justify-center gap-3 flex-wrap"
-          style={{ marginBottom: 40 }}
-        >
+        <div className="flex justify-center gap-3 flex-wrap mb-10">
           {tabs.map((tab, i) => {
             const isActive = i === activeIndex
             return (
@@ -50,8 +44,8 @@ export default function ServicesWorkflowTabs({ heading, tabs }: ServicesWorkflow
                 onClick={() => setActiveIndex(i)}
                 className={`relative inline-flex items-center justify-center rounded-[99px] px-[24px] py-[8px] text-[15px] leading-[1.2] transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   isActive
-                    ? "bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]"
-                    : "bg-surface-raised text-body border border-ui hover:border-[#8015e8]"
+                    ? "bg-gradient-to-r from-brand to-brand-light text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]"
+                    : "bg-surface-raised text-body border border-ui hover:border-brand"
                 }`}
               >
                 {tab.label}
@@ -61,67 +55,24 @@ export default function ServicesWorkflowTabs({ heading, tabs }: ServicesWorkflow
         </div>
 
         {/* Active panel */}
-        <div
-          className="rounded-card border border-ui bg-surface-raised"
-          style={{ padding: 40 }}
-        >
-          <h3
-            style={{
-              fontSize: 28,
-              fontWeight: 700,
-              color: "var(--text-body)",
-              marginBottom: 16,
-              lineHeight: 1.2,
-            }}
-          >
+        <div className="rounded-card border border-ui bg-surface-raised p-10">
+          <h3 className="text-[28px] font-bold mb-4 leading-[1.2]">
             {active.heading}
           </h3>
-          <p
-            style={{
-              fontSize: 16,
-              lineHeight: "26px",
-              color: "var(--text-muted-fg)",
-              marginBottom: 32,
-            }}
-          >
+          <p className="text-base leading-[26px] text-muted mb-8">
             {active.description}
           </p>
-          <div
-            style={{
-              fontSize: 14,
-              fontWeight: 700,
-              color: "#8015e8",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              marginBottom: 16,
-            }}
-          >
+          <div className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand mb-4">
             Benefits
           </div>
-          <div
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7"
-            style={{ gap: 16 }}
-          >
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
             {active.benefits.map((b, i) => (
               <div
                 key={`${active.key}-b-${i}`}
-                className="flex flex-col items-center text-center"
-                style={{
-                  padding: 16,
-                  borderRadius: 12,
-                  backgroundColor: "var(--surface-subtle)",
-                  gap: 8,
-                }}
+                className="flex flex-col items-center text-center gap-2 p-4 rounded-chip bg-surface-subtle"
               >
-                <div style={{ fontSize: 28, lineHeight: 1 }}>{b.emoji}</div>
-                <div
-                  style={{
-                    fontSize: 13,
-                    lineHeight: "18px",
-                    color: "var(--text-body)",
-                    fontWeight: 500,
-                  }}
-                >
+                <div className="text-[28px] leading-none">{b.emoji}</div>
+                <div className="text-[13px] leading-[18px] font-medium">
                   {b.label}
                 </div>
               </div>

@@ -624,6 +624,84 @@ export async function getFaqItemsForPage(pageKey: string) {
   )
 }
 
+/** Canonical fallbacks when the proofStats doc is absent — matches the live
+ *  dataset's dominant values (audited 2026-07-18: 500+ appears 42× in Sanity
+ *  content and 47× in code; 4.9 rating; 180,000+ monday customers). */
+export const PROOF_STATS_DEFAULTS = {
+  implementations: '500+',
+  clientRating: '4.9',
+  marketsCount: '6',
+  mondayEcosystemCustomers: '180,000+',
+  partnerTierMonday: 'Platinum monday.com Partner',
+  partnerTierAtlassian: 'Platinum Atlassian Partner',
+  awards: ['monday.com Rising Star 2026', 'Atlassian Rising Star of the Year 2026'],
+}
+
+/**
+ * The proofStats singleton — Fruition's entity-signal numbers (implementation
+ * count, rating, partner tiers, awards). Always returns a complete object:
+ * missing doc or missing fields fall back to PROOF_STATS_DEFAULTS.
+ */
+export async function getProofStats(): Promise<typeof PROOF_STATS_DEFAULTS> {
+  const doc = await client.fetch(`*[_id == "proofStats"][0]{
+    implementations, clientRating, marketsCount, mondayEcosystemCustomers,
+    partnerTierMonday, partnerTierAtlassian, awards
+  }`)
+  const merged = { ...PROOF_STATS_DEFAULTS }
+  for (const key of Object.keys(PROOF_STATS_DEFAULTS) as (keyof typeof PROOF_STATS_DEFAULTS)[]) {
+    const v = doc?.[key]
+    if (v != null && (typeof v !== 'string' || v.trim() !== '') && !(Array.isArray(v) && v.length === 0)) {
+      ;(merged as Record<string, unknown>)[key] = v
+    }
+  }
+  return merged
+}
+
+/**
+ * Quote testimonials for a page — caseStudy docs tagged with the page key,
+ * in page order. Returns [] when none are tagged; callers keep their previous
+ * page-field arrays as fallback, so a missing tag never breaks a page.
+ */
+export async function getCaseStudiesForPage(pageKey: string) {
+  return client.fetch(
+    `*[_type == "caseStudy" && $pageKey in pages] | order(coalesce(order, 99) asc) {
+      _id, clientName, clientRole, clientCompany, quote, logo, profilePhoto,
+      linkedinUrl, industry, platform, order
+    }`,
+    { pageKey }
+  )
+}
+
+/**
+ * Closing CTA banner copy for a page — the closingCta doc tagged with the
+ * page key, or null. Callers keep their previous hardcoded copy as fallback,
+ * so a null result never breaks a page (and editors override any page just by
+ * tagging a doc with its key).
+ */
+export async function getClosingCtaForPage(pageKey: string) {
+  return client.fetch(
+    `*[_type == "closingCta" && $pageKey in pages][0]{
+      eyebrow, heading, headingAccent, lead,
+      primaryLabel, primaryUrl, secondaryLabel, secondaryUrl
+    }`,
+    { pageKey }
+  )
+}
+
+/**
+ * Like getFaqItemsForPage but WITHOUT the curated-set fallback: returns []
+ * when the page has no specific faqItem docs. For callers that carry their
+ * own fallback content (templates with hardcoded FAQs pre-migration).
+ */
+export async function getFaqItemsForPageStrict(pageKey: string) {
+  return client.fetch(
+    `*[_type == "faqItem" && $pageKey in pages] | order(coalesce(categoryOrder, 99) asc, order asc) {
+      _id, question, answer, category, categoryOrder, order
+    }`,
+    { pageKey }
+  )
+}
+
 export async function getPageBySlug(slug: string) {
   return client.fetch(
     `*[_type == "page" && slug.current == $slug][0]{

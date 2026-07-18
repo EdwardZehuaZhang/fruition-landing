@@ -19,7 +19,7 @@ export default async function PostListBlockView({ heading, subheading, limit = 6
       <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[24px]">
         {/* Header */}
         <div className="flex flex-col gap-[12px] items-center w-full text-center">
-          <h2 className="text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">
+          <h2 className="text-[26px] leading-[36px] md:text-[35px] md:leading-[49px] font-medium text-body">
 
             {heading || "Don\u2019t miss our latest pieces"}
           </h2>

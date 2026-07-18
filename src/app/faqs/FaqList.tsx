@@ -293,9 +293,14 @@ export default function FaqList({ items }: { items: FaqItem[] }) {
   }, [groupByKey])
 
   useEffect(() => {
-    syncFromUrl()
+    // Deferred a frame: calling setState synchronously inside an effect can
+    // cascade renders (react-hooks lint error); visually identical.
+    const raf = requestAnimationFrame(syncFromUrl)
     window.addEventListener("popstate", syncFromUrl)
-    return () => window.removeEventListener("popstate", syncFromUrl)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener("popstate", syncFromUrl)
+    }
   }, [syncFromUrl])
 
   const navTo = useCallback((key: GroupKey | null) => {
@@ -402,7 +407,7 @@ export default function FaqList({ items }: { items: FaqItem[] }) {
               {normalized.length} questions
             </span>
           </div>
-          <ul className="grid gap-4 sm:grid-cols-2">
+          <ul className="grid gap-4 md:grid-cols-2">
             {groups.map((g, i) => (
               <li key={g.key} className="animate-fade-in" style={{ animationDelay: `${i * 70}ms` }}>
                 <button

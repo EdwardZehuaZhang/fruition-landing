@@ -11,11 +11,11 @@ export default function SecurityBadgeSection({ badge }: SecurityBadgeSectionProp
   if (!src) return null
 
   return (
-    <section className="bg-surface px-4" style={{ paddingBottom: 80 }}>
+    <section className="bg-surface px-4 pb-[80px]">
       <div className="mx-auto max-w-[976px] overflow-x-auto">
         <FramedMedia>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={src} alt="Security certifications" width={976} height={94} className="h-auto w-full min-w-[560px] sm:min-w-0" />
+          <img src={src} alt="Security certifications" width={976} height={94} className="h-auto w-full min-w-[560px] md:min-w-0" />
         </FramedMedia>
       </div>
     </section>

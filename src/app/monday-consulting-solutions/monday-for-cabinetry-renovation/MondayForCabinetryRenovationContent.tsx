@@ -41,7 +41,6 @@ interface Props {
 
 
 
-
 /* -------- Key Features + Services -------- */
 function KeyFeaturesSection({
   keyFeaturesPart1,
@@ -59,17 +58,17 @@ function KeyFeaturesSection({
   services: string[]
 }) {
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto grid grid-cols-1 md:grid-cols-2" style={{ maxWidth: 1100, gap: 48 }}>
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto grid grid-cols-1 md:grid-cols-2 w-full max-w-[1100px] gap-10 md:gap-12">
         <div>
-          <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
-            {keyFeaturesPart1} <span style={{ color: "#8015e8" }}>{keyFeaturesAccent}</span>
+          <h2 className="text-section-h2 text-body mb-6">
+            {keyFeaturesPart1} <span className="text-brand">{keyFeaturesAccent}</span>
           </h2>
-          <ul className="flex flex-col" style={{ gap: 14 }}>
+          <ul className="flex flex-col gap-3.5">
             {keyFeatures.map((f) => (
-              <li key={f.title} className="flex items-start" style={{ gap: 10 }}>
-                <Check size={16} color="#8015e8" style={{ flexShrink: 0 }} aria-hidden />
-                <p style={{ fontSize: 15, lineHeight: "24px", color: "var(--text-body)" }}>
+              <li key={f.title} className="flex items-start gap-2.5">
+                <Check size={16} className="shrink-0 text-brand" aria-hidden />
+                <p className="text-body-sm text-body">
                   <span className="font-bold">{f.title}:</span> {f.body}
                 </p>
               </li>
@@ -77,14 +76,14 @@ function KeyFeaturesSection({
           </ul>
         </div>
         <div>
-          <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
-            {servicesPart1} <span style={{ color: "#8015e8" }}>{servicesAccent}</span>
+          <h2 className="text-section-h2 text-body mb-6">
+            {servicesPart1} <span className="text-brand">{servicesAccent}</span>
           </h2>
-          <ul className="flex flex-col" style={{ gap: 14 }}>
+          <ul className="flex flex-col gap-3.5">
             {services.map((s) => (
-              <li key={s} className="flex items-start" style={{ gap: 10 }}>
-                <Check size={16} color="#8015e8" style={{ flexShrink: 0 }} aria-hidden />
-                <p style={{ fontSize: 15, lineHeight: "24px", color: "var(--text-body)" }}>{s}</p>
+              <li key={s} className="flex items-start gap-2.5">
+                <Check size={16} className="shrink-0 text-brand" aria-hidden />
+                <p className="text-body-sm text-body">{s}</p>
               </li>
             ))}
           </ul>
@@ -121,81 +120,62 @@ function ReturnsBannerSection({
   secondaryUrl: string
 }) {
   return (
-    <section
-      className="px-4 relative overflow-hidden"
-      style={{
-        paddingTop: 96,
-        paddingBottom: 96,
-        background: "linear-gradient(160deg, #2b074d 0%, #10003a 100%)",
-      }}
-    >
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2
-          className="text-center font-bold"
-          style={{ color: "white", fontSize: "clamp(28px, 7vw, 44px)", lineHeight: 1.2, marginBottom: 12 }}
-        >
+    <section className="px-4 relative overflow-hidden py-14 md:py-24 bg-gradient-to-br from-surface-dark-2 to-surface-dark">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <h2 className="text-section-h2 text-center text-white mb-3">
           {heading}
         </h2>
-        <p className="text-center" style={{ color: "rgba(255,255,255,0.8)", fontSize: 18, marginBottom: 48 }}>
+        <p className="text-center text-body-lead text-white/80 mb-12">
           {subheading}
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {testimonials.map((t) => (
             <figure
               key={t.name}
-              className="bg-surface-raised dark:shadow-none dark:border dark:border-ui"
-              style={{ borderRadius: 16, padding: 24, display: "flex", flexDirection: "column", gap: 16 }}
+              className="bg-surface-raised dark:shadow-none dark:border dark:border-ui rounded-card p-6 flex flex-col gap-4"
             >
-              <blockquote style={{ fontSize: 14, lineHeight: "22px", color: "var(--text-body)" }}>
+              <blockquote className="text-sm leading-[22px] text-body">
                 “{t.quote}”
               </blockquote>
-              <figcaption className="flex items-center" style={{ marginTop: "auto", gap: 12 }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={t.photo}
-                  alt={t.name}
-                  width={56}
-                  height={56}
-                  className="rounded-full object-cover"
-                  style={{ width: 56, height: 56, flexShrink: 0 }}
-                />
+              <figcaption className="flex items-center mt-auto gap-3">
+                {t.photo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={t.photo}
+                    alt={t.name}
+                    width={56}
+                    height={56}
+                    className="rounded-full object-cover w-14 h-14 shrink-0"
+                  />
+                ) : (
+                  <div
+                    aria-hidden
+                    className="rounded-full w-14 h-14 shrink-0 bg-brand-soft text-brand flex items-center justify-center font-bold"
+                  >
+                    {t.name.charAt(0)}
+                  </div>
+                )}
                 <div>
-                  <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 14 }}>{t.name}</p>
-                  <p style={{ color: "var(--text-muted-fg)", fontSize: 12 }}>{t.role}</p>
-                  <p style={{ color: "#8015e8", fontSize: 12, fontWeight: 700 }}>{t.company}</p>
+                  <p className="font-bold text-body text-sm">{t.name}</p>
+                  <p className="text-muted text-xs">{t.role}</p>
+                  <p className="text-brand text-xs font-bold">{t.company}</p>
                 </div>
               </figcaption>
             </figure>
           ))}
         </div>
 
-        <div className="flex flex-wrap justify-center" style={{ gap: 16, marginTop: 48 }}>
+        <div className="flex flex-wrap justify-center gap-4 mt-12">
           <Link
             href={primaryUrl}
-            className="inline-flex items-center justify-center font-semibold"
-            style={{
-              height: 50,
-              padding: "0 26px",
-              borderRadius: 999,
-              background: "linear-gradient(to right, #8015e8, #ba83f0)",
-              color: "white",
-              fontSize: 15,
-            }}
+            className="cta-btn cta-btn-on-dark-primary"
           >
             {primaryLabel}
           </Link>
           <Link
             href={secondaryUrl}
-            className="inline-flex items-center justify-center font-semibold"
-            style={{
-              height: 50,
-              padding: "0 26px",
-              borderRadius: 999,
-              border: "1px solid rgba(255,255,255,0.6)",
-              color: "white",
-              fontSize: 15,
-            }}
+            className="cta-btn cta-btn-on-dark-outline"
           >
             {secondaryLabel}
           </Link>
@@ -264,8 +244,8 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
       />
 
       {/* Trusted-by caption */}
-      <section className="bg-surface px-4" style={{ paddingTop: 0, paddingBottom: 24 }}>
-        <p className="text-center" style={{ color: "var(--text-body)", fontSize: 14, fontWeight: 600 }}>
+      <section className="bg-surface px-4 pt-0 pb-6">
+        <p className="text-center text-sm font-semibold text-body">
           {page.trustedByCaption || "Trusted by 500+ businesses worldwide"}
         </p>
       </section>

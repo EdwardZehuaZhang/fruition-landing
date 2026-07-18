@@ -41,21 +41,21 @@ export default function SolutionSelector({
   const active = options.find((o) => o.key === activeKey) ?? options[0]
 
   return (
-    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "var(--surface)" }}>
-      <div className="mx-auto" style={{ maxWidth: 1040 }}>
-        <div className="text-center" style={{ marginBottom: 36, marginInline: "auto", maxWidth: 680 }}>
+    <section className="px-4 py-20 bg-surface">
+      <div className="mx-auto max-w-[1040px]">
+        <div className="text-center mx-auto max-w-[680px] mb-9">
           {eyebrow && (
-            <p className="font-semibold uppercase" style={{ color: "#8015e8", fontSize: 12, letterSpacing: "0.16em", marginBottom: 12 }}>
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand mb-3">
               {eyebrow}
             </p>
           )}
           {heading && (
-            <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: "clamp(26px, 4.5vw, 36px)", lineHeight: 1.2, letterSpacing: "-0.015em", textWrap: "balance" }}>
+            <h2 className="text-section-h2 text-balance">
               {heading}
             </h2>
           )}
           {subheading && (
-            <p style={{ color: "var(--text-muted-fg)", fontSize: 16, lineHeight: "26px", marginTop: 12 }}>{subheading}</p>
+            <p className="text-muted text-base leading-[26px] mt-3">{subheading}</p>
           )}
         </div>
 
@@ -64,8 +64,7 @@ export default function SolutionSelector({
           <div
             role="tablist"
             aria-label="Choose your bottleneck"
-            className="flex flex-col"
-            style={{ gap: 10 }}
+            className="flex flex-col gap-2.5"
           >
             {options.map((opt) => {
               const isActive = opt.key === active.key
@@ -76,25 +75,21 @@ export default function SolutionSelector({
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => setActiveKey(opt.key)}
-                  className="cs-filter-pill flex items-center text-left"
+                  className="cs-filter-pill flex items-center text-left gap-3 px-4 py-3.5 md:gap-3.5 md:px-5 md:py-[18px] rounded-2xl cursor-pointer"
                   style={{
-                    gap: 14,
-                    padding: "18px 20px",
-                    borderRadius: 16,
-                    cursor: "pointer",
-                    border: isActive ? "1px solid #8015e8" : "1px solid var(--border-ui)",
-                    background: isActive ? "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)" : "var(--surface-raised)",
+                    border: isActive ? "1px solid var(--purple-primary)" : "1px solid var(--border-ui)",
+                    background: isActive ? "linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-light) 100%)" : "var(--surface-raised)",
                     boxShadow: isActive ? "0 18px 36px -24px rgba(128,21,232,0.7)" : "none",
                   }}
                 >
-                  <span aria-hidden style={{ fontSize: 24, lineHeight: 1 }}>
+                  <span aria-hidden className="text-xl md:text-2xl leading-none">
                     {opt.glyph ?? "•"}
                   </span>
                   <span className="flex flex-col">
-                    <span className="font-bold" style={{ fontSize: 15, color: isActive ? "#ffffff" : "var(--text-body)" }}>
+                    <span className={`font-bold text-sm md:text-[15px] ${isActive ? "text-white" : ""}`}>
                       {opt.label}
                     </span>
-                    <span style={{ fontSize: 12, lineHeight: "16px", marginTop: 2, color: isActive ? "rgba(255,255,255,0.82)" : "var(--text-muted-fg)" }}>
+                    <span className={`text-[11px] md:text-xs leading-4 mt-[2px] ${isActive ? "text-white/82" : "text-muted"}`}>
                       {opt.problem}
                     </span>
                   </span>
@@ -107,11 +102,9 @@ export default function SolutionSelector({
           <div
             key={active.key}
             role="tabpanel"
-            className="cs-card relative overflow-hidden rounded-card flex flex-col dark:!bg-surface-raised dark:!bg-none"
+            className="cs-card relative overflow-hidden rounded-card flex flex-col p-9 border border-ui dark:!bg-surface-raised dark:!bg-none"
             style={{
-              padding: 36,
               background: "linear-gradient(135deg, #faf7ff 0%, #ffffff 55%, #f9f5ff 100%)",
-              border: "1px solid var(--border-ui)",
             }}
           >
             <span
@@ -120,40 +113,35 @@ export default function SolutionSelector({
               style={{ top: -120, right: -120, width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(128,21,232,0.10) 0%, rgba(128,21,232,0) 70%)" }}
             />
             <div className="relative">
-              <p className="font-semibold uppercase" style={{ color: "#8015e8", fontSize: 11, letterSpacing: "0.16em" }}>
+              <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand">
                 How we solve it
               </p>
-              <h3 className="font-bold" style={{ color: "var(--text-body)", fontSize: 24, lineHeight: "30px", marginTop: 8, textWrap: "balance" }}>
+              <h3 className="text-2xl font-bold leading-[1.25] mt-2 text-balance">
                 {active.label}
               </h3>
-              <ul className="flex flex-col" style={{ gap: 12, marginTop: 22 }}>
+              <ul className="flex flex-col gap-3 mt-[22px]">
                 {active.configures.map((c, i) => (
-                  <li key={i} className="flex items-start" style={{ gap: 12 }}>
+                  <li key={i} className="flex items-start gap-3">
                     <span
                       aria-hidden
-                      className="flex-none inline-flex items-center justify-center"
-                      style={{ width: 22, height: 22, borderRadius: 999, background: "#efe7fb", color: "#8015e8", marginTop: 1 }}
+                      className="flex-none inline-flex items-center justify-center w-[22px] h-[22px] rounded-full bg-brand-soft text-brand mt-[1px]"
                     >
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                         <path d="M20 6 9 17l-5-5" />
                       </svg>
                     </span>
-                    <span style={{ color: "var(--text-body)", fontSize: 15, lineHeight: "22px" }}>{c}</span>
+                    <span className="text-[15px] leading-[22px]">{c}</span>
                   </li>
                 ))}
               </ul>
-              <div
-                className="flex flex-wrap items-center justify-between"
-                style={{ gap: 16, marginTop: 26, paddingTop: 22, borderTop: "1px solid var(--border-ui)" }}
-              >
-                <p className="font-semibold" style={{ color: "var(--text-body)", fontSize: 15, maxWidth: 360 }}>
+              <div className="flex flex-wrap items-center justify-between gap-4 mt-[26px] pt-[22px] border-t border-ui">
+                <p className="font-semibold text-[15px] max-w-[360px]">
                   {active.outcome}
                 </p>
                 {ctaLabel && ctaUrl && (
                   <a
                     href={ctaUrl}
-                    className="inline-flex flex-none items-center justify-center font-semibold"
-                    style={{ height: 46, padding: "0 22px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "#ffffff", fontSize: 14 }}
+                    className="cta-btn cta-btn-primary flex-none"
                   >
                     {ctaLabel}
                   </a>

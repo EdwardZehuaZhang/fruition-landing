@@ -30,43 +30,22 @@ type ProvenStat = { emoji?: string; value?: string; body?: string }
 function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
   if (!stats || stats.length === 0) return null
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 40 }}>
-          Proven <span style={{ color: "#8015e8" }}>n8n Automation</span> Results
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <h2 className="text-center text-section-h2 text-body mb-10">
+          Proven <span className="text-brand">n8n Automation</span> Results
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {stats.map((s, i) => (
             <div
               key={s.value || i}
-              className="text-center"
-              style={{
-                padding: 32,
-                borderRadius: 18,
-                background: "linear-gradient(180deg, #f6efff 0%, #ebd9ff 100%)",
-                border: "1px solid rgba(128,21,232,0.10)",
-                boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 14,
-              }}
+              className="text-center p-6 md:p-8 rounded-card ring-1 ring-brand/10 shadow-whisper bg-gradient-to-b from-brand-soft to-brand-light/30 flex flex-col items-center gap-3.5"
             >
-              <span
-                className="flex items-center justify-center"
-                style={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: 999,
-                  background: "white",
-                  fontSize: 26,
-                  boxShadow: "0 4px 14px -8px rgba(64,12,140,0.25)",
-                }}
-              >
+              <span className="flex items-center justify-center w-14 h-14 rounded-pill bg-white text-[26px] shadow-micro">
                 {s.emoji}
               </span>
-              <p className="font-bold" style={{ color: "#8015e8", fontSize: 40, lineHeight: 1 }}>{s.value}</p>
-              <p style={{ color: "#444", fontSize: 14, lineHeight: "22px", maxWidth: 220 }}>{s.body}</p>
+              <p className="font-bold text-brand text-4xl leading-none">{s.value}</p>
+              <p className="text-sm text-muted leading-relaxed max-w-[220px]">{s.body}</p>
             </div>
           ))}
         </div>

@@ -15,8 +15,6 @@ interface ComparisonTabsSectionProps {
   withPurpleCircle?: boolean
 }
 
-const DARK_BG = "#2b074d"
-
 function XIcon() {
   return (
     <svg
@@ -25,7 +23,7 @@ function XIcon() {
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ flexShrink: 0, marginTop: 2 }}
+      className="shrink-0 mt-0.5"
       aria-hidden="true"
     >
       <circle cx="10" cy="10" r="10" fill="#EF4444" />
@@ -47,7 +45,7 @@ function CheckIcon() {
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ flexShrink: 0, marginTop: 2 }}
+      className="shrink-0 mt-0.5"
       aria-hidden="true"
     >
       <circle cx="10" cy="10" r="10" fill="#22C55E" />
@@ -69,26 +67,14 @@ function renderItemText(item: ComparisonTabItem) {
   const description = item.description || item.title || ""
   if (hasBoldPrefix) {
     return (
-      <span
-        style={{
-          fontSize: 15,
-          lineHeight: "22px",
-          color: "var(--text-body)",
-        }}
-      >
-        <span style={{ fontWeight: 700 }}>{number}</span>
+      <span className="text-[15px] leading-[22px] text-body">
+        <span className="font-bold">{number}</span>
         {description ? ` ${description}` : ""}
       </span>
     )
   }
   return (
-    <span
-      style={{
-        fontSize: 15,
-        lineHeight: "22px",
-        color: "var(--text-body)",
-      }}
-    >
+    <span className="text-[15px] leading-[22px] text-body">
       {description}
     </span>
   )
@@ -106,9 +92,9 @@ export default function ComparisonTabsSection({
   if (tabs.length === 0) return null
   const isDark = theme === "dark"
 
-  const sectionBg = isDark ? DARK_BG : "var(--surface)"
-  const headingColor = isDark ? "#ffffff" : "var(--text-body)"
-  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "var(--text-body)"
+  const sectionBgClass = isDark ? "bg-surface-dark-2" : "bg-surface"
+  const headingColorClass = isDark ? "text-white" : ""
+  const subheadingColorClass = isDark ? "text-white/80" : "text-body"
 
   if (layout === "sideBySide" && tabs.length >= 2) {
     const beforeItems = tabs[0]?.items ?? []
@@ -117,36 +103,28 @@ export default function ComparisonTabsSection({
     return (
       <section
         id="our-process"
-        className="py-[80px] px-4"
-        style={{ backgroundColor: sectionBg }}
+        className={`py-[80px] px-4 ${sectionBgClass}`}
       >
         <div className="mx-auto max-w-[1040px] flex flex-col items-center gap-[40px]">
           <div className="flex flex-col gap-[12px] items-center text-center w-full">
             {heading && (
-              <h2
-                className="text-section-h2 text-center"
-                style={{ color: headingColor }}
-              >
+              <h2 className={`text-section-h2 text-center ${headingColorClass}`}>
                 {heading}
               </h2>
             )}
             {subheading && (
-              <p
-                className="text-body text-center mx-auto"
-                style={{ color: subheadingColor, maxWidth: 820 }}
-              >
+              <p className={`text-body text-center mx-auto max-w-[820px] ${subheadingColorClass}`}>
                 {subheading}
               </p>
             )}
           </div>
 
           <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
-            <ul className="flex flex-col" style={{ gap: 20, listStyle: "none" }}>
+            <ul className="flex flex-col gap-5 list-none">
               {beforeItems.map((item, i) => (
                 <li
                   key={item._key || `before-${i}`}
-                  className="flex items-start"
-                  style={{ gap: 12 }}
+                  className="flex items-start gap-3"
                 >
                   <XIcon />
                   {renderItemText(item)}
@@ -154,12 +132,11 @@ export default function ComparisonTabsSection({
               ))}
             </ul>
 
-            <ul className="flex flex-col" style={{ gap: 20, listStyle: "none" }}>
+            <ul className="flex flex-col gap-5 list-none">
               {afterItems.map((item, i) => (
                 <li
                   key={item._key || `after-${i}`}
-                  className="flex items-start"
-                  style={{ gap: 12 }}
+                  className="flex items-start gap-3"
                 >
                   <CheckIcon />
                   {renderItemText(item)}
@@ -173,42 +150,28 @@ export default function ComparisonTabsSection({
   }
 
   const active = tabs[activeIndex]
-  const cardBg = "var(--surface-raised)"
 
   return (
     <section
       id="our-process"
-      className="py-[80px] px-4 relative overflow-visible"
-      style={{ backgroundColor: sectionBg }}
+      className={`py-[80px] px-4 relative overflow-visible ${sectionBgClass}`}
     >
       {withPurpleCircle && (
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1400px] h-[1400px] max-w-none"
-          style={{
-            backgroundImage: "url(/images/purple-circle-background.avif)",
-            backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-          }}
+          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1400px] h-[1400px] max-w-none bg-[url('/images/purple-circle-background.avif')] bg-contain bg-no-repeat bg-center"
         />
       )}
       <div className="relative mx-auto max-w-[959px] flex flex-col items-center gap-[40px]">
         {/* Heading + subheading */}
         <div className="flex flex-col gap-[12px] items-center text-center w-full">
           {heading && (
-            <h2
-              className="text-section-h2 text-center"
-              style={{ color: headingColor }}
-            >
+            <h2 className={`text-section-h2 text-center ${headingColorClass}`}>
               {heading}
             </h2>
           )}
           {subheading && (
-            <p
-              className="text-body text-center mx-auto"
-              style={{ color: subheadingColor, maxWidth: 820 }}
-            >
+            <p className={`text-body text-center mx-auto max-w-[820px] ${subheadingColorClass}`}>
               {subheading}
             </p>
           )}
@@ -217,19 +180,19 @@ export default function ComparisonTabsSection({
         {/* Tab pills + content card */}
         <div className="flex flex-col gap-[24px] items-center w-full max-w-[816px]">
           {/* Tab buttons — allow overflow beyond the 816px content card */}
-          <div className="flex justify-center gap-[12px] flex-wrap w-full" style={{ overflow: "visible" }}>
+          <div className="flex justify-center gap-[12px] flex-wrap w-full overflow-visible">
             {tabs.map((tab, i) => {
               const isActive = i === activeIndex
               const inactiveClass = isDark
                 ? "bg-white/10 text-white border border-white/20 hover:border-white/60"
-                : "bg-surface-raised text-body border border-ui hover:border-[#8015e8]"
+                : "bg-surface-raised text-body border border-ui hover:border-brand"
               return (
                 <button
                   key={tab._key || tab.label || i}
                   onClick={() => setActiveIndex(i)}
                   className={`relative inline-flex items-center justify-center rounded-[99px] px-[31px] py-[7px] text-[16px] leading-[1.2] transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     isActive
-                      ? "bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]"
+                      ? "bg-gradient-to-r from-brand to-brand-light text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]"
                       : inactiveClass
                   }`}
                 >
@@ -241,11 +204,9 @@ export default function ComparisonTabsSection({
 
           {/* Content card */}
           <div
-            className="w-full rounded-card border py-[12px]"
-            style={{
-              backgroundColor: cardBg,
-              borderColor: isDark ? "transparent" : "var(--border-ui)",
-            }}
+            className={`w-full rounded-card border py-[12px] bg-surface-raised ${
+              isDark ? "border-transparent" : "border-ui"
+            }`}
           >
             <NumberedStepList
               items={active?.items ?? []}

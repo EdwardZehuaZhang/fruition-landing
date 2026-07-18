@@ -58,20 +58,20 @@ export default function CtaBlockView({
       ) : null}
 
       {heading && (
-        <h2 className="mb-4 text-center text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium max-w-[655px]">{heading}</h2>
+        <h2 className="mb-4 text-center text-[26px] leading-[36px] md:text-[35px] md:leading-[49px] font-medium max-w-[655px]">{heading}</h2>
       )}
       {body && (
         <p className="mb-8 text-center text-gray-200 max-w-[600px] leading-relaxed">{body}</p>
       )}
 
       {/* Buttons */}
-      <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-[24px] items-center w-full max-w-[680px]">
+      <div className="flex flex-col md:flex-row md:flex-wrap justify-center gap-[24px] items-center w-full max-w-[680px]">
         {ctaLabel && ctaUrl && (
           <CtaButton
             href={ctaUrl}
             label={ctaLabel}
             variant="onDarkPrimary"
-            className="w-full sm:w-[330px]"
+            className="w-full md:w-[330px]"
           />
         )}
         {secondaryCtaLabel && secondaryCtaUrl && (
@@ -79,7 +79,7 @@ export default function CtaBlockView({
             href={secondaryCtaUrl}
             label={secondaryCtaLabel}
             variant="onDarkOutline"
-            className="w-full sm:w-[330px]"
+            className="w-full md:w-[330px]"
           />
         )}
       </div>

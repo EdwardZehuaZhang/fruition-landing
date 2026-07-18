@@ -60,7 +60,7 @@ export default function TrainingRecommender({
   }, [teamSize, complexity])
 
   return (
-    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "#f0ecfe" }}>
+    <section className="px-4 py-20 bg-brand-soft">
       <style>{`
         .tr-range {
           -webkit-appearance: none; appearance: none; width: 100%;
@@ -68,37 +68,34 @@ export default function TrainingRecommender({
         }
         .tr-range::-webkit-slider-thumb {
           -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%;
-          background: #8015e8; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(128,21,232,0.45); cursor: pointer;
+          background: var(--purple-primary); border: 3px solid #fff; box-shadow: 0 2px 8px rgba(128,21,232,0.45); cursor: pointer;
         }
         .tr-range::-moz-range-thumb {
-          width: 24px; height: 24px; border-radius: 50%; background: #8015e8;
+          width: 24px; height: 24px; border-radius: 50%; background: var(--purple-primary);
           border: 3px solid #fff; box-shadow: 0 2px 8px rgba(128,21,232,0.45); cursor: pointer;
         }
         .tr-range::-moz-range-track { height: 8px; border-radius: 999px; background: #e2d8f7; }
       `}</style>
 
-      <div className="mx-auto" style={{ maxWidth: 920 }}>
-        <div className="text-center" style={{ marginBottom: 36, marginInline: "auto", maxWidth: 680 }}>
+      <div className="mx-auto max-w-[920px]">
+        <div className="text-center mx-auto max-w-[680px] mb-9">
           {eyebrow && (
-            <p className="font-semibold uppercase" style={{ color: "#8015e8", fontSize: 12, letterSpacing: "0.16em", marginBottom: 12 }}>
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand mb-3">
               {eyebrow}
             </p>
           )}
-          {heading && <h2 className="text-section-h2 text-body" style={{ textWrap: "balance" }}>{heading}</h2>}
+          {heading && <h2 className="text-section-h2 text-body text-balance">{heading}</h2>}
           {subheading && (
-            <p style={{ color: "var(--text-muted-fg)", fontSize: 17, lineHeight: "26px", marginTop: 12 }}>{subheading}</p>
+            <p className="text-muted text-[17px] leading-[26px] mt-3">{subheading}</p>
           )}
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 md:items-stretch">
           {/* Inputs */}
-          <div
-            className="rounded-card bg-surface-raised flex flex-col justify-center h-full dark:shadow-none dark:border dark:border-ui"
-            style={{ padding: 36, border: "1px solid #ece7fb", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
-          >
-            <label htmlFor={`${uid}-size`} className="flex items-baseline justify-between" style={{ marginBottom: 12 }}>
-              <span className="font-semibold" style={{ color: "var(--text-body)", fontSize: 14 }}>Team size</span>
-              <span className="font-bold" style={{ color: "#8015e8", fontSize: 15 }}>
+          <div className="rounded-card bg-surface-raised flex flex-col justify-center h-full p-9 border border-brand/15 shadow-[0_18px_36px_-24px_rgba(64,12,140,0.2)] dark:shadow-none dark:border-ui">
+            <label htmlFor={`${uid}-size`} className="flex items-baseline justify-between mb-3">
+              <span className="font-semibold text-sm">Team size</span>
+              <span className="font-bold text-brand text-[15px]">
                 {teamSize} {teamSize === 1 ? "person" : "people"}
               </span>
             </label>
@@ -112,12 +109,12 @@ export default function TrainingRecommender({
               onChange={(e) => setTeamSize(Number(e.target.value))}
             />
 
-            <div style={{ height: 32 }} />
+            <div className="h-8" />
 
-            <span className="font-semibold" style={{ color: "var(--text-body)", fontSize: 14, marginBottom: 12, display: "block" }}>
+            <span className="font-semibold text-sm mb-3 block">
               Workflow complexity
             </span>
-            <div className="flex flex-col" style={{ gap: 8 }} role="radiogroup" aria-label="Workflow complexity">
+            <div className="flex flex-col gap-2" role="radiogroup" aria-label="Workflow complexity">
               {COMPLEXITY.map((label, i) => {
                 const isActive = complexity === i
                 return (
@@ -127,28 +124,17 @@ export default function TrainingRecommender({
                     role="radio"
                     aria-checked={isActive}
                     onClick={() => setComplexity(i)}
-                    className="cs-filter-pill flex items-center text-left"
-                    style={{
-                      gap: 10,
-                      padding: "12px 14px",
-                      borderRadius: 12,
-                      cursor: "pointer",
-                      border: isActive ? "1px solid #8015e8" : "1px solid var(--border-ui)",
-                      background: isActive ? "#f3e9ff" : "var(--surface-raised)",
-                    }}
+                    className={`cs-filter-pill flex items-center text-left gap-2.5 px-3.5 py-3 rounded-chip cursor-pointer border ${
+                      isActive ? "border-brand bg-brand-soft" : "border-ui bg-surface-raised"
+                    }`}
                   >
                     <span
                       aria-hidden
-                      className="flex-none inline-flex items-center justify-center"
-                      style={{
-                        width: 18,
-                        height: 18,
-                        borderRadius: 999,
-                        border: isActive ? "5px solid #8015e8" : "2px solid #cbbce6",
-                        background: "var(--surface-raised)",
-                      }}
+                      className={`flex-none inline-flex items-center justify-center w-[18px] h-[18px] rounded-full bg-surface-raised ${
+                        isActive ? "border-[5px] border-brand" : "border-2 border-brand/30"
+                      }`}
                     />
-                    <span style={{ color: isActive ? "#3b2963" : "var(--text-body)", fontSize: 14 }}>{label}</span>
+                    <span className={`text-sm ${isActive ? "text-brand-dark" : ""}`}>{label}</span>
                   </button>
                 )
               })}
@@ -158,22 +144,21 @@ export default function TrainingRecommender({
           {/* Recommendation */}
           <div
             key={rec.name}
-            className="cs-card rounded-card flex flex-col justify-center h-full"
-            style={{ padding: 36, background: "linear-gradient(-38deg, rgb(128,21,232) 0%, rgb(16,0,58) 100%)", color: "#fff" }}
+            className="cs-card rounded-card flex flex-col justify-center h-full p-9 text-white"
+            style={{ background: "linear-gradient(-38deg, var(--purple-primary) 0%, var(--dark-bg) 100%)" }}
           >
-            <p className="font-semibold uppercase" style={{ color: "rgba(255,255,255,0.7)", fontSize: 11, letterSpacing: "0.16em" }}>
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-white/70">
               Recommended track
             </p>
-            <p className="font-bold" style={{ fontSize: 30, lineHeight: "36px", marginTop: 10, textWrap: "balance" }}>
+            <p className="font-bold text-[30px] leading-[36px] mt-2.5 text-balance">
               {rec.name}
             </p>
-            <p style={{ color: "rgba(255,255,255,0.86)", fontSize: 15, lineHeight: "24px", marginTop: 12 }}>{rec.blurb}</p>
-            <p style={{ color: "rgba(255,255,255,0.62)", fontSize: 13, lineHeight: "20px", marginTop: 14 }}>{rec.fit}</p>
+            <p className="text-white/86 text-[15px] leading-6 mt-3">{rec.blurb}</p>
+            <p className="text-white/62 text-[13px] leading-5 mt-3.5">{rec.fit}</p>
             {ctaLabel && ctaUrl && (
               <a
                 href={ctaUrl}
-                className="inline-flex items-center justify-center font-semibold self-start"
-                style={{ marginTop: 26, height: 48, padding: "0 24px", borderRadius: 999, background: "#fff", color: "#8015e8", fontSize: 14 }}
+                className="cta-btn cta-btn-on-dark-primary self-start mt-[26px]"
               >
                 {ctaLabel}
               </a>

@@ -13,20 +13,6 @@ interface StickyCtaBarProps {
   showAfter?: number
 }
 
-const DISMISS_ICON = (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={2}
-    strokeLinecap="round"
-    aria-hidden="true"
-  >
-    <line x1="18" y1="6" x2="6" y2="18" />
-    <line x1="6" y1="6" x2="18" y2="18" />
-  </svg>
-)
-
 /**
  * Floating bottom CTA that fades in once the visitor scrolls past the hero, so
  * a friction-free conversion path is always one click away (per PDF). Dismissible.
@@ -49,17 +35,6 @@ export default function StickyCtaBar({
 
   if (!label || !href || dismissed) return null
 
-  const dismiss = (placement: "compact" | "row") => (
-    <button
-      type="button"
-      aria-label="Dismiss banner"
-      onClick={() => setDismissed(true)}
-      className={`sticky-cta-dismiss sticky-cta-dismiss-${placement}`}
-    >
-      {DISMISS_ICON}
-    </button>
-  )
-
   return (
     <div
       className="fixed inset-x-0 bottom-0 z-50 px-4 pb-[env(safe-area-inset-bottom,0px)] transition-all duration-300"
@@ -69,26 +44,38 @@ export default function StickyCtaBar({
         pointerEvents: visible ? "auto" : "none",
       }}
     >
-      <div role="region" aria-label="Consultation banner" className="sticky-cta mx-auto mb-4">
-        <div aria-hidden="true" className="sticky-cta-glow" />
-        <div className="sticky-cta-top">
-          <p className="sticky-cta-heading">Ready to scale your workflows?</p>
-          {dismiss("compact")}
-        </div>
-        <div className="sticky-cta-actions">
+      {/* Single row at every width: label (wraps within its box) · CTA · dismiss */}
+      <div className="mx-auto mb-4 flex max-w-[720px] items-center gap-3 rounded-2xl bg-[linear-gradient(-38deg,var(--purple-primary)_0%,var(--dark-bg)_100%)] px-4 py-2.5 shadow-[0_18px_40px_-16px_rgba(64,12,140,0.55)] md:gap-4 md:px-5 md:py-3">
+        {/* Label is desktop-only; on phones the pill carries the message */}
+        <span className="hidden min-w-0 flex-1 font-semibold leading-tight text-white md:block md:text-sm">
+          Ready to scale your workflows?
+        </span>
+        <div className="flex min-w-0 flex-1 items-center justify-center gap-1.5 md:flex-none md:justify-end md:gap-2">
+          {/* Mobile: short label; hidden on desktop */}
           <CtaButton
             href={href}
             label={mobileLabel ?? label}
             variant="onDarkPrimary"
-            className="sticky-cta-cta-mobile"
+            className="md:hidden !min-h-0 !h-10 whitespace-nowrap"
+            style={{ fontSize: 13, padding: "0 16px" }}
           />
+          {/* Desktop: full label; hidden on mobile */}
           <CtaButton
             href={href}
             label={label}
+            mobileLabel={mobileLabel}
             variant="onDarkPrimary"
-            className="sticky-cta-cta-full"
+            className="hidden md:inline-flex"
+            style={{ fontSize: 13, padding: "0 18px" }}
           />
-          {dismiss("row")}
+          <button
+            type="button"
+            aria-label="Dismiss"
+            onClick={() => setDismissed(true)}
+            className="flex min-h-10 min-w-8 shrink-0 items-center justify-center text-[22px] leading-none text-white/70 hover:text-white md:min-h-11 md:min-w-11"
+          >
+            ×
+          </button>
         </div>
       </div>
     </div>

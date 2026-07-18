@@ -51,18 +51,10 @@ export default function MondayForFinanceContent({
     <div>
       {/* 1. Hero — certificates on top, no small image */}
       <section className="bg-surface">
-        <div
-          className="mx-auto flex flex-col items-center"
-          style={{
-            paddingLeft: 273,
-            paddingRight: 273,
-            paddingTop: 80,
-            paddingBottom: 80,
-          }}
-        >
+        <div className="mx-auto flex w-full max-w-[1148px] flex-col items-center px-4 py-14 md:py-20">
           {/* Three certificate badges */}
           {partnerBadges.length > 0 && (
-            <div className="flex items-center" style={{ gap: 22 }}>
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-[22px]">
               {partnerBadges.map((badge, i) => {
                 const src = safeImageUrl(badge.image)
                 if (!src) return null
@@ -84,27 +76,16 @@ export default function MondayForFinanceContent({
 
           {/* Eyebrow */}
           {page.heroEyebrow && (
-            <div
-              style={{
-                marginTop: 32,
-                fontSize: 14,
-                fontWeight: 700,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "var(--purple-primary)",
-              }}
-            >
+            <div className="mt-8 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand">
               {page.heroEyebrow}
             </div>
           )}
 
           {/* Heading */}
           <h1
-            className="text-display text-center"
-            style={{
-              marginTop: page.heroEyebrow ? 16 : 42,
-              maxWidth: 924,
-            }}
+            className={`text-display text-center max-w-[924px] ${
+              page.heroEyebrow ? "mt-4" : "mt-10"
+            }`}
           >
             <span className="text-body">
               {page.heroHeading || page.title || ""}
@@ -113,44 +94,19 @@ export default function MondayForFinanceContent({
 
           {/* Subheading */}
           {!page.hideHeroSubheading && page.heroSubheading && (
-            <p
-              className="text-body-lead text-center text-body"
-              style={{
-                marginTop: 31,
-                maxWidth: 859,
-                whiteSpace: "pre-line",
-              }}
-            >
+            <p className="text-body-lead text-center text-muted mt-7 max-w-[859px] whitespace-pre-line">
               {page.heroSubheading}
             </p>
           )}
 
           {/* CTA buttons */}
-          <div
-            className="flex items-center justify-center"
-            style={{ gap: 20, marginTop: 40, width: 680 }}
-          >
+          <div className="mt-10 flex w-full max-w-[680px] flex-wrap items-center justify-center gap-5">
             {page.primaryCtaLabel && (
               <Link
                 href={page.primaryCtaUrl || calendlyUrl}
-                className="flex items-center justify-center font-bold"
-                style={{
-                  width: 330,
-                  height: 53,
-                  borderRadius: 100,
-                  ...(page.secondaryCtaLabel
-                    ? {
-                        border: "1px solid #8015e8",
-                        backgroundColor: "white",
-                        color: "#8015e8",
-                      }
-                    : {
-                        background:
-                          "linear-gradient(to right, #8015e8, #ba83f0)",
-                        color: "white",
-                      }),
-                  fontSize: 16,
-                }}
+                className={`cta-btn ${
+                  page.secondaryCtaLabel ? "cta-btn-outline" : "cta-btn-primary"
+                }`}
               >
                 {page.primaryCtaLabel}
               </Link>
@@ -158,14 +114,7 @@ export default function MondayForFinanceContent({
             {page.secondaryCtaLabel && (
               <Link
                 href={page.secondaryCtaUrl || calendlyUrl}
-                className="flex items-center justify-center font-bold text-white"
-                style={{
-                  width: 330,
-                  height: 53,
-                  borderRadius: 100,
-                  background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                  fontSize: 16,
-                }}
+                className="cta-btn cta-btn-primary"
               >
                 {page.secondaryCtaLabel}
               </Link>
@@ -174,14 +123,13 @@ export default function MondayForFinanceContent({
 
           {/* Hero image */}
           {heroImageSrc && (
-            <div style={{ marginTop: 40 }}>
-              <FramedMedia className="rounded-card" style={{ width: "100%", maxWidth: 1042 }}>
+            <div className="mt-10 flex w-full justify-center">
+              <FramedMedia className="rounded-card w-full max-w-[1042px]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={heroImageSrc}
                   alt={page.heroHeading || "Hero"}
-                  className="rounded-card"
-                  style={{ width: "100%", height: "auto" }}
+                  className="rounded-card w-full h-auto"
                 />
               </FramedMedia>
             </div>
@@ -199,12 +147,9 @@ export default function MondayForFinanceContent({
 
       {/* 3. Video (underneath logo scroll) */}
       {page.heroVideoUrl && (
-        <section className="bg-surface" style={{ paddingBottom: 80 }}>
-          <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
-            <div
-              className="rounded-card overflow-hidden"
-              style={{ aspectRatio: "16 / 9" }}
-            >
+        <section className="bg-surface pb-14 md:pb-20">
+          <div className="mx-auto px-4 max-w-[1042px]">
+            <div className="rounded-card overflow-hidden aspect-video">
               <YouTubeEmbed url={page.heroVideoUrl} title={page.heroVideoTitle} />
             </div>
           </div>
@@ -270,61 +215,29 @@ function FinanceTabsSection({
   if (tabs.length === 0) return null
 
   return (
-    <section
-      className="px-4"
-      style={{
-        paddingTop: 80,
-        paddingBottom: 80,
-        background: "linear-gradient(180deg,#f5f0ff 0%,#ffffff 60%)",
-      }}
-    >
-      <div
-        className="mx-auto flex flex-col items-center"
-        style={{ maxWidth: 959 }}
-      >
+    <section className="px-4 py-14 md:py-24 bg-gradient-to-b from-brand-soft to-surface">
+      <div className="mx-auto flex w-full max-w-[959px] flex-col items-center">
         {(headingPart1 || headingAccent) && (
-          <h2
-            className="text-section-h2 text-center text-body"
-            style={{ maxWidth: 900 }}
-          >
+          <h2 className="text-section-h2 text-center text-body max-w-[900px]">
             {headingPart1}
             {headingPart1 && headingAccent ? " " : ""}
             {headingAccent && (
-              <span style={{ color: "#8015e8" }}>{headingAccent}</span>
+              <span className="text-brand">{headingAccent}</span>
             )}
           </h2>
         )}
 
         {/* Tab buttons */}
-        <div
-          className="flex justify-center flex-wrap"
-          style={{ gap: 12, marginTop: 40, width: "max-content", maxWidth: "100vw", overflow: "visible" }}
-        >
+        <div className="mt-10 flex max-w-full flex-wrap justify-center gap-3">
           {tabs.map((tab, i) => (
             <button
               key={tab.label}
               onClick={() => setActiveTab(i)}
-              className="cursor-pointer transition-all whitespace-nowrap shrink-0"
-              style={{
-                padding: "10px 32px",
-                borderRadius: 99,
-                fontSize: 16,
-                fontWeight: 600,
-                ...(i === activeTab
-                  ? {
-                      background:
-                        "linear-gradient(to right, #8015e8, #ba83f0)",
-                      color: "white",
-                      boxShadow:
-                        "2.83px 2.83px 15px 3px rgba(0,0,0,0.18)",
-                      border: "none",
-                    }
-                  : {
-                      backgroundColor: "white",
-                      color: "#2b074d",
-                      border: "1px solid #e8e6e6",
-                    }),
-              }}
+              className={`cursor-pointer transition-all whitespace-nowrap shrink-0 rounded-pill px-8 py-2.5 text-base font-semibold ${
+                i === activeTab
+                  ? "bg-gradient-to-r from-brand to-brand-light text-white shadow-card border-0"
+                  : "bg-surface-raised text-surface-dark-2 border border-ui"
+              }`}
             >
               {tab.label}
             </button>
@@ -333,62 +246,29 @@ function FinanceTabsSection({
 
         {/* Tab heading */}
         {active?.subheading && (
-          <h3
-            className="text-center font-semibold"
-            style={{ fontSize: 22, color: "#8015e8", marginTop: 40 }}
-          >
+          <h3 className="text-card-title text-center text-brand mt-10">
             {active.subheading}
           </h3>
         )}
 
         {/* Numbered items */}
-        <div
-          className="w-full rounded-card border border-[#e8e6e6]"
-          style={{ marginTop: 24, padding: "12px 0" }}
-        >
+        <div className="w-full rounded-card border border-ui mt-6 py-3">
           {(active.items ?? []).map((item, i) => (
             <div
               key={item.title || i}
-              className="ui-step-row"
-              style={{
-                padding: "24px 40px",
-                borderBottom:
-                  i < (active.items?.length ?? 0) - 1
-                    ? "1px solid #f0f0f0"
-                    : "none",
-              }}
+              className="ui-step-row px-5 py-6 md:px-10"
             >
-              <span
-                className="ui-step-number"
-                style={{
-                  fontSize: 40,
-                  fontWeight: 200,
-                  lineHeight: 1,
-                  minWidth: 56,
-                  flexShrink: 0,
-                }}
-              >
+              <span className="ui-step-number">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <div style={{ flex: 1 }}>
-                <p
-                  className="font-bold"
-                  style={{ fontSize: 18, color: "#2b074d" }}
-                >
+              <div className="flex-1">
+                <p className="font-bold text-lg text-surface-dark-2">
                   {"icon" in item && (item as { icon?: string }).icon
                     ? `${(item as { icon?: string }).icon} `
                     : ""}
                   {item.title}
                 </p>
-                <p
-                  style={{
-                    fontSize: 14,
-                    lineHeight: "22px",
-                    color: "#444",
-                    marginTop: 8,
-                    whiteSpace: "pre-line",
-                  }}
-                >
+                <p className="mt-2 text-sm leading-[22px] text-muted whitespace-pre-line">
                   {item.description}
                 </p>
               </div>
@@ -419,53 +299,33 @@ function BottomFeatureSection({
 }) {
   if (cards.length === 0 && !videoUrl) return null
   return (
-    <section style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(180deg, #f5f0ff 0%, #ffffff 100%)" }}>
-      <div className="mx-auto px-4" style={{ maxWidth: 1100 }}>
+    <section className="py-14 md:py-24 bg-gradient-to-b from-brand-soft to-surface">
+      <div className="mx-auto px-4 w-full max-w-[1100px]">
         {/* Title */}
         {(headingPart1 || headingAccent) && (
-          <h2
-            className="text-section-h2 text-center"
-            style={{ color: "#2b074d", maxWidth: 900, margin: "0 auto" }}
-          >
+          <h2 className="text-section-h2 text-center text-surface-dark-2 max-w-[900px] mx-auto">
             {headingPart1}
             {headingPart1 && headingAccent ? " " : ""}
             {headingAccent && (
-              <span style={{ color: "#8015e8" }}>{headingAccent}</span>
+              <span className="text-brand">{headingAccent}</span>
             )}
           </h2>
         )}
 
         {/* 3x3 feature grid */}
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-          style={{ gap: 24, marginTop: 40 }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
           {cards.map((card, i) => (
             <div
               key={card.title || i}
-              className="flex flex-col items-center text-center bg-surface-raised rounded-card border border-ui dark:shadow-none"
-              style={{
-                padding: 28,
-                boxShadow: "var(--shadow-whisper)",
-              }}
+              className="flex flex-col items-center text-center bg-surface-raised rounded-card border border-ui shadow-whisper dark:shadow-none p-7"
             >
-              <span style={{ fontSize: 36, lineHeight: 1, marginBottom: 12 }}>
+              <span className="text-4xl leading-none mb-3">
                 {card.emoji}
               </span>
-              <h4
-                className="font-bold"
-                style={{ fontSize: 18, color: "#8015e8" }}
-              >
+              <h4 className="font-bold text-lg text-brand">
                 {card.title}
               </h4>
-              <p
-                style={{
-                  fontSize: 14,
-                  lineHeight: "22px",
-                  color: "#444",
-                  marginTop: 10,
-                }}
-              >
+              <p className="mt-2.5 text-sm leading-[22px] text-muted">
                 {card.description}
               </p>
             </div>
@@ -474,10 +334,7 @@ function BottomFeatureSection({
 
         {/* YouTube video below the feature grid */}
         {videoUrl && (
-          <div
-            className="w-full rounded-card overflow-hidden"
-            style={{ marginTop: 56, aspectRatio: "16 / 9" }}
-          >
+          <div className="w-full rounded-card overflow-hidden mt-14 aspect-video">
             <YouTubeEmbed url={videoUrl} title={videoTitle} />
           </div>
         )}

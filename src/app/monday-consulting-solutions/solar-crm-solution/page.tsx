@@ -3,8 +3,22 @@ import {
   getSiteSettings,
   getCaseStudies,
   getFaqItemsForPage,
+  getCaseStudiesForPage,
 } from "@/sanity/queries"
 import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
+import { urlFor } from "@/sanity/image"
+
+/* Legacy Wix imports can carry malformed asset refs — never let urlFor throw. */
+function safePhotoUrl(img: unknown): string | undefined {
+  try {
+    // @ts-expect-error loose Sanity image shape
+    if (!img?.asset?._ref) return undefined
+    return urlFor(img).url()
+  } catch {
+    return undefined
+  }
+}
+
 import SolarCrmSolutionContent from "./SolarCrmSolutionContent"
 import { buildOgMetadata } from "@/lib/metadata"
 
@@ -27,12 +41,18 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const [page, siteSettings, caseStudies, centralFaqs] = await Promise.all([
+  const [page, siteSettings, caseStudies, centralFaqs, centralTestimonials] = await Promise.all([
     getSolutionPageBySlug(SLUG),
     getSiteSettings(),
     getCaseStudies(),
     getFaqItemsForPage(`monday-consulting-solutions/${SLUG}`),
+    getCaseStudiesForPage("monday-consulting-solutions/solar-crm-solution"),
   ])
+
+  // Central testimonial store wins; the page-doc array stays as fallback.
+  if (page && centralTestimonials?.length) {
+    page.solarTestimonials = centralTestimonials.map((t: any) => ({ quote: t.quote, name: t.clientName, role: t.clientRole, company: t.clientCompany, photo: safePhotoUrl(t.profilePhoto) }))
+  }
   return (
     <SolarCrmSolutionContent
       page={page}

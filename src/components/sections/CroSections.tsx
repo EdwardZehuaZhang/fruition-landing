@@ -85,8 +85,8 @@ export default function CroSections({ data, primaryCtaLabel, primaryCtaUrl }: Cr
       )}
 
       {hasDualCta && (
-        <section className="bg-surface px-4" style={{ paddingTop: 8, paddingBottom: 40 }}>
-          <div className="mx-auto flex justify-center" style={{ maxWidth: 1100 }}>
+        <section className="bg-surface px-4 pt-2 pb-10">
+          <div className="mx-auto flex justify-center max-w-[1100px]">
             <DualCtaRow
               primaryLabel={primaryCtaLabel}
               primaryHref={primaryCtaUrl}

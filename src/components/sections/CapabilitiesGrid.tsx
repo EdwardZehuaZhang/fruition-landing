@@ -18,10 +18,6 @@ interface CapabilitiesGridProps {
   ctaSecondaryUrl?: string
 }
 
-const DARK_BG = "#2b074d"
-const LIGHT_BG = "var(--surface-subtle)"
-const ACCENT = "#8015e8"
-
 export default function CapabilitiesGrid({
   eyebrow,
   heading,
@@ -38,146 +34,85 @@ export default function CapabilitiesGrid({
   if (cards.length === 0) return null
 
   const isDark = theme === "dark"
-  const bg = isDark ? DARK_BG : LIGHT_BG
-  const headingColor = isDark ? "#ffffff" : "var(--text-body)"
-  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "var(--text-muted-fg)"
-  const eyebrowColor = isDark ? "rgba(255,255,255,0.75)" : ACCENT
 
   const cols = columns ?? (cards.length <= 4 ? 2 : 3)
   const gridClass =
     cols === 2
-      ? "grid grid-cols-1 sm:grid-cols-2"
-      : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+      ? "grid grid-cols-1 md:grid-cols-2"
+      : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
 
   return (
-    <section style={{ backgroundColor: bg, paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
+    <section className={`py-20 ${isDark ? "bg-surface-dark-2" : "bg-surface-subtle"}`}>
+      <div className="mx-auto px-4 max-w-[1200px]">
         {eyebrow && (
           <div
-            className="text-center"
-            style={{
-              color: eyebrowColor,
-              fontSize: 13,
-              fontWeight: 700,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              marginBottom: 12,
-            }}
+            className={`text-center font-mono text-xs font-semibold uppercase tracking-[0.14em] mb-3 ${
+              isDark ? "text-white/75" : "text-brand"
+            }`}
           >
             {eyebrow}
           </div>
         )}
         {(heading || headingAccent) && (
           <h2
-            className="text-section-h2 text-center"
-            style={{
-              color: headingColor,
-              marginBottom: subheading ? 16 : 48,
-            }}
+            className={`text-section-h2 text-center ${isDark ? "text-white" : ""} ${
+              subheading ? "mb-4" : "mb-12"
+            }`}
           >
             {heading}
             {headingAccent && (
-              <span style={{ color: ACCENT }}>{headingAccent}</span>
+              <span className="text-brand">{headingAccent}</span>
             )}
           </h2>
         )}
         {subheading && (
           <p
-            className="text-body text-center mx-auto"
-            style={{
-              color: subheadingColor,
-              maxWidth: 820,
-              marginBottom: 48,
-              whiteSpace: "pre-line",
-            }}
+            className={`text-body text-center mx-auto max-w-[820px] mb-12 whitespace-pre-line ${
+              isDark ? "text-white/80" : "text-muted"
+            }`}
           >
             {subheading}
           </p>
         )}
-        <div className={gridClass} style={{ gap: 24 }}>
+        <div className={`${gridClass} gap-6`}>
           {cards.map((card, i) => {
             const hasBullets = (card.bullets?.length ?? 0) > 0
             return (
               <div
                 key={card._key || i}
-                className="bg-surface-raised rounded-card border border-ui dark:shadow-none"
-                style={{
-                  padding: 28,
-                  textAlign: hasBullets ? "left" : "center",
-                  boxShadow: "var(--shadow-whisper)",
-                }}
+                className={`rounded-card shadow-whisper ring-1 ring-ui bg-surface-raised dark:shadow-none p-7 ${
+                  hasBullets ? "text-left" : "text-center"
+                }`}
               >
                 {card.emoji && (
                   <div
-                    style={{
-                      fontSize: 32,
-                      lineHeight: 1,
-                      marginBottom: 12,
-                      textAlign: hasBullets ? "left" : "center",
-                    }}
+                    className={`text-[32px] leading-none mb-3 ${hasBullets ? "text-left" : "text-center"}`}
                   >
                     {card.emoji}
                   </div>
                 )}
-                <h3
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 700,
-                    color: ACCENT,
-                    marginBottom: 10,
-                  }}
-                >
+                <h3 className="text-xl font-bold text-brand mb-2.5">
                   {card.title}
                 </h3>
                 {card.description && (
-                  <p
-                    style={{
-                      fontSize: 14,
-                      lineHeight: 1.55,
-                      color: "var(--text-body)",
-                      whiteSpace: "pre-line",
-                    }}
-                  >
+                  <p className="text-sm leading-[1.55] text-body whitespace-pre-line">
                     {card.description}
                   </p>
                 )}
                 {hasBullets && (
-                  <ul
-                    style={{
-                      marginTop: 16,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 8,
-                    }}
-                  >
+                  <ul className="mt-4 flex flex-col gap-2">
                     {card.bullets!.map((b, bi) => {
                       const bulletEmoji = (b as { emoji?: string }).emoji
                       return (
                         <li
                           key={b._key || bi}
-                          style={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            gap: 10,
-                            fontSize: 14,
-                            lineHeight: 1.5,
-                            color: "var(--text-body)",
-                          }}
+                          className="flex items-start gap-2.5 text-sm leading-normal text-body"
                         >
                           <span
                             aria-hidden
-                            style={{
-                              display: "inline-flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              width: bulletEmoji ? 20 : 16,
-                              height: 20,
-                              flexShrink: 0,
-                              marginTop: 1,
-                              color: bulletEmoji ? "inherit" : ACCENT,
-                              fontSize: bulletEmoji ? 16 : 14,
-                              fontWeight: 700,
-                            }}
+                            className={`inline-flex items-center justify-center h-5 shrink-0 mt-px font-bold ${
+                              bulletEmoji ? "w-5 text-base" : "w-4 text-sm text-brand"
+                            }`}
                           >
                             {bulletEmoji || <Check size={14} aria-hidden />}
                           </span>
@@ -192,41 +127,16 @@ export default function CapabilitiesGrid({
           })}
         </div>
         {((ctaLabel && ctaUrl) || (ctaSecondaryLabel && ctaSecondaryUrl)) && (
-          <div
-            className="flex flex-wrap justify-center"
-            style={{ marginTop: 40, gap: 16 }}
-          >
+          <div className="flex flex-wrap justify-center mt-10 gap-4">
             {ctaLabel && ctaUrl && (
-              <Link
-                href={ctaUrl}
-                className="flex items-center justify-center font-bold"
-                style={{
-                  height: 53,
-                  padding: "0 40px",
-                  borderRadius: 100,
-                  background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                  color: "white",
-                  fontSize: 16,
-                }}
-              >
+              <Link href={ctaUrl} className="cta-btn cta-btn-primary">
                 {ctaLabel}
               </Link>
             )}
             {ctaSecondaryLabel && ctaSecondaryUrl && (
               <Link
                 href={ctaSecondaryUrl}
-                className="flex items-center justify-center font-bold"
-                style={{
-                  height: 53,
-                  padding: "0 40px",
-                  borderRadius: 100,
-                  background: isDark ? "rgba(255,255,255,0.08)" : "#ffffff",
-                  color: isDark ? "#ffffff" : ACCENT,
-                  border: isDark
-                    ? "1px solid rgba(255,255,255,0.3)"
-                    : `1px solid ${ACCENT}`,
-                  fontSize: 16,
-                }}
+                className={`cta-btn ${isDark ? "cta-btn-on-dark-outline" : "cta-btn-outline"}`}
               >
                 {ctaSecondaryLabel}
               </Link>

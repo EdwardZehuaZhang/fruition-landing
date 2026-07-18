@@ -189,6 +189,27 @@ export async function deleteChunksForSource(sourceId: string): Promise<void> {
 }
 
 /**
+ * Upsert the FULL blog draft into `blog_drafts` keyed by monday item id —
+ * the same write the make.com draft scenario performs, so getFullDraft (and
+ * the auto-docs route) can read the untruncated body regardless of which
+ * pipeline produced the draft.
+ */
+export async function saveFullDraft(mondayItemId: string, body: string): Promise<void> {
+  const r = await fetch(`${supabaseRestBase()}/blog_drafts?on_conflict=monday_item_id`, {
+    method: "POST",
+    headers: supabaseHeaders({ Prefer: "resolution=merge-duplicates,return=minimal" }),
+    body: JSON.stringify({
+      monday_item_id: mondayItemId,
+      body,
+      updated_at: new Date().toISOString(),
+    }),
+  })
+  if (!r.ok) {
+    throw new Error(`blog_drafts upsert failed (${r.status}): ${(await r.text()).slice(0, 200)}`)
+  }
+}
+
+/**
  * Read the FULL blog draft the n8n workflow stored in `blog_drafts`. The monday
  * long_text column truncates at ~2000 chars, so the auto-docs builder reads the
  * complete draft from here instead. Returns null if no row (then callers fall

@@ -44,6 +44,8 @@ const SYSTEM_PROMPT = [
   "- No em dashes anywhere. Use commas, parens, or two short sentences.",
   "- Banned words: leverage, synergise, best-in-class, unlock potential, drive transformation, seamlessly, robust, dive into, in today's world, fast-paced, game-changer.",
   "- No 'I hope this helps' / 'let's dive in' AI-tells.",
+  "- It must read human-written: vary sentence length and rhythm, allow a casual aside, never mirror the same sentence shape twice in a row. A sharp reader should not clock it as AI.",
+  "- Only reference facts actually present in the blog draft. Never add statistics or claims of your own.",
   "",
   "Format constraints:",
   "- Plain text only. No markdown headings or bold.",

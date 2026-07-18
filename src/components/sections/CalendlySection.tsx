@@ -31,13 +31,15 @@ export default function CalendlySection({
   const [subheadingExtra, setSubheadingExtra] = useState(0)
 
   useEffect(() => {
+    // Initial measurement deferred a frame: synchronous setState in an effect
+    // cascades renders; ResizeObserver keeps it in sync afterwards.
     if (!subheading || !subheadingRef.current) {
-      setSubheadingExtra(0)
-      return
+      const raf = requestAnimationFrame(() => setSubheadingExtra(0))
+      return () => cancelAnimationFrame(raf)
     }
     const el = subheadingRef.current
     const update = () => setSubheadingExtra(el.offsetHeight)
-    update()
+    const raf = requestAnimationFrame(update)
     const ro = new ResizeObserver(update)
     ro.observe(el)
     return () => ro.disconnect()
@@ -67,20 +69,20 @@ export default function CalendlySection({
   }, [embedUrl])
 
   return (
-    <section className="bg-surface-subtle" style={{ paddingTop: 0, paddingBottom: 0 }}>
-      <div className="mx-auto flex flex-col items-center px-4" style={{ maxWidth: 1200, paddingTop: 80 }}>
-        <h2 className="text-section-h2 text-center text-body" style={{ maxWidth: 900 }}>
+    <section className="bg-surface-subtle py-0">
+      <div className="mx-auto flex flex-col items-center px-4 max-w-[1200px] pt-20">
+        <h2 className="text-section-h2 text-center text-body max-w-[900px]">
           {heading}
         </h2>
         {subheading && (
-          <p ref={subheadingRef} className="text-center" style={{ fontSize: 16, lineHeight: "24px", color: "var(--text-body)", marginTop: 16, maxWidth: 900, whiteSpace: "pre-line" }}>
+          <p ref={subheadingRef} className="text-center text-base leading-6 text-body mt-4 max-w-[900px] whitespace-pre-line">
             {subheading}
           </p>
         )}
         <div
           ref={widgetRef}
-          className="w-full"
-          style={{ marginTop: 8, height: BASE_WIDGET_HEIGHT + subheadingExtra }}
+          className="w-full mt-2"
+          style={{ height: BASE_WIDGET_HEIGHT + subheadingExtra }}
         />
       </div>
     </section>

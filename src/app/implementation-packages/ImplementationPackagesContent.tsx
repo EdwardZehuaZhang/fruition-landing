@@ -351,13 +351,10 @@ export default function ImplementationPackagesContent({
       {/* SECTION 1 -- Hero                                            */}
       {/* ============================================================ */}
       <section className="bg-surface">
-        <div
-          className="mx-auto flex flex-col items-center"
-          style={{ paddingLeft: 273, paddingRight: 273, paddingTop: 80, paddingBottom: 80 }}
-        >
+        <div className="mx-auto flex w-full max-w-[1148px] flex-col items-center px-4 py-14 md:py-24">
           {/* Partner badges */}
           {heroPartnerBadges.length > 0 && (
-            <div className="flex items-center" style={{ gap: 22 }}>
+            <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5">
               {heroPartnerBadges.map((badge) => (
                 <FramedMedia key={badge._key ?? badge.src} className="dark:!p-1">
                   <Image
@@ -365,7 +362,7 @@ export default function ImplementationPackagesContent({
                     alt={badge.alt}
                     width={120}
                     height={44}
-                    className="h-[44px] w-auto rounded-[5px]"
+                    className="h-[36px] w-auto rounded-[5px] md:h-[44px]"
                     unoptimized
                   />
                 </FramedMedia>
@@ -374,22 +371,14 @@ export default function ImplementationPackagesContent({
           )}
 
           {/* Heading */}
-          <h1
-            className="text-center font-bold"
-            style={{
-              fontSize: "clamp(32px, 8vw, 48px)",
-              lineHeight: "1.2",
-              marginTop: 42,
-              maxWidth: 924,
-            }}
-          >
+          <h1 className="text-display mt-10 max-w-[924px] text-center">
             <span className="text-body">{heroHeadingPart1}</span>
-            <span style={{ color: "#8015e8" }}>{heroHeadingAccent}</span>
+            <span className="text-brand">{heroHeadingAccent}</span>
             <span className="text-body">{heroHeadingPart2}</span>
           </h1>
 
           {/* Monday Partners image */}
-          <FramedMedia style={{ marginTop: 40 }}>
+          <FramedMedia className="mt-10 w-full max-w-[924px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/monday-partners.avif"
@@ -413,23 +402,11 @@ export default function ImplementationPackagesContent({
 
           {/* Dual CTA */}
           {(heroPrimaryCtaUrl || heroSecondaryCtaUrl) && (
-            <div
-              className="flex items-center justify-center"
-              style={{ gap: 20, marginTop: 40, width: 680 }}
-            >
+            <div className="mt-10 flex w-full max-w-[680px] flex-col items-center justify-center gap-4 md:flex-row md:gap-5">
               {heroPrimaryCtaUrl && (
                 <Link
                   href={heroPrimaryCtaUrl}
-                  className="flex items-center justify-center font-bold"
-                  style={{
-                    width: 330,
-                    height: 53,
-                    borderRadius: 100,
-                    border: "1px solid #8015e8",
-                    backgroundColor: "white",
-                    color: "#8015e8",
-                    fontSize: 16,
-                  }}
+                  className="cta-btn cta-btn-outline w-full md:flex-1"
                 >
                   <CtaLabel label={heroPrimaryCtaLabel} />
                 </Link>
@@ -437,14 +414,7 @@ export default function ImplementationPackagesContent({
               {heroSecondaryCtaUrl && (
                 <Link
                   href={heroSecondaryCtaUrl}
-                  className="flex items-center justify-center font-bold text-white"
-                  style={{
-                    width: 330,
-                    height: 53,
-                    borderRadius: 100,
-                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                    fontSize: 16,
-                  }}
+                  className="cta-btn cta-btn-primary w-full md:flex-1"
                 >
                   <CtaLabel label={heroSecondaryCtaLabel} />
                 </Link>
@@ -454,15 +424,14 @@ export default function ImplementationPackagesContent({
 
           {/* Hero image */}
           {heroImageSrc && (
-            <FramedMedia style={{ marginTop: 40 }}>
+            <FramedMedia className="mt-10 w-full max-w-[1042px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroImageSrc}
                 alt="monday.com dashboards — project planning and team OKRs"
                 width={1042}
                 height={312}
-                className="rounded-card object-contain bg-white"
-                style={{ width: 1042, height: 312 }}
+                className="rounded-card w-full h-auto object-contain bg-white"
               />
             </FramedMedia>
           )}
@@ -473,24 +442,21 @@ export default function ImplementationPackagesContent({
       {/* SECTION 2 -- Logo Cloud with Marquee Scroll                  */}
       {/* ============================================================ */}
       {resolvedCarouselLogos.length > 0 && (
-        <section className="bg-surface py-[80px] px-4">
-          <div className="flex flex-col gap-[35px] items-center w-full max-w-[1348px] mx-auto">
+        <section className="bg-surface py-14 md:py-24 px-4">
+          <div className="flex flex-col gap-8 md:gap-9 items-center w-full max-w-[1348px] mx-auto">
             {/* Heading */}
-            <p className="text-[28px] font-medium leading-[39.2px] text-center">
+            <p className="text-section-h3 text-center">
               <span className="text-body">{logoCloudHeadingPart1}</span>
-              <span className="text-[#8015e8]">{logoCloudHeadingAccent}</span>
+              <span className="text-brand">{logoCloudHeadingAccent}</span>
             </p>
 
             {/* Horizontal marquee logo strip */}
             <div className="w-full overflow-hidden">
-              <div
-                className="flex items-center gap-[65px] animate-marquee"
-                style={{ width: "max-content" }}
-              >
+              <div className="flex w-max items-center gap-10 md:gap-[65px] animate-marquee">
                 {duplicatedLogos.map((logo, i) => (
                   <FramedMedia
                     key={`logo-${i}`}
-                    className="flex items-center justify-center shrink-0 h-[65px] dark:!p-1.5"
+                    className="flex items-center justify-center shrink-0 h-[48px] md:h-[65px] dark:!p-1.5"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -511,7 +477,7 @@ export default function ImplementationPackagesContent({
       {/* SECTION 3 -- YouTube Video Embed                             */}
       {/* ============================================================ */}
       {videoEmbedUrl && (
-        <section className="bg-surface py-[80px] px-[10px]">
+        <section className="bg-surface py-14 md:py-24 px-4">
           <div className="mx-auto flex flex-col items-center justify-center">
             <div className="w-full max-w-[979px] aspect-video rounded-card overflow-hidden">
               <iframe
@@ -519,8 +485,7 @@ export default function ImplementationPackagesContent({
                 title={videoTitle}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-                className="w-full h-full"
-                style={{ border: 0 }}
+                className="w-full h-full border-0"
               />
             </div>
           </div>
@@ -530,66 +495,32 @@ export default function ImplementationPackagesContent({
       {/* ============================================================ */}
       {/* SECTION 4 -- Services Content (bg-[#f0ecfe])                 */}
       {/* ============================================================ */}
-      <section style={{ backgroundColor: "var(--surface-subtle)" }}>
-        <div
-          className="mx-auto flex flex-col items-center"
-          style={{ paddingTop: 80, paddingBottom: 80 }}
-        >
+      <section className="bg-surface-subtle">
+        <div className="mx-auto flex flex-col items-center px-4 py-14 md:py-24">
           {/* 4a: Intro heading */}
-          <div
-            className="text-center"
-            style={{
-              fontSize: "clamp(24px, 6vw, 40px)",
-              fontWeight: 400,
-              lineHeight: 1.3,
-              maxWidth: 924,
-            }}
-          >
+          <div className="text-section-h2 max-w-[924px] text-center">
             <p>
               <span className="text-body">{servicesIntroHeadingPart1}</span>
-              <span style={{ color: "#8015e8" }}>{servicesIntroHeadingAccent}</span>
+              <span className="text-brand">{servicesIntroHeadingAccent}</span>
               <span className="text-body">{servicesIntroHeadingPart2}</span>
             </p>
           </div>
 
           {/* 4b: Two feature cards */}
           {featureCards.length > 0 && (
-          <div
-            className="flex justify-center"
-            style={{ gap: 28, marginTop: 60, maxWidth: 1200, width: "100%" }}
-          >
+          <div className="mt-10 md:mt-14 grid w-full max-w-[1200px] grid-cols-1 gap-6 md:grid-cols-2 md:gap-7">
             {featureCards.map((card, i) => (
               <div
                 key={card._key ?? i}
-                className="flex-1 dark:shadow-none"
-                style={{
-                  backgroundColor: "var(--surface-raised)",
-                  border: "1px solid var(--border-ui)",
-                  borderRadius: "var(--radius-card)",
-                  padding: 28,
-                }}
+                className="dark:shadow-none rounded-card shadow-whisper ring-1 ring-ui bg-surface-raised p-6 md:p-7"
               >
-                <div className="flex items-start" style={{ gap: 29 }}>
-                  <span style={{ fontSize: 60 }}>{card.emoji}</span>
-                  <h3
-                    style={{
-                      fontSize: 24,
-                      fontWeight: 500,
-                      color: "var(--text-body)",
-                    }}
-                  >
+                <div className="flex items-start gap-5 md:gap-7">
+                  <span className="text-5xl leading-none md:text-6xl">{card.emoji}</span>
+                  <h3 className="text-card-title text-body font-medium">
                     {card.title}
                   </h3>
                 </div>
-                <p
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 400,
-                    lineHeight: "22.4px",
-                    color: "var(--text-body)",
-                    marginTop: 20,
-                  }}
-                >
+                <p className="mt-5 text-body">
                   {card.description}
                 </p>
               </div>
@@ -599,27 +530,9 @@ export default function ImplementationPackagesContent({
 
           {/* 4c: Social proof banner */}
           {(socialProofBannerHtml || socialProofCtaUrl) && (
-            <div
-              className="flex items-center"
-              style={{
-                marginTop: 60,
-                background:
-                  "linear-gradient(98.14deg, rgb(28, 2, 76) 0%, rgb(125, 20, 227) 100.01%)",
-                borderRadius: "var(--radius-card)",
-                paddingLeft: 27,
-                paddingRight: 44,
-                paddingTop: 28,
-                paddingBottom: 28,
-                gap: 24,
-                maxWidth: 1200,
-                width: "100%",
-              }}
-            >
+            <div className="mt-10 md:mt-14 flex w-full max-w-[1200px] flex-col items-start gap-6 rounded-card bg-gradient-to-r from-surface-dark to-brand px-6 py-7 md:flex-row md:items-center md:pl-7 md:pr-11">
               {socialProofBannerHtml && (
-                <div
-                  className="flex-1"
-                  style={{ fontSize: 20, fontWeight: 500, color: "white" }}
-                >
+                <div className="flex-1 text-lg font-medium text-white md:text-xl">
                   <PortableText
                     value={socialProofBannerHtml}
                     components={{
@@ -635,7 +548,7 @@ export default function ImplementationPackagesContent({
                                 return (
                                   <span key={i}>
                                     {child.slice(0, idx)}
-                                    <span style={{ color: "#ba83f0" }}>
+                                    <span className="text-brand-light">
                                       {highlight}
                                     </span>
                                     {child.slice(idx + highlight.length)}
@@ -653,14 +566,7 @@ export default function ImplementationPackagesContent({
               {socialProofCtaUrl && (
                 <Link
                   href={socialProofCtaUrl}
-                  className="flex shrink-0 items-center justify-center gap-2 font-bold text-white transition-colors hover:bg-[#579bfc] hover:border-[#579bfc]"
-                  style={{
-                    width: 216,
-                    height: 53,
-                    border: "1px solid white",
-                    borderRadius: 100,
-                    fontSize: 16,
-                  }}
+                  className="cta-btn cta-btn-on-dark-outline w-full shrink-0 md:w-auto md:min-w-[216px]"
                 >
                   <CtaLabel label={socialProofCtaLabel} />
                 </Link>
@@ -674,40 +580,23 @@ export default function ImplementationPackagesContent({
       {/* ============================================================ */}
       {/* SECTION 4.5 -- Pricing Packages                              */}
       {/* ============================================================ */}
-      <section style={{ backgroundColor: "var(--surface)" }}>
-        <div
-          className="mx-auto flex flex-col w-full"
-          style={{ paddingTop: 80, paddingBottom: 80, maxWidth: 1200, paddingLeft: 16, paddingRight: 16 }}
-        >
+      <section className="bg-surface">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-col px-4 py-14 md:py-24">
           {/* Header row: heading left, dropdowns right */}
-          <div
-            className="flex flex-col md:flex-row md:items-end md:justify-between w-full"
-            style={{ gap: 24 }}
-          >
-            <div className="flex flex-col" style={{ maxWidth: 640 }}>
-              <h2 className="text-section-h2 text-body" style={{ textAlign: "left" }}>
+          <div className="flex w-full flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="flex max-w-[640px] flex-col text-left">
+              <h2 className="text-section-h2 text-body">
                 {pricingHeading || "Pricing Packages"}
               </h2>
-              <p
-                style={{
-                  marginTop: 14,
-                  fontSize: 18,
-                  color: "var(--text-muted-fg)",
-                  lineHeight: 1.5,
-                  textAlign: "left",
-                }}
-              >
+              <p className="mt-3.5 text-body-lead text-muted">
                 {data?.pricingSubheading || "Hit the ground running and drive lasting impact with hands-on support"}
               </p>
             </div>
 
             {/* Toggles */}
-            <div
-              className="flex flex-wrap items-center"
-              style={{ gap: 16 }}
-            >
+            <div className="flex flex-wrap items-center gap-4">
               {/* Currency dropdown */}
-              <div ref={currencyRef} style={{ position: "relative" }}>
+              <div ref={currencyRef} className="relative">
                 <button
                   type="button"
                   onClick={() => {
@@ -716,49 +605,25 @@ export default function ImplementationPackagesContent({
                   }}
                   onMouseEnter={() => setCurrencyHover(true)}
                   onMouseLeave={() => setCurrencyHover(false)}
-                  className="flex items-center font-semibold"
+                  className="flex h-11 cursor-pointer items-center gap-2.5 rounded-pill border bg-surface-raised pl-[18px] pr-3.5 text-sm font-semibold text-body transition-[border-color,box-shadow,transform] duration-150 ease-out"
                   style={{
-                    height: 44,
-                    paddingLeft: 18,
-                    paddingRight: 14,
-                    borderRadius: 99,
-                    backgroundColor: "var(--surface-raised)",
-                    border: `1px solid ${currencyHover || currencyOpen ? "#8015e8" : "var(--border-ui)"}`,
-                    color: "var(--text-body)",
-                    fontSize: 14,
-                    gap: 10,
+                    borderColor: currencyHover || currencyOpen ? "var(--purple-primary)" : "var(--border-ui)",
                     boxShadow: currencyHover
                       ? "0px 4px 12px rgba(128,21,232,0.12)"
                       : "0px 1px 2px rgba(43,7,77,0.04)",
                     transform: currencyHover ? "translateY(-1px)" : "translateY(0)",
-                    transition: "border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease",
-                    cursor: "pointer",
                   }}
                 >
-                  <span style={{ color: "#8015e8", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}>
+                  <span className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-brand">
                     CURRENCY
                   </span>
                   <span>{CURRENCIES[currency].symbol} {CURRENCIES[currency].label}</span>
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: currencyOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>
-                    <path d="M2 4l4 4 4-4" stroke="#8015e8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-brand transition-transform duration-150" style={{ transform: currencyOpen ? "rotate(180deg)" : "none" }}>
+                    <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
                 {currencyOpen && (
-                  <div
-                    className="dark:shadow-none"
-                    style={{
-                      position: "absolute",
-                      top: "calc(100% + 8px)",
-                      left: 0,
-                      minWidth: 180,
-                      backgroundColor: "var(--surface-raised)",
-                      border: "1px solid var(--border-ui)",
-                      borderRadius: 16,
-                      padding: 6,
-                      boxShadow: "0px 12px 32px rgba(43,7,77,0.12)",
-                      zIndex: 20,
-                    }}
-                  >
+                  <div className="dark:shadow-none absolute left-0 top-[calc(100%+8px)] z-20 min-w-[180px] rounded-2xl border border-ui bg-surface-raised p-1.5 shadow-[0px_12px_32px_rgba(43,7,77,0.12)]">
                     {(Object.keys(CURRENCIES) as CurrencyCode[]).map((code) => {
                       const active = code === currency
                       return (
@@ -769,20 +634,12 @@ export default function ImplementationPackagesContent({
                             setCurrency(code)
                             setCurrencyOpen(false)
                           }}
-                          className="flex items-center justify-between w-full"
-                          style={{
-                            padding: "10px 14px",
-                            borderRadius: 10,
-                            fontSize: 14,
-                            fontWeight: active ? 600 : 500,
-                            color: active ? "#8015e8" : "var(--text-body)",
-                            backgroundColor: active ? "rgba(128,21,232,0.08)" : "transparent",
-                            cursor: "pointer",
-                            textAlign: "left",
-                          }}
+                          className={`flex w-full cursor-pointer items-center justify-between rounded-[10px] px-3.5 py-2.5 text-left text-sm ${
+                            active ? "bg-brand/[0.08] font-semibold text-brand" : "bg-transparent font-medium text-body"
+                          }`}
                         >
                           <span>{CURRENCIES[code].label}</span>
-                          <span style={{ color: "var(--text-muted-fg)", fontWeight: 400 }}>{CURRENCIES[code].symbol}</span>
+                          <span className="font-normal text-muted">{CURRENCIES[code].symbol}</span>
                         </button>
                       )
                     })}
@@ -791,7 +648,7 @@ export default function ImplementationPackagesContent({
               </div>
 
               {/* Region dropdown */}
-              <div ref={regionRef} style={{ position: "relative" }}>
+              <div ref={regionRef} className="relative">
                 <button
                   type="button"
                   onClick={() => {
@@ -800,49 +657,25 @@ export default function ImplementationPackagesContent({
                   }}
                   onMouseEnter={() => setRegionHover(true)}
                   onMouseLeave={() => setRegionHover(false)}
-                  className="flex items-center font-semibold"
+                  className="flex h-11 cursor-pointer items-center gap-2.5 rounded-pill border bg-surface-raised pl-[18px] pr-3.5 text-sm font-semibold text-body transition-[border-color,box-shadow,transform] duration-150 ease-out"
                   style={{
-                    height: 44,
-                    paddingLeft: 18,
-                    paddingRight: 14,
-                    borderRadius: 99,
-                    backgroundColor: "var(--surface-raised)",
-                    border: `1px solid ${regionHover || regionOpen ? "#8015e8" : "var(--border-ui)"}`,
-                    color: "var(--text-body)",
-                    fontSize: 14,
-                    gap: 10,
+                    borderColor: regionHover || regionOpen ? "var(--purple-primary)" : "var(--border-ui)",
                     boxShadow: regionHover
                       ? "0px 4px 12px rgba(128,21,232,0.12)"
                       : "0px 1px 2px rgba(43,7,77,0.04)",
                     transform: regionHover ? "translateY(-1px)" : "translateY(0)",
-                    transition: "border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease",
-                    cursor: "pointer",
                   }}
                 >
-                  <span style={{ color: "#8015e8", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em" }}>
+                  <span className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-brand">
                     TEAM
                   </span>
                   <span>{REGIONS[region].label}</span>
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: regionOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>
-                    <path d="M2 4l4 4 4-4" stroke="#8015e8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-brand transition-transform duration-150" style={{ transform: regionOpen ? "rotate(180deg)" : "none" }}>
+                    <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
                 {regionOpen && (
-                  <div
-                    className="dark:shadow-none"
-                    style={{
-                      position: "absolute",
-                      top: "calc(100% + 8px)",
-                      left: 0,
-                      minWidth: 180,
-                      backgroundColor: "var(--surface-raised)",
-                      border: "1px solid var(--border-ui)",
-                      borderRadius: 16,
-                      padding: 6,
-                      boxShadow: "0px 12px 32px rgba(43,7,77,0.12)",
-                      zIndex: 20,
-                    }}
-                  >
+                  <div className="dark:shadow-none absolute left-0 top-[calc(100%+8px)] z-20 min-w-[180px] rounded-2xl border border-ui bg-surface-raised p-1.5 shadow-[0px_12px_32px_rgba(43,7,77,0.12)]">
                     {(Object.keys(REGIONS) as RegionCode[]).map((code) => {
                       const active = code === region
                       return (
@@ -853,20 +686,12 @@ export default function ImplementationPackagesContent({
                             setRegion(code)
                             setRegionOpen(false)
                           }}
-                          className="flex items-center justify-between w-full"
-                          style={{
-                            padding: "10px 14px",
-                            borderRadius: 10,
-                            fontSize: 14,
-                            fontWeight: active ? 600 : 500,
-                            color: active ? "#8015e8" : "var(--text-body)",
-                            backgroundColor: active ? "rgba(128,21,232,0.08)" : "transparent",
-                            cursor: "pointer",
-                            textAlign: "left",
-                          }}
+                          className={`flex w-full cursor-pointer items-center justify-between rounded-[10px] px-3.5 py-2.5 text-left text-sm ${
+                            active ? "bg-brand/[0.08] font-semibold text-brand" : "bg-transparent font-medium text-body"
+                          }`}
                         >
                           <span>{REGIONS[code].label}</span>
-                          <span style={{ color: "var(--text-muted-fg)", fontWeight: 400, fontSize: 12 }}>
+                          <span className="text-xs font-normal text-muted">
                             {code === "US" ? "Americas" : code === "UK" ? "EMEA" : "Asia-Pacific"}
                           </span>
                         </button>
@@ -879,138 +704,84 @@ export default function ImplementationPackagesContent({
           </div>
 
             {/* Cards */}
-            <div
-              className="grid grid-cols-1 md:grid-cols-3 w-full"
-              style={{ gap: 24, marginTop: 44 }}
-            >
+            <div className="mt-11 grid w-full grid-cols-1 gap-6 md:grid-cols-3">
               {PRICING_TIERS.map((tier) => {
                 const featured = !!tier.featured
                 const hovered = hoveredTier === tier.name
-                const baseTranslate = featured ? -12 : 0
                 const hoverLift = hovered ? -4 : 0
                 return (
                   <div
                     key={tier.name}
-                    className={`flex flex-col${featured ? "" : " dark:shadow-none"}`}
+                    className={`relative flex flex-col rounded-[28px] p-6 transition-[transform,box-shadow] duration-200 ease-out md:p-8 ${
+                      featured
+                        ? "bg-gradient-to-br from-brand to-brand-dark text-white md:-translate-y-3"
+                        : "dark:shadow-none border border-ui bg-surface-raised text-body"
+                    }`}
                     onMouseEnter={() => setHoveredTier(tier.name)}
                     onMouseLeave={() => setHoveredTier(null)}
                     style={{
-                      borderRadius: 28,
-                      padding: 32,
-                      position: "relative",
-                      transition: "transform 200ms ease, box-shadow 200ms ease",
-                      transform: `translateY(${baseTranslate + hoverLift}px)`,
-                      ...(featured
-                        ? {
-                            background: "linear-gradient(160deg, #7d14e3 0%, #5a0eb0 100%)",
-                            color: "white",
-                            boxShadow: hovered
-                              ? "0px 32px 72px rgba(125,20,227,0.45), 0px 0px 0px 1px rgba(125,20,227,0.4)"
-                              : "0px 24px 60px rgba(125,20,227,0.35), 0px 0px 0px 1px rgba(125,20,227,0.4)",
-                          }
-                        : {
-                            backgroundColor: "var(--surface-raised)",
-                            border: "1px solid var(--border-ui)",
-                            color: "var(--text-body)",
-                            boxShadow: hovered
-                              ? "0px 16px 36px rgba(43,7,77,0.12)"
-                              : "0px 8px 24px rgba(43,7,77,0.06)",
-                          }),
+                      transform: `translateY(${hoverLift}px)`,
+                      boxShadow: featured
+                        ? hovered
+                          ? "0px 32px 72px rgba(125,20,227,0.45), 0px 0px 0px 1px rgba(125,20,227,0.4)"
+                          : "0px 24px 60px rgba(125,20,227,0.35), 0px 0px 0px 1px rgba(125,20,227,0.4)"
+                        : hovered
+                          ? "0px 16px 36px rgba(43,7,77,0.12)"
+                          : "0px 8px 24px rgba(43,7,77,0.06)",
                     }}
                   >
                     {/* Name */}
-                    <h3
-                      style={{
-                        fontSize: 22,
-                        fontWeight: 700,
-                        color: featured ? "white" : "var(--text-body)",
-                      }}
-                    >
+                    <h3 className={`text-card-title ${featured ? "text-white" : "text-body"}`}>
                       {tier.name}
                     </h3>
 
                     {/* Hours */}
-                    <p
-                      style={{
-                        fontSize: 14,
-                        marginTop: 4,
-                        color: featured ? "rgba(255,255,255,0.78)" : "var(--text-muted-fg)",
-                        fontWeight: 500,
-                      }}
-                    >
+                    <p className={`mt-1 text-sm font-medium ${featured ? "text-white/[0.78]" : "text-muted"}`}>
                       {tier.hours}
                     </p>
 
                     {/* Price */}
-                    <div style={{ marginTop: 18, display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: 6 }}>
+                    <div className="mt-[18px] flex flex-wrap items-baseline gap-1.5">
                       {tier.pricePrefix && (
-                        <span
-                          style={{
-                            fontSize: 18,
-                            fontWeight: 500,
-                            color: featured ? "rgba(255,255,255,0.85)" : "var(--text-muted-fg)",
-                          }}
-                        >
+                        <span className={`text-lg font-medium ${featured ? "text-white/[0.85]" : "text-muted"}`}>
                           {tier.pricePrefix}
                         </span>
                       )}
                       <span
-                        style={{
-                          fontSize: 40,
-                          fontWeight: 600,
-                          lineHeight: 1,
-                          color: featured ? "white" : "var(--text-body)",
-                          letterSpacing: "-0.02em",
-                        }}
+                        className={`text-[32px] font-semibold leading-none tracking-[-0.02em] md:text-[40px] ${
+                          featured ? "text-white" : "text-body"
+                        }`}
                       >
                         {formatPrice(tier.basePrice)}
                       </span>
                     </div>
-                    <p
-                      style={{
-                        marginTop: 6,
-                        fontSize: 12,
-                        color: featured ? "rgba(255,255,255,0.7)" : "var(--text-muted-fg)",
-                      }}
-                    >
+                    <p className={`mt-1.5 text-xs ${featured ? "text-white/70" : "text-muted"}`}>
                       {CURRENCIES[currency].label} · {REGIONS[region].label} team rate
                     </p>
 
                     {/* Divider */}
-                    <div
-                      style={{
-                        marginTop: 24,
-                        marginBottom: 20,
-                        height: 1,
-                        backgroundColor: featured ? "rgba(255,255,255,0.18)" : "var(--border-ui)",
-                      }}
-                    />
+                    <div className={`mb-5 mt-6 h-px ${featured ? "bg-white/[0.18]" : "bg-ui"}`} />
 
                     {/* Features */}
-                    <ul className="flex flex-col" style={{ gap: 12 }}>
+                    <ul className="flex flex-col gap-3">
                       {tier.features.map((f) => (
-                        <li
-                          key={f}
-                          className="flex items-start"
-                          style={{ gap: 10, fontSize: 14, lineHeight: 1.5 }}
-                        >
+                        <li key={f} className="flex items-start gap-2.5 text-sm leading-normal">
                           <svg
                             width="16"
                             height="16"
                             viewBox="0 0 11 11"
                             fill="none"
-                            className="shrink-0"
-                            style={{ marginTop: 4 }}
+                            className={`mt-1 shrink-0 ${featured ? "text-white" : "text-brand"}`}
                           >
                             <path
                               d="M1.5 5.6l2.6 2.6L9.5 2.8"
-                              stroke={featured ? "white" : "#8015e8"}
+                              stroke="currentColor"
                               strokeWidth="2"
                               strokeLinecap="round"
                               strokeLinejoin="round"
                             />
                           </svg>
-                          <span style={{ color: featured ? "rgba(255,255,255,0.95)" : "var(--text-body)" }}>{f}</span>
+                          <span className={featured ? "text-white/95" : "text-body"}>{f}</span>
                         </li>
                       ))}
                     </ul>
@@ -1018,22 +789,11 @@ export default function ImplementationPackagesContent({
                     {/* CTA */}
                     <Link
                       href={heroPrimaryCtaUrl || "#"}
-                      className="flex items-center justify-center font-bold"
-                      style={{
-                        marginTop: 28,
-                        height: 48,
-                        borderRadius: 100,
-                        fontSize: 14,
-                        ...(featured
-                          ? {
-                              backgroundColor: "white",
-                              color: "#8015e8",
-                            }
-                          : {
-                              background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                              color: "white",
-                            }),
-                      }}
+                      className={`mt-7 flex h-12 items-center justify-center rounded-pill text-sm font-bold ${
+                        featured
+                          ? "bg-white text-brand"
+                          : "bg-gradient-to-r from-brand to-brand-light text-white"
+                      }`}
                     >
                       Get started
                     </Link>
@@ -1043,15 +803,7 @@ export default function ImplementationPackagesContent({
             </div>
 
             {/* Footnote */}
-            <p
-              className="text-center"
-              style={{
-                marginTop: 28,
-                fontSize: 12,
-                color: "var(--text-muted-fg)",
-                fontStyle: "italic",
-              }}
-            >
+            <p className="mt-7 text-center text-xs italic text-muted">
               {data?.pricingFootnote || "*Please note: you must purchase one package per product. Prices shown are estimates and may vary by scope."}
             </p>
           </div>
@@ -1101,10 +853,8 @@ export default function ImplementationPackagesContent({
       {/* ============================================================ */}
       {/* SECTION 8 -- Discover CTA                                    */}
       {/* ============================================================ */}
-      <section
-        style={{ backgroundColor: "var(--surface-subtle)", paddingTop: 80, paddingBottom: 80 }}
-      >
-        <div className="mx-auto flex flex-col items-center">
+      <section className="bg-surface-subtle py-14 md:py-24">
+        <div className="mx-auto flex flex-col items-center px-4">
           {/* Certifications badge */}
           {discoverBadgeSrc && (
             <FramedMedia>
@@ -1114,38 +864,25 @@ export default function ImplementationPackagesContent({
                 alt="Certifications"
                 width={325}
                 height={73}
-                className="h-[73px] w-[325px] object-contain"
+                className="h-auto w-full max-w-[325px] object-contain"
               />
             </FramedMedia>
           )}
 
           {/* Heading */}
           {discoverHeading && (
-            <h2
-              className="text-section-h2 text-center text-body"
-              style={{ width: 694, marginTop: 28 }}
-            >
+            <h2 className="text-section-h2 mt-7 w-full max-w-[694px] text-center text-body">
               {discoverHeading}
             </h2>
           )}
 
           {/* Dual CTA buttons */}
           {(discoverPrimaryCtaUrl || discoverSecondaryCtaUrl) && (
-            <div
-              className="flex items-center justify-center"
-              style={{ gap: 24, marginTop: 32, width: 694 }}
-            >
+            <div className="mt-8 flex w-full max-w-[694px] flex-col items-center justify-center gap-4 md:flex-row md:gap-6">
               {discoverPrimaryCtaUrl && (
                 <Link
                   href={discoverPrimaryCtaUrl}
-                  className="flex flex-1 items-center justify-center font-bold"
-                  style={{
-                    height: 63,
-                    borderRadius: 100,
-                    backgroundColor: "white",
-                    color: "#8015e8",
-                    fontSize: 16,
-                  }}
+                  className="cta-btn cta-btn-outline w-full md:flex-1"
                 >
                   <CtaLabel label={discoverPrimaryCtaLabel} />
                 </Link>
@@ -1153,13 +890,7 @@ export default function ImplementationPackagesContent({
               {discoverSecondaryCtaUrl && (
                 <Link
                   href={discoverSecondaryCtaUrl}
-                  className="flex flex-1 items-center justify-center font-bold text-white"
-                  style={{
-                    height: 63,
-                    borderRadius: 100,
-                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                    fontSize: 16,
-                  }}
+                  className="cta-btn cta-btn-primary w-full md:flex-1"
                 >
                   <CtaLabel label={discoverSecondaryCtaLabel} />
                 </Link>
@@ -1173,66 +904,44 @@ export default function ImplementationPackagesContent({
       {/* SECTION 9 -- Implementation Methodology                     */}
       {/* ============================================================ */}
       {methodologySteps.length > 0 && (
-      <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto flex flex-col items-center px-4 sm:px-6 lg:px-8" style={{ gap: 56, maxWidth: 1040 }}>
+      <section className="bg-surface py-14 md:py-24">
+        <div className="mx-auto flex w-full max-w-[1040px] flex-col items-center gap-10 px-4 md:px-6 md:gap-14 lg:px-8">
           {/* Heading */}
           <h2 className="text-section-h2 text-center">
-            <span style={{ color: 'var(--text-body)' }}>{methodologyHeading}</span>
+            <span className="text-body">{methodologyHeading}</span>
             <br />
-            <span style={{ color: 'var(--purple-primary)' }}>{methodologyHeadingAccent}</span>
+            <span className="text-brand">{methodologyHeadingAccent}</span>
           </h2>
 
           {/* Steps grid — 2 columns on md+, 1 column on mobile */}
-          <div className="grid grid-cols-1 md:grid-cols-2 w-full" style={{ gap: "48px 64px" }}>
+          <div className="grid w-full grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-16 md:gap-y-12">
             {methodologySteps.map((step, si) => (
               <div
                 key={step._key ?? step.number ?? si}
                 className="flex flex-col items-start"
               >
                 {/* Number */}
-                <p
-                  className="font-extralight"
-                  style={{ fontSize: 56, color: '#8015e8', lineHeight: 1, marginBottom: 16 }}
-                >
+                <p className="mb-4 text-[44px] font-extralight leading-none text-brand md:text-[56px]">
                   {step.number}
                 </p>
                 {/* Content */}
-                <h3
-                  className="font-bold"
-                  style={{ fontSize: 18, color: 'var(--text-body)', lineHeight: 1.4, marginBottom: 8 }}
-                >
+                <h3 className="mb-2 text-lg font-bold leading-snug text-body">
                   {step.title}
                 </h3>
                 {step.description && (
-                  <p style={{ fontSize: 15, color: 'var(--text-muted-fg)', lineHeight: 1.6 }}>
+                  <p className="text-body-sm text-muted">
                     {step.description}
                   </p>
                 )}
                 {step.bullets && step.bullets.length > 0 && (
-                  <ul
-                    className="list-disc"
-                    style={{
-                      paddingLeft: 20,
-                      marginTop: 16,
-                      fontSize: 15,
-                      color: 'var(--text-muted-fg)',
-                      lineHeight: 1.6,
-                    }}
-                  >
+                  <ul className="mt-4 list-disc pl-5 text-body-sm text-muted">
                     {step.bullets.map((b, bi) => (
-                      <li key={bi} style={{ marginBottom: 4 }}>{b}</li>
+                      <li key={bi} className="mb-1">{b}</li>
                     ))}
                   </ul>
                 )}
                 {step.extraText && (
-                  <p
-                    style={{
-                      fontSize: 15,
-                      color: 'var(--text-muted-fg)',
-                      lineHeight: 1.6,
-                      marginTop: 16,
-                    }}
-                  >
+                  <p className="mt-4 text-body-sm text-muted">
                     {step.extraText}
                   </p>
                 )}
@@ -1247,7 +956,7 @@ export default function ImplementationPackagesContent({
       {/* SECTION 10 -- Security Badge                                 */}
       {/* ============================================================ */}
       {securityBadgeSrc && (
-        <section className="bg-surface" style={{ paddingBottom: 80 }}>
+        <section className="bg-surface px-4 pb-14 md:pb-24">
           <FramedMedia className="mx-auto max-w-[976px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

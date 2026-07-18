@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
@@ -35,7 +36,7 @@ export default async function LoginPage({
       <style dangerouslySetInnerHTML={{ __html: scopedStyles }} />
 
       {/* Back to site — top-right corner */}
-      <a
+      <Link
         href="/"
         className={cn(
           buttonVariants({ variant: "ghost" }),
@@ -43,7 +44,7 @@ export default async function LoginPage({
         )}
       >
         Back to site
-      </a>
+      </Link>
 
       {/* Left brand panel */}
       <div className="relative hidden h-full flex-col justify-between overflow-hidden p-10 text-white lg:flex">
@@ -181,19 +182,19 @@ export default async function LoginPage({
 
           <p className="px-4 text-center text-xs text-muted-foreground">
             By continuing, you agree to our{" "}
-            <a
+            <Link
               href="/terms-and-conditions"
               className="underline underline-offset-4 hover:text-foreground"
             >
               Terms &amp; Conditions
-            </a>{" "}
+            </Link>{" "}
             and{" "}
-            <a
+            <Link
               href="/data-privacy"
               className="underline underline-offset-4 hover:text-foreground"
             >
               Privacy Policy
-            </a>
+            </Link>
             .
           </p>
         </div>

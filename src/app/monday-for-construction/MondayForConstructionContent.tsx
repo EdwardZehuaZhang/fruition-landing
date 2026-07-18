@@ -28,11 +28,11 @@ interface Props {
 
 function ConstructionIntroStrip() {
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 32, paddingBottom: 32 }}>
-      <div className="mx-auto text-center" style={{ maxWidth: 920 }}>
-        <p style={{ color: "var(--text-body)", fontSize: 16, lineHeight: "26px" }}>
-          With monday.com <span className="font-bold" style={{ color: "#8015e8" }}>CRM</span> and{" "}
-          <span className="font-bold" style={{ color: "#8015e8" }}>Work Management</span> as your Construction software, your teams will experience simplified and streamlined communication with mobile access and improved automated workflow efficiency.
+    <section className="bg-surface px-4 py-8">
+      <div className="mx-auto text-center w-full max-w-[920px]">
+        <p className="text-body">
+          With monday.com <span className="font-bold text-brand">CRM</span> and{" "}
+          <span className="font-bold text-brand">Work Management</span> as your Construction software, your teams will experience simplified and streamlined communication with mobile access and improved automated workflow efficiency.
         </p>
       </div>
     </section>
@@ -44,17 +44,17 @@ type ConstructionTestimonial = { title?: string; quote?: string; name?: string; 
 
 function LifecycleSection({ stages }: { stages: LifecycleStage[] }) {
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 32, lineHeight: "42px", marginBottom: 40 }}>
-          Support Each Stage of Your Project Life Cycle with a <span style={{ color: "#8015e8" }}>monday.com Expert</span>
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <h2 className="text-center text-section-h2 mb-10">
+          Support Each Stage of Your Project Life Cycle with a <span className="text-brand">monday.com Expert</span>
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 28 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
           {stages.map((s, i) => (
-            <div key={s.n || i} className="flex flex-col dark:shadow-none dark:border dark:border-ui" style={{ gap: 10, padding: 24, borderRadius: 16, border: "1px solid var(--border-ui)", background: "var(--surface-raised)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)" }}>
-              <p style={{ color: "#8015e8", fontSize: 36, fontWeight: 300, lineHeight: 1 }}>{s.n}</p>
-              <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 18 }}>{s.title}</p>
-              <p style={{ color: "var(--text-body)", fontSize: 14, lineHeight: "22px" }}>{s.body}</p>
+            <div key={s.n || i} className="flex flex-col gap-2.5 p-6 rounded-card ring-1 ring-ui bg-surface-raised shadow-whisper dark:shadow-none">
+              <p className="text-4xl font-light leading-none text-brand">{s.n}</p>
+              <p className="font-bold text-lg text-body">{s.title}</p>
+              <p className="text-sm text-body leading-relaxed">{s.body}</p>
             </div>
           ))}
         </div>
@@ -65,24 +65,24 @@ function LifecycleSection({ stages }: { stages: LifecycleStage[] }) {
 
 function ConstructionTestimonialsSection({ testimonials }: { testimonials: ConstructionTestimonial[] }) {
   return (
-    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(180deg, #faf6ff 0%, #ebd9ff 100%)" }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "#10003a", fontSize: 32, lineHeight: "42px", marginBottom: 40 }}>
-          Construction <span style={{ color: "#8015e8" }}>Testimonials</span>
+    <section className="px-4 py-14 md:py-24 bg-gradient-to-b from-brand-soft/30 to-brand-soft">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <h2 className="text-center text-section-h2 mb-10">
+          Construction <span className="text-brand">Testimonials</span>
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 24 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {testimonials.map((t, i) => (
-            <figure key={t.title || i} className="bg-white overflow-hidden flex flex-col" style={{ borderRadius: 20, border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.22)" }}>
-              <div style={{ aspectRatio: "16 / 10", overflow: "hidden", background: "#f5f0ff" }}>
+            <figure key={t.title || i} className="bg-surface-raised overflow-hidden flex flex-col rounded-card ring-1 ring-ui shadow-whisper">
+              <div className="aspect-[16/10] overflow-hidden bg-brand-soft">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={t.image} alt={t.title} className="w-full h-full object-cover" />
               </div>
-              <div style={{ padding: 28 }}>
-                <p className="font-bold" style={{ color: "#8015e8", fontSize: 13, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 14 }}>{t.title}</p>
-                <blockquote style={{ color: "#222", fontSize: 15, lineHeight: "24px" }}>“{t.quote}”</blockquote>
-                <figcaption style={{ marginTop: 18 }}>
-                  <p className="font-bold" style={{ color: "#10003a", fontSize: 14 }}>{t.name}</p>
-                  <p style={{ color: "#666", fontSize: 12 }}>{t.role}</p>
+              <div className="p-7">
+                <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand mb-3.5">{t.title}</p>
+                <blockquote className="text-body-sm text-body">“{t.quote}”</blockquote>
+                <figcaption className="mt-4">
+                  <p className="font-bold text-sm text-body">{t.name}</p>
+                  <p className="text-xs text-muted">{t.role}</p>
                 </figcaption>
               </div>
             </figure>
@@ -105,44 +105,39 @@ function ConstructionTabs({ tabs }: { tabs: ComparisonTab[] }) {
         : "Our expert consultants empower you to adopt workflow automation & AI systems"
 
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto w-full max-w-[1100px]">
         {/* Tab buttons */}
-        <div className="flex flex-wrap justify-center" style={{ gap: 12, marginBottom: 32 }}>
+        <div className="flex flex-wrap justify-center gap-3 mb-8">
           {tabs.map((tab, i) => (
             <button
               key={tab._key}
               onClick={() => setActiveIdx(i)}
-              style={{
-                padding: "10px 26px",
-                borderRadius: 999,
-                fontSize: 14,
-                fontWeight: 600,
-                cursor: "pointer",
-                ...(i === activeIdx
-                  ? { background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", border: "none", boxShadow: "0 10px 22px -12px rgba(128,21,232,0.55)" }
-                  : { background: "var(--surface-raised)", color: "var(--text-body)", border: "1px solid var(--border-ui)" }),
-              }}
+              className={`px-6 py-2.5 rounded-pill text-sm font-semibold cursor-pointer transition-colors ${
+                i === activeIdx
+                  ? "bg-gradient-to-r from-brand to-brand-light text-white shadow-[0_10px_22px_-12px_rgba(128,21,232,0.55)]"
+                  : "bg-surface-raised text-body ring-1 ring-ui"
+              }`}
             >
               {tab.label}
             </button>
           ))}
         </div>
         {/* Heading swaps with active tab */}
-        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 30, lineHeight: "40px", marginBottom: 32 }}>
+        <h2 className="text-center text-section-h2 mb-8">
           {heading}
         </h2>
         {/* Items grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {active.items?.map((it) => (
-            <div key={it._key} className="bg-surface-raised dark:shadow-none dark:border dark:border-ui" style={{ padding: 24, borderRadius: 18, border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 12 }}>
-              <div className="flex items-center" style={{ gap: 14 }}>
-                <span className="flex items-center justify-center font-bold" style={{ width: 38, height: 38, borderRadius: 12, background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)", color: "white", fontSize: 13 }}>
+            <div key={it._key} className="bg-surface-raised rounded-card ring-1 ring-ui shadow-whisper dark:shadow-none flex flex-col gap-3 p-6">
+              <div className="flex items-center gap-3.5">
+                <span className="flex items-center justify-center font-bold w-9 h-9 rounded-chip bg-gradient-to-br from-brand to-brand-light text-white text-[13px]">
                   {it.number}
                 </span>
-                <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 15, lineHeight: "22px" }}>{it.title}</p>
+                <p className="font-bold text-[15px] leading-snug text-body">{it.title}</p>
               </div>
-              <p style={{ color: "var(--text-body)", fontSize: 13, lineHeight: "20px", whiteSpace: "pre-line" }}>{it.description}</p>
+              <p className="text-[13px] leading-tight whitespace-pre-line text-body">{it.description}</p>
             </div>
           ))}
         </div>
@@ -235,7 +230,6 @@ export default function MondayForConstructionContent({
         heading="What our customers say about us"
         ctaLabel="Start Your Transformation"
         ctaUrl={calendlyUrl}
-        statCardValue="500+"
         statCardSubtitle="have maximised their workflows with our monday.com expert support"
         statCardCtaLabel="Read our case studies"
         statCardCtaUrl="/customer-testimonials"

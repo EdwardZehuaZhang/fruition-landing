@@ -125,17 +125,10 @@ export default function MondayProductManagementContent({
     <div>
       {/* 1. Hero */}
       <section className="bg-surface">
-        <div
-          className="mx-auto flex flex-col items-center px-4"
-          style={{
-            maxWidth: 1200,
-            paddingTop: 80,
-            paddingBottom: 80,
-          }}
-        >
+        <div className="mx-auto flex flex-col items-center px-4 max-w-[1200px] py-14 md:py-24">
           {/* Partner badges */}
           {partnerBadges.length > 0 && (
-            <div className="flex items-center" style={{ gap: 22 }}>
+            <div className="flex flex-wrap items-center justify-center gap-[22px]">
               {partnerBadges.map((badge, i) => {
                 const src = safeImageUrl(badge.image)
                 if (!src) return null
@@ -156,27 +149,14 @@ export default function MondayProductManagementContent({
 
           {/* Eyebrow */}
           {page.heroEyebrow && (
-            <div
-              style={{
-                marginTop: 32,
-                fontSize: 14,
-                fontWeight: 700,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "var(--purple-primary)",
-              }}
-            >
+            <div className="mt-8 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand">
               {page.heroEyebrow}
             </div>
           )}
 
           {/* Heading */}
           <h1
-            className="text-display text-center"
-            style={{
-              marginTop: page.heroEyebrow ? 16 : 42,
-              maxWidth: 924,
-            }}
+            className={`text-display text-center max-w-[924px] ${page.heroEyebrow ? "mt-4" : "mt-10"}`}
           >
             <span className="text-body">
               {page.heroHeading || page.title || ""}
@@ -185,44 +165,17 @@ export default function MondayProductManagementContent({
 
           {/* Subheading */}
           {!page.hideHeroSubheading && page.heroSubheading && (
-            <p
-              className="text-body-lead text-center text-body"
-              style={{
-                marginTop: 31,
-                maxWidth: 859,
-                whiteSpace: "pre-line",
-              }}
-            >
+            <p className="text-body-lead text-center text-muted mt-8 max-w-[859px] whitespace-pre-line">
               {page.heroSubheading}
             </p>
           )}
 
           {/* CTA buttons */}
-          <div
-            className="flex items-center justify-center"
-            style={{ gap: 20, marginTop: 40, maxWidth: 680, width: "100%" }}
-          >
+          <div className="flex flex-wrap items-center justify-center gap-5 mt-10 w-full max-w-[680px]">
             {page.primaryCtaLabel && (
               <Link
                 href={page.primaryCtaUrl || calendlyUrl}
-                className="flex items-center justify-center font-bold"
-                style={{
-                  width: 330,
-                  height: 53,
-                  borderRadius: 100,
-                  ...(page.secondaryCtaLabel
-                    ? {
-                        border: "1px solid #8015e8",
-                        backgroundColor: "white",
-                        color: "#8015e8",
-                      }
-                    : {
-                        background:
-                          "linear-gradient(to right, #8015e8, #ba83f0)",
-                        color: "white",
-                      }),
-                  fontSize: 16,
-                }}
+                className={`cta-btn ${page.secondaryCtaLabel ? "cta-btn-outline" : "cta-btn-primary"}`}
               >
                 {page.primaryCtaLabel}
               </Link>
@@ -230,14 +183,7 @@ export default function MondayProductManagementContent({
             {page.secondaryCtaLabel && (
               <Link
                 href={page.secondaryCtaUrl || calendlyUrl}
-                className="flex items-center justify-center font-bold text-white"
-                style={{
-                  width: 330,
-                  height: 53,
-                  borderRadius: 100,
-                  background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                  fontSize: 16,
-                }}
+                className="cta-btn cta-btn-primary"
               >
                 {page.secondaryCtaLabel}
               </Link>
@@ -249,13 +195,12 @@ export default function MondayProductManagementContent({
             const heroSrc = safeImageUrl(page.heroImage)
             if (!heroSrc) return null
             return (
-              <div style={{ marginTop: 40, width: "100%", maxWidth: 1042 }}>
+              <div className="mt-10 w-full max-w-[1042px]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={heroSrc}
                   alt={page.heroHeading || "monday.com product management boards"}
-                  className="rounded-card"
-                  style={{ width: "100%", height: "auto" }}
+                  className="rounded-card w-full h-auto"
                 />
               </div>
             )
@@ -273,12 +218,9 @@ export default function MondayProductManagementContent({
 
       {/* 3. Video (underneath logo scroll) */}
       {heroVideoEmbedSrc && (
-        <section className="bg-surface" style={{ paddingBottom: 80 }}>
-          <div className="mx-auto" style={{ maxWidth: 1042 }}>
-            <div
-              className="rounded-card overflow-hidden"
-              style={{ aspectRatio: "16 / 9" }}
-            >
+        <section className="bg-surface pb-14 md:pb-24">
+          <div className="mx-auto max-w-[1042px] px-4">
+            <div className="rounded-card overflow-hidden aspect-video">
               <YouTubeEmbed url={heroVideoEmbedSrc} title={page.heroVideoTitle || "Video"} />
             </div>
           </div>
@@ -379,42 +321,34 @@ function StrategicApproachCardsSection({
   if (!tabs || tabs.length === 0) return null
 
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto flex flex-col items-center" style={{ maxWidth: 1100 }}>
-        <h2 className="text-section-h2 text-center text-body" style={{ maxWidth: 900 }}>
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto flex flex-col items-center max-w-[1100px]">
+        <h2 className="text-section-h2 text-center text-body max-w-[900px]">
           {headingPart1}
-          <span style={{ color: "#8015e8" }}>{headingAccent}</span>
+          <span className="text-brand">{headingAccent}</span>
         </h2>
         {subheading && (
-          <p
-            className="text-body text-center mx-auto"
-            style={{ color: "var(--text-muted-fg)", maxWidth: 820, marginTop: 16 }}
-          >
+          <p className="text-base leading-relaxed text-muted text-center mx-auto max-w-[820px] mt-4">
             {subheading}
           </p>
         )}
 
-        <div
-          className="grid grid-cols-1 md:grid-cols-3 w-full"
-          style={{ gap: 24, marginTop: 48 }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-6 mt-12">
           {tabs.map((card, i) => (
             <div
               key={card._key || card.label || `strat-card-${i}`}
-              className="flex flex-col bg-[#f7f5fc] rounded-card border border-[#ece7fb]"
-              style={{ padding: 28 }}
+              className="flex flex-col bg-brand-soft rounded-card border border-brand/20 p-7"
             >
-              <h3 className="font-bold" style={{ fontSize: 18, color: "#8015e8", marginBottom: 16 }}>
+              <h3 className="text-card-title text-brand mb-4">
                 {card.label}
               </h3>
-              <ul className="flex flex-col" style={{ gap: 12 }}>
+              <ul className="flex flex-col gap-3">
                 {(card.items ?? []).map((item, ii) => (
                   <li
                     key={item._key || item.text || `strat-item-${i}-${ii}`}
-                    className="flex items-start"
-                    style={{ fontSize: 14, lineHeight: "22px", color: "#444", gap: 10 }}
+                    className="flex items-start gap-2.5 text-sm leading-[22px] text-body"
                   >
-                    <span style={{ fontSize: 20, lineHeight: "22px", flexShrink: 0 }}>{item.emoji}</span>
+                    <span className="text-xl leading-[22px] shrink-0">{item.emoji}</span>
                     <span>{item.text}</span>
                   </li>
                 ))}
@@ -447,62 +381,31 @@ function WhyProductTeamsSection({
   if (!cards || cards.length === 0) return null
 
   return (
-    <section
-      style={{
-        backgroundColor: "var(--surface-subtle)",
-        paddingTop: 80,
-        paddingBottom: 80,
-      }}
-    >
-      <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
-        <h2
-          className="text-section-h2 text-center"
-          style={{ color: "var(--text-body)", marginBottom: 16 }}
-        >
+    <section className="bg-surface-subtle py-14 md:py-24">
+      <div className="mx-auto px-4 max-w-[1200px]">
+        <h2 className="text-section-h2 text-center text-body mb-4">
           {headingPart1}
-          <span style={{ color: "#8015e8", display: "block" }}>{headingAccent}</span>
+          <span className="block text-brand">{headingAccent}</span>
         </h2>
         {subheading && (
-          <p
-            className="text-body text-center mx-auto"
-            style={{
-              color: "var(--text-muted-fg)",
-              maxWidth: 820,
-              marginBottom: 48,
-            }}
-          >
+          <p className="text-base leading-relaxed text-muted text-center mx-auto max-w-[820px] mb-12">
             {subheading}
           </p>
         )}
 
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2"
-          style={{ gap: 24 }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {cards.map((card, i) => (
             <div
               key={card._key || card.title || `why-card-${i}`}
-              className="flex flex-col items-center text-center bg-surface-raised rounded-card border border-ui ui-hover-card dark:shadow-none"
-              style={{ padding: 28, boxShadow: "var(--shadow-whisper)" }}
+              className="flex flex-col items-center text-center bg-surface-raised rounded-card border border-ui ui-hover-card shadow-whisper dark:shadow-none p-7"
             >
-              <span
-                style={{ fontSize: 36, lineHeight: 1, marginBottom: 12 }}
-              >
+              <span className="text-4xl leading-none mb-3">
                 {card.emoji}
               </span>
-              <h3
-                className="font-bold"
-                style={{ fontSize: 20, color: "#8015e8", marginBottom: 10 }}
-              >
+              <h3 className="text-card-title text-brand mb-2.5">
                 {card.title}
               </h3>
-              <p
-                style={{
-                  fontSize: 14,
-                  lineHeight: "22px",
-                  color: "var(--text-body)",
-                }}
-              >
+              <p className="text-sm leading-[22px] text-body">
                 {card.description}
               </p>
             </div>
@@ -535,65 +438,29 @@ function StrategicApproachSection({
   const active = tabs[activeTab] ?? tabs[0]
 
   return (
-    <section
-      className="bg-surface px-4"
-      style={{ paddingTop: 80, paddingBottom: 80 }}
-    >
-      <div
-        className="mx-auto flex flex-col items-center"
-        style={{ maxWidth: 959 }}
-      >
-        <h2
-          className="text-section-h2 text-center text-body"
-          style={{ maxWidth: 900 }}
-        >
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto flex flex-col items-center max-w-[959px]">
+        <h2 className="text-section-h2 text-center text-body max-w-[900px]">
           {headingPart1}
-          <span style={{ color: "#8015e8" }}>{headingAccent}</span>
+          <span className="text-brand">{headingAccent}</span>
         </h2>
         {subheading && (
-          <p
-            className="text-body text-center mx-auto"
-            style={{
-              color: "var(--text-muted-fg)",
-              maxWidth: 820,
-              marginTop: 16,
-              marginBottom: 40,
-            }}
-          >
+          <p className="text-base leading-relaxed text-muted text-center mx-auto max-w-[820px] mt-4 mb-10">
             {subheading}
           </p>
         )}
 
         {/* Tab buttons */}
-        <div
-          className="flex justify-center flex-wrap"
-          style={{ gap: 12 }}
-        >
+        <div className="flex justify-center flex-wrap gap-3">
           {tabs.map((tab, i) => (
             <button
               key={tab._key || tab.label || `approach-tab-${i}`}
               onClick={() => setActiveTab(i)}
-              className="cursor-pointer transition-all whitespace-nowrap shrink-0"
-              style={{
-                padding: "10px 32px",
-                borderRadius: 99,
-                fontSize: 16,
-                fontWeight: 600,
-                ...(i === activeTab
-                  ? {
-                      background:
-                        "linear-gradient(to right, #8015e8, #ba83f0)",
-                      color: "white",
-                      boxShadow:
-                        "2.83px 2.83px 15px 3px rgba(0,0,0,0.18)",
-                      border: "none",
-                    }
-                  : {
-                      backgroundColor: "var(--surface-raised)",
-                      color: "var(--text-body)",
-                      border: "1px solid var(--border-ui)",
-                    }),
-              }}
+              className={`cursor-pointer transition-all whitespace-nowrap shrink-0 rounded-pill px-8 py-2.5 text-base font-semibold ${
+                i === activeTab
+                  ? "bg-gradient-to-r from-brand to-brand-light text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.18)] border border-transparent"
+                  : "bg-surface-raised text-body border border-ui"
+              }`}
             >
               {tab.label}
             </button>
@@ -601,39 +468,20 @@ function StrategicApproachSection({
         </div>
 
         {/* Tab content */}
-        <div
-          className="w-full rounded-card border border-ui"
-          style={{ marginTop: 32, padding: "32px 40px" }}
-        >
-          <h3
-            className="font-semibold"
-            style={{ fontSize: 22, color: "#8015e8", marginBottom: 24 }}
-          >
+        <div className="w-full rounded-card border border-ui mt-8 p-6 md:px-10 md:py-8">
+          <h3 className="text-card-title text-brand mb-6">
             {active?.label}
           </h3>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 16,
-            }}
-          >
+          <div className="flex flex-col gap-4">
             {(active?.items ?? []).map((item, i) => (
               <div
                 key={item._key || `approach-item-${i}`}
-                className="flex items-start"
-                style={{ gap: 12 }}
+                className="flex items-start gap-3"
               >
-                <span style={{ fontSize: 20, lineHeight: 1, flexShrink: 0 }}>
+                <span className="text-xl leading-none shrink-0">
                   {item.emoji}
                 </span>
-                <p
-                  style={{
-                    fontSize: 16,
-                    lineHeight: "24px",
-                    color: "var(--text-body)",
-                  }}
-                >
+                <p className="text-body">
                   {item.text}
                 </p>
               </div>
@@ -663,54 +511,27 @@ function IndustrySpecificSection({
   const active = tabs[activeTab] ?? tabs[0]
 
   return (
-    <section
-      style={{
-        background: "linear-gradient(135deg, #1c024c 0%, #7d14e3 100%)",
-        paddingTop: 80,
-        paddingBottom: 80,
-      }}
-    >
-      <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
+    <section className="bg-gradient-to-br from-surface-dark-2 to-brand py-14 md:py-24">
+      <div className="mx-auto px-4 max-w-[1200px]">
         {heading && (
-          <h2
-            className="text-section-h2 text-center text-white"
-            style={{ marginBottom: 40 }}
-          >
+          <h2 className="text-section-h2 text-center text-white mb-10">
             {heading}
           </h2>
         )}
 
         {/* Tab pills */}
-        <div
-          className="flex items-center justify-center flex-wrap"
-          style={{ gap: 12, marginBottom: 40 }}
-        >
+        <div className="flex items-center justify-center flex-wrap gap-3 mb-10">
           {tabs.map((tab, idx) => {
             const isActive = idx === activeTab
             return (
               <button
                 key={tab._key || tab.label || `industry-tab-${idx}`}
                 onClick={() => setActiveTab(idx)}
-                className="flex items-center justify-center font-bold"
-                style={{
-                  height: 39,
-                  paddingLeft: 24,
-                  paddingRight: 24,
-                  borderRadius: 99,
-                  fontSize: 14,
-                  cursor: "pointer",
-                  ...(isActive
-                    ? {
-                        backgroundColor: "white",
-                        color: "#8015e8",
-                        boxShadow: "0px 2px 8px rgba(128,21,232,0.35)",
-                      }
-                    : {
-                        backgroundColor: "rgba(255,255,255,0.15)",
-                        color: "white",
-                        border: "1px solid rgba(255,255,255,0.3)",
-                      }),
-                }}
+                className={`flex items-center justify-center font-bold h-[39px] px-6 rounded-pill text-sm cursor-pointer ${
+                  isActive
+                    ? "bg-white text-brand shadow-[0px_2px_8px_rgba(128,21,232,0.35)]"
+                    : "bg-white/15 text-white border border-white/30"
+                }`}
               >
                 {tab.label}
               </button>
@@ -720,73 +541,36 @@ function IndustrySpecificSection({
 
         {/* Tab description */}
         {active?.description && (
-          <p
-            className="text-center mx-auto"
-            style={{
-              fontSize: 16,
-              lineHeight: "25.6px",
-              color: "#e8dcfb",
-              maxWidth: 800,
-              marginBottom: 32,
-            }}
-          >
+          <p className="text-center mx-auto text-base leading-relaxed text-brand-soft max-w-[800px] mb-8">
             {active.description}
           </p>
         )}
 
         {/* Numbered sub-sections */}
-        <div
-          className="mx-auto"
-          style={{ maxWidth: 900, display: "flex", flexDirection: "column", gap: 24 }}
-        >
+        <div className="mx-auto max-w-[900px] flex flex-col gap-6">
           {(active?.sections ?? []).map((section, si) => (
             <div
               key={section._key || section.number || `industry-section-${si}`}
-              className="rounded-card ui-hover-card"
-              style={{
-                backgroundColor: "rgba(255,255,255,0.1)",
-                border: "1px solid rgba(255,255,255,0.2)",
-                padding: "32px 40px",
-              }}
+              className="rounded-card ui-hover-card bg-white/10 border border-white/20 p-6 md:px-10 md:py-8"
             >
-              <div className="flex items-center" style={{ gap: 16, marginBottom: 20 }}>
-                <span
-                  style={{
-                    fontSize: 36,
-                    fontWeight: 200,
-                    color: "#ba83f0",
-                    lineHeight: 1,
-                  }}
-                >
+              <div className="flex items-center gap-4 mb-5">
+                <span className="text-4xl font-extralight text-brand-light leading-none">
                   {section.number}
                 </span>
-                <h3
-                  className="font-semibold text-white"
-                  style={{ fontSize: 22 }}
-                >
+                <h3 className="text-card-title font-semibold text-white">
                   {section.title}
                 </h3>
               </div>
-              <div
-                className="grid grid-cols-1 sm:grid-cols-2"
-                style={{ gap: 12 }}
-              >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {(section.bullets ?? []).map((bullet, bi) => (
                   <div
                     key={bullet._key || `industry-bullet-${si}-${bi}`}
-                    className="flex items-start"
-                    style={{ gap: 10 }}
+                    className="flex items-start gap-2.5"
                   >
-                    <span style={{ fontSize: 20, lineHeight: 1, flexShrink: 0 }}>
+                    <span className="text-xl leading-none shrink-0">
                       {bullet.emoji}
                     </span>
-                    <span
-                      style={{
-                        fontSize: 14,
-                        lineHeight: "20px",
-                        color: "white",
-                      }}
-                    >
+                    <span className="text-sm leading-5 text-white">
                       {bullet.text}
                     </span>
                   </div>
@@ -826,54 +610,27 @@ function ProductDevelopmentSection({
       : safeImageUrl(active?.image as SanityImageRef | undefined)
 
   return (
-    <section
-      style={{
-        backgroundColor: "var(--surface-subtle)",
-        paddingTop: 80,
-        paddingBottom: 80,
-      }}
-    >
-      <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
-        <h2
-          className="text-section-h2 text-center"
-          style={{ color: "var(--text-body)", marginBottom: 40, maxWidth: 1000, marginLeft: "auto", marginRight: "auto" }}
-        >
+    <section className="bg-surface-subtle py-14 md:py-24">
+      <div className="mx-auto px-4 max-w-[1200px]">
+        <h2 className="text-section-h2 text-center text-body mb-10 max-w-[1000px] mx-auto">
           {headingPart1}
-          <span style={{ color: "#8015e8" }}>{headingAccent}</span>
+          <span className="text-brand">{headingAccent}</span>
           {headingPart2}
         </h2>
 
         {/* Tab pills */}
-        <div
-          className="flex items-center justify-center flex-wrap"
-          style={{ gap: 12, marginBottom: 40 }}
-        >
+        <div className="flex items-center justify-center flex-wrap gap-3 mb-10">
           {tabs.map((tab, i) => {
             const isActive = i === activeTab
             return (
               <button
                 key={tab._key || tab.label || `prod-dev-tab-${i}`}
                 onClick={() => setActiveTab(i)}
-                className="cursor-pointer transition-all font-semibold"
-                style={{
-                  padding: "10px 24px",
-                  borderRadius: 99,
-                  fontSize: 15,
-                  ...(isActive
-                    ? {
-                        background:
-                          "linear-gradient(to right, #8015e8, #ba83f0)",
-                        color: "white",
-                        boxShadow:
-                          "2.83px 2.83px 15px 3px rgba(0,0,0,0.18)",
-                        border: "none",
-                      }
-                    : {
-                        backgroundColor: "var(--surface-raised)",
-                        color: "var(--text-body)",
-                        border: "1px solid var(--border-ui)",
-                      }),
-                }}
+                className={`cursor-pointer transition-all font-semibold rounded-pill px-6 py-2.5 text-[15px] ${
+                  isActive
+                    ? "bg-gradient-to-r from-brand to-brand-light text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.18)] border border-transparent"
+                    : "bg-surface-raised text-body border border-ui"
+                }`}
               >
                 {tab.label}
               </button>
@@ -882,61 +639,26 @@ function ProductDevelopmentSection({
         </div>
 
         {/* Tab content */}
-        <div
-          className="w-full rounded-card border border-ui bg-surface-raised dark:shadow-none"
-          style={{ padding: "40px" }}
-        >
-          <div
-            className="grid grid-cols-1 lg:grid-cols-2"
-            style={{ gap: 40, alignItems: "center" }}
-          >
+        <div className="w-full rounded-card border border-ui bg-surface-raised dark:shadow-none p-6 md:p-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             {/* Text column */}
             <div>
-              <h3
-                className="font-semibold"
-                style={{ fontSize: 24, color: "#8015e8", marginBottom: 16 }}
-              >
+              <h3 className="text-card-title text-brand mb-4">
                 {active?.label}
               </h3>
-              <p
-                style={{
-                  fontSize: 16,
-                  lineHeight: "24px",
-                  color: "var(--text-body)",
-                  marginBottom: 24,
-                }}
-              >
+              <p className="text-body mb-6">
                 {active?.description}
               </p>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 16,
-                }}
-              >
+              <div className="flex flex-col gap-4">
                 {(active?.bullets ?? []).map((bullet, i) => (
                   <div
                     key={bullet._key || `prod-dev-bullet-${i}`}
-                    className="flex items-start"
-                    style={{ gap: 12 }}
+                    className="flex items-start gap-3"
                   >
-                    <span
-                      style={{
-                        fontSize: 22,
-                        lineHeight: 1,
-                        flexShrink: 0,
-                      }}
-                    >
+                    <span className="text-[22px] leading-none shrink-0">
                       {bullet.emoji}
                     </span>
-                    <p
-                      style={{
-                        fontSize: 16,
-                        lineHeight: "24px",
-                        color: "var(--text-body)",
-                      }}
-                    >
+                    <p className="text-body">
                       {bullet.text}
                     </p>
                   </div>
@@ -945,19 +667,13 @@ function ProductDevelopmentSection({
             </div>
 
             {/* Image column */}
-            <div
-              className="rounded-card overflow-hidden"
-              style={{
-                border: "1px solid #ece7fb",
-                backgroundColor: "#fff",
-              }}
-            >
+            <div className="rounded-card overflow-hidden border border-brand/20 bg-surface-raised">
               {activeImageSrc && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={activeImageSrc}
                   alt={active?.imageAlt || ""}
-                  style={{ width: "100%", height: "auto", display: "block" }}
+                  className="w-full h-auto block"
                 />
               )}
             </div>

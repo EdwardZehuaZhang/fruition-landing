@@ -10,6 +10,8 @@ import servicePage from './servicePage'
 import teamMember from './teamMember'
 import caseStudy from './caseStudy'
 import faqItem from './faqItem'
+import closingCta from './closingCta'
+import proofStats from './proofStats'
 import page from './page'
 import voiceGuide from './voiceGuide'
 
@@ -49,6 +51,8 @@ export const schemaTypes = [
   teamMember,
   caseStudy,
   faqItem,
+  closingCta,
+  proofStats,
   page,
   voiceGuide,
 
