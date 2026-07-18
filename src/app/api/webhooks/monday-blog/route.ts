@@ -12,6 +12,8 @@ import {
 } from "@/lib/googleDocs"
 import { getFullDraft } from "@/lib/marketa/brain"
 import { generateLinkedInPost } from "@/lib/marketa/marketaLinkedIn"
+import { createSocialDraft } from "@/lib/marketa/zernio"
+import { getPortalAdmin } from "@/lib/portalAuth"
 import {
   changeColumnValues,
   getItemForWebhook,
@@ -485,6 +487,27 @@ function boldPrimaryKeyword(article: string, keyword: string | undefined): strin
   return lines.join("\n")
 }
 
+/**
+ * Read the full untruncated draft from portal_drafts (written by the generate
+ * endpoint's pulseId mode, keyed via metadata.monday_item_id). Fail-safe null
+ * so callers fall through to the legacy brain table / monday column.
+ */
+async function getPortalFullDraft(pulseId: string): Promise<string | null> {
+  try {
+    const admin = getPortalAdmin()
+    const { data } = await admin
+      .from("portal_drafts")
+      .select("body_markdown")
+      .eq("metadata->>monday_item_id", pulseId)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    return data?.body_markdown || null
+  } catch {
+    return null
+  }
+}
+
 async function autoDocsForDraft(
   pulseId: string,
   snapshot: MondayItemSnapshot | null,
@@ -501,11 +524,13 @@ async function autoDocsForDraft(
   }
   const title = snapshot.name?.trim() || "(untitled blog draft)"
   const ctx = extractContext(snapshot)
-  // Prefer the FULL draft from Supabase. monday's long_text column truncates at
-  // ~2000 chars (which chopped the post to its intro), so the n8n workflow
-  // stores the complete draft in blog_drafts and we read it here. Fall back to
-  // the monday column only if the Supabase row is missing.
-  const fullDraft = await getFullDraft(pulseId)
+  // Prefer the FULL draft over the monday column (long_text truncates at
+  // ~2000 chars, which chops posts to ~300 words mid-sentence). Sources in
+  // order: portal_drafts (written by the generate endpoint's pulseId mode —
+  // same project the portal reads, so this also keeps the doc and the portal
+  // in sync) → legacy brain blog_drafts (n8n/make era) → monday column.
+  const fullDraft =
+    (await getPortalFullDraft(pulseId)) ?? (await getFullDraft(pulseId))
   const rawDraftBody = (fullDraft || ctx.draftBody)?.trim()
   if (!rawDraftBody) {
     throw new Error(`monday item ${pulseId} has no draft body (Supabase + monday both empty)`)
@@ -583,8 +608,21 @@ async function autoDocsForDraft(
     [COL_LINKEDIN_DOC_URL]: { url: linkedInDoc.docUrl, text: "LinkedIn post" },
   })
 
+  // Zernio DRAFT social post (X + Google Business) for human review — same
+  // best-effort integration the daily pipeline has. Never sinks the docs.
+  let socialUrl: string | null = null
+  try {
+    const social = await createSocialDraft({
+      title,
+      excerpt: meta || article.split("\n\n").find((p) => p.trim() && !p.startsWith("#"))?.slice(0, 220) || title,
+    })
+    socialUrl = social?.reviewUrl ?? null
+  } catch (socialErr) {
+    console.error("[monday-blog] Zernio draft failed (non-fatal):", errMsg(socialErr))
+  }
+
   // Thread reply on the original Slack message — Block Kit with header,
-  // title link, and three action buttons (blog draft, LinkedIn post, monday).
+  // title link, and action buttons (blog draft, LinkedIn post, social, monday).
   const built = buildAutoDocsReadyBlocks({
     pulseId,
     title,
@@ -592,6 +630,7 @@ async function autoDocsForDraft(
     targetKeyword: ctx.targetKeyword,
     blogDocUrl: blogDoc.docUrl,
     linkedInDocUrl: linkedInDoc.docUrl,
+    socialUrl,
   })
   if (origin) {
     await postSlackMessage(origin.channel, built.blocks, built.fallbackText, {

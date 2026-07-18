@@ -157,6 +157,7 @@ export function buildAutoDocsReadyBlocks(args: {
   targetKeyword?: string
   blogDocUrl: string
   linkedInDocUrl: string
+  socialUrl?: string | null
 }): { fallbackText: string; blocks: Record<string, unknown>[] } {
   const blocks: Record<string, unknown>[] = []
   blocks.push({
@@ -172,23 +173,28 @@ export function buildAutoDocsReadyBlocks(args: {
   })
   const meta = metaLine({ industry: args.industry, targetKeyword: args.targetKeyword })
   if (meta) blocks.push({ type: "context", elements: [{ type: "mrkdwn", text: meta }] })
-  blocks.push({
-    type: "actions",
-    elements: [
-      openInPortalButton(args.pulseId, "Review in Portal"),
-      {
-        type: "button",
-        text: { type: "plain_text", text: "Open blog draft :pencil:", emoji: true },
-        url: args.blogDocUrl,
-      },
-      {
-        type: "button",
-        text: { type: "plain_text", text: "Open LinkedIn post :linkedin:", emoji: true },
-        url: args.linkedInDocUrl,
-      },
-      openInMondayButton(args.pulseId, "Open in monday :clipboard:", false),
-    ],
-  })
+  const actionEls: Record<string, unknown>[] = [
+    openInPortalButton(args.pulseId, "Review in Portal"),
+    {
+      type: "button",
+      text: { type: "plain_text", text: "Open blog draft :pencil:", emoji: true },
+      url: args.blogDocUrl,
+    },
+    {
+      type: "button",
+      text: { type: "plain_text", text: "Open LinkedIn post :linkedin:", emoji: true },
+      url: args.linkedInDocUrl,
+    },
+  ]
+  if (args.socialUrl) {
+    actionEls.push({
+      type: "button",
+      text: { type: "plain_text", text: "Review social post :bird:", emoji: true },
+      url: args.socialUrl,
+    })
+  }
+  actionEls.push(openInMondayButton(args.pulseId, "Open in monday :clipboard:", false))
+  blocks.push({ type: "actions", elements: actionEls })
   return { fallbackText: `:memo: Draft ready: ${args.title}`, blocks }
 }
 

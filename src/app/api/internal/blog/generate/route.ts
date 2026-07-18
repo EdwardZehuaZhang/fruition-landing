@@ -65,12 +65,28 @@ function extractIndustry(topic: string): string {
   return "Professional Services"
 }
 
-const SYSTEM_PROMPT = `You are a B2B content writer for Fruition, a monday.com Platinum Partner.
-Write authoritative, practical blog posts that answer industry questions — not product pitches.
-Follow the 80/20 industry/product editorial rule. 
-Use short paragraphs (2-4 sentences). Use H2 headings for sections.
-Banned words: leverage, synergise, best-in-class, unlock potential, drive results, game-changer, revolutionize, cutting-edge, delve, dive deep.
-End with a "## Key takeaway" section.
+// Style rules come from Fruition's human blog editor (Slack feedback,
+// 2026-07): conversational Q&A tone, Hemingway-grade readability, scannable
+// structure, verified-facts-only with a Sources section, keyword bolded.
+const SYSTEM_PROMPT = `You are a senior content writer for Fruition, a monday.com Platinum Partner.
+Write like a helpful consultant talking to one busy reader — conversational and direct. Ask the questions the reader is already asking, then answer them plainly.
+
+TONE & READABILITY
+- Conversational question-and-answer flow: phrase most H2 headings as questions a real person would type or ask.
+- Short sentences. Plain words. Aim for Hemingway grade 6-8. If a sentence needs a second breath, split it.
+- Paragraphs are 2 sentences (long ones) to 3 sentences (short ones). NEVER more than 3 sentences in a paragraph.
+- It must not read as AI-written: no filler, no throat-clearing, no symmetrical "On one hand / on the other" scaffolding, vary sentence length.
+
+STRUCTURE & SCANNABILITY
+- Make it scannable: use bullet lists whenever you enumerate 3+ items, and use them often.
+- H2 for sections (mostly questions), H3 sparingly for sub-points.
+- Bold the target keyword the first 2-3 times it appears naturally in the body. Don't force it.
+
+FACTS & SOURCES
+- Only state facts you can verify from official product websites and documentation. NEVER invent statistics, prices, limits, or feature claims. When unsure, leave it out.
+- End with "## Key takeaway" (2-3 sentences), then "## Sources" — a bullet list of the official pages the content draws from, as markdown links. Only link to top-level official pages you are certain exist (e.g. monday.com product pages, vendor homepages, official docs). Never fabricate deep URLs.
+
+BANNED: leverage, synergise, best-in-class, unlock potential, drive results, game-changer, revolutionize, cutting-edge, delve, dive deep, "in today's fast-paced world", "it's important to note", "seamlessly", "robust".
 Output ONLY clean markdown. No JSON wrapper, no preamble.`
 
 export async function POST(req: Request) {
@@ -126,7 +142,9 @@ export async function POST(req: Request) {
   // fall back to a globally-available model so generation never hard-fails.
   console.log(`Generating blog: "${topic}"${pulseId ? ` (monday item ${pulseId})` : ""}`)
   const briefBlock = pulseId && body.brief?.trim() ? `\n\nBrief / context from the requester:\n${body.brief.trim()}` : ""
-  const userPrompt = `Write a 1000-1200 word blog post: "${topic}". Focus on practical, actionable advice for ${industry} teams. Use H2 headings. Output clean markdown.${briefBlock}`
+  const userPrompt = `Write a 1200-1500 word blog post: "${topic}".
+Target keyword: "${keyword}". Audience: ${industry} teams evaluating or already using monday.com.
+Practical and specific — real workflows, real decisions, concrete examples. Question-style H2 headings, short paragraphs (2-3 sentences), bullet lists for anything enumerable, keyword bolded on first uses, and finish with "## Key takeaway" then "## Sources". Output clean markdown only.${briefBlock}`
   const MODELS = (process.env.MARKETA_BLOG_MODELS || "anthropic/claude-sonnet-5,openai/gpt-4o,google/gemini-2.5-pro")
     .split(",").map((s) => s.trim()).filter(Boolean)
   let bodyMarkdown = ""
@@ -199,16 +217,39 @@ export async function POST(req: Request) {
 
   // monday mode: attach the draft to the existing item and hand off to the
   // monday-blog webhook (auto-docs + threaded Slack reply fire on the stage
-  // change to "Draft ready"). No portal draft, no direct Slack/docs here.
+  // change to "Draft ready"). No direct Slack/docs here.
   if (pulseId) {
+    // Portal copy FIRST — this is what the /internal/blog/monday/[pulseId]
+    // bridge resolves against (else it 404s) and what auto-docs reads for the
+    // full untruncated body. The brain blog_drafts write below is legacy
+    // best-effort (its creds may not be live on the Worker).
+    try {
+      const portalAdmin = getPortalAdmin()
+      const { error: pdErr } = await portalAdmin.from("portal_drafts").insert({
+        title: topic,
+        body_markdown: bodyMarkdown,
+        metadata: {
+          status: "drafted",
+          industry,
+          target_keyword: keyword,
+          monday_item_id: pulseId,
+          source: "slack-intake",
+          generated_at: new Date().toISOString(),
+        },
+        updated_at: new Date().toISOString(),
+      })
+      if (pdErr) console.error("[blog/generate] portal draft insert failed (non-fatal):", pdErr.message)
+    } catch (portalErr) {
+      console.error("[blog/generate] portal draft insert failed (non-fatal):", portalErr)
+    }
     try {
       await saveFullDraft(pulseId, bodyMarkdown)
     } catch (saveErr) {
-      // Non-fatal: auto-docs falls back to the (truncated) monday column.
       console.error("[blog/generate] blog_drafts upsert failed (non-fatal):", saveErr)
     }
     await changeColumnValues(MONDAY_BOARD_ID, pulseId, {
       [COL_DRAFT_BODY]: { text: bodyMarkdown },
+      [COL_TARGET_KW]: keyword,
       [COL_STAGE]: { labels: ["Draft ready"] },
     })
     return NextResponse.json({ ok: true, pulseId, stage: "Draft ready", words: wordCount(bodyMarkdown) })
