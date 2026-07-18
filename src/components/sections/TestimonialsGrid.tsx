@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
 import CtaLabel from "@/components/CtaLabel"
@@ -48,10 +48,14 @@ export default function TestimonialsGrid({
   }))
 
   // Paginate into groups of 5
-  const pages: typeof testimonials[] = []
-  for (let i = 0; i < testimonials.length; i += TESTIMONIALS_PER_PAGE) {
-    pages.push(testimonials.slice(i, i + TESTIMONIALS_PER_PAGE))
-  }
+  // Memoized so the React Compiler can preserve downstream memoization.
+  const pages = useMemo(() => {
+    const out: typeof testimonials[] = []
+    for (let i = 0; i < testimonials.length; i += TESTIMONIALS_PER_PAGE) {
+      out.push(testimonials.slice(i, i + TESTIMONIALS_PER_PAGE))
+    }
+    return out
+  }, [testimonials])
   const totalPages = pages.length
   const [currentPage, setCurrentPage] = useState(0)
 

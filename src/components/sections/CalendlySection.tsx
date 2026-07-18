@@ -31,13 +31,15 @@ export default function CalendlySection({
   const [subheadingExtra, setSubheadingExtra] = useState(0)
 
   useEffect(() => {
+    // Initial measurement deferred a frame: synchronous setState in an effect
+    // cascades renders; ResizeObserver keeps it in sync afterwards.
     if (!subheading || !subheadingRef.current) {
-      setSubheadingExtra(0)
-      return
+      const raf = requestAnimationFrame(() => setSubheadingExtra(0))
+      return () => cancelAnimationFrame(raf)
     }
     const el = subheadingRef.current
     const update = () => setSubheadingExtra(el.offsetHeight)
-    update()
+    const raf = requestAnimationFrame(update)
     const ro = new ResizeObserver(update)
     ro.observe(el)
     return () => ro.disconnect()

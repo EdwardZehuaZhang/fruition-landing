@@ -293,9 +293,14 @@ export default function FaqList({ items }: { items: FaqItem[] }) {
   }, [groupByKey])
 
   useEffect(() => {
-    syncFromUrl()
+    // Deferred a frame: calling setState synchronously inside an effect can
+    // cascade renders (react-hooks lint error); visually identical.
+    const raf = requestAnimationFrame(syncFromUrl)
     window.addEventListener("popstate", syncFromUrl)
-    return () => window.removeEventListener("popstate", syncFromUrl)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener("popstate", syncFromUrl)
+    }
   }, [syncFromUrl])
 
   const navTo = useCallback((key: GroupKey | null) => {
