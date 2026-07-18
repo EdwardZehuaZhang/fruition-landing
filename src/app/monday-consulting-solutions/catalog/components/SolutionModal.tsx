@@ -45,7 +45,7 @@ function ModalShell({
       role="dialog"
       aria-modal="true"
       aria-labelledby="solution-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6"
     >
       <div
         className="absolute inset-0 bg-[rgba(16,0,58,0.6)] backdrop-blur-sm"
@@ -144,7 +144,7 @@ function OverviewTab({ solution }: { solution: Solution }) {
       </div>
 
       {solution.highlights?.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {solution.highlights.map((h, i) => (
             <div
               key={i}
@@ -161,7 +161,7 @@ function OverviewTab({ solution }: { solution: Solution }) {
 
       {solution.outcomes && solution.outcomes.length > 0 && (
         <RichSection title="Business outcomes">
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {solution.outcomes.map((o, i) => (
               <li
                 key={i}
@@ -176,7 +176,7 @@ function OverviewTab({ solution }: { solution: Solution }) {
 
       {solution.modules && solution.modules.length > 0 && (
         <RichSection title="Modules">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {solution.modules.map((m, i) => (
               <div
                 key={i}
@@ -200,7 +200,7 @@ function OverviewTab({ solution }: { solution: Solution }) {
 
       {solution.personas && solution.personas.length > 0 && (
         <RichSection title="Personas">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
             {solution.personas.map((p, i) => (
               <div
                 key={i}
@@ -216,7 +216,7 @@ function OverviewTab({ solution }: { solution: Solution }) {
 
       {solution.phases && solution.phases.length > 0 && (
         <RichSection title="Phasing">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {solution.phases.map((p, i) => (
               <div
                 key={i}
@@ -238,7 +238,7 @@ function OverviewTab({ solution }: { solution: Solution }) {
       {(solution.kpis?.length ||
         solution.integrations?.length ||
         solution.team) && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {solution.kpis && solution.kpis.length > 0 && (
             <MetaPanel title="KPIs">
               <ul className="space-y-1">
@@ -363,7 +363,7 @@ function WorkflowTab({ solution }: { solution: Solution }) {
           live walk-through.
         </div>
       ) : (
-        <div className="rounded-xl border border-[var(--border-ui)] bg-surface-raised p-3 sm:p-5 overflow-auto min-h-[240px]">
+        <div className="rounded-xl border border-[var(--border-ui)] bg-surface-raised p-3 md:p-5 overflow-auto min-h-[240px]">
           {loading && (
             <div className="text-body-sm text-[var(--color-text-secondary)] py-10 text-center">
               Rendering diagram…

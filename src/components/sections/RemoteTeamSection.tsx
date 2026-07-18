@@ -29,8 +29,6 @@ interface RemoteTeamSectionProps {
   children?: React.ReactNode
 }
 
-const ACCENT = "#8015e8"
-
 export default function RemoteTeamSection({
   eyebrow,
   heading,
@@ -46,42 +44,21 @@ export default function RemoteTeamSection({
   if (!heading && !headingAccent && offices.length === 0) return null
 
   return (
-    <section style={{ backgroundColor: bg, paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
+    <section className="py-[80px]" style={{ backgroundColor: bg }}>
+      <div className="mx-auto px-4 max-w-[1200px]">
         {eyebrow && (
-          <div
-            className="text-center"
-            style={{
-              color: ACCENT,
-              fontSize: 13,
-              fontWeight: 700,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              marginBottom: 12,
-            }}
-          >
+          <div className="text-center font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand mb-3">
             {eyebrow}
           </div>
         )}
         {(heading || headingAccent) && (
-          <h2
-            className="text-section-h2 text-center"
-            style={{ color: "var(--text-body)", marginBottom: subheading ? 16 : 48 }}
-          >
+          <h2 className={`text-section-h2 text-center text-body ${subheading ? "mb-4" : "mb-12"}`}>
             {heading}
-            {headingAccent && <span style={{ color: ACCENT }}>{headingAccent}</span>}
+            {headingAccent && <span className="text-brand">{headingAccent}</span>}
           </h2>
         )}
         {subheading && (
-          <p
-            className="text-body text-center mx-auto"
-            style={{
-              color: "var(--text-muted-fg)",
-              maxWidth: 820,
-              marginBottom: 48,
-              whiteSpace: "pre-line",
-            }}
-          >
+          <p className="text-body text-center mx-auto text-muted max-w-[820px] mb-12 whitespace-pre-line">
             {subheading}
           </p>
         )}
@@ -89,44 +66,29 @@ export default function RemoteTeamSection({
         {children}
 
         {offices.length > 0 && (
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5"
-            style={{ gap: 20, marginBottom: 48 }}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 mb-12">
             {offices.map((o, i) => (
               <div
                 key={o._key || i}
-                className="bg-surface-raised rounded-card border border-ui dark:shadow-none"
-                style={{
-                  padding: 20,
-                  textAlign: "center",
-                  boxShadow: "var(--shadow-whisper)",
-                }}
+                className="bg-surface-raised rounded-card border border-ui dark:shadow-none p-5 text-center shadow-whisper"
               >
                 {o.flag && (
-                  <div style={{ fontSize: 32, lineHeight: 1, marginBottom: 8 }}>
+                  <div className="text-[32px] leading-none mb-2">
                     {o.flag}
                   </div>
                 )}
                 {o.city && (
-                  <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-body)", marginBottom: 2 }}>
+                  <h3 className="text-lg font-bold text-body mb-0.5">
                     {o.city}
                   </h3>
                 )}
                 {o.region && (
-                  <div style={{ fontSize: 13, color: ACCENT, fontWeight: 600, marginBottom: 10 }}>
+                  <div className="text-[13px] text-brand font-semibold mb-2.5">
                     {o.region}
                   </div>
                 )}
                 {o.address && (
-                  <p
-                    style={{
-                      fontSize: 13,
-                      lineHeight: 1.5,
-                      color: "var(--text-muted-fg)",
-                      whiteSpace: "pre-line",
-                    }}
-                  >
+                  <p className="text-[13px] leading-normal text-muted whitespace-pre-line">
                     {o.address}
                   </p>
                 )}
@@ -137,25 +99,14 @@ export default function RemoteTeamSection({
 
         {features.length > 0 && (
           <div
-            className="flex flex-wrap items-center justify-center"
-            style={{ gap: 12, marginBottom: ctaLabel ? 40 : 0 }}
+            className={`flex flex-wrap items-center justify-center gap-3 ${ctaLabel ? "mb-10" : ""}`}
           >
             {features.map((f, i) => (
               <div
                 key={f._key || i}
-                className="bg-surface-raised rounded-full border border-ui dark:shadow-none"
-                style={{
-                  padding: "10px 18px",
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: "var(--text-body)",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
-                  boxShadow: "var(--shadow-whisper)",
-                }}
+                className="bg-surface-raised rounded-full border border-ui dark:shadow-none inline-flex items-center gap-2 px-[18px] py-2.5 text-sm font-semibold text-body shadow-whisper"
               >
-                {f.emoji && <span style={{ fontSize: 16 }}>{f.emoji}</span>}
+                {f.emoji && <span className="text-base">{f.emoji}</span>}
                 <span>{f.label}</span>
               </div>
             ))}
@@ -164,18 +115,7 @@ export default function RemoteTeamSection({
 
         {ctaLabel && ctaUrl && (
           <div className="flex justify-center">
-            <Link
-              href={ctaUrl}
-              className="flex items-center justify-center font-bold"
-              style={{
-                height: 53,
-                padding: "0 40px",
-                borderRadius: 100,
-                background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                color: "white",
-                fontSize: 16,
-              }}
-            >
+            <Link href={ctaUrl} className="cta-btn cta-btn-primary">
               {ctaLabel}
             </Link>
           </div>

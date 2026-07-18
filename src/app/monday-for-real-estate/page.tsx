@@ -180,7 +180,7 @@ export default async function Page() {
                 {page.whyBestHeading}
               </h2>
             )}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: 24 }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 24 }}>
               {page.capabilitiesCards.map((card: { _key?: string; emoji?: string; title?: string; description?: string }) => (
                 <div
                   key={card._key}

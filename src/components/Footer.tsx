@@ -102,7 +102,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
       {/*  LEFT PANEL - gradient background                            */}
       {/* ============================================================ */}
       <div
-        className="w-full lg:w-[530px] shrink-0 py-12 lg:py-16 px-8 sm:px-12 lg:pl-[120px] lg:pr-10 flex flex-col gap-8"
+        className="w-full lg:w-[530px] shrink-0 py-12 lg:py-16 px-8 md:px-12 lg:pl-[120px] lg:pr-10 flex flex-col gap-8"
         style={{
           background: 'linear-gradient(-38deg, rgb(128, 21, 232) 0%, rgb(16, 0, 58) 100%)',
         }}
@@ -147,7 +147,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
           {/* Phone numbers (one per office; placeholder numbers hidden) */}
           <div className="flex items-start gap-2">
             <PhoneIcon />
-            <div className="flex flex-col gap-y-0.5 sm:flex-row sm:flex-wrap sm:gap-x-6 text-[13px] leading-[20px] text-white">
+            <div className="flex flex-col gap-y-0.5 md:flex-row md:flex-wrap md:gap-x-6 text-[13px] leading-[20px] text-white">
               {offices.filter((o) => isRealPhone(o.phone)).map((o) => (
                 <a
                   key={o.phoneTel || o.phone}
@@ -166,7 +166,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
           {siteSettings?.footerPartnerExpertiseHeading && (
             <h4 className="text-white font-semibold text-[16px] leading-tight mb-3">{siteSettings.footerPartnerExpertiseHeading}</h4>
           )}
-          <div className="grid grid-cols-2 gap-x-6 sm:gap-x-[40px] gap-y-[10px] sm:gap-y-[7px]">
+          <div className="grid grid-cols-2 gap-x-6 md:gap-x-[40px] gap-y-[10px] md:gap-y-[7px]">
             {partnerLogos.map((p, i) => {
               const w = p.width ?? 110
               const h = p.height ?? 38
@@ -234,9 +234,9 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
       {/* ============================================================ */}
       {/*  RIGHT PANEL - dark background                               */}
       {/* ============================================================ */}
-      <div className="flex-1 bg-black py-12 lg:py-16 px-8 sm:px-12 lg:px-16">
-        {/* Three link columns — two-up on phones so the footer doesn't become one long stack */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 lg:gap-8">
+      <div className="flex-1 bg-black py-12 lg:py-16 px-8 md:px-12 lg:px-16">
+        {/* Three link columns — hidden on mobile (too tall); links stay in the DOM for crawlers */}
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 lg:gap-8">
           {/* Services */}
           <div>
             {siteSettings?.footerServicesHeading && (
@@ -292,8 +292,8 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
           </div>
         </div>
 
-        {/* Our Locations */}
-        <div className="mt-12">
+        {/* Our Locations — first visible block on mobile, so no top margin there */}
+        <div className="md:mt-12">
           {siteSettings?.footerOurLocationsHeading && (
             <h4 className="text-white font-semibold text-[16px] leading-tight mb-5">{siteSettings.footerOurLocationsHeading}</h4>
           )}

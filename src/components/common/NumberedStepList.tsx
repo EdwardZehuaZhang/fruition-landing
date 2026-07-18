@@ -30,7 +30,7 @@ interface NumberedStepListProps {
 
 export default function NumberedStepList({
   items,
-  containerClassName = 'ui-surface-panel w-full max-w-[816px] p-2 sm:p-3',
+  containerClassName = 'ui-surface-panel w-full max-w-[816px] p-2 md:p-3',
   stepRowClassName = 'ui-step-row',
 }: NumberedStepListProps) {
   if (!items || items.length === 0) return null

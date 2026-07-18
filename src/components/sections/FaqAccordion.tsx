@@ -70,38 +70,35 @@ export default function FaqAccordion({
       : null
 
   return (
-    <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 120 }}>
+    <section id="faq" className="bg-surface pt-14 pb-20 md:pt-20 md:pb-[120px]">
       {faqJsonLd && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       )}
-      <div className="mx-auto flex flex-col px-4 sm:px-6 lg:px-8" style={{ maxWidth: 959, gap: 24 }}>
+      <div className="mx-auto flex flex-col px-4 md:px-6 lg:px-8 max-w-[1200px] gap-6">
         {heading && (
-          <h2 className="text-section-h2" style={{ color: "var(--purple-primary)" }}>
+          <h2 className="text-section-h2 text-brand">
             {heading}
           </h2>
         )}
 
         {/* Tab navigation bar with icon-triggered horizontal scroll */}
-        <div className="relative" style={{ height: 52 }}>
+        <div className="relative h-[52px]">
           <div
             ref={tabsRef}
-            className="faq-tab-scroll flex items-start h-full"
-            style={{ overflowX: "auto", overflowY: "hidden" }}
+            className="faq-tab-scroll flex items-start h-full overflow-x-auto overflow-y-hidden"
           >
             {tabs.map((tab, idx) => (
               <button
                 key={tab._key || idx}
                 onClick={() => { setActiveFaqTab(idx); setOpenFaqIndex(0) }}
-                className="h-full shrink-0 relative cursor-pointer"
-                style={{
-                  paddingTop: 14, paddingBottom: 17, paddingLeft: 27.469, paddingRight: 27.469,
-                  borderBottom: activeFaqTab === idx ? "3px solid #8e5cbf" : "3px solid transparent",
-                }}
+                className={`h-full shrink-0 relative cursor-pointer pt-3.5 pb-[17px] px-5 md:px-7 border-b-[3px] ${
+                  activeFaqTab === idx ? "border-brand" : "border-transparent"
+                }`}
               >
-                <span style={{ fontSize: 16, color: activeFaqTab === idx ? "#8e5cbf" : "var(--text-body)", textAlign: "center", whiteSpace: "nowrap" }}>
+                <span className={`text-sm md:text-base text-center whitespace-nowrap ${activeFaqTab === idx ? "text-brand" : "text-body"}`}>
                   {tab.label}
                 </span>
               </button>
@@ -112,7 +109,7 @@ export default function FaqAccordion({
               type="button"
               aria-label="Scroll tabs left"
               onClick={() => scrollBy(-1)}
-              className="faq-tab-arrow absolute left-0 top-0 h-full w-10 flex items-center justify-start bg-gradient-to-r from-surface via-surface to-transparent text-[#8e5cbf] hover:text-[#2563eb] transition-colors cursor-pointer"
+              className="faq-tab-arrow absolute left-0 top-0 h-full w-10 flex items-center justify-start bg-gradient-to-r from-surface via-surface to-transparent text-brand hover:text-brand-dark transition-colors cursor-pointer"
             >
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -124,7 +121,7 @@ export default function FaqAccordion({
               type="button"
               aria-label="Scroll tabs right"
               onClick={() => scrollBy(1)}
-              className="faq-tab-arrow absolute right-0 top-0 h-full w-10 flex items-center justify-end bg-gradient-to-l from-surface via-surface to-transparent text-[#8e5cbf] hover:text-[#2563eb] transition-colors cursor-pointer"
+              className="faq-tab-arrow absolute right-0 top-0 h-full w-10 flex items-center justify-end bg-gradient-to-l from-surface via-surface to-transparent text-brand hover:text-brand-dark transition-colors cursor-pointer"
             >
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -134,27 +131,26 @@ export default function FaqAccordion({
         </div>
 
         {/* FAQ items for active tab */}
-        <div className="flex flex-col" style={{ gap: 12 }}>
+        <div className="flex flex-col gap-3">
           {currentItems.map((item, i) => (
-            <div key={item._key || i} style={{ paddingTop: i === 0 ? 20 : 24 }}>
+            <div key={item._key || i} className={i === 0 ? "pt-5" : "pt-6"}>
               <button
                 onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                className="w-full flex items-start justify-between gap-3 text-left cursor-pointer"
-                style={{ minHeight: 30 }}
+                className="w-full flex items-start justify-between gap-3 text-left cursor-pointer min-h-[30px]"
               >
-                <span className="min-w-0" style={{ fontSize: 20, lineHeight: "24px", color: "var(--text-body)" }}>{item.question}</span>
-                <div className="shrink-0" style={{ width: 30, height: 30 }}>
+                <span className="min-w-0 text-lg md:text-xl leading-6 text-body">{item.question}</span>
+                <div className="shrink-0 w-[30px] h-[30px]">
                   <svg className={`transition-transform ${openFaqIndex === i ? "rotate-180" : ""}`} width="30" height="30" viewBox="0 0 30 30" fill="none">
                     <path d="M8 12L15 19L22 12" stroke="var(--text-body)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
               </button>
               {openFaqIndex === i && (
-                <div style={{ paddingBottom: 16, paddingTop: 31, fontSize: 16, lineHeight: "24px", color: "var(--text-body)", whiteSpace: "pre-line" }}>
+                <div className="pb-4 pt-[31px] text-base leading-6 text-body whitespace-pre-line">
                   {item.answer}
                 </div>
               )}
-              <div style={{ borderBottom: "1px solid var(--border-ui)", marginTop: openFaqIndex === i ? 0 : 36 }} />
+              <div className={`border-b border-ui ${openFaqIndex === i ? "mt-0" : "mt-9"}`} />
             </div>
           ))}
         </div>

@@ -48,7 +48,7 @@ export default async function TermsPage() {
       </p>
 
       {docs.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {docs.map((doc) => {
             return (
               <a

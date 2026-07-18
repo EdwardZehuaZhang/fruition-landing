@@ -28,6 +28,8 @@ export default function TestimonialsGrid({
   heading = "What our customers say about us \uD83D\uDE4C",
   ctaLabel = "Start Your Transformation",
   ctaUrl = "https://calendly.com/global-calendar-fruitionservices",
+  // Default mirrors the proofStats singleton (Sanity, _id "proofStats") — the
+  // canonical entity-signal registry. Keep in sync via getProofStats/PROOF_STATS_DEFAULTS.
   statCardValue = "500+",
   statCardSubtitle = "have maximised their workflows with our monday.com expert support",
   statCardCtaLabel = "Read our case studies",
@@ -68,7 +70,7 @@ export default function TestimonialsGrid({
       <div className="mx-auto max-w-[1343px]">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-6 lg:gap-[89px] mb-10 lg:mb-[58px] w-full">
-          <h2 className="text-section-h2 text-body w-full lg:w-[919px] lg:shrink-0">{heading}</h2>
+          <h2 className="text-section-h2 w-full lg:w-[919px] lg:shrink-0">{heading}</h2>
           <Link
             href={ctaUrl}
             className="ui-cta-btn ui-cta-btn-secondary h-[53px] w-full lg:w-[330px] lg:shrink-0"
@@ -89,17 +91,17 @@ export default function TestimonialsGrid({
                 className="flex flex-wrap gap-x-[16px] gap-y-[18px] w-full shrink-0"
               >
                 {/* Stat card (repeats on every page) */}
-                <div className="relative flex w-full max-w-none lg:max-w-[437px] flex-col rounded-card bg-[#10003a] px-[38px] shadow-card">
+                <div className="relative flex w-full max-w-none lg:max-w-[437px] flex-col rounded-card bg-surface-dark px-[38px] shadow-card">
                   <div className="pt-[23px] pb-[30px]">
-                    <p className="font-semibold text-[32px] sm:text-[40px] text-[#ba83f0] leading-[1.2]">{statCardValue}</p>
-                    <p className="font-normal text-white text-[19px] sm:text-[24px] leading-[1.4]" style={{ whiteSpace: "pre-line" }}>
+                    <p className="font-semibold text-[32px] md:text-[40px] text-brand-light leading-[1.2]">{statCardValue}</p>
+                    <p className="font-normal text-white text-[19px] md:text-[24px] leading-[1.4] whitespace-pre-line">
                       {statCardSubtitle}
                     </p>
                   </div>
                   <div className="pb-[30px]">
                     <Link
                       href={statCardCtaUrl}
-                      className="inline-flex items-center justify-center rounded-[100px] border border-white/40 px-6 py-2.5 text-sm font-semibold text-white hover:bg-white/10 transition"
+                      className="cta-btn cta-btn-on-dark-outline"
                     >
                       <CtaLabel label={statCardCtaLabel} />
                     </Link>
@@ -123,8 +125,7 @@ export default function TestimonialsGrid({
                         alt={t.name}
                         width={53}
                         height={53}
-                        className="w-[53px] h-[53px] rounded-full object-cover shrink-0 ml-4"
-                        style={{ backgroundColor: "var(--border-ui)" }}
+                        className="w-[53px] h-[53px] rounded-full object-cover shrink-0 ml-4 bg-ui"
                       />
                     </div>
                     <div className="px-[38px] flex-1">
@@ -132,7 +133,7 @@ export default function TestimonialsGrid({
                     </div>
                     <div className="flex gap-[2px] px-[38px] pb-[35px] pt-4">
                       {[...Array(5)].map((_, si) => (
-                        <svg key={si} className="w-[23px] h-[21px]" viewBox="0 0 23 21" fill="#8015E8">
+                        <svg key={si} className="w-[23px] h-[21px] text-brand" viewBox="0 0 23 21" fill="currentColor">
                           <path d="M11.5 0L14.09 7.36H22.06L15.49 11.92L18.08 19.28L11.5 14.72L4.92 19.28L7.51 11.92L0.94 7.36H8.91L11.5 0Z" />
                         </svg>
                       ))}
@@ -151,10 +152,7 @@ export default function TestimonialsGrid({
               <button
                 key={i}
                 onClick={() => setCurrentPage(i)}
-                className="w-3 h-3 rounded-full transition-colors"
-                style={{
-                  backgroundColor: i === currentPage ? "#8015e8" : "var(--border-ui)",
-                }}
+                className={`w-3 h-3 rounded-full transition-colors ${i === currentPage ? "bg-brand" : "bg-ui"}`}
                 aria-label={`Go to testimonial page ${i + 1}`}
               />
             ))}

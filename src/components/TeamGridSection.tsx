@@ -100,7 +100,7 @@ export default function TeamGridSection({
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: 28 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 28 }}>
           {ordered.map((m) => {
             const photo = safeImageUrl(m.photo) || m.photoUrl
             return (

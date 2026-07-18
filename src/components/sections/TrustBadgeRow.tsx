@@ -22,52 +22,41 @@ export default function TrustBadgeRow({
 
   return (
     <section
-      className="px-4"
-      style={{
-        paddingTop: compact ? 28 : 56,
-        paddingBottom: compact ? 28 : 56,
-        background: dark ? "transparent" : "var(--surface)",
-      }}
+      className={`px-4 ${compact ? "py-7" : "py-14"} ${
+        dark ? "bg-transparent" : "bg-surface"
+      }`}
     >
-      <div className="mx-auto flex flex-wrap items-stretch justify-center" style={{ maxWidth: 1160, gap: 16 }}>
+      <div className="mx-auto flex flex-wrap items-stretch justify-center max-w-[1160px] gap-4">
         {badges.map((b, i) => (
           <div
             key={b._key || i}
-            className="flex items-center rounded-full"
-            style={{
-              gap: 12,
-              padding: "12px 22px 12px 14px",
-              border: `1px solid ${dark ? "rgba(255,255,255,0.18)" : "var(--border-ui)"}`,
-              background: dark
-                ? "rgba(255,255,255,0.07)"
-                : "var(--surface-raised)",
-              boxShadow: dark ? "none" : "0 8px 22px -16px rgba(64,12,140,0.35)",
-            }}
+            className={`flex items-center rounded-full gap-3 py-3 pl-3.5 pr-[22px] border ${
+              dark
+                ? "border-white/18 bg-white/7"
+                : "border-ui bg-surface-raised shadow-[0_8px_22px_-16px_rgba(64,12,140,0.35)]"
+            }`}
           >
             {/* Verified mark */}
             <span
               aria-hidden
-              className="shrink-0 flex items-center justify-center rounded-full"
-              style={{
-                width: 30,
-                height: 30,
-                background: dark ? "rgba(255,255,255,0.14)" : "#f0e7ff",
-                color: dark ? "#fff" : "#8015e8",
-              }}
+              className={`shrink-0 flex items-center justify-center rounded-full w-[30px] h-[30px] ${
+                dark ? "bg-white/14 text-white" : "bg-brand-soft text-brand"
+              }`}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </span>
-            <span className="flex flex-col" style={{ gap: 1 }}>
+            <span className="flex flex-col gap-[1px]">
               <span
-                className="font-semibold"
-                style={{ fontSize: 15, lineHeight: "19px", letterSpacing: "-0.01em", color: dark ? "#fff" : "var(--text-body)" }}
+                className={`font-semibold text-[15px] leading-[19px] tracking-[-0.01em] ${
+                  dark ? "text-white" : ""
+                }`}
               >
                 {b.label}
               </span>
               {b.detail && (
-                <span style={{ fontSize: 12.5, lineHeight: "16px", color: dark ? "rgba(255,255,255,0.65)" : "var(--text-muted-fg)" }}>
+                <span className={`text-[12.5px] leading-4 ${dark ? "text-white/65" : "text-muted"}`}>
                   {b.detail}
                 </span>
               )}

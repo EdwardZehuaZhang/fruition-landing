@@ -103,13 +103,10 @@ export default function MondayCrmConsultingContent({
       <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
       {/* 1. Hero */}
       <section className="bg-surface">
-        <div
-          className="mx-auto flex flex-col items-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-[120px] 2xl:px-[273px] max-w-[1588px] w-full"
-          style={{ paddingTop: 80, paddingBottom: 80 }}
-        >
+        <div className="mx-auto flex flex-col items-center px-4 md:px-16 lg:px-24 max-w-[1588px] w-full py-14 md:py-20">
           {/* Three certificate badges */}
           {page.certificateBadges?.length > 0 && (
-            <div className="flex items-center" style={{ gap: 22 }}>
+            <div className="flex items-center flex-wrap justify-center gap-[22px]">
               {page.certificateBadges.map(
                 (badge: { src?: string; alt?: string; _key?: string }, i: number) => (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -128,24 +125,14 @@ export default function MondayCrmConsultingContent({
 
           {/* Eyebrow */}
           {page.heroEyebrow && (
-            <div
-              style={{
-                marginTop: 32,
-                fontSize: 14,
-                fontWeight: 700,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "var(--purple-primary)",
-              }}
-            >
+            <div className="mt-8 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand">
               {page.heroEyebrow}
             </div>
           )}
 
           {/* Heading */}
           <h1
-            className="text-display text-center"
-            style={{ marginTop: page.heroEyebrow ? 16 : 42, maxWidth: 924 }}
+            className={`text-display text-center max-w-[924px] ${page.heroEyebrow ? "mt-4" : "mt-10"}`}
           >
             <span className="text-body">
               {page.heroHeading || page.title || ""}
@@ -154,43 +141,17 @@ export default function MondayCrmConsultingContent({
 
           {/* Subheading */}
           {!page.hideHeroSubheading && page.heroSubheading && (
-            <p
-              className="text-body-lead text-center text-body"
-              style={{
-                marginTop: 31,
-                maxWidth: 859,
-                whiteSpace: "pre-line",
-              }}
-            >
+            <p className="text-body-lead text-center text-body mt-8 max-w-[859px] whitespace-pre-line">
               {page.heroSubheading}
             </p>
           )}
 
           {/* CTA buttons */}
-          <div
-            className="flex flex-col sm:flex-row items-center justify-center w-full max-w-[680px]"
-            style={{ gap: 20, marginTop: 40 }}
-          >
+          <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-[680px] gap-5 mt-10">
             {page.primaryCtaLabel && (
               <Link
                 href={page.primaryCtaUrl || calendlyUrl}
-                className="flex items-center justify-center font-bold w-full sm:flex-1 sm:max-w-[330px]"
-                style={{
-                  height: 53,
-                  borderRadius: 100,
-                  ...(page.secondaryCtaLabel
-                    ? {
-                        border: "1px solid #8015e8",
-                        backgroundColor: "white",
-                        color: "#8015e8",
-                      }
-                    : {
-                        background:
-                          "linear-gradient(to right, #8015e8, #ba83f0)",
-                        color: "white",
-                      }),
-                  fontSize: 16,
-                }}
+                className={`cta-btn ${page.secondaryCtaLabel ? "cta-btn-outline" : "cta-btn-primary"} w-full md:flex-1 md:max-w-[330px]`}
               >
                 {page.primaryCtaLabel}
               </Link>
@@ -198,13 +159,7 @@ export default function MondayCrmConsultingContent({
             {page.secondaryCtaLabel && (
               <Link
                 href={page.secondaryCtaUrl || calendlyUrl}
-                className="flex items-center justify-center font-bold text-white w-full sm:flex-1 sm:max-w-[330px]"
-                style={{
-                  height: 53,
-                  borderRadius: 100,
-                  background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                  fontSize: 16,
-                }}
+                className="cta-btn cta-btn-primary w-full md:flex-1 md:max-w-[330px]"
               >
                 {page.secondaryCtaLabel}
               </Link>
@@ -213,13 +168,12 @@ export default function MondayCrmConsultingContent({
 
           {/* Hero image - full height, no cropping */}
           {heroImageSrc && (
-            <div className="w-full max-w-[1042px]" style={{ marginTop: 40 }}>
+            <div className="w-full max-w-[1042px] mt-10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroImageSrc}
                 alt="Hero"
-                className="rounded-card w-full"
-                style={{ height: "auto" }}
+                className="rounded-card w-full h-auto"
               />
             </div>
           )}
@@ -236,12 +190,9 @@ export default function MondayCrmConsultingContent({
 
       {/* 3. Video (underneath logo scroll) */}
       {heroVideoEmbedSrc && (
-        <section className="bg-surface" style={{ paddingBottom: 80 }}>
-          <div className="mx-auto" style={{ maxWidth: 1042 }}>
-            <div
-              className="rounded-card overflow-hidden"
-              style={{ aspectRatio: "16 / 9" }}
-            >
+        <section className="bg-surface pb-14 md:pb-20">
+          <div className="mx-auto px-4 max-w-[1042px]">
+            <div className="rounded-card overflow-hidden aspect-video">
               <YouTubeEmbed url={heroVideoEmbedSrc} title={page.heroVideoTitle || "Video"} />
             </div>
           </div>
@@ -348,12 +299,9 @@ export default function MondayCrmConsultingContent({
 
       {/* 9. Bottom video (under capabilities) */}
       {bottomVideoEmbedSrc && (
-        <section className="bg-surface" style={{ paddingBottom: 80 }}>
-          <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
-            <div
-              className="rounded-card overflow-hidden"
-              style={{ aspectRatio: "16 / 9" }}
-            >
+        <section className="bg-surface pb-14 md:pb-20">
+          <div className="mx-auto px-4 max-w-[1042px]">
+            <div className="rounded-card overflow-hidden aspect-video">
               <YouTubeEmbed url={bottomVideoEmbedSrc} title={page.bottomVideoTitle || "Video"} />
             </div>
           </div>

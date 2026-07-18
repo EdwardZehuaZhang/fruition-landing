@@ -32,17 +32,17 @@ type ExpertCard = { _key?: string; title?: string; body?: string; image?: string
 function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
   if (!stats || stats.length === 0) return null
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 40 }}>
-          Proven <span style={{ color: "#8015e8" }}>Atlassian Cloud</span> Results
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <h2 className="text-center text-section-h2 text-body mb-10">
+          Proven <span className="text-brand">Atlassian Cloud</span> Results
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {stats.map((s: ProvenStat, i: number) => (
-            <div key={s._key || s.value || i} className="text-center" style={{ padding: 32, borderRadius: 18, background: "linear-gradient(180deg, #f6efff 0%, #ebd9ff 100%)", border: "1px solid rgba(128,21,232,0.10)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
-              <span className="flex items-center justify-center" style={{ width: 56, height: 56, borderRadius: 999, background: "white", fontSize: 26, boxShadow: "0 4px 14px -8px rgba(64,12,140,0.25)" }}>{s.emoji}</span>
-              <p className="font-bold" style={{ color: "#8015e8", fontSize: 32, lineHeight: 1 }}>{s.value}</p>
-              <p style={{ color: "#444", fontSize: 13, lineHeight: "20px", maxWidth: 240 }}>{s.body}</p>
+            <div key={s._key || s.value || i} className="text-center p-6 md:p-8 rounded-card ring-1 ring-brand/10 shadow-whisper bg-gradient-to-b from-brand-soft to-brand-light/30 flex flex-col items-center gap-3.5">
+              <span className="flex items-center justify-center w-14 h-14 rounded-pill bg-white text-[26px] shadow-micro">{s.emoji}</span>
+              <p className="font-bold text-brand text-3xl leading-none">{s.value}</p>
+              <p className="text-sm text-muted leading-relaxed max-w-[240px]">{s.body}</p>
             </div>
           ))}
         </div>
@@ -54,22 +54,22 @@ function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
 function ComprehensiveServicesSection({ cards }: { cards: ServiceCard[] }) {
   if (!cards || cards.length === 0) return null
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 40 }}>
-          Our Comprehensive <span style={{ color: "#8015e8" }}>Atlassian</span> Services
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <h2 className="text-center text-section-h2 text-body mb-10">
+          Our Comprehensive <span className="text-brand">Atlassian</span> Services
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {cards.map((c: ServiceCard, i: number) => (
-            <div key={c._key || c.title || i} className="dark:shadow-none" style={{ padding: 24, borderRadius: 16, background: "var(--surface-raised)", border: "1px solid var(--border-ui)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 12 }}>
-              <span style={{ fontSize: 28 }}>{c.emoji}</span>
-              <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 16 }}>{c.title}</p>
-              <p style={{ color: "var(--text-muted-fg)", fontSize: 13, lineHeight: "20px" }}>{c.body}</p>
+            <div key={c._key || c.title || i} className="dark:shadow-none rounded-card shadow-whisper ring-1 ring-ui bg-surface-raised p-6 flex flex-col gap-3">
+              <span className="text-[28px]">{c.emoji}</span>
+              <p className="font-bold text-base">{c.title}</p>
+              <p className="text-sm text-muted leading-relaxed">{c.body}</p>
               {c.bullets && c.bullets.length > 0 && (
-                <ul className="flex flex-col" style={{ gap: 6, marginTop: 4 }}>
+                <ul className="flex flex-col gap-1.5 mt-1">
                   {c.bullets.map((b: string, j: number) => (
-                    <li key={b || j} className="flex items-start" style={{ gap: 8, color: "var(--text-muted-fg)", fontSize: 12, lineHeight: "18px" }}>
-                      <Check size={16} color="#8015e8" aria-hidden />
+                    <li key={b || j} className="flex items-start gap-2 text-xs text-muted leading-relaxed">
+                      <Check size={16} className="text-brand shrink-0" aria-hidden />
                       <span>{b}</span>
                     </li>
                   ))}
@@ -86,38 +86,30 @@ function ComprehensiveServicesSection({ cards }: { cards: ServiceCard[] }) {
 function AtlassianExpertsSection({ calendlyUrl, cards }: { calendlyUrl: string; cards: ExpertCard[] }) {
   if (!cards || cards.length === 0) return null
   return (
-    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(180deg, #faf6ff 0%, #ebd9ff 100%)" }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <div className="flex flex-col items-center text-center" style={{ marginBottom: 56 }}>
-          <h2 className="font-bold" style={{ color: "#10003a", fontSize: 36, lineHeight: "44px", marginBottom: 22 }}>
-            Your <span style={{ color: "#8015e8" }}>Atlassian</span> Experts
+    <section className="px-4 py-14 md:py-24 bg-gradient-to-b from-brand-soft/50 to-brand-light/30">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <div className="flex flex-col items-center text-center mb-14">
+          <h2 className="text-section-h2 text-surface-dark mb-5">
+            Your <span className="text-brand">Atlassian</span> Experts
           </h2>
-          <Link
-            href={calendlyUrl}
-            className="inline-flex items-center justify-center gap-2 font-semibold"
-            style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", fontSize: 15, boxShadow: "0 14px 28px -12px rgba(128,21,232,0.55)" }}
-          >
+          <Link href={calendlyUrl} className="cta-btn cta-btn-primary">
             <Rocket size={16} aria-hidden /> Book a Meeting
           </Link>
         </div>
 
-        <div className="flex flex-col" style={{ gap: 60 }}>
+        <div className="flex flex-col gap-14 md:gap-16">
           {cards.map((c: ExpertCard, i: number) => (
             <div
               key={c._key || c.title || i}
-              className="flex flex-col items-center"
-              style={{ gap: 40, flexDirection: i % 2 === 0 ? "row" : "row-reverse" }}
+              className={`flex flex-col items-center gap-10 ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
             >
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <p className="font-bold" style={{ color: "#10003a", fontSize: 26, lineHeight: "34px", marginBottom: 14 }}>
+              <div className="w-full min-w-0 md:flex-1">
+                <p className="text-section-h3 text-surface-dark mb-3.5">
                   {c.title}
                 </p>
-                <p style={{ color: "#444", fontSize: 15, lineHeight: "25px" }}>{c.body}</p>
+                <p className="text-body-sm text-muted">{c.body}</p>
               </div>
-              <div
-                className="rounded-card overflow-hidden bg-white"
-                style={{ flex: 1, aspectRatio: "16 / 10", border: "1px solid rgba(128,21,232,0.10)", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
-              >
+              <div className="rounded-card overflow-hidden bg-white w-full md:flex-1 aspect-[16/10] ring-1 ring-brand/10 shadow-card">
                 {c.image && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={c.image} alt={c.title} className="w-full h-full object-cover" />

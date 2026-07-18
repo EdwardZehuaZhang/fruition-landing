@@ -95,17 +95,16 @@ export default function WorldMap({ offices }: { offices: MapOffice[] }) {
 
   return (
     <div
-      className="mx-auto w-full"
-      style={{ maxWidth: 1120, position: "relative" }}
+      className="mx-auto w-full max-w-[1120px] relative"
       aria-label="Map of Fruition office locations"
       role="group"
     >
-      <div style={{ position: "relative", width: "100%", aspectRatio: `${MAP_W} / ${BOX_H}` }}>
+      <div className="relative w-full" style={{ aspectRatio: `${MAP_W} / ${BOX_H}` }}>
         {/* Dot grid — letterboxed vertically inside the taller box so the
             continents keep PAD_Y of empty space above and below. */}
         <div
           aria-hidden="true"
-          style={{ position: "absolute", inset: 0 }}
+          className="absolute inset-0"
           dangerouslySetInnerHTML={{
             __html: BG_SVG.replace(
               /<svg [^>]*?>/,
@@ -157,12 +156,12 @@ export default function WorldMap({ offices }: { offices: MapOffice[] }) {
                   {pin.office.flag && (
                     <span className="fr-map-flag" aria-hidden="true">{pin.office.flag}</span>
                   )}
-                  <div style={{ fontWeight: 600, fontSize: 13, lineHeight: "18px", color: "var(--text-body)" }}>
+                  <div className="font-semibold text-[13px] leading-[18px] text-body">
                     {pin.office.city}
                     {pin.office.country ? `, ${pin.office.country}` : ""}
                   </div>
                   {pin.office.address && (
-                    <div style={{ fontSize: 12, lineHeight: "18px", color: "var(--text-muted-fg)", marginTop: 4 }}>
+                    <div className="text-xs leading-[18px] text-muted mt-1">
                       {pin.office.address}
                     </div>
                   )}

@@ -19,10 +19,6 @@ interface ServicesCardsGridProps {
   theme?: SectionTheme
 }
 
-const DARK_BG = "#2b074d"
-const LIGHT_BG = "var(--surface-subtle)"
-const ACCENT = "#8015e8"
-
 export default function ServicesCardsGrid({
   heading,
   headingAccent,
@@ -33,120 +29,64 @@ export default function ServicesCardsGrid({
   if (cards.length === 0) return null
 
   const isDark = theme === "dark"
-  const bg = isDark ? DARK_BG : LIGHT_BG
-  const headingColor = isDark ? "#ffffff" : "var(--text-body)"
-  const subheadingColor = isDark ? "rgba(255,255,255,0.8)" : "var(--text-muted-fg)"
 
   return (
-    <section style={{ backgroundColor: bg, paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
+    <section className={`py-20 ${isDark ? "bg-surface-dark-2" : "bg-surface-subtle"}`}>
+      <div className="mx-auto px-4 max-w-[1200px]">
         {(heading || headingAccent) && (
           <h2
-            className="text-section-h2 text-center"
-            style={{
-              color: headingColor,
-              marginBottom: subheading ? 16 : 48,
-            }}
+            className={`text-section-h2 text-center ${isDark ? "text-white" : ""} ${
+              subheading ? "mb-4" : "mb-12"
+            }`}
           >
             {heading}
             {headingAccent && (
-              <span style={{ color: "#b990f5" }}>{headingAccent}</span>
+              <span className="text-brand-light">{headingAccent}</span>
             )}
           </h2>
         )}
         {subheading && (
           <p
-            className="text-body text-center mx-auto"
-            style={{
-              color: subheadingColor,
-              maxWidth: 820,
-              marginBottom: 48,
-              whiteSpace: "pre-line",
-            }}
+            className={`text-body text-center mx-auto max-w-[820px] mb-12 whitespace-pre-line ${
+              isDark ? "text-white/80" : "text-muted"
+            }`}
           >
             {subheading}
           </p>
         )}
-        <div
-          className="grid grid-cols-1 md:grid-cols-2"
-          style={{ gap: 24 }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {cards.map((card, i) => (
             <div
               key={card._key || i}
-              className="bg-surface-raised rounded-card dark:shadow-none dark:border dark:border-ui"
-              style={{
-                padding: 28,
-                boxShadow: "var(--shadow-whisper)",
-              }}
+              className="bg-surface-raised rounded-card shadow-whisper p-7 dark:shadow-none dark:border dark:border-ui"
             >
               {card.emoji && (
-                <div
-                  style={{
-                    fontSize: 32,
-                    lineHeight: 1,
-                    marginBottom: 12,
-                  }}
-                >
+                <div className="text-[32px] leading-none mb-3">
                   {card.emoji}
                 </div>
               )}
-              <h3
-                style={{
-                  fontSize: 20,
-                  fontWeight: 700,
-                  color: "var(--text-body)",
-                  marginBottom: 10,
-                }}
-              >
+              <h3 className="text-xl font-bold mb-2.5">
                 {card.title}
               </h3>
               {card.description && (
                 <p
-                  style={{
-                    fontSize: 14,
-                    lineHeight: 1.55,
-                    color: "var(--text-body)",
-                    whiteSpace: "pre-line",
-                    marginBottom: card.bullets?.length ? 16 : 0,
-                  }}
+                  className={`text-sm leading-[1.55] whitespace-pre-line ${
+                    card.bullets?.length ? "mb-4" : ""
+                  }`}
                 >
                   {card.description}
                 </p>
               )}
               {card.bullets && card.bullets.length > 0 && (
-                <ul
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 8,
-                  }}
-                >
+                <ul className="flex flex-col gap-2">
                   {card.bullets.map((b, bi) => (
                     <li
                       key={b._key || bi}
-                      style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: 10,
-                        fontSize: 14,
-                        lineHeight: 1.5,
-                        color: "var(--text-body)",
-                      }}
+                      className="flex items-start gap-2.5 text-sm leading-normal"
                     >
                       <span
                         aria-hidden
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          width: 16,
-                          height: 16,
-                          flexShrink: 0,
-                          marginTop: 3,
-                          color: ACCENT,
-                          fontWeight: 700,
-                        }}
+                        className="inline-flex items-center justify-center w-4 h-4 shrink-0 mt-[3px] text-brand font-bold"
                       >
                         <Check size={14} aria-hidden />
                       </span>

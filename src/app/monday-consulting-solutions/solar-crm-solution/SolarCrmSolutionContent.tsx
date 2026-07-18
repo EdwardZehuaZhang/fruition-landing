@@ -51,20 +51,20 @@ function KeyFeaturesSection({
 }) {
   if (features.length === 0 && services.length === 0) return null
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto grid grid-cols-1 md:grid-cols-2" style={{ maxWidth: 1100, gap: 48 }}>
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto grid grid-cols-1 md:grid-cols-2 w-full max-w-[1100px] gap-10 md:gap-12">
         <div>
-          <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
+          <h2 className="text-section-h2 text-body mb-6">
             {featuresHeadingPart1}
             {featuresHeadingAccent && (
-              <span style={{ color: "#8015e8" }}>{featuresHeadingAccent}</span>
+              <span className="text-brand">{featuresHeadingAccent}</span>
             )}
           </h2>
-          <ul className="flex flex-col" style={{ gap: 14 }}>
+          <ul className="flex flex-col gap-3.5">
             {features.map((f, i) => (
-              <li key={f.title || i} className="flex items-start" style={{ gap: 10 }}>
-                <Check size={16} color="#8015e8" style={{ flexShrink: 0 }} aria-hidden />
-                <p style={{ fontSize: 15, lineHeight: "24px", color: "var(--text-body)" }}>
+              <li key={f.title || i} className="flex items-start gap-2.5">
+                <Check size={16} className="shrink-0 text-brand" aria-hidden />
+                <p className="text-body-sm text-body">
                   <span className="font-bold">{f.title}:</span> {f.body}
                 </p>
               </li>
@@ -72,17 +72,17 @@ function KeyFeaturesSection({
           </ul>
         </div>
         <div>
-          <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
+          <h2 className="text-section-h2 text-body mb-6">
             {servicesHeadingPart1}
             {servicesHeadingAccent && (
-              <span style={{ color: "#8015e8" }}>{servicesHeadingAccent}</span>
+              <span className="text-brand">{servicesHeadingAccent}</span>
             )}
           </h2>
-          <ul className="flex flex-col" style={{ gap: 14 }}>
+          <ul className="flex flex-col gap-3.5">
             {services.map((s, i) => (
-              <li key={s || i} className="flex items-start" style={{ gap: 10 }}>
-                <Check size={16} color="#8015e8" style={{ flexShrink: 0 }} aria-hidden />
-                <p style={{ fontSize: 15, lineHeight: "24px", color: "var(--text-body)" }}>{s}</p>
+              <li key={s || i} className="flex items-start gap-2.5">
+                <Check size={16} className="shrink-0 text-brand" aria-hidden />
+                <p className="text-body-sm text-body">{s}</p>
               </li>
             ))}
           </ul>
@@ -111,53 +111,41 @@ function ReturnsBannerSection({
   testimonials: SolarTestimonial[]
 }) {
   return (
-    <section
-      className="px-4 relative overflow-hidden"
-      style={{
-        paddingTop: 96,
-        paddingBottom: 96,
-        background: "linear-gradient(160deg, #2b074d 0%, #10003a 100%)",
-      }}
-    >
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
+    <section className="px-4 relative overflow-hidden py-14 md:py-24 bg-gradient-to-br from-surface-dark-2 to-surface-dark">
+      <div className="mx-auto w-full max-w-[1100px]">
         {heading && (
-          <h2
-            className="text-center font-bold"
-            style={{ color: "white", fontSize: "clamp(28px, 7vw, 44px)", lineHeight: 1.2, marginBottom: 12 }}
-          >
+          <h2 className="text-section-h2 text-center text-white mb-3">
             {heading}
           </h2>
         )}
         {subheading && (
-          <p className="text-center" style={{ color: "rgba(255,255,255,0.8)", fontSize: 18, marginBottom: 48 }}>
+          <p className="text-center text-body-lead text-white/80 mb-12">
             {subheading}
           </p>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {testimonials.map((t, i) => (
             <figure
               key={t.name || i}
-              className="bg-surface"
-              style={{ borderRadius: 16, padding: 24, display: "flex", flexDirection: "column", gap: 16 }}
+              className="bg-surface rounded-card p-6 flex flex-col gap-4"
             >
-              <blockquote style={{ fontSize: 14, lineHeight: "22px", color: "#222" }}>
+              <blockquote className="text-sm leading-[22px] text-body">
                 “{t.quote}”
               </blockquote>
-              <figcaption className="flex items-center" style={{ marginTop: "auto", gap: 12 }}>
+              <figcaption className="flex items-center mt-auto gap-3">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={t.photo}
                   alt={t.name}
                   width={56}
                   height={56}
-                  className="rounded-full object-cover"
-                  style={{ width: 56, height: 56, flexShrink: 0 }}
+                  className="rounded-full object-cover w-14 h-14 shrink-0"
                 />
                 <div>
-                  <p className="font-bold" style={{ color: "#10003a", fontSize: 14 }}>{t.name}</p>
-                  <p style={{ color: "#666", fontSize: 12 }}>{t.role}</p>
-                  <p style={{ color: "#8015e8", fontSize: 12, fontWeight: 700 }}>{t.company}</p>
+                  <p className="font-bold text-surface-dark text-sm">{t.name}</p>
+                  <p className="text-muted text-xs">{t.role}</p>
+                  <p className="text-brand text-xs font-bold">{t.company}</p>
                 </div>
               </figcaption>
             </figure>
@@ -165,19 +153,11 @@ function ReturnsBannerSection({
         </div>
 
         {(primaryLabel || secondaryLabel) && (
-          <div className="flex flex-wrap justify-center" style={{ gap: 16, marginTop: 48 }}>
+          <div className="flex flex-wrap justify-center gap-4 mt-12">
             {primaryLabel && primaryUrl && (
               <Link
                 href={primaryUrl}
-                className="inline-flex items-center justify-center font-semibold"
-                style={{
-                  height: 50,
-                  padding: "0 26px",
-                  borderRadius: 999,
-                  background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                  color: "white",
-                  fontSize: 15,
-                }}
+                className="cta-btn cta-btn-on-dark-primary"
               >
                 {primaryLabel}
               </Link>
@@ -185,15 +165,7 @@ function ReturnsBannerSection({
             {secondaryLabel && secondaryUrl && (
               <Link
                 href={secondaryUrl}
-                className="inline-flex items-center justify-center font-semibold"
-                style={{
-                  height: 50,
-                  padding: "0 26px",
-                  borderRadius: 999,
-                  border: "1px solid rgba(255,255,255,0.6)",
-                  color: "white",
-                  fontSize: 15,
-                }}
+                className="cta-btn cta-btn-on-dark-outline"
               >
                 {secondaryLabel}
               </Link>
@@ -209,17 +181,14 @@ function ReturnsBannerSection({
 function FinalStatsSection({ stats }: { stats: JoinStat[] }) {
   if (stats.length === 0) return null
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 60, paddingBottom: 100 }}>
-      <div
-        className="mx-auto grid grid-cols-2 md:grid-cols-4 text-center"
-        style={{ maxWidth: 1100, gap: 24 }}
-      >
+    <section className="bg-surface px-4 pt-14 pb-20 md:pt-16 md:pb-24">
+      <div className="mx-auto grid grid-cols-2 md:grid-cols-4 text-center w-full max-w-[1100px] gap-6">
         {stats.map((s, i) => (
           <div key={s.label || i}>
-            <p className="font-bold" style={{ color: "#8015e8", fontSize: 28, lineHeight: "34px" }}>
+            <p className="text-section-h3 text-brand">
               {s.value}
             </p>
-            <p style={{ color: "var(--text-body)", fontSize: 14, marginTop: 6 }}>{s.label}</p>
+            <p className="mt-1.5 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted">{s.label}</p>
           </div>
         ))}
       </div>
@@ -267,8 +236,8 @@ export default function SolarCrmSolutionContent({ page, siteSettings }: Props) {
 
       {/* "Trusted by 300+ businesses worldwide" caption */}
       {page.trustedByCaption && (
-        <section className="bg-surface px-4" style={{ paddingTop: 0, paddingBottom: 24 }}>
-          <p className="text-center" style={{ color: "var(--text-body)", fontSize: 14, fontWeight: 600 }}>
+        <section className="bg-surface px-4 pt-0 pb-6">
+          <p className="text-center text-sm font-semibold text-body">
             {page.trustedByCaption}
           </p>
         </section>

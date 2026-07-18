@@ -116,7 +116,7 @@ export default async function CareersPage() {
 
           {(page.primaryCtaLabel || page.secondaryCtaLabel) && (
             <div
-              className="flex flex-col sm:flex-row items-center justify-center"
+              className="flex flex-col md:flex-row items-center justify-center"
               style={{ gap: 16, marginTop: 40 }}
             >
               {page.primaryCtaLabel && (

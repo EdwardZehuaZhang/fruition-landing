@@ -98,7 +98,7 @@ export default function HeroBlockView({
 
   return (
     <section className="bg-surface w-full">
-      <div className="mx-auto max-w-[1348px] flex items-start gap-[10px] py-[80px] px-4 xl:px-0">
+      <div className="mx-auto max-w-[1348px] flex items-start gap-[10px] py-[80px] px-4">
         {/* Left column */}
         <div className="flex flex-col gap-[109px] w-full max-w-[924px]">
           <div className="flex flex-col gap-[31px] w-full">
@@ -120,7 +120,7 @@ export default function HeroBlockView({
 
               {/* Heading */}
               {heading && (
-                <h1 className="text-[32px] leading-[40px] sm:text-[48px] sm:leading-[67.2px] font-bold text-body">
+                <h1 className="text-[32px] leading-[40px] md:text-[48px] md:leading-[67.2px] font-bold text-body">
                   {renderHeading(heading, headingAccents ?? [])}
                 </h1>
               )}
@@ -131,13 +131,13 @@ export default function HeroBlockView({
           </div>
 
           {/* Buttons */}
-          <div className="flex flex-col sm:flex-row gap-[20px] items-start w-full max-w-[680px]">
+          <div className="flex flex-col md:flex-row gap-[20px] items-start w-full max-w-[680px]">
             {primaryCtaLabel && primaryCtaUrl && (
               <CtaButton
                 href={primaryCtaUrl}
                 label={primaryCtaLabel}
                 variant="outline"
-                className="w-full sm:w-[330px]"
+                className="w-full md:w-[330px]"
               />
             )}
             {secondaryCtaLabel && secondaryCtaUrl && (
@@ -145,7 +145,7 @@ export default function HeroBlockView({
                 href={secondaryCtaUrl}
                 label={secondaryCtaLabel}
                 variant="primary"
-                className="w-full sm:w-[330px]"
+                className="w-full md:w-[330px]"
               />
             )}
           </div>

@@ -3,7 +3,7 @@ import { METHOD_PHASES } from "../data/method-phases"
 export default function DeliveryMethod() {
   return (
     <section id="method">
-      <div className="max-w-6xl mx-auto px-5 sm:px-7 py-16 lg:py-20">
+      <div className="max-w-6xl mx-auto px-5 md:px-7 py-16 lg:py-20">
         <div className="max-w-[820px] mb-10">
           <div className="text-micro font-semibold tracking-[0.16em] uppercase text-[var(--purple-primary)]">
             Delivery Method
@@ -30,7 +30,7 @@ export default function DeliveryMethod() {
             Discovery to adoption in five phases.
           </h3>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             {METHOD_PHASES.map((p) => (
               <div
                 key={p.number}

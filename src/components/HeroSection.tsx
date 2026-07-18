@@ -25,7 +25,7 @@ export default function HeroSection({ heading, subheading, primaryCta, secondary
         {subheading && (
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">{subheading}</p>
         )}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col md:flex-row gap-4 justify-center">
           <Link
             href={primaryCta.url}
             className="bg-white text-blue-700 px-8 py-3 rounded-md font-semibold hover:bg-blue-50 transition-colors"

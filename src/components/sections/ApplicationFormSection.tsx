@@ -12,26 +12,20 @@ export default function ApplicationFormSection({
   if (!embedUrl) return null
 
   return (
-    <section style={{ backgroundColor: "var(--surface)", paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto px-4" style={{ maxWidth: 920 }}>
+    <section className="bg-surface py-20">
+      <div className="mx-auto px-4 max-w-[920px]">
         {heading && (
-          <h2
-            className="text-section-h2 text-center"
-            style={{ color: "var(--text-body)", marginBottom: 32 }}
-          >
+          <h2 className="text-section-h2 text-center text-body mb-8">
             {heading}
           </h2>
         )}
-        <div
-          className="rounded-card overflow-hidden border border-ui dark:shadow-none"
-          style={{ boxShadow: "var(--shadow-whisper)" }}
-        >
+        <div className="rounded-card overflow-hidden border border-ui shadow-whisper dark:shadow-none">
           <iframe
             src={embedUrl}
             title={heading || "Application Form"}
             width="100%"
             height="1200"
-            style={{ border: 0, display: "block", width: "100%" }}
+            className="block w-full border-0"
             allow="camera; microphone; fullscreen"
           />
         </div>

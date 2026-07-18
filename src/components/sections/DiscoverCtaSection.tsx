@@ -29,7 +29,7 @@ export default function DiscoverCtaSection({
   if (!heading && !primaryCtaLabel && !secondaryCtaLabel && !badgeSrc) return null
 
   return (
-    <section style={{ backgroundColor: "var(--surface-subtle)" }} className="py-[80px] px-4">
+    <section className="bg-surface-subtle py-20 px-4">
       <div className="mx-auto flex max-w-[900px] flex-col items-center">
         {badgeSrc && (
           <FramedMedia>
@@ -43,13 +43,13 @@ export default function DiscoverCtaSection({
           </h2>
         )}
         {(primaryCtaLabel || secondaryCtaLabel) && (
-          <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
+          <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-6">
             {primaryCtaLabel && primaryCtaUrl && (
               <CtaButton
                 href={primaryCtaUrl}
                 label={primaryCtaLabel}
                 variant="outline"
-                className="w-full sm:flex-1"
+                className="w-full md:flex-1"
               />
             )}
             {secondaryCtaLabel && secondaryCtaUrl && (
@@ -57,7 +57,7 @@ export default function DiscoverCtaSection({
                 href={secondaryCtaUrl}
                 label={secondaryCtaLabel}
                 variant="primary"
-                className="w-full sm:flex-1"
+                className="w-full md:flex-1"
               />
             )}
           </div>

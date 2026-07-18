@@ -75,7 +75,7 @@ function IndustryIcon({ name }: { name: IndustryIconKey }) {
 export default function IndustryMap() {
   return (
     <section id="industries" className="bg-[var(--light-section-bg)]">
-      <div className="max-w-6xl mx-auto px-5 sm:px-7 py-16 lg:py-20">
+      <div className="max-w-6xl mx-auto px-5 md:px-7 py-16 lg:py-20">
         <div className="max-w-[820px] mb-10">
           <div className="text-micro font-semibold tracking-[0.16em] uppercase text-[var(--purple-primary)]">
             Industry Map

@@ -44,25 +44,19 @@ export default function StickyCtaBar({
         pointerEvents: visible ? "auto" : "none",
       }}
     >
-      <div
-        className="mx-auto mb-4 flex flex-col items-stretch gap-3 px-4 py-3 md:flex-row md:items-center md:justify-between md:gap-4 md:px-5"
-        style={{
-          maxWidth: 720,
-          borderRadius: 16,
-          background: "linear-gradient(-38deg, rgb(128,21,232) 0%, rgb(16,0,58) 100%)",
-          boxShadow: "0 18px 40px -16px rgba(64,12,140,0.55)",
-        }}
-      >
-        <span className="font-semibold text-white text-[13px] md:text-sm">
+      {/* Single row at every width: label (wraps within its box) · CTA · dismiss */}
+      <div className="mx-auto mb-4 flex max-w-[720px] items-center gap-3 rounded-2xl bg-[linear-gradient(-38deg,var(--purple-primary)_0%,var(--dark-bg)_100%)] px-4 py-2.5 shadow-[0_18px_40px_-16px_rgba(64,12,140,0.55)] md:gap-4 md:px-5 md:py-3">
+        {/* Label is desktop-only; on phones the pill carries the message */}
+        <span className="hidden min-w-0 flex-1 font-semibold leading-tight text-white md:block md:text-sm">
           Ready to scale your workflows?
         </span>
-        <div className="flex items-center justify-between gap-2 md:justify-end">
+        <div className="flex min-w-0 flex-1 items-center justify-center gap-1.5 md:flex-none md:justify-end md:gap-2">
           {/* Mobile: short label; hidden on desktop */}
           <CtaButton
             href={href}
             label={mobileLabel ?? label}
             variant="onDarkPrimary"
-            className="md:hidden"
+            className="md:hidden !min-h-0 !h-10 whitespace-nowrap"
             style={{ fontSize: 13, padding: "0 16px" }}
           />
           {/* Desktop: full label; hidden on mobile */}
@@ -78,8 +72,7 @@ export default function StickyCtaBar({
             type="button"
             aria-label="Dismiss"
             onClick={() => setDismissed(true)}
-            className="flex shrink-0 items-center justify-center text-white/70 hover:text-white"
-            style={{ minWidth: 44, minHeight: 44, fontSize: 22, lineHeight: 1 }}
+            className="flex min-h-10 min-w-8 shrink-0 items-center justify-center text-[22px] leading-none text-white/70 hover:text-white md:min-h-11 md:min-w-11"
           >
             ×
           </button>

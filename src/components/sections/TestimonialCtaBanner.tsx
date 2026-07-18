@@ -56,7 +56,7 @@ export default function TestimonialCtaBanner({
   const role = active?.clientCompany || active?.clientRole || ""
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6">
+    <section className="py-16 md:py-20 lg:py-24 px-4 md:px-6">
       <div className="mx-auto max-w-6xl">
         <div className="relative w-full rounded-[28px] bg-black text-white overflow-hidden">
           {/* Layered gradient background */}
@@ -76,7 +76,7 @@ export default function TestimonialCtaBanner({
             <div className="max-w-[480px]">
               <h2 className="text-[2.25rem] md:text-[3.25rem] leading-[1.12] font-semibold tracking-[-0.04em]">
                 <span>{headingPart1}</span>
-                <span className="text-[#b493ff]">{headingAccent}</span>
+                <span className="text-brand-light">{headingAccent}</span>
                 <span>{headingPart2}</span>
               </h2>
 
@@ -86,8 +86,7 @@ export default function TestimonialCtaBanner({
                     href={primaryCtaUrl}
                     label={primaryCtaLabel}
                     variant="onDarkPrimary"
-                    className="w-full"
-                    style={{ height: 56 }}
+                    className="w-full h-14"
                   />
                 )}
                 {secondaryCtaLabel && secondaryCtaUrl && (
@@ -95,8 +94,7 @@ export default function TestimonialCtaBanner({
                     href={secondaryCtaUrl}
                     label={secondaryCtaLabel}
                     variant="primary"
-                    className="w-full"
-                    style={{ height: 56 }}
+                    className="w-full h-14"
                   />
                 )}
               </div>
@@ -106,18 +104,10 @@ export default function TestimonialCtaBanner({
             {active && (
               <div
                 key={active._id || index}
-                className="bg-white text-black rounded-[18px] px-8 py-9 md:px-10 md:py-10 shadow-2xl shadow-black/30 max-w-[500px] justify-self-end animate-fade-in flex flex-col"
-                style={{ minHeight: 420 }}
+                className="bg-white text-black rounded-[18px] px-8 py-9 md:px-10 md:py-10 shadow-2xl shadow-black/30 max-w-[500px] justify-self-end animate-fade-in flex flex-col min-h-[420px]"
               >
                 {active.quote && (
-                  <p
-                    className="text-[1.08rem] md:text-[1.15rem] leading-[1.5] font-semibold tracking-[-0.02em] text-black/90 overflow-hidden"
-                    style={{
-                      display: "-webkit-box",
-                      WebkitLineClamp: 6,
-                      WebkitBoxOrient: "vertical",
-                    }}
-                  >
+                  <p className="text-[1.08rem] md:text-[1.15rem] leading-[1.5] font-semibold tracking-[-0.02em] text-black/90 overflow-hidden line-clamp-6">
                     {active.quote}
                   </p>
                 )}
@@ -127,11 +117,10 @@ export default function TestimonialCtaBanner({
                   <img
                     src={photoSrc || "/images/default-avatar.svg"}
                     alt={active.clientName || ""}
-                    className="h-24 w-24 shrink-0 rounded-full object-cover"
-                    style={{ backgroundColor: "#ddd" }}
+                    className="h-24 w-24 shrink-0 rounded-full object-cover bg-ui"
                   />
                   <div className="pb-1">
-                    <div className="mb-3 flex h-9 w-9 items-center justify-center bg-[#6c35c8] text-white text-2xl font-bold rounded-sm">
+                    <div className="mb-3 flex h-9 w-9 items-center justify-center bg-brand text-white text-2xl font-bold rounded-sm">
                       &ldquo;
                     </div>
                     <div className="text-[1.05rem] font-semibold">
@@ -151,11 +140,9 @@ export default function TestimonialCtaBanner({
                         type="button"
                         onClick={() => setIndex(i)}
                         aria-label={`Show testimonial ${i + 1}`}
-                        className="h-2 rounded-full transition-all"
-                        style={{
-                          width: i === index ? 22 : 8,
-                          backgroundColor: i === index ? "#6c35c8" : "#d6cfe6",
-                        }}
+                        className={`h-2 rounded-full transition-all ${
+                          i === index ? "w-[22px] bg-brand" : "w-2 bg-ui"
+                        }`}
                       />
                     ))}
                   </div>

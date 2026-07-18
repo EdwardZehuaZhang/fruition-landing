@@ -29,7 +29,7 @@ export default function CalendlyBlockView({
       <div className="mx-auto max-w-[959px] flex flex-col items-center">
         {/* Logo removed — not in Figma design */}
         {heading && (
-          <h2 className="mb-4 text-center text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">
+          <h2 className="mb-4 text-center text-[26px] leading-[36px] md:text-[35px] md:leading-[49px] font-medium text-body">
 
             {heading}
           </h2>

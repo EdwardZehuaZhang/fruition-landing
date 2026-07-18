@@ -31,54 +31,27 @@ export default function IndustryTabsSection({
   const current = tabs[activeTab]
 
   return (
-    <section
-      style={{
-        background: "linear-gradient(135deg, #1c024c 0%, var(--purple-hover) 100%)",
-        paddingTop: 80,
-        paddingBottom: 80,
-      }}
-    >
-      <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
+    <section className="py-[80px] bg-[linear-gradient(135deg,var(--dark-bg)_0%,var(--dark-bg-secondary)_100%)]">
+      <div className="mx-auto px-4 max-w-[1200px]">
         {heading && (
-          <h2
-            className="text-section-h2 text-center text-white"
-            style={{ marginBottom: 40 }}
-          >
+          <h2 className="text-section-h2 text-center text-white mb-10">
             {heading}
           </h2>
         )}
 
         {/* Tab pills */}
-        <div
-          className="flex items-center justify-center flex-wrap"
-          style={{ gap: 12, marginBottom: 40 }}
-        >
+        <div className="flex items-center justify-center flex-wrap gap-3 mb-10">
           {tabs.map((tab, idx) => {
             const isActive = idx === activeTab
             return (
               <button
                 key={tab._key || idx}
                 onClick={() => setActiveTab(idx)}
-                className="flex items-center justify-center font-bold"
-                style={{
-                  height: 39,
-                  paddingLeft: 24,
-                  paddingRight: 24,
-                  borderRadius: 99,
-                  fontSize: 14,
-                  cursor: "pointer",
-                  ...(isActive
-                    ? {
-                        backgroundColor: "var(--white)",
-                        color: "var(--brand)",
-                        boxShadow: "0px 2px 8px rgba(128,21,232,0.35)",
-                      }
-                    : {
-                        backgroundColor: "rgba(255,255,255,0.15)",
-                        color: "var(--white)",
-                        border: "1px solid rgba(255,255,255,0.3)",
-                      }),
-                }}
+                className={`flex items-center justify-center font-bold h-[39px] px-6 rounded-full text-sm cursor-pointer ${
+                  isActive
+                    ? "bg-white text-brand shadow-[0px_2px_8px_rgba(128,21,232,0.35)]"
+                    : "bg-white/15 text-white border border-white/30"
+                }`}
               >
                 {tab.label}
               </button>
@@ -87,66 +60,31 @@ export default function IndustryTabsSection({
         </div>
 
         {/* Active tab content card */}
-        <div
-          className="mx-auto rounded-card"
-          style={{
-            maxWidth: 900,
-            backgroundColor: "rgba(255,255,255,0.1)",
-            border: "1px solid rgba(255,255,255,0.2)",
-            padding: 40,
-          }}
-        >
+        <div className="mx-auto rounded-card max-w-[900px] bg-white/10 border border-white/20 p-10">
           {current?.title && (
-            <h3
-              className="font-semibold text-white"
-              style={{ fontSize: 24, marginBottom: 16 }}
-            >
+            <h3 className="font-semibold text-white text-2xl mb-4">
               {current.title}
             </h3>
           )}
 
           {current?.description && (
-            <p
-              style={{
-                fontSize: 16,
-                lineHeight: "25.6px",
-                color: "#e8dcfb",
-                whiteSpace: "pre-line",
-                marginBottom: 28,
-              }}
-            >
+            <p className="text-base leading-[1.6] text-brand-soft whitespace-pre-line mb-7">
               {current.description}
             </p>
           )}
 
           {current?.benefits && current.benefits.length > 0 && (
             <>
-              <p
-                className="font-semibold"
-                style={{ fontSize: 16, color: "var(--purple-light)", marginBottom: 16 }}
-              >
+              <p className="font-semibold text-base text-brand-light mb-4">
                 Benefits
               </p>
-              <div
-                className="grid grid-cols-1 sm:grid-cols-2"
-                style={{ gap: 12 }}
-              >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {current.benefits.map((b, i) => (
-                  <div
-                    key={b._key || i}
-                    className="flex items-start"
-                    style={{ gap: 10 }}
-                  >
-                    <span style={{ fontSize: 20, lineHeight: 1 }}>
+                  <div key={b._key || i} className="flex items-start gap-2.5">
+                    <span className="text-xl leading-none">
                       {b.emoji}
                     </span>
-                    <span
-                      style={{
-                        fontSize: 14,
-                        lineHeight: "20px",
-                        color: "var(--white)",
-                      }}
-                    >
+                    <span className="text-sm leading-5 text-white">
                       {b.text}
                     </span>
                   </div>

@@ -55,25 +55,19 @@ const HR_OPERATIONS_ITEMS: Array<{ icon: LucideIcon; text: string }> = [
 
 function HrLifecycleSection({ stages: resolvedLifecycleStages }: { stages: { n?: string; title?: string; body?: string }[] }) {
   return (
-    <section
-      className="bg-surface px-4 relative overflow-hidden"
-      style={{ paddingTop: 96, paddingBottom: 96 }}
-    >
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2
-          className="text-center font-bold"
-          style={{ color: "var(--text-body)", fontSize: "clamp(26px, 6.5vw, 40px)", lineHeight: 1.2, marginBottom: 56 }}
-        >
+    <section className="bg-surface px-4 relative overflow-hidden py-14 md:py-24">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <h2 className="text-section-h2 text-center text-body mb-10 md:mb-14">
           Supporting Each Stage of Your HR Life Cycle
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 32, columnGap: 56 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-x-14">
           {resolvedLifecycleStages.map((stage: { n?: string; title?: string; body?: string }, i: number) => (
-            <div key={stage.n || i} className="flex flex-col" style={{ gap: 12 }}>
-              <p style={{ color: "#8015e8", fontSize: 40, fontWeight: 300, lineHeight: 1 }}>{stage.n}</p>
-              <p style={{ color: "var(--text-body)", fontSize: 18, fontWeight: 700 }}>{stage.title}</p>
-              <p style={{ color: "var(--text-body)", fontSize: 14, lineHeight: "22px" }}>{stage.body}</p>
+            <div key={stage.n || i} className="flex flex-col gap-3">
+              <p className="text-brand text-4xl font-light leading-none">{stage.n}</p>
+              <p className="text-lg font-bold">{stage.title}</p>
+              <p className="text-sm leading-[22px]">{stage.body}</p>
               {stage.n === "04" && (
-                <FramedMedia className="rounded-card overflow-hidden" style={{ marginTop: 8, maxWidth: 460 }}>
+                <FramedMedia className="rounded-card overflow-hidden mt-2 w-full max-w-[460px]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/images/hr-lifecycle-stage-04.gif"
@@ -92,18 +86,12 @@ function HrLifecycleSection({ stages: resolvedLifecycleStages }: { stages: { n?:
 
 function HrExpertiseSection() {
   return (
-    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, backgroundColor: "#ebd9ff" }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2
-          className="text-center font-bold"
-          style={{ color: "#10003a", fontSize: 36, lineHeight: "44px", marginBottom: 16 }}
-        >
+    <section className="px-4 py-14 md:py-24 bg-brand-soft">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <h2 className="text-section-h2 text-center text-surface-dark mb-4">
           Our monday CRM consulting expertise
         </h2>
-        <p
-          className="text-center mx-auto"
-          style={{ color: "#4a4a4a", fontSize: 15, lineHeight: "24px", maxWidth: 820, marginBottom: 48 }}
-        >
+        <p className="text-center mx-auto text-body-sm text-muted max-w-[820px] mb-12">
           Streamline your HR operations and strategic management systems with monday.com,
           through intelligent automation and data tracking; you can enhance your entire
           employee lifecycle from strategic recruitment workflow planning through to
@@ -112,47 +100,39 @@ function HrExpertiseSection() {
           company projects, contract administration, and performance initiatives across
           all phases of your employee&apos;s journey from hire to retire.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 24 }}>
-          <div
-            className="rounded-card"
-            style={{ padding: 28, border: "1px solid #ece7fb", backgroundColor: "#f9f7ff" }}
-          >
-            <h3 className="font-bold" style={{ fontSize: 20, color: "#8015e8", marginBottom: 16 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="rounded-card p-7 ring-1 ring-ui bg-surface-raised shadow-whisper">
+            <h3 className="text-card-title text-brand mb-4">
               Hiring
             </h3>
-            <ul className="flex flex-col" style={{ gap: 10 }}>
+            <ul className="flex flex-col gap-2.5">
               {HR_HIRING_ITEMS.map((item) => {
                 const Icon = item.icon
                 return (
                   <li
                     key={item.text}
-                    className="flex items-start"
-                    style={{ gap: 10, fontSize: 14, lineHeight: "22px", color: "#444" }}
+                    className="flex items-start gap-2.5 text-sm leading-[22px] text-muted"
                   >
-                    <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 2, color: "#8015e8" }} />
+                    <Icon size={18} aria-hidden className="shrink-0 mt-0.5 text-brand" />
                     <span>{item.text}</span>
                   </li>
                 )
               })}
             </ul>
           </div>
-          <div
-            className="rounded-card"
-            style={{ padding: 28, border: "1px solid #ece7fb", backgroundColor: "#f9f7ff" }}
-          >
-            <h3 className="font-bold" style={{ fontSize: 20, color: "#8015e8", marginBottom: 16 }}>
+          <div className="rounded-card p-7 ring-1 ring-ui bg-surface-raised shadow-whisper">
+            <h3 className="text-card-title text-brand mb-4">
               HR Operations
             </h3>
-            <ul className="flex flex-col" style={{ gap: 10 }}>
+            <ul className="flex flex-col gap-2.5">
               {HR_OPERATIONS_ITEMS.map((item) => {
                 const Icon = item.icon
                 return (
                   <li
                     key={item.text}
-                    className="flex items-start"
-                    style={{ gap: 10, fontSize: 14, lineHeight: "22px", color: "#444" }}
+                    className="flex items-start gap-2.5 text-sm leading-[22px] text-muted"
                   >
-                    <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 2, color: "#8015e8" }} />
+                    <Icon size={18} aria-hidden className="shrink-0 mt-0.5 text-brand" />
                     <span>{item.text}</span>
                   </li>
                 )
@@ -167,102 +147,53 @@ function HrExpertiseSection() {
 
 function HrFitSection({ calendlyUrl, reasons: resolvedFitReasons }: { calendlyUrl: string; reasons: { title?: string; body?: string }[] }) {
   return (
-    <section className="px-4 relative overflow-hidden" style={{ paddingTop: 96, paddingBottom: 96, backgroundColor: "#ebd9ff" }}>
+    <section className="px-4 relative overflow-hidden py-14 md:py-24 bg-brand-soft">
       {/* Decorative orbs */}
       <div
         aria-hidden
-        className="absolute pointer-events-none"
-        style={{
-          top: -120,
-          right: -120,
-          width: 360,
-          height: 360,
-          borderRadius: 999,
-          background: "radial-gradient(circle, rgba(128,21,232,0.18), transparent 70%)",
-        }}
+        className="absolute pointer-events-none -top-[120px] -right-[120px] w-[360px] h-[360px] rounded-full bg-[radial-gradient(circle,rgba(128,21,232,0.18),transparent_70%)]"
       />
       <div
         aria-hidden
-        className="absolute pointer-events-none"
-        style={{
-          bottom: -120,
-          left: -120,
-          width: 320,
-          height: 320,
-          borderRadius: 999,
-          background: "radial-gradient(circle, rgba(186,131,240,0.22), transparent 70%)",
-        }}
+        className="absolute pointer-events-none -bottom-[120px] -left-[120px] w-[320px] h-[320px] rounded-full bg-[radial-gradient(circle,rgba(186,131,240,0.22),transparent_70%)]"
       />
 
-      <div className="relative mx-auto" style={{ maxWidth: 1100 }}>
+      <div className="relative mx-auto w-full max-w-[1100px]">
         {/* Header */}
-        <div className="flex flex-col items-center text-center" style={{ marginBottom: 56 }}>
-          <span
-            className="uppercase font-bold tracking-[0.18em]"
-            style={{ color: "#8015e8", fontSize: 12, marginBottom: 14 }}
-          >
+        <div className="flex flex-col items-center text-center mb-10 md:mb-14">
+          <span className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand mb-3">
             Built for People &amp; Culture
           </span>
-          <h2
-            className="font-bold"
-            style={{ color: "#10003a", fontSize: 38, lineHeight: "46px", maxWidth: 820 }}
-          >
+          <h2 className="text-section-h2 text-surface-dark max-w-[820px]">
             Why monday.com is the perfect fit for People and Culture Teams
           </h2>
           <Link
             href={calendlyUrl}
-            className="inline-flex items-center justify-center font-semibold transition-transform hover:-translate-y-[1px]"
-            style={{
-              marginTop: 28,
-              height: 50,
-              padding: "0 28px",
-              borderRadius: 999,
-              background: "linear-gradient(to right, #8015e8, #ba83f0)",
-              color: "white",
-              fontSize: 15,
-              boxShadow: "0 12px 28px -10px rgba(128,21,232,0.55)",
-            }}
+            className="cta-btn cta-btn-primary mt-7"
           >
             Schedule a Meeting
-            <svg width="10" height="14" viewBox="0 0 8 14" fill="none" style={{ marginLeft: 10 }}>
+            <svg width="10" height="14" viewBox="0 0 8 14" fill="none" className="ml-2.5">
               <path d="M1 1L7 7L1 13" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
         </div>
 
         {/* Card grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {resolvedFitReasons.map((r: { title?: string; body?: string }, i: number) => (
             <div
               key={r.title || i}
-              className="relative bg-surface-raised dark:shadow-none transition-transform hover:-translate-y-[2px]"
-              style={{
-                borderRadius: 20,
-                padding: "24px 26px",
-                boxShadow: "0 1px 0 rgba(16,0,58,0.04), 0 18px 32px -22px rgba(64,12,140,0.25)",
-                border: "1px solid rgba(128,21,232,0.08)",
-              }}
+              className="relative rounded-card px-6 py-6 ring-1 ring-ui bg-surface-raised shadow-whisper dark:shadow-none transition-transform hover:-translate-y-[2px]"
             >
-              <div className="flex items-center" style={{ gap: 14, marginBottom: 10 }}>
-                <span
-                  className="flex items-center justify-center font-bold"
-                  style={{
-                    width: 38,
-                    height: 38,
-                    borderRadius: 12,
-                    background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)",
-                    color: "white",
-                    fontSize: 13,
-                    letterSpacing: "0.04em",
-                  }}
-                >
+              <div className="flex items-center gap-3.5 mb-2.5">
+                <span className="flex items-center justify-center shrink-0 w-[38px] h-[38px] rounded-xl bg-gradient-to-br from-brand to-brand-light text-white font-mono text-xs font-semibold tracking-[0.04em]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <p className="font-bold" style={{ color: "#10003a", fontSize: 17, lineHeight: "22px" }}>
+                <p className="font-bold text-surface-dark text-[17px] leading-[22px]">
                   {r.title}
                 </p>
               </div>
-              <p style={{ fontSize: 14, lineHeight: "22px", color: "#56516a", paddingLeft: 52 }}>
+              <p className="text-sm leading-[22px] text-muted pl-[52px]">
                 {r.body}
               </p>
             </div>
@@ -275,9 +206,9 @@ function HrFitSection({ calendlyUrl, reasons: resolvedFitReasons }: { calendlyUr
 
 function HrVideoSection() {
   return (
-    <section className="px-4" style={{ paddingTop: 40, paddingBottom: 80, backgroundColor: "#ebd9ff" }}>
-      <div className="mx-auto w-full" style={{ maxWidth: 1100 }}>
-        <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
+    <section className="px-4 pt-10 pb-14 md:pb-20 bg-brand-soft">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <div className="rounded-card overflow-hidden aspect-video">
           <YouTubeEmbed videoId="g83dt0bCG4I" title="Improve your HR processes" />
         </div>
       </div>

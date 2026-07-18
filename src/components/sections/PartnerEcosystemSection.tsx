@@ -23,8 +23,6 @@ interface PartnerEcosystemSectionProps {
   partners?: Partner[]
 }
 
-const ACCENT = "#8015e8"
-
 export default function PartnerEcosystemSection({
   eyebrow,
   heading,
@@ -35,117 +33,62 @@ export default function PartnerEcosystemSection({
   if (partners.length === 0) return null
 
   return (
-    <section
-      className="bg-surface"
-      style={{ paddingTop: 80, paddingBottom: 80 }}
-    >
-      <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
+    <section className="bg-surface py-[80px]">
+      <div className="mx-auto px-4 max-w-[1200px]">
         {eyebrow && (
-          <div
-            className="text-center"
-            style={{
-              color: ACCENT,
-              fontSize: 13,
-              fontWeight: 700,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              marginBottom: 12,
-            }}
-          >
+          <div className="text-center font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand mb-3">
             {eyebrow}
           </div>
         )}
         {(heading || headingAccent) && (
-          <h2
-            className="text-section-h2 text-center"
-            style={{ color: "var(--text-body)", marginBottom: subheading ? 16 : 48 }}
-          >
+          <h2 className={`text-section-h2 text-center text-body ${subheading ? "mb-4" : "mb-12"}`}>
             {heading}
             {headingAccent && (
-              <span style={{ color: ACCENT }}>{headingAccent}</span>
+              <span className="text-brand">{headingAccent}</span>
             )}
           </h2>
         )}
         {subheading && (
-          <p
-            className="text-body text-center mx-auto"
-            style={{
-              color: "var(--text-muted-fg)",
-              maxWidth: 760,
-              marginBottom: 48,
-            }}
-          >
+          <p className="text-body text-center mx-auto text-muted max-w-[760px] mb-12">
             {subheading}
           </p>
         )}
 
-        <div
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"
-          style={{ gap: 16 }}
-        >
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {partners.map((p, i) => (
             <div
               key={p._key || i}
-              className="rounded-card border border-ui bg-surface-raised flex flex-col dark:shadow-none"
-              style={{
-                padding: 20,
-                boxShadow: "var(--shadow-whisper)",
-                transition: "transform 200ms ease, box-shadow 200ms ease",
-              }}
+              className="rounded-card border border-ui bg-surface-raised flex flex-col dark:shadow-none p-5 shadow-whisper transition-[transform,box-shadow] duration-200"
             >
               <div
-                className="flex items-center justify-center rounded-[16px]"
-                style={{
-                  height: 72,
-                  background: p.tint || "#f7f5ff",
-                  marginBottom: 14,
-                }}
+                className="flex items-center justify-center rounded-[16px] h-[72px] mb-3.5"
+                style={{ background: p.tint || "var(--purple-soft)" }}
               >
                 {p.logo?.asset?._ref ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={urlFor(p.logo).height(80).url()}
                     alt={p.name}
-                    style={{ maxHeight: 40, width: "auto" }}
+                    className="max-h-10 w-auto"
                   />
                 ) : p.wordmark ? (
                   p.wordmark
                 ) : (
-                  <span style={{ fontSize: 18, fontWeight: 700, color: "var(--text-body)" }}>{p.name}</span>
+                  <span className="text-lg font-bold text-body">{p.name}</span>
                 )}
               </div>
-              <div
-                style={{
-                  fontSize: 16,
-                  fontWeight: 700,
-                  color: "var(--text-body)",
-                  marginBottom: 2,
-                }}
-              >
+              <div className="text-base font-bold text-body mb-0.5">
                 {p.name}
               </div>
               {p.tier && (
                 <div
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: ACCENT,
-                    letterSpacing: "0.04em",
-                    textTransform: "uppercase",
-                    marginBottom: p.description ? 6 : 0,
-                  }}
+                  className={`font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand ${p.description ? "mb-1.5" : ""}`}
                 >
                   {p.tier}
                 </div>
               )}
               {p.description && (
-                <p
-                  style={{
-                    fontSize: 13,
-                    lineHeight: 1.5,
-                    color: "var(--text-muted-fg)",
-                  }}
-                >
+                <p className="text-[13px] leading-normal text-muted">
                   {p.description}
                 </p>
               )}

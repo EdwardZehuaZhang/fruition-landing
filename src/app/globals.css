@@ -13,6 +13,7 @@
   --purple-primary: #8015e8;
   --purple-light: #ba83f0;
   --purple-dark: #550e9b;
+  --purple-soft: #f5edfd;
   --dark-bg: #10003a;
   --dark-bg-secondary: #2b074d;
   --light-section-bg: #ecf1fc;
@@ -46,12 +47,13 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-poppins), system-ui, sans-serif;
-  --font-montserrat: var(--font-montserrat), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* Color tokens → bg-brand, text-brand, border-brand, etc. */
   --color-brand: var(--purple-primary);
   --color-brand-light: var(--purple-light);
   --color-brand-dark: var(--purple-dark);
+  --color-brand-soft: var(--purple-soft);
   --color-surface-dark: var(--dark-bg);
   --color-surface-dark-2: var(--dark-bg-secondary);
 
@@ -98,36 +100,11 @@
    uses `text-body` for its color). Otherwise `.text-body{font-size:16px}` would
    override the heading size and shrink titles site-wide. */
 @layer components {
-  /* Hero H1: 48px, bold, tight tracking */
-  .text-display {
-    font-size: 48px;
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-  }
-
-  /* Section H2: landing page scale 44px, bold, slightly tight */
-  .text-section-h2 {
-    font-size: 44px;
-    font-weight: 600;
-    line-height: 1.25;
-    letter-spacing: -0.015em;
-  }
-
-  /* Large sub-section heading: 28px */
-  .text-section-h3 {
-    font-size: 28px;
-    font-weight: 600;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
-  }
-
-  /* Card / feature titles: 22px */
-  .text-card-title {
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 1.25;
-  }
+  /* Body / label roles first, heading roles after: `text-body` doubles as the
+     body-color utility, so headings often carry BOTH classes (e.g.
+     "text-section-h2 text-body"). Same layer + same specificity means source
+     order decides — heading roles are declared last so their metrics win on
+     combined elements, while the color still comes from the utilities layer. */
 
   /* Lead / hero description: 18px */
   .text-body-lead {
@@ -163,6 +140,58 @@
     font-weight: 500;
     line-height: 1.4;
     letter-spacing: 0.02em;
+  }
+
+  /* Canonical form field (DESIGN.md · Inputs): white fill, hairline border,
+     chip radius, brand focus ring. Shared by ContactSection + LeadForm. */
+  .form-field {
+    width: 100%;
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-chip);
+    padding: 11px 14px;
+    font-size: 15px;
+    color: var(--text-body);
+    background: var(--surface-raised);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .form-field:focus {
+    outline: none;
+    border-color: var(--purple-primary);
+    box-shadow: 0 0 0 3px rgba(128, 21, 232, 0.08);
+  }
+  .form-field[aria-invalid="true"] {
+    border-color: #e0708a;
+  }
+
+  /* Hero H1: 48px, bold, tight tracking */
+  .text-display {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  /* Section H2: landing page scale 44px, bold, slightly tight */
+  .text-section-h2 {
+    font-size: 44px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+  }
+
+  /* Large sub-section heading: 28px */
+  .text-section-h3 {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  /* Card / feature titles: 22px */
+  .text-card-title {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.25;
   }
 
   /* Heading guard: headings frequently wrap their text in a `text-body` span to
@@ -233,7 +262,7 @@
   }
 
   .ui-step-row:hover .ui-step-number {
-    color: #579bfc;
+    color: var(--purple-light);
     transform: scale(1.08);
   }
 
@@ -253,7 +282,7 @@
   }
 
   .feature-number-card:hover .feature-number-card__number {
-    color: #579bfc;
+    color: var(--purple-light);
     transform: scale(1.06);
   }
 
@@ -287,7 +316,7 @@
 
   .ui-cta-btn-primary:hover {
     color: #fff;
-    background: #579bfc;
+    background: var(--purple-dark);
   }
 
   .ui-cta-btn-secondary {
@@ -297,7 +326,7 @@
 
   .ui-cta-btn-secondary:hover {
     color: #fff;
-    background: #579bfc;
+    background: var(--purple-dark);
   }
 
   @media (max-width: 767px) {
@@ -378,17 +407,19 @@ body {
   }
 }
 
-.monday-for-retail-page {
-  --radius-card: 36px;
-}
+@layer components {
+  .monday-for-retail-page {
+    --radius-card: 36px;
+  }
 
-/* Hide scrollbar for FAQ tab strip — icon buttons handle scrolling instead */
-.faq-tab-scroll {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.faq-tab-scroll::-webkit-scrollbar {
-  display: none;
+  /* Hide scrollbar for FAQ tab strip — icon buttons handle scrolling instead */
+  .faq-tab-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .faq-tab-scroll::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Marquee animation for logo carousel */
@@ -402,12 +433,14 @@ body {
   100% { transform: translateX(0); }
 }
 
-.animate-marquee {
-  animation: marquee 60s linear infinite;
-}
+@layer components {
+  .animate-marquee {
+    animation: marquee 60s linear infinite;
+  }
 
-.animate-marquee-reverse {
-  animation: marquee-reverse 30s linear infinite;
+  .animate-marquee-reverse {
+    animation: marquee-reverse 30s linear infinite;
+  }
 }
 
 @keyframes fadeInSwap {
@@ -415,13 +448,15 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fade-in {
-  animation: fadeInSwap 420ms ease-out both;
-}
-
-@media (prefers-reduced-motion: reduce) {
+@layer components {
   .animate-fade-in {
-    animation: none;
+    animation: fadeInSwap 420ms ease-out both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-in {
+      animation: none;
+    }
   }
 }
 
@@ -433,13 +468,15 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-reveal-up {
-  animation: authorRevealUp 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-@media (prefers-reduced-motion: reduce) {
+@layer components {
   .animate-reveal-up {
-    animation: none;
+    animation: authorRevealUp 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-reveal-up {
+      animation: none;
+    }
   }
 }
 
@@ -447,19 +484,21 @@ body {
 /* Hoverable card — generic lift + soft glow on hover            */
 /* Apply via className="ui-hover-card" alongside existing styles */
 /* ============================================================ */
-.ui-hover-card {
-  transition: transform 240ms ease, box-shadow 240ms ease, background-color 240ms ease, border-color 240ms ease;
-  will-change: transform;
-}
-.ui-hover-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 18px 40px -18px rgba(128, 21, 232, 0.35);
-}
-@media (prefers-reduced-motion: reduce) {
-  .ui-hover-card,
+@layer components {
+  .ui-hover-card {
+    transition: transform 240ms ease, box-shadow 240ms ease, background-color 240ms ease, border-color 240ms ease;
+    will-change: transform;
+  }
   .ui-hover-card:hover {
-    transform: none;
-    transition: none;
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px -18px rgba(128, 21, 232, 0.35);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ui-hover-card,
+    .ui-hover-card:hover {
+      transform: none;
+      transition: none;
+    }
   }
 }
 
@@ -467,86 +506,113 @@ body {
 /* CTA Button — unified outline + primary variants               */
 /* Auto-prepended icon, vertical-center label, blue hover state. */
 /* ============================================================ */
-.cta-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  height: 53px;
-  padding: 0 28px;
-  border-radius: 9999px;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.32px;
-  white-space: nowrap;
-  text-decoration: none;
-  transition: background-color 0.2s ease, color 0.2s ease,
-    border-color 0.2s ease, background-image 0.2s ease, opacity 0.2s ease;
-}
-
-.cta-btn-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  line-height: 16px;
-  height: 16px;
-}
-
-.cta-btn-label {
-  display: inline-flex;
-  align-items: center;
-  line-height: 16px;
-  height: 16px;
-}
-
-.cta-btn-outline {
-  background-color: #ffffff;
-  color: var(--purple-primary);
-  border: 1px solid var(--purple-primary);
-}
-
-.cta-btn-primary {
-  background-image: linear-gradient(to right, var(--purple-primary), var(--purple-light));
-  color: #ffffff;
-  border: 1px solid transparent;
-}
-
-/* On dark backgrounds — primary CTA: white pill, purple text */
-.cta-btn-on-dark-primary {
-  background-color: #ffffff;
-  color: var(--purple-primary);
-  border: 1px solid transparent;
-}
-
-/* On dark backgrounds — secondary CTA: transparent w/ white outline */
-.cta-btn-on-dark-outline {
-  background-color: transparent;
-  color: #ffffff;
-  border: 1px solid #ffffff;
-}
-
-.cta-btn:hover {
-  background-image: none;
-  background-color: #4674FB;
-  color: #ffffff;
-  border-color: #4674FB;
-}
-
-/* Mobile: allow long CTA labels to wrap instead of overflowing the button */
-@media (max-width: 767px) {
+@layer components {
   .cta-btn {
-    white-space: normal;
-    text-align: center;
-    height: auto;
-    min-height: 48px;
-    padding: 12px 20px;
-    font-size: 15px;
-    line-height: 1.2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 53px;
+    padding: 0 28px;
+    border-radius: 9999px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.32px;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease,
+      border-color 0.2s ease, background-image 0.2s ease, opacity 0.2s ease,
+      transform 0.2s ease;
   }
+
+  .cta-btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    line-height: 16px;
+    height: 16px;
+  }
+
   .cta-btn-label {
-    height: auto;
-    line-height: 1.2;
+    display: inline-flex;
+    align-items: center;
+    line-height: 16px;
+    height: 16px;
+  }
+
+  .cta-btn-outline {
+    background-color: #ffffff;
+    color: var(--purple-primary);
+    border: 1px solid var(--purple-primary);
+  }
+
+  .cta-btn-primary {
+    background-image: linear-gradient(to right, var(--purple-primary), var(--purple-light));
+    color: #ffffff;
+    border: 1px solid transparent;
+  }
+
+  /* On dark backgrounds — primary CTA: white pill, purple text */
+  .cta-btn-on-dark-primary {
+    background-color: #ffffff;
+    color: var(--purple-primary);
+    border: 1px solid transparent;
+  }
+
+  /* On dark backgrounds — secondary CTA: transparent w/ white outline */
+  .cta-btn-on-dark-outline {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+  }
+
+  /* Hover stays in the purple family (DESIGN.md); slight lift for feedback */
+  .cta-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .cta-btn-primary:hover {
+    background-image: none;
+    background-color: var(--purple-dark);
+  }
+
+  .cta-btn-outline:hover {
+    background-color: var(--purple-primary);
+    color: #ffffff;
+    border-color: var(--purple-primary);
+  }
+
+  .cta-btn-on-dark-primary:hover {
+    color: var(--purple-dark);
+    box-shadow: 0 6px 20px rgba(16, 0, 58, 0.25);
+  }
+
+  .cta-btn-on-dark-outline:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta-btn:hover {
+      transform: none;
+    }
+  }
+
+  /* Mobile: allow long CTA labels to wrap instead of overflowing the button */
+  @media (max-width: 767px) {
+    .cta-btn {
+      white-space: normal;
+      text-align: center;
+      height: auto;
+      min-height: 48px;
+      padding: 12px 20px;
+      font-size: 15px;
+      line-height: 1.2;
+    }
+    .cta-btn-label {
+      height: auto;
+      line-height: 1.2;
+    }
   }
 }
 
@@ -555,6 +621,7 @@ body {
 /* Content is visible by default; animations only add entrance + */
 /* a slow ambient drift on the glow. Disabled for reduced motion.*/
 /* ============================================================ */
+@layer components {
 .nf-rise {
   animation: authorRevealUp 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -661,6 +728,7 @@ body {
   .wc-hub-glow { animation: none; opacity: 0.6; }
   .eco-line { animation: none; }
 }
+} /* end @layer components (page-motion helpers) */
 
 /* ================================================================== */
 /*  Internal portal (/internal) — self-contained shadcn theme.        */
@@ -873,6 +941,14 @@ body {
 .blog-tiptap .ProseMirror-selectednode {
   outline: 2px solid var(--purple-primary);
   outline-offset: 2px;
+}
+
+/* Body images: block-level, natural height, same frame styling as videos. */
+.blog-tiptap img.blog-body-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius, 12px);
 }
 
 /* Tables inside the editor. */
