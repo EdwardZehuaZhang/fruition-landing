@@ -9,6 +9,7 @@ const MAX_IMAGE_BYTES = 8 * 1024 * 1024
 
 // Mirror of the `industry` enum in src/sanity/schemas/blogPost.ts.
 const ALLOWED_INDUSTRIES = new Set([
+  "ai",
   "construction",
   "hr",
   "real-estate",
@@ -59,6 +60,7 @@ export async function POST(req: Request) {
   const excerpt = String(form.get("excerpt") ?? "").trim()
   const industry = String(form.get("industry") ?? "").trim()
   const author = String(form.get("author") ?? "").trim()
+  const seoKeyword = String(form.get("seoKeyword") ?? "").trim()
   const seoTitle = String(form.get("seoTitle") ?? "").trim()
   const seoDescription = String(form.get("seoDescription") ?? "").trim()
   const publishedAt = String(form.get("publishedAt") ?? "").trim()
@@ -118,6 +120,7 @@ export async function POST(req: Request) {
       excerpt: excerpt || undefined,
       industry: industry || undefined,
       author: byline,
+      seoKeyword: seoKeyword || undefined,
       seoTitle: seoTitle || undefined,
       seoDescription: seoDescription || undefined,
       categoryIds: categoryIds.length ? categoryIds : undefined,

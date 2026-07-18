@@ -17,15 +17,23 @@ export interface BlogEditorInitial {
   excerpt?: string
   industry?: string
   categoryIds?: string[]
+  seoKeyword?: string
   seoTitle?: string
   seoDescription?: string
   publishedAt?: string
   body?: string
   author?: string
+  /**
+   * The draft's full metadata row, passed through so saving from the editor
+   * preserves pipeline keys it doesn't edit (status, monday_item_id,
+   * google_doc_url, …) instead of overwriting the whole object.
+   */
+  metadata?: Record<string, unknown>
 }
 
 const INDUSTRIES = [
   { value: "", label: "— none —" },
+  { value: "ai", label: "AI" },
   { value: "construction", label: "Construction" },
   { value: "hr", label: "HR" },
   { value: "real-estate", label: "Real Estate" },
@@ -69,6 +77,7 @@ export default function BlogEditor({
   const [excerpt, setExcerpt] = useState(initial?.excerpt ?? "")
   const [industry, setIndustry] = useState(initial?.industry ?? "")
   const [categoryIds, setCategoryIds] = useState<string[]>(initial?.categoryIds ?? [])
+  const [seoKeyword, setSeoKeyword] = useState(initial?.seoKeyword ?? "")
   const [seoTitle, setSeoTitle] = useState(initial?.seoTitle ?? "")
   const [seoDescription, setSeoDescription] = useState(initial?.seoDescription ?? "")
   const [publishedAt, setPublishedAt] = useState(initial?.publishedAt ?? "")
@@ -92,7 +101,20 @@ export default function BlogEditor({
   }
 
   function metadata() {
-    return { excerpt, industry, categoryIds, seoTitle, seoDescription, publishedAt, author, slug: effectiveSlug }
+    return {
+      // Preserve pipeline keys (status, monday_item_id, google_doc_url, …)
+      // the editor doesn't manage — the draft save replaces the whole object.
+      ...(initial?.metadata ?? {}),
+      excerpt,
+      industry,
+      categoryIds,
+      seoKeyword,
+      seoTitle,
+      seoDescription,
+      publishedAt,
+      author,
+      slug: effectiveSlug,
+    }
   }
 
   function onSaveDraft() {
@@ -137,6 +159,7 @@ export default function BlogEditor({
     fd.set("excerpt", excerpt.trim())
     fd.set("industry", industry)
     fd.set("author", author)
+    fd.set("seoKeyword", seoKeyword.trim())
     fd.set("seoTitle", seoTitle.trim())
     fd.set("seoDescription", seoDescription.trim())
     if (publishedAt) fd.set("publishedAt", new Date(publishedAt).toISOString())
@@ -243,6 +266,14 @@ export default function BlogEditor({
             </div>
           </Field>
         )}
+        <Field label="SEO keyword" hint="Primary keyword this post targets">
+          <input
+            value={seoKeyword}
+            onChange={(e) => setSeoKeyword(e.target.value)}
+            placeholder="e.g. monday.com automations"
+            className={inputClass}
+          />
+        </Field>
         <Field label="SEO title" hint={`${seoTitle.length}/60`}>
           <input value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} className={inputClass} />
         </Field>

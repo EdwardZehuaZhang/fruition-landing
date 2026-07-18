@@ -125,6 +125,7 @@ export interface UpsertBlogPostInput {
   excerpt?: string
   industry?: string
   author?: string
+  seoKeyword?: string
   seoTitle?: string
   seoDescription?: string
   coverImageAssetId?: string
@@ -436,6 +437,7 @@ function buildBlogPostDoc(input: UpsertBlogPostInput): Record<string, unknown> {
   }
   if (input.excerpt) doc.excerpt = input.excerpt
   if (input.industry) doc.industry = input.industry
+  if (input.seoKeyword) doc.seoKeyword = input.seoKeyword
   if (input.seoTitle) doc.seoTitle = input.seoTitle
   if (input.seoDescription) doc.seoDescription = input.seoDescription
   if (input.categoryIds && input.categoryIds.length > 0) {
@@ -485,6 +487,7 @@ export async function upsertBlogPost(
     if (input.publishedAt) set.publishedAt = input.publishedAt
     if (input.excerpt) set.excerpt = input.excerpt
     if (input.industry) set.industry = input.industry
+    if (input.seoKeyword) set.seoKeyword = input.seoKeyword
     if (input.seoTitle) set.seoTitle = input.seoTitle
     if (input.seoDescription) set.seoDescription = input.seoDescription
     if (input.mondayItemId) set.mondayItemId = input.mondayItemId
