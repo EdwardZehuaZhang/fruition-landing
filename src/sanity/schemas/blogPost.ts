@@ -91,6 +91,12 @@ export default {
       description: "YouTube or other video embed URLs found in the original post",
       of: [{ type: "url" }],
     },
+    {
+      name: "seoKeyword",
+      title: "SEO Keyword",
+      type: "string",
+      description: "Primary keyword this post targets",
+    },
     { name: "seoTitle", title: "SEO Title", type: "string" },
     { name: "seoDescription", title: "SEO Description", type: "text" },
     {
@@ -99,6 +105,7 @@ export default {
       type: "string",
       options: {
         list: [
+          { title: "AI", value: "ai" },
           { title: "Construction", value: "construction" },
           { title: "HR", value: "hr" },
           { title: "Real Estate", value: "real-estate" },
