@@ -13,6 +13,20 @@ interface StickyCtaBarProps {
   showAfter?: number
 }
 
+const DISMISS_ICON = (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    aria-hidden="true"
+  >
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+)
+
 /**
  * Floating bottom CTA that fades in once the visitor scrolls past the hero, so
  * a friction-free conversion path is always one click away (per PDF). Dismissible.
@@ -35,6 +49,17 @@ export default function StickyCtaBar({
 
   if (!label || !href || dismissed) return null
 
+  const dismiss = (placement: "compact" | "row") => (
+    <button
+      type="button"
+      aria-label="Dismiss banner"
+      onClick={() => setDismissed(true)}
+      className={`sticky-cta-dismiss sticky-cta-dismiss-${placement}`}
+    >
+      {DISMISS_ICON}
+    </button>
+  )
+
   return (
     <div
       className="fixed inset-x-0 bottom-0 z-50 px-4 pb-[env(safe-area-inset-bottom,0px)] transition-all duration-300"
@@ -44,45 +69,26 @@ export default function StickyCtaBar({
         pointerEvents: visible ? "auto" : "none",
       }}
     >
-      <div
-        className="mx-auto mb-4 flex flex-col items-stretch gap-3 px-4 py-3 md:flex-row md:items-center md:justify-between md:gap-4 md:px-5"
-        style={{
-          maxWidth: 720,
-          borderRadius: 16,
-          background: "linear-gradient(-38deg, rgb(128,21,232) 0%, rgb(16,0,58) 100%)",
-          boxShadow: "0 18px 40px -16px rgba(64,12,140,0.55)",
-        }}
-      >
-        <span className="font-semibold text-white text-[13px] md:text-sm">
-          Ready to scale your workflows?
-        </span>
-        <div className="flex items-center justify-between gap-2 md:justify-end">
-          {/* Mobile: short label; hidden on desktop */}
+      <div role="region" aria-label="Consultation banner" className="sticky-cta mx-auto mb-4">
+        <div aria-hidden="true" className="sticky-cta-glow" />
+        <div className="sticky-cta-top">
+          <p className="sticky-cta-heading">Ready to scale your workflows?</p>
+          {dismiss("compact")}
+        </div>
+        <div className="sticky-cta-actions">
           <CtaButton
             href={href}
             label={mobileLabel ?? label}
             variant="onDarkPrimary"
-            className="md:hidden"
-            style={{ fontSize: 13, padding: "0 16px" }}
+            className="sticky-cta-cta-mobile"
           />
-          {/* Desktop: full label; hidden on mobile */}
           <CtaButton
             href={href}
             label={label}
-            mobileLabel={mobileLabel}
             variant="onDarkPrimary"
-            className="hidden md:inline-flex"
-            style={{ fontSize: 13, padding: "0 18px" }}
+            className="sticky-cta-cta-full"
           />
-          <button
-            type="button"
-            aria-label="Dismiss"
-            onClick={() => setDismissed(true)}
-            className="flex shrink-0 items-center justify-center text-white/70 hover:text-white"
-            style={{ minWidth: 44, minHeight: 44, fontSize: 22, lineHeight: 1 }}
-          >
-            ×
-          </button>
+          {dismiss("row")}
         </div>
       </div>
     </div>
