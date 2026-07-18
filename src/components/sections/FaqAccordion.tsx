@@ -134,17 +134,23 @@ export default function FaqAccordion({
         <div className="flex flex-col gap-3">
           {currentItems.map((item, i) => (
             <div key={item._key || i} className={i === 0 ? "pt-5" : "pt-6"}>
-              <button
-                onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                className="w-full flex items-start justify-between gap-3 text-left cursor-pointer min-h-[30px]"
-              >
-                <span className="min-w-0 text-lg md:text-xl leading-6 text-body">{item.question}</span>
-                <div className="shrink-0 w-[30px] h-[30px]">
-                  <svg className={`transition-transform ${openFaqIndex === i ? "rotate-180" : ""}`} width="30" height="30" viewBox="0 0 30 30" fill="none">
-                    <path d="M8 12L15 19L22 12" stroke="var(--text-body)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </div>
-              </button>
+              {/* Heading wraps the trigger (accessible-accordion pattern) so
+                  questions are real h3s per the FAQ-bank spec; preflight keeps
+                  h3 metrics inherited, so the visual is unchanged. */}
+              <h3 className="m-0">
+                <button
+                  onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
+                  aria-expanded={openFaqIndex === i}
+                  className="w-full flex items-start justify-between gap-3 text-left cursor-pointer min-h-[30px] font-normal"
+                >
+                  <span className="min-w-0 text-lg md:text-xl leading-6 text-body">{item.question}</span>
+                  <div className="shrink-0 w-[30px] h-[30px]">
+                    <svg className={`transition-transform ${openFaqIndex === i ? "rotate-180" : ""}`} width="30" height="30" viewBox="0 0 30 30" fill="none">
+                      <path d="M8 12L15 19L22 12" stroke="var(--text-body)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                </button>
+              </h3>
               {openFaqIndex === i && (
                 <div className="pb-4 pt-[31px] text-base leading-6 text-body whitespace-pre-line">
                   {item.answer}
