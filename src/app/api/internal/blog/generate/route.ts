@@ -142,7 +142,11 @@ async function fetchBrainChunks(
       body: JSON.stringify({
         query_embedding: vec,
         match_count: 8,
-        filter_industry: industry.toLowerCase(),
+        // NO industry filter: verified 2026-07-18 that zero of the corpus's
+        // chunks carry metadata.industry, so any non-null/non-'general' value
+        // makes the RPC return 0 rows. Cosine similarity on the topic query
+        // already narrows retrieval topically.
+        filter_industry: null,
       }),
       signal: AbortSignal.timeout(15_000),
     })
