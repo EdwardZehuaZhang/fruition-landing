@@ -41,7 +41,7 @@ const PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
 const DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET
 
 /** `image-<hash>-<WxH>-<fmt>` asset ref → public CDN URL (null if malformed). */
-function imageRefToUrl(ref: string): string | null {
+export function imageRefToUrl(ref: string): string | null {
   const m = /^image-([A-Za-z0-9]+)-(\d+x\d+)-([a-z0-9]+)$/.exec(ref)
   if (!m || !PROJECT_ID || !DATASET) return null
   return `https://cdn.sanity.io/images/${PROJECT_ID}/${DATASET}/${m[1]}-${m[2]}.${m[3]}`

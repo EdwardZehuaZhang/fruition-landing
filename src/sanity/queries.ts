@@ -33,6 +33,7 @@ export async function getBlogPostBySlug(slug: string) {
       excerpt,
       "coverImage": coalesce(coverImage, mainImage, featuredImage, heroImage, body[_type == "image"][0]),
       body,
+      seoKeyword,
       seoTitle,
       seoDescription,
       videoUrls,
@@ -136,7 +137,7 @@ export async function getBlogPostForPortalEdit(docId: string) {
   return client.fetch(
     `*[_type == "blogPost" && _id == $docId][0] {
       _id, title, "slug": slug.current, publishedAt, author, industry, excerpt,
-      seoTitle, seoDescription, body, "categoryIds": categories[]._ref
+      seoKeyword, seoTitle, seoDescription, body, "categoryIds": categories[]._ref
     }`,
     { docId }
   )

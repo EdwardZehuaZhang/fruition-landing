@@ -1058,6 +1058,14 @@ body {
   outline-offset: 2px;
 }
 
+/* Body images: block-level, natural height, same frame styling as videos. */
+.blog-tiptap img.blog-body-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius, 12px);
+}
+
 /* Tables inside the editor. */
 .blog-tiptap table {
   border-collapse: collapse;
