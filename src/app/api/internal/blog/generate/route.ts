@@ -65,29 +65,98 @@ function extractIndustry(topic: string): string {
   return "Professional Services"
 }
 
-// Style rules come from Fruition's human blog editor (Slack feedback,
-// 2026-07): conversational Q&A tone, Hemingway-grade readability, scannable
-// structure, verified-facts-only with a Sources section, keyword bolded.
-const SYSTEM_PROMPT = `You are a senior content writer for Fruition, a monday.com Platinum Partner.
-Write like a helpful consultant talking to one busy reader — conversational and direct. Ask the questions the reader is already asking, then answer them plainly.
+// Minimal fallback style rules, used ONLY if the Sanity voice guide can't be
+// fetched. The real style contract is the `voiceGuide` document in Sanity
+// (edited by the content team; fetched fresh per run below) — it encodes the
+// full Fruition post template (meta description, Q&A snippet opener, cited
+// stats, internal links, How-Fruition-Helps proof block, FAQs, Sources).
+const FALLBACK_STYLE = `You are a senior content writer for Fruition, a monday.com Platinum Partner.
+Conversational Q&A tone: question-style H2s answered directly in the first sentence. Hemingway grade 6-9, sentences under 20 words, paragraphs 2-3 sentences. Bullet lists with bold lead-ins. Bold the target keyword on first uses. Only verifiable facts — never invent statistics, prices, or features. End with "## FAQs" (3 Q&As) then "## Sources" (official pages only).
+Banned: leverage, synergise, best-in-class, unlock potential, game-changer, revolutionise, delve, "in today's fast-paced world", "let's dive in". British spelling. Output ONLY clean markdown.`
 
-TONE & READABILITY
-- Conversational question-and-answer flow: phrase most H2 headings as questions a real person would type or ask.
-- Short sentences. Plain words. Aim for Hemingway grade 6-8. If a sentence needs a second breath, split it.
-- Paragraphs are 2 sentences (long ones) to 3 sentences (short ones). NEVER more than 3 sentences in a paragraph.
-- It must not read as AI-written: no filler, no throat-clearing, no symmetrical "On one hand / on the other" scaffolding, vary sentence length.
+const HARNESS_PROMPT = `You are Marketa, Fruition's blog writer. Follow the Fruition voice-and-template guide below EXACTLY — both the required post structure and the writing style. Use your web search capability to verify every external statistic, price, and date before stating it; if you cannot verify a fact, leave it out. Prefer the retrieved Fruition sources (when provided) for Fruition-specific facts and internal links. Output only the finished blog post in clean markdown.`
 
-STRUCTURE & SCANNABILITY
-- Make it scannable: use bullet lists whenever you enumerate 3+ items, and use them often.
-- H2 for sections (mostly questions), H3 sparingly for sub-points.
-- Bold the target keyword the first 2-3 times it appears naturally in the body. Don't force it.
+// Sanity voice guide — fetched per run (cached in-isolate for 1h) so the
+// content team can tune style without a code deploy. Same GROQ the original
+// make.com draft scenario used.
+let cachedGuide: { text: string; at: number } | null = null
+async function fetchVoiceGuide(): Promise<string | null> {
+  if (cachedGuide && Date.now() - cachedGuide.at < 3_600_000) return cachedGuide.text
+  try {
+    const r = await fetch(
+      "https://bt6nb58h.api.sanity.io/v2024-01-01/data/query/production?query=" +
+        encodeURIComponent('*[_type=="voiceGuide"][0].body'),
+      { signal: AbortSignal.timeout(10_000) },
+    )
+    if (!r.ok) return null
+    const j = (await r.json()) as { result?: string }
+    if (!j.result || j.result.length < 200) return null
+    cachedGuide = { text: j.result, at: Date.now() }
+    return j.result
+  } catch {
+    return null
+  }
+}
 
-FACTS & SOURCES
-- Only state facts you can verify from official product websites and documentation. NEVER invent statistics, prices, limits, or feature claims. When unsure, leave it out.
-- End with "## Key takeaway" (2-3 sentences), then "## Sources" — a bullet list of the official pages the content draws from, as markdown links. Only link to top-level official pages you are certain exist (e.g. monday.com product pages, vendor homepages, official docs). Never fabricate deep URLs.
+/**
+ * RAG retrieval from the Marketa brain (Supabase content_chunks): embed the
+ * topic with the SAME model/dimensions the ingest pipeline uses, then call the
+ * match_content_chunks RPC. Best-effort — returns null when the brain is
+ * unreachable so generation proceeds ungrounded rather than failing.
+ */
+async function fetchBrainChunks(
+  query: string,
+  industry: string,
+): Promise<{ text: string; count: number } | null> {
+  const gKey = process.env.GEMINI_API_KEY
+  const bUrl = process.env.MARKETA_SUPABASE_URL
+  const bKey = process.env.MARKETA_SUPABASE_SERVICE_ROLE_KEY
+  if (!gKey || !bUrl || !bKey) return null
+  try {
+    const er = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent`,
+      {
+        method: "POST",
+        headers: { "x-goog-api-key": gKey, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "models/gemini-embedding-001",
+          content: { parts: [{ text: query }] },
+          taskType: "RETRIEVAL_QUERY",
+          outputDimensionality: 768,
+        }),
+        signal: AbortSignal.timeout(15_000),
+      },
+    )
+    if (!er.ok) return null
+    const ed = (await er.json()) as { embedding?: { values?: number[] } }
+    const vec = ed.embedding?.values
+    if (!vec?.length) return null
 
-BANNED: leverage, synergise, best-in-class, unlock potential, drive results, game-changer, revolutionize, cutting-edge, delve, dive deep, "in today's fast-paced world", "it's important to note", "seamlessly", "robust".
-Output ONLY clean markdown. No JSON wrapper, no preamble.`
+    const rr = await fetch(`${bUrl.replace(/\/+$/, "")}/rest/v1/rpc/match_content_chunks`, {
+      method: "POST",
+      headers: {
+        apikey: bKey,
+        Authorization: `Bearer ${bKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query_embedding: vec,
+        match_count: 8,
+        filter_industry: industry.toLowerCase(),
+      }),
+      signal: AbortSignal.timeout(15_000),
+    })
+    if (!rr.ok) return null
+    const rows = (await rr.json()) as Array<{ source_id?: string; body?: string }>
+    if (!rows?.length) return null
+    const text = rows
+      .map((c, i) => `--- Source ${i + 1} (id: ${c.source_id ?? "unknown"}) ---\n${c.body ?? ""}`)
+      .join("\n\n")
+    return { text, count: rows.length }
+  } catch {
+    return null
+  }
+}
 
 export async function POST(req: Request) {
   // Auth check
@@ -141,14 +210,29 @@ export async function POST(req: Request) {
   // Anthropic model is unreliable here. We keep Claude first for quality and
   // fall back to a globally-available model so generation never hard-fails.
   console.log(`Generating blog: "${topic}"${pulseId ? ` (monday item ${pulseId})` : ""}`)
+
+  // Grounding: the Sanity voice guide (style + template contract) and RAG
+  // chunks from the Marketa brain (past Fruition content → accurate internal
+  // facts + internal-link targets). Both best-effort in parallel.
+  const [voiceGuide, brainChunks] = await Promise.all([
+    fetchVoiceGuide(),
+    fetchBrainChunks(`${topic} - ${keyword} - ${industry}`, industry),
+  ])
+  const systemPrompt = `${HARNESS_PROMPT}\n\nVOICE GUIDE:\n${voiceGuide ?? FALLBACK_STYLE}`
+
   const briefBlock = pulseId && body.brief?.trim() ? `\n\nBrief / context from the requester:\n${body.brief.trim()}` : ""
-  const userPrompt = `Write a 1200-1500 word blog post: "${topic}".
-Target keyword: "${keyword}". Audience: ${industry} teams evaluating or already using monday.com.
-Practical and specific — real workflows, real decisions, concrete examples. Question-style H2 headings, short paragraphs (2-3 sentences), bullet lists for anything enumerable, keyword bolded on first uses, and finish with "## Key takeaway" then "## Sources". Output clean markdown only.${briefBlock}`
+  const chunksBlock = brainChunks
+    ? `\n\nRetrieved Fruition sources — prefer these for Fruition-specific facts, and use them to pick real internal links (cite as [Source N] while drafting is NOT needed; weave links naturally):\n${brainChunks.text}`
+    : ""
+  const userPrompt = `Write a 1200-1600 word blog post. Topic seed: "${topic}".
+Primary keyword: "${keyword}". Industry/audience: ${industry} teams evaluating or already using monday.com.
+Follow the voice guide's post template exactly (meta description line, reframed H1, Q&A snippet opener, question H2s, How Fruition Helps, CTA, FAQs, Sources). Write the COMPLETE post — it is unusable if it stops before the FAQs and Sources sections. Verify external facts with web search before including them.${briefBlock}${chunksBlock}`
+
   const MODELS = (process.env.MARKETA_BLOG_MODELS || "anthropic/claude-sonnet-5,openai/gpt-4o,google/gemini-2.5-pro")
     .split(",").map((s) => s.trim()).filter(Boolean)
   let bodyMarkdown = ""
   let genErr = ""
+  let usedWebSearch = false
 
   for (const model of MODELS) {
     if (bodyMarkdown) break
@@ -160,10 +244,17 @@ Practical and specific — real workflows, real decisions, concrete examples. Qu
       },
       body: JSON.stringify({
         model,
-        max_tokens: 3000,
+        // Reasoning models (claude-sonnet-5) count thinking tokens INSIDE
+        // max_tokens on OpenRouter — 4000 left only ~700 for the article and
+        // truncated posts mid-sentence. 12000 fits thinking + a 2000-word post.
+        max_tokens: 12000,
         temperature: 0.7,
+        // OpenRouter web-search plugin: grounds the completion with live
+        // results so stats/prices/dates can actually be verified, per the
+        // voice guide's "verify every external fact" rule.
+        plugins: [{ id: "web", max_results: 5 }],
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
+          { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
       }),
@@ -171,7 +262,10 @@ Practical and specific — real workflows, real decisions, concrete examples. Qu
     if (orResp.ok) {
       const orData = (await orResp.json()) as { choices?: Array<{ message?: { content?: string } }> }
       bodyMarkdown = orData.choices?.[0]?.message?.content || ""
-      if (bodyMarkdown) console.log(`[blog/generate] generated with ${model}`)
+      if (bodyMarkdown) {
+        usedWebSearch = true
+        console.log(`[blog/generate] generated with ${model} (web plugin)`)
+      }
     } else {
       genErr = `${genErr}[${model} ${orResp.status}] ${(await orResp.text()).slice(0, 150)} `
       console.error(`[blog/generate] ${model} failed:`, genErr)
@@ -191,16 +285,22 @@ Practical and specific — real workflows, real decisions, concrete examples. Qu
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+              systemInstruction: { parts: [{ text: systemPrompt }] },
               contents: [{ role: "user", parts: [{ text: userPrompt }] }],
-              generationConfig: { maxOutputTokens: 4000, temperature: 0.7 },
+              // Google Search grounding — Gemini's native web search, so the
+              // fallback path can verify external facts too.
+              tools: [{ google_search: {} }],
+              generationConfig: { maxOutputTokens: 10000, temperature: 0.7 },
             }),
           },
         )
         if (gr.ok) {
           const gd = (await gr.json()) as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> }
           bodyMarkdown = (gd.candidates?.[0]?.content?.parts ?? []).map((p) => p.text ?? "").join("")
-          if (bodyMarkdown) console.log(`[blog/generate] generated with ${gModel} (Gemini direct)`)
+          if (bodyMarkdown) {
+            usedWebSearch = true
+            console.log(`[blog/generate] generated with ${gModel} (Gemini direct + search grounding)`)
+          }
         } else {
           genErr = `${genErr}[gemini ${gModel} ${gr.status}] ${(await gr.text()).slice(0, 150)} `
           console.error(`[blog/generate] Gemini ${gModel} failed:`, genErr)
@@ -252,12 +352,20 @@ Practical and specific — real workflows, real decisions, concrete examples. Qu
       [COL_TARGET_KW]: keyword,
       [COL_STAGE]: { labels: ["Draft ready"] },
     })
-    return NextResponse.json({ ok: true, pulseId, stage: "Draft ready", words: wordCount(bodyMarkdown) })
+    return NextResponse.json({
+      ok: true,
+      pulseId,
+      stage: "Draft ready",
+      words: wordCount(bodyMarkdown),
+      grounding: { voiceGuide: Boolean(voiceGuide), brainChunks: brainChunks?.count ?? 0, webSearch: usedWebSearch },
+    })
   }
 
-  // Extract excerpt (first non-heading paragraph)
-  const paragraphs = bodyMarkdown.split("\n\n").filter(p => p.trim() && !p.startsWith("#"))
-  const excerpt = paragraphs[0]?.slice(0, 250) || topic
+  // Excerpt: prefer the template's Meta-Description line (a 140-160 char
+  // benefit promise); fall back to the first non-heading paragraph.
+  const metaMatch = bodyMarkdown.match(/^\s*Meta-Description:\s*(.+)$/im)
+  const paragraphs = bodyMarkdown.split("\n\n").filter(p => p.trim() && !p.startsWith("#") && !/^\s*Meta-Description:/i.test(p))
+  const excerpt = metaMatch?.[1]?.trim().slice(0, 250) || paragraphs[0]?.slice(0, 250) || topic
 
   // Save draft to portal_drafts
   const admin = getPortalAdmin()
@@ -311,7 +419,11 @@ Practical and specific — real workflows, real decisions, concrete examples. Qu
       const dateStamp = new Date().toISOString().slice(0, 10)
       const subfolderId = await createSubfolder(folderId, `${dateStamp} ${topic}`.slice(0, 80))
       const titleClip = topic.slice(0, 80)
-      const blogDocBody = [`# ${topic}`, "", bodyMarkdown.trim()].join("\n")
+      // Template-style output already carries its own reframed H1 (and a
+      // Meta-Description line); only prepend a title when the body lacks one.
+      const blogDocBody = /^#\s/m.test(bodyMarkdown)
+        ? bodyMarkdown.trim()
+        : [`# ${topic}`, "", bodyMarkdown.trim()].join("\n")
       const [blogDoc, linkedInDoc] = await Promise.all([
         createDraftDoc({ folderId: subfolderId, title: `${titleClip} — Blog draft`, body: blogDocBody }),
         linkedinCopy
@@ -416,6 +528,7 @@ Practical and specific — real workflows, real decisions, concrete examples. Qu
     mondayItemId,
     mondayItemUrl,
     socialUrl,
+    grounding: { voiceGuide: Boolean(voiceGuide), brainChunks: brainChunks?.count ?? 0, webSearch: usedWebSearch },
   })
 }
 
