@@ -8,10 +8,12 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 Any work that touches UI must follow [PRODUCT.md](PRODUCT.md) (strategy, brand personality, anti-references) and [DESIGN.md](DESIGN.md) (tokens, type scale, components, do's/don'ts). Read both before writing or changing any page or component. Non-negotiables: semantic tokens from `src/app/globals.css` only (no raw hex, no inline `style` for layout/type), three breakpoints (base / `md:` 768 / `lg:` 1024), Poppins + JetBrains Mono only, and never remove or rewrite page copy or Sanity content during visual work.
 
-# Marketa blog pipeline — runtime HERE, long-term home is marketa-monorepo
+# Marketa blog pipeline — lives in marketa-monorepo, NOT here
 
-The Marketa AI blog pipeline (routes `api/internal/blog/generate`, `api/webhooks/slack-blog`, `api/webhooks/monday-blog`, `api/internal/slack-admin`; libs under `src/lib/marketa/` + `googleDocs.ts`) **currently runs from THIS repo** on the `fruition-landing` Worker. Its long-term home is the `marketa-monorepo` repo, where every file is mirrored byte-identically. Until the runtime cutover:
+The Marketa AI blog pipeline (blog generation, Slack intake bot, monday auto-docs, social publishing) runs from the **`marketa-monorepo`** repo on its own host. This repo no longer contains any pipeline code — do not add Marketa routes or libs here.
 
-1. **Edit pipeline code here first** (this repo is what deploys), then mirror the changed file(s) to `marketa-monorepo` at the same paths (`diff -r` shows drift).
-2. **Never delete the Marketa routes/libs from this repo** before executing the cutover in `marketa-monorepo/docs/MIGRATION-STATUS.md` — the Slack app, monday webhooks, and make.com scenarios all point at fruitionservices.io.
-3. Flows + file inventory: [docs/architecture.md §8](docs/architecture.md). Writing style the prompts encode: `docs/marketa-blog-style-spec.md`.
+What the website keeps (the one seam):
+1. **Portal pages** under `src/app/internal/blog/` — the draft dashboard and editors. They read drafts via `src/lib/marketaDrafts.ts` (read-only accessor for the brain Supabase `blog_drafts` table) and their own `api/internal/blog` routes.
+2. `claudeClient.ts`, `slackClient.ts`, `mondayClient.ts` stay — they serve website features (design chat, rb2b leads, onboarding), not Marketa.
+
+Pipeline changes go to `marketa-monorepo` directly (see its `CLAUDE.md` and `ARCHITECTURE.md`).

@@ -137,21 +137,20 @@ server-side redirect gate pattern stays the same — only the backing session ch
 Server-side clients live in `src/lib/`:
 
 - **`sanityWriteClient.ts`** — HTTP writes to Sanity (blog posts, team members, image assets).
-- **`mondayClient.ts` / `slackClient.ts` / `googleDocs.ts` / `claudeClient.ts` / `leadNotify.ts`** —
-  integration clients for the webhooks and the Marketa pipeline.
-- **`marketa/brain.ts`** — Gemini embeddings + Supabase pgvector (the RAG "brain").
+- **`mondayClient.ts` / `slackClient.ts` / `claudeClient.ts` / `leadNotify.ts`** —
+  integration clients for the website's own webhooks and internal tools.
+- **`marketaDrafts.ts`** — read-only accessor for Marketa's `blog_drafts` store (the portal's one
+  seam into the pipeline; see §8).
 
 API routes (`src/app/api/`):
 
 - **`contact`** — contact form → Resend email.
 - **`leads`** / **`webhooks/rb2b`** — lead capture + de-anonymisation → Monday/Slack enrichment.
-- **`sanity-ingest`** — HMAC webhook feeding content into the Marketa brain.
 - **`webhooks/monday`** — native monday webhook for the Team Onboarding board (create_item →
   teamMember doc in Sanity). No make.com relay any more.
-- **`internal/blog/generate`, `webhooks/monday-blog`, `webhooks/slack-blog`,
-  `internal/slack-admin`** — the Marketa blog pipeline routes (see §8 for the full flows and the
-  planned extraction). Long drafts are stored in `portal_drafts` (+ brain `blog_drafts`) to sidestep
-  Monday's ~2,000-char long-text cap.
+- **`internal/blog`** (list/draft/image) — portal draft dashboard backend. Long drafts live in
+  `portal_drafts` (+ brain `blog_drafts`) to sidestep Monday's ~2,000-char long-text cap; the
+  pipeline that WRITES them runs from marketa-monorepo (§8).
 
 ---
 
@@ -243,48 +242,26 @@ The full proposal, phasing, and verification steps live in the approved plan:
 
 ---
 
-## 8. Marketa blog pipeline — current state & planned extraction (2026-07-18)
+## 8. Marketa blog pipeline — extracted to marketa-monorepo (cutover 2026-07-18)
 
-Two production pipelines, both verified end-to-end. **The code currently lives — and RUNS — in this
-repo** (deployed with the site on the `fruition-landing` Worker), but its long-term home is
-**[`marketa-monorepo`](https://github.com/Fruition-Service/marketa-monorepo)**, where every file is
-already mirrored byte-identically (see that repo's `docs/MIGRATION-STATUS.md` for the cutover
-checklist).
+The Marketa pipeline (daily auto-blog, Slack topic intake, monday auto-docs, social publishing) now
+lives and runs in **[`marketa-monorepo`](https://github.com/Fruition-Service/marketa-monorepo)** on
+its own host. The Slack app, monday board 5028637584 webhook, and both make.com scenarios point at
+that host — this repo serves none of the pipeline routes any more. Flows, file inventory, and
+operational gotchas: marketa-monorepo `ARCHITECTURE.md` + `CLAUDE.md`.
 
-### Pipeline 1 — daily auto-blog (09:00 SGT)
-```
-make.com 6575457 (daily cron) ─▶ POST /api/internal/blog/generate  (Bearer INTERNAL_API_KEY)
-  └▶ generate (OpenRouter chain → Gemini fallback; voiceGuide + brain RAG + web search)
-     ─▶ portal_drafts ─▶ Google Docs (blog + LinkedIn) ─▶ monday item (Website Blogs, "Drafting")
-     ─▶ Zernio social draft (X + Google Business, isDraft) ─▶ Slack #website-blogs (5 buttons)
-```
+### What the website keeps (the portal seam)
+- **Portal pages** `/internal/blog/...` — draft dashboard + editors (auth via `portalAuth`).
+  "Review in Portal" buttons in Slack link here; that is intentional and survives the extraction.
+- **`lib/marketaDrafts.ts`** — read-only accessor for the brain Supabase `blog_drafts` table
+  (the portal bridge page resolves monday items to full drafts through it).
+- **`api/internal/blog`** (list/draft/image) — the portal's own backend; it does not generate.
+- Shared clients that predate Marketa and serve website features: `mondayClient` (onboarding, rb2b,
+  leadNotify), `slackClient` (rb2b), `claudeClient` (design chat).
 
-### Pipeline 2 — Slack topic intake (Josh's flow)
-```
-Top-level message in #website-blogs ─▶ /api/webhooks/slack-blog ─▶ monday item + "Queued" reply
-  ─▶ make.com 6574831 webhook ─▶ POST generate {pulseId,…} (monday mode)
-  ─▶ portal_drafts + brain blog_drafts + monday patch "Draft ready"
-  ─▶ monday webhook ─▶ /api/webhooks/monday-blog ─▶ Google Docs + Zernio + threaded
-     "Draft ready" reply (portal / blog doc / LinkedIn doc / social / monday buttons)
-```
-
-### Grounding
-Generation injects the Sanity `voiceGuide` document at run time (content team edits style in Sanity —
-no deploy), retrieves chunks from the brain (Supabase pgvector, project `wucrgqdfyaiccacvxvpq` —
-free tier, **re-pauses after ~7 idle days**; if RAG returns 0 chunks check the project is up), and
-uses provider web search so stats/links are verified live. Prompts encode the human editor's style
-rules (`docs/marketa-blog-style-spec.md`).
-
-### Marketa file inventory in this repo (everything mirrored to marketa-monorepo)
-- Routes: `api/internal/blog/generate`, `api/webhooks/slack-blog`, `api/webhooks/monday-blog`,
-  `api/internal/slack-admin`.
-- Libs: `lib/googleDocs.ts` (fetch + WebCrypto — google-auth-library breaks on Workers),
-  `lib/marketa/{brain,blogSlackBlocks,marketaLinkedIn,zernio,socialVariants}.ts`,
-  plus shared `mondayClient` / `slackClient` / `sanityWriteClient` / `claudeClient`.
-- Portal bridge: `/internal/blog/monday/[pulseId]/edit` resolves monday items to portal drafts.
-
-### Extraction rule (until the runtime cutover)
-**This repo is the runtime. Make pipeline changes HERE first (this is what deploys), then mirror the
-file(s) to marketa-monorepo.** The cutover itself (deploy marketa-monorepo, move ~15 secrets, repoint
-the Slack app Events URL, two monday webhooks, and two make.com scenario URLs) is documented in
-marketa-monorepo `docs/MIGRATION-STATUS.md`; the portal pages stay here either way.
+### Removed in the extraction
+Routes `api/internal/blog/generate`, `api/webhooks/slack-blog`, `api/webhooks/monday-blog`,
+`api/webhooks/slack-interactivity`, `api/sanity-ingest`, `api/internal/slack-admin`; libs
+`lib/marketa/*`, `lib/googleDocs.ts`, `lib/botTools.ts`, `lib/replyGuards.ts`; the marketa docs
+(now only in marketa-monorepo). Their env vars can be pruned from the Worker at leisure — unused
+secrets are harmless.

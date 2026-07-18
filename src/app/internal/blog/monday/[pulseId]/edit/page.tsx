@@ -1,6 +1,6 @@
 import { redirect, notFound } from "next/navigation"
 import { requirePortalUser, getPortalAdmin } from "@/lib/portalAuth"
-import { getFullDraft } from "@/lib/marketa/brain"
+import { getFullDraft } from "@/lib/marketaDrafts"
 
 export const dynamic = "force-dynamic"
 
