@@ -14,8 +14,10 @@
   --purple-light: #ba83f0;
   --purple-dark: #550e9b;
   --purple-soft: #f5edfd;
-  --dark-bg: #10003a;
-  --dark-bg-secondary: #2b074d;
+  --navy-900: #10003a;
+  --navy-700: #2b074d;
+  --dark-bg: var(--navy-900);
+  --dark-bg-secondary: var(--navy-700);
   --light-section-bg: #ecf1fc;
   --text-dark: #242323;
 
