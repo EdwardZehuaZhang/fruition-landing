@@ -1,0 +1,75 @@
+import { NextResponse } from "next/server"
+import { getPortalApiUser } from "@/lib/portalAuth"
+import { publishSocialDraft, type PlatformKey } from "@/lib/social/zernio"
+import { buildPanelState, publishedBlogFacts } from "@/lib/social/panelState"
+
+export const runtime = "nodejs"
+export const maxDuration = 120
+
+/**
+ * Publish selected social drafts NOW via Zernio (isDraft:false + publishNow).
+ *
+ * Body: { slug, draftId?, docId?, items: [{ key, postId, content, title? }] }
+ *
+ * Requires the blog to be live in Sanity — captions get the live URL appended
+ * when missing, and Instagram/Pinterest attach the blog's cover image (both
+ * platforms refuse media-less posts). Per-platform failures are isolated so
+ * one bad channel never blocks the rest.
+ */
+export async function POST(req: Request) {
+  const user = await getPortalApiUser()
+  if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 })
+  if (!process.env.ZERNIO_API_KEY) {
+    return NextResponse.json({ error: "Zernio is not configured (ZERNIO_API_KEY missing)." }, { status: 501 })
+  }
+
+  let body: {
+    slug?: string
+    draftId?: string
+    docId?: string
+    items?: Array<{ key?: PlatformKey; postId?: string; content?: string; title?: string }>
+  }
+  try {
+    body = (await req.json()) as typeof body
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 })
+  }
+
+  const slug = (body.slug ?? "").trim()
+  const items = (body.items ?? []).filter((i) => i.key && i.postId && typeof i.content === "string")
+  if (!slug) return NextResponse.json({ error: "Missing slug." }, { status: 400 })
+  if (!items.length) return NextResponse.json({ error: "No platforms selected." }, { status: 400 })
+
+  const { blogUrl, coverImageUrl } = await publishedBlogFacts(slug)
+  if (!blogUrl) {
+    return NextResponse.json(
+      { error: "The blog post isn't live yet — publish it first so social posts can link to it." },
+      { status: 409 },
+    )
+  }
+
+  const results: Array<{ key: PlatformKey; status?: string; error?: string }> = []
+  for (const item of items) {
+    try {
+      const { status } = await publishSocialDraft({
+        postId: item.postId!,
+        key: item.key!,
+        content: item.content!,
+        title: item.title,
+        blogUrl,
+        imageUrl: coverImageUrl,
+      })
+      results.push({ key: item.key!, status })
+    } catch (err) {
+      results.push({ key: item.key!, error: err instanceof Error ? err.message : String(err) })
+    }
+  }
+
+  const state = await buildPanelState({
+    slug,
+    draftId: body.draftId || undefined,
+    docId: body.docId || undefined,
+  }).catch(() => null)
+
+  return NextResponse.json({ results, state })
+}
