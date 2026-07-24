@@ -37,7 +37,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      deployments: write
       pull-requests: write
+    environment:
+      name: Preview
+      url: ${{ steps.upload.outputs.url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
