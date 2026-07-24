@@ -7,6 +7,8 @@ import BlogEditor, {
   type CategoryOption,
   type BlogEditorInitial,
 } from "@/components/internal/BlogEditor"
+import SocialDraftsPanel from "@/components/internal/SocialDraftsPanel"
+import { slugifyTitle } from "@/lib/social/zernio"
 
 export const dynamic = "force-dynamic"
 
@@ -71,7 +73,8 @@ export default async function EditPublishedPostPage({
       <div className="rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
         <h1 className="mb-1 text-2xl font-semibold text-ink-heading">Edit published post</h1>
         <p className="mb-6 text-sm text-muted-foreground">
-          Changes go live on the site when you hit Publish — this edits the live post in place.
+          This post is live. “Update post” edits it in place; “Unpublish” takes it off the site and
+          keeps a copy in portal drafts.
         </p>
         <BlogEditor
           categories={categories}
@@ -80,6 +83,16 @@ export default async function EditPublishedPostPage({
           initial={initial}
         />
       </div>
+      <SocialDraftsPanel
+        source={{ slug: post.slug || slugifyTitle(post.title ?? ""), docId: post._id }}
+        blog={{
+          title: post.title ?? "",
+          excerpt: post.excerpt,
+          bodyMarkdown: initial.body,
+          industry: post.industry,
+          targetKeyword: post.seoKeyword,
+        }}
+      />
     </PortalShell>
   )
 }
