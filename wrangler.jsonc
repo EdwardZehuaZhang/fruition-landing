@@ -3,6 +3,7 @@
   "main": ".open-next/worker.js",
   "name": "fruition-landing",
   "workers_dev": true,
+  "preview_urls": true,
   "routes": [
     { "pattern": "fruitionservices.io/*", "zone_name": "fruitionservices.io" },
     { "pattern": "www.fruitionservices.io/*", "zone_name": "fruitionservices.io" }
