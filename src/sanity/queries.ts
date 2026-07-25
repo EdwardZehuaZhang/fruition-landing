@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { client } from './client'
 import { authorSlug } from './authorSlug'
 
@@ -528,7 +529,9 @@ export async function getAllServicePages() {
 /*  Site-wide docs                                                      */
 /* ================================================================== */
 
-export async function getSiteSettings() {
+// Deduped per render pass: the root layout calls this from both
+// generateMetadata and the component body on every page.
+export const getSiteSettings = cache(async () => {
   return client.fetch(`*[_type == "siteSettings"][0]{
     contactEmail,
     phone,
@@ -564,7 +567,7 @@ export async function getSiteSettings() {
     footerLegalLinks,
     footerCopyrightText
   }`)
-}
+})
 
 export async function getTeamMembers() {
   return client.fetch(
