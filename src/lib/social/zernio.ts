@@ -572,6 +572,31 @@ export async function updateSocialDraft(args: {
 }
 
 /**
+ * Instagram rejects images outside the 4:5 – 1.91:1 aspect range (a standard
+ * 1200×627 OG cover is 1.914 and FAILS). For Sanity CDN images (dimensions are
+ * in the filename) return a URL cropped server-side into range, as JPEG.
+ * Non-Sanity URLs are returned unchanged.
+ */
+export function instagramSafeImageUrl(url: string): string {
+  const m = url.match(/^(https:\/\/cdn\.sanity\.io\/images\/[^?]+-(\d+)x(\d+)\.\w+)(\?.*)?$/)
+  if (!m) return url
+  const base = m[1]
+  const w = parseInt(m[2], 10)
+  const h = parseInt(m[3], 10)
+  if (!w || !h) return url
+  const ratio = w / h
+  if (ratio > 1.91) {
+    const cw = Math.min(w, 1600)
+    return `${base}?w=${cw}&h=${Math.round(cw / 1.9)}&fit=crop&fm=jpg`
+  }
+  if (ratio < 0.8) {
+    const ch = Math.min(h, 1600)
+    return `${base}?h=${ch}&w=${Math.round(ch * 0.8)}&fit=crop&fm=jpg`
+  }
+  return `${base}?w=${Math.min(w, 1600)}&fit=max&fm=jpg`
+}
+
+/**
  * Publish a draft NOW. Ensures the blog URL is present in the caption for
  * link-friendly platforms (appended if missing, X re-clamped to fit raw 280),
  * and attaches the cover image where the platform requires media.
@@ -604,7 +629,10 @@ export async function publishSocialDraft(args: {
     isDraft: false,
     publishNow: true,
   }
-  if (args.imageUrl && spec.supportsMedia) body.mediaItems = [{ type: "image", url: args.imageUrl }]
+  if (args.imageUrl && spec.supportsMedia) {
+    const url = spec.key === "instagram" ? instagramSafeImageUrl(args.imageUrl) : args.imageUrl
+    body.mediaItems = [{ type: "image", url }]
+  }
   const data = await zernioJson<{ post?: { status?: string } }>(`/posts/${args.postId}`, {
     method: "PUT",
     body: JSON.stringify(body),
