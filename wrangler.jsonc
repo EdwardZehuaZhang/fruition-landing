@@ -17,6 +17,13 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "kv_namespaces": [
+    {
+      // OpenNext incremental (ISR) cache — see open-next.config.ts.
+      "binding": "NEXT_INC_CACHE_KV",
+      "id": "74a7eb0e0e4542e8a9acdbc178a849af"
+    }
+  ],
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
