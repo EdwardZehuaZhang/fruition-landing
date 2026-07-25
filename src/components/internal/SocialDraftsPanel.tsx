@@ -3,12 +3,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import type { PanelPlatform, PanelState } from "@/lib/social/panelState"
 import type { PlatformKey } from "@/lib/social/zernio"
+import PlatformIcon from "@/components/internal/SocialIcons"
 
 /**
- * Per-platform social drafts under the blog editor. Each platform is one
- * Zernio draft post: edit the caption, tick the platforms to include, publish
+ * Per-platform social drafts for a blog (the "Social media" tab). Each
+ * platform is one Zernio draft post: edit the caption, pick the image (taken
+ * from the blog's cover/body images), tick the platforms to include, publish
  * one platform or everything selected. Publishing needs the blog live in
- * Sanity (captions link to it; Instagram/Pinterest attach its cover image).
+ * Sanity (captions link to it; Instagram/Pinterest require an image).
  */
 
 export interface SocialPanelSource {
@@ -28,6 +30,9 @@ export interface SocialPanelBlog {
 interface DraftEdit {
   content: string
   title?: string
+  /** Chosen image: url = set, "" = none, undefined = keep the draft's. */
+  mediaUrl?: string
+  subreddit?: string
   dirty: boolean
 }
 
@@ -62,6 +67,12 @@ function StatusChip({ post, connected }: { post?: PanelPlatform["post"]; connect
   )
 }
 
+/** The image a card would publish with right now. "" = none. */
+function effectiveMedia(p: PanelPlatform, edit: DraftEdit | undefined, coverImageUrl?: string): string {
+  if (edit?.mediaUrl !== undefined) return edit.mediaUrl
+  return p.post?.mediaUrl ?? coverImageUrl ?? ""
+}
+
 export default function SocialDraftsPanel({
   source,
   blog,
@@ -86,15 +97,13 @@ export default function SocialDraftsPanel({
 
   const applyState = useCallback((next: PanelState) => {
     setState(next)
-    // Seed local edits from server content, preserving unsaved local changes.
+    // Local edits only track unsaved changes; clean cards read from the server state.
     setEdits((prev) => {
-      const merged: Partial<Record<PlatformKey, DraftEdit>> = {}
-      for (const p of next.platforms) {
-        if (!p.post) continue
-        const local = prev[p.key]
-        merged[p.key] = local?.dirty ? local : { content: p.post.content, title: p.post.title, dirty: false }
+      const kept: Partial<Record<PlatformKey, DraftEdit>> = {}
+      for (const [k, v] of Object.entries(prev)) {
+        if (v?.dirty) kept[k as PlatformKey] = v
       }
-      return merged
+      return kept
     })
     setSelected((prev) => {
       if (prev.size) return prev
@@ -122,13 +131,32 @@ export default function SocialDraftsPanel({
     }
   }, [query, applyState])
 
+  function patchEdit(p: PanelPlatform, partial: Partial<Omit<DraftEdit, "dirty">>) {
+    setEdits((prev) => {
+      const base: DraftEdit = prev[p.key] ?? {
+        content: p.post?.content ?? "",
+        title: p.post?.title,
+        subreddit: p.post?.subreddit,
+        dirty: false,
+      }
+      return { ...prev, [p.key]: { ...base, ...partial, dirty: true } }
+    })
+  }
+
   const itemFor = useCallback(
-    (p: PanelPlatform) => ({
-      key: p.key,
-      postId: p.post!.id,
-      content: edits[p.key]?.content ?? p.post!.content,
-      title: edits[p.key]?.title ?? p.post!.title,
-    }),
+    (p: PanelPlatform) => {
+      const edit = edits[p.key]
+      return {
+        key: p.key,
+        postId: p.post!.id,
+        content: edit?.content ?? p.post!.content,
+        title: edit?.title ?? p.post!.title,
+        // undefined = leave the draft's media untouched (server falls back to
+        // the cover at publish time); "" = explicitly no image.
+        mediaUrl: edit?.mediaUrl,
+        subreddit: edit?.subreddit ?? p.post!.subreddit,
+      }
+    },
     [edits],
   )
 
@@ -140,7 +168,7 @@ export default function SocialDraftsPanel({
       const r = await fetch("/api/internal/blog/social", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...source, ...blogPayload(blog), keys }),
+        body: JSON.stringify({ ...source, ...blog, keys }),
       })
       const data = (await r.json()) as PanelState & { error?: string; warning?: string }
       if (!r.ok) {
@@ -190,7 +218,7 @@ export default function SocialDraftsPanel({
         for (const [k, v] of Object.entries(prev)) next[k as PlatformKey] = { ...v!, dirty: false }
         return next
       })
-      setNotice("Captions saved to Zernio.")
+      setNotice("Saved to Zernio.")
     } catch (err) {
       setError(err instanceof Error ? err.message : "Save failed.")
     } finally {
@@ -256,7 +284,15 @@ export default function SocialDraftsPanel({
   const withPosts = state.platforms.filter((p) => p.post)
   const missing = state.platforms.filter((p) => !p.post)
   const publishableKeys = state.platforms
-    .filter((p) => p.post && p.connected && selected.has(p.key) && !overLimit(p, edits) && (!p.needsMedia || state.coverImageUrl))
+    .filter(
+      (p) =>
+        p.post &&
+        p.connected &&
+        selected.has(p.key) &&
+        p.post.status !== "published" &&
+        !overLimit(p, edits) &&
+        (!p.needsMedia || effectiveMedia(p, edits[p.key], state.coverImageUrl)),
+    )
     .map((p) => p.key)
   const blogLive = Boolean(state.blogUrl)
 
@@ -281,7 +317,7 @@ export default function SocialDraftsPanel({
               className="rounded-pill border px-4 py-2 text-sm font-semibold transition disabled:opacity-60"
               style={{ borderColor: "var(--color-border)", color: "var(--ink-heading)" }}
             >
-              {busy === "save" ? "Saving…" : "Save captions"}
+              {busy === "save" ? "Saving…" : "Save changes"}
             </button>
           )}
           {missing.length > 0 && (
@@ -312,7 +348,7 @@ export default function SocialDraftsPanel({
 
       {!blogLive && withPosts.length > 0 && (
         <p className="mb-4 rounded-chip px-3 py-2 text-sm" style={{ backgroundColor: "rgba(128,21,232,0.08)", color: "var(--purple-primary)" }}>
-          The blog post isn&apos;t live yet. You can edit captions now; publishing unlocks once the blog is published (links + cover image come from the live post).
+          The blog post isn&apos;t live yet. You can edit captions now; publishing unlocks once the blog is published (links + images come from the live post).
         </p>
       )}
       {error && (
@@ -335,7 +371,8 @@ export default function SocialDraftsPanel({
               edit={edits[p.key]}
               selected={selected.has(p.key)}
               blogLive={blogLive}
-              hasCover={Boolean(state.coverImageUrl)}
+              availableImages={state.availableImages}
+              coverImageUrl={state.coverImageUrl}
               busy={busy}
               onToggle={() =>
                 setSelected((prev) => {
@@ -345,9 +382,7 @@ export default function SocialDraftsPanel({
                   return next
                 })
               }
-              onEdit={(content, title) =>
-                setEdits((prev) => ({ ...prev, [p.key]: { content, title, dirty: true } }))
-              }
+              onPatch={(partial) => patchEdit(p, partial)}
               onRegenerate={() => generate([p.key])}
               onPublish={() => publish([p.key])}
             />
@@ -358,16 +393,6 @@ export default function SocialDraftsPanel({
   )
 }
 
-function blogPayload(blog: SocialPanelBlog) {
-  return {
-    title: blog.title,
-    excerpt: blog.excerpt,
-    bodyMarkdown: blog.bodyMarkdown,
-    industry: blog.industry,
-    targetKeyword: blog.targetKeyword,
-  }
-}
-
 function overLimit(p: PanelPlatform, edits: Partial<Record<PlatformKey, DraftEdit>>): boolean {
   const content = edits[p.key]?.content ?? p.post?.content ?? ""
   return content.length > p.limit
@@ -375,7 +400,7 @@ function overLimit(p: PanelPlatform, edits: Partial<Record<PlatformKey, DraftEdi
 
 function Section({ children }: { children: React.ReactNode }) {
   return (
-    <section className="mt-6 rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
+    <section className="rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
       {children}
     </section>
   )
@@ -386,10 +411,11 @@ function PlatformCard({
   edit,
   selected,
   blogLive,
-  hasCover,
+  availableImages,
+  coverImageUrl,
   busy,
   onToggle,
-  onEdit,
+  onPatch,
   onRegenerate,
   onPublish,
 }: {
@@ -397,20 +423,28 @@ function PlatformCard({
   edit?: DraftEdit
   selected: boolean
   blogLive: boolean
-  hasCover: boolean
+  availableImages: string[]
+  coverImageUrl?: string
   busy: string | null
   onToggle: () => void
-  onEdit: (content: string, title?: string) => void
+  onPatch: (partial: Partial<Omit<DraftEdit, "dirty">>) => void
   onRegenerate: () => void
   onPublish: () => void
 }) {
   const content = edit?.content ?? p.post?.content ?? ""
   const title = edit?.title ?? p.post?.title ?? ""
+  const subreddit = edit?.subreddit ?? p.post?.subreddit ?? ""
+  const media = effectiveMedia(p, edit, coverImageUrl)
   const hasTitle = p.key === "pinterest" || p.key === "reddit"
   const over = content.length > p.limit
   const published = p.post?.status === "published"
-  const mediaBlocked = p.needsMedia && !hasCover
+  const mediaBlocked = p.needsMedia && !media
   const canPublish = Boolean(p.post) && p.connected && blogLive && !over && !mediaBlocked && !published
+
+  // Every selectable image: the blog's images plus whatever is already
+  // attached (e.g. attached before the blog images changed).
+  const imageChoices = [...availableImages]
+  if (media && !imageChoices.includes(media)) imageChoices.unshift(media)
 
   return (
     <div className="rounded-card border p-4" style={{ borderColor: "var(--color-border)" }}>
@@ -423,9 +457,17 @@ function PlatformCard({
             disabled={!p.post || published}
             className="h-4 w-4 accent-[var(--purple-primary)]"
           />
-          <span>
-            <span className="block text-sm font-semibold text-ink-heading">{p.label}</span>
-            <span className="block text-xs text-[var(--color-text-secondary)]">@{p.account.replace(/^@/, "")}</span>
+          <span className="flex items-center gap-2.5">
+            <span
+              className="flex h-9 w-9 items-center justify-center rounded-chip"
+              style={{ backgroundColor: "rgba(128,21,232,0.08)", color: "var(--purple-primary)" }}
+            >
+              <PlatformIcon platform={p.key} />
+            </span>
+            <span>
+              <span className="block text-sm font-semibold text-ink-heading">{p.label}</span>
+              <span className="block text-xs text-[var(--color-text-secondary)]">@{p.account.replace(/^@/, "")}</span>
+            </span>
           </span>
         </label>
         <div className="flex items-center gap-2">
@@ -443,24 +485,78 @@ function PlatformCard({
           {hasTitle && (
             <input
               value={title}
-              onChange={(e) => onEdit(content, e.target.value)}
+              onChange={(e) => onPatch({ title: e.target.value })}
               placeholder={p.key === "pinterest" ? "Pin title" : "Reddit title"}
               disabled={published}
               className={`${inputClass} mb-2`}
             />
           )}
+          {p.key === "reddit" && (
+            <div className="mb-2 flex items-center gap-2">
+              <span className="text-sm font-medium text-[var(--color-text-secondary)]">r/</span>
+              <input
+                value={subreddit}
+                onChange={(e) => onPatch({ subreddit: e.target.value })}
+                placeholder="account default subreddit"
+                disabled={published}
+                className={inputClass}
+              />
+            </div>
+          )}
           <textarea
             value={content}
-            onChange={(e) => onEdit(e.target.value, hasTitle ? title : undefined)}
+            onChange={(e) => onPatch({ content: e.target.value })}
             rows={p.key === "twitter" ? 4 : 6}
             disabled={published}
             className={`${inputClass} resize-y font-normal`}
           />
+
+          {p.supportsMedia && (imageChoices.length > 0 || media) && (
+            <div className="mt-2">
+              <span className="mb-1 block text-xs font-medium text-[var(--color-text-secondary)]">
+                Image{p.needsMedia ? " (required)" : ""}
+              </span>
+              <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                {imageChoices.map((url) => {
+                  const active = media === url
+                  return (
+                    <button
+                      key={url}
+                      type="button"
+                      onClick={() => onPatch({ mediaUrl: url })}
+                      disabled={published}
+                      title="Use this image"
+                      className="shrink-0 rounded-chip border-2 transition"
+                      style={{ borderColor: active ? "var(--purple-primary)" : "var(--color-border)" }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={url} alt="Blog image" className="h-14 w-14 rounded-[6px] object-cover" />
+                    </button>
+                  )
+                })}
+                {!p.needsMedia && (
+                  <button
+                    type="button"
+                    onClick={() => onPatch({ mediaUrl: "" })}
+                    disabled={published}
+                    className="shrink-0 rounded-chip border px-3 py-2 text-xs font-medium transition"
+                    style={{
+                      borderColor: media === "" ? "var(--purple-primary)" : "var(--color-border)",
+                      color: media === "" ? "var(--purple-primary)" : "var(--color-text-secondary)",
+                    }}
+                  >
+                    No image
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="mt-2 flex items-center justify-between gap-3">
             <span className="text-xs" style={{ color: over ? "var(--danger-strong)" : "var(--color-text-secondary)" }}>
               {content.length}/{p.limit}
               {edit?.dirty ? " · unsaved" : ""}
-              {mediaBlocked ? " · needs a cover image on the blog" : ""}
+              {mediaBlocked ? " · needs an image (add a cover to the blog)" : ""}
             </span>
             <div className="flex gap-2">
               {!published && (
@@ -479,7 +575,7 @@ function PlatformCard({
                   type="button"
                   onClick={onPublish}
                   disabled={busy !== null || !canPublish}
-                  title={!blogLive ? "Publish the blog post first." : mediaBlocked ? "This platform needs the blog's cover image." : undefined}
+                  title={!blogLive ? "Publish the blog post first." : mediaBlocked ? "This platform needs an image." : undefined}
                   className="rounded-pill px-3 py-1.5 text-xs font-semibold text-white transition disabled:opacity-60"
                   style={{ backgroundColor: "var(--purple-primary)" }}
                 >

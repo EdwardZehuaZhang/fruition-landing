@@ -27,7 +27,15 @@ export async function POST(req: Request) {
     slug?: string
     draftId?: string
     docId?: string
-    items?: Array<{ key?: PlatformKey; postId?: string; content?: string; title?: string }>
+    items?: Array<{
+      key?: PlatformKey
+      postId?: string
+      content?: string
+      title?: string
+      /** Image chosen in the panel; "" = publish without media. */
+      mediaUrl?: string
+      subreddit?: string
+    }>
   }
   try {
     body = (await req.json()) as typeof body
@@ -51,13 +59,16 @@ export async function POST(req: Request) {
   const results: Array<{ key: PlatformKey; status?: string; error?: string }> = []
   for (const item of items) {
     try {
+      // Panel-chosen image wins; fall back to the blog cover. "" = no media.
+      const imageUrl = item.mediaUrl !== undefined ? item.mediaUrl || undefined : coverImageUrl
       const { status } = await publishSocialDraft({
         postId: item.postId!,
         key: item.key!,
         content: item.content!,
         title: item.title,
         blogUrl,
-        imageUrl: coverImageUrl,
+        imageUrl,
+        subreddit: item.subreddit,
       })
       results.push({ key: item.key!, status })
     } catch (err) {
