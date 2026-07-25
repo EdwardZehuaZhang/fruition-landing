@@ -30,6 +30,46 @@ const KEY_TO_ICON: Record<PlatformKey, keyof typeof PATHS> = {
   reddit: "reddit",
 }
 
+/** Zernio platform strings → icon (for rows outside the PlatformKey world). */
+const NAME_TO_ICON: Record<string, keyof typeof PATHS> = {
+  twitter: "x",
+  x: "x",
+  googlebusiness: "google",
+  google: "google",
+  instagram: "instagram",
+  linkedin: "linkedin",
+  pinterest: "pinterest",
+  reddit: "reddit",
+}
+
+export function PlatformNameIcon({
+  name,
+  size = 16,
+  className,
+}: {
+  name: string
+  size?: number
+  className?: string
+}) {
+  const icon = NAME_TO_ICON[name.toLowerCase()]
+  if (!icon) {
+    return (
+      <span
+        aria-hidden="true"
+        className={className}
+        style={{ fontSize: size * 0.75, lineHeight: `${size}px`, fontWeight: 600 }}
+      >
+        {name.slice(0, 1).toUpperCase()}
+      </span>
+    )
+  }
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true" className={className}>
+      <path d={PATHS[icon]} />
+    </svg>
+  )
+}
+
 export default function PlatformIcon({
   platform,
   size = 18,
