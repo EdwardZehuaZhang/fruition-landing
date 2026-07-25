@@ -53,6 +53,8 @@ function StatusChip({ post, connected }: { post?: PanelPlatform["post"]; connect
   } else if (post?.status === "failed") {
     bg = "var(--danger-surface)"
     color = "var(--danger-strong)"
+  } else if (post?.status === "cancelled") {
+    label = "unpublished"
   } else if (post && (post.status === "publishing" || post.status === "scheduled")) {
     bg = "rgba(128,21,232,0.10)"
     color = "var(--purple-primary)"
@@ -111,25 +113,69 @@ export default function SocialDraftsPanel({
     })
   }, [])
 
+  const loadState = useCallback(async (): Promise<boolean> => {
+    try {
+      const r = await fetch(`/api/internal/blog/social?${query}`)
+      const data = (await r.json()) as PanelState & { error?: string }
+      if (!r.ok) {
+        setError(data.error ?? "Failed to load social drafts.")
+        return false
+      }
+      applyState(data)
+      return true
+    } catch {
+      setError("Failed to load social drafts.")
+      return false
+    }
+  }, [query, applyState])
+
   useEffect(() => {
     let cancelled = false
-    ;(async () => {
-      try {
-        const r = await fetch(`/api/internal/blog/social?${query}`)
-        const data = (await r.json()) as PanelState & { error?: string }
-        if (cancelled) return
-        if (!r.ok) setError(data.error ?? "Failed to load social drafts.")
-        else applyState(data)
-      } catch {
-        if (!cancelled) setError("Failed to load social drafts.")
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
-    })()
+    loadState().finally(() => {
+      if (!cancelled) setLoading(false)
+    })
     return () => {
       cancelled = true
     }
-  }, [query, applyState])
+  }, [loadState])
+
+  async function unpublish(p: PanelPlatform) {
+    if (!p.post) return
+    if (
+      !window.confirm(
+        `Delete this post from ${p.label}? It comes off the platform immediately — the caption stays here so you can edit and republish.`,
+      )
+    ) {
+      return
+    }
+    setBusy(`unpublish:${p.key}`)
+    setError(null)
+    setNotice(null)
+    try {
+      const r = await fetch("/api/internal/social/unpublish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ postId: p.post.id, key: p.key }),
+      })
+      const data = (await r.json()) as { ok?: boolean; error?: string }
+      if (!r.ok) {
+        setError(data.error ?? "Unpublish failed.")
+        return
+      }
+      // Deselect so "Publish selected" doesn't immediately repost it.
+      setSelected((prev) => {
+        const next = new Set(prev)
+        next.delete(p.key)
+        return next
+      })
+      await loadState()
+      setNotice(`Removed from ${p.label}. Edit the caption below and hit Republish whenever.`)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unpublish failed.")
+    } finally {
+      setBusy(null)
+    }
+  }
 
   function patchEdit(p: PanelPlatform, partial: Partial<Omit<DraftEdit, "dirty">>) {
     setEdits((prev) => {
@@ -385,6 +431,7 @@ export default function SocialDraftsPanel({
               onPatch={(partial) => patchEdit(p, partial)}
               onRegenerate={() => generate([p.key])}
               onPublish={() => publish([p.key])}
+              onUnpublish={() => unpublish(p)}
             />
           ))}
         </div>
@@ -418,6 +465,7 @@ function PlatformCard({
   onPatch,
   onRegenerate,
   onPublish,
+  onUnpublish,
 }: {
   platform: PanelPlatform
   edit?: DraftEdit
@@ -430,6 +478,7 @@ function PlatformCard({
   onPatch: (partial: Partial<Omit<DraftEdit, "dirty">>) => void
   onRegenerate: () => void
   onPublish: () => void
+  onUnpublish: () => void
 }) {
   const content = edit?.content ?? p.post?.content ?? ""
   const title = edit?.title ?? p.post?.title ?? ""
@@ -438,6 +487,8 @@ function PlatformCard({
   const hasTitle = p.key === "pinterest" || p.key === "reddit"
   const over = content.length > p.limit
   const published = p.post?.status === "published"
+  const cancelled = p.post?.status === "cancelled"
+  const canUnpublish = published && p.key !== "instagram"
   const mediaBlocked = p.needsMedia && !media
   const canPublish = Boolean(p.post) && p.connected && blogLive && !over && !mediaBlocked && !published
 
@@ -559,6 +610,22 @@ function PlatformCard({
               {mediaBlocked ? " · needs an image (add a cover to the blog)" : ""}
             </span>
             <div className="flex gap-2">
+              {canUnpublish && (
+                <button
+                  type="button"
+                  onClick={onUnpublish}
+                  disabled={busy !== null}
+                  className="rounded-pill border px-3 py-1.5 text-xs font-semibold transition disabled:opacity-60"
+                  style={{ borderColor: "var(--danger-strong)", color: "var(--danger-strong)" }}
+                >
+                  {busy === `unpublish:${p.key}` ? "Removing…" : "Unpublish"}
+                </button>
+              )}
+              {published && p.key === "instagram" && (
+                <span className="self-center text-xs text-[var(--color-text-secondary)]">
+                  Delete via the Instagram app
+                </span>
+              )}
               {!published && (
                 <button
                   type="button"
@@ -579,7 +646,7 @@ function PlatformCard({
                   className="rounded-pill px-3 py-1.5 text-xs font-semibold text-white transition disabled:opacity-60"
                   style={{ backgroundColor: "var(--purple-primary)" }}
                 >
-                  {busy === `publish:${p.key}` ? "Publishing…" : "Publish"}
+                  {busy === `publish:${p.key}` ? "Publishing…" : cancelled ? "Republish" : "Publish"}
                 </button>
               )}
             </div>

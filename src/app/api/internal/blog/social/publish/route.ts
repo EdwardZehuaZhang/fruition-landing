@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server"
 import { getPortalApiUser } from "@/lib/portalAuth"
-import { publishSocialDraft, type PlatformKey } from "@/lib/social/zernio"
+import {
+  getZernioPost,
+  publishSocialDraft,
+  republishCancelledPost,
+  type PlatformKey,
+} from "@/lib/social/zernio"
 import { buildPanelState, publishedBlogFacts } from "@/lib/social/panelState"
 
 export const runtime = "nodejs"
@@ -61,7 +66,7 @@ export async function POST(req: Request) {
     try {
       // Panel-chosen image wins; fall back to the blog cover. "" = no media.
       const imageUrl = item.mediaUrl !== undefined ? item.mediaUrl || undefined : coverImageUrl
-      const { status } = await publishSocialDraft({
+      const args = {
         postId: item.postId!,
         key: item.key!,
         content: item.content!,
@@ -69,7 +74,18 @@ export async function POST(req: Request) {
         blogUrl,
         imageUrl,
         subreddit: item.subreddit,
-      })
+      }
+      const current = await getZernioPost(item.postId!)
+      if (current.status === "published") {
+        results.push({ key: item.key!, error: "Already live — unpublish it first to repost." })
+        continue
+      }
+      // After an unpublish the record is "cancelled" and Zernio won't re-run
+      // it; recreate a fresh post carrying its metadata and publish that.
+      const { status } =
+        current.status === "cancelled"
+          ? await republishCancelledPost({ ...args, oldPost: current })
+          : await publishSocialDraft(args)
       results.push({ key: item.key!, status })
     } catch (err) {
       results.push({ key: item.key!, error: err instanceof Error ? err.message : String(err) })

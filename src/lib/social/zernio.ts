@@ -215,6 +215,21 @@ export async function deleteZernioPost(postId: string): Promise<void> {
   await zernioJson<{ message: string }>(`/posts/${postId}`, { method: "DELETE" })
 }
 
+/**
+ * Delete a PUBLISHED post from the live platform (the Zernio record stays,
+ * status → "cancelled"). Unsupported by Instagram (platform limitation —
+ * delete in the IG app instead). `platform` is Zernio's platform string.
+ */
+export async function unpublishZernioPost(postId: string, platform: string): Promise<void> {
+  if (platform === "instagram") {
+    throw new Error("Instagram posts can't be deleted via API — remove it in the Instagram app")
+  }
+  await zernioJson<{ success?: boolean; message?: string }>(`/posts/${postId}/unpublish`, {
+    method: "POST",
+    body: JSON.stringify({ platform }),
+  })
+}
+
 /** Source identifiers linking a Zernio post back to a blog. */
 export interface SocialSource {
   slug: string
@@ -638,6 +653,40 @@ export async function publishSocialDraft(args: {
     body: JSON.stringify(body),
   })
   return { status: data.post?.status ?? "publishing" }
+}
+
+/**
+ * Republish after an unpublish (Zernio leaves the old record "cancelled" and
+ * won't re-run it): create a FRESH draft carrying over the old post's
+ * metadata, publish that, then delete the cancelled record. Returns the new
+ * post id so callers can re-link.
+ */
+export async function republishCancelledPost(args: {
+  oldPost: ZernioPost
+  key: PlatformKey
+  content: string
+  title?: string
+  blogUrl: string
+  imageUrl?: string
+  subreddit?: string
+}): Promise<{ status: string; postId: string }> {
+  const spec = platformSpec(args.key)
+  const created = await zernioJson<{ post?: { _id?: string } }>("/posts", {
+    method: "POST",
+    body: JSON.stringify({
+      title: args.oldPost.title,
+      content: clampText(args.content, spec.limit),
+      isDraft: true,
+      platforms: [platformEntry(spec, { title: args.title, link: args.blogUrl, subreddit: args.subreddit })],
+      metadata: args.oldPost.metadata ?? {},
+    }),
+  })
+  const postId = created.post?._id
+  if (!postId) throw new Error("Zernio recreate returned no post id")
+
+  const { status } = await publishSocialDraft({ ...args, postId })
+  await deleteZernioPost(args.oldPost._id).catch(() => {}) // best-effort cleanup
+  return { status, postId }
 }
 
 /* ------------------------------------------------------------------ */
