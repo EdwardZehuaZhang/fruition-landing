@@ -11,7 +11,7 @@ import {
   type PlatformKey,
   type SocialSource,
 } from "@/lib/social/zernio"
-import { buildPanelState, publishedBlogFacts } from "@/lib/social/panelState"
+import { buildPanelState, publishedBlogFacts, draftBodyImages } from "@/lib/social/panelState"
 
 export const runtime = "nodejs"
 export const maxDuration = 120
@@ -102,7 +102,13 @@ export async function POST(req: Request) {
       : undefined
 
   try {
-    const { blogUrl } = await publishedBlogFacts(source.slug)
+    const [facts, mdImages] = await Promise.all([
+      publishedBlogFacts(source.slug),
+      draftBodyImages(source.draftId),
+    ])
+    const blogUrl = facts.blogUrl
+    // Default image for new drafts: cover first, then body images.
+    const defaultImage = facts.images[0] ?? mdImages[0]
     const captions = await generateSocialCaptions({
       title,
       excerpt: body.excerpt,
@@ -131,11 +137,25 @@ export async function POST(req: Request) {
         )
       }
       if (toCreate.length) {
-        const created = await createSocialDrafts({ source, blogTitle: title, captions, blogUrl, keys: toCreate })
+        const created = await createSocialDrafts({
+          source,
+          blogTitle: title,
+          captions,
+          blogUrl,
+          imageUrl: defaultImage,
+          keys: toCreate,
+        })
         errors.push(...created.filter((r) => r.error).map((r) => `${r.key}: ${r.error}`))
       }
     } else {
-      const created = await createSocialDrafts({ source, blogTitle: title, captions, blogUrl, existing })
+      const created = await createSocialDrafts({
+        source,
+        blogTitle: title,
+        captions,
+        blogUrl,
+        imageUrl: defaultImage,
+        existing,
+      })
       errors.push(...created.filter((r) => r.error).map((r) => `${r.key}: ${r.error}`))
     }
 
@@ -156,7 +176,15 @@ export async function PUT(req: Request) {
 
   let body: {
     slug?: string
-    items?: Array<{ key?: PlatformKey; postId?: string; content?: string; title?: string }>
+    items?: Array<{
+      key?: PlatformKey
+      postId?: string
+      content?: string
+      title?: string
+      /** "" removes the image; undefined leaves it untouched. */
+      mediaUrl?: string
+      subreddit?: string
+    }>
   }
   try {
     body = (await req.json()) as typeof body
@@ -176,6 +204,8 @@ export async function PUT(req: Request) {
         content: item.content!,
         title: item.title,
         blogUrl,
+        imageUrl: item.mediaUrl,
+        subreddit: item.subreddit,
       })
     } catch (err) {
       errors.push(`${item.key}: ${err instanceof Error ? err.message : String(err)}`)

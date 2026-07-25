@@ -8,6 +8,7 @@ import BlogEditor, {
   type BlogEditorInitial,
 } from "@/components/internal/BlogEditor"
 import SocialDraftsPanel from "@/components/internal/SocialDraftsPanel"
+import BlogEditTabs from "@/components/internal/BlogEditTabs"
 import { slugifyTitle } from "@/lib/social/zernio"
 
 export const dynamic = "force-dynamic"
@@ -68,30 +69,38 @@ export default async function EditPublishedPostPage({
     author: post.author,
   }
 
+  const editorPane = (
+    <div className="rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
+      <h1 className="mb-1 text-2xl font-semibold text-ink-heading">Edit published post</h1>
+      <p className="mb-6 text-sm text-muted-foreground">
+        This post is live. “Update post” edits it in place; “Unpublish” takes it off the site and
+        keeps a copy in portal drafts.
+      </p>
+      <BlogEditor
+        categories={categories}
+        authors={authors}
+        currentAuthorName={currentAuthorName}
+        initial={initial}
+      />
+    </div>
+  )
+
   return (
     <PortalShell email={user.email} active="blog" title="Edit published post">
-      <div className="rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
-        <h1 className="mb-1 text-2xl font-semibold text-ink-heading">Edit published post</h1>
-        <p className="mb-6 text-sm text-muted-foreground">
-          This post is live. “Update post” edits it in place; “Unpublish” takes it off the site and
-          keeps a copy in portal drafts.
-        </p>
-        <BlogEditor
-          categories={categories}
-          authors={authors}
-          currentAuthorName={currentAuthorName}
-          initial={initial}
-        />
-      </div>
-      <SocialDraftsPanel
-        source={{ slug: post.slug || slugifyTitle(post.title ?? ""), docId: post._id }}
-        blog={{
-          title: post.title ?? "",
-          excerpt: post.excerpt,
-          bodyMarkdown: initial.body,
-          industry: post.industry,
-          targetKeyword: post.seoKeyword,
-        }}
+      <BlogEditTabs
+        blog={editorPane}
+        social={
+          <SocialDraftsPanel
+            source={{ slug: post.slug || slugifyTitle(post.title ?? ""), docId: post._id }}
+            blog={{
+              title: post.title ?? "",
+              excerpt: post.excerpt,
+              bodyMarkdown: initial.body,
+              industry: post.industry,
+              targetKeyword: post.seoKeyword,
+            }}
+          />
+        }
       />
     </PortalShell>
   )

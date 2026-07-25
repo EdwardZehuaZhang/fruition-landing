@@ -51,6 +51,8 @@ export interface PlatformSpec {
   limit: number
   /** Platform refuses to publish without an image. */
   needsMedia: boolean
+  /** Whether to attach blog images at all (Reddit stays a text post). */
+  supportsMedia: boolean
   /** Which generated caption this platform uses (gbp-au + gbp-sg share one). */
   captionKey: "twitter" | "googlebusiness" | "instagram" | "linkedin" | "pinterest" | "reddit"
 }
@@ -67,6 +69,7 @@ export const PLATFORMS: PlatformSpec[] = [
     label: "X (Twitter)",
     limit: 280,
     needsMedia: false,
+    supportsMedia: true,
     captionKey: "twitter",
   },
   {
@@ -76,6 +79,7 @@ export const PLATFORMS: PlatformSpec[] = [
     label: "Google Business — Australia",
     limit: 1500,
     needsMedia: false,
+    supportsMedia: true,
     captionKey: "googlebusiness",
   },
   {
@@ -85,6 +89,7 @@ export const PLATFORMS: PlatformSpec[] = [
     label: "Google Business — Singapore",
     limit: 1500,
     needsMedia: false,
+    supportsMedia: true,
     captionKey: "googlebusiness",
   },
   {
@@ -94,6 +99,7 @@ export const PLATFORMS: PlatformSpec[] = [
     label: "Instagram",
     limit: 2200,
     needsMedia: true,
+    supportsMedia: true,
     captionKey: "instagram",
   },
   {
@@ -103,6 +109,7 @@ export const PLATFORMS: PlatformSpec[] = [
     label: "LinkedIn (Fruition)",
     limit: 3000,
     needsMedia: false,
+    supportsMedia: true,
     captionKey: "linkedin",
   },
   {
@@ -112,6 +119,7 @@ export const PLATFORMS: PlatformSpec[] = [
     label: "Pinterest",
     limit: 500,
     needsMedia: true,
+    supportsMedia: true,
     captionKey: "pinterest",
   },
   {
@@ -121,6 +129,7 @@ export const PLATFORMS: PlatformSpec[] = [
     label: "Reddit",
     limit: 10000,
     needsMedia: false,
+    supportsMedia: false,
     captionKey: "reddit",
   },
 ]
@@ -442,7 +451,10 @@ export interface PlatformDraftInput {
   title?: string
 }
 
-function platformEntry(spec: PlatformSpec, args: { title?: string; link?: string }): ZernioPlatformEntry {
+function platformEntry(
+  spec: PlatformSpec,
+  args: { title?: string; link?: string; subreddit?: string },
+): ZernioPlatformEntry {
   const psd: Record<string, unknown> = {}
   if (spec.key === "pinterest") {
     if (PINTEREST_BOARD_ID) psd.boardId = PINTEREST_BOARD_ID
@@ -451,7 +463,8 @@ function platformEntry(spec: PlatformSpec, args: { title?: string; link?: string
   }
   if (spec.key === "reddit") {
     if (args.title) psd.title = clampText(args.title, 300)
-    if (REDDIT_SUBREDDIT) psd.subreddit = REDDIT_SUBREDDIT
+    const subreddit = (args.subreddit ?? REDDIT_SUBREDDIT).trim().replace(/^\/?r\//, "")
+    if (subreddit) psd.subreddit = subreddit
   }
   return {
     platform: spec.platform,
@@ -500,7 +513,9 @@ export async function createSocialDrafts(args: {
         platforms: [platformEntry(spec, { title, link })],
         metadata: sourceMetadata(args.source, spec.key),
       }
-      if (args.imageUrl) body.mediaItems = [{ type: "image", url: args.imageUrl, title: args.blogTitle.slice(0, 90) }]
+      if (args.imageUrl && spec.supportsMedia) {
+        body.mediaItems = [{ type: "image", url: args.imageUrl, title: args.blogTitle.slice(0, 90) }]
+      }
       const data = await zernioJson<{ post?: { _id?: string } }>("/posts", {
         method: "POST",
         body: JSON.stringify(body),
@@ -532,7 +547,7 @@ export function captionFor(spec: PlatformSpec, captions: SocialCaptions): { cont
   }
 }
 
-/** Update a draft's caption (and Pinterest/Reddit title) in place. */
+/** Update a draft's caption (and Pinterest/Reddit title, Reddit subreddit) in place. */
 export async function updateSocialDraft(args: {
   postId: string
   key: PlatformKey
@@ -540,13 +555,19 @@ export async function updateSocialDraft(args: {
   title?: string
   blogUrl?: string
   imageUrl?: string
+  subreddit?: string
 }): Promise<void> {
   const spec = platformSpec(args.key)
   const body: Record<string, unknown> = {
     content: clampText(args.key === "twitter" ? clampTwitter(args.content) : args.content, spec.limit),
-    platforms: [platformEntry(spec, { title: args.title, link: args.blogUrl || SITE_BASE })],
+    platforms: [
+      platformEntry(spec, { title: args.title, link: args.blogUrl || SITE_BASE, subreddit: args.subreddit }),
+    ],
   }
-  if (args.imageUrl) body.mediaItems = [{ type: "image", url: args.imageUrl }]
+  // imageUrl semantics: undefined = leave media as-is, "" = remove, url = set.
+  if (args.imageUrl !== undefined && spec.supportsMedia) {
+    body.mediaItems = args.imageUrl ? [{ type: "image", url: args.imageUrl }] : []
+  }
   await zernioJson(`/posts/${args.postId}`, { method: "PUT", body: JSON.stringify(body) })
 }
 
@@ -562,6 +583,7 @@ export async function publishSocialDraft(args: {
   title?: string
   blogUrl: string
   imageUrl?: string
+  subreddit?: string
 }): Promise<{ status: string }> {
   const spec = platformSpec(args.key)
   if (spec.needsMedia && !args.imageUrl) {
@@ -578,11 +600,11 @@ export async function publishSocialDraft(args: {
 
   const body: Record<string, unknown> = {
     content,
-    platforms: [platformEntry(spec, { title: args.title, link: args.blogUrl })],
+    platforms: [platformEntry(spec, { title: args.title, link: args.blogUrl, subreddit: args.subreddit })],
     isDraft: false,
     publishNow: true,
   }
-  if (args.imageUrl) body.mediaItems = [{ type: "image", url: args.imageUrl }]
+  if (args.imageUrl && spec.supportsMedia) body.mediaItems = [{ type: "image", url: args.imageUrl }]
   const data = await zernioJson<{ post?: { status?: string } }>(`/posts/${args.postId}`, {
     method: "PUT",
     body: JSON.stringify(body),
