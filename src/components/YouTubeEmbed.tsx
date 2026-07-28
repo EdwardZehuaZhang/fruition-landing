@@ -58,9 +58,18 @@ export default function YouTubeEmbed({
 }: YouTubeEmbedProps) {
   const id = videoId || extractVideoId(url)
   const [playing, setPlaying] = useState(false)
+  // Poster fallback chain: not every video has the higher resolutions, and
+  // YouTube answers a missing size with a VALID 120x90 grey placeholder
+  // (so onError never fires) — onLoad checks naturalWidth to catch it.
+  const [posterIdx, setPosterIdx] = useState(0)
   if (!id) return null
-  const posterMax = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`
-  const posterHq = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
+  const posters = [
+    `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,
+    `https://i.ytimg.com/vi/${id}/sddefault.jpg`,
+    `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+  ]
+  const poster = posters[posterIdx]
+  const nextPoster = () => setPosterIdx((i) => Math.min(i + 1, posters.length - 1))
 
   // VideoObject JSON-LD so the facaded video is discoverable by Googlebot.
   // Null when there's no meaningful title (avoids placeholder-named markup).
@@ -99,10 +108,10 @@ export default function YouTubeEmbed({
       {videoLd}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={posterMax}
-        onError={(e) => {
-          const img = e.currentTarget
-          if (img.src !== posterHq) img.src = posterHq
+        src={poster}
+        onError={nextPoster}
+        onLoad={(e) => {
+          if (e.currentTarget.naturalWidth <= 120 && posterIdx < posters.length - 1) nextPoster()
         }}
         alt={title || "Video thumbnail"}
         className="w-full h-full object-cover"
