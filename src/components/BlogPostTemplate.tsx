@@ -143,9 +143,12 @@ function extractHeadings(body?: PortableTextBlock[]): TocEntry[] {
 /*  Figma rules:                                                       */
 /*    - Montserrat Regular/Bold                                        */
 /*    - body: 18px / leading-27px / text-body                         */
-/*    - h2 (section): 28px Bold / leading-35px / py-27.5px             */
-/*    - h3 (sub): 22px Bold / leading-27px / pt-27.5px                 */
-/*    - h4 (inline): 18px Bold / leading-27px / pt-27.5px              */
+/*    - h2 (section): 28px Bold / leading-35px / pt-45px               */
+/*    - h3 (sub): 22px Bold / leading-27px / pt-36px                   */
+/*    - h4 (inline): 18px Bold / leading-27px / pt-32px                */
+/*    Headings carry no bottom padding — the next block's pt-27.5px    */
+/*    supplies the below-gap, so the gap above a heading is always     */
+/*    larger and each heading visually opens the section below it.     */
 /*    - between paragraphs: pt-27.5px                                  */
 /*    - link color: #604c97                                            */
 /*    - image: w-[740px] with figcaption centered, 14px                */
@@ -155,22 +158,22 @@ function extractHeadings(body?: PortableTextBlock[]): TocEntry[] {
 const blogPortableTextComponents: PortableTextComponents = {
   block: {
     h1: ({ children, value }) => (
-      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-bold text-[24px] md:text-[28px] leading-[31px] md:leading-[35px] text-body w-full py-[27.5px]">
+      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-bold text-[24px] md:text-[28px] leading-[31px] md:leading-[35px] text-body w-full pt-[45px] first:pt-0">
         {children}
       </h2>
     ),
     h2: ({ children, value }) => (
-      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-bold text-[24px] md:text-[28px] leading-[31px] md:leading-[35px] text-body w-full py-[27.5px]">
+      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-bold text-[24px] md:text-[28px] leading-[31px] md:leading-[35px] text-body w-full pt-[45px] first:pt-0">
         {children}
       </h2>
     ),
     h3: ({ children, value }) => (
-      <h3 id={slugify(blockText(value))} className="scroll-mt-[100px] font-bold text-[22px] leading-[27px] text-body w-full pt-[27.5px] pb-[10px]">
+      <h3 id={slugify(blockText(value))} className="scroll-mt-[100px] font-bold text-[22px] leading-[27px] text-body w-full pt-[36px] first:pt-0">
         {children}
       </h3>
     ),
     h4: ({ children }) => (
-      <h4 className="font-bold text-[18px] leading-[27px] text-body w-full pt-[27.5px]">
+      <h4 className="font-bold text-[18px] leading-[27px] text-body w-full pt-[32px] first:pt-0">
         {children}
       </h4>
     ),
