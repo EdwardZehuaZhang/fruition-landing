@@ -9,6 +9,22 @@ export default {
     { name: "author", title: "Author", type: "string" },
     { name: "coverImage", title: "Cover Image", type: "image" },
     {
+      name: "coverImageAlt",
+      title: "Cover Image Alt (legacy)",
+      type: "string",
+      description:
+        "Carried over from the Wix migration. Not rendered by the site — defined here so Studio stops flagging migrated posts with 'Unknown fields found'.",
+      readOnly: true,
+    },
+    {
+      name: "coverImageUrl",
+      title: "Cover Image URL (legacy)",
+      type: "string",
+      description:
+        "Original Wix image URL from the migration. Not rendered by the site — the Cover Image field above is what renders.",
+      readOnly: true,
+    },
+    {
       name: "categories",
       title: "Categories",
       type: "array",
