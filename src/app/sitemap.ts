@@ -25,6 +25,7 @@ const STATIC_PATHS: string[] = [
   "/ai-consulting/operations-back-office",
   "/ai-consulting/rag-knowledge-systems",
   "/ai-consulting/sales-outbound",
+  "/ai-readiness-blueprint",
   "/ai-strategy-and-execution",
   "/atlassian-consulting",
   "/atlassian-consulting/confluence",
