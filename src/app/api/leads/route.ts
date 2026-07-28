@@ -39,7 +39,10 @@ export async function POST(req: Request) {
   }
 
   const clean: LeadPayload = { name, email, company: p.company, source: p.source, fields: p.fields }
-  const [slackOk, mondayItemId] = await Promise.all([notifySlack(clean), pushToMonday(clean)])
+  // monday is the primary structured sink; Slack only fires when the monday
+  // push fails, so a lead is never lost but the channel isn't double-fed.
+  const mondayItemId = await pushToMonday(clean)
+  const slackOk = mondayItemId ? false : await notifySlack(clean)
 
   if (!slackOk && !mondayItemId) {
     return NextResponse.json(

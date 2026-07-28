@@ -3,17 +3,19 @@ import { changeColumnValues, createItem } from "@/lib/mondayClient"
 /**
  * Shared lead-notification sinks used by the intake forms.
  *
- * Slack is the guaranteed sink (#leads via SLACK_LEADS_CHANNEL_ID); monday.com
- * is best-effort when MONDAY_LEADS_BOARD_ID is configured. Kept schema-light so
- * a moved board never breaks a form — Slack always receives the full payload.
+ * monday.com is the primary sink: leads land as structured items on the
+ * Website Leads board (5030259940), which mirrors the Fruition CRM (APAC)
+ * board 1924922135 so items can later be migrated 1:1. Slack is the fallback
+ * sink — routes post there only when the monday push fails, so a lead is
+ * never lost but #website-leads-rb2b isn't double-fed.
  *
  * Env:
  *   SLACK_BOT_TOKEN          — bot with chat:write to the channel
- *   SLACK_LEADS_CHANNEL_ID   — destination channel
+ *   SLACK_LEADS_CHANNEL_ID   — fallback channel
  *   MONDAY_LEADS_BOARD_ID    (optional) — numeric board id; enables monday item
- *   MONDAY_LEADS_GROUP_ID    (optional) — group id, defaults to "topics"
- *   MONDAY_LEADS_EMAIL_COLUMN(optional) — column id to store email
- *   MONDAY_LEADS_NOTES_COLUMN(optional) — long_text column id to store details
+ *   MONDAY_LEADS_GROUP_ID    (optional) — group id, defaults to "New Leads"
+ *   MONDAY_LEADS_EMAIL_COLUMN(optional) — email column id, default "lead_email"
+ *   MONDAY_LEADS_NOTES_COLUMN(optional) — long_text column id, default "long_text66rcx0qu"
  */
 export interface LeadPayload {
   name?: string
@@ -62,24 +64,67 @@ export async function notifySlack(p: LeadPayload): Promise<boolean> {
   }
 }
 
+/**
+ * Column ids on the Website Leads board (5030259940). The board reuses the
+ * CRM board's column ids wherever monday allows a user-specified id, so a
+ * later item migration into the CRM maps 1:1. If the structured write fails
+ * (e.g. the board moved), we retry with just email + notes so the lead still
+ * lands with its full payload.
+ */
+const CRM_COLS = {
+  contactName: "text3",
+  company: "company_name",
+  phone: "lead_phone",
+  status: "lead_status",
+  sourceDropdown: "source",
+  utmSource: "short_textqfwxowxd",
+  creationDate: "mirror4",
+} as const
+
 export async function pushToMonday(p: LeadPayload): Promise<string | null> {
   const boardId = Number(process.env.MONDAY_LEADS_BOARD_ID)
   if (!boardId) return null
-  const groupId = process.env.MONDAY_LEADS_GROUP_ID || "topics"
+  const groupId = process.env.MONDAY_LEADS_GROUP_ID || "group_mm5pvztf"
+  const emailCol = process.env.MONDAY_LEADS_EMAIL_COLUMN || "lead_email"
+  const notesCol = process.env.MONDAY_LEADS_NOTES_COLUMN || "long_text66rcx0qu"
+
+  let itemId: string
   try {
-    const itemId = await createItem(boardId, groupId, p.name || p.email || "New lead")
-    const cols: Record<string, unknown> = {}
-    const emailCol = process.env.MONDAY_LEADS_EMAIL_COLUMN
-    const notesCol = process.env.MONDAY_LEADS_NOTES_COLUMN
-    if (emailCol && p.email) cols[emailCol] = { email: p.email, text: p.email }
-    if (notesCol) {
-      const detail = fmtDetails(p)
-      if (detail) cols[notesCol] = { text: detail }
-    }
-    if (Object.keys(cols).length > 0) await changeColumnValues(boardId, itemId, cols)
-    return itemId
+    itemId = await createItem(boardId, groupId, p.name || p.email || "New lead")
   } catch (err) {
     console.warn("[leads] monday push failed:", err instanceof Error ? err.message : String(err))
     return null
   }
+
+  const minimal: Record<string, unknown> = {}
+  if (p.email) minimal[emailCol] = { email: p.email, text: p.email }
+  const detail = fmtDetails(p)
+  if (detail) minimal[notesCol] = { text: detail }
+
+  const structured: Record<string, unknown> = {
+    ...minimal,
+    [CRM_COLS.status]: { label: "New Lead" },
+    [CRM_COLS.sourceDropdown]: { labels: ["Website"] },
+    [CRM_COLS.creationDate]: { date: new Date().toISOString().slice(0, 10) },
+  }
+  if (p.name) structured[CRM_COLS.contactName] = p.name
+  if (p.company) structured[CRM_COLS.company] = p.company
+  const phone = p.fields?.["Phone"]?.trim()
+  if (phone) structured[CRM_COLS.phone] = { phone }
+  if (p.source) structured[CRM_COLS.utmSource] = p.source
+
+  try {
+    await changeColumnValues(boardId, itemId, structured)
+  } catch (err) {
+    console.warn(
+      "[leads] monday structured columns failed, retrying minimal:",
+      err instanceof Error ? err.message : String(err),
+    )
+    try {
+      await changeColumnValues(boardId, itemId, minimal)
+    } catch {
+      // Item already exists with its name — better a bare item than no lead.
+    }
+  }
+  return itemId
 }
