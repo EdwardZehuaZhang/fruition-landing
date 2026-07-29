@@ -10,21 +10,22 @@ import { changeColumnValues, createItem, createUpdate, moveItemToGroupTop } from
  * The classifier fails open — when it errors, the submission is treated as
  * a lead.
  *
- * monday.com is the primary sink: each lead is routed by region to the
- * matching Fruition CRM board (APAC / NA / UK) and lands as a structured item
- * in that board's New Leads group. Region detection uses Cloudflare's
- * cf-ipcountry header first, then the phone country code, then the email TLD,
- * and defaults to APAC.
+ * monday.com is the primary sink: every lead lands as a structured item in
+ * the New Leads group of Fruition CRM (ILE) — the Inbound Lead Engine board,
+ * counterpart to Fruition CRM (OLE) — with its detected Region (APAC/NA/UK)
+ * and Country as columns. Region detection uses Cloudflare's cf-ipcountry
+ * header first, then the phone country code, then the email TLD, and
+ * defaults to APAC.
  *
  * Failure ladder — a lead is never lost:
- *   regional CRM board → env-configured fallback board (Website Leads) →
+ *   ILE board → env-configured fallback board (Website Enquiries) →
  *   Slack (#website-leads-rb2b; routes post there only when monday failed).
  *
  * Env:
  *   SLACK_BOT_TOKEN          — bot with chat:write to the channel
  *   SLACK_LEADS_CHANNEL_ID   — fallback channel
- *   MONDAY_LEADS_BOARD_ID    (optional) — fallback board id (Website Leads)
- *   MONDAY_LEADS_GROUP_ID    (optional) — fallback group, defaults to "New Leads"
+ *   MONDAY_LEADS_BOARD_ID    (optional) — fallback board id (Website Enquiries)
+ *   MONDAY_LEADS_GROUP_ID    (optional) — fallback group, default "Other Enquiries"
  *   MONDAY_LEADS_EMAIL_COLUMN(optional) — fallback email column, default "lead_email"
  *   MONDAY_LEADS_NOTES_COLUMN(optional) — fallback long_text column, default "long_text66rcx0qu"
  *   MONDAY_LEADS_COMPANY_COLUMN(optional) — fallback text column, default "company_name"
@@ -43,7 +44,7 @@ export interface LeadPayload {
 
 export type LeadRegion = "APAC" | "NA" | "UK"
 
-interface RegionBoard {
+interface LeadBoard {
   boardId: number
   groupId: string
   /**
@@ -53,65 +54,40 @@ interface RegionBoard {
   cols: {
     email: string
     contactName?: string
-    /** UK splits contact into first/last name columns */
-    contactLastName?: string
     phone?: string
     company?: string
     status?: string
+    /** Status column — gets the label "Website" */
     source?: string
+    /** Status column — gets the detected APAC/NA/UK region label */
+    region?: string
     utmSource?: string
     creationDate?: string
+    /** Country-type column — gets {countryCode, countryName} */
     country?: string
     notes?: string
   }
 }
 
 /**
- * The regional Fruition CRM boards. Status label "New Lead" and source label
- * "Website" exist on all three. Column ids verified 2026-07-29.
+ * Fruition CRM (ILE) — the Inbound Lead Engine board, sibling of Fruition
+ * CRM (OLE). Every website lead lands here (item name = person, company in
+ * text3 per the OLE convention). Column ids verified 2026-07-29.
  */
-const REGION_BOARDS: Record<LeadRegion, RegionBoard> = {
-  APAC: {
-    boardId: 1924922135,
-    groupId: "emailed_items__1",
-    cols: {
-      email: "lead_email",
-      contactName: "text3",
-      phone: "lead_phone",
-      company: "text_mkmkvqpj",
-      status: "lead_status",
-      source: "source",
-      utmSource: "short_textqfwxowxd",
-      creationDate: "mirror4",
-      notes: "text_mm38sjrq", // Follow-up Notes — where sales expects the enquiry
-    },
-  },
-  NA: {
-    boardId: 1925296156,
-    groupId: "emailed_items_mkkpe7r4",
-    cols: {
-      email: "lead_email",
-      contactName: "text3",
-      phone: "lead_phone",
-      company: "company_name",
-      status: "lead_status",
-      source: "source",
-      creationDate: "mirror4",
-      country: "country",
-    },
-  },
-  UK: {
-    boardId: 1924931935,
-    groupId: "topics",
-    cols: {
-      email: "lead_email",
-      contactName: "text3",
-      contactLastName: "text_mkx7q4np",
-      phone: "lead_phone",
-      status: "lead_status",
-      source: "source",
-      creationDate: "mirror4",
-    },
+const ILE_BOARD: LeadBoard = {
+  boardId: 5030276917,
+  groupId: "topics",
+  cols: {
+    email: "lead_email",
+    phone: "lead_phone",
+    company: "text3",
+    status: "lead_status",
+    source: "color_mm2wasnj",
+    region: "region",
+    utmSource: "short_textqfwxowxd",
+    creationDate: "mirror4",
+    country: "country_mm345qer",
+    notes: "follow_up_notes",
   },
 }
 
@@ -120,7 +96,7 @@ const REGION_BOARDS: Record<LeadRegion, RegionBoard> = {
  * grouped by classifier category. Same lead-shaped column ids as the CRMs so
  * a misclassified enquiry moves back to a CRM cleanly.
  */
-const ENQUIRIES_BOARD: RegionBoard = {
+const ENQUIRIES_BOARD: LeadBoard = {
   boardId: 5030270944,
   groupId: "group_mm5qewhh",
   cols: {
@@ -210,6 +186,15 @@ function errMsg(err: unknown): string {
   return err instanceof Error ? err.message : String(err)
 }
 
+/** "US" → "United States"; falls back to the code if ICU data is missing. */
+function countryName(code: string): string {
+  try {
+    return new Intl.DisplayNames(["en"], { type: "region" }).of(code) ?? code
+  } catch {
+    return code
+  }
+}
+
 export async function notifySlack(p: LeadPayload): Promise<boolean> {
   const token = process.env.SLACK_BOT_TOKEN
   const channel = process.env.SLACK_LEADS_CHANNEL_ID
@@ -237,7 +222,7 @@ export async function notifySlack(p: LeadPayload): Promise<boolean> {
   }
 }
 
-async function pushToBoard(p: LeadPayload, rb: RegionBoard, label: string): Promise<string | null> {
+async function pushToBoard(p: LeadPayload, rb: LeadBoard, label: string): Promise<string | null> {
   let itemId: string
   try {
     itemId = await createItem(rb.boardId, rb.groupId, p.name || p.email || "New lead")
@@ -257,23 +242,19 @@ async function pushToBoard(p: LeadPayload, rb: RegionBoard, label: string): Prom
   const c = rb.cols
   const cols: Record<string, unknown> = {}
   if (p.email) cols[c.email] = { email: p.email, text: p.email }
-  if (p.name && c.contactName) {
-    if (c.contactLastName) {
-      const [first, ...rest] = p.name.split(/\s+/)
-      cols[c.contactName] = first
-      if (rest.length) cols[c.contactLastName] = rest.join(" ")
-    } else {
-      cols[c.contactName] = p.name
-    }
-  }
+  if (p.name && c.contactName) cols[c.contactName] = p.name
   const phone = p.fields?.["Phone"]?.trim()
   if (phone && c.phone) cols[c.phone] = { phone }
   if (p.company && c.company) cols[c.company] = p.company
   if (c.status) cols[c.status] = { label: "New Lead" }
-  if (c.source) cols[c.source] = { labels: ["Website"] }
+  if (c.source) cols[c.source] = { label: "Website" }
   if (p.source && c.utmSource) cols[c.utmSource] = p.source
   if (c.creationDate) cols[c.creationDate] = { date: new Date().toISOString().slice(0, 10) }
-  if (p.country && c.country) cols[c.country] = p.country
+  if (c.region) cols[c.region] = { label: detectRegion(p) }
+  const cc = p.country?.trim().toUpperCase()
+  if (cc && /^[A-Z]{2}$/.test(cc) && c.country) {
+    cols[c.country] = { countryCode: cc, countryName: countryName(cc) }
+  }
   const detail = fmtDetails(p)
   // Some notes columns are single-line text — cap the column value and rely
   // on the item update below for the full text.
@@ -309,12 +290,12 @@ async function pushToBoard(p: LeadPayload, rb: RegionBoard, label: string): Prom
   return itemId
 }
 
-function fallbackBoard(): RegionBoard | null {
+function fallbackBoard(): LeadBoard | null {
   const boardId = Number(process.env.MONDAY_LEADS_BOARD_ID)
   if (!boardId) return null
   return {
     boardId,
-    groupId: process.env.MONDAY_LEADS_GROUP_ID || "group_mm5pvztf",
+    groupId: process.env.MONDAY_LEADS_GROUP_ID || "group_mm5qewhh",
     cols: {
       email: process.env.MONDAY_LEADS_EMAIL_COLUMN || "lead_email",
       contactName: "text3",
@@ -356,11 +337,10 @@ export async function pushToMonday(p: LeadPayload): Promise<string | null> {
     console.warn("[leads] enquiries push failed, falling back to lead path")
   }
 
-  const region = detectRegion(p)
-  const viaRegion = await pushToBoard(p, REGION_BOARDS[region], region)
-  if (viaRegion) return viaRegion
+  const viaIle = await pushToBoard(p, ILE_BOARD, "ILE")
+  if (viaIle) return viaIle
 
-  // Regional CRM unreachable — land the lead on the fallback intake board.
+  // ILE board unreachable — land the lead on the fallback intake board.
   const fallback = fallbackBoard()
   if (!fallback) return null
   return pushToBoard(p, fallback, "fallback")
