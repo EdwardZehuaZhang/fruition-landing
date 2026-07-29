@@ -38,8 +38,19 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "A valid email is required." }, { status: 400 })
   }
 
-  const clean: LeadPayload = { name, email, company: p.company, source: p.source, fields: p.fields }
-  const [slackOk, mondayItemId] = await Promise.all([notifySlack(clean), pushToMonday(clean)])
+  const clean: LeadPayload = {
+    name,
+    email,
+    company: p.company,
+    source: p.source,
+    // Cloudflare's edge geolocation drives the regional CRM routing.
+    country: req.headers.get("cf-ipcountry") ?? p.country,
+    fields: p.fields,
+  }
+  // monday is the primary structured sink; Slack only fires when the monday
+  // push fails, so a lead is never lost but the channel isn't double-fed.
+  const mondayItemId = await pushToMonday(clean)
+  const slackOk = mondayItemId ? false : await notifySlack(clean)
 
   if (!slackOk && !mondayItemId) {
     return NextResponse.json(
