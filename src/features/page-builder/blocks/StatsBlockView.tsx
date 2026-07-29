@@ -1,5 +1,6 @@
 'use client'
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from 'next/link'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/image'
@@ -141,7 +142,7 @@ export default function StatsBlockView({
         {/* CTA */}
         {ctaLabel && ctaUrl && (
           <Link
-            href={ctaUrl}
+            href={bookingHref(ctaUrl)}
             className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-brand-dark hover:bg-none text-white text-lg md:text-xl font-bold tracking-wide hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-purple-500/20 mt-2"
           >
             <PaperPlaneIcon size={20} />

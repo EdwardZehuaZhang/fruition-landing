@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import { urlFor } from '@/sanity/image'
 import CtaButton from '@/components/CtaButton'
 import type { SiteSettings } from '../types'
@@ -134,7 +135,7 @@ export default function HeroBlockView({
           <div className="flex flex-col md:flex-row gap-[20px] items-start w-full max-w-[680px]">
             {primaryCtaLabel && primaryCtaUrl && (
               <CtaButton
-                href={primaryCtaUrl}
+                href={bookingHref(primaryCtaUrl)}
                 label={primaryCtaLabel}
                 variant="outline"
                 className="w-full md:w-[330px]"
@@ -142,7 +143,7 @@ export default function HeroBlockView({
             )}
             {secondaryCtaLabel && secondaryCtaUrl && (
               <CtaButton
-                href={secondaryCtaUrl}
+                href={bookingHref(secondaryCtaUrl)}
                 label={secondaryCtaLabel}
                 variant="primary"
                 className="w-full md:w-[330px]"

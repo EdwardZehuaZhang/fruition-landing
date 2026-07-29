@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -43,9 +44,9 @@ export default function MondayProjectManagementContent({
 }: Props) {
   if (!page) return null
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const comparisonTabs = page.comparisonTabs ?? []
   const capabilitiesColumns =
@@ -111,7 +112,7 @@ export default function MondayProjectManagementContent({
       <CalendlySection
         heading={calendlyHeading}
         subheading={calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* 3. FAQ */}

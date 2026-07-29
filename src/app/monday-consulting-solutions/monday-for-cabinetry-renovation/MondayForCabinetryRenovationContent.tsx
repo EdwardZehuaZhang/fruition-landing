@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { Check } from "lucide-react"
 import { urlFor } from "@/sanity/image"
@@ -188,9 +189,9 @@ function ReturnsBannerSection({
 export default function MondayForCabinetryRenovationContent({ page, siteSettings }: Props) {
   if (!page) return null
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   // CapabilitiesCards holds the challenges set for this page.
   const challengeCards = page.capabilitiesCards ?? []
@@ -289,7 +290,7 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
           page.calendlySubheading ||
           "Book a time with one of our certified monday.com consultants to see how monday.com can be customized for your cabinetry renovation and installation business and start your free 4-week extended trial."
         }
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* 7. Solution cards — bottom pair (CLIENT COMMUNICATION + CHANGE ORDER MANAGEMENT) */}

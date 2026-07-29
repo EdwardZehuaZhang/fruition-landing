@@ -1,5 +1,6 @@
 'use client'
 
+import { bookingHref } from "@/lib/bookingLink"
 import { useState } from 'react'
 import Link from 'next/link'
 import { BarChart3 } from 'lucide-react'
@@ -126,7 +127,7 @@ export default function TabSectionBlockView({
                 )}
                 {active?.ctaLabel && active?.ctaUrl && (
                   <Link
-                    href={active.ctaUrl}
+                    href={bookingHref(active.ctaUrl)}
                     className="shrink-0 flex items-center justify-center h-[39px] px-[20px] rounded-[100px] border border-brand text-brand text-[16px] font-semibold hover:bg-brand/5 transition gap-[4px]"
                   >
                     {active.ctaLabel}

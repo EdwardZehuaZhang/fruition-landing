@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -26,9 +27,9 @@ export default function HootsuiteDeliveryPartnerContent({
   siteSettings,
 }: Props) {
   if (!page) return null
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   return (
     <div>
@@ -88,7 +89,7 @@ export default function HootsuiteDeliveryPartnerContent({
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* Join Stats */}

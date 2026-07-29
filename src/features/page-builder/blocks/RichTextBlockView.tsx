@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import Link from 'next/link'
 import { PortableText, type PortableTextBlock } from '@portabletext/react'
 import { portableTextComponents } from '@/components/PortableTextComponents'
@@ -139,7 +140,7 @@ export default function RichTextBlockView({
 
       {ctaLabel && ctaUrl && (
         <Link
-          href={ctaUrl}
+          href={bookingHref(ctaUrl)}
           className="group flex items-center justify-center gap-2 h-[53px] w-full max-w-[326px] rounded-[100px] bg-gradient-to-r from-[#8015e8] to-[#ba83f0] hover:bg-brand-dark hover:bg-none text-white text-[16px] font-bold tracking-[0.32px] transition-colors"
         >
           <PaperPlaneIcon />

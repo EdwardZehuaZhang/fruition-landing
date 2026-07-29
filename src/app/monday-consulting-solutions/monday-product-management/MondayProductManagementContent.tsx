@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import { useState } from "react"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
@@ -107,9 +108,9 @@ export default function MondayProductManagementContent({
 }: Props) {
   if (!page) return null
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const partnerBadges: PartnerBadge[] = siteSettings?.navbarPartnerBadges || []
   const heroVideoEmbedSrc = youtubeEmbedUrl(page.heroVideoUrl)
@@ -255,7 +256,7 @@ export default function MondayProductManagementContent({
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* 7. Industry-Specific Product Management Solutions */}

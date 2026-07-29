@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -60,9 +61,9 @@ export default function N8nIntegrationPartnerContent({
   faqTabs,
 }: Props) {
   if (!page) return null
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const provenStats: ProvenStat[] = page.provenStats ?? []
   const comparisonTabs: ComparisonTab[] = page.comparisonTabs ?? []
@@ -137,7 +138,7 @@ export default function N8nIntegrationPartnerContent({
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* FAQ */}

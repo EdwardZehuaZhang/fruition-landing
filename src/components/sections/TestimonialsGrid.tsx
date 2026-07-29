@@ -1,5 +1,6 @@
 "use client"
 
+import { BOOKING_ANCHOR, bookingHref } from "@/lib/bookingLink"
 import { useState, useEffect, useCallback, useMemo } from "react"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
@@ -27,7 +28,7 @@ const TESTIMONIALS_PER_PAGE = 5
 export default function TestimonialsGrid({
   heading = "What our customers say about us \uD83D\uDE4C",
   ctaLabel = "Start Your Transformation",
-  ctaUrl = "https://calendly.com/global-calendar-fruitionservices",
+  ctaUrl = BOOKING_ANCHOR,
   // Default mirrors the proofStats singleton (Sanity, _id "proofStats") — the
   // canonical entity-signal registry. Keep in sync via getProofStats/PROOF_STATS_DEFAULTS.
   statCardValue = "500+",
@@ -76,7 +77,7 @@ export default function TestimonialsGrid({
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-6 lg:gap-[89px] mb-10 lg:mb-[58px] w-full">
           <h2 className="text-section-h2 w-full lg:w-[919px] lg:shrink-0">{heading}</h2>
           <Link
-            href={ctaUrl}
+            href={bookingHref(ctaUrl)}
             className="ui-cta-btn ui-cta-btn-secondary h-[53px] w-full lg:w-[330px] lg:shrink-0"
           >
             <CtaLabel label={ctaLabel} />

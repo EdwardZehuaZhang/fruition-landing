@@ -1,4 +1,5 @@
 "use client"
+import { bookingHref } from "@/lib/bookingLink"
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -58,7 +59,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
     setMobileExpandedSection(null)
   }
 
-  const calendlyUrl = siteSettings?.calendlyLink || ''
+  const calendlyUrl = siteSettings?.calendlyLink ? bookingHref(siteSettings.calendlyLink) : ''
   const phoneAu = siteSettings?.phone
   const navItems: NavItem[] = siteSettings?.navigation || []
   const ctaLabel = siteSettings?.navbarCtaLabel || ''
@@ -102,7 +103,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                 return (
                   <div key={item.label} onMouseEnter={() => setOpenMenu(null)}>
                     <Link
-                      href={item.href}
+                      href={bookingHref(item.href)}
                       className={`block font-medium text-sm py-1.5 px-3 transition-colors border border-transparent whitespace-nowrap ${
                         linkActive
                           ? 'text-brand dark:text-brand-light'
@@ -194,7 +195,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                 return (
                   <div key={item.label} className="border-b border-ui last:border-b-0">
                     <Link
-                      href={item.href}
+                      href={bookingHref(item.href)}
                       onClick={closeMobile}
                       className={`block px-2 py-3 text-[15px] font-semibold ${
                         pathname === item.href ? 'text-brand' : 'text-body hover:text-brand'
@@ -268,7 +269,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                             return (
                               <Link
                                 key={sub.href}
-                                href={sub.href || '#'}
+                                href={bookingHref(sub.href || '#')}
                                 className={`flex items-start gap-3 pl-4 pr-2 py-2 rounded-md transition-colors ${
                                   isActive ? 'bg-brand-soft dark:bg-white/10' : 'hover:bg-black/5 dark:hover:bg-white/5'
                                 }`}
@@ -364,7 +365,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                           return (
                             <Link
                               key={sub.href}
-                              href={sub.href || '#'}
+                              href={bookingHref(sub.href || '#')}
                               className={`group flex items-start gap-3 rounded-lg p-3 transition-colors ${
                                 isActive
                                   ? 'bg-brand-soft dark:bg-white/10'

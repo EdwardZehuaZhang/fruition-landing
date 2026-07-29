@@ -1,3 +1,4 @@
+import { BOOKING_ANCHOR, bookingHref } from "@/lib/bookingLink"
 import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react"
 import { PortableText } from "@portabletext/react"
 import Image from "next/image"
@@ -57,7 +58,7 @@ interface BlogPostTemplateProps {
   calendlyUrl?: string
 }
 
-const DEFAULT_CALENDLY = "https://calendly.com/global-calendar-fruitionservices"
+const DEFAULT_CALENDLY = BOOKING_ANCHOR
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -624,7 +625,7 @@ function InlineAuditCta({ calendlyUrl }: { calendlyUrl: string }) {
           </p>
         </div>
         <Link
-          href={calendlyUrl}
+          href={bookingHref(calendlyUrl)}
           className="flex-none cta-btn cta-btn-on-dark-primary"
         >
           Book a 30-Min System Audit

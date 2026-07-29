@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
 import {
@@ -61,9 +62,9 @@ export default function MondayCrmConsultingContent({
 }: MondayCrmConsultingContentProps) {
   if (!page) return null
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const heroImageSrc = safeImageUrl(page.heroImage)
   const heroVideoEmbedSrc = youtubeEmbedUrl(page.heroVideoUrl)
@@ -271,7 +272,7 @@ export default function MondayCrmConsultingContent({
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* 7. FAQ */}

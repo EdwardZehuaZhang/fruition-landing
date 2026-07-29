@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import { urlFor } from '@/sanity/image'
 import CtaButton from '@/components/CtaButton'
 import type { SiteSettings } from '../types'
@@ -68,7 +69,7 @@ export default function CtaBlockView({
       <div className="flex flex-col md:flex-row md:flex-wrap justify-center gap-[24px] items-center w-full max-w-[680px]">
         {ctaLabel && ctaUrl && (
           <CtaButton
-            href={ctaUrl}
+            href={bookingHref(ctaUrl)}
             label={ctaLabel}
             variant="onDarkPrimary"
             className="w-full md:w-[330px]"
@@ -76,7 +77,7 @@ export default function CtaBlockView({
         )}
         {secondaryCtaLabel && secondaryCtaUrl && (
           <CtaButton
-            href={secondaryCtaUrl}
+            href={bookingHref(secondaryCtaUrl)}
             label={secondaryCtaLabel}
             variant="onDarkOutline"
             className="w-full md:w-[330px]"

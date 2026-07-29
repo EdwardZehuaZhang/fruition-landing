@@ -582,7 +582,7 @@ export default function BookingSection({
   calendlyUrl = "https://calendly.com/global-calendar-fruitionservices",
 }: BookingSectionProps) {
   return (
-    <section className="fr-booking-section" style={{ position: "relative", background: "linear-gradient(-38deg,#8015e8 0%,#4b0d8f 42%,#10003a 100%)", padding: "84px 72px", overflow: "hidden" }}>
+    <section id="book" className="fr-booking-section" style={{ position: "relative", scrollMarginTop: 90, background: "linear-gradient(-38deg,#8015e8 0%,#4b0d8f 42%,#10003a 100%)", padding: "84px 72px", overflow: "hidden" }}>
       {/* brand glow motif */}
       <div aria-hidden="true" style={{ position: "absolute", top: -160, right: -120, width: 620, height: 620, borderRadius: "50%", opacity: 0.5, mixBlendMode: "screen", pointerEvents: "none", background: "radial-gradient(circle, rgba(255,255,255,0.28), rgba(255,255,255,0))" }} />
 
