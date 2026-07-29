@@ -101,7 +101,7 @@ export default function MondayCrmConsultingContent({
 
   return (
     <div>
-      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={bookingHref(page.croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* 1. Hero */}
       <section className="bg-surface">
         <div className="mx-auto flex flex-col items-center px-4 md:px-16 lg:px-24 max-w-[1588px] w-full py-14 md:py-20">
@@ -151,7 +151,7 @@ export default function MondayCrmConsultingContent({
           <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-[680px] gap-5 mt-10">
             {page.primaryCtaLabel && (
               <Link
-                href={page.primaryCtaUrl || calendlyUrl}
+                href={bookingHref(page.primaryCtaUrl || calendlyUrl)}
                 className={`cta-btn ${page.secondaryCtaLabel ? "cta-btn-outline" : "cta-btn-primary"} w-full md:flex-1 md:max-w-[330px]`}
               >
                 {page.primaryCtaLabel}
@@ -159,7 +159,7 @@ export default function MondayCrmConsultingContent({
             )}
             {page.secondaryCtaLabel && (
               <Link
-                href={page.secondaryCtaUrl || calendlyUrl}
+                href={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
                 className="cta-btn cta-btn-primary w-full md:flex-1 md:max-w-[330px]"
               >
                 {page.secondaryCtaLabel}
@@ -217,7 +217,7 @@ export default function MondayCrmConsultingContent({
         heading="Which pipeline bottleneck is slowing you down?"
         subheading="Pick the one you recognize and see exactly how we configure monday CRM to solve it."
         ctaLabel="Book a Free Discovery Call"
-        ctaUrl={page.primaryCtaUrl || calendlyUrl}
+        ctaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
         options={[
           {
             key: "lead-routing",
@@ -265,7 +265,7 @@ export default function MondayCrmConsultingContent({
       <CroSections
         data={page.croSections}
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
       />
 
       {/* 6. Calendly */}

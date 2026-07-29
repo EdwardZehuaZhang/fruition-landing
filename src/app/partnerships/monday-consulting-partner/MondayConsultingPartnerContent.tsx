@@ -349,7 +349,7 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
 
   return (
     <div>
-      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={bookingHref(page.croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* 1. Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow || "monday.com Expert Consultants"}
@@ -370,7 +370,7 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel || "Book a Consultation"}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={page.secondaryCtaLabel || "Get Started with monday.com"}
         secondaryCtaUrl={page.secondaryCtaUrl || "https://monday.com"}
       />
@@ -402,7 +402,7 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
       <CroSections
         data={page.croSections}
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
       />
 
       {/* 6. FAQ */}

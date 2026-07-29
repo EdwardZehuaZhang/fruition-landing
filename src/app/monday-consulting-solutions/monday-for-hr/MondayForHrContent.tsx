@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import type { LucideIcon } from "lucide-react"
 import {
@@ -224,7 +225,8 @@ export default function MondayForHrContent({
 }: Props) {
   if (!page) return null
 
-  const calendlyUrl = siteSettings?.calendlyLink ?? ""
+  const rawCalendly = siteSettings?.calendlyLink ?? ""
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const featuredTestimonial = caseStudies[0]
 
@@ -245,9 +247,9 @@ export default function MondayForHrContent({
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || rawCalendly)}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || rawCalendly)}
       />
 
       {/* Logo cloud */}
@@ -271,7 +273,7 @@ export default function MondayForHrContent({
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* FAQ */}
@@ -301,7 +303,7 @@ export default function MondayForHrContent({
           stats={page.joinStats}
           footnote={page.joinFootnote}
           ctaLabel={page.joinCtaLabel}
-          ctaUrl={page.joinCtaUrl || calendlyUrl}
+          ctaUrl={bookingHref(page.joinCtaUrl || rawCalendly)}
           siteSettings={siteSettings || undefined}
         />
       )}

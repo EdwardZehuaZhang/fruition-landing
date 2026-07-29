@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { useMemo, useState } from "react"
 import { urlFor } from "@/sanity/image"
@@ -111,7 +112,7 @@ export default function FruitionTeamClient({
 
   return (
     <div>
-      <StickyCtaBar label={croSections?.stickyCtaLabel} href={croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={croSections?.stickyCtaLabel} href={bookingHref(croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* Hero */}
       <section className="bg-surface">
         <div

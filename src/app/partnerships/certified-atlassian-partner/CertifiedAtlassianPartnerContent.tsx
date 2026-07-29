@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { Rocket, Check } from "lucide-react"
 import {
@@ -127,7 +128,8 @@ function AtlassianExpertsSection({ calendlyUrl, cards }: { calendlyUrl: string; 
 
 export default function CertifiedAtlassianPartnerContent({ page, siteSettings, faqTabs }: Props) {
   if (!page) return null
-  const calendlyUrl = siteSettings?.calendlyLink ?? ""
+  const rawCalendly = siteSettings?.calendlyLink ?? ""
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const resolvedFaqTabs = faqTabs ?? []
   const atlassianTabs: ComparisonTab[] = page.atlassianTabs ?? []
@@ -178,7 +180,7 @@ export default function CertifiedAtlassianPartnerContent({ page, siteSettings, f
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* FAQ */}

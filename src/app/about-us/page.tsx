@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import {
   getPageBySlug,
   getSiteSettings,
@@ -32,7 +33,8 @@ export default async function Page() {
 
   if (!page) return null
 
-  const calendlyUrl = siteSettings?.calendlyLink ?? ""
+  const rawCalendly = siteSettings?.calendlyLink ?? ""
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const centralTabs = groupFaqsIntoTabs(centralFaqs)
   const faqTabs =

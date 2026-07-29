@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import { useState } from "react"
 import type { LucideIcon } from "lucide-react"
 import {
@@ -392,7 +393,8 @@ export default function MakePartnersContent({
   caseStudies = [],
   pageData,
 }: Props) {
-  const calendlyUrl = siteSettings?.calendlyLink || ""
+  const rawCalendly = siteSettings?.calendlyLink || ""
+  const calendlyUrl = bookingHref(rawCalendly)
   const partnerBadges = siteSettings?.navbarPartnerBadges || []
 
   void caseStudies
@@ -459,7 +461,7 @@ export default function MakePartnersContent({
 
   return (
     <div>
-      <StickyCtaBar label={pageData?.croSections?.stickyCtaLabel} href={pageData?.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={pageData?.croSections?.stickyCtaLabel} href={bookingHref(pageData?.croSections?.stickyCtaUrl || rawCalendly)} />
       {/* 1. Hero */}
       <section className="bg-surface">
         <div className="mx-auto flex flex-col items-center px-6 md:px-16 lg:px-[273px] py-14 md:py-20">
@@ -501,7 +503,7 @@ export default function MakePartnersContent({
             <div className="flex flex-col md:flex-row items-center justify-center gap-5 mt-10 w-full">
               {pageData?.heroPrimaryCtaLabel && (pageData.heroPrimaryCtaUrl || calendlyUrl) && (
                 <CtaButton
-                  href={pageData.heroPrimaryCtaUrl || calendlyUrl}
+                  href={bookingHref(pageData.heroPrimaryCtaUrl || rawCalendly)}
                   label={pageData.heroPrimaryCtaLabel}
                   variant="outline"
                   className="w-full max-w-[330px]"
@@ -509,7 +511,7 @@ export default function MakePartnersContent({
               )}
               {pageData?.heroSecondaryCtaLabel && (pageData.heroSecondaryCtaUrl || calendlyUrl) && (
                 <CtaButton
-                  href={pageData.heroSecondaryCtaUrl || calendlyUrl}
+                  href={bookingHref(pageData.heroSecondaryCtaUrl || rawCalendly)}
                   label={pageData.heroSecondaryCtaLabel}
                   variant="primary"
                   className="w-full max-w-[330px]"
@@ -615,7 +617,7 @@ export default function MakePartnersContent({
       <CroSections
         data={pageData?.croSections}
         primaryCtaLabel={pageData?.heroPrimaryCtaLabel}
-        primaryCtaUrl={pageData?.heroPrimaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(pageData?.heroPrimaryCtaUrl || rawCalendly)}
       />
 
       {/* 6. Calendly */}
@@ -623,7 +625,7 @@ export default function MakePartnersContent({
         <CalendlySection
           heading={pageData?.calendlyHeading}
           subheading={pageData?.calendlySubheading}
-          calendlyUrl={calendlyUrl}
+          calendlyUrl={rawCalendly}
         />
       )}
 
@@ -691,7 +693,7 @@ export default function MakePartnersContent({
         headingPart2={pageData?.joinHeadingPart2}
         stats={pageData?.joinStats}
         ctaLabel={pageData?.joinCtaLabel}
-        ctaUrl={pageData?.joinCtaUrl || calendlyUrl}
+        ctaUrl={bookingHref(pageData?.joinCtaUrl || rawCalendly)}
         siteSettings={siteSettings || undefined}
       />
 

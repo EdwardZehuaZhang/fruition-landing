@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import { useState } from "react"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
@@ -41,7 +42,8 @@ export default function MondayForFinanceContent({
 }: Props) {
   if (!page) return null
 
-  const calendlyUrl = siteSettings?.calendlyLink ?? ""
+  const rawCalendly = siteSettings?.calendlyLink ?? ""
+  const calendlyUrl = bookingHref(rawCalendly)
   const partnerBadges: PartnerBadge[] = siteSettings?.navbarPartnerBadges || []
   const heroImageSrc = safeImageUrl(page.heroImage as SanityImageRef)
   const tabs: FinanceComparisonTab[] = page.comparisonTabs ?? []
@@ -103,7 +105,7 @@ export default function MondayForFinanceContent({
           <div className="mt-10 flex w-full max-w-[680px] flex-wrap items-center justify-center gap-5">
             {page.primaryCtaLabel && (
               <Link
-                href={page.primaryCtaUrl || calendlyUrl}
+                href={bookingHref(page.primaryCtaUrl || rawCalendly)}
                 className={`cta-btn ${
                   page.secondaryCtaLabel ? "cta-btn-outline" : "cta-btn-primary"
                 }`}
@@ -113,7 +115,7 @@ export default function MondayForFinanceContent({
             )}
             {page.secondaryCtaLabel && (
               <Link
-                href={page.secondaryCtaUrl || calendlyUrl}
+                href={bookingHref(page.secondaryCtaUrl || rawCalendly)}
                 className="cta-btn cta-btn-primary"
               >
                 {page.secondaryCtaLabel}
@@ -167,7 +169,7 @@ export default function MondayForFinanceContent({
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* 6. FAQ */}

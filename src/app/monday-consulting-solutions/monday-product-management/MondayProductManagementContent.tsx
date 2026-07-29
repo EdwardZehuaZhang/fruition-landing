@@ -175,7 +175,7 @@ export default function MondayProductManagementContent({
           <div className="flex flex-wrap items-center justify-center gap-5 mt-10 w-full max-w-[680px]">
             {page.primaryCtaLabel && (
               <Link
-                href={page.primaryCtaUrl || calendlyUrl}
+                href={bookingHref(page.primaryCtaUrl || calendlyUrl)}
                 className={`cta-btn ${page.secondaryCtaLabel ? "cta-btn-outline" : "cta-btn-primary"}`}
               >
                 {page.primaryCtaLabel}
@@ -183,7 +183,7 @@ export default function MondayProductManagementContent({
             )}
             {page.secondaryCtaLabel && (
               <Link
-                href={page.secondaryCtaUrl || calendlyUrl}
+                href={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
                 className="cta-btn cta-btn-primary"
               >
                 {page.secondaryCtaLabel}

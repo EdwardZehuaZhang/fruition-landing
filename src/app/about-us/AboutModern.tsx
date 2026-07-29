@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -853,7 +854,7 @@ export default function AboutModern(props: AboutModernProps) {
 
   return (
     <div>
-      <StickyCtaBar label={croSections?.stickyCtaLabel} href={croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={croSections?.stickyCtaLabel} href={bookingHref(croSections?.stickyCtaUrl || calendlyUrl)} />
       <HeroSection
         eyebrow={heroEyebrow}
         headingPart1={heroHeadingPart1}
@@ -862,7 +863,7 @@ export default function AboutModern(props: AboutModernProps) {
         subheading={heroSubheading}
         heroImage={heroImage}
         primaryCtaLabel={primaryCtaLabel}
-        primaryCtaUrl={primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={secondaryCtaLabel}
         secondaryCtaUrl={secondaryCtaUrl}
         partnerBadges={allBadges}
@@ -904,7 +905,7 @@ export default function AboutModern(props: AboutModernProps) {
         offices={offices}
       />
       <PartnerStack badges={allBadges} eyebrow={partnerStackEyebrow} />
-      <CroSections data={croSections} primaryCtaLabel={primaryCtaLabel} primaryCtaUrl={primaryCtaUrl || calendlyUrl} />
+      <CroSections data={croSections} primaryCtaLabel={primaryCtaLabel} primaryCtaUrl={bookingHref(primaryCtaUrl || calendlyUrl)} />
       {faqTabs.length > 0 && faqHeading && (
         <FaqAccordion
           heading={faqHeading}

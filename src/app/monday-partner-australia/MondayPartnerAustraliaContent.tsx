@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { Rocket, Play, Navigation } from "lucide-react"
 import {
@@ -173,7 +174,8 @@ export default function MondayPartnerAustraliaContent({
   teamMembers,
 }: Props) {
   if (!page) return null
-  const calendlyUrl = siteSettings?.calendlyLink ?? ""
+  const rawCalendly = siteSettings?.calendlyLink ?? ""
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const resolvedFaqTabs = faqTabs ?? []
   const partnerCaseStudies = caseStudies
@@ -183,7 +185,7 @@ export default function MondayPartnerAustraliaContent({
 
   return (
     <div>
-      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={bookingHref(page.croSections?.stickyCtaUrl || rawCalendly)} />
       {/* Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow}
@@ -199,7 +201,7 @@ export default function MondayPartnerAustraliaContent({
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || rawCalendly)}
         secondaryCtaLabel={page.secondaryCtaLabel}
         secondaryCtaUrl={page.secondaryCtaUrl}
       />
@@ -225,7 +227,7 @@ export default function MondayPartnerAustraliaContent({
       <CroSections
         data={page.croSections}
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || rawCalendly)}
       />
 
       {/* Meet the team — AU region */}
@@ -245,7 +247,7 @@ export default function MondayPartnerAustraliaContent({
           page.calendlySubheading ||
           "Schedule a personalised monday.com demo with our certified monday.com consultants to discover how the platform can be customised for your specific business needs."
         }
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* Customer testimonials carousel */}

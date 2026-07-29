@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { Check } from "lucide-react"
 import {
@@ -199,7 +200,8 @@ function FinalStatsSection({ stats }: { stats: JoinStat[] }) {
 export default function SolarCrmSolutionContent({ page, siteSettings }: Props) {
   if (!page) return null
 
-  const calendlyUrl = siteSettings?.calendlyLink ?? ""
+  const rawCalendly = siteSettings?.calendlyLink ?? ""
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const secondaryCards = page.secondaryCapabilitiesCards ?? []
   const solutionCards = page.solutionCards ?? []
@@ -278,7 +280,7 @@ export default function SolarCrmSolutionContent({ page, siteSettings }: Props) {
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* 6. Solution cards — top pair */}
@@ -289,7 +291,7 @@ export default function SolarCrmSolutionContent({ page, siteSettings }: Props) {
         heading={page.returnsBannerHeading}
         subheading={page.returnsBannerSubheading}
         primaryLabel={page.returnsBannerPrimaryLabel}
-        primaryUrl={page.returnsBannerPrimaryUrl || calendlyUrl}
+        primaryUrl={bookingHref(page.returnsBannerPrimaryUrl || rawCalendly)}
         secondaryLabel={page.returnsBannerSecondaryLabel}
         secondaryUrl={page.returnsBannerSecondaryUrl}
         testimonials={testimonials}
