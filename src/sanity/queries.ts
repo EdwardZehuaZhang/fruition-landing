@@ -667,9 +667,24 @@ export async function getProofStats(): Promise<typeof PROOF_STATS_DEFAULTS> {
  */
 export async function getCaseStudiesForPage(pageKey: string) {
   return client.fetch(
-    `*[_type == "caseStudy" && $pageKey in pages] | order(coalesce(order, 99) asc) {
+    `*[_type == "caseStudy" && coalesce(kind, "quote") == "quote" && $pageKey in pages] | order(coalesce(order, 99) asc) {
       _id, clientName, clientRole, clientCompany, quote, logo, profilePhoto,
       linkedinUrl, industry, platform, order
+    }`,
+    { pageKey }
+  )
+}
+
+/**
+ * Case-study cards (kind == "card") for a page — the filterable big cards on
+ * /customer-testimonials. Same store as quote testimonials; `platform` doubles
+ * as the card's "product" filter facet. Callers keep page.caseStudyCards as
+ * render fallback, so [] never breaks a page.
+ */
+export async function getCaseStudyCardsForPage(pageKey: string) {
+  return client.fetch(
+    `*[_type == "caseStudy" && kind == "card" && $pageKey in pages] | order(coalesce(order, 99) asc) {
+      _id, title, image, "product": platform, industry, services, timeline, verifiedSource, order
     }`,
     { pageKey }
   )

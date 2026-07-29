@@ -1,4 +1,4 @@
-import { getSiteSettings, getPageBySlug } from "@/sanity/queries"
+import { getSiteSettings, getPageBySlug, getCaseStudyCardsForPage } from "@/sanity/queries"
 import { LogoCloudMarquee, CalendlySection, DiscoverCtaSection, CroSections, StickyCtaBar, TestimonialFilterGrid } from "@/components/sections"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
@@ -24,6 +24,7 @@ export async function generateMetadata() {
 
 interface CaseStudyCard {
   _key?: string
+  _id?: string
   title?: string
   image?: SanityImageRef | string
   product?: string
@@ -50,9 +51,10 @@ function getCaseStudyImageSrc(image?: SanityImageRef | string): string | null {
 }
 
 export default async function CustomerTestimonialsPage() {
-  const [siteSettings, page] = await Promise.all([
+  const [siteSettings, page, centralCards] = await Promise.all([
     getSiteSettings(),
     getPageBySlug("customer-testimonials"),
+    getCaseStudyCardsForPage("customer-testimonials"),
   ])
 
   const calendlyUrl = siteSettings?.calendlyLink || ""
@@ -71,7 +73,11 @@ export default async function CustomerTestimonialsPage() {
   const logoCloudPart1 = page?.logoCloudHeadingPart1
   const logoCloudAccent = page?.logoCloudHeadingAccent
 
-  const caseStudyCards: CaseStudyCard[] = (page?.caseStudyCards ?? []) as CaseStudyCard[]
+  // Central caseStudy docs (kind == "card") win; the page-field array is the
+  // render fallback (same override pattern as quote testimonials).
+  const caseStudyCards: CaseStudyCard[] = (
+    (centralCards?.length ? centralCards : page?.caseStudyCards) ?? []
+  ) as CaseStudyCard[]
 
   const calendlyHeading = page?.calendlyHeading
   const calendlySubheading = page?.calendlySubheading
@@ -196,7 +202,7 @@ export default async function CustomerTestimonialsPage() {
       <TestimonialFilterGrid
         heading={page?.caseStudySectionHeading}
         cards={caseStudyCards.map((s) => ({
-          _key: s._key,
+          _key: s._key || s._id,
           title: s.title,
           product: s.product,
           industry: s.industry,
