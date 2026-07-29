@@ -16,6 +16,12 @@ import { changeColumnValues, createItem } from "@/lib/mondayClient"
  *   MONDAY_LEADS_GROUP_ID    (optional) — group id, defaults to "New Leads"
  *   MONDAY_LEADS_EMAIL_COLUMN(optional) — email column id, default "lead_email"
  *   MONDAY_LEADS_NOTES_COLUMN(optional) — long_text column id, default "long_text66rcx0qu"
+ *   MONDAY_LEADS_COMPANY_COLUMN(optional) — text column id, default "company_name"
+ *
+ * To point directly at the Fruition CRM (APAC) board instead of the Website
+ * Leads mimic, only env changes are needed: BOARD_ID=1924922135,
+ * GROUP_ID=emailed_items__1, COMPANY_COLUMN=text_mkmkvqpj (all other column
+ * ids are identical on both boards).
  */
 export interface LeadPayload {
   name?: string
@@ -87,6 +93,7 @@ export async function pushToMonday(p: LeadPayload): Promise<string | null> {
   const groupId = process.env.MONDAY_LEADS_GROUP_ID || "group_mm5pvztf"
   const emailCol = process.env.MONDAY_LEADS_EMAIL_COLUMN || "lead_email"
   const notesCol = process.env.MONDAY_LEADS_NOTES_COLUMN || "long_text66rcx0qu"
+  const companyCol = process.env.MONDAY_LEADS_COMPANY_COLUMN || CRM_COLS.company
 
   let itemId: string
   try {
@@ -108,7 +115,7 @@ export async function pushToMonday(p: LeadPayload): Promise<string | null> {
     [CRM_COLS.creationDate]: { date: new Date().toISOString().slice(0, 10) },
   }
   if (p.name) structured[CRM_COLS.contactName] = p.name
-  if (p.company) structured[CRM_COLS.company] = p.company
+  if (p.company) structured[companyCol] = p.company
   const phone = p.fields?.["Phone"]?.trim()
   if (phone) structured[CRM_COLS.phone] = { phone }
   if (p.source) structured[CRM_COLS.utmSource] = p.source
