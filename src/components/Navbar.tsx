@@ -248,16 +248,16 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                               }
                               className="w-full flex items-center justify-between gap-2 px-3 py-2 text-left"
                             >
-                              <span className="text-xs font-semibold text-brand uppercase tracking-wider flex items-center gap-2">
+                              <span className="text-xs font-semibold text-muted uppercase tracking-wider flex items-center gap-2">
                                 {section.heading}
                                 {section.badge && (
-                                  <span className="inline-flex items-center rounded-full bg-brand text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 whitespace-nowrap">
+                                  <span className="inline-flex items-center rounded-full ring-1 ring-ui text-muted text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 whitespace-nowrap">
                                     {section.badge}
                                   </span>
                                 )}
                               </span>
                               <svg
-                                className={`shrink-0 text-brand transition-transform duration-200 ${sectionOpen ? 'rotate-180' : ''}`}
+                                className={`shrink-0 text-muted transition-transform duration-200 ${sectionOpen ? 'rotate-180' : ''}`}
                                 width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                               >
                                 <path d="M6 9l6 6 6-6" />
@@ -271,7 +271,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                                 key={sub.href}
                                 href={bookingHref(sub.href || '#')}
                                 className={`flex items-start gap-3 pl-4 pr-2 py-2 rounded-md transition-colors ${
-                                  isActive ? 'bg-brand-soft dark:bg-white/10' : 'hover:bg-black/5 dark:hover:bg-white/5'
+                                  isActive ? 'bg-black/5 dark:bg-white/10' : 'hover:bg-black/5 dark:hover:bg-white/5'
                                 }`}
                                 onClick={closeMobile}
                               >
@@ -330,27 +330,17 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                   return (
                     <div
                       key={`${section.heading}-${sIdx}`}
-                      className={`min-w-0 ${
-                        columnsLayout
-                          ? section.highlight
-                            ? 'flex-[1.3] rounded-xl bg-brand-soft dark:bg-white/5 ring-1 ring-brand/30 dark:ring-white/10 p-4'
-                            : 'flex-1'
-                          : ''
-                      }`}
+                      className={`min-w-0 ${columnsLayout ? 'flex-1' : ''}`}
                     >
                       {section.heading && (
                         <p
-                          className={`text-xs pb-3 border-b mb-3 flex items-center gap-2 ${
+                          className={`text-xs pb-3 border-b mb-3 flex items-center gap-2 text-muted border-ui ${
                             columnsLayout ? 'font-semibold uppercase tracking-wider' : 'font-medium'
-                          } ${
-                            section.highlight
-                              ? 'text-brand dark:text-brand-light border-brand/30 dark:border-white/10'
-                              : 'text-muted border-ui'
                           }`}
                         >
                           {section.heading}
                           {section.badge && (
-                            <span className="inline-flex items-center rounded-full bg-brand text-white text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 whitespace-nowrap">
+                            <span className="inline-flex items-center rounded-full ring-1 ring-ui text-muted text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 whitespace-nowrap">
                               {section.badge}
                             </span>
                           )}
@@ -368,10 +358,8 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                               href={bookingHref(sub.href || '#')}
                               className={`group flex items-start gap-3 rounded-lg p-3 transition-colors ${
                                 isActive
-                                  ? 'bg-brand-soft dark:bg-white/10'
-                                  : sub.featured
-                                    ? 'bg-surface-raised ring-1 ring-brand/30 dark:ring-white/15 shadow-sm hover:ring-brand dark:hover:ring-brand-light'
-                                    : 'hover:bg-black/5 dark:hover:bg-white/5'
+                                  ? 'bg-black/5 dark:bg-white/10'
+                                  : 'hover:bg-black/5 dark:hover:bg-white/5'
                               }`}
                               onClick={() => setOpenMenu(null)}
                             >

@@ -1,8 +1,9 @@
 import type { PracticePage } from './types'
 
 /**
- * /pricing and /ai-consulting/n8n — copy ported from the approved v2.1 mockups
- * (pricing.html + ai-consulting/n8n.html).
+ * /pricing — copy ported from the approved v2.1 mockups (pricing.html).
+ * (The /ai-consulting/n8n page was pruned July 2026 — 301 →
+ * /partnerships/n8n-integration-partner.)
  *
  * Notes on the port:
  * - The immutable `services` card type carries no href, so the cross-links the
@@ -123,111 +124,6 @@ export const PRICING_N8N_PAGES: Record<string, PracticePage> = {
       {
         q: 'How long does a typical consulting engagement take?',
         a: 'Most consulting engagements run 4 to 12 weeks from kickoff to delivery depending on scope. Fruition works in fixed phases with defined outcomes, so you always know what is being delivered, by when, and at what cost.',
-      },
-      {
-        q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
-      },
-      {
-        q: 'Can Fruition deliver this remotely?',
-        a: 'Yes. All Fruition services are delivered remotely as standard across Australia, the UK, and the US, with optional on-site workshop weeks in Sydney, London, and New York.',
-      },
-    ],
-  },
-
-  n8n: {
-    path: '/ai-consulting/n8n',
-    seoTitle: 'n8n Consulting Partner | Fruition — Agentic Workflow Automation, AU · UK · US',
-    seoDescription:
-      'Fruition is an n8n consulting and implementation partner across Australia, the UK, and the US. We build agentic automation networks that connect your AI models, platforms, and data — self-hosted or cloud.',
-    breadcrumb: [
-      { label: 'AI Consulting', href: '/ai-consulting' },
-      { label: 'n8n', href: '/ai-consulting/n8n' },
-    ],
-    eyebrow: 'AI Consulting · n8n Partner',
-    heading: 'n8n workflows that run your operations, not just your Zaps',
-    lead: 'Fruition is an n8n consulting and implementation partner across Australia, the UK, and the US. We build agentic automation networks that connect your AI models, platforms, and data — self-hosted or cloud.',
-    targetQueries: [
-      'n8n consultant',
-      'n8n implementation partner',
-      'n8n AI agent development',
-      'n8n vs Zapier enterprise',
-      'self-hosted n8n setup',
-    ],
-    approachEyebrow: 'Our approach',
-    approachHeading: 'Why n8n, and why us.',
-    approach: [
-      {
-        title: 'AI-native orchestration',
-        body: 'n8n’s agent nodes, LLM integrations, and code flexibility make it the strongest open platform for agentic automation — a tier beyond trigger-action tools.',
-      },
-      {
-        title: 'Self-hosted when it matters',
-        body: 'Data sovereignty requirements? We deploy and manage self-hosted n8n with the security posture regulated industries need.',
-      },
-      {
-        title: 'Deep platform connections',
-        body: 'We connect n8n to the platforms we implement daily — monday.com, HubSpot, Jira, Aircall, Twilio — with error handling built for production.',
-      },
-    ],
-    servicesEyebrow: 'What we build',
-    servicesHeading: 'n8n in production.',
-    services: [
-      {
-        title: 'AI agent workflows',
-        body: 'Multi-step agents combining LLM calls, tool use, and business logic — research agents, enrichment pipelines, content operations.',
-      },
-      {
-        title: 'Cross-platform automation',
-        body: 'monday.com ↔ HubSpot ↔ Xero ↔ Slack flows that replace manual re-keying with governed, logged automation.',
-      },
-      {
-        title: 'Outbound & marketing engines',
-        body: 'Lead sourcing, enrichment, personalisation, and sequencing networks — the architecture behind modern outbound systems.',
-      },
-      {
-        title: 'Migration from Make/Zapier',
-        body: 'Structured migration when you’ve outgrown trigger-action tools — with a workflow audit that usually consolidates 40% of scenarios.',
-      },
-    ],
-    childrenEyebrow: 'Related',
-    childrenHeading: 'Where n8n fits.',
-    children: [
-      {
-        label: 'AI Consulting',
-        description: 'The broader AI practice this orchestration work sits within.',
-        href: '/ai-consulting',
-      },
-      {
-        label: 'n8n Integration Partner',
-        description: 'Our n8n partner credential and integration track record.',
-        href: '/partnerships/n8n-integration-partner',
-      },
-    ],
-    faqs: [
-      {
-        q: 'What is n8n and how does it compare to Zapier or Make?',
-        a: 'n8n is a workflow automation platform with native AI agent capabilities, code-level flexibility, and a self-hosting option. Zapier and Make excel at simple trigger-action automation; n8n is the stronger choice for complex, multi-step, AI-driven workflows and for organisations with data sovereignty requirements.',
-      },
-      {
-        q: 'Can n8n be self-hosted for compliance reasons?',
-        a: 'Yes — self-hosting is one of n8n’s core advantages. Fruition deploys and manages self-hosted n8n instances for clients in financial services, healthcare, and government where workflow data cannot leave controlled infrastructure.',
-      },
-      {
-        q: 'Does Fruition connect n8n to monday.com?',
-        a: 'Yes — it’s one of our most common builds. As a monday.com Platinum Partner and n8n implementer, we build production-grade monday↔n8n automation with proper error handling, rate-limit management, and logging.',
-      },
-      {
-        q: 'How much does n8n consulting cost with Fruition?',
-        a: 'Fruition n8n engagements start at AUD $12,000 for a structured initial phase, with fixed-fee pricing published per phase. Mid-scope projects are quoted after a scoping call. We serve Australia (AUD), the UK (GBP), and the US (USD) with local pricing in each region.',
-      },
-      {
-        q: 'Which regions does Fruition deliver n8n services in?',
-        a: 'Fruition delivers from Sydney (headquarters, serving APAC including Singapore and India), London (UK and Europe), and New York (US and Canada). Engagements are delivered remotely as standard, with optional on-site workshops in each region.',
-      },
-      {
-        q: 'How long does a typical n8n engagement take?',
-        a: 'Most n8n engagements run 4 to 12 weeks from kickoff to delivery depending on scope. Fruition works in fixed phases with defined outcomes, so you always know what is being delivered, by when, and at what cost.',
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
