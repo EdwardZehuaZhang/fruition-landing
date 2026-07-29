@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import type { CSSProperties, ReactNode } from "react"
 import FaqAccordion from "@/components/sections/FaqAccordion"
 import ClosingCtaSection, { type ClosingCtaCopy } from "@/components/sections/ClosingCtaSection"
@@ -68,9 +69,7 @@ export default function AiPartnerTemplate({
 }) {
   if (!page) return null
 
-  const calendly =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const calendly = bookingHref(siteSettings?.calendlyLink)
 
   const rootStyle = {
     "--accent": page.accentColor || "#8015e8",

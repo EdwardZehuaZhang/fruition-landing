@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import Link from 'next/link'
 import CtaButton from '@/components/CtaButton'
 import Image from 'next/image'
@@ -83,7 +84,7 @@ function isRealPhone(phone?: string): boolean {
 }
 
 export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsProp | null }) {
-  const calendlyUrl = siteSettings?.calendlyLink || ''
+  const calendlyUrl = siteSettings?.calendlyLink ? bookingHref(siteSettings.calendlyLink) : ''
   const offices = siteSettings?.offices ?? []
   const socials = siteSettings?.socialLinks ?? []
   const partnerLogos = siteSettings?.footerPartnerLogos ?? []

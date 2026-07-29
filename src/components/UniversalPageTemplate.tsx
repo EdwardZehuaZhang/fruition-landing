@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import type { ReactNode } from "react"
 import {
   HeroBanner,
@@ -73,9 +74,9 @@ export default function UniversalPageTemplate({
 }: UniversalPageTemplateProps) {
   if (!page) return null
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const comparisonTabs = page.comparisonTabs ?? []
   const methodologySteps = page.methodologySteps ?? []
@@ -147,7 +148,7 @@ export default function UniversalPageTemplate({
         <CalendlySection
           heading={page.calendlyHeading}
           subheading={page.calendlySubheading}
-          calendlyUrl={calendlyUrl}
+          calendlyUrl={rawCalendly}
         />
       )}
 
@@ -270,7 +271,7 @@ export default function UniversalPageTemplate({
         <CalendlySection
           heading={page.calendlyHeading}
           subheading={page.calendlySubheading}
-          calendlyUrl={calendlyUrl}
+          calendlyUrl={rawCalendly}
         />
       )}
 

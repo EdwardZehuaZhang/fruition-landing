@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { Rocket, Play, Check } from "lucide-react"
 import {
@@ -319,9 +320,9 @@ function PartnerWrapUpSection({
 
 export default function MondayConsultingPartnerContent({ page, siteSettings, caseStudies = [], faqTabs }: Props) {
   if (!page) return null
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const partnerTabs: ComparisonTab[] = [LEADERSHIP_CHALLENGES, TEAM_CHALLENGES, HOW_WE_HELP]
   const resolvedFaqTabs = faqTabs ?? []
@@ -392,7 +393,7 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
       />
 
       {/* 4. Certified Excellence dark banner */}
-      <CertifiedExcellenceSection calendlyUrl={calendlyUrl} />
+      <CertifiedExcellenceSection calendlyUrl={rawCalendly} />
 
       {/* 5. Why Choose Fruition */}
       <WhyFruitionSection items={resolvedWhyFruition} />
@@ -435,7 +436,7 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
           page.calendlySubheading ||
           "Schedule a demo with our monday.com consultants to discover how monday.com can be customised for your business, and get a free 4-week extended trial to experience its full potential."
         }
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* 9. Implementation Services (2×2) */}
@@ -443,7 +444,7 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
 
       {/* 10. Combined: CRM expertise + Industry/Global cards + Fruition Advantage banner */}
       <PartnerWrapUpSection
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
         industrySolutions={resolvedIndustrySolutions}
         countries={resolvedCountries}
         fruitionAdvantages={resolvedFruitionAdvantages}

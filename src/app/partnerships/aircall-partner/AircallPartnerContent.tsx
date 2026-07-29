@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { useState } from "react"
 import { Rocket, Check } from "lucide-react"
@@ -270,9 +271,9 @@ function AIConversationsSection({ calendlyUrl, features }: { calendlyUrl: string
 
 export default function AircallPartnerContent({ page, siteSettings, faqTabs }: Props) {
   if (!page) return null
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const resolvedFaqTabs = faqTabs ?? []
   const resolvedAircallFeatures: AircallFeature[] = (page.aircallFeatures && page.aircallFeatures.length > 0) ? page.aircallFeatures : AIRCALL_FEATURES_FALLBACK
@@ -320,10 +321,10 @@ export default function AircallPartnerContent({ page, siteSettings, faqTabs }: P
       <CalendlySection
         heading={page.calendlyHeading || "Schedule A 30-Min Consultation"}
         subheading={page.calendlySubheading || "AI-powered customer conversations made easy."}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
-      <AIConversationsSection calendlyUrl={calendlyUrl} features={resolvedAircallFeatures} />
+      <AIConversationsSection calendlyUrl={rawCalendly} features={resolvedAircallFeatures} />
 
       <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
 

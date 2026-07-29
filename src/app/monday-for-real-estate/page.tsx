@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import {
   getIndustryPageBySlug,
   getSiteSettings,
@@ -42,8 +43,9 @@ export default async function Page() {
 
   if (!page) return null
 
-  const calendlyUrl =
+  const rawCalendly =
     siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const featuredTestimonial =
     caseStudies?.find(
@@ -165,7 +167,7 @@ export default async function Page() {
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* 7. Why the best use monday.com — 9 capability cards (real estate) */}

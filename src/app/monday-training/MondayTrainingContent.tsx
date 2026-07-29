@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -292,7 +293,7 @@ export default function MondayTrainingContent({
 
   return (
     <div>
-      <StickyCtaBar label={data?.croSections?.stickyCtaLabel} href={data?.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={data?.croSections?.stickyCtaLabel} href={bookingHref(data?.croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* ============================================================ */}
       {/* SECTION 1 -- Hero                                            */}
       {/* ============================================================ */}
@@ -517,11 +518,11 @@ export default function MondayTrainingContent({
         heading="Which training format fits your team?"
         subheading="Set your team size and workflow complexity for an instant recommendation."
         ctaLabel="Book a FREE Training Consultation"
-        ctaUrl={calendlyUrl}
+        ctaUrl={bookingHref(calendlyUrl)}
       />
 
       {/* CRO action items */}
-      <CroSections data={data?.croSections} primaryCtaLabel={data?.heroPrimaryCtaLabel} primaryCtaUrl={calendlyUrl} />
+      <CroSections data={data?.croSections} primaryCtaLabel={data?.heroPrimaryCtaLabel} primaryCtaUrl={bookingHref(calendlyUrl)} />
 
       {/* ============================================================ */}
       {/* SECTION 4 -- Testimonials (shared carousel component)        */}

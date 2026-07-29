@@ -1,5 +1,6 @@
 "use client"
 
+import { BOOKING_ANCHOR } from "@/lib/bookingLink"
 import { useEffect, useState } from "react"
 import CtaButton from "@/components/CtaButton"
 
@@ -8,7 +9,7 @@ import CtaButton from "@/components/CtaButton"
 /*  from Josh's approved interactive mockup (monday item 2790599256).  */
 /* ------------------------------------------------------------------ */
 
-const CALENDLY = "https://calendly.com/global-calendar-fruitionservices"
+const CALENDLY = BOOKING_ANCHOR
 const PAID_ASSESSMENT = "/ai-capability-assessment"
 
 const DIMS = [

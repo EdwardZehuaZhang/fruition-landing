@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import { getSiteSettings } from "@/sanity/queries"
 import { buildOgMetadata } from "@/lib/metadata"
 import CatalogContent from "./CatalogContent"
@@ -16,7 +17,6 @@ export async function generateMetadata() {
 
 export default async function Page() {
   const siteSettings = await getSiteSettings()
-  const calendlyUrl =
-    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(siteSettings?.calendlyLink)
   return <CatalogContent calendlyUrl={calendlyUrl} />
 }
