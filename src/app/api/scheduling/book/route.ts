@@ -25,6 +25,10 @@ interface BookRequest {
   /** "What can we help with?" selection — ILE Service Interest dropdown */
   service?: string
   notes?: string
+  /** "How many people would use monday?" — extra line in the Message column */
+  teamSize?: string
+  /** "Which office should take this?" — extra line in the Message column */
+  office?: string
   timezone?: string
   region?: LeadRegion
   /** Spam honeypot — must be empty */
@@ -63,6 +67,8 @@ export async function POST(req: Request) {
   if (p.phone?.trim()) fields["Phone"] = p.phone.trim()
   if (p.service?.trim()) fields["Service"] = p.service.trim()
   if (p.notes?.trim()) fields["Message"] = p.notes.trim()
+  if (p.teamSize?.trim()) fields["Team size"] = p.teamSize.trim()
+  if (p.office?.trim()) fields["Preferred office"] = p.office.trim()
 
   let booked = false
   try {

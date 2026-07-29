@@ -6,7 +6,7 @@ import Link from "next/link"
 import { urlFor } from "@/sanity/image"
 import StatsBlockView from "@/features/page-builder/blocks/StatsBlockView"
 import TestimonialsGrid from "@/components/sections/TestimonialsGrid"
-import ContactFormCard from "@/components/sections/ContactFormCard"
+import BookingSection from "@/components/sections/BookingSection"
 import PaperPlaneIcon from "@/components/common/icons/PaperPlaneIcon"
 import FaqAccordion from "@/components/sections/FaqAccordion"
 import LeftRightSection from "@/components/sections/LeftRightSection"
@@ -626,10 +626,10 @@ export default function MondayTrainingContent({
       {/* ============================================================ */}
       {/* SECTION 9 -- Calendly Booking                                */}
       {/* ============================================================ */}
-      <ContactFormCard
+      <BookingSection
+        eyebrow="monday.com training"
         heading="Book a FREE Training Consultation"
-        subheading="Tell us about your team and the workflows you want to master — a trainer replies within one business day."
-        source="monday-training"
+        sub="Tell us about your team and the workflows you want to master — we’ll tailor the session live on the call."
       />
 
       {/* ============================================================ */}
