@@ -56,6 +56,17 @@ export async function createItem(boardId: number, groupId: string, name: string)
   return data.create_item.id
 }
 
+/** Post a plain-text update (comment) on a monday item. */
+export async function createUpdate(itemId: string, body: string): Promise<string> {
+  const data = await gql<{ create_update: { id: string } }>(
+    `mutation ($item: ID!, $body: String!) {
+      create_update(item_id: $item, body: $body) { id }
+    }`,
+    { item: String(itemId), body },
+  )
+  return data.create_update.id
+}
+
 /**
  * Write multiple column values on a monday item.
  *

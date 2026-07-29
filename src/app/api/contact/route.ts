@@ -129,7 +129,14 @@ export async function POST(req: Request) {
   if (phone) fields["Phone"] = phone
   if (service) fields["Service"] = service
   if (message) fields["Message"] = message
-  const lead = { name: name || email, email, source: "contact-us", fields }
+  const lead = {
+    name: name || email,
+    email,
+    source: "contact-us",
+    // Cloudflare's edge geolocation drives the regional CRM routing.
+    country: req.headers.get("cf-ipcountry") ?? undefined,
+    fields,
+  }
   const mondayId = await pushToMonday(lead)
   const slackOk = mondayId ? false : await notifySlack(lead)
 
