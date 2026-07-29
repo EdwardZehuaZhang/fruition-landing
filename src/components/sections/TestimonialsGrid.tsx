@@ -37,26 +37,30 @@ export default function TestimonialsGrid({
   statCardCtaUrl = "/customer-testimonials",
   caseStudies = [],
 }: TestimonialsGridProps) {
-  // Build testimonial cards from case studies
-  const testimonials = caseStudies.map((t) => ({
-    name: t.clientName ?? "",
-    role: t.clientRole && t.clientCompany
-      ? `${t.clientRole}, ${t.clientCompany}`
-      : t.clientRole || t.clientCompany || "",
-    quote: t.quote ?? "",
-    photo: safeImageUrl(t.profilePhoto) ?? undefined,
-    id: t._id,
-  }))
-
-  // Paginate into groups of 5
+  // Build testimonial cards from case studies, then paginate into groups of 5.
+  // Case studies without a quote (e.g. project write-ups with no testimonial)
+  // are dropped — they'd otherwise render as blank panels.
   // Memoized so the React Compiler can preserve downstream memoization.
   const pages = useMemo(() => {
+    const testimonials = caseStudies
+      .map((t) => ({
+        name: t.clientName ?? "",
+        role: t.clientRole && t.clientCompany
+          ? `${t.clientRole}, ${t.clientCompany}`
+          : t.clientRole || t.clientCompany || "",
+        quote: (t.quote ?? "").trim(),
+        photo: safeImageUrl(t.profilePhoto) ?? undefined,
+        id: t._id,
+      }))
+      .filter((t) => t.quote.length > 0)
     const out: typeof testimonials[] = []
     for (let i = 0; i < testimonials.length; i += TESTIMONIALS_PER_PAGE) {
       out.push(testimonials.slice(i, i + TESTIMONIALS_PER_PAGE))
     }
-    return out
-  }, [testimonials])
+    // Always render at least one page so the stat card shows even when no
+    // case study carries a quote.
+    return out.length > 0 ? out : [[]]
+  }, [caseStudies])
   const totalPages = pages.length
   const [currentPage, setCurrentPage] = useState(0)
 
