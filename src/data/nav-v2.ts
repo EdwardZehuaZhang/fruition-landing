@@ -316,6 +316,8 @@ export const NAV_V2: NavV2Item[] = [
         items: [
           { label: 'Blog', href: '/consulting-blog', icon: 'edit', description: '100+ articles on monday.com, AI & automation' },
           { label: 'Case Studies', href: '/case-studies', icon: 'document', description: 'Client stories with the working shown' },
+          { label: 'Client Success Stories', href: '/customer-testimonials', icon: 'chart', description: '8 verified client implementations, filterable' },
+          { label: 'Solutions Catalog', href: '/monday-consulting-solutions/catalog', icon: 'list', description: '45 prebuilt monday.com solutions in one atlas' },
           { label: 'FAQs', href: '/faqs', icon: 'question', description: 'Direct answers to common questions' },
         ],
       },
@@ -349,6 +351,7 @@ export const NAV_V2: NavV2Item[] = [
       },
       {
         heading: 'Locations',
+        columns: 2,
         items: [
           { label: 'Australia', href: '/monday-partner-australia', icon: 'globe', description: 'Sydney HQ — APAC delivery' },
           { label: 'United Kingdom', href: '/monday-partner-uk', icon: 'globe', description: 'London delivery centre' },

@@ -358,9 +358,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                               className={`group flex items-start gap-3 rounded-lg p-3 transition-colors ${
                                 isActive
                                   ? 'bg-black/5 dark:bg-white/10'
-                                  : sub.featured
-                                    ? 'bg-surface-raised ring-1 ring-ui shadow-sm hover:ring-brand dark:hover:ring-brand-light'
-                                    : 'hover:bg-black/5 dark:hover:bg-white/5'
+                                  : 'hover:bg-black/5 dark:hover:bg-white/5'
                               }`}
                               onClick={() => setOpenMenu(null)}
                             >
