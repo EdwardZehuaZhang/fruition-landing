@@ -281,7 +281,6 @@ export const NAV_V2: NavV2Item[] = [
           { label: 'Twilio', href: '/integrations/twilio', icon: 'zap', description: 'SMS & voice workflow automation' },
           { label: 'Guidde', href: '/partnerships/certified-guidde-partner', icon: 'video', description: 'Certified Guidde partner' },
           { label: 'Hootsuite', href: '/partnerships/hootsuite-delivery-partner', icon: 'megaphone', description: 'Hootsuite delivery partner' },
-          { label: 'All certifications & awards', href: '/certifications-and-awards', icon: 'list', description: 'Every credential & award, in one place' },
         ],
       },
     ],
