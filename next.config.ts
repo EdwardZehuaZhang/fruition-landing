@@ -17,6 +17,17 @@ const auditRedirects: Redirect[] = [
   { source: "/integrations/make", destination: "/partnerships/make-partners", permanent: true },
   // Accidental duplicate blog post.
   { source: "/post/monday-com-vs-clickup-1", destination: "/post/monday-com-vs-clickup", permanent: true },
+  // n8n service page folded into the certified-partner page (Aircall pattern).
+  { source: "/ai-consulting/n8n", destination: "/partnerships/n8n-integration-partner", permanent: true },
+  // monday-products cluster (July 2026 build, zero traffic) pruned into
+  // the ranked monday.com service pages.
+  { source: "/monday-products", destination: "/implementation-packages", permanent: true },
+  { source: "/monday-products/crm", destination: "/monday-crm-consulting", permanent: true },
+  { source: "/monday-products/service", destination: "/monday-consulting-solutions/monday-service", permanent: true },
+  { source: "/monday-products/work-management", destination: "/implementation-packages", permanent: true },
+  { source: "/monday-products/dev", destination: "/implementation-packages", permanent: true },
+  { source: "/monday-products/ai", destination: "/implementation-packages", permanent: true },
+  { source: "/monday-products/enterprise", destination: "/implementation-packages", permanent: true },
 
   // ── Legacy Wix URLs still receiving traffic (GA4, July 2026) ──
   { source: "/leadership", destination: "/fruition-team", permanent: true },

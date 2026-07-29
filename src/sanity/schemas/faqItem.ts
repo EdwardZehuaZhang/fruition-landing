@@ -54,7 +54,6 @@ export default {
           { value: 'ai-consulting/customer-service', title: 'AI · Customer Service' },
           { value: 'ai-consulting/governance-and-compliance', title: 'AI · Governance & Compliance' },
           { value: 'ai-consulting/marketing-automation', title: 'AI · Marketing Automation' },
-          { value: 'ai-consulting/n8n', title: 'AI · n8n' },
           { value: 'ai-consulting/operations-back-office', title: 'AI · Operations & Back Office' },
           { value: 'ai-consulting/rag-knowledge-systems', title: 'AI · RAG & Knowledge Systems' },
           { value: 'ai-consulting/sales-outbound', title: 'AI · Sales & Outbound' },
@@ -79,13 +78,12 @@ export default {
           { value: 'integrations/make', title: 'Integrations · Make' },
           { value: 'integrations/twilio', title: 'Integrations · Twilio' },
           { value: 'integrations/zapier', title: 'Integrations · Zapier' },
-          { value: 'monday-products', title: 'monday Products (hub)' },
-          { value: 'monday-products/ai', title: 'monday Products · AI' },
-          { value: 'monday-products/crm', title: 'monday Products · CRM' },
-          { value: 'monday-products/dev', title: 'monday Products · Dev' },
-          { value: 'monday-products/enterprise', title: 'monday Products · Enterprise' },
-          { value: 'monday-products/service', title: 'monday Products · Service' },
-          { value: 'monday-products/work-management', title: 'monday Products · Work Management' },
+
+
+
+
+
+
           { value: 'pricing', title: 'Pricing' },
           /* Department solution pages (FAQ-bank agentic sets) */
           { value: 'monday-consulting-solutions/monday-for-finance', title: 'monday for Finance' },
