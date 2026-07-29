@@ -21,9 +21,12 @@ interface ContactRequest {
   firstName?: string
   lastName?: string
   email?: string
+  company?: string
   phone?: string
   message?: string
   service?: string
+  /** Which form/page the lead came from, defaults to "contact-us" */
+  source?: string
   /** Spam honeypot — must be empty */
   website?: string
 }
@@ -58,6 +61,8 @@ export async function POST(req: Request) {
   const phone = (p.phone ?? "").trim()
   const message = (p.message ?? "").trim()
   const service = (p.service ?? "").trim()
+  const company = (p.company ?? "").trim()
+  const source = (p.source ?? "").trim() || "contact-us"
   const name = [firstName, lastName].filter(Boolean).join(" ")
 
   if (!firstName) return NextResponse.json({ ok: false, error: "First name is required." }, { status: 400 })
@@ -69,6 +74,7 @@ export async function POST(req: Request) {
   const rows: [string, string][] = [
     ["Name", name],
     ["Email", email],
+    ["Company", company],
     ["Phone", phone],
     ["Service", service],
   ]
@@ -132,7 +138,8 @@ export async function POST(req: Request) {
   const lead = {
     name: name || email,
     email,
-    source: "contact-us",
+    company: company || undefined,
+    source,
     // Cloudflare's edge geolocation drives the regional CRM routing.
     country: req.headers.get("cf-ipcountry") ?? undefined,
     fields,

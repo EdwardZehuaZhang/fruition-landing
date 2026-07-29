@@ -87,7 +87,7 @@ const ILE_BOARD: LeadBoard = {
     utmSource: "short_textqfwxowxd",
     creationDate: "mirror4",
     country: "country_mm345qer",
-    notes: "follow_up_notes",
+    notes: "message",
   },
 }
 
@@ -222,7 +222,12 @@ export async function notifySlack(p: LeadPayload): Promise<boolean> {
   }
 }
 
-async function pushToBoard(p: LeadPayload, rb: LeadBoard, label: string): Promise<string | null> {
+async function pushToBoard(
+  p: LeadPayload,
+  rb: LeadBoard,
+  label: string,
+  statusLabel = "New Lead",
+): Promise<string | null> {
   let itemId: string
   try {
     itemId = await createItem(rb.boardId, rb.groupId, p.name || p.email || "New lead")
@@ -246,7 +251,7 @@ async function pushToBoard(p: LeadPayload, rb: LeadBoard, label: string): Promis
   const phone = p.fields?.["Phone"]?.trim()
   if (phone && c.phone) cols[c.phone] = { phone }
   if (p.company && c.company) cols[c.company] = p.company
-  if (c.status) cols[c.status] = { label: "New Lead" }
+  if (c.status) cols[c.status] = { label: statusLabel }
   if (c.source) cols[c.source] = { label: "Website" }
   if (p.source && c.utmSource) cols[c.utmSource] = p.source
   if (c.creationDate) cols[c.creationDate] = { date: new Date().toISOString().slice(0, 10) }
@@ -308,6 +313,19 @@ function fallbackBoard(): LeadBoard | null {
       notes: process.env.MONDAY_LEADS_NOTES_COLUMN || "long_text66rcx0qu",
     },
   }
+}
+
+/**
+ * A confirmed consultation booking from the website scheduler. Skips the
+ * classifier (a booked meeting is a lead by definition) and lands on the ILE
+ * board with status "Meeting Booked".
+ */
+export async function pushMeetingToMonday(p: LeadPayload): Promise<string | null> {
+  const viaIle = await pushToBoard(p, ILE_BOARD, "ILE:booking", "Meeting Booked")
+  if (viaIle) return viaIle
+  const fallback = fallbackBoard()
+  if (!fallback) return null
+  return pushToBoard(p, fallback, "fallback:booking")
 }
 
 export async function pushToMonday(p: LeadPayload): Promise<string | null> {
