@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -830,7 +831,7 @@ export default function ImplementationPackagesContent({
       <CroSections
         data={data?.croSections}
         primaryCtaLabel={data?.heroPrimaryCtaLabel}
-        primaryCtaUrl={data?.heroPrimaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(data?.heroPrimaryCtaUrl || calendlyUrl)}
       />
 
       {/* ============================================================ */}

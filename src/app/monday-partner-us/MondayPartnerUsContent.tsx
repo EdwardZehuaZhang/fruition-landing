@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { Rocket, Play } from "lucide-react"
 import {
@@ -114,7 +115,8 @@ export default function MondayPartnerUsContent({
   closingCta,
 }: Props) {
   if (!page) return null
-  const calendlyUrl = siteSettings?.calendlyLink ?? ""
+  const rawCalendly = siteSettings?.calendlyLink ?? ""
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const resolvedFaqTabs = faqTabs ?? []
   const partnerCaseStudies = caseStudies
@@ -123,7 +125,7 @@ export default function MondayPartnerUsContent({
 
   return (
     <div>
-      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={page.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={bookingHref(page.croSections?.stickyCtaUrl || rawCalendly)} />
       {/* Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow}
@@ -139,7 +141,7 @@ export default function MondayPartnerUsContent({
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || rawCalendly)}
         secondaryCtaLabel={page.secondaryCtaLabel}
         secondaryCtaUrl={page.secondaryCtaUrl}
       />
@@ -175,7 +177,7 @@ export default function MondayPartnerUsContent({
       <CroSections
         data={page.croSections}
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || rawCalendly)}
       />
 
       {/* Calendly */}
@@ -185,7 +187,7 @@ export default function MondayPartnerUsContent({
           page.calendlySubheading ||
           "Schedule a personalized monday.com demonstration with our certified monday.com implementation consultants to discover how the platform can be tailored to your unique business requirements.\n\nUnlock monday.com's complete potential with our exclusive 4-week extended free trial period, providing comprehensive time to explore advanced workflow features and achieve measurable productivity results."
         }
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* Customer testimonials */}

@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import { getSiteSettings, getPageBySlug } from "@/sanity/queries"
 import { LogoCloudMarquee, CalendlySection, DiscoverCtaSection, CroSections, StickyCtaBar, TestimonialFilterGrid } from "@/components/sections"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
@@ -55,7 +56,8 @@ export default async function CustomerTestimonialsPage() {
     getPageBySlug("customer-testimonials"),
   ])
 
-  const calendlyUrl = siteSettings?.calendlyLink || ""
+  const rawCalendly = siteSettings?.calendlyLink || ""
+  const calendlyUrl = bookingHref(rawCalendly)
   const partnerBadges: PartnerBadge[] = page?.heroPartnerBadges?.length > 0
     ? page.heroPartnerBadges
     : siteSettings?.navbarPartnerBadges || []
@@ -84,7 +86,7 @@ export default async function CustomerTestimonialsPage() {
 
   return (
     <div>
-      <StickyCtaBar label={page?.croSections?.stickyCtaLabel} href={page?.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={page?.croSections?.stickyCtaLabel} href={bookingHref(page?.croSections?.stickyCtaUrl || rawCalendly)} />
       {/* Hero */}
       <section className="bg-surface">
         <div
@@ -215,7 +217,7 @@ export default async function CustomerTestimonialsPage() {
         <CalendlySection
           heading={calendlyHeading}
           subheading={calendlySubheading}
-          calendlyUrl={calendlyUrl}
+          calendlyUrl={rawCalendly}
         />
       )}
 

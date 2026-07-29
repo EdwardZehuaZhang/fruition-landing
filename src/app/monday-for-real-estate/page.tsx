@@ -63,9 +63,9 @@ export default async function Page() {
         heroImage={page.heroImage}
         heroImageUrl={page.heroImageUrl}
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
       />
 
       {/* 2. Logo Cloud */}
@@ -146,7 +146,7 @@ export default async function Page() {
                 {page.caseStudyCtaLabel && (
                   <div style={{ marginTop: 8 }}>
                     <CtaButton
-                      href={page.caseStudyCtaUrl || calendlyUrl}
+                      href={bookingHref(page.caseStudyCtaUrl || calendlyUrl)}
                       label={page.caseStudyCtaLabel}
                       variant="primary"
                     />
@@ -208,7 +208,7 @@ export default async function Page() {
         primaryCtaLabel={page.testimonialBannerPrimaryCtaLabel}
         primaryCtaUrl={calendlyUrl}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
         testimonial={featuredTestimonial}
         testimonials={caseStudies}
       />

@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { Rocket, Play } from "lucide-react"
 import {
@@ -130,7 +131,8 @@ export default function MondayPartnerPhilippinesContent({
   closingCta,
 }: Props) {
   if (!page) return null
-  const calendlyUrl = siteSettings?.calendlyLink ?? ""
+  const rawCalendly = siteSettings?.calendlyLink ?? ""
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const partnerCaseStudies = caseStudies
   const resolvedComparisonTabs: ComparisonTab[] = page.comparisonTabs ?? []
@@ -157,7 +159,7 @@ export default function MondayPartnerPhilippinesContent({
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || rawCalendly)}
         secondaryCtaLabel={page.secondaryCtaLabel}
         secondaryCtaUrl={page.secondaryCtaUrl}
       />
@@ -195,7 +197,7 @@ export default function MondayPartnerPhilippinesContent({
       <CalendlySection
         heading={page.calendlyHeading || "Schedule A 30-Min Consultation With One of Our monday.com Implementation Consultants"}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* Customer testimonials */}

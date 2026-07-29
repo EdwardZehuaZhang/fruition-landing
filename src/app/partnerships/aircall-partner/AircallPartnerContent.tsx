@@ -300,9 +300,9 @@ export default function AircallPartnerContent({ page, siteSettings, faqTabs }: P
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel || "Book a Consultation"}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
       />
 
       <IntroSection />
@@ -338,7 +338,7 @@ export default function AircallPartnerContent({ page, siteSettings, faqTabs }: P
           stats={page.joinStats}
           footnote={page.joinFootnote}
           ctaLabel={page.joinCtaLabel || "BOOK A MEETING"}
-          ctaUrl={page.joinCtaUrl || calendlyUrl}
+          ctaUrl={bookingHref(page.joinCtaUrl || calendlyUrl)}
           siteSettings={siteSettings || undefined}
         />
       )}

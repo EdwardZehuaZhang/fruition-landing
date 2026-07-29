@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import { getTeamMembers, getPageBySlug, getSiteSettings } from "@/sanity/queries"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import FruitionTeamClient, {
@@ -31,7 +32,8 @@ export default async function TeamPage() {
     getSiteSettings(),
   ])
 
-  const calendlyUrl = siteSettings?.calendlyLink || ""
+  const rawCalendly = siteSettings?.calendlyLink || ""
+  const calendlyUrl = bookingHref(rawCalendly)
   const partnerBadges: PartnerBadge[] = (siteSettings?.navbarPartnerBadges as PartnerBadge[]) || []
   const certificationBadge = siteSettings?.badgeCertifications as SanityImageRef
 

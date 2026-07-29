@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
@@ -350,7 +351,7 @@ export default function MondayImplementationConsultantsContent({
 
   return (
     <div>
-      <StickyCtaBar label={data?.croSections?.stickyCtaLabel} href={data?.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={data?.croSections?.stickyCtaLabel} href={bookingHref(data?.croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* ============================================================ */}
       {/* SECTION 1 — Hero                                             */}
       {/* ============================================================ */}

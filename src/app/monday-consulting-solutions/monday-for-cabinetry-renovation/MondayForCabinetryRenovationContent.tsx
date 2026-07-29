@@ -239,7 +239,7 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel || "Book a Consultation"}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={page.secondaryCtaLabel || "Get Started with monday.com"}
         secondaryCtaUrl={page.secondaryCtaUrl || "https://monday.com"}
       />
@@ -305,7 +305,7 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
         }
         testimonials={inlineTestimonials}
         primaryLabel={page.returnsBannerPrimaryLabel || "Book a Consultation"}
-        primaryUrl={page.returnsBannerPrimaryUrl || calendlyUrl}
+        primaryUrl={bookingHref(page.returnsBannerPrimaryUrl || calendlyUrl)}
         secondaryLabel={page.returnsBannerSecondaryLabel || "Get Started with monday.com"}
         secondaryUrl={page.returnsBannerSecondaryUrl || "https://monday.com"}
       />

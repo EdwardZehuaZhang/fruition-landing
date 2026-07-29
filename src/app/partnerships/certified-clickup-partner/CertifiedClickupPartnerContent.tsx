@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import { useState } from "react"
 import {
   HeroBanner,
@@ -218,7 +219,8 @@ function EverythingAppFeaturesSection({ features }: { features: EverythingAppFea
 
 export default function CertifiedClickupPartnerContent({ page, siteSettings, faqTabs }: Props) {
   if (!page) return null
-  const calendlyUrl = siteSettings?.calendlyLink ?? ""
+  const rawCalendly = siteSettings?.calendlyLink ?? ""
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const resolvedFaqTabs = faqTabs ?? []
   const everythingAppCards: EverythingAppCard[] = page.everythingAppCards ?? []
@@ -244,9 +246,9 @@ export default function CertifiedClickupPartnerContent({ page, siteSettings, faq
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || rawCalendly)}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || rawCalendly)}
       />
 
       <PartnershipIntroSection />
@@ -267,7 +269,7 @@ export default function CertifiedClickupPartnerContent({ page, siteSettings, faq
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       <FaqAccordion heading={page.faqHeading || "Frequently asked questions"} tabs={resolvedFaqTabs} />

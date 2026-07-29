@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import HeroSection from "@/components/HeroSection"
 import { CroSections, StickyCtaBar } from "@/components/sections"
@@ -27,17 +28,18 @@ export default async function SolutionsPage() {
     getSiteSettings(),
   ])
 
-  const calendlyUrl = siteSettings?.calendlyLink || ""
+  const rawCalendly = siteSettings?.calendlyLink || ""
+  const calendlyUrl = bookingHref(rawCalendly)
 
   return (
     <div>
-      <StickyCtaBar label={page?.croSections?.stickyCtaLabel} href={page?.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={page?.croSections?.stickyCtaLabel} href={bookingHref(page?.croSections?.stickyCtaUrl || rawCalendly)} />
       <HeroSection
         heading={page.heroHeading || ""}
         subheading={page.heroSubheading}
         primaryCta={{ label: page.primaryCtaLabel || "", url: page.primaryCtaUrl || calendlyUrl }}
       />
-      <CroSections data={page?.croSections} primaryCtaLabel={page?.primaryCtaLabel} primaryCtaUrl={page?.primaryCtaUrl || calendlyUrl} />
+      <CroSections data={page?.croSections} primaryCtaLabel={page?.primaryCtaLabel} primaryCtaUrl={bookingHref(page?.primaryCtaUrl || rawCalendly)} />
       <div className="max-w-6xl mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {solutions.map((s: { slug: string; title: string; heroSubheading?: string }) => (
           <Link
