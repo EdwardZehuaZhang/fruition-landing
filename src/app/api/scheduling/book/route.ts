@@ -15,10 +15,15 @@ export const maxDuration = 30
 interface BookRequest {
   start?: string
   slotUrl?: string
+  firstName?: string
+  lastName?: string
+  /** Legacy single-field name — kept for back-compat with older clients */
   name?: string
   email?: string
   company?: string
   phone?: string
+  /** "What can we help with?" selection — ILE Service Interest dropdown */
+  service?: string
   notes?: string
   timezone?: string
   region?: LeadRegion
@@ -37,7 +42,9 @@ export async function POST(req: Request) {
   }
   if (p.website && p.website.trim()) return NextResponse.json({ ok: true })
 
-  const name = (p.name ?? "").trim()
+  const firstName = (p.firstName ?? "").trim()
+  const lastName = (p.lastName ?? "").trim()
+  const name = [firstName, lastName].filter(Boolean).join(" ").trim() || (p.name ?? "").trim()
   const email = (p.email ?? "").trim()
   const start = (p.start ?? "").trim()
   const timezone = (p.timezone ?? "").trim() || "UTC"
@@ -54,6 +61,7 @@ export async function POST(req: Request) {
     "Meeting time": `${start} (${timezone})`,
   }
   if (p.phone?.trim()) fields["Phone"] = p.phone.trim()
+  if (p.service?.trim()) fields["Service"] = p.service.trim()
   if (p.notes?.trim()) fields["Message"] = p.notes.trim()
 
   let booked = false

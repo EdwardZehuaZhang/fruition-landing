@@ -27,6 +27,16 @@ interface Slot {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+/* Same options as ContactFormCard — both feed the ILE Service Interest column. */
+const SERVICE_OPTIONS = [
+  "monday.com implementation",
+  "Workflow automation",
+  "Integrations",
+  "Training & enablement",
+  "Strategy & consulting",
+  "Other",
+]
+
 export default function CalendlySection({
   heading = "Schedule A 30-Min Consultation With One of Our monday.com Consultants",
   subheading,
@@ -38,6 +48,7 @@ export default function CalendlySection({
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null)
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle")
   const [error, setError] = useState("")
+  const [service, setService] = useState("")
 
   const timezone = useMemo(() => {
     try {
@@ -101,17 +112,19 @@ export default function CalendlySection({
     const payload = {
       start: selectedSlot.start,
       slotUrl: selectedSlot.url,
-      name: String(fd.get("name") ?? "").trim(),
+      firstName: String(fd.get("firstName") ?? "").trim(),
+      lastName: String(fd.get("lastName") ?? "").trim(),
       email: String(fd.get("email") ?? "").trim(),
       company: String(fd.get("company") ?? "").trim(),
       phone: String(fd.get("phone") ?? "").trim(),
+      service,
       notes: String(fd.get("notes") ?? "").trim(),
       timezone,
       website: String(fd.get("website") ?? ""), // honeypot
     }
-    if (!payload.name || !EMAIL_RE.test(payload.email)) {
+    if (!payload.firstName || !EMAIL_RE.test(payload.email)) {
       setStatus("error")
-      setError("Please fill in your name and a valid email.")
+      setError("Please fill in your first name and a valid email.")
       return
     }
     setStatus("sending")
@@ -259,14 +272,18 @@ export default function CalendlySection({
                   </div>
                   <div className="fr-sched-row" style={{ display: "grid", gap: 14 }}>
                     <label className="flex flex-col" style={{ gap: 6 }}>
-                      <span style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600 }}>Full name</span>
-                      <input name="name" type="text" required className="form-field" />
+                      <span style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600 }}>First name</span>
+                      <input name="firstName" type="text" required className="form-field" />
                     </label>
                     <label className="flex flex-col" style={{ gap: 6 }}>
-                      <span style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600 }}>Work email</span>
-                      <input name="email" type="email" required className="form-field" />
+                      <span style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600 }}>Last name</span>
+                      <input name="lastName" type="text" className="form-field" />
                     </label>
                   </div>
+                  <label className="flex flex-col" style={{ gap: 6 }}>
+                    <span style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600 }}>Work email</span>
+                    <input name="email" type="email" required className="form-field" />
+                  </label>
                   <div className="fr-sched-row" style={{ display: "grid", gap: 14 }}>
                     <label className="flex flex-col" style={{ gap: 6 }}>
                       <span style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600 }}>Company (optional)</span>
@@ -277,8 +294,41 @@ export default function CalendlySection({
                       <input name="phone" type="tel" className="form-field" />
                     </label>
                   </div>
+
+                  <fieldset className="border-0 p-0 m-0">
+                    <legend className="text-[13px] text-body font-semibold mb-2">
+                      What can we help with?
+                    </legend>
+                    <div className="flex flex-wrap gap-2">
+                      {SERVICE_OPTIONS.map((opt) => {
+                        const selected = service === opt
+                        return (
+                          <label
+                            key={opt}
+                            className="inline-flex items-center px-3.5 py-2 rounded-full text-[13.5px] font-medium cursor-pointer transition-colors"
+                            style={{
+                              border: `1px solid ${selected ? "var(--purple-primary)" : "var(--border-ui)"}`,
+                              background: selected ? "var(--purple-soft)" : "var(--surface-raised)",
+                              color: selected ? "var(--purple-dark)" : "var(--text-body)",
+                            }}
+                          >
+                            <input
+                              type="radio"
+                              name="service"
+                              value={opt}
+                              checked={selected}
+                              onChange={() => setService(opt)}
+                              className="absolute opacity-0 w-px h-px"
+                            />
+                            {opt}
+                          </label>
+                        )
+                      })}
+                    </div>
+                  </fieldset>
+
                   <label className="flex flex-col" style={{ gap: 6 }}>
-                    <span style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600 }}>Anything we should prepare? (optional)</span>
+                    <span style={{ fontSize: 13, color: "var(--text-body)", fontWeight: 600 }}>Message (optional)</span>
                     <textarea name="notes" rows={3} className="form-field resize-y" />
                   </label>
 

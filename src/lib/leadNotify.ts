@@ -65,6 +65,8 @@ interface LeadBoard {
     creationDate?: string
     /** Country-type column — gets {countryCode, countryName} */
     country?: string
+    /** Dropdown column receiving the form's "What can we help with?" selection */
+    serviceInterest?: string
     notes?: string
   }
 }
@@ -87,6 +89,7 @@ const ILE_BOARD: LeadBoard = {
     utmSource: "short_textqfwxowxd",
     creationDate: "mirror4",
     country: "country_mm345qer",
+    serviceInterest: "dropdown_mm5qr1ha",
     notes: "message",
   },
 }
@@ -260,21 +263,33 @@ async function pushToBoard(
   if (cc && /^[A-Z]{2}$/.test(cc) && c.country) {
     cols[c.country] = { countryCode: cc, countryName: countryName(cc) }
   }
+  const service = p.fields?.["Service"]?.trim()
+  if (service && c.serviceInterest) cols[c.serviceInterest] = { labels: [service] }
   const detail = fmtDetails(p)
+  // The notes column carries only the visitor's actual message plus any
+  // unmapped extra fields — Phone/Service/Message are excluded because they
+  // land in their own columns. The item update below keeps the full dump.
+  const message = (p.fields?.["Message"] ?? "").trim()
+  const extras = Object.entries(p.fields ?? {})
+    .filter(([k, v]) => !["Message", "Phone", "Service"].includes(k) && v && String(v).trim())
+    .map(([k, v]) => `${k}: ${v}`)
+  let notesValue = [message, extras.join("\n")].filter(Boolean).join("\n\n")
   // Some notes columns are single-line text — cap the column value and rely
   // on the item update below for the full text.
-  const notesValue = detail.length > 1900 ? `${detail.slice(0, 1900)}…` : detail
-  if (detail && c.notes) cols[c.notes] = { text: notesValue }
+  if (notesValue.length > 1900) notesValue = `${notesValue.slice(0, 1900)}…`
+  if (notesValue && c.notes) cols[c.notes] = { text: notesValue }
 
   try {
-    await changeColumnValues(rb.boardId, itemId, cols)
+    // createLabelsIfMissing: a novel Service or Source label must never
+    // reject the whole write.
+    await changeColumnValues(rb.boardId, itemId, cols, { createLabelsIfMissing: true })
   } catch (err) {
     // Board schema drifted — retry with just email + notes so the lead still
-    // lands with its full payload.
+    // lands with its message.
     console.warn(`[leads] monday ${label} columns failed, retrying minimal:`, errMsg(err))
     const minimal: Record<string, unknown> = {}
     if (p.email) minimal[c.email] = { email: p.email, text: p.email }
-    if (detail && c.notes) minimal[c.notes] = { text: notesValue }
+    if (notesValue && c.notes) minimal[c.notes] = { text: notesValue }
     try {
       await changeColumnValues(rb.boardId, itemId, minimal)
     } catch {
@@ -284,7 +299,7 @@ async function pushToBoard(
 
   // Post the full payload as an item update when the board has no notes
   // column, or when the message is long enough that a text column clips it —
-  // the enquiry text should be the first thing sales sees on the item.
+  // the update remains the complete audit record of the submission.
   if (detail && (!c.notes || detail.length > 500)) {
     try {
       await createUpdate(itemId, `Website form submission\n${detail}`)
