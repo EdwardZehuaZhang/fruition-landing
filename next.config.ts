@@ -6,6 +6,40 @@ import { wixRedirects } from "./src/redirects";
 // src/redirects.ts is auto-generated from the migration import — add new
 // entries here instead. Placed BEFORE wixRedirects so audits override.
 const auditRedirects: Redirect[] = [
+  // ── Consolidations (July 2026 traffic audit) ──
+  // Case-study hub folded into the ranked client-stories library.
+  { source: "/case-studies", destination: "/customer-testimonials", permanent: true },
+  // Legacy Wix partnerships hub → the curated credentials directory.
+  { source: "/partnerships", destination: "/certifications-and-awards", permanent: true },
+  // Duplicate Aircall / Make pages → their canonical partner pages.
+  { source: "/integrations/aircall", destination: "/partnerships/aircall-partner", permanent: true },
+  { source: "/monday-consulting-solutions/aircall", destination: "/partnerships/aircall-partner", permanent: true },
+  { source: "/integrations/make", destination: "/partnerships/make-partners", permanent: true },
+  // Accidental duplicate blog post.
+  { source: "/post/monday-com-vs-clickup-1", destination: "/post/monday-com-vs-clickup", permanent: true },
+
+  // ── Legacy Wix URLs still receiving traffic (GA4, July 2026) ──
+  { source: "/leadership", destination: "/fruition-team", permanent: true },
+  { source: "/members", destination: "/fruition-team", permanent: true },
+  { source: "/people", destination: "/fruition-team", permanent: true },
+  { source: "/speakers", destination: "/fruition-team", permanent: true },
+  { source: "/board", destination: "/fruition-team", permanent: true },
+  { source: "/advisory-board", destination: "/fruition-team", permanent: true },
+  { source: "/alumni", destination: "/fruition-team", permanent: true },
+  { source: "/cohort", destination: "/fruition-team", permanent: true },
+  { source: "/committee", destination: "/fruition-team", permanent: true },
+  { source: "/faculty", destination: "/fruition-team", permanent: true },
+  { source: "/graduates", destination: "/fruition-team", permanent: true },
+  { source: "/blogs", destination: "/consulting-blog", permanent: true },
+  { source: "/directory", destination: "/certifications-and-awards", permanent: true },
+  { source: "/contact", destination: "/contact-us", permanent: true },
+  { source: "/contacts", destination: "/contact-us", permanent: true },
+  { source: "/enquiry", destination: "/contact-us", permanent: true },
+  { source: "/enquiries", destination: "/contact-us", permanent: true },
+  { source: "/agenda", destination: "/", permanent: true },
+  { source: "/thank-you-page-1", destination: "/", permanent: true },
+  // Broken trailing-dot variant seen in analytics.
+  { source: "/monday-implementation-consultants.", destination: "/monday-implementation-consultants", permanent: true },
   {
     source: "/_files/ugd/a280a5_11fba06999d94082af98412eb473461c.pdf",
     destination: "/legal/deprecated/uk",

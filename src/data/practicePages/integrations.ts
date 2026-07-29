@@ -67,7 +67,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       {
         label: 'Aircall',
         description: 'Telephony connected to your CRM and service desk',
-        href: '/integrations/aircall',
+        href: '/partnerships/aircall-partner',
       },
       {
         label: 'Twilio',
@@ -77,7 +77,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       {
         label: 'Make',
         description: 'Visual automation scenarios, built properly',
-        href: '/integrations/make',
+        href: '/partnerships/make-partners',
       },
       {
         label: 'n8n',
@@ -123,7 +123,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
     seoTitle: 'Aircall Integration Consulting | Fruition — Telephony in Your CRM & Service Desk',
     seoDescription:
       'Fruition integrates Aircall with monday.com, HubSpot, and your service workflows across Australia, the UK, and the US — so calls create records, tickets, and follow-ups automatically.',
-    breadcrumb: [HUB, { label: 'Aircall', href: '/integrations/aircall' }],
+    breadcrumb: [HUB, { label: 'Aircall', href: '/partnerships/aircall-partner' }],
     eyebrow: 'Integrations · Aircall',
     heading: 'Every call, logged where the work happens',
     lead: 'Fruition integrates Aircall with monday.com, HubSpot, and your service workflows across Australia, the UK, and the US — so calls create records, tickets, and follow-ups automatically.',
@@ -267,7 +267,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
     seoTitle: 'Make (Integromat) Consulting | Fruition — Visual Automation Built Properly',
     seoDescription:
       'Fruition designs and builds Make automation for teams across Australia, the UK, and the US — multi-step scenarios with the error handling, documentation, and governance DIY builds skip.',
-    breadcrumb: [HUB, { label: 'Make', href: '/integrations/make' }],
+    breadcrumb: [HUB, { label: 'Make', href: '/partnerships/make-partners' }],
     eyebrow: 'Integrations · Make',
     heading: 'Make scenarios that survive contact with production',
     lead: 'Fruition designs and builds Make automation for teams across Australia, the UK, and the US — multi-step scenarios with the error handling, documentation, and governance DIY builds skip.',
