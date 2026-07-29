@@ -56,6 +56,23 @@ export async function createItem(boardId: number, groupId: string, name: string)
   return data.create_item.id
 }
 
+/**
+ * Move an item to the top of its group. create_item appends to the bottom,
+ * which buries new leads below the fold in large CRM groups. Undocumented but
+ * stable mutation (present in the public schema); ids are interpolated
+ * because its argument types aren't published for typed variables.
+ */
+export async function moveItemToGroupTop(itemId: string, groupId: string): Promise<void> {
+  const item = Number(itemId)
+  if (!Number.isFinite(item)) throw new Error(`bad item id: ${itemId}`)
+  if (!/^[a-z0-9_]+$/i.test(groupId)) throw new Error(`bad group id: ${groupId}`)
+  await gql(
+    `mutation {
+      change_item_position(item_id: ${item}, group_id: "${groupId}", group_top: true) { id }
+    }`,
+  )
+}
+
 /** Post a plain-text update (comment) on a monday item. */
 export async function createUpdate(itemId: string, body: string): Promise<string> {
   const data = await gql<{ create_update: { id: string } }>(

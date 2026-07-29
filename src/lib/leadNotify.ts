@@ -1,4 +1,4 @@
-import { changeColumnValues, createItem, createUpdate } from "@/lib/mondayClient"
+import { changeColumnValues, createItem, createUpdate, moveItemToGroupTop } from "@/lib/mondayClient"
 
 /**
  * Shared lead-notification sinks used by the intake forms.
@@ -211,6 +211,14 @@ async function pushToBoard(p: LeadPayload, rb: RegionBoard, label: string): Prom
   } catch (err) {
     console.warn(`[leads] monday ${label} create failed:`, errMsg(err))
     return null
+  }
+
+  // create_item appends to the bottom of the group; surface the lead at the
+  // top instead. Position is cosmetic — never fail the lead over it.
+  try {
+    await moveItemToGroupTop(itemId, rb.groupId)
+  } catch (err) {
+    console.warn(`[leads] monday ${label} reposition failed:`, errMsg(err))
   }
 
   const c = rb.cols
