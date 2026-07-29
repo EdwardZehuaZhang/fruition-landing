@@ -1,7 +1,14 @@
+import { classifyLead, type EnquiryCategory } from "@/lib/leadClassify"
 import { changeColumnValues, createItem, createUpdate, moveItemToGroupTop } from "@/lib/mondayClient"
 
 /**
  * Shared lead-notification sinks used by the intake forms.
+ *
+ * Every submission is first screened by an LLM classifier (leadClassify):
+ * vendor pitches, spam, and other non-leads land on the Website Enquiries
+ * board instead of a CRM, grouped by category with the classifier's reason.
+ * The classifier fails open — when it errors, the submission is treated as
+ * a lead.
  *
  * monday.com is the primary sink: each lead is routed by region to the
  * matching Fruition CRM board (APAC / NA / UK) and lands as a structured item
@@ -76,7 +83,7 @@ const REGION_BOARDS: Record<LeadRegion, RegionBoard> = {
       source: "source",
       utmSource: "short_textqfwxowxd",
       creationDate: "mirror4",
-      notes: "long_text66rcx0qu",
+      notes: "text_mm38sjrq", // Follow-up Notes — where sales expects the enquiry
     },
   },
   NA: {
@@ -106,6 +113,32 @@ const REGION_BOARDS: Record<LeadRegion, RegionBoard> = {
       creationDate: "mirror4",
     },
   },
+}
+
+/**
+ * Website Enquiries board (5030270944) — where non-lead submissions land,
+ * grouped by classifier category. Same lead-shaped column ids as the CRMs so
+ * a misclassified enquiry moves back to a CRM cleanly.
+ */
+const ENQUIRIES_BOARD: RegionBoard = {
+  boardId: 5030270944,
+  groupId: "group_mm5qewhh",
+  cols: {
+    email: "lead_email",
+    contactName: "text3",
+    phone: "lead_phone",
+    company: "company_name",
+    utmSource: "short_textqfwxowxd",
+    creationDate: "mirror4",
+    notes: "long_text66rcx0qu",
+  },
+}
+
+const ENQUIRY_GROUPS: Record<Exclude<EnquiryCategory, "lead">, { groupId: string; label: string }> = {
+  vendor_pitch: { groupId: "group_mm5q3z6d", label: "Vendor Pitch" },
+  spam: { groupId: "group_mm5q36a1", label: "Spam / Fake" },
+  job_application: { groupId: "group_mm5qewhh", label: "Job Application" },
+  other: { groupId: "group_mm5qewhh", label: "Other" },
 }
 
 // Region split: Americas → NA; Europe, Middle East, Africa → UK;
@@ -242,7 +275,10 @@ async function pushToBoard(p: LeadPayload, rb: RegionBoard, label: string): Prom
   if (c.creationDate) cols[c.creationDate] = { date: new Date().toISOString().slice(0, 10) }
   if (p.country && c.country) cols[c.country] = p.country
   const detail = fmtDetails(p)
-  if (detail && c.notes) cols[c.notes] = { text: detail }
+  // Some notes columns are single-line text — cap the column value and rely
+  // on the item update below for the full text.
+  const notesValue = detail.length > 1900 ? `${detail.slice(0, 1900)}…` : detail
+  if (detail && c.notes) cols[c.notes] = { text: notesValue }
 
   try {
     await changeColumnValues(rb.boardId, itemId, cols)
@@ -252,7 +288,7 @@ async function pushToBoard(p: LeadPayload, rb: RegionBoard, label: string): Prom
     console.warn(`[leads] monday ${label} columns failed, retrying minimal:`, errMsg(err))
     const minimal: Record<string, unknown> = {}
     if (p.email) minimal[c.email] = { email: p.email, text: p.email }
-    if (detail && c.notes) minimal[c.notes] = { text: detail }
+    if (detail && c.notes) minimal[c.notes] = { text: notesValue }
     try {
       await changeColumnValues(rb.boardId, itemId, minimal)
     } catch {
@@ -260,9 +296,10 @@ async function pushToBoard(p: LeadPayload, rb: RegionBoard, label: string): Prom
     }
   }
 
-  // Boards without a notes column get the full payload as an item update, so
-  // the enquiry text is the first thing sales sees on the item.
-  if (detail && !c.notes) {
+  // Post the full payload as an item update when the board has no notes
+  // column, or when the message is long enough that a text column clips it —
+  // the enquiry text should be the first thing sales sees on the item.
+  if (detail && (!c.notes || detail.length > 500)) {
     try {
       await createUpdate(itemId, `Website form submission\n${detail}`)
     } catch (err) {
@@ -293,6 +330,32 @@ function fallbackBoard(): RegionBoard | null {
 }
 
 export async function pushToMonday(p: LeadPayload): Promise<string | null> {
+  // Screen first: vendor pitches / spam / other non-leads go to the Website
+  // Enquiries board, not a CRM. Fails open to "lead".
+  const verdict = await classifyLead(p)
+  if (verdict.category !== "lead") {
+    const dest = ENQUIRY_GROUPS[verdict.category]
+    const enquiryId = await pushToBoard(
+      p,
+      { ...ENQUIRIES_BOARD, groupId: dest.groupId },
+      `enquiries:${verdict.category}`,
+    )
+    if (enquiryId) {
+      try {
+        await changeColumnValues(ENQUIRIES_BOARD.boardId, enquiryId, {
+          enquiry_type: { label: dest.label },
+          ai_reason: verdict.reason,
+        })
+      } catch (err) {
+        console.warn("[leads] enquiry labeling failed:", errMsg(err))
+      }
+      return enquiryId
+    }
+    // Enquiries board unreachable — fall through to the lead path so the
+    // submission still lands somewhere visible.
+    console.warn("[leads] enquiries push failed, falling back to lead path")
+  }
+
   const region = detectRegion(p)
   const viaRegion = await pushToBoard(p, REGION_BOARDS[region], region)
   if (viaRegion) return viaRegion
