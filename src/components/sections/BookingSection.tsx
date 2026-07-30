@@ -306,6 +306,8 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
           teamSize: size,
           office,
           timezone: tz,
+          // Attributes the lead to the page it was booked from.
+          sourcePage: window.location.pathname,
           website: f.website ?? "",
         }),
       })
