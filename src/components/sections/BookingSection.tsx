@@ -88,8 +88,10 @@ const dayShort = (key: string): string => {
 }
 
 /* ---------- atoms ---------- */
+/* flex:none — the slot list is a scrolling flex column, so pills would
+   otherwise shrink to their text height instead of scrolling. */
 const pill = (sel: boolean, wide?: boolean): CSSProperties => ({
-  display: "flex", alignItems: "center", justifyContent: "center", height: 38, padding: "0 16px",
+  display: "flex", alignItems: "center", justifyContent: "center", height: 38, flex: "none", padding: "0 16px",
   width: wide ? "100%" : undefined, borderRadius: 9999, fontFamily: "var(--font-sans)", fontSize: 14,
   fontWeight: 600, cursor: "pointer", border: `1px solid ${sel ? "transparent" : "var(--color-border)"}`,
   background: sel ? "var(--purple-primary)" : "#fff", color: sel ? "#fff" : "var(--text-dark)",
