@@ -1,9 +1,14 @@
-// Screens inbound website form submissions so vendor pitches and spam never
-// pollute the regional CRM boards. Same OpenRouter setup as claudeClient.ts
-// (one account, model swappable via env without touching code).
+// Screens inbound website form submissions so vendor pitches don't pollute
+// the CRM board. Same OpenRouter setup as claudeClient.ts (one account, model
+// swappable via env without touching code).
 //
 // Fail-open by design: any error, timeout, or unparseable reply classifies as
 // "lead" — a junk item in the CRM beats a lost prospect.
+//
+// Spam/fake detection is OFF: calling a real enquiry a lookalike-domain scam
+// is a judgment humans should make, and a false positive quietly buries a real
+// prospect. Anything that would have been "spam" is treated as a lead and
+// reviewed manually. Set LEAD_CLASSIFIER_SPAM=on to re-enable.
 
 export type EnquiryCategory = "lead" | "vendor_pitch" | "spam" | "job_application" | "other"
 
@@ -16,23 +21,25 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 const MODEL = process.env.LEAD_CLASSIFIER_MODEL ?? "anthropic/claude-haiku-4.5"
 const TIMEOUT_MS = 10_000
 
-const CATEGORIES: ReadonlySet<string> = new Set([
-  "lead",
-  "vendor_pitch",
-  "spam",
-  "job_application",
-  "other",
-])
+/** Spam/fake detection is opt-in — see the file header. */
+const SPAM_DETECTION = process.env.LEAD_CLASSIFIER_SPAM === "on"
+
+const SPAM_RULE = `- "spam": fake or malicious submissions — lookalike domains, generated/mismatched names, phishing patterns (e.g. a famous brand "selecting agency partners"), gibberish.
+`
 
 const SYSTEM_PROMPT = `You screen contact-form submissions for Fruition Services, a monday.com consulting and workflow-automation agency. Classify each submission:
 
 - "lead": a potential CLIENT — anyone who might pay Fruition for consulting, implementation, training, licenses, or automation work. When in doubt, choose "lead".
 - "vendor_pitch": someone selling TO Fruition — dev/SEO/marketing/VA/outsourcing services, link building, tools, or "partnerships" where Fruition would be the buyer.
-- "spam": fake or malicious submissions — lookalike domains, generated/mismatched names, phishing patterns (e.g. a famous brand "selecting agency partners"), gibberish.
-- "job_application": someone seeking employment or freelance work AT Fruition.
+${SPAM_DETECTION ? SPAM_RULE : ""}- "job_application": someone seeking employment or freelance work AT Fruition.
 - "other": genuine but not a sales opportunity — press, events, existing-client support.
 
-Reply with ONLY a JSON object, no prose: {"category":"...","reason":"<one short sentence>"}`
+${SPAM_DETECTION ? "" : `Do NOT judge whether a submission is fake, spam, or a scam — an unfamiliar domain, an odd name, or an unusually large budget is not your call. Classify on intent alone.
+`}Reply with ONLY a JSON object, no prose: {"category":"...","reason":"<one short sentence>"}`
+
+const CATEGORIES: ReadonlySet<string> = new Set(
+  ["lead", "vendor_pitch", "job_application", "other", ...(SPAM_DETECTION ? ["spam"] : [])],
+)
 
 export interface ClassifyInput {
   name?: string
@@ -68,6 +75,8 @@ export async function classifyLead(input: ClassifyInput): Promise<LeadVerdict> {
       body: JSON.stringify({
         model: MODEL,
         max_tokens: 150,
+        // Deterministic: the same submission must always sort the same way.
+        temperature: 0,
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: lines.join("\n").slice(0, 6000) },
@@ -87,6 +96,11 @@ export async function classifyLead(input: ClassifyInput): Promise<LeadVerdict> {
     // Models occasionally wrap JSON in code fences despite instructions.
     const json = content.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "")
     const verdict = JSON.parse(json) as { category?: string; reason?: string }
+    // The model can still reach for "spam" from its own priors; with detection
+    // off that verdict is discarded and the submission goes through as a lead.
+    if (!SPAM_DETECTION && verdict.category === "spam") {
+      return { category: "lead", reason: "Spam detection off — routed as a lead for manual review" }
+    }
     if (!verdict.category || !CATEGORIES.has(verdict.category)) return fallback
     return {
       category: verdict.category as EnquiryCategory,
