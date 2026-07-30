@@ -46,7 +46,7 @@ export interface LeadPayload {
   fields?: Record<string, string>
 }
 
-export type LeadRegion = "APAC" | "NA" | "UK"
+export type LeadRegion = "APAC" | "SEA" | "IND" | "NA" | "UK"
 
 interface LeadBoard {
   boardId: number
@@ -58,6 +58,8 @@ interface LeadBoard {
   cols: {
     email: string
     contactName?: string
+    /** People column — gets the regional owner */
+    owner?: string
     phone?: string
     company?: string
     status?: string
@@ -87,6 +89,7 @@ const ILE_BOARD: LeadBoard = {
   groupId: "topics",
   cols: {
     email: "lead_email",
+    owner: "people",
     phone: "lead_phone",
     company: "text3",
     status: "lead_status",
@@ -142,29 +145,57 @@ const ENQUIRY_GROUPS: Record<Exclude<EnquiryCategory, "lead">, { groupId: string
   other: { groupId: "group_mm5qewhh", label: "Other" },
 }
 
-// Region split: Americas → NA; Europe, Middle East, Africa → UK;
-// Asia-Pacific and anything unknown → APAC (HQ).
+/**
+ * Regional desks. Each region maps to the consultant who owns its leads, the
+ * Region column label, and the Calendly calendar whose availability is shown.
+ * "IND" covers India + UAE — the board label is "I&UAE".
+ */
+export const REGION_OWNER_IDS: Record<LeadRegion, number> = {
+  APAC: 42426115, // Josh Jebathilak
+  SEA: 74789722, // Nikki Glucksman
+  IND: 65603104, // Nikhil Kumar Tiwari
+  UK: 62091155, // Kevin Zhao
+  NA: 51981029, // Zach Weller
+}
+
+/** Region column labels — only IND differs from the region key. */
+const REGION_LABELS: Record<LeadRegion, string> = {
+  APAC: "APAC",
+  SEA: "SEA",
+  IND: "I&UAE",
+  UK: "UK",
+  NA: "NA",
+}
+
+// Country → desk. Sets are disjoint; anything unlisted falls through to APAC
+// (Australia/NZ and the rest of Asia-Pacific, the HQ desk).
+const IND_COUNTRIES = new Set("IN AE".split(" "))
+const SEA_COUNTRIES = new Set("SG MY PH ID TH VN MM KH LA BN TL".split(" "))
 const NA_COUNTRIES = new Set(
   "US CA MX BR AR CL CO PE VE EC UY PY BO CR PA GT HN SV NI DO CU JM TT BS BB HT GY SR BZ PR".split(" "),
 )
 const UK_COUNTRIES = new Set(
   (
     "GB IE FR DE ES IT PT NL BE LU CH AT SE NO DK FI IS PL CZ SK HU RO BG GR HR SI RS BA MK ME AL EE LV LT UA MD XK CY MT AD MC SM LI " +
-    "AE SA QA KW BH OM IL JO LB IQ TR EG MA DZ TN LY ZA NG KE GH ET TZ UG ZW ZM MZ BW SN CI CM CD AO RW MW MU MG"
+    "SA QA KW BH OM IL JO LB IQ TR EG MA DZ TN LY ZA NG KE GH ET TZ UG ZW ZM MZ BW SN CI CM CD AO RW MW MU MG"
   ).split(" "),
 )
 
-// International dial prefixes that are unambiguous enough to route on.
+// International dial prefixes unambiguous enough to route on.
+const IND_PHONE_PREFIXES = ["+91", "+971"]
+const SEA_PHONE_PREFIXES = ["+65", "+60", "+63", "+62", "+66", "+84", "+95", "+855", "+856", "+673"]
 const UK_PHONE_PREFIXES = [
   "+44", "+353", "+33", "+49", "+34", "+39", "+31", "+32", "+41", "+43", "+46", "+47", "+45",
-  "+358", "+48", "+351", "+30", "+90", "+971", "+966", "+972", "+974", "+965", "+973", "+968",
+  "+358", "+48", "+351", "+30", "+90", "+966", "+972", "+974", "+965", "+973", "+968",
   "+27", "+20", "+212", "+234", "+254",
 ]
 
 const NA_TLDS = new Set(["us", "ca", "mx", "br", "ar", "cl", "co"])
+const IND_TLDS = new Set(["in", "ae"])
+const SEA_TLDS = new Set(["sg", "my", "ph", "id", "th", "vn"])
 const UK_TLDS = new Set([
   "uk", "ie", "fr", "de", "es", "it", "nl", "be", "ch", "at", "se", "no", "dk", "fi", "pl",
-  "pt", "gr", "tr", "ae", "sa", "il", "za", "eg", "ng", "ke",
+  "pt", "gr", "tr", "sa", "il", "za", "eg", "ng", "ke",
 ])
 
 function regionFromPhone(phone: string): LeadRegion | null {
@@ -172,19 +203,28 @@ function regionFromPhone(phone: string): LeadRegion | null {
   // National formats (leading 0) are ambiguous — only route on +country codes.
   if (!digits.startsWith("+")) return null
   if (digits.startsWith("+1")) return "NA"
+  if (IND_PHONE_PREFIXES.some((p) => digits.startsWith(p))) return "IND"
+  if (SEA_PHONE_PREFIXES.some((p) => digits.startsWith(p))) return "SEA"
   if (UK_PHONE_PREFIXES.some((p) => digits.startsWith(p))) return "UK"
   return null
 }
 
-// Middle-East zones the UK team covers; the rest of Asia-Pacific is APAC.
+const IND_TIMEZONES = new Set("Asia/Kolkata Asia/Calcutta Asia/Dubai".split(" "))
+const SEA_TIMEZONES = new Set(
+  ("Asia/Singapore Asia/Kuala_Lumpur Asia/Manila Asia/Jakarta Asia/Bangkok Asia/Ho_Chi_Minh " +
+    "Asia/Saigon Asia/Yangon Asia/Phnom_Penh Asia/Vientiane Asia/Brunei Asia/Makassar").split(" "),
+)
+// Middle-East zones the UK desk covers; UAE belongs to the India desk above.
 const UK_TIMEZONES = new Set(
-  ("Asia/Jerusalem Asia/Tel_Aviv Asia/Dubai Asia/Riyadh Asia/Qatar Asia/Kuwait Asia/Bahrain " +
+  ("Asia/Jerusalem Asia/Tel_Aviv Asia/Riyadh Asia/Qatar Asia/Kuwait Asia/Bahrain " +
     "Asia/Muscat Asia/Beirut Asia/Amman Asia/Baghdad Asia/Istanbul Europe/Istanbul").split(" "),
 )
 
 /** Region from an IANA timezone — the fallback when there's no geo header. */
 function regionFromTimezone(tz?: string): LeadRegion | null {
   if (!tz) return null
+  if (IND_TIMEZONES.has(tz)) return "IND"
+  if (SEA_TIMEZONES.has(tz)) return "SEA"
   if (/^America\//.test(tz)) return "NA"
   if (/^(Europe|Africa)\//.test(tz)) return "UK"
   if (UK_TIMEZONES.has(tz)) return "UK"
@@ -226,6 +266,8 @@ export function countryFromTimezone(tz?: string): string | undefined {
 export function detectRegion(p: LeadPayload): LeadRegion {
   const country = p.country?.trim().toUpperCase()
   if (country && /^[A-Z]{2}$/.test(country) && country !== "XX" && country !== "T1") {
+    if (IND_COUNTRIES.has(country)) return "IND"
+    if (SEA_COUNTRIES.has(country)) return "SEA"
     if (NA_COUNTRIES.has(country)) return "NA"
     if (UK_COUNTRIES.has(country)) return "UK"
     return "APAC"
@@ -239,6 +281,8 @@ export function detectRegion(p: LeadPayload): LeadRegion {
   }
   const tld = p.email?.split(".").pop()?.toLowerCase()
   if (tld) {
+    if (IND_TLDS.has(tld)) return "IND"
+    if (SEA_TLDS.has(tld)) return "SEA"
     if (NA_TLDS.has(tld)) return "NA"
     if (UK_TLDS.has(tld)) return "UK"
   }
@@ -371,7 +415,10 @@ async function pushToBoard(
   if (c.source) cols[c.source] = { label: fromSite ? "Website" : "Calendly (direct)" }
   if (p.source && c.utmSource) cols[c.utmSource] = p.source
   if (c.creationDate) cols[c.creationDate] = { date: new Date().toISOString().slice(0, 10) }
-  if (c.region) cols[c.region] = { label: detectRegion(p) }
+  const region = detectRegion(p)
+  if (c.region) cols[c.region] = { label: REGION_LABELS[region] }
+  // Route to the desk that owns the region so nothing sits unassigned.
+  if (c.owner) cols[c.owner] = { personsAndTeams: [{ id: REGION_OWNER_IDS[region], kind: "person" }] }
   const headerCc = p.country?.trim().toUpperCase()
   const cc = headerCc && /^[A-Z]{2}$/.test(headerCc) ? headerCc : countryFromTimezone(p.timezone)
   if (cc && c.country) {

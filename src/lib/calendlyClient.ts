@@ -14,6 +14,10 @@ const CALENDLY_API = "https://api.calendly.com"
  */
 export const REGION_EVENT_TYPES: Record<LeadRegion, string> = {
   APAC: "https://api.calendly.com/event_types/377b37e5-6cbc-4ed1-b27d-6865363e4534",
+  SEA: "https://api.calendly.com/event_types/b46e38ae-b292-47f1-a348-45274bb7e64d",
+  // No India calendar exists yet — South-East Asia is the nearest timezone
+  // window. Point this at an India event type once one is created.
+  IND: "https://api.calendly.com/event_types/b46e38ae-b292-47f1-a348-45274bb7e64d",
   UK: "https://api.calendly.com/event_types/7f6f81d8-585b-49b2-a73d-f1333bd59ab5",
   NA: "https://api.calendly.com/event_types/b9e04736-439e-4948-964c-6ce99b960665",
 }
