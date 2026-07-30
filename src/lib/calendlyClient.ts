@@ -12,12 +12,18 @@ const CALENDLY_API = "https://api.calendly.com"
  * Regional 30-minute consultation event types on the
  * global-calendar-fruitionservices account. Verified 2026-07-29.
  */
+const APAC_EVENT_TYPE = "https://api.calendly.com/event_types/377b37e5-6cbc-4ed1-b27d-6865363e4534"
+
 export const REGION_EVENT_TYPES: Record<LeadRegion, string> = {
-  APAC: "https://api.calendly.com/event_types/377b37e5-6cbc-4ed1-b27d-6865363e4534",
-  SEA: "https://api.calendly.com/event_types/b46e38ae-b292-47f1-a348-45274bb7e64d",
-  // No India calendar exists yet — South-East Asia is the nearest timezone
-  // window. Point this at an India event type once one is created.
-  IND: "https://api.calendly.com/event_types/b46e38ae-b292-47f1-a348-45274bb7e64d",
+  APAC: APAC_EVENT_TYPE,
+  // SEA and IND both fall back to APAC on purpose. The [South-East Asia]
+  // event type (b46e38ae-…) has no calendar connected, so it offered every
+  // slot in its window and visitors could book over real meetings; there is
+  // no India event type at all. Repoint each one once its own calendar is
+  // connected in Calendly — until then APAC is the only APAC-hours calendar
+  // that reflects real availability.
+  SEA: APAC_EVENT_TYPE,
+  IND: APAC_EVENT_TYPE,
   UK: "https://api.calendly.com/event_types/7f6f81d8-585b-49b2-a73d-f1333bd59ab5",
   NA: "https://api.calendly.com/event_types/b9e04736-439e-4948-964c-6ce99b960665",
 }

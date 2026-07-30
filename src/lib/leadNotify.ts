@@ -152,8 +152,12 @@ const ENQUIRY_GROUPS: Record<Exclude<EnquiryCategory, "lead">, { groupId: string
  */
 export const REGION_OWNER_IDS: Record<LeadRegion, number> = {
   APAC: 42426115, // Josh Jebathilak
-  SEA: 74789722, // Nikki Glucksman
-  IND: 65603104, // Nikhil Kumar Tiwari
+  // SEA and IND book into the APAC calendar (see REGION_EVENT_TYPES), so Josh
+  // is the one on the call and owns the lead. Hand these back to Nikki
+  // Glucksman (74789722) and Nikhil Kumar Tiwari (65603104) when their own
+  // Calendly calendars exist. The Region labels stay SEA / I&UAE either way.
+  SEA: 42426115,
+  IND: 42426115,
   UK: 62091155, // Kevin Zhao
   NA: 51981029, // Zach Weller
 }
