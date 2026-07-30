@@ -5,17 +5,19 @@ import { changeColumnValues, createItem, createUpdate, moveItemToGroupTop } from
  * Shared lead-notification sinks used by the intake forms.
  *
  * Every submission is first screened by an LLM classifier (leadClassify):
- * vendor pitches, spam, and other non-leads land on the Website Enquiries
- * board instead of a CRM, grouped by category with the classifier's reason.
- * The classifier fails open — when it errors, the submission is treated as
- * a lead.
+ * vendor pitches and other non-leads land on the Website Enquiries board
+ * instead of a CRM, grouped by category with the classifier's reason. The
+ * classifier fails open — when it errors, the submission is treated as a lead.
  *
- * monday.com is the primary sink: every lead lands as a structured item in
- * the New Leads group of Fruition CRM (ILE) — the Inbound Lead Engine board,
- * counterpart to Fruition CRM (OLE) — with its detected Region (APAC/NA/UK)
- * and Country as columns. Region detection uses Cloudflare's cf-ipcountry
- * header first, then the phone country code, then the email TLD, and
- * defaults to APAC.
+ * monday.com is the primary sink: leads land as structured items on Fruition
+ * CRM (ILE) — the Inbound Lead Engine board, counterpart to Fruition CRM
+ * (OLE) — with Region (APAC/NA/UK) and Country as columns. Bookings go to the
+ * "Meeting Booked" group with that status; the plain-lead path uses New Leads.
+ * Region detection: Cloudflare's cf-ipcountry header, then the invitee
+ * timezone, then the phone country code, then the email TLD, else APAC.
+ *
+ * Each answer lands in its own column — phone, company, service, meeting
+ * logistics — so the notes column holds only what the visitor actually wrote.
  *
  * Failure ladder — a lead is never lost:
  *   ILE board → env-configured fallback board (Website Enquiries) →
@@ -38,6 +40,8 @@ export interface LeadPayload {
   source?: string
   /** ISO 3166-1 alpha-2 visitor country (from Cloudflare's cf-ipcountry) */
   country?: string
+  /** IANA timezone (e.g. a Calendly invitee's) — used when there's no geo header */
+  timezone?: string
   /** Free-form additional answers keyed by label */
   fields?: Record<string, string>
 }
@@ -65,6 +69,8 @@ interface LeadBoard {
     creationDate?: string
     /** Country-type column — gets {countryCode, countryName} */
     country?: string
+    /** Long-text column for meeting logistics (time, event name) */
+    nextSteps?: string
     /** Dropdown column receiving the form's "What can we help with?" selection */
     serviceInterest?: string
     notes?: string
@@ -90,9 +96,18 @@ const ILE_BOARD: LeadBoard = {
     creationDate: "mirror4",
     country: "country_mm345qer",
     serviceInterest: "dropdown_mm5qr1ha",
+    nextSteps: "long_text_mm2wddv8",
     notes: "message",
   },
 }
+
+/**
+ * Bookings are created straight into "Meeting Booked" rather than New Leads.
+ * A board automation fires on item-creation in the New Leads group and resets
+ * Status to "New Lead", overwriting our write a second later; creating in the
+ * destination group means that trigger never fires.
+ */
+export const ILE_BOOKING_GROUP = "new_group__1"
 
 /**
  * Website Enquiries board (5030270944) — where non-lead submissions land,
@@ -154,6 +169,53 @@ function regionFromPhone(phone: string): LeadRegion | null {
   return null
 }
 
+// Middle-East zones the UK team covers; the rest of Asia-Pacific is APAC.
+const UK_TIMEZONES = new Set(
+  ("Asia/Jerusalem Asia/Tel_Aviv Asia/Dubai Asia/Riyadh Asia/Qatar Asia/Kuwait Asia/Bahrain " +
+    "Asia/Muscat Asia/Beirut Asia/Amman Asia/Baghdad Asia/Istanbul Europe/Istanbul").split(" "),
+)
+
+/** Region from an IANA timezone — the fallback when there's no geo header. */
+function regionFromTimezone(tz?: string): LeadRegion | null {
+  if (!tz) return null
+  if (/^America\//.test(tz)) return "NA"
+  if (/^(Europe|Africa)\//.test(tz)) return "UK"
+  if (UK_TIMEZONES.has(tz)) return "UK"
+  return null
+}
+
+/**
+ * ISO-3166 country for the common IANA zones. Bookings made on Calendly
+ * arrive server-to-server with no cf-ipcountry, but always carry the
+ * invitee's timezone. Unknown zones return undefined rather than a guess.
+ */
+const TIMEZONE_COUNTRY: Record<string, string> = {
+  "America/New_York": "US", "America/Chicago": "US", "America/Denver": "US",
+  "America/Los_Angeles": "US", "America/Phoenix": "US", "America/Anchorage": "US",
+  "America/Detroit": "US", "America/Indiana/Indianapolis": "US", "Pacific/Honolulu": "US",
+  "America/Toronto": "CA", "America/Vancouver": "CA", "America/Edmonton": "CA",
+  "America/Winnipeg": "CA", "America/Halifax": "CA",
+  "America/Mexico_City": "MX", "America/Sao_Paulo": "BR", "America/Bogota": "CO",
+  "America/Buenos_Aires": "AR", "America/Santiago": "CL",
+  "Europe/London": "GB", "Europe/Dublin": "IE", "Europe/Paris": "FR", "Europe/Berlin": "DE",
+  "Europe/Madrid": "ES", "Europe/Rome": "IT", "Europe/Amsterdam": "NL", "Europe/Brussels": "BE",
+  "Europe/Zurich": "CH", "Europe/Vienna": "AT", "Europe/Stockholm": "SE", "Europe/Oslo": "NO",
+  "Europe/Copenhagen": "DK", "Europe/Helsinki": "FI", "Europe/Warsaw": "PL", "Europe/Prague": "CZ",
+  "Europe/Lisbon": "PT", "Europe/Athens": "GR", "Europe/Istanbul": "TR",
+  "Australia/Sydney": "AU", "Australia/Melbourne": "AU", "Australia/Brisbane": "AU",
+  "Australia/Perth": "AU", "Australia/Adelaide": "AU", "Australia/Hobart": "AU",
+  "Australia/Canberra": "AU", "Australia/Darwin": "AU",
+  "Pacific/Auckland": "NZ", "Asia/Singapore": "SG", "Asia/Kolkata": "IN", "Asia/Calcutta": "IN",
+  "Asia/Manila": "PH", "Asia/Tokyo": "JP", "Asia/Hong_Kong": "HK", "Asia/Shanghai": "CN",
+  "Asia/Dubai": "AE", "Asia/Jakarta": "ID", "Asia/Bangkok": "TH", "Asia/Kuala_Lumpur": "MY",
+  "Asia/Seoul": "KR", "Asia/Jerusalem": "IL", "Africa/Johannesburg": "ZA", "Africa/Lagos": "NG",
+  "Africa/Nairobi": "KE", "Africa/Cairo": "EG",
+}
+
+export function countryFromTimezone(tz?: string): string | undefined {
+  return tz ? TIMEZONE_COUNTRY[tz.trim()] : undefined
+}
+
 export function detectRegion(p: LeadPayload): LeadRegion {
   const country = p.country?.trim().toUpperCase()
   if (country && /^[A-Z]{2}$/.test(country) && country !== "XX" && country !== "T1") {
@@ -161,6 +223,8 @@ export function detectRegion(p: LeadPayload): LeadRegion {
     if (UK_COUNTRIES.has(country)) return "UK"
     return "APAC"
   }
+  const byTz = regionFromTimezone(p.timezone)
+  if (byTz) return byTz
   const phone = p.fields?.["Phone"]
   if (phone) {
     const byPhone = regionFromPhone(phone)
@@ -253,25 +317,37 @@ async function pushToBoard(
   if (p.name && c.contactName) cols[c.contactName] = p.name
   const phone = p.fields?.["Phone"]?.trim()
   if (phone && c.phone) cols[c.phone] = { phone }
-  if (p.company && c.company) cols[c.company] = p.company
+  const company = p.company?.trim() || p.fields?.["Company"]?.trim()
+  if (company && c.company) cols[c.company] = company
   if (c.status) cols[c.status] = { label: statusLabel }
   if (c.source) cols[c.source] = { label: "Website" }
   if (p.source && c.utmSource) cols[c.utmSource] = p.source
   if (c.creationDate) cols[c.creationDate] = { date: new Date().toISOString().slice(0, 10) }
   if (c.region) cols[c.region] = { label: detectRegion(p) }
-  const cc = p.country?.trim().toUpperCase()
-  if (cc && /^[A-Z]{2}$/.test(cc) && c.country) {
+  const headerCc = p.country?.trim().toUpperCase()
+  const cc = headerCc && /^[A-Z]{2}$/.test(headerCc) ? headerCc : countryFromTimezone(p.timezone)
+  if (cc && c.country) {
     cols[c.country] = { countryCode: cc, countryName: countryName(cc) }
   }
   const service = p.fields?.["Service"]?.trim()
   if (service && c.serviceInterest) cols[c.serviceInterest] = { labels: [service] }
+  // Meeting logistics belong with the next action, not in the visitor's message.
+  const logistics = [p.fields?.["Meeting time"], p.fields?.["Event"]]
+    .map((v) => v?.trim())
+    .filter(Boolean)
+  if (logistics.length > 0 && c.nextSteps) cols[c.nextSteps] = { text: logistics.join("\n") }
   const detail = fmtDetails(p)
   // The notes column carries only the visitor's actual message plus any
   // unmapped extra fields — Phone/Service/Message are excluded because they
   // land in their own columns. The item update below keeps the full dump.
   const message = (p.fields?.["Message"] ?? "").trim()
+  // Keys that have their own column — never duplicated into the notes blob.
+  // "Meeting time"/"Event" stay here only when the board has no Next Steps
+  // column (the Enquiries fallback), so the detail isn't silently lost.
+  const reserved = ["Message", "Phone", "Service", "Company"]
+  if (c.nextSteps) reserved.push("Meeting time", "Event")
   const extras = Object.entries(p.fields ?? {})
-    .filter(([k, v]) => !["Message", "Phone", "Service"].includes(k) && v && String(v).trim())
+    .filter(([k, v]) => !reserved.includes(k) && v && String(v).trim())
     .map(([k, v]) => `${k}: ${v}`)
   let notesValue = [message, extras.join("\n")].filter(Boolean).join("\n\n")
   // Some notes columns are single-line text — cap the column value and rely
@@ -336,7 +412,12 @@ function fallbackBoard(): LeadBoard | null {
  * board with status "Meeting Booked".
  */
 export async function pushMeetingToMonday(p: LeadPayload): Promise<string | null> {
-  const viaIle = await pushToBoard(p, ILE_BOARD, "ILE:booking", "Meeting Booked")
+  const viaIle = await pushToBoard(
+    p,
+    { ...ILE_BOARD, groupId: ILE_BOOKING_GROUP },
+    "ILE:booking",
+    "Meeting Booked",
+  )
   if (viaIle) return viaIle
   const fallback = fallbackBoard()
   if (!fallback) return null

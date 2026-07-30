@@ -30,6 +30,8 @@ interface BookRequest {
   /** "Which office should take this?" — extra line in the Message column */
   office?: string
   timezone?: string
+  /** Site path the visitor booked from, e.g. "/monday-crm-consulting" */
+  sourcePage?: string
   region?: LeadRegion
   /** Spam honeypot — must be empty */
   website?: string
@@ -59,7 +61,11 @@ export async function POST(req: Request) {
   }
 
   const country = req.headers.get("cf-ipcountry") ?? undefined
-  const region = p.region ?? detectRegion({ country })
+  const region = p.region ?? detectRegion({ country, timezone })
+  // Only a same-origin path is accepted — this value is stored and echoed
+  // back into Calendly tracking.
+  const raw = (p.sourcePage ?? "").trim()
+  const sourcePage = raw.startsWith("/") && !raw.startsWith("//") && raw.length <= 200 ? raw : undefined
 
   const fields: Record<string, string> = {
     "Meeting time": `${start} (${timezone})`,
@@ -72,7 +78,7 @@ export async function POST(req: Request) {
 
   let booked = false
   try {
-    await createBooking({ region, start, name, email, timezone, phone: p.phone?.trim() })
+    await createBooking({ region, start, name, email, timezone, phone: p.phone?.trim(), sourcePage })
     booked = true
   } catch (err) {
     console.warn("[scheduling] api booking failed:", err instanceof Error ? err.message : String(err))
@@ -81,8 +87,12 @@ export async function POST(req: Request) {
   if (!booked) {
     // Client opens the Calendly slot page with details prefilled; the
     // invitee.created webhook will record the lead once they confirm there.
+    // utm_source marks it as ours without matching the webhook's dedupe tag —
+    // this booking was NOT recorded here, so the webhook must record it.
+    const params = new URLSearchParams({ name, email, utm_source: "fruition-fallback" })
+    if (sourcePage) params.set("utm_content", sourcePage)
     const fallbackUrl = p.slotUrl
-      ? `${p.slotUrl}${p.slotUrl.includes("?") ? "&" : "?"}name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`
+      ? `${p.slotUrl}${p.slotUrl.includes("?") ? "&" : "?"}${params.toString()}`
       : null
     return NextResponse.json({ ok: false, fallbackUrl, error: "booking_api_failed" }, { status: 502 })
   }
@@ -92,8 +102,9 @@ export async function POST(req: Request) {
     name,
     email,
     company: p.company?.trim() || undefined,
-    source: "scheduler",
+    source: sourcePage ?? "scheduler",
     country,
+    timezone,
     fields,
   })
 

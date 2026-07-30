@@ -93,6 +93,8 @@ export interface BookingRequest {
   email: string
   timezone: string
   phone?: string
+  /** Site path the booking started from — carried as utm_content. */
+  sourcePage?: string
 }
 
 /**
@@ -117,7 +119,7 @@ export async function createBooking(req: BookingRequest): Promise<{ inviteeUri: 
         utm_source: "fruition-scheduler",
         utm_campaign: null,
         utm_medium: "website",
-        utm_content: null,
+        utm_content: req.sourcePage ?? null,
         utm_term: null,
         salesforce_uuid: null,
       },
