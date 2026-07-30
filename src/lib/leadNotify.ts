@@ -110,6 +110,13 @@ const ILE_BOARD: LeadBoard = {
 export const ILE_BOOKING_GROUP = "new_group__1"
 
 /**
+ * Source marker for a booking made on calendly.com with no page attribution.
+ * The webhook sets it; pushToBoard turns it into the "Calendly (direct)" label
+ * so these never count as website-driven.
+ */
+export const CALENDLY_DIRECT_SOURCE = "calendly"
+
+/**
  * Website Enquiries board (5030270944) — where non-lead submissions land,
  * grouped by classifier category. Same lead-shaped column ids as the CRMs so
  * a misclassified enquiry moves back to a CRM cleanly.
@@ -289,6 +296,41 @@ export async function notifySlack(p: LeadPayload): Promise<boolean> {
   }
 }
 
+/**
+ * monday fails an entire change_multiple_column_values call when any single
+ * value is malformed — a phone number with spaces once cost us the status,
+ * region, company and meeting details on a real booking. The error names the
+ * offending column, so drop that one and retry rather than losing everything.
+ * Returns false only if nothing could be written.
+ */
+async function writeColumnsDroppingRejects(
+  boardId: number,
+  itemId: string,
+  cols: Record<string, unknown>,
+  label: string,
+): Promise<boolean> {
+  const remaining = { ...cols }
+  // Bounded: each pass removes one column, so this can't spin.
+  for (let attempt = 0; attempt < 5; attempt++) {
+    if (Object.keys(remaining).length === 0) return false
+    try {
+      // createLabelsIfMissing: a novel Service or Source label must never
+      // reject the whole write.
+      await changeColumnValues(boardId, itemId, remaining, { createLabelsIfMissing: true })
+      return true
+    } catch (err) {
+      const rejected = /"column_id":\s*"([^"]+)"/.exec(errMsg(err))?.[1]
+      if (!rejected || !(rejected in remaining)) {
+        console.warn(`[leads] monday ${label} write failed:`, errMsg(err))
+        return false
+      }
+      console.warn(`[leads] monday ${label} rejected column ${rejected} — retrying without it`)
+      delete remaining[rejected]
+    }
+  }
+  return false
+}
+
 async function pushToBoard(
   p: LeadPayload,
   rb: LeadBoard,
@@ -315,12 +357,18 @@ async function pushToBoard(
   const cols: Record<string, unknown> = {}
   if (p.email) cols[c.email] = { email: p.email, text: p.email }
   if (p.name && c.contactName) cols[c.contactName] = p.name
-  const phone = p.fields?.["Phone"]?.trim()
+  // monday's phone column rejects spaces and punctuation outright, and one
+  // rejected value fails the WHOLE write — so normalise to +digits here.
+  const phone = p.fields?.["Phone"]?.replace(/[^\d+]/g, "")
   if (phone && c.phone) cols[c.phone] = { phone }
   const company = p.company?.trim() || p.fields?.["Company"]?.trim()
   if (company && c.company) cols[c.company] = company
   if (c.status) cols[c.status] = { label: statusLabel }
-  if (c.source) cols[c.source] = { label: "Website" }
+  // "calendly" is the marker the webhook uses when a booking carries no page
+  // attribution — i.e. it was made straight on calendly.com, not on the site.
+  // Labelling those "Website" would inflate the website's measured impact.
+  const fromSite = p.source !== CALENDLY_DIRECT_SOURCE
+  if (c.source) cols[c.source] = { label: fromSite ? "Website" : "Calendly (direct)" }
   if (p.source && c.utmSource) cols[c.utmSource] = p.source
   if (c.creationDate) cols[c.creationDate] = { date: new Date().toISOString().slice(0, 10) }
   if (c.region) cols[c.region] = { label: detectRegion(p) }
@@ -355,14 +403,11 @@ async function pushToBoard(
   if (notesValue.length > 1900) notesValue = `${notesValue.slice(0, 1900)}…`
   if (notesValue && c.notes) cols[c.notes] = { text: notesValue }
 
-  try {
-    // createLabelsIfMissing: a novel Service or Source label must never
-    // reject the whole write.
-    await changeColumnValues(rb.boardId, itemId, cols, { createLabelsIfMissing: true })
-  } catch (err) {
-    // Board schema drifted — retry with just email + notes so the lead still
-    // lands with its message.
-    console.warn(`[leads] monday ${label} columns failed, retrying minimal:`, errMsg(err))
+  const wrote = await writeColumnsDroppingRejects(rb.boardId, itemId, cols, label)
+  if (!wrote) {
+    // Nothing landed — fall back to the two fields that matter most so the
+    // lead is still actionable.
+    console.warn(`[leads] monday ${label} columns failed, retrying minimal`)
     const minimal: Record<string, unknown> = {}
     if (p.email) minimal[c.email] = { email: p.email, text: p.email }
     if (notesValue && c.notes) minimal[c.notes] = { text: notesValue }

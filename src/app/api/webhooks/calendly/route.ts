@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { createHmac, timingSafeEqual } from "node:crypto"
-import { pushMeetingToMonday } from "@/lib/leadNotify"
+import { CALENDLY_DIRECT_SOURCE, pushMeetingToMonday } from "@/lib/leadNotify"
 
 export const runtime = "nodejs"
 export const maxDuration = 30
@@ -93,7 +93,7 @@ export async function POST(req: Request) {
   // The booking flow stamps the page path into utm_content, so a booking that
   // finished on Calendly is still attributed to the page it started from.
   const utmContent = p.tracking?.utm_content?.trim()
-  const source = utmContent?.startsWith("/") ? utmContent : "calendly"
+  const source = utmContent?.startsWith("/") ? utmContent : CALENDLY_DIRECT_SOURCE
 
   const mondayId = await pushMeetingToMonday({
     name: name || email,
