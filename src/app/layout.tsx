@@ -7,6 +7,7 @@ import Footer from "@/components/Footer"
 import NavigationProgress from "@/components/NavigationProgress"
 import CookieNotice from "@/components/CookieNotice"
 import SiteFrame from "@/components/SiteFrame"
+import AwardBanner from "@/components/home/AwardBanner"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { getSiteSettings } from "@/sanity/queries"
 import { urlFor } from "@/sanity/image"
@@ -231,7 +232,12 @@ export default async function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           <NavigationProgress />
           <SiteFrame
-            header={<Navbar key="site-header" siteSettings={siteSettings} />}
+            header={
+              <div key="site-header">
+                <AwardBanner />
+                <Navbar siteSettings={siteSettings} />
+              </div>
+            }
             footer={<Footer key="site-footer" siteSettings={siteSettings} />}
             cookie={<CookieNotice key="site-cookie" />}
           >
