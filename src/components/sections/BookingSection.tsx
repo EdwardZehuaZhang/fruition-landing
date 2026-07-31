@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import type { ChangeEvent, CSSProperties, ReactNode } from "react"
 
 /**
@@ -20,6 +20,10 @@ interface Slot {
   start: string
   url: string
 }
+
+/** Mirrors LeadRegion in @/lib/leadNotify — redeclared so this client
+ *  component doesn't pull the server-only lead pipeline into the bundle. */
+type BookingRegion = "APAC" | "SEA" | "IND" | "NA" | "UK"
 
 export interface BookingSectionProps {
   eyebrow?: string
@@ -192,6 +196,60 @@ interface BlankCell { blank: true; id: string }
 interface DayCell { blank?: false; id: string; label: string; key: string; disabled: boolean }
 type CalCell = BlankCell | DayCell
 
+declare global {
+  interface Window {
+    Calendly?: {
+      initInlineWidget: (opts: { url: string; parentElement: HTMLElement }) => void
+    }
+  }
+}
+
+/** The account page every booking goes through. */
+const CALENDLY_ACCOUNT = "https://calendly.com/global-calendar-fruitionservices"
+const CALENDLY_SCRIPT = "https://assets.calendly.com/assets/external/widget.js"
+
+/**
+ * Calendly's own inline widget, filling the section's white card.
+ *
+ * `calendlyUrl` reaches us from Sanity via `bookingHref`, which rewrites
+ * Calendly links to the on-site anchor (/contact-us#book) so CTA buttons stay
+ * on the site. That's right for a link and very wrong for an embed — feeding it
+ * in made the page iframe itself — so anything that isn't an absolute
+ * calendly.com URL falls back to the account page.
+ */
+function CalendlyEmbed({ calendlyUrl }: { calendlyUrl?: string }) {
+  const hostRef = useRef<HTMLDivElement>(null)
+  const src = calendlyUrl && /^https?:\/\/([a-z0-9-]+\.)?calendly\.com\//i.test(calendlyUrl)
+    ? calendlyUrl
+    : CALENDLY_ACCOUNT
+
+  useEffect(() => {
+    const embedUrl = `${src}${src.includes("?") ? "&" : "?"}hide_gdpr_banner=1&embed_type=Inline`
+    const init = () => {
+      if (!window.Calendly || !hostRef.current) return
+      hostRef.current.innerHTML = ""
+      window.Calendly.initInlineWidget({ url: embedUrl, parentElement: hostRef.current })
+    }
+    if (window.Calendly) {
+      init()
+      return
+    }
+    const existing = document.querySelector<HTMLScriptElement>(`script[src="${CALENDLY_SCRIPT}"]`)
+    if (existing) {
+      existing.addEventListener("load", init)
+      return () => existing.removeEventListener("load", init)
+    }
+    const script = document.createElement("script")
+    script.src = CALENDLY_SCRIPT
+    script.async = true
+    script.addEventListener("load", init)
+    document.body.appendChild(script)
+    return () => script.removeEventListener("load", init)
+  }, [src])
+
+  return <div ref={hostRef} style={{ width: "100%", height: 700 }} />
+}
+
 function BookingCard({ duration, askTeamSize, calendlyUrl }: {
   duration: number
   askTeamSize: boolean
@@ -199,10 +257,22 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
 }) {
   const [tz, setTz] = useState("Australia/Sydney")
   const [rawSlots, setRawSlots] = useState<Slot[] | null>(null)
+  /**
+   * The region the slots were fetched for, echoed back when booking.
+   *
+   * Both routes derive the region independently, but from different inputs —
+   * /availability from the country header alone, /book from country *and* the
+   * visitor's timezone. Wherever `cf-ipcountry` is absent those disagree (an
+   * Asia/Singapore visitor gets APAC slots, then books against SEA), the slot
+   * doesn't exist on that event type, and the booking silently falls back to
+   * Calendly. Pinning it keeps both halves on one event type.
+   */
+  const [region, setRegion] = useState<BookingRegion | null>(null)
   const [failed, setFailed] = useState(false)
   const [dayKey, setDayKey] = useState<string | null>(null)
   const [slot, setSlot] = useState<Slot | null>(null)
-  const [monthOffset, setMonthOffset] = useState(0)
+  // null = follow availability; a number = the visitor paged with ‹ ›
+  const [monthOffsetOverride, setMonthOffsetOverride] = useState<number | null>(null)
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [f, setF] = useState<Record<string, string>>({})
   const [topic, setTopic] = useState("")
@@ -221,13 +291,14 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
     setOffice(officeFor(detected))
   }, [])
 
-  /* fetch ~14 days of availability once — UTC slots, regrouped per timezone */
+  /* fetch the whole availability horizon once — UTC slots, regrouped per timezone */
   useEffect(() => {
     let live = true
     fetch("/api/scheduling/availability")
       .then((r) => r.json())
-      .then((d: { slots?: Slot[] }) => {
+      .then((d: { slots?: Slot[]; region?: BookingRegion }) => {
         if (!live) return
+        if (d.region) setRegion(d.region)
         if (d.slots && d.slots.length > 0) setRawSlots(d.slots)
         else setFailed(true)
       })
@@ -267,6 +338,21 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
 
   /* month grid cells — a day is enabled only if it has ≥1 slot in this tz */
   const todayKey = useMemo(() => dayFmt(tz).format(new Date()), [tz])
+
+  /**
+   * Months from now to the first month that actually has a slot. Opening on
+   * the current month shows an empty grid whenever the month is booked out —
+   * e.g. on 31 July the next opening is 3 August, so the visitor would land on
+   * a July grid with every date greyed and assume there is no availability.
+   * Derived rather than set from an effect so paging with ‹ › still wins.
+   */
+  const firstAvailableOffset = useMemo(() => {
+    if (dayKeys.length === 0) return 0
+    const t = partsOf(todayKey)
+    const first = partsOf(dayKeys[0])
+    return Math.max(0, (first.y - t.y) * 12 + (first.m - t.m))
+  }, [dayKeys, todayKey])
+  const monthOffset = monthOffsetOverride ?? firstAvailableOffset
   const cells = useMemo<CalCell[]>(() => {
     const t = partsOf(todayKey)
     const base = new Date(t.y, t.m - 1 + monthOffset, 1)
@@ -308,6 +394,8 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
           teamSize: size,
           office,
           timezone: tz,
+          // Book against the same event type the slots came from.
+          ...(region ? { region } : {}),
           // Attributes the lead to the page it was booked from.
           sourcePage: window.location.pathname,
           website: f.website ?? "",
@@ -525,8 +613,8 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
               {MONTH_FULL[monthBase.getMonth()]} {monthBase.getFullYear()}
             </span>
             <div style={{ display: "flex", gap: 6 }}>
-              <button type="button" disabled={monthOffset <= 0} onClick={() => setMonthOffset((m) => Math.max(0, m - 1))} style={navBtn(monthOffset <= 0)} aria-label="Previous month">‹</button>
-              <button type="button" onClick={() => setMonthOffset((m) => m + 1)} style={navBtn(false)} aria-label="Next month">›</button>
+              <button type="button" disabled={monthOffset <= firstAvailableOffset} onClick={() => setMonthOffsetOverride(Math.max(firstAvailableOffset, monthOffset - 1))} style={navBtn(monthOffset <= firstAvailableOffset)} aria-label="Previous month">‹</button>
+              <button type="button" onClick={() => setMonthOffsetOverride(monthOffset + 1)} style={navBtn(false)} aria-label="Next month">›</button>
             </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 5 }}>
@@ -618,8 +706,8 @@ export default function BookingSection({
           </div>
         </div>
 
-        <div style={{ background: "#fff", borderRadius: 24, boxShadow: "0 34px 70px -26px rgba(8,0,32,.65)", padding: 30, minHeight: 474 }}>
-          <BookingCard duration={duration} askTeamSize={askTeamSize} calendlyUrl={calendlyUrl} />
+        <div style={{ background: "#fff", borderRadius: 24, boxShadow: "0 34px 70px -26px rgba(8,0,32,.65)", padding: 12, minHeight: 474 }}>
+          <CalendlyEmbed calendlyUrl={calendlyUrl} />
         </div>
       </div>
 

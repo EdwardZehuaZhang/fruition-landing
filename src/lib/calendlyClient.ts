@@ -8,24 +8,29 @@ import type { LeadRegion } from "@/lib/leadNotify"
 
 const CALENDLY_API = "https://api.calendly.com"
 
-/**
- * Regional 30-minute consultation event types on the
- * global-calendar-fruitionservices account. Verified 2026-07-29.
- */
-const APAC_EVENT_TYPE = "https://api.calendly.com/event_types/377b37e5-6cbc-4ed1-b27d-6865363e4534"
+const EVENT_TYPE = (uuid: string) => `https://api.calendly.com/event_types/${uuid}`
 
+/**
+ * The four regional consultations published on
+ * calendly.com/global-calendar-fruitionservices — the same ones the site's
+ * fallback link sends visitors to. Verified against the API 2026-07-31.
+ *
+ * These replace a set of `collective` duplicates on secret /d/… links that the
+ * map previously pointed at. Those duplicates are hosted by two people each,
+ * so availability was the thin intersection of both calendars: over the week
+ * of 3 Aug the [APAC] duplicate offered 20 slots with no Wednesday at all and
+ * the [US] one offered 19 with no Thursday, while these four offer 77–99 each
+ * across all five weekdays.
+ *
+ * India has no event type of its own, so IND rides on South-East Asia — the
+ * nearest business hours (IST is SGT−2:30).
+ */
 export const REGION_EVENT_TYPES: Record<LeadRegion, string> = {
-  APAC: APAC_EVENT_TYPE,
-  // SEA and IND both fall back to APAC on purpose. The [South-East Asia]
-  // event type (b46e38ae-…) has no calendar connected, so it offered every
-  // slot in its window and visitors could book over real meetings; there is
-  // no India event type at all. Repoint each one once its own calendar is
-  // connected in Calendly — until then APAC is the only APAC-hours calendar
-  // that reflects real availability.
-  SEA: APAC_EVENT_TYPE,
-  IND: APAC_EVENT_TYPE,
-  UK: "https://api.calendly.com/event_types/7f6f81d8-585b-49b2-a73d-f1333bd59ab5",
-  NA: "https://api.calendly.com/event_types/b9e04736-439e-4948-964c-6ce99b960665",
+  APAC: EVENT_TYPE("50ec7db3-e50d-43e4-b9d2-5a3c0eecea9b"), // [Australia & New Zealand]
+  SEA: EVENT_TYPE("b46e38ae-b292-47f1-a348-45274bb7e64d"), //  [South-East Asia]
+  IND: EVENT_TYPE("b46e38ae-b292-47f1-a348-45274bb7e64d"), //  [South-East Asia]
+  UK: EVENT_TYPE("24539274-650a-47ec-994b-a19bc1026437"), //   [UK & Europe]
+  NA: EVENT_TYPE("e5644214-e726-4cc7-865b-6fcc9f992139"), //   [US & Canada]
 }
 
 function getToken(): string {
@@ -64,18 +69,29 @@ export interface CalendlySlot {
   url: string
 }
 
+/** Calendly caps `event_type_available_times` at a 7-day span per request. */
+const WINDOW_DAYS = 7
 /**
- * Available slots for a region's consultation event type. Calendly caps each
- * request at a 7-day window, so two windows are fetched for a 14-day view.
+ * How far ahead to offer slots. Six windows ≈ 42 days, so the picker always
+ * covers the rest of the current month plus all of the next one — a 14-day
+ * horizon left the second half of the visible month looking fully booked even
+ * though Calendly's own page offered those days.
+ */
+const HORIZON_WINDOWS = 6
+
+/**
+ * Available slots for a region's consultation event type, fetched as
+ * consecutive 7-day windows in parallel and flattened.
  */
 export async function getAvailableSlots(region: LeadRegion): Promise<CalendlySlot[]> {
   const eventType = REGION_EVENT_TYPES[region]
   // Start an hour out so we never offer a slot that expires mid-booking.
   const from = new Date(Date.now() + 60 * 60 * 1000)
-  const windows: [Date, Date][] = [
-    [from, new Date(from.getTime() + 7 * 86400_000)],
-    [new Date(from.getTime() + 7 * 86400_000), new Date(from.getTime() + 14 * 86400_000)],
-  ]
+  const span = WINDOW_DAYS * 86400_000
+  const windows: [Date, Date][] = Array.from({ length: HORIZON_WINDOWS }, (_, i) => [
+    new Date(from.getTime() + i * span),
+    new Date(from.getTime() + (i + 1) * span),
+  ])
   const results = await Promise.all(
     windows.map(async ([s, e]) => {
       try {

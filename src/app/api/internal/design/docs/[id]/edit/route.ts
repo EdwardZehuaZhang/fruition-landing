@@ -22,6 +22,23 @@ interface ChatMessage {
   content: string
 }
 
+/** Surface OpenRouter's real error message (not a generic one) so failures are diagnosable. */
+function describeEditError(body: string, status: number): string {
+  let message = ""
+  try {
+    message = (JSON.parse(body) as { error?: { message?: string } }).error?.message || ""
+  } catch {
+    /* non-JSON error body (e.g. an HTML gateway page) */
+  }
+  if (!message) message = body.trim().slice(0, 200)
+
+  const base = message ? `Edit failed: ${message}` : `Edit failed (upstream status ${status}).`
+  if (status === 429) return `${base} The model is busy right now — wait a moment and try again.`
+  if (status === 402) return `${base} The AI account is out of credit.`
+  if (status >= 500) return `${base} This is usually a temporary upstream issue; please try again.`
+  return base
+}
+
 type Ctx = { params: Promise<{ id: string }> }
 
 /**
@@ -122,7 +139,7 @@ export async function POST(req: Request, ctx: Ctx) {
     const detail = await upstream.text().catch(() => "")
     console.error(`[design/edit] upstream failed ${upstream.status}: ${detail.slice(0, 500)}`)
     return NextResponse.json(
-      { error: "The edit request failed upstream. Please try again." },
+      { error: describeEditError(detail, upstream.status) },
       { status: 502 },
     )
   }

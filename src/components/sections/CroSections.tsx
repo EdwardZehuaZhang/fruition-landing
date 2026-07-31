@@ -76,7 +76,10 @@ export default function CroSections({ data, primaryCtaLabel, primaryCtaUrl }: Cr
   const roiEnabled = !!data.roiCalc?.enabled
   const caseStudies = data.microCaseStudies?.cases ?? []
   const hasStatBanner = !!(data.statBanner?.statement || (data.statBanner?.metrics?.length ?? 0) > 0)
-  const leadFormEnabled = !!data.leadForm?.enabled
+  // Retired: the site now has exactly one contact/scheduling surface, the dark
+  // BookingSection. The "free 15-minute workflow audit" form competed with it
+  // on the same pages, so it no longer renders regardless of the Sanity flag.
+  const leadFormEnabled = false
 
   return (
     <>
