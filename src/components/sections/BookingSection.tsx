@@ -221,7 +221,7 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
     setOffice(officeFor(detected))
   }, [])
 
-  /* fetch ~14 days of availability once — UTC slots, regrouped per timezone */
+  /* fetch the whole availability horizon once — UTC slots, regrouped per timezone */
   useEffect(() => {
     let live = true
     fetch("/api/scheduling/availability")

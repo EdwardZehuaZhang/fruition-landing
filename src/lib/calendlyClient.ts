@@ -64,18 +64,29 @@ export interface CalendlySlot {
   url: string
 }
 
+/** Calendly caps `event_type_available_times` at a 7-day span per request. */
+const WINDOW_DAYS = 7
 /**
- * Available slots for a region's consultation event type. Calendly caps each
- * request at a 7-day window, so two windows are fetched for a 14-day view.
+ * How far ahead to offer slots. Six windows ≈ 42 days, so the picker always
+ * covers the rest of the current month plus all of the next one — a 14-day
+ * horizon left the second half of the visible month looking fully booked even
+ * though Calendly's own page offered those days.
+ */
+const HORIZON_WINDOWS = 6
+
+/**
+ * Available slots for a region's consultation event type, fetched as
+ * consecutive 7-day windows in parallel and flattened.
  */
 export async function getAvailableSlots(region: LeadRegion): Promise<CalendlySlot[]> {
   const eventType = REGION_EVENT_TYPES[region]
   // Start an hour out so we never offer a slot that expires mid-booking.
   const from = new Date(Date.now() + 60 * 60 * 1000)
-  const windows: [Date, Date][] = [
-    [from, new Date(from.getTime() + 7 * 86400_000)],
-    [new Date(from.getTime() + 7 * 86400_000), new Date(from.getTime() + 14 * 86400_000)],
-  ]
+  const span = WINDOW_DAYS * 86400_000
+  const windows: [Date, Date][] = Array.from({ length: HORIZON_WINDOWS }, (_, i) => [
+    new Date(from.getTime() + i * span),
+    new Date(from.getTime() + (i + 1) * span),
+  ])
   const results = await Promise.all(
     windows.map(async ([s, e]) => {
       try {
