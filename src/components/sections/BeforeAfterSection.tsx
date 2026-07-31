@@ -21,37 +21,37 @@ export default function BeforeAfterSection({
   if (!rows.length) return null
 
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto" style={{ maxWidth: 1000 }}>
+    <section className="bg-surface px-4 py-20">
+      <div className="mx-auto max-w-[1000px]">
         {heading && (
-          <h2 className="text-section-h2 text-center text-body" style={{ marginBottom: 40 }}>
+          <h2 className="text-section-h2 text-center text-body mb-10">
             {heading}
           </h2>
         )}
         <div className="grid gap-6 md:grid-cols-2">
           {/* Before */}
-          <div className="rounded-card" style={{ border: "1px solid #f0d6d6", background: "#fdf6f6", padding: 28 }}>
-            <div className="font-bold" style={{ color: "#c0392b", fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 18 }}>
+          <div className="rounded-card border border-[#f0d6d6] bg-[#fdf6f6] p-7">
+            <div className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[#c0392b] mb-[18px]">
               {beforeLabel}
             </div>
-            <ul className="flex flex-col" style={{ gap: 14 }}>
+            <ul className="flex flex-col gap-3.5">
               {rows.map((r, i) => (
-                <li key={`b-${r._key || i}`} className="flex gap-3" style={{ color: "#5b4040", fontSize: 15, lineHeight: "22px" }}>
-                  <span aria-hidden style={{ color: "#c0392b", flexShrink: 0, marginTop: 2 }}><X size={16} /></span>
+                <li key={`b-${r._key || i}`} className="flex gap-3 text-[15px] leading-[22px] text-[#5b4040]">
+                  <span aria-hidden className="text-[#c0392b] shrink-0 mt-0.5"><X size={16} /></span>
                   <span>{r.before}</span>
                 </li>
               ))}
             </ul>
           </div>
           {/* After */}
-          <div className="rounded-card" style={{ border: "1px solid #d6ecd9", background: "#f5fbf6", padding: 28 }}>
-            <div className="font-bold" style={{ color: "#1e8449", fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 18 }}>
+          <div className="rounded-card border border-[#d6ecd9] bg-[#f5fbf6] p-7">
+            <div className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[#1e8449] mb-[18px]">
               {afterLabel}
             </div>
-            <ul className="flex flex-col" style={{ gap: 14 }}>
+            <ul className="flex flex-col gap-3.5">
               {rows.map((r, i) => (
-                <li key={`a-${r._key || i}`} className="flex gap-3" style={{ color: "#274d33", fontSize: 15, lineHeight: "22px" }}>
-                  <span aria-hidden style={{ color: "#1e8449", flexShrink: 0, marginTop: 2 }}><Check size={16} /></span>
+                <li key={`a-${r._key || i}`} className="flex gap-3 text-[15px] leading-[22px] text-[#274d33]">
+                  <span aria-hidden className="text-[#1e8449] shrink-0 mt-0.5"><Check size={16} /></span>
                   <span>{r.after}</span>
                 </li>
               ))}

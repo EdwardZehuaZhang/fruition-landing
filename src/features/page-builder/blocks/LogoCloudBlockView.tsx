@@ -20,7 +20,7 @@ function renderHeadingWithAccent(heading: string) {
     const before = heading.slice(0, idx)
     const after = heading.slice(idx + accent.length)
     return (
-      <p className="text-[22px] leading-[30px] sm:text-[28px] sm:leading-[39.2px] font-medium text-center">
+      <p className="text-[22px] leading-[30px] md:text-[28px] md:leading-[39.2px] font-medium text-center">
         <span className="text-body">{before}</span>
 
         <span className="text-[#8015e8]">{accent}</span>
@@ -28,7 +28,7 @@ function renderHeadingWithAccent(heading: string) {
       </p>
     )
   }
-  return <p className="text-[22px] leading-[30px] sm:text-[28px] sm:leading-[39.2px] font-medium text-body text-center">{heading}</p>
+  return <p className="text-[22px] leading-[30px] md:text-[28px] md:leading-[39.2px] font-medium text-body text-center">{heading}</p>
 
 }
 

@@ -99,7 +99,7 @@ function PillRow<T extends string>({
       <span className="text-caption text-[var(--color-text-secondary)] font-semibold whitespace-nowrap pr-1 pt-1.5 min-w-[88px]">
         {label}
       </span>
-      <div className="flex items-start gap-2 flex-nowrap sm:flex-wrap overflow-x-auto pb-1 -mx-1 px-1 scrollbar-thin">
+      <div className="flex items-start gap-2 flex-nowrap md:flex-wrap overflow-x-auto pb-1 -mx-1 px-1 scrollbar-thin">
         {pills.map((p) => {
           const isActive = p.value === active
           const count = counts[p.value] ?? 0

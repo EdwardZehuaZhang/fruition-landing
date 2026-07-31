@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { useState } from "react"
 import { Rocket, Check } from "lucide-react"
@@ -141,11 +142,11 @@ const AIRCALL_TABS: Tab[] = [
 
 function IntroSection() {
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 60, paddingBottom: 60 }}>
-      <div className="mx-auto text-center" style={{ maxWidth: 920 }}>
-        <p style={{ fontSize: 16, lineHeight: "26px", color: "var(--text-muted-fg)" }}>
-          Fruition is an <span className="font-bold" style={{ color: "#8015e8" }}>official Aircall Partner</span> specialising in
-          <span className="font-bold" style={{ color: "#8015e8" }}> enterprise-grade cloud phone system implementations</span>. Our certified team delivers comprehensive Aircall integration services, connecting your business communications with CRM platforms, contact centre operations, and sales workflows.
+    <section className="bg-surface px-4 py-10 md:py-16">
+      <div className="mx-auto text-center w-full max-w-[920px]">
+        <p className="text-body text-muted">
+          Fruition is an <span className="font-bold text-brand">official Aircall Partner</span> specialising in
+          <span className="font-bold text-brand"> enterprise-grade cloud phone system implementations</span>. Our certified team delivers comprehensive Aircall integration services, connecting your business communications with CRM platforms, contact centre operations, and sales workflows.
         </p>
       </div>
     </section>
@@ -158,53 +159,48 @@ function AircallTabsSection({ tabs }: { tabs: AircallTabShape[] }) {
   const [activeIdx, setActiveIdx] = useState(0)
   const active = tabs[activeIdx]
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <div className="flex flex-col items-center text-center" style={{ marginBottom: 32 }}>
-          <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 32, lineHeight: "40px", maxWidth: 860, marginBottom: 14 }}>
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <div className="flex flex-col items-center text-center mb-8">
+          <h2 className="text-section-h2 text-body max-w-[860px] mb-4">
             Streamline Operations & Maximize Efficiency on monday.com with n8n Solutions
           </h2>
-          <p style={{ color: "var(--text-muted-fg)", fontSize: 16, lineHeight: "26px", maxWidth: 820 }}>
+          <p className="text-body text-muted max-w-[820px]">
             We transform fragmented business processes into cohesive, automated systems that enhance team collaboration and deliver measurable ROI across your entire organization.
           </p>
         </div>
-        <div className="flex flex-wrap justify-center" style={{ gap: 12, marginBottom: 40 }}>
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
           {tabs.map((tab, i) => (
             <button
               key={tab.key}
               onClick={() => setActiveIdx(i)}
-              style={{
-                padding: "10px 26px",
-                borderRadius: 999,
-                fontSize: 14,
-                fontWeight: 600,
-                cursor: "pointer",
-                ...(i === activeIdx
-                  ? { background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", border: "none", boxShadow: "0 10px 22px -12px rgba(128,21,232,0.55)" }
-                  : { background: "var(--surface-raised)", color: "var(--text-body)", border: "1px solid var(--border-ui)" }),
-              }}
+              className={`px-6 py-2.5 rounded-pill text-sm font-semibold cursor-pointer ${
+                i === activeIdx
+                  ? "bg-gradient-to-r from-brand to-brand-light text-white shadow-[0_10px_22px_-12px_rgba(128,21,232,0.55)]"
+                  : "bg-surface-raised text-body ring-1 ring-ui"
+              }`}
             >
               {tab.label}
             </button>
           ))}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {(active.items ?? []).map((g, idx) => (
-            <div key={g.number || idx} className="dark:shadow-none" style={{ padding: 24, borderRadius: 18, background: "var(--surface-raised)", border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 12 }}>
-              <div className="flex items-center" style={{ gap: 14 }}>
-                <span className="flex items-center justify-center font-bold" style={{ width: 38, height: 38, borderRadius: 12, background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)", color: "white", fontSize: 13 }}>
+            <div key={g.number || idx} className="dark:shadow-none rounded-card shadow-whisper ring-1 ring-brand/10 bg-surface-raised p-6 flex flex-col gap-3">
+              <div className="flex items-center gap-3.5">
+                <span className="flex items-center justify-center font-bold w-[38px] h-[38px] shrink-0 rounded-chip bg-gradient-to-br from-brand to-brand-light text-white text-[13px]">
                   {g.number}
                 </span>
-                <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 15, lineHeight: "22px" }}>{g.title}</p>
+                <p className="font-bold text-body-sm leading-snug">{g.title}</p>
               </div>
               {g.description && (
-                <p style={{ color: "var(--text-muted-fg)", fontSize: 13, lineHeight: "20px" }}>{g.description}</p>
+                <p className="text-sm text-muted leading-relaxed">{g.description}</p>
               )}
               {g.bullets && (
-                <ul className="flex flex-col" style={{ gap: 8 }}>
+                <ul className="flex flex-col gap-2">
                   {g.bullets.map((b: string) => (
-                    <li key={b} className="flex items-start" style={{ gap: 8, color: "var(--text-muted-fg)", fontSize: 13, lineHeight: "20px" }}>
-                      <Check size={16} color="#8015e8" aria-hidden />
+                    <li key={b} className="flex items-start gap-2 text-sm text-muted leading-relaxed">
+                      <Check size={16} className="text-brand shrink-0 mt-0.5" aria-hidden />
                       <span>{b}</span>
                     </li>
                   ))}
@@ -236,38 +232,30 @@ const AIRCALL_FEATURES_FALLBACK: AircallFeature[] = [
 
 function AIConversationsSection({ calendlyUrl, features }: { calendlyUrl: string; features: AircallFeature[] }) {
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 64, paddingBottom: 64 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <div className="flex flex-col items-center text-center" style={{ marginBottom: 48 }}>
-          <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 24 }}>
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <div className="flex flex-col items-center text-center mb-12">
+          <h2 className="text-section-h2 text-body mb-6">
             AI-powered customer conversations made easy
           </h2>
-          <Link
-            href={calendlyUrl}
-            className="inline-flex items-center justify-center gap-2 font-semibold"
-            style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", fontSize: 15, boxShadow: "0 14px 28px -12px rgba(128,21,232,0.55)" }}
-          >
+          <Link href={calendlyUrl} className="cta-btn cta-btn-primary">
             <Rocket size={16} aria-hidden /> Book a Meeting
           </Link>
         </div>
 
-        <div className="flex flex-col" style={{ gap: 60 }}>
+        <div className="flex flex-col gap-14 md:gap-16">
           {features.map((f, i) => (
             <div
               key={f.title || i}
-              className="flex flex-col items-center"
-              style={{ gap: 40, flexDirection: f.imageRight ? "row" : "row-reverse" }}
+              className={`flex flex-col items-center gap-10 ${f.imageRight ? "md:flex-row" : "md:flex-row-reverse"}`}
             >
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 26, lineHeight: "34px", marginBottom: 14 }}>
+              <div className="w-full min-w-0 md:flex-1">
+                <p className="text-section-h3 text-body mb-3.5">
                   {f.title}
                 </p>
-                <p style={{ color: "var(--text-muted-fg)", fontSize: 15, lineHeight: "25px" }}>{f.body}</p>
+                <p className="text-body-sm text-muted">{f.body}</p>
               </div>
-              <FramedMedia
-                className="rounded-card overflow-hidden"
-                style={{ flex: 1, aspectRatio: "16 / 10", border: "1px solid var(--border-ui)", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
-              >
+              <FramedMedia className="rounded-card overflow-hidden w-full md:flex-1 aspect-[16/10] ring-1 ring-ui shadow-card">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={f.image} alt={f.title} className="w-full h-full object-cover" />
               </FramedMedia>
@@ -283,9 +271,9 @@ function AIConversationsSection({ calendlyUrl, features }: { calendlyUrl: string
 
 export default function AircallPartnerContent({ page, siteSettings, faqTabs }: Props) {
   if (!page) return null
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const resolvedFaqTabs = faqTabs ?? []
   const resolvedAircallFeatures: AircallFeature[] = (page.aircallFeatures && page.aircallFeatures.length > 0) ? page.aircallFeatures : AIRCALL_FEATURES_FALLBACK
@@ -312,9 +300,9 @@ export default function AircallPartnerContent({ page, siteSettings, faqTabs }: P
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel || "Book a Consultation"}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
       />
 
       <IntroSection />
@@ -333,10 +321,10 @@ export default function AircallPartnerContent({ page, siteSettings, faqTabs }: P
       <CalendlySection
         heading={page.calendlyHeading || "Schedule A 30-Min Consultation"}
         subheading={page.calendlySubheading || "AI-powered customer conversations made easy."}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
-      <AIConversationsSection calendlyUrl={calendlyUrl} features={resolvedAircallFeatures} />
+      <AIConversationsSection calendlyUrl={rawCalendly} features={resolvedAircallFeatures} />
 
       <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
 
@@ -350,7 +338,7 @@ export default function AircallPartnerContent({ page, siteSettings, faqTabs }: P
           stats={page.joinStats}
           footnote={page.joinFootnote}
           ctaLabel={page.joinCtaLabel || "BOOK A MEETING"}
-          ctaUrl={page.joinCtaUrl || calendlyUrl}
+          ctaUrl={bookingHref(page.joinCtaUrl || calendlyUrl)}
           siteSettings={siteSettings || undefined}
         />
       )}

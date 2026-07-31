@@ -42,31 +42,28 @@ export default function EcosystemGrid({
   })
 
   return (
-    <section
-      className="px-4"
-      style={{ paddingTop: 88, paddingBottom: 88, background: "linear-gradient(160deg, var(--navy-700) 0%, var(--navy-900) 100%)" }}
-    >
-      <div className="mx-auto" style={{ maxWidth: 1040 }}>
-        <div className="text-center" style={{ marginBottom: 44, marginInline: "auto", maxWidth: 680 }}>
+    <section className="px-4 py-22 bg-[linear-gradient(160deg,var(--color-surface-dark-2)_0%,var(--color-surface-dark)_100%)]">
+      <div className="mx-auto max-w-[1040px]">
+        <div className="text-center mb-11 mx-auto max-w-[680px]">
           {eyebrow && (
-            <p className="font-semibold uppercase" style={{ color: "var(--purple-light)", fontSize: 12, letterSpacing: "0.18em", marginBottom: 12 }}>
+            <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand-light mb-3">
               {eyebrow}
             </p>
           )}
           {heading && (
-            <h2 className="font-bold" style={{ color: "var(--white)", fontSize: "clamp(26px, 4.5vw, 38px)", lineHeight: 1.2, letterSpacing: "-0.015em", textWrap: "balance" }}>
+            <h2 className="text-section-h2 text-white text-balance">
               {heading}
             </h2>
           )}
           {subheading && (
-            <p style={{ color: "rgba(255,255,255,0.66)", fontSize: 16, lineHeight: "26px", marginTop: 14 }}>{subheading}</p>
+            <p className="text-white/[0.66] text-base leading-[26px] mt-3.5">{subheading}</p>
           )}
         </div>
 
         {/* Desktop: radial constellation */}
-        <div className="relative mx-auto hidden md:block" style={{ width: "100%", maxWidth: 560, aspectRatio: "1 / 1" }}>
+        <div className="relative mx-auto hidden md:block w-full max-w-[560px] aspect-square">
           {/* connector lines */}
-          <svg className="absolute inset-0" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden style={{ width: "100%", height: "100%" }}>
+          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
             {positioned.map((p, i) => (
               <line
                 key={i}
@@ -74,7 +71,8 @@ export default function EcosystemGrid({
                 y1="50"
                 x2={p.x}
                 y2={p.y}
-                stroke="rgba(186,131,240,0.45)"
+                stroke="var(--color-brand-light)"
+                strokeOpacity="0.45"
                 strokeWidth="0.4"
                 strokeDasharray="2 2"
                 className="eco-line"
@@ -87,68 +85,44 @@ export default function EcosystemGrid({
           {positioned.map((p, i) => (
             <div
               key={i}
-              className="wc-node absolute flex flex-col items-center justify-center"
+              className="wc-node absolute flex flex-col items-center justify-center -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-[18px] bg-white/[0.06] border border-white/[0.14] backdrop-blur-[4px]"
               style={{
                 left: `${p.x}%`,
                 top: `${p.y}%`,
-                transform: "translate(-50%, -50%)",
-                width: 96,
-                height: 96,
-                borderRadius: 18,
-                background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.14)",
-                backdropFilter: "blur(4px)",
                 animationDelay: `${i * 80}ms`,
               }}
             >
-              <span aria-hidden style={{ fontSize: 24, lineHeight: 1 }}>{p.glyph ?? "•"}</span>
-              <span className="font-semibold text-center" style={{ color: "var(--white)", fontSize: 11, lineHeight: "14px", marginTop: 6, padding: "0 6px" }}>
+              <span aria-hidden className="text-2xl leading-none">{p.glyph ?? "•"}</span>
+              <span className="font-semibold text-center text-white text-[11px] leading-[14px] mt-1.5 px-1.5">
                 {p.label}
               </span>
             </div>
           ))}
 
           {/* central hub */}
-          <div
-            className="absolute flex flex-col items-center justify-center"
-            style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: 152, height: 152 }}
-          >
+          <div className="absolute flex flex-col items-center justify-center left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[152px] h-[152px]">
             <span
               aria-hidden
-              className="wc-hub-glow absolute"
-              style={{ inset: -6, borderRadius: "50%", background: "radial-gradient(circle, rgba(186,131,240,0.55) 0%, rgba(186,131,240,0) 70%)" }}
+              className="wc-hub-glow absolute -inset-1.5 rounded-full bg-[radial-gradient(circle,rgba(186,131,240,0.55)_0%,rgba(186,131,240,0)_70%)]"
             />
-            <div
-              className="relative flex flex-col items-center justify-center"
-              style={{
-                width: "100%",
-                height: "100%",
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-light) 100%)",
-                boxShadow: "0 24px 56px -20px rgba(128,21,232,0.8)",
-              }}
-            >
-              <span aria-hidden style={{ fontSize: 30 }}>📊</span>
-              <span className="font-bold" style={{ color: "var(--white)", fontSize: 15, marginTop: 6 }}>{hubLabel}</span>
+            <div className="relative flex flex-col items-center justify-center w-full h-full rounded-full bg-[linear-gradient(135deg,var(--color-brand)_0%,var(--color-brand-light)_100%)] shadow-[0_24px_56px_-20px_rgba(128,21,232,0.8)]">
+              <span aria-hidden className="text-3xl">📊</span>
+              <span className="font-bold text-white text-[15px] mt-1.5">{hubLabel}</span>
             </div>
           </div>
         </div>
 
         {/* Mobile: hub + chip cloud */}
         <div className="md:hidden flex flex-col items-center">
-          <div
-            className="flex flex-col items-center justify-center"
-            style={{ width: 132, height: 132, borderRadius: "50%", background: "linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-light) 100%)", boxShadow: "0 24px 48px -20px rgba(128,21,232,0.8)" }}
-          >
-            <span aria-hidden style={{ fontSize: 26 }}>📊</span>
-            <span className="font-bold" style={{ color: "var(--white)", fontSize: 14, marginTop: 4 }}>{hubLabel}</span>
+          <div className="flex flex-col items-center justify-center w-[132px] h-[132px] rounded-full bg-[linear-gradient(135deg,var(--color-brand)_0%,var(--color-brand-light)_100%)] shadow-[0_24px_48px_-20px_rgba(128,21,232,0.8)]">
+            <span aria-hidden className="text-[26px]">📊</span>
+            <span className="font-bold text-white text-sm mt-1">{hubLabel}</span>
           </div>
-          <div className="flex flex-wrap justify-center" style={{ gap: 8, marginTop: 28 }}>
+          <div className="flex flex-wrap justify-center gap-2 mt-7">
             {apps.map((app, i) => (
               <span
                 key={i}
-                className="inline-flex items-center font-semibold"
-                style={{ gap: 7, padding: "8px 14px", borderRadius: 999, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.14)", color: "var(--white)", fontSize: 13 }}
+                className="inline-flex items-center font-semibold gap-[7px] px-3.5 py-2 rounded-full bg-white/[0.06] border border-white/[0.14] text-white text-[13px]"
               >
                 <span aria-hidden>{app.glyph ?? "•"}</span>
                 {app.label}
@@ -158,7 +132,7 @@ export default function EcosystemGrid({
         </div>
 
         {countLabel && (
-          <p className="text-center font-semibold" style={{ color: "var(--purple-light)", fontSize: 15, marginTop: 44 }}>
+          <p className="text-center font-semibold text-brand-light text-[15px] mt-11">
             {countLabel}
           </p>
         )}

@@ -23,7 +23,7 @@ export default function ProjectBuildsIndex() {
 
   return (
     <section id="builds" className="bg-surface">
-      <div className="max-w-6xl mx-auto px-5 sm:px-7 py-16 lg:py-20">
+      <div className="max-w-6xl mx-auto px-5 md:px-7 py-16 lg:py-20">
         <div className="max-w-[820px] mb-10">
           <div className="text-micro font-semibold tracking-[0.16em] uppercase text-[var(--purple-primary)]">
             Project Builds Index
@@ -56,7 +56,7 @@ export default function ProjectBuildsIndex() {
               </svg>
             </span>
             <span className="text-card-title text-[var(--text-dark)]">Fruition Clients</span>
-            <span className="text-body-sm text-[var(--color-text-secondary)] hidden sm:inline">
+            <span className="text-body-sm text-[var(--color-text-secondary)] hidden md:inline">
               <strong>{total}</strong>{" "}delivered implementations across US, APAC &amp; UK
             </span>
             <span className="ml-auto text-caption text-[var(--purple-primary)]">
@@ -80,7 +80,7 @@ export default function ProjectBuildsIndex() {
                       {g.items.length} delivered
                     </span>
                   </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
                     {g.items.map((c, idx) => (
                       <div
                         key={`${g.key}-${c.name}-${idx}`}

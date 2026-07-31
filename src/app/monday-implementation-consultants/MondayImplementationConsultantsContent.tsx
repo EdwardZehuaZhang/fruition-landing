@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
@@ -350,18 +351,15 @@ export default function MondayImplementationConsultantsContent({
 
   return (
     <div>
-      <StickyCtaBar label={data?.croSections?.stickyCtaLabel} href={data?.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={data?.croSections?.stickyCtaLabel} href={bookingHref(data?.croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* ============================================================ */}
       {/* SECTION 1 — Hero                                             */}
       {/* ============================================================ */}
       <section className="bg-surface">
-        <div
-          className="mx-auto flex flex-col items-center px-4 lg:px-[120px]"
-          style={{ paddingTop: 80, paddingBottom: 80, maxWidth: 1600 }}
-        >
+        <div className="mx-auto flex flex-col items-center px-4 lg:px-[120px] py-14 md:py-20 w-full max-w-[1600px]">
           {/* Partner badges */}
           {heroPartnerBadges.length > 0 && (
-            <div className="flex items-center flex-wrap justify-center" style={{ gap: 22 }}>
+            <div className="flex items-center flex-wrap justify-center gap-[22px]">
               {heroPartnerBadges.map((badge) => (
                 <Image
                   key={badge._key ?? badge.src}
@@ -377,82 +375,50 @@ export default function MondayImplementationConsultantsContent({
           )}
 
           {/* Heading */}
-          <h1
-            className="text-center font-bold"
-            style={{
-              fontSize: "clamp(32px, 8vw, 48px)",
-              lineHeight: 1.2,
-              marginTop: 14,
-              maxWidth: 924,
-              whiteSpace: "pre-line",
-            }}
-          >
+          <h1 className="text-display text-center mt-4 max-w-[924px] whitespace-pre-line">
             {heroHeadingPart1 && <span className="text-body">{heroHeadingPart1}</span>}
-            <span style={{ color: "#8015e8" }}>{heroHeadingAccent}</span>
+            <span className="text-brand">{heroHeadingAccent}</span>
             {heroHeadingPart2 && <span className="text-body">{heroHeadingPart2}</span>}
           </h1>
 
           {/* Subheading */}
           {heroSubheading && (
-            <p
-              style={{
-                fontSize: 18,
-                lineHeight: "25.2px",
-                color: "black",
-                marginTop: 31,
-                textAlign: "center",
-                maxWidth: 859,
-                whiteSpace: "pre-line",
-              }}
-            >
+            <p className="text-body-lead text-muted text-center mt-8 max-w-[859px] whitespace-pre-line">
               {heroSubheading}
             </p>
           )}
 
           {/* Certification badge */}
           {heroCertBadgeSrc && (
-            <div style={{ marginTop: 40 }}>
+            <div className="mt-10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroCertBadgeSrc}
                 alt="monday.com Certifications"
-                className="h-auto object-contain"
-                style={{ maxWidth: 534 }}
+                className="w-full max-w-[534px] h-auto object-contain"
               />
             </div>
           )}
 
           {/* Monday Partners image */}
-          <div style={{ marginTop: 40 }}>
+          <div className="mt-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://static.wixstatic.com/media/39b8ef_abd15c5dcf7c4d16a392b5693a6f7923~mv2.png/v1/fill/w_534,h_133,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/MONDAY%20PARTNERS.png"
               alt="Monday.com Partners"
               width={534}
               height={133}
-              className="h-auto object-contain"
-              style={{ maxWidth: 415 }}
+              className="w-full max-w-[415px] h-auto object-contain"
             />
           </div>
 
           {/* Dual CTA */}
           {(heroPrimaryCtaUrl || heroSecondaryCtaUrl) && (
-            <div
-              className="flex flex-col sm:flex-row items-center justify-center flex-wrap w-full max-w-[680px]"
-              style={{ gap: 20, marginTop: 40 }}
-            >
+            <div className="flex flex-col md:flex-row items-center justify-center flex-wrap w-full max-w-[680px] gap-5 mt-10">
               {heroPrimaryCtaUrl && (
                 <Link
                   href={heroPrimaryCtaUrl}
-                  className="flex items-center justify-center font-bold w-full sm:flex-1 sm:max-w-[330px]"
-                  style={{
-                    height: 53,
-                    borderRadius: 100,
-                    border: "1px solid #8015e8",
-                    backgroundColor: "white",
-                    color: "#8015e8",
-                    fontSize: 16,
-                  }}
+                  className="cta-btn cta-btn-outline w-full md:flex-1 md:max-w-[330px]"
                 >
                   <CtaLabel label={heroPrimaryCtaLabel} />
                 </Link>
@@ -460,13 +426,7 @@ export default function MondayImplementationConsultantsContent({
               {heroSecondaryCtaUrl && (
                 <Link
                   href={heroSecondaryCtaUrl}
-                  className="flex items-center justify-center font-bold text-white w-full sm:flex-1 sm:max-w-[330px]"
-                  style={{
-                    height: 53,
-                    borderRadius: 100,
-                    background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                    fontSize: 16,
-                  }}
+                  className="cta-btn cta-btn-primary w-full md:flex-1 md:max-w-[330px]"
                 >
                   <CtaLabel label={heroSecondaryCtaLabel} />
                 </Link>
@@ -476,30 +436,28 @@ export default function MondayImplementationConsultantsContent({
 
           {/* Hero dashboard image */}
           {heroDashboardImageSrc && (
-            <div className="w-full max-w-[1042px]" style={{ marginTop: 40 }}>
+            <div className="w-full max-w-[1042px] mt-10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroDashboardImageSrc}
                 alt="monday.com dashboards"
                 width={1042}
                 height={312}
-                className="rounded-card object-contain bg-white w-full"
-                style={{ height: "auto", aspectRatio: "1042 / 312" }}
+                className="rounded-card object-contain bg-surface-raised w-full h-auto aspect-[1042/312]"
               />
             </div>
           )}
 
           {/* Product images row */}
           {heroProductImages.length > 0 && (
-            <div className="flex items-center justify-center" style={{ gap: 24, marginTop: 40 }}>
+            <div className="flex flex-wrap items-center justify-center gap-6 mt-10">
               {heroProductImages.map((img) => (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   key={img._key ?? img.src}
                   src={img.src}
                   alt={img.alt}
-                  className="h-auto object-contain"
-                  style={{ width: 220 }}
+                  className="h-auto object-contain w-full max-w-[220px]"
                 />
               ))}
             </div>
@@ -510,14 +468,7 @@ export default function MondayImplementationConsultantsContent({
       {/* ============================================================ */}
       {/* SECTION 1b — monday product logos strip                       */}
       {/* ============================================================ */}
-      <section
-        className="px-4"
-        style={{
-          background: "linear-gradient(to bottom, #ffffff 0%, #e9e1ff 100%)",
-          paddingTop: 40,
-          paddingBottom: 40,
-        }}
-      >
+      <section className="px-4 py-10 bg-gradient-to-b from-surface to-brand-soft">
         <div className="mx-auto flex flex-wrap items-center justify-center gap-x-[56px] gap-y-6 max-w-[1100px]">
           {[
             { src: "/images/monday-crm-logo.avif", alt: "monday CRM" },
@@ -539,18 +490,15 @@ export default function MondayImplementationConsultantsContent({
       {/* ============================================================ */}
       {/* SECTION 2 — Logo cloud marquee                               */}
       {/* ============================================================ */}
-      <section className="bg-surface py-[80px] px-4">
+      <section className="bg-surface py-14 md:py-20 px-4">
         <div className="flex flex-col gap-[35px] items-center w-full max-w-[1348px] mx-auto">
-          <p className="text-[28px] font-medium leading-[39.2px] text-center">
+          <p className="text-section-h3 text-center">
             <span className="text-body">{logoCloudPart1}</span>
-            <span className="text-[#8015e8]">{logoCloudAccent}</span>
+            <span className="text-brand">{logoCloudAccent}</span>
           </p>
           {duplicatedLogos.length > 0 && (
             <div className="w-full overflow-hidden">
-              <div
-                className="flex items-center gap-[65px] animate-marquee"
-                style={{ width: "max-content" }}
-              >
+              <div className="flex items-center gap-[65px] animate-marquee w-max">
                 {duplicatedLogos.map((logo, i) => (
                   <div
                     key={`logo-${i}`}
@@ -575,9 +523,9 @@ export default function MondayImplementationConsultantsContent({
       {/* SECTION 2b — Video Embed                                     */}
       {/* ============================================================ */}
       {videoEmbedUrl && (
-        <section className="bg-surface" style={{ paddingBottom: 80 }}>
-          <div className="mx-auto" style={{ maxWidth: 1042 }}>
-            <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
+        <section className="bg-surface pb-14 md:pb-20">
+          <div className="mx-auto px-4 max-w-[1042px]">
+            <div className="rounded-card overflow-hidden aspect-video">
               <YouTubeEmbed url={videoEmbedUrl} title={videoTitle} />
             </div>
           </div>
@@ -614,8 +562,8 @@ export default function MondayImplementationConsultantsContent({
       {/* ============================================================ */}
       {/* SECTION 8 — Solution cards                                   */}
       {/* ============================================================ */}
-      <section style={{ backgroundColor: "#ffffff", paddingTop: 80, paddingBottom: 80 }}>
-        <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
+      <section className="bg-surface py-14 md:py-20">
+        <div className="mx-auto px-4 max-w-[1200px]">
           {/* Solution cards — alternating sides.
               Re-map source data to match design: synthesize CRM card from
               section heading/intro + first card's eyebrow-as-CTA, then
@@ -649,96 +597,45 @@ export default function MondayImplementationConsultantsContent({
             ]
 
             return (
-              <div className="flex flex-col" style={{ gap: 40 }}>
+              <div className="flex flex-col gap-10">
                 {orderedCards.map((card, i) => {
                   const imgSrc = imageUrl(card.image)
                   const reverse = i % 2 === 0
               return (
                 <div
                   key={card._key || i}
-                  className={`flex flex-col ${reverse ? "md:flex-row-reverse" : "md:flex-row"} items-center`}
-                  style={{
-                    backgroundColor: "transparent",
-                    border: "none",
-                    borderRadius: 0,
-                    overflow: "hidden",
-                    gap: 0,
-                  }}
+                  className={`flex flex-col ${reverse ? "md:flex-row-reverse" : "md:flex-row"} items-center overflow-hidden`}
                 >
                   {/* Text column */}
-                  <div className="flex-1 w-full" style={{ padding: 40 }}>
+                  <div className="flex-1 w-full p-6 md:p-10">
                     {card.eyebrow && (
-                      <p
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 600,
-                          color: "#8015e8",
-                          letterSpacing: "0.5px",
-                          textTransform: "uppercase",
-                        }}
-                      >
+                      <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand">
                         {card.eyebrow}
                       </p>
                     )}
-                    <h3
-                      className="font-bold"
-                      style={{
-                        fontSize: 28,
-                        color: "#2b074d",
-                        lineHeight: "36px",
-                        marginTop: 12,
-                      }}
-                    >
+                    <h3 className="text-section-h3 text-surface-dark-2 mt-3">
                       {card.heading}
                     </h3>
                     {card.body && (
-                      <p
-                        style={{
-                          fontSize: 15,
-                          lineHeight: "22.5px",
-                          color: "black",
-                          marginTop: 16,
-                          whiteSpace: "pre-line",
-                        }}
-                      >
+                      <p className="text-body-sm text-muted mt-4 whitespace-pre-line">
                         {card.body}
                       </p>
                     )}
                     {card.ctaLabel && card.ctaUrl && (
-                      <Link
-                        href={card.ctaUrl}
-                        className="inline-flex items-center justify-center font-bold"
-                        style={{
-                          height: 48,
-                          paddingLeft: 28,
-                          paddingRight: 28,
-                          borderRadius: 100,
-                          background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                          color: "white",
-                          fontSize: 14,
-                          marginTop: 24,
-                        }}
-                      >
+                      <Link href={card.ctaUrl} className="cta-btn cta-btn-primary mt-6">
                         <CtaLabel label={card.ctaLabel} />
                       </Link>
                     )}
                   </div>
 
                   {/* Image column */}
-                  <div
-                    className="flex-1 w-full"
-                    style={{
-                      minHeight: 320,
-                      backgroundColor: "#ffffff",
-                    }}
-                  >
+                  <div className="flex-1 w-full min-h-[240px] md:min-h-[320px] bg-surface-raised">
                     {imgSrc && (
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
                         src={imgSrc}
                         alt={card.heading ?? ""}
-                        className="w-full h-full object-contain"
-                        style={{ minHeight: 320 }}
+                        className="w-full h-full object-contain min-h-[240px] md:min-h-[320px]"
                       />
                     )}
                   </div>
@@ -782,8 +679,8 @@ export default function MondayImplementationConsultantsContent({
       {/* ============================================================ */}
       {/* SECTION 12 — Security badge                                   */}
       {/* ============================================================ */}
-      <section className="bg-surface px-4" style={{ paddingTop: 40, paddingBottom: 80 }}>
-        <div className="mx-auto" style={{ maxWidth: 976 }}>
+      <section className="bg-surface px-4 pt-10 pb-14 md:pb-20">
+        <div className="mx-auto max-w-[976px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://static.wixstatic.com/media/d6e205_dd894a9db73241b2a6b8e6bdb4ee7585~mv2.png/v1/fill/w_976,h_94,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Security.png"

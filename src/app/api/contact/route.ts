@@ -7,8 +7,8 @@ export const maxDuration = 30
 
 /**
  * Contact-form endpoint. Primary action is an email to contact@fruitionservices.io
- * via Resend (the send must succeed). The existing lead pipeline (Slack + monday)
- * is fired best-effort so contact inquiries also land where the team already works.
+ * via Resend (the send must succeed). The lead also lands as a structured item
+ * on the monday Website Leads board, with Slack as the fallback sink.
  *
  * Env:
  *   RESEND_API_KEY   — Resend API key
@@ -21,9 +21,12 @@ interface ContactRequest {
   firstName?: string
   lastName?: string
   email?: string
+  company?: string
   phone?: string
   message?: string
   service?: string
+  /** Which form/page the lead came from, defaults to "contact-us" */
+  source?: string
   /** Spam honeypot — must be empty */
   website?: string
 }
@@ -58,6 +61,8 @@ export async function POST(req: Request) {
   const phone = (p.phone ?? "").trim()
   const message = (p.message ?? "").trim()
   const service = (p.service ?? "").trim()
+  const company = (p.company ?? "").trim()
+  const source = (p.source ?? "").trim() || "contact-us"
   const name = [firstName, lastName].filter(Boolean).join(" ")
 
   if (!firstName) return NextResponse.json({ ok: false, error: "First name is required." }, { status: 400 })
@@ -69,6 +74,7 @@ export async function POST(req: Request) {
   const rows: [string, string][] = [
     ["Name", name],
     ["Email", email],
+    ["Company", company],
     ["Phone", phone],
     ["Service", service],
   ]
@@ -122,15 +128,24 @@ export async function POST(req: Request) {
     }
   }
 
-  // Mirror into the existing Slack + monday lead pipeline.
+  // Mirror into the lead pipeline: monday is the primary structured sink;
+  // Slack only fires when the monday push fails, so a lead is never lost but
+  // the channel isn't double-fed.
   const fields: Record<string, string> = {}
   if (phone) fields["Phone"] = phone
   if (service) fields["Service"] = service
   if (message) fields["Message"] = message
-  const [slackOk, mondayId] = await Promise.all([
-    notifySlack({ name: name || email, email, source: "contact-us", fields }),
-    pushToMonday({ name: name || email, email, source: "contact-us", fields }),
-  ])
+  const lead = {
+    name: name || email,
+    email,
+    company: company || undefined,
+    source,
+    // Cloudflare's edge geolocation drives the regional CRM routing.
+    country: req.headers.get("cf-ipcountry") ?? undefined,
+    fields,
+  }
+  const mondayId = await pushToMonday(lead)
+  const slackOk = mondayId ? false : await notifySlack(lead)
 
   if (emailed || slackOk || mondayId) {
     return NextResponse.json({ ok: true })

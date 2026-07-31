@@ -32,9 +32,9 @@ export default function SolutionCardsSection({
   if (cards.length === 0) return null
 
   return (
-    <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
-        <div className="flex flex-col" style={{ gap: 60 }}>
+    <section className="bg-surface py-20">
+      <div className="mx-auto px-4 max-w-[1200px]">
+        <div className="flex flex-col gap-[60px]">
           {cards.map((card, i) => {
             const imageSrc = card.imageSrc || safeImageUrl(card.image)
             const isEven = i % 2 === 0
@@ -45,58 +45,26 @@ export default function SolutionCardsSection({
                   isEven ? "md:flex-row" : "md:flex-row-reverse"
                 }`}
               >
-                <div style={{ flex: 1 }}>
+                <div className="flex-1">
                   {card.eyebrow && (
-                    <p
-                      style={{
-                        fontSize: 14,
-                        fontWeight: 600,
-                        color: "#8015e8",
-                        letterSpacing: "0.5px",
-                        textTransform: "uppercase",
-                      }}
-                    >
+                    <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand">
                       {card.eyebrow}
                     </p>
                   )}
                   {card.heading && (
-                    <h3
-                      style={{
-                        fontSize: 28,
-                        fontWeight: 600,
-                        color: "var(--text-body)",
-                        marginTop: card.eyebrow ? 8 : 0,
-                      }}
-                    >
+                    <h3 className={`text-[28px] font-semibold ${card.eyebrow ? "mt-2" : ""}`}>
                       {card.heading}
                     </h3>
                   )}
                   {card.body && (
-                    <p
-                      style={{
-                        fontSize: 16,
-                        lineHeight: "25.6px",
-                        color: "var(--text-body)",
-                        marginTop: 20,
-                        whiteSpace: "pre-line",
-                      }}
-                    >
+                    <p className="text-base leading-[1.6] mt-5 whitespace-pre-line">
                       {card.body}
                     </p>
                   )}
                   {card.ctaLabel && card.ctaUrl && (
                     <Link
                       href={card.ctaUrl}
-                      className="inline-flex items-center justify-center font-bold text-white"
-                      style={{
-                        height: 53,
-                        paddingLeft: 32,
-                        paddingRight: 32,
-                        borderRadius: 100,
-                        background: "linear-gradient(to right, #8015e8, #ba83f0)",
-                        fontSize: 16,
-                        marginTop: 24,
-                      }}
+                      className="cta-btn cta-btn-primary mt-6"
                     >
                       {card.ctaLabel}
                     </Link>
@@ -104,8 +72,7 @@ export default function SolutionCardsSection({
                 </div>
                 {imageSrc && (
                   <FramedMedia
-                    className="rounded-card overflow-hidden shadow-whisper bg-surface-raised flex items-center justify-center dark:shadow-none"
-                    style={{ flex: 1, aspectRatio: "16 / 10" }}
+                    className="rounded-card overflow-hidden shadow-whisper bg-surface-raised flex items-center justify-center dark:shadow-none flex-1 aspect-[16/10]"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img

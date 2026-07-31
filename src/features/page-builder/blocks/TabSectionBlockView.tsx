@@ -1,5 +1,6 @@
 'use client'
 
+import { bookingHref } from "@/lib/bookingLink"
 import { useState } from 'react'
 import Link from 'next/link'
 import { BarChart3 } from 'lucide-react'
@@ -61,7 +62,7 @@ export default function TabSectionBlockView({
       <div className="relative mx-auto max-w-[959px] flex flex-col items-center gap-[24px]">
         {/* Heading */}
         {heading && (
-          <h2 className="text-center text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">
+          <h2 className="text-center text-[26px] leading-[36px] md:text-[35px] md:leading-[49px] font-medium text-body">
 
             {heading}
           </h2>
@@ -80,10 +81,10 @@ export default function TabSectionBlockView({
               <button
                 key={tab._key ?? i}
                 onClick={() => setActiveIndex(i)}
-                className={`relative inline-flex items-center justify-center rounded-[99px] px-[27px] py-[7px] text-[16px] leading-[1.2] transition-all ${
+                className={`relative inline-flex items-center justify-center rounded-[99px] px-4 py-1.5 text-sm md:px-[27px] md:py-[7px] md:text-base leading-[1.2] transition-all ${
                   i === activeIndex
-                    ? 'bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]'
-                    : 'bg-surface-raised text-body border border-ui hover:border-[#8015e8]'
+                    ? 'bg-gradient-to-r from-brand to-brand-light text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]'
+                    : 'bg-surface-raised text-body border border-ui hover:border-brand'
                 }`}
               >
                 {tab.label}
@@ -99,10 +100,10 @@ export default function TabSectionBlockView({
                   <button
                     key={tab._key ?? idx}
                     onClick={() => setActiveIndex(idx)}
-                    className={`relative inline-flex items-center justify-center rounded-[99px] px-[27px] py-[7px] text-[16px] leading-[1.2] transition-all ${
+                    className={`relative inline-flex items-center justify-center rounded-[99px] px-4 py-1.5 text-sm md:px-[27px] md:py-[7px] md:text-base leading-[1.2] transition-all ${
                       idx === activeIndex
-                        ? 'bg-gradient-to-r from-[#8015e8] to-[#ba83f0] text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]'
-                        : 'bg-surface-raised text-body border border-ui hover:border-[#8015e8]'
+                        ? 'bg-gradient-to-r from-brand to-brand-light text-white shadow-[2.83px_2.83px_15px_3px_rgba(0,0,0,0.24)]'
+                        : 'bg-surface-raised text-body border border-ui hover:border-brand'
                     }`}
                   >
                     {tab.label}
@@ -118,7 +119,7 @@ export default function TabSectionBlockView({
           {isImplementSection ? (
             /* "Implement monday.com" layout: heading + button row, body text, emoji features grid */
             <div className="flex flex-col gap-[24px]">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between w-full">
+              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between w-full">
                 {active?.heading && (
                   <h3 className="text-[24px] font-medium text-body leading-[33.6px] max-w-[487px]">
                     {active.heading}
@@ -126,12 +127,12 @@ export default function TabSectionBlockView({
                 )}
                 {active?.ctaLabel && active?.ctaUrl && (
                   <Link
-                    href={active.ctaUrl}
-                    className="shrink-0 flex items-center justify-center h-[39px] px-[20px] rounded-[100px] border border-[#8015e8] text-[#8015e8] text-[16px] font-semibold hover:bg-[#8015e8]/5 transition gap-[4px]"
+                    href={bookingHref(active.ctaUrl)}
+                    className="shrink-0 flex items-center justify-center h-[39px] px-[20px] rounded-[100px] border border-brand text-brand text-[16px] font-semibold hover:bg-brand/5 transition gap-[4px]"
                   >
                     {active.ctaLabel}
                     <svg width="8" height="14" viewBox="0 0 8 14" fill="none" className="ml-1">
-                      <path d="M1 1L7 7L1 13" stroke="#8015e8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M1 1L7 7L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </Link>
                 )}
@@ -140,10 +141,10 @@ export default function TabSectionBlockView({
                 <p className="text-[16px] text-body leading-[22.4px]">{active.body}</p>
               )}
               {active?.features && active.features.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-[20px] gap-y-[12px]">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-[20px] gap-y-[12px]">
                   {active.features.map((f, i) => (
                     <div key={f._key ?? i} className="flex items-center gap-[12px]">
-                      <span className="text-[24px] font-semibold text-[#7a14e1]">
+                      <span className="text-[24px] font-semibold text-brand">
                         {f.icon || <BarChart3 size={22} aria-hidden />}
                       </span>
                       <span className="text-[14px] text-body">{f.label}</span>

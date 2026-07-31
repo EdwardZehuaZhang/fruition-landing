@@ -18,7 +18,7 @@ export default function LeftRightSection({
   afterRow,
 }: LeftRightSectionProps) {
   return (
-    <section className={`${className} py-[80px] px-4 sm:px-8 md:px-16 lg:px-24 xl:px-[120px] 2xl:px-[273px]`}>
+    <section className={`${className} py-[80px] px-4 md:px-16 lg:px-24`}>
       {beforeRow}
       {/* Mobile always stacks text → image so alternating rows read consistently;
           imageOnLeft only affects the md+ row order */}

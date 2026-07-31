@@ -1,3 +1,4 @@
+import { BOOKING_ANCHOR, bookingHref } from "@/lib/bookingLink"
 import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react"
 import { PortableText } from "@portabletext/react"
 import Image from "next/image"
@@ -57,7 +58,7 @@ interface BlogPostTemplateProps {
   calendlyUrl?: string
 }
 
-const DEFAULT_CALENDLY = "https://calendly.com/global-calendar-fruitionservices"
+const DEFAULT_CALENDLY = BOOKING_ANCHOR
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -143,9 +144,12 @@ function extractHeadings(body?: PortableTextBlock[]): TocEntry[] {
 /*  Figma rules:                                                       */
 /*    - Montserrat Regular/Bold                                        */
 /*    - body: 18px / leading-27px / text-body                         */
-/*    - h2 (section): 28px Bold / leading-35px / py-27.5px             */
-/*    - h3 (sub): 22px Bold / leading-27px / pt-27.5px                 */
-/*    - h4 (inline): 18px Bold / leading-27px / pt-27.5px              */
+/*    - h2 (section): 28px Bold / leading-35px / pt-45px               */
+/*    - h3 (sub): 22px Bold / leading-27px / pt-36px                   */
+/*    - h4 (inline): 18px Bold / leading-27px / pt-32px                */
+/*    Headings carry no bottom padding — the next block's pt-27.5px    */
+/*    supplies the below-gap, so the gap above a heading is always     */
+/*    larger and each heading visually opens the section below it.     */
 /*    - between paragraphs: pt-27.5px                                  */
 /*    - link color: #604c97                                            */
 /*    - image: w-[740px] with figcaption centered, 14px                */
@@ -155,32 +159,32 @@ function extractHeadings(body?: PortableTextBlock[]): TocEntry[] {
 const blogPortableTextComponents: PortableTextComponents = {
   block: {
     h1: ({ children, value }) => (
-      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-montserrat font-bold text-[24px] sm:text-[28px] leading-[31px] sm:leading-[35px] text-body w-full py-[27.5px]">
+      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-bold text-[24px] md:text-[28px] leading-[31px] md:leading-[35px] text-body w-full pt-[45px] first:pt-0">
         {children}
       </h2>
     ),
     h2: ({ children, value }) => (
-      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-montserrat font-bold text-[24px] sm:text-[28px] leading-[31px] sm:leading-[35px] text-body w-full py-[27.5px]">
+      <h2 id={slugify(blockText(value))} className="scroll-mt-[100px] font-bold text-[24px] md:text-[28px] leading-[31px] md:leading-[35px] text-body w-full pt-[45px] first:pt-0">
         {children}
       </h2>
     ),
     h3: ({ children, value }) => (
-      <h3 id={slugify(blockText(value))} className="scroll-mt-[100px] font-montserrat font-bold text-[22px] leading-[27px] text-body w-full pt-[27.5px] pb-[10px]">
+      <h3 id={slugify(blockText(value))} className="scroll-mt-[100px] font-bold text-[22px] leading-[27px] text-body w-full pt-[36px] first:pt-0">
         {children}
       </h3>
     ),
     h4: ({ children }) => (
-      <h4 className="font-montserrat font-bold text-[18px] leading-[27px] text-body w-full pt-[27.5px]">
+      <h4 className="font-bold text-[18px] leading-[27px] text-body w-full pt-[32px] first:pt-0">
         {children}
       </h4>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="font-montserrat font-normal text-[18px] leading-[27px] text-body w-full pt-[27.5px] pl-[20px] border-l-[3px] border-[#604c97] italic">
+      <blockquote className="font-normal text-[18px] leading-[27px] text-body w-full pt-[27.5px] pl-[20px] border-l-[3px] border-brand-dark italic">
         {children}
       </blockquote>
     ),
     normal: ({ children }) => (
-      <p className="font-montserrat font-normal text-[18px] leading-[27px] text-body w-full pt-[27.5px] first:pt-0">
+      <p className="font-normal text-[18px] leading-[27px] text-body w-full pt-[27.5px] first:pt-0">
         {children}
       </p>
     ),
@@ -195,19 +199,19 @@ const blogPortableTextComponents: PortableTextComponents = {
   },
   listItem: {
     bullet: ({ children }) => (
-      <li className="font-montserrat font-normal text-[18px] leading-[27px] text-body">
+      <li className="font-normal text-[18px] leading-[27px] text-body">
         {children}
       </li>
     ),
     number: ({ children }) => (
-      <li className="font-montserrat font-normal text-[18px] leading-[27px] text-body">
+      <li className="font-normal text-[18px] leading-[27px] text-body">
         {children}
       </li>
     ),
   },
   marks: {
     strong: ({ children }) => (
-      <strong className="font-montserrat font-bold">{children}</strong>
+      <strong className="font-bold">{children}</strong>
     ),
     em: ({ children }) => <em className="italic">{children}</em>,
     link: ({ children, value }) => (
@@ -215,7 +219,7 @@ const blogPortableTextComponents: PortableTextComponents = {
         href={value?.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-[#604c97] underline hover:no-underline"
+        className="text-brand-dark underline hover:no-underline"
       >
         {children}
       </a>
@@ -223,7 +227,7 @@ const blogPortableTextComponents: PortableTextComponents = {
     internalLink: ({ children, value }) => (
       <Link
         href={value?.slug?.current ? `/${value.slug.current}` : "#"}
-        className="text-[#604c97] underline hover:no-underline"
+        className="text-brand-dark underline hover:no-underline"
       >
         {children}
       </Link>
@@ -248,7 +252,7 @@ const blogPortableTextComponents: PortableTextComponents = {
           </div>
           {value.caption && (
             <figcaption className="w-full flex items-center justify-center p-[16px]">
-              <span className="font-montserrat font-normal text-[14px] leading-[27px] text-body text-center">
+              <span className="font-normal text-[14px] leading-[27px] text-body text-center">
                 {value.caption}
               </span>
             </figcaption>
@@ -269,7 +273,7 @@ function BodyTable({ rows }: { rows?: { cells?: string[] }[] }) {
   const [head, ...body] = rows
   return (
     <figure className="w-full overflow-x-auto pt-[27.5px]">
-      <table className="w-full border-collapse font-montserrat text-[16px] leading-[24px] text-body">
+      <table className="w-full border-collapse text-[16px] leading-[24px] text-body">
         {head?.cells?.length ? (
           <thead>
             <tr>
@@ -325,7 +329,7 @@ function BodyVideoEmbed({ url, caption }: { url?: string; caption?: string }) {
       </div>
       {caption && (
         <figcaption className="w-full flex items-center justify-center p-[16px]">
-          <span className="font-montserrat font-normal text-[14px] leading-[27px] text-body text-center">
+          <span className="font-normal text-[14px] leading-[27px] text-body text-center">
             {caption}
           </span>
         </figcaption>
@@ -341,10 +345,7 @@ function BodyVideoEmbed({ url, caption }: { url?: string; caption?: string }) {
 function AuthorAvatar({ name }: { name?: string }) {
   return (
     <div
-      className="shrink-0 size-[32px] rounded-[16px] flex items-center justify-center text-white font-montserrat font-semibold text-[12px] leading-none select-none"
-      style={{
-        background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)",
-      }}
+      className="shrink-0 size-[32px] rounded-[16px] flex items-center justify-center text-white font-semibold text-[12px] leading-none select-none bg-gradient-to-br from-brand to-brand-light"
       aria-hidden="true"
     >
       {authorInitials(name)}
@@ -386,7 +387,7 @@ function AuthorMetaRow({
         <div className="flex flex-col items-start min-w-0">
           <Link
             href={`/author/${authorSlug(author)}`}
-            className="font-montserrat font-normal text-[14px] leading-[21px] text-body truncate max-w-full hover:text-[#604c97] transition-colors"
+            className="font-normal text-[14px] leading-[21px] text-body truncate max-w-full hover:text-brand-dark transition-colors"
           >
             {author}
           </Link>
@@ -394,13 +395,13 @@ function AuthorMetaRow({
       )}
       {/* Date */}
       {publishedAt && (
-        <div className="flex gap-[6px] items-start pl-[6px] shrink-0 font-montserrat font-normal text-[14px] leading-[21px] text-body whitespace-nowrap">
+        <div className="flex gap-[6px] items-center pl-[6px] shrink-0 font-mono text-xs font-semibold uppercase tracking-[0.14em] leading-[21px] text-muted whitespace-nowrap">
           <span>·</span>
           <span>{formatDate(publishedAt)}</span>
         </div>
       )}
       {/* Reading time */}
-      <div className="flex gap-[6px] items-start pl-[6px] shrink-0 font-montserrat font-normal text-[14px] leading-[21px] text-body whitespace-nowrap">
+      <div className="flex gap-[6px] items-center pl-[6px] shrink-0 font-mono text-xs font-semibold uppercase tracking-[0.14em] leading-[21px] text-muted whitespace-nowrap">
         <span>·</span>
         <span>{readingTime}</span>
       </div>
@@ -411,7 +412,7 @@ function AuthorMetaRow({
 function ArticleTitle({ title }: { title: string }) {
   return (
     <div className="flex flex-col items-start w-full">
-      <h1 className="font-montserrat font-bold text-[28px] leading-[36px] sm:text-[40px] sm:leading-[50px] text-body w-full">
+      <h1 className="font-bold text-[28px] leading-[36px] md:text-[40px] md:leading-[50px] text-body w-full">
         {title}
       </h1>
     </div>
@@ -479,9 +480,9 @@ function TagsRow({ categories }: { categories: BlogCategoryRef[] }) {
         <Link
           key={cat.slug}
           href={`/consulting-blog/categories/${cat.slug}`}
-          className="inline-flex items-start px-[13px] py-[7px] bg-surface-raised border border-ui hover:border-[#604c97] transition-colors"
+          className="inline-flex items-start px-[13px] py-[7px] bg-surface-raised border border-ui hover:border-brand-dark transition-colors"
         >
-          <span className="font-montserrat font-normal text-[14px] leading-[17px] text-body">
+          <span className="font-mono text-xs font-semibold uppercase tracking-[0.14em] leading-[17px] text-brand">
             {cat.title}
           </span>
         </Link>
@@ -528,7 +529,7 @@ function EngagementBar() {
             <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M8 11.5a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1 1M11 7.5a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1-1"
-                stroke="black"
+                stroke="var(--text-body)"
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -543,7 +544,7 @@ function EngagementBar() {
             <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M17 2 9.5 9.5M17 2l-5 15-2.5-7.5L2 7l15-5Z"
-                stroke="black"
+                stroke="var(--text-body)"
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -579,19 +580,21 @@ function ArticleToc({ entries }: { entries: TocEntry[] }) {
   return (
     <nav
       aria-label="On this page"
-      className="w-full rounded-[16px] p-[24px] sm:p-[28px]"
-      style={{ background: "var(--surface-subtle)", border: "1px solid var(--border-ui)" }}
+      className="w-full rounded-[16px] p-[24px] md:p-[28px] bg-surface-subtle border border-ui"
     >
-      <p className="font-montserrat font-semibold uppercase" style={{ color: "#8015e8", fontSize: 12, letterSpacing: "0.16em" }}>
+      <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand">
         On this page
       </p>
-      <ul className="mt-[14px] flex flex-col" style={{ gap: 8, listStyle: "none", padding: 0 }}>
+      <ul className="mt-[14px] flex flex-col gap-[8px] list-none p-0">
         {entries.map((e) => (
-          <li key={e.id} style={{ paddingLeft: e.level === 3 ? 16 : 0 }}>
+          <li key={e.id} className={e.level === 3 ? "pl-[16px]" : ""}>
             <a
               href={`#${e.id}`}
-              className="font-montserrat hover:underline"
-              style={{ color: e.level === 3 ? "var(--text-muted-fg)" : "var(--text-body)", fontSize: e.level === 3 ? 14 : 15, fontWeight: e.level === 3 ? 400 : 600 }}
+              className={`hover:underline ${
+                e.level === 3
+                  ? "text-muted text-[14px] font-normal"
+                  : "text-body text-[15px] font-semibold"
+              }`}
             >
               {e.text}
             </a>
@@ -606,27 +609,24 @@ function ArticleToc({ entries }: { entries: TocEntry[] }) {
 function InlineAuditCta({ calendlyUrl }: { calendlyUrl: string }) {
   return (
     <aside
-      className="relative w-full overflow-hidden rounded-[20px] p-[32px] sm:p-[40px]"
-      style={{ background: "linear-gradient(135deg, #2b074d 0%, #10003a 100%)" }}
+      className="relative w-full overflow-hidden rounded-card p-[32px] md:p-[40px] bg-gradient-to-br from-surface-dark-2 to-surface-dark"
     >
       <span
         aria-hidden
-        className="pointer-events-none absolute"
-        style={{ top: -120, right: -100, width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(128,21,232,0.4) 0%, rgba(128,21,232,0) 70%)" }}
+        className="pointer-events-none absolute -top-[120px] -right-[100px] size-[300px] rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--color-brand)_40%,transparent)_0%,transparent_70%)]"
       />
-      <div className="relative flex flex-col gap-[18px] sm:flex-row sm:items-center sm:justify-between">
-        <div style={{ maxWidth: 540 }}>
-          <h2 className="font-montserrat font-bold" style={{ color: "#ffffff", fontSize: 22, lineHeight: "30px", textWrap: "balance" }}>
+      <div className="relative flex flex-col gap-[18px] md:flex-row md:items-center md:justify-between">
+        <div className="max-w-[540px]">
+          <h2 className="font-bold text-white text-[22px] leading-[30px] text-balance">
             Scaling this workflow across 50+ users?
           </h2>
-          <p className="font-montserrat" style={{ color: "rgba(255,255,255,0.78)", fontSize: 15, lineHeight: "24px", marginTop: 8 }}>
+          <p className="mt-[8px] text-[15px] leading-[24px] text-white/[0.78]">
             Book a complimentary 30-minute process audit with a Fruition consultant and we will map the build for your team.
           </p>
         </div>
         <Link
-          href={calendlyUrl}
-          className="inline-flex flex-none items-center justify-center font-montserrat font-semibold"
-          style={{ height: 50, padding: "0 26px", borderRadius: 999, background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "#ffffff", fontSize: 15 }}
+          href={bookingHref(calendlyUrl)}
+          className="flex-none cta-btn cta-btn-on-dark-primary"
         >
           Book a 30-Min System Audit
         </Link>
@@ -642,7 +642,7 @@ function RelatedPostCard({ post }: { post: RelatedBlogPost }) {
   return (
     <Link
       href={`/post/${post.slug}`}
-      className="group bg-surface-raised relative flex-1 min-w-0 max-w-[290.67px] self-stretch border border-ui hover:border-[#604c97] dark:shadow-none transition-colors overflow-hidden"
+      className="group bg-surface-raised relative flex-1 min-w-0 max-w-[290.67px] self-stretch rounded-card shadow-whisper ring-1 ring-ui hover:ring-brand-dark dark:shadow-none transition-colors overflow-hidden"
     >
       <div className="flex flex-col items-start h-full">
         {/* Image — 162px tall, full card width */}
@@ -656,13 +656,13 @@ function RelatedPostCard({ post }: { post: RelatedBlogPost }) {
               className="object-cover group-hover:scale-[1.02] transition-transform duration-300"
             />
           ) : (
-            <div className="size-full bg-gradient-to-br from-[#8015e8] to-[#ba83f0]" />
+            <div className="size-full bg-gradient-to-br from-brand to-brand-light" />
           )}
         </div>
         {/* Body */}
         <div className="flex flex-col items-start flex-1 w-full pt-[24px] px-[24px] pb-[24px]">
           <div className="flex flex-col items-start w-full overflow-hidden">
-            <p className="font-montserrat font-bold text-[18px] leading-[normal] text-body w-full line-clamp-2 group-hover:text-[#604c97] transition-colors">
+            <p className="font-bold text-[18px] leading-[normal] text-body w-full line-clamp-2 group-hover:text-brand-dark transition-colors">
               {post.title}
             </p>
           </div>
@@ -682,7 +682,7 @@ function RelatedPostCard({ post }: { post: RelatedBlogPost }) {
                     fill="var(--text-body)"
                   />
                 </svg>
-                <span className="font-montserrat font-normal text-[12px] leading-[18px] text-body">
+                <span className="font-normal text-[12px] leading-[18px] text-body">
                   0
                 </span>
               </div>
@@ -712,19 +712,19 @@ function RelatedPostsSection({ posts }: { posts: RelatedBlogPost[] }) {
       {/* Header */}
       <header className="flex items-start justify-between w-full h-[27px]">
         <div className="flex flex-col items-start self-stretch">
-          <h2 className="font-montserrat font-normal text-[18px] leading-[27px] text-body whitespace-nowrap">
+          <h2 className="font-normal text-[18px] leading-[27px] text-body whitespace-nowrap">
             Recent Posts
           </h2>
         </div>
         <Link
           href="/consulting-blog"
-          className="flex flex-col items-start self-stretch font-montserrat font-normal text-[14px] leading-[21px] text-body whitespace-nowrap hover:text-[#604c97] transition-colors"
+          className="flex flex-col items-start self-stretch font-normal text-[14px] leading-[21px] text-body whitespace-nowrap hover:text-brand-dark transition-colors"
         >
           See All
         </Link>
       </header>
       {/* Cards row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-[34px] items-start w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-[34px] items-start w-full">
         {posts.slice(0, 2).map((p) => (
           <RelatedPostCard key={p._id} post={p} />
         ))}
@@ -756,13 +756,13 @@ export default function BlogPostTemplate({
   }
 
   return (
-    <div className="bg-surface w-full font-montserrat">
+    <div className="bg-surface w-full">
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
       />
-      <div className="mx-auto w-full max-w-[1470px] flex items-start justify-center px-[24px] sm:px-[48px] lg:px-[80px] xl:px-[273px] py-[48px] lg:py-[80px]">
+      <div className="mx-auto w-full max-w-[1470px] flex items-start justify-center px-6 md:px-12 lg:px-20 py-[48px] lg:py-[80px]">
         <div className="flex flex-col gap-[40px] items-center justify-center w-full max-w-[924px]">
           {/* Author meta */}
           <AuthorMetaRow

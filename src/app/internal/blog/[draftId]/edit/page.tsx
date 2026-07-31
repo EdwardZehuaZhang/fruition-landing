@@ -6,6 +6,9 @@ import BlogEditor, {
   type CategoryOption,
   type BlogEditorInitial,
 } from "@/components/internal/BlogEditor"
+import SocialDraftsPanel from "@/components/internal/SocialDraftsPanel"
+import BlogEditTabs from "@/components/internal/BlogEditTabs"
+import { slugifyTitle } from "@/lib/social/zernio"
 
 export const dynamic = "force-dynamic"
 
@@ -65,17 +68,43 @@ export default async function EditDraftPage({
     metadata: meta,
   }
 
+  const title = draft.title ?? ""
+  const socialSlug =
+    (typeof meta.slug === "string" && meta.slug) || (title ? slugifyTitle(title) : "")
+
+  const editorPane = (
+    <div className="rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
+      <h1 className="mb-6 text-2xl font-semibold text-ink-heading">Edit draft</h1>
+      <BlogEditor
+        categories={categories}
+        authors={authors}
+        currentAuthorName={currentAuthorName}
+        initial={initial}
+      />
+    </div>
+  )
+
   return (
     <PortalShell email={user.email} active="new">
-      <div className="rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
-        <h1 className="mb-6 text-2xl font-semibold text-ink-heading">Edit draft</h1>
-        <BlogEditor
-          categories={categories}
-          authors={authors}
-          currentAuthorName={currentAuthorName}
-          initial={initial}
+      {socialSlug ? (
+        <BlogEditTabs
+          blog={editorPane}
+          social={
+            <SocialDraftsPanel
+              source={{ slug: socialSlug, draftId: draft.id }}
+              blog={{
+                title,
+                excerpt: initial.excerpt,
+                bodyMarkdown: draft.body_markdown ?? undefined,
+                industry: initial.industry,
+                targetKeyword: initial.seoKeyword,
+              }}
+            />
+          }
         />
-      </div>
+      ) : (
+        editorPane
+      )}
     </PortalShell>
   )
 }

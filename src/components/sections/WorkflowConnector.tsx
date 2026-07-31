@@ -44,50 +44,43 @@ export default function WorkflowConnector({
 
   return (
     <section
-      className="px-4"
-      style={{
-        paddingTop: 88,
-        paddingBottom: 88,
-        background: dark
-          ? "linear-gradient(160deg, #2b074d 0%, #10003a 100%)"
-          : "var(--surface)",
-      }}
+      className={`px-4 py-22 ${
+        dark
+          ? "bg-[linear-gradient(160deg,var(--dark-bg-secondary)_0%,var(--dark-bg)_100%)]"
+          : "bg-surface"
+      }`}
     >
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
+      <div className="mx-auto max-w-[1100px]">
         {(eyebrow || heading || subheading) && (
-          <div className="text-center" style={{ marginBottom: 52, marginInline: "auto", maxWidth: 720 }}>
+          <div className="text-center mx-auto max-w-[720px] mb-13">
             {eyebrow && (
-              <p className="font-semibold uppercase" style={{ color: "#ba83f0", fontSize: 12, letterSpacing: "0.18em", marginBottom: 12 }}>
+              <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand-light mb-3">
                 {eyebrow}
               </p>
             )}
             {heading && (
-              <h2
-                className="font-bold"
-                style={{ color: ink, fontSize: "clamp(26px, 4.5vw, 38px)", lineHeight: 1.2, letterSpacing: "-0.015em", textWrap: "balance" }}
-              >
+              <h2 className={`text-section-h2 text-balance ${dark ? "text-white" : ""}`}>
                 {heading}
               </h2>
             )}
             {subheading && (
-              <p style={{ color: muted, fontSize: 16, lineHeight: "26px", marginTop: 14 }}>{subheading}</p>
+              <p className={`text-base leading-[26px] mt-3.5 ${dark ? "text-white/66" : "text-muted"}`}>
+                {subheading}
+              </p>
             )}
           </div>
         )}
 
         {/* Rail: row on desktop, column on mobile. Connectors switch axis to match. */}
-        <ol
-          className="flex flex-col md:flex-row md:items-stretch"
-          style={{ gap: 0, listStyle: "none", margin: 0, padding: 0 }}
-        >
+        <ol className="flex flex-col md:flex-row md:items-stretch list-none m-0 p-0">
           {steps.map((step, i) => {
             const isHub = step.tone === "hub"
             const last = i === steps.length - 1
             return (
               <Fragment key={`${step.label}-${i}`}>
                 <li
-                  className="wc-node relative flex flex-1 flex-col items-center text-center"
-                  style={{ animationDelay: `${i * 110}ms`, minWidth: 0 }}
+                  className="wc-node relative flex flex-1 flex-col items-center text-center min-w-0"
+                  style={{ animationDelay: `${i * 110}ms` }}
                 >
                   {/* node chip */}
                   <div
@@ -98,7 +91,7 @@ export default function WorkflowConnector({
                       padding: isHub ? "26px 20px" : "22px 18px",
                       borderRadius: 20,
                       background: isHub
-                        ? "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)"
+                        ? "linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-light) 100%)"
                         : nodeBg,
                       border: isHub ? "none" : `1px solid ${nodeBorder}`,
                       boxShadow: isHub
@@ -155,19 +148,12 @@ export default function WorkflowConnector({
                 {!last && (
                   <li
                     aria-hidden
-                    className="flex flex-none items-center justify-center"
-                    style={{ alignSelf: "center" }}
+                    className="flex flex-none items-center justify-center self-center"
                   >
                     {/* horizontal connector (desktop) */}
-                    <span
-                      className="wc-flow hidden md:block"
-                      style={{ width: 44, height: 3, borderRadius: 3 }}
-                    />
+                    <span className="wc-flow hidden md:block w-11 h-[3px] rounded-[3px]" />
                     {/* vertical connector (mobile) */}
-                    <span
-                      className="wc-flow-y md:hidden"
-                      style={{ width: 3, height: 30, borderRadius: 3, marginBlock: 6 }}
-                    />
+                    <span className="wc-flow-y md:hidden w-[3px] h-[30px] rounded-[3px] my-1.5" />
                   </li>
                 )}
               </Fragment>
@@ -176,7 +162,7 @@ export default function WorkflowConnector({
         </ol>
 
         {footnote && (
-          <p className="text-center" style={{ color: muted, fontSize: 13, marginTop: 36 }}>
+          <p className={`text-center text-[13px] mt-9 ${dark ? "text-white/66" : "text-muted"}`}>
             {footnote}
           </p>
         )}

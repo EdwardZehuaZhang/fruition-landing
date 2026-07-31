@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -25,9 +26,9 @@ export default function AiStrategyContent({
 }: AiStrategyContentProps) {
   if (!page) return null
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const resolvedFaqTabs =
     faqTabs && faqTabs.length > 0 ? faqTabs : page.faqTabs ?? []
@@ -50,9 +51,9 @@ export default function AiStrategyContent({
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
       />
 
       <LogoCloudMarquee
@@ -92,7 +93,7 @@ export default function AiStrategyContent({
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {resolvedFaqTabs.length > 0 && <FaqAccordion tabs={resolvedFaqTabs} />}

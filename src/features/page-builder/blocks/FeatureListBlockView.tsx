@@ -54,7 +54,7 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
           {/* Heading + subheading */}
           <div className="flex flex-col gap-[12px] items-center text-center w-full">
             {heading && (
-              <h2 className="text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">
+              <h2 className="text-[26px] leading-[36px] md:text-[35px] md:leading-[49px] font-medium text-body">
                 {heading}
               </h2>
             )}
@@ -96,7 +96,7 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
         <div className="mx-auto max-w-[959px] flex flex-col items-center gap-[36px]">
           <div className="flex flex-col gap-[12px] items-center text-center">
             {heading && (
-              <h2 className="text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">
+              <h2 className="text-[26px] leading-[36px] md:text-[35px] md:leading-[49px] font-medium text-body">
                 {headingAccent ? (
                   (() => {
                     const idx = heading.indexOf(headingAccent)
@@ -168,24 +168,24 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
 
         <div className="mx-auto max-w-[1199px] relative z-10 flex flex-col items-center">
           {stepsHeading && (
-            <h2 className="mb-3 text-center text-[28px] leading-[36px] sm:text-[45px] sm:leading-[63px] text-white">{stepsHeading}</h2>
+            <h2 className="mb-3 text-center text-[28px] leading-[36px] md:text-[45px] md:leading-[63px] text-white">{stepsHeading}</h2>
           )}
           {stepsSubheading && (
-            <p className="mb-12 text-center text-[19px] sm:text-[25px] font-extralight italic text-white">{stepsSubheading}</p>
+            <p className="mb-12 text-center text-[19px] md:text-[25px] font-extralight italic text-white">{stepsSubheading}</p>
           )}
 
-          <div className="flex flex-wrap gap-y-10 sm:gap-y-0 gap-x-0 w-full justify-center">
+          <div className="flex flex-wrap gap-y-10 md:gap-y-0 gap-x-0 w-full justify-center">
             {features?.map((f, i) => (
               <div
                 key={f._key ?? i}
-                className="group w-full sm:w-[237px] text-center cursor-default transition-transform duration-300 ease-out hover:-translate-y-1"
+                className="group w-full md:w-[237px] text-center cursor-default transition-transform duration-300 ease-out hover:-translate-y-1"
               >
-                <p className="text-[40px] sm:text-[48px] font-light text-[#b162fe] leading-[1.4] transition-all duration-300 ease-out group-hover:font-bold group-hover:text-white">
+                <p className="text-[40px] md:text-[48px] font-light text-[#b162fe] leading-[1.4] transition-all duration-300 ease-out group-hover:font-bold group-hover:text-white">
                   {String(i + 1).padStart(2, '0')}
                 </p>
-                <p className="text-[15px] sm:text-[14px] font-medium text-white mb-2 transition-all duration-300 ease-out group-hover:font-bold">{f.title}</p>
+                <p className="text-[15px] md:text-[14px] font-medium text-white mb-2 transition-all duration-300 ease-out group-hover:font-bold">{f.title}</p>
                 {f.description && (
-                  <p className="text-[14px] font-light text-white/90 leading-[22.4px] mx-auto max-w-[280px] sm:max-w-[190px]">{f.description}</p>
+                  <p className="text-[14px] font-light text-white/90 leading-[22.4px] mx-auto max-w-[280px] md:max-w-[190px]">{f.description}</p>
                 )}
               </div>
             ))}
@@ -200,7 +200,7 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
     <section className="bg-surface py-[80px] px-4">
       <div className="mx-auto max-w-[959px] flex flex-col items-center">
         {heading && (
-          <h2 className="mb-3 text-center text-[26px] leading-[36px] sm:text-[35px] sm:leading-[49px] font-medium text-body">{heading}</h2>
+          <h2 className="mb-3 text-center text-[26px] leading-[36px] md:text-[35px] md:leading-[49px] font-medium text-body">{heading}</h2>
         )}
         {subheading && (
           <p className="mb-10 text-center text-[20px] text-body max-w-[800px]">{subheading}</p>

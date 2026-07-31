@@ -4,6 +4,7 @@ import {
   getCaseStudies,
   getFaqItemsForPage,
   getTeamMembers,
+  getClosingCtaForPage,
 } from "@/sanity/queries"
 import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
 import { mergeTeamMembers } from "@/lib/mergeTeamMembers"
@@ -29,12 +30,13 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const [page, siteSettings, caseStudies, centralFaqs, teamMembers] = await Promise.all([
+  const [page, siteSettings, caseStudies, centralFaqs, teamMembers, closingCta] = await Promise.all([
     getLocationPageBySlug(SLUG),
     getSiteSettings(),
     getCaseStudies(),
     getFaqItemsForPage(SLUG),
     getTeamMembers(),
+    getClosingCtaForPage(SLUG),
   ])
   return (
     <MondayPartnerPhilippinesContent
@@ -43,6 +45,7 @@ export default async function Page() {
       caseStudies={caseStudies || []}
       faqTabs={groupFaqsIntoTabs(centralFaqs)}
       teamMembers={mergeTeamMembers(teamMembers || [], siteSettings?.excludedTeamMemberNames || [])}
+      closingCta={closingCta}
     />
   )
 }

@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import type { ReactNode } from "react"
 import {
   HeroBanner,
@@ -73,9 +74,9 @@ export default function UniversalPageTemplate({
 }: UniversalPageTemplateProps) {
   if (!page) return null
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const comparisonTabs = page.comparisonTabs ?? []
   const methodologySteps = page.methodologySteps ?? []
@@ -135,9 +136,9 @@ export default function UniversalPageTemplate({
         }
         partnerImageSrc={heroPartnerImageSrc}
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
         splitLayout={page.heroSplitLayout === true}
         hidePartnerBadges={page.hideHeroPartnerBadges === true}
       />
@@ -147,7 +148,7 @@ export default function UniversalPageTemplate({
         <CalendlySection
           heading={page.calendlyHeading}
           subheading={page.calendlySubheading}
-          calendlyUrl={calendlyUrl}
+          calendlyUrl={rawCalendly}
         />
       )}
 
@@ -161,9 +162,9 @@ export default function UniversalPageTemplate({
 
       {/* 2b. Hero video (only when heroVideoUrl is set on the page doc) */}
       {heroVideoEmbedSrc && (
-        <section className="bg-surface" style={{ paddingBottom: 80 }}>
-          <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
-            <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
+        <section className="bg-surface pb-14 md:pb-24">
+          <div className="mx-auto px-4 max-w-[1042px]">
+            <div className="rounded-card overflow-hidden aspect-video">
               <YouTubeEmbed url={heroVideoEmbedSrc} title={page.heroVideoTitle || "Video"} />
             </div>
           </div>
@@ -270,7 +271,7 @@ export default function UniversalPageTemplate({
         <CalendlySection
           heading={page.calendlyHeading}
           subheading={page.calendlySubheading}
-          calendlyUrl={calendlyUrl}
+          calendlyUrl={rawCalendly}
         />
       )}
 
@@ -335,12 +336,9 @@ export default function UniversalPageTemplate({
 
       {/* 11. Bottom video embed (if populated) */}
       {bottomVideoEmbedSrc && (
-        <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
-          <div className="mx-auto px-4" style={{ maxWidth: 1042 }}>
-            <div
-              className="rounded-card overflow-hidden"
-              style={{ aspectRatio: "16 / 9" }}
-            >
+        <section className="bg-surface py-14 md:py-24">
+          <div className="mx-auto px-4 max-w-[1042px]">
+            <div className="rounded-card overflow-hidden aspect-video">
               <YouTubeEmbed url={bottomVideoEmbedSrc} title={page.bottomVideoTitle || "Video"} />
             </div>
           </div>
@@ -373,7 +371,7 @@ export default function UniversalPageTemplate({
           stats={page.joinStats}
           footnote={page.joinFootnote}
           ctaLabel={page.joinCtaLabel}
-          ctaUrl={page.joinCtaUrl || calendlyUrl}
+          ctaUrl={bookingHref(page.joinCtaUrl || calendlyUrl)}
           siteSettings={siteSettings || undefined}
         />
       )}

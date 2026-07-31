@@ -19,33 +19,31 @@ export default function SymptomsChecklist({
   if (!items.length) return null
 
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 72, paddingBottom: 72 }}>
-      <div className="mx-auto" style={{ maxWidth: 880 }}>
+    <section className="bg-surface px-4 py-18">
+      <div className="mx-auto max-w-[880px]">
         {heading && (
-          <h2 className="text-section-h2 text-center text-body" style={{ marginBottom: subheading ? 12 : 32 }}>
+          <h2 className={`text-section-h2 text-center text-body ${subheading ? "mb-3" : "mb-8"}`}>
             {heading}
           </h2>
         )}
         {subheading && (
-          <p className="text-center" style={{ color: "var(--text-muted-fg)", fontSize: 16, lineHeight: "24px", marginBottom: 32 }}>
+          <p className="text-center text-muted text-base leading-6 mb-8">
             {subheading}
           </p>
         )}
-        <ul className="flex flex-col" style={{ gap: 12 }}>
+        <ul className="flex flex-col gap-3">
           {items.map((it, i) => (
             <li
               key={it._key || i}
-              className="flex items-start gap-3 rounded-card"
-              style={{ border: "1px solid var(--border-ui)", background: "var(--surface-raised)", padding: "16px 20px" }}
+              className="flex items-start gap-3 rounded-card shadow-whisper ring-1 ring-ui bg-surface-raised px-5 py-4"
             >
               <span
                 aria-hidden
-                className="shrink-0 flex items-center justify-center font-bold"
-                style={{ width: 22, height: 22, borderRadius: 999, background: "#f3e8ff", color: "#8015e8", fontSize: 13, marginTop: 1 }}
+                className="shrink-0 flex items-center justify-center font-bold w-[22px] h-[22px] rounded-full bg-brand-soft text-brand text-[13px] mt-[1px]"
               >
                 <Check size={14} aria-hidden />
               </span>
-              <span style={{ fontSize: 16, lineHeight: "24px", color: "var(--text-body)" }}>{it.text}</span>
+              <span className="text-base leading-6">{it.text}</span>
             </li>
           ))}
         </ul>

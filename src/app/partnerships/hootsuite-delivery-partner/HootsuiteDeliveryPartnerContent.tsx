@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -26,9 +27,9 @@ export default function HootsuiteDeliveryPartnerContent({
   siteSettings,
 }: Props) {
   if (!page) return null
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   return (
     <div>
@@ -47,9 +48,9 @@ export default function HootsuiteDeliveryPartnerContent({
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel || "Book a Consultation"}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
       />
 
       {/* Logo cloud */}
@@ -72,9 +73,9 @@ export default function HootsuiteDeliveryPartnerContent({
       )}
 
       {/* YouTube video below tab section */}
-      <section className="bg-surface px-4" style={{ paddingTop: 24, paddingBottom: 80 }}>
-        <div className="mx-auto" style={{ maxWidth: 980 }}>
-          <div className="rounded-card overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
+      <section className="bg-surface px-4 pt-6 pb-14 md:pb-24">
+        <div className="mx-auto w-full max-w-[980px]">
+          <div className="rounded-card overflow-hidden aspect-video">
             <YouTubeEmbed
               url={page.bottomVideoUrl || undefined}
               videoId={page.bottomVideoUrl ? undefined : "7zC5uxk0lc8"}
@@ -88,7 +89,7 @@ export default function HootsuiteDeliveryPartnerContent({
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* Join Stats */}
@@ -101,7 +102,7 @@ export default function HootsuiteDeliveryPartnerContent({
           stats={page.joinStats}
           footnote={page.joinFootnote}
           ctaLabel={page.joinCtaLabel || "BOOK A MEETING"}
-          ctaUrl={page.joinCtaUrl || calendlyUrl}
+          ctaUrl={bookingHref(page.joinCtaUrl || calendlyUrl)}
           siteSettings={siteSettings || undefined}
         />
       )}

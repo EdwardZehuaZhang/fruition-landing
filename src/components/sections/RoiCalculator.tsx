@@ -41,7 +41,7 @@ export default function RoiCalculator({ config = {} }: RoiCalculatorProps) {
   const fmt = (n: number) => n.toLocaleString("en-US")
 
   return (
-    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "#f0ecfe" }}>
+    <section className="px-4 py-[80px] bg-brand-soft">
       <style>{`
         .roi-range {
           -webkit-appearance: none;
@@ -59,7 +59,7 @@ export default function RoiCalculator({ config = {} }: RoiCalculatorProps) {
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          background: #8015e8;
+          background: var(--purple-primary);
           border: 3px solid #fff;
           box-shadow: 0 2px 8px rgba(128,21,232,0.45);
           cursor: pointer;
@@ -68,27 +68,24 @@ export default function RoiCalculator({ config = {} }: RoiCalculatorProps) {
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          background: #8015e8;
+          background: var(--purple-primary);
           border: 3px solid #fff;
           box-shadow: 0 2px 8px rgba(128,21,232,0.45);
           cursor: pointer;
         }
         .roi-range::-moz-range-track { height: 8px; border-radius: 999px; background: #e2d8f7; }
       `}</style>
-      <div className="mx-auto" style={{ maxWidth: 920 }}>
-        <div className="text-center" style={{ marginBottom: 36 }}>
+      <div className="mx-auto max-w-[920px]">
+        <div className="text-center mb-9">
           <h2 className="text-section-h2 text-body">{heading}</h2>
           {subheading && (
-            <p style={{ color: "var(--text-muted-fg)", fontSize: 17, lineHeight: "26px", marginTop: 12 }}>{subheading}</p>
+            <p className="text-muted text-[17px] leading-[26px] mt-3">{subheading}</p>
           )}
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 md:items-stretch">
           {/* Inputs */}
-          <div
-            className="rounded-card bg-surface-raised flex flex-col justify-center h-full dark:shadow-none dark:border dark:border-ui"
-            style={{ padding: 36, border: "1px solid #ece7fb", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}
-          >
+          <div className="rounded-card bg-surface-raised flex flex-col justify-center h-full p-9 border border-brand-soft shadow-[0_18px_36px_-24px_rgba(64,12,140,0.2)] dark:shadow-none dark:border dark:border-ui">
             <Slider
               id={`${uid}-team`}
               label="Team size"
@@ -98,7 +95,7 @@ export default function RoiCalculator({ config = {} }: RoiCalculatorProps) {
               suffix={teamSize === 1 ? "person" : "people"}
               onChange={setTeamSize}
             />
-            <div style={{ height: 36 }} />
+            <div className="h-9" />
             <Slider
               id={`${uid}-hours`}
               label="Hours/week each person loses to manual updates"
@@ -111,21 +108,14 @@ export default function RoiCalculator({ config = {} }: RoiCalculatorProps) {
           </div>
 
           {/* Outputs */}
-          <div
-            className="rounded-card flex flex-col justify-center h-full"
-            style={{
-              padding: 36,
-              background: "linear-gradient(-38deg, rgb(128,21,232) 0%, rgb(16,0,58) 100%)",
-              color: "#fff",
-            }}
-          >
+          <div className="rounded-card flex flex-col justify-center h-full p-9 text-white bg-[linear-gradient(-38deg,var(--purple-primary)_0%,var(--dark-bg)_100%)]">
             <Result big value={`${fmt(yearlyHours)} hrs`} label="reclaimed per year" />
-            <div style={{ height: 20 }} />
+            <div className="h-5" />
             <div className="flex flex-wrap gap-x-8 gap-y-4">
               <Result value={`${fmt(weeklyHours)} hrs`} label="per week" />
               <Result value={`${currencySymbol}${fmt(yearlyDollars)}`} label="saved per year" />
             </div>
-            <p style={{ fontSize: 12, lineHeight: "18px", color: "rgba(255,255,255,0.6)", marginTop: 22 }}>
+            <p className="text-xs leading-[18px] text-white/60 mt-[22px]">
               Estimate assumes automation reclaims ~{Math.round(reclaimRate * 100)}% of manual hours at a{" "}
               {currencySymbol}
               {hourlyRate}/hr fully-loaded cost.
@@ -156,12 +146,12 @@ function Slider({
 }) {
   return (
     <div>
-      <div className="flex items-baseline justify-between gap-4" style={{ marginBottom: 14 }}>
-        <label htmlFor={id} className="font-medium" style={{ fontSize: 17, lineHeight: "24px", color: "var(--text-body)", maxWidth: "65%" }}>
+      <div className="flex items-baseline justify-between gap-4 mb-3.5">
+        <label htmlFor={id} className="font-medium text-[17px] leading-6 text-body max-w-[65%]">
           {label}
         </label>
-        <span className="font-bold shrink-0" style={{ fontSize: 28, lineHeight: "30px", color: "#8015e8" }}>
-          {value} <span style={{ fontSize: 15, fontWeight: 500, color: "var(--text-muted-fg)" }}>{suffix}</span>
+        <span className="font-bold shrink-0 font-mono text-[28px] leading-[30px] text-brand">
+          {value} <span className="font-mono text-xs font-semibold text-muted">{suffix}</span>
         </span>
       </div>
       <input
@@ -180,10 +170,14 @@ function Slider({
 function Result({ value, label, big = false }: { value: string; label: string; big?: boolean }) {
   return (
     <div>
-      <div className="font-bold" style={{ fontSize: big ? "clamp(28px, 8vw, 44px)" : "clamp(20px, 5vw, 26px)", lineHeight: 1.1, wordBreak: "break-word" }}>
+      <div
+        className={`font-bold font-mono leading-[1.1] break-words ${
+          big ? "text-[clamp(28px,8vw,44px)]" : "text-[clamp(20px,5vw,26px)]"
+        }`}
+      >
         {value}
       </div>
-      <div style={{ fontSize: 13, lineHeight: "18px", color: "rgba(255,255,255,0.72)", marginTop: 4 }}>{label}</div>
+      <div className="font-mono text-xs font-semibold text-white/70 mt-1">{label}</div>
     </div>
   )
 }

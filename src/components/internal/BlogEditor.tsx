@@ -90,6 +90,11 @@ export default function BlogEditor({
   const [publishedSlug, setPublishedSlug] = useState<string | null>(null)
   const [savingDraft, startDraft] = useTransition()
   const [publishing, startPublish] = useTransition()
+  const [unpublishing, startUnpublish] = useTransition()
+
+  // Editing a live Sanity doc: the primary action updates it in place, and
+  // Unpublish becomes available.
+  const isPublished = Boolean(initial?.docId)
 
   const effectiveSlug = useMemo(
     () => (slugTouched && slug ? slugify(slug) : slugify(title)),
@@ -175,7 +180,52 @@ export default function BlogEditor({
         return
       }
       setPublishedSlug(data.slug)
-      setStatus("Published to Sanity.")
+      setStatus(isPublished ? "Updated — changes are live." : "Published to Sanity.")
+    })
+  }
+
+  /**
+   * Take a live post off the site: save its content as a portal draft first
+   * (so nothing is lost and it can be re-published), then delete the Sanity
+   * doc and jump to the new draft.
+   */
+  function onUnpublish() {
+    const docId = initial?.docId
+    if (!docId) return
+    if (
+      !window.confirm(
+        "Unpublish this post? It comes off the live site immediately. A copy is kept in portal drafts so you can re-publish it later.",
+      )
+    ) {
+      return
+    }
+    setError(null)
+    setStatus(null)
+    startUnpublish(async () => {
+      const draftRes = await fetch("/api/internal/blog/draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: draftId,
+          title,
+          body_markdown: body,
+          metadata: { ...metadata(), status: "unpublished", unpublished_doc_id: docId },
+        }),
+      })
+      const draftData = (await draftRes.json().catch(() => ({}))) as { id?: string; error?: string }
+      if (!draftRes.ok || !draftData.id) {
+        setError(draftData.error ?? "Could not save a draft copy — the post was NOT unpublished.")
+        return
+      }
+      const delRes = await fetch(`/api/internal/blog?docId=${encodeURIComponent(docId)}`, {
+        method: "DELETE",
+      })
+      const delData = (await delRes.json().catch(() => ({}))) as { error?: string }
+      if (!delRes.ok) {
+        setError(delData.error ?? "Unpublish failed — the post is still live.")
+        return
+      }
+      window.location.href = `/internal/blog/${draftData.id}/edit`
     })
   }
 
@@ -326,7 +376,7 @@ export default function BlogEditor({
           <button
             type="button"
             onClick={onSaveDraft}
-            disabled={savingDraft}
+            disabled={savingDraft || unpublishing}
             className="flex-1 rounded-pill border px-4 py-3 text-sm font-semibold transition disabled:opacity-60"
             style={{ borderColor: "var(--color-border)", color: "var(--ink-heading)" }}
           >
@@ -335,13 +385,24 @@ export default function BlogEditor({
           <button
             type="button"
             onClick={onPublish}
-            disabled={publishing}
+            disabled={publishing || unpublishing}
             className="flex-1 rounded-pill px-4 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
             style={{ backgroundColor: "var(--purple-primary)" }}
           >
-            {publishing ? "Publishing…" : "Publish"}
+            {publishing ? (isPublished ? "Updating…" : "Publishing…") : isPublished ? "Update post" : "Publish"}
           </button>
         </div>
+        {isPublished && (
+          <button
+            type="button"
+            onClick={onUnpublish}
+            disabled={publishing || unpublishing || savingDraft}
+            className="w-full rounded-pill border px-4 py-3 text-sm font-semibold transition disabled:opacity-60"
+            style={{ borderColor: "var(--danger-strong)", color: "var(--danger-strong)" }}
+          >
+            {unpublishing ? "Unpublishing…" : "Unpublish"}
+          </button>
+        )}
       </aside>
     </div>
   )

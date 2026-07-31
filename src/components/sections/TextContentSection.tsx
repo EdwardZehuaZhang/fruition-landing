@@ -13,32 +13,19 @@ export default function TextContentSection({
 }: TextContentSectionProps) {
   if (!heading && !body) return null
 
-  const bg = theme === "tint" ? "var(--surface-subtle)" : "var(--surface)"
-
   return (
-    <section className="px-4" style={{ backgroundColor: bg, paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto" style={{ maxWidth: 880 }}>
+    <section className={`px-4 py-20 ${theme === "tint" ? "bg-surface-subtle" : "bg-surface"}`}>
+      <div className="mx-auto max-w-[880px]">
         {(heading || headingAccent) && (
-          <h2
-            className="text-section-h2 text-center"
-            style={{ marginBottom: 32, color: "var(--text-body)" }}
-          >
+          <h2 className="text-section-h2 text-center mb-8">
             {heading}
             {headingAccent && (
-              <span style={{ color: "var(--purple-primary)" }}> {headingAccent}</span>
+              <span className="text-brand"> {headingAccent}</span>
             )}
           </h2>
         )}
         {body && (
-          <div
-            style={{
-              fontSize: 17,
-              lineHeight: "28px",
-              color: "var(--text-body)",
-              whiteSpace: "pre-line",
-              textAlign: "center",
-            }}
-          >
+          <div className="text-[17px] leading-7 text-body whitespace-pre-line text-center">
             {body}
           </div>
         )}

@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -105,38 +106,31 @@ function SignatureNote({
 }) {
   if (!note) return null
   return (
-    <section className="px-4" style={{ paddingTop: 24, paddingBottom: 72 }}>
-      <figure
-        className="mx-auto relative overflow-hidden dark:bg-none"
-        style={{
-          maxWidth: 820,
-          margin: "0 auto",
-          padding: "44px 48px",
-          borderRadius: 24,
-          background: "linear-gradient(180deg, #faf7ff 0%, #ffffff 100%)",
-          backgroundColor: "var(--surface-raised)",
-          border: "1px solid var(--border-ui)",
-        }}
-      >
+    <section className="px-4 pt-6 pb-10 md:pb-16">
+      <figure className="relative mx-auto max-w-[820px] overflow-hidden rounded-card border border-ui bg-surface-raised bg-gradient-to-b from-brand-soft/50 to-surface-raised px-6 py-8 md:px-12 md:py-11 dark:bg-none">
         <span
           aria-hidden
-          className="pointer-events-none absolute font-bold"
-          style={{ top: 8, left: 28, fontSize: 120, lineHeight: 1, color: "rgba(128,21,232,0.10)" }}
+          className="pointer-events-none absolute top-2 left-7 font-bold text-[120px] leading-none text-brand/10"
         >
           &ldquo;
         </span>
-        <blockquote
-          className="relative"
-          style={{ color: "var(--text-body)", fontSize: 20, lineHeight: "32px", fontWeight: 500, textWrap: "pretty" }}
-        >
+        <blockquote className="relative text-xl leading-8 font-medium text-pretty">
           {note}
         </blockquote>
-        <figcaption className="relative flex items-center" style={{ gap: 18, marginTop: 28 }}>
+        <figcaption className="relative mt-7 flex items-center gap-4">
           {/* hand-drawn signature flourish */}
-          <svg width="116" height="40" viewBox="0 0 116 40" fill="none" aria-hidden role="presentation">
+          <svg
+            width="116"
+            height="40"
+            viewBox="0 0 116 40"
+            fill="none"
+            aria-hidden
+            role="presentation"
+            className="shrink-0 text-brand"
+          >
             <path
               d="M3 28c10-14 16-20 20-18s-2 22 4 22 14-26 20-24-4 24 4 24 16-30 24-24c4 3-2 14 6 14 6 0 12-8 18-12"
-              stroke="#8015e8"
+              stroke="currentColor"
               strokeWidth="2.4"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -144,14 +138,8 @@ function SignatureNote({
             />
           </svg>
           <div className="flex flex-col">
-            {name && (
-              <span className="font-bold" style={{ color: "var(--text-body)", fontSize: 16 }}>
-                {name}
-              </span>
-            )}
-            {title && (
-              <span style={{ color: "var(--text-muted-fg)", fontSize: 13 }}>{title}</span>
-            )}
+            {name && <span className="text-base font-bold">{name}</span>}
+            {title && <span className="text-sm text-muted">{title}</span>}
           </div>
         </figcaption>
       </figure>
@@ -209,74 +197,32 @@ function HeroSection({
   const featured = partnerBadges.slice(0, 4)
 
   return (
-    <section className="relative overflow-hidden" style={{ paddingTop: 96, paddingBottom: 96 }}>
+    <section className="relative overflow-hidden py-14 md:py-24">
       <div
         aria-hidden
-        className="absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(1100px 600px at 12% -10%, rgba(128, 21, 232, 0.18), transparent 60%), radial-gradient(900px 500px at 95% 0%, rgba(70, 116, 251, 0.12), transparent 55%), linear-gradient(180deg, #f7f4ff 0%, #ffffff 70%)",
-        }}
+        className="absolute inset-0 -z-10 bg-[radial-gradient(1100px_600px_at_12%_-10%,rgba(128,21,232,0.18),transparent_60%),radial-gradient(900px_500px_at_95%_0%,rgba(186,131,240,0.14),transparent_55%),linear-gradient(180deg,var(--color-brand-soft)_0%,var(--color-surface)_70%)]"
       />
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 opacity-[0.35]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 1px 1px, rgba(128, 21, 232, 0.18) 1px, transparent 0)",
-          backgroundSize: "28px 28px",
-          maskImage:
-            "linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 70%)",
-        }}
+        className="absolute inset-0 -z-10 opacity-[0.35] bg-[radial-gradient(circle_at_1px_1px,rgba(128,21,232,0.18)_1px,transparent_0)] [background-size:28px_28px] [mask-image:linear-gradient(180deg,rgba(0,0,0,0.7)_0%,rgba(0,0,0,0)_70%)]"
       />
 
-      <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
-        <div className="grid grid-cols-1 lg:grid-cols-12 items-center" style={{ gap: 56 }}>
+      <div className="mx-auto max-w-[1240px] px-4 md:px-6 lg:px-8">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-14">
           <div className="lg:col-span-6">
             {eyebrow && (
-              <span
-                className="inline-flex items-center"
-                style={{
-                  gap: 8,
-                  height: 34,
-                  padding: "0 14px",
-                  borderRadius: 9999,
-                  background: "rgba(128, 21, 232, 0.08)",
-                  color: "var(--purple-dark)",
-                  border: "1px solid rgba(128, 21, 232, 0.18)",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  letterSpacing: 0.4,
-                  textTransform: "uppercase",
-                }}
-              >
-                <span style={{ width: 6, height: 6, borderRadius: 9999, background: "var(--purple-primary)" }} />
+              <span className="inline-flex h-[34px] items-center gap-2 rounded-pill border border-brand/20 bg-brand-soft px-3.5 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand-dark">
+                <span className="h-1.5 w-1.5 rounded-pill bg-brand" />
                 {eyebrow}
               </span>
             )}
 
-            <h1
-              className="text-display"
-              style={{
-                marginTop: 20,
-                fontSize: "clamp(32px, 5.4vw, 64px)",
-                lineHeight: 1.1,
-                letterSpacing: "-0.025em",
-                color: "var(--text-body)",
-              }}
-            >
+            <h1 className="text-display mt-5">
               {headingPart1}
               {headingAccent && (
                 <>
                   {" "}
-                  <span
-                    style={{
-                      background: "linear-gradient(135deg, #8015e8 0%, #4674FB 100%)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
-                    }}
-                  >
+                  <span className="bg-gradient-to-r from-brand to-brand-light bg-clip-text text-transparent">
                     {headingAccent}
                   </span>
                 </>
@@ -285,15 +231,10 @@ function HeroSection({
             </h1>
 
             {subheading && (
-              <p
-                className="text-body-lead"
-                style={{ marginTop: 20, maxWidth: 560, color: "var(--text-body)" }}
-              >
-                {subheading}
-              </p>
+              <p className="text-body-lead text-muted mt-5 max-w-[560px]">{subheading}</p>
             )}
 
-            <div className="flex flex-wrap" style={{ marginTop: 32, gap: 14 }}>
+            <div className="mt-8 flex flex-wrap gap-4">
               {primaryCtaLabel && primaryCtaUrl && (
                 <CtaButton href={primaryCtaUrl} label={primaryCtaLabel} variant="primary" />
               )}
@@ -302,25 +243,25 @@ function HeroSection({
               )}
             </div>
 
-            <div className="flex flex-wrap items-center" style={{ marginTop: 36, gap: 28 }}>
+            <div className="mt-9 flex flex-wrap items-center gap-7">
               {partnerBadgesLabel && (
-                <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: 0.8, textTransform: "uppercase", color: "var(--text-muted-fg)" }}>
+                <span className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted">
                   {partnerBadgesLabel}
                 </span>
               )}
-              <div className="flex flex-wrap items-center" style={{ gap: 22 }}>
+              <div className="flex flex-wrap items-center gap-5">
                 {featured.map((b, i) => {
                   const u = badgeUrl(b)
                   if (!u) return null
                   return (
                     <FramedMedia key={b._key || i} className="dark:!p-1">
-                      <span className="relative inline-block" style={{ height: 28, width: 84 }}>
+                      <span className="relative inline-block h-7 w-[84px]">
                         <Image
                           src={u}
                           alt={b.name || ""}
                           fill
                           sizes="84px"
-                          style={{ objectFit: "contain", objectPosition: "left center" }}
+                          className="object-contain object-left"
                         />
                       </span>
                     </FramedMedia>
@@ -333,117 +274,51 @@ function HeroSection({
           <div className="lg:col-span-6">
             <div className="relative">
               <div
-                className="absolute"
-                style={{
-                  inset: -22,
-                  borderRadius: 32,
-                  background:
-                    "linear-gradient(135deg, rgba(128, 21, 232, 0.22), rgba(70, 116, 251, 0.12) 60%, transparent)",
-                  filter: "blur(28px)",
-                }}
                 aria-hidden
+                className="absolute -inset-[22px] rounded-[32px] blur-[28px] bg-[linear-gradient(135deg,rgba(128,21,232,0.22),rgba(186,131,240,0.14)_60%,transparent)]"
               />
-              <div
-                className="relative overflow-hidden dark:shadow-none"
-                style={{
-                  borderRadius: 28,
-                  boxShadow: "0 30px 80px -30px rgba(16, 0, 58, 0.45), 0 2px 8px rgba(0,0,0,0.06)",
-                  border: "1px solid rgba(128, 21, 232, 0.16)",
-                  background: "var(--surface-raised)",
-                  aspectRatio: "16 / 11",
-                }}
-              >
+              <div className="relative aspect-[16/11] overflow-hidden rounded-[28px] border border-brand/15 bg-surface-raised shadow-[0_30px_80px_-30px_rgba(16,0,58,0.45),0_2px_8px_rgba(0,0,0,0.06)] dark:shadow-none">
                 {imgUrl ? (
                   <Image
                     src={imgUrl}
                     alt="Fruition team"
                     fill
                     sizes="(min-width: 1024px) 640px, 100vw"
-                    style={{ objectFit: "cover" }}
+                    className="object-cover"
                     priority
                   />
                 ) : (
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      background: "linear-gradient(135deg, #2b074d 0%, #10003a 100%)",
-                    }}
-                  />
+                  <div className="h-full w-full bg-gradient-to-br from-surface-dark-2 to-surface-dark" />
                 )}
               </div>
 
               {(calloutBadgeLabel || calloutBadgeText) && (
-                <div
-                  className="absolute dark:shadow-none"
-                  style={{
-                    right: -16,
-                    bottom: -22,
-                    background: "var(--surface-raised)",
-                    borderRadius: 18,
-                    padding: "14px 18px",
-                    boxShadow: "0 18px 40px -12px rgba(16, 0, 58, 0.25)",
-                    border: "1px solid rgba(128, 21, 232, 0.18)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 12,
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: 9999,
-                      background: "#10b981",
-                      boxShadow: "0 0 0 4px rgba(16, 185, 129, 0.16)",
-                    }}
-                  />
+                <div className="absolute -right-2 -bottom-[22px] flex items-center gap-3 rounded-[18px] border border-brand/20 bg-surface-raised px-4 py-3.5 shadow-[0_18px_40px_-12px_rgba(16,0,58,0.25)] md:-right-4 dark:shadow-none">
+                  <div className="h-2.5 w-2.5 rounded-pill bg-brand shadow-[0_0_0_4px_rgba(128,21,232,0.16)]" />
                   <div>
                     {calloutBadgeLabel && (
-                      <div style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted-fg)", letterSpacing: 0.6, textTransform: "uppercase" }}>
+                      <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
                         {calloutBadgeLabel}
                       </div>
                     )}
                     {calloutBadgeText && (
-                      <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-body)" }}>
-                        {calloutBadgeText}
-                      </div>
+                      <div className="text-sm font-semibold">{calloutBadgeText}</div>
                     )}
                   </div>
                 </div>
               )}
 
               {calloutOfficesText && (
-                <div
-                  className="absolute hidden md:flex dark:shadow-none"
-                  style={{
-                    left: -22,
-                    top: 28,
-                    background: "var(--surface-raised)",
-                    borderRadius: 16,
-                    padding: "10px 14px",
-                    boxShadow: "0 18px 40px -12px rgba(16, 0, 58, 0.2)",
-                    border: "1px solid var(--border-ui)",
-                    alignItems: "center",
-                    gap: 10,
-                  }}
-                >
-                  <div style={{ display: "flex", marginRight: 2 }}>
-                    {["#8015e8", "#4674FB", "#ec4899"].map((c, i) => (
+                <div className="absolute -left-[22px] top-7 hidden items-center gap-2.5 rounded-2xl border border-ui bg-surface-raised px-3.5 py-2.5 shadow-[0_18px_40px_-12px_rgba(16,0,58,0.2)] md:flex dark:shadow-none">
+                  <div className="mr-0.5 flex">
+                    {["bg-brand", "bg-brand-light", "bg-brand-dark"].map((c, i) => (
                       <span
                         key={i}
-                        style={{
-                          width: 24,
-                          height: 24,
-                          borderRadius: 9999,
-                          background: c,
-                          border: "2px solid var(--surface-raised)",
-                          marginLeft: i ? -8 : 0,
-                        }}
+                        className={`h-6 w-6 rounded-pill border-2 border-surface-raised ${c} ${i ? "-ml-2" : ""}`}
                       />
                     ))}
                   </div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-body)" }}>{calloutOfficesText}</div>
+                  <div className="text-sm font-semibold">{calloutOfficesText}</div>
                 </div>
               )}
             </div>
@@ -457,62 +332,24 @@ function HeroSection({
 function StatsBand({ stats }: { stats: StatItem[] }) {
   if (!stats?.length) return null
   return (
-    <section style={{ paddingTop: 16, paddingBottom: 72 }}>
-      <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
-        <div
-          className="grid grid-cols-1 sm:grid-cols-3"
-          style={{
-            borderRadius: 28,
-            background: "linear-gradient(135deg, #10003a 0%, #2b074d 100%)",
-            color: "#fff",
-            padding: "44px 24px",
-            boxShadow: "0 24px 60px -28px rgba(16, 0, 58, 0.55)",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
+    <section className="pt-4 pb-10 md:pb-16">
+      <div className="mx-auto max-w-[1240px] px-4 md:px-6 lg:px-8">
+        <div className="relative grid grid-cols-1 overflow-hidden rounded-[28px] bg-gradient-to-br from-surface-dark to-surface-dark-2 px-6 py-11 text-white shadow-[0_24px_60px_-28px_rgba(16,0,58,0.55)] md:grid-cols-3">
           <div
             aria-hidden
-            style={{
-              position: "absolute",
-              inset: 0,
-              background:
-                "radial-gradient(600px 200px at 20% 0%, rgba(128, 21, 232, 0.35), transparent 60%), radial-gradient(500px 200px at 90% 100%, rgba(70, 116, 251, 0.25), transparent 60%)",
-            }}
+            className="absolute inset-0 bg-[radial-gradient(600px_200px_at_20%_0%,rgba(128,21,232,0.35),transparent_60%),radial-gradient(500px_200px_at_90%_100%,rgba(186,131,240,0.22),transparent_60%)]"
           />
           {stats.map((s, i) => (
             <div
               key={s._key || i}
-              className="relative text-center"
-              style={{
-                padding: "12px 16px",
-                borderLeft: i === 0 ? "none" : "1px solid rgba(255,255,255,0.12)",
-              }}
+              className={`relative px-4 py-3 text-center ${
+                i === 0 ? "" : "border-t border-white/10 md:border-t-0 md:border-l"
+              }`}
             >
-              <div
-                style={{
-                  fontSize: "clamp(38px, 4.6vw, 56px)",
-                  fontWeight: 700,
-                  letterSpacing: "-0.02em",
-                  background: "linear-gradient(135deg, #ffffff 0%, #ba83f0 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  lineHeight: 1,
-                }}
-              >
+              <div className="text-[clamp(38px,4.6vw,56px)] font-bold leading-none tracking-[-0.02em] bg-gradient-to-br from-white to-brand-light bg-clip-text text-transparent">
                 {s.value}
               </div>
-              <div
-                style={{
-                  marginTop: 10,
-                  fontSize: 14,
-                  letterSpacing: 0.6,
-                  textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.75)",
-                  fontWeight: 600,
-                }}
-              >
+              <div className="mt-2.5 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-white/75">
                 {s.label}
               </div>
             </div>
@@ -538,96 +375,50 @@ function StorySection({
 }) {
   if (!sections?.length) return null
   return (
-    <section style={{ paddingTop: 72, paddingBottom: 72, background: "var(--surface)" }}>
-      <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1100 }}>
-        <div className="text-center" style={{ marginBottom: 56 }}>
+    <section className="bg-surface py-10 md:py-16">
+      <div className="mx-auto max-w-[1100px] px-4 md:px-6 lg:px-8">
+        <div className="mb-10 text-center md:mb-14">
           {eyebrow && (
-            <span
-              className="inline-flex items-center"
-              style={{
-                padding: "4px 12px",
-                borderRadius: 9999,
-                background: "rgba(128, 21, 232, 0.08)",
-                color: "var(--purple-dark)",
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: 0.8,
-                textTransform: "uppercase",
-              }}
-            >
+            <span className="inline-flex items-center rounded-pill bg-brand-soft px-3 py-1 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand-dark">
               {eyebrow}
             </span>
           )}
           {(heading || headingAccent) && (
-            <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--text-body)" }}>
+            <h2 className="text-section-h2 mt-4">
               {heading}
               {headingAccent && (
                 <>
                   {" "}
-                  <span style={{ color: "var(--purple-primary)" }}>{headingAccent}</span>
+                  <span className="text-brand">{headingAccent}</span>
                 </>
               )}
             </h2>
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 32 }}>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {sections.map((s, i) => (
             <article
               key={s._key || i}
-              className="dark:shadow-none"
-              style={{
-                position: "relative",
-                padding: 32,
-                borderRadius: 24,
-                background: i % 2 === 0 ? "var(--surface-raised)" : "linear-gradient(160deg, #f6f1ff 0%, #ffffff 70%)",
-                border: "1px solid rgba(128, 21, 232, 0.12)",
-                boxShadow: "0 10px 30px -18px rgba(16, 0, 58, 0.18)",
-                overflow: "hidden",
-              }}
+              className={`relative overflow-hidden rounded-card border border-brand/10 p-6 shadow-[0_10px_30px_-18px_rgba(16,0,58,0.18)] md:p-8 dark:shadow-none ${
+                i % 2 === 0
+                  ? "bg-surface-raised"
+                  : "bg-surface-raised bg-gradient-to-b from-brand-soft/70 to-surface-raised"
+              }`}
             >
               <span
                 aria-hidden
-                style={{
-                  position: "absolute",
-                  top: -20,
-                  right: -20,
-                  width: 110,
-                  height: 110,
-                  borderRadius: 9999,
-                  background: "rgba(128, 21, 232, 0.08)",
-                }}
+                className="absolute -top-5 -right-5 h-[110px] w-[110px] rounded-pill bg-brand/10"
               />
-              <div
-                style={{
-                  fontSize: 12,
-                  fontWeight: 700,
-                  letterSpacing: 0.8,
-                  textTransform: "uppercase",
-                  color: "var(--purple-primary)",
-                  marginBottom: 14,
-                }}
-              >
+              <div className="mb-3.5 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand">
                 0{i + 1}
                 {cardEyebrowPrefix && <> · {cardEyebrowPrefix}</>}
               </div>
-              <h3 className="text-section-h3" style={{ color: i % 2 === 0 ? "var(--text-body)" : "var(--dark-bg)" }}>
+              <h3 className={`text-section-h3 ${i % 2 === 0 ? "" : "text-surface-dark"}`}>
                 {s.heading}
-                {s.headingAccent && (
-                  <span style={{ color: "var(--purple-primary)" }}> {s.headingAccent}</span>
-                )}
+                {s.headingAccent && <span className="text-brand"> {s.headingAccent}</span>}
               </h3>
-              <div
-                style={{
-                  marginTop: 16,
-                  color: i % 2 === 0 ? "var(--text-body)" : "#3f4256",
-                  fontSize: 16,
-                  lineHeight: 1.6,
-                  whiteSpace: "pre-line",
-                }}
-              >
-                {s.body}
-              </div>
+              <div className="text-body mt-4 whitespace-pre-line">{s.body}</div>
             </article>
           ))}
         </div>
@@ -653,120 +444,56 @@ function ChallengesBento({
     "md:col-span-1",
     "md:col-span-1",
   ]
-  const accent = ["#8015e8", "#4674FB", "#ec4899", "#10b981", "#f59e0b"]
+  const accent = [
+    "bg-brand/10 text-brand",
+    "bg-brand-light/15 text-brand-light",
+    "bg-brand-dark/10 text-brand-dark",
+    "bg-brand-soft text-brand",
+    "bg-brand/10 text-brand-dark",
+  ]
   return (
-    <section
-      className="dark:bg-none"
-      style={{
-        paddingTop: 96,
-        paddingBottom: 96,
-        background:
-          "linear-gradient(180deg, #fbf9ff 0%, #ffffff 100%)",
-        backgroundColor: "var(--surface)",
-      }}
-    >
-      <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
-        <div className="text-center" style={{ marginBottom: 56 }}>
+    <section className="bg-surface bg-gradient-to-b from-brand-soft/40 to-surface py-14 md:py-24 dark:bg-none">
+      <div className="mx-auto max-w-[1240px] px-4 md:px-6 lg:px-8">
+        <div className="mb-10 text-center md:mb-14">
           {eyebrow && (
-            <span
-              style={{
-                padding: "4px 12px",
-                borderRadius: 9999,
-                background: "rgba(128, 21, 232, 0.08)",
-                color: "var(--purple-dark)",
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: 0.8,
-                textTransform: "uppercase",
-              }}
-            >
+            <span className="inline-flex items-center rounded-pill bg-brand-soft px-3 py-1 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand-dark">
               {eyebrow}
             </span>
           )}
-          <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--text-body)" }}>
-            {heading}
-          </h2>
+          <h2 className="text-section-h2 mt-4">{heading}</h2>
         </div>
 
-        <div
-          className="grid grid-cols-1 md:grid-cols-3"
-          style={{ gap: 20 }}
-        >
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {cards.map((c, i) => {
             const isFeature = i === 0
             return (
               <article
                 key={c._key || i}
-                className={`${layout[i] ?? "md:col-span-2"}${isFeature ? "" : " dark:shadow-none"}`}
-                style={{
-                  position: "relative",
-                  padding: isFeature ? 32 : 26,
-                  borderRadius: 24,
-                  background: isFeature
-                    ? "linear-gradient(155deg, #10003a 0%, #2b074d 100%)"
-                    : "var(--surface-raised)",
-                  color: isFeature ? "#fff" : "var(--text-body)",
-                  border: isFeature ? "none" : "1px solid var(--border-ui)",
-                  boxShadow: isFeature
-                    ? "0 30px 60px -28px rgba(16, 0, 58, 0.5)"
-                    : "0 8px 24px -16px rgba(16, 0, 58, 0.12)",
-                  overflow: "hidden",
-                  minHeight: 220,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 12,
-                }}
+                className={`${layout[i] ?? "md:col-span-2"} relative flex min-h-[220px] flex-col gap-3 overflow-hidden rounded-card ${
+                  isFeature
+                    ? "bg-gradient-to-br from-surface-dark to-surface-dark-2 p-8 text-white shadow-[0_30px_60px_-28px_rgba(16,0,58,0.5)]"
+                    : "border border-ui bg-surface-raised p-6 shadow-[0_8px_24px_-16px_rgba(16,0,58,0.12)] dark:shadow-none"
+                }`}
               >
                 {isFeature && (
                   <span
                     aria-hidden
-                    style={{
-                      position: "absolute",
-                      right: -50,
-                      bottom: -60,
-                      width: 220,
-                      height: 220,
-                      borderRadius: 9999,
-                      background: "rgba(128, 21, 232, 0.4)",
-                      filter: "blur(24px)",
-                    }}
+                    className="absolute -right-[50px] -bottom-[60px] h-[220px] w-[220px] rounded-pill bg-brand/40 blur-xl"
                   />
                 )}
                 <div
-                  style={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: 14,
-                    background: isFeature
-                      ? "rgba(255,255,255,0.12)"
-                      : `${accent[i % accent.length]}14`,
-                    color: accent[i % accent.length],
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 26,
-                    border: isFeature ? "1px solid rgba(255,255,255,0.2)" : "none",
-                  }}
+                  className={`inline-flex h-[52px] w-[52px] items-center justify-center rounded-[14px] text-[26px] ${
+                    isFeature
+                      ? "border border-white/20 bg-white/10 text-white"
+                      : accent[i % accent.length]
+                  }`}
                 >
                   {c.emoji}
                 </div>
-                <h3
-                  className="text-card-title"
-                  style={{
-                    color: isFeature ? "#fff" : "var(--text-body)",
-                    marginTop: 4,
-                  }}
-                >
+                <h3 className={`text-card-title mt-1 ${isFeature ? "text-white" : ""}`}>
                   {c.title}
                 </h3>
-                <p
-                  style={{
-                    fontSize: 15,
-                    lineHeight: 1.6,
-                    color: isFeature ? "rgba(255,255,255,0.78)" : "var(--text-muted-fg)",
-                    margin: 0,
-                  }}
-                >
+                <p className={`text-body-sm m-0 ${isFeature ? "text-white/80" : "text-muted"}`}>
                   {c.description}
                 </p>
               </article>
@@ -791,133 +518,49 @@ function MethodologyTimeline({
 }) {
   if (!steps?.length) return null
   return (
-    <section
-      style={{
-        paddingTop: 96,
-        paddingBottom: 96,
-        background: "#10003a",
-        color: "#fff",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
+    <section className="relative overflow-hidden bg-surface-dark py-14 text-white md:py-24">
       <div
         aria-hidden
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "radial-gradient(800px 400px at 0% 0%, rgba(128, 21, 232, 0.3), transparent 60%), radial-gradient(700px 400px at 100% 100%, rgba(70, 116, 251, 0.18), transparent 60%)",
-        }}
+        className="absolute inset-0 bg-[radial-gradient(800px_400px_at_0%_0%,rgba(128,21,232,0.3),transparent_60%),radial-gradient(700px_400px_at_100%_100%,rgba(186,131,240,0.16),transparent_60%)]"
       />
-      <div className="relative mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1100 }}>
-        <div className="text-center" style={{ marginBottom: 64 }}>
+      <div className="relative mx-auto max-w-[1100px] px-4 md:px-6 lg:px-8">
+        <div className="mb-12 text-center md:mb-16">
           {eyebrow && (
-            <span
-              style={{
-                padding: "4px 12px",
-                borderRadius: 9999,
-                background: "rgba(255,255,255,0.1)",
-                color: "#ba83f0",
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: 0.8,
-                textTransform: "uppercase",
-              }}
-            >
+            <span className="inline-flex items-center rounded-pill bg-white/10 px-3 py-1 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand-light">
               {eyebrow}
             </span>
           )}
-          <h2 className="text-section-h2" style={{ marginTop: 16 }}>
-            {heading}
-          </h2>
+          <h2 className="text-section-h2 mt-4">{heading}</h2>
         </div>
 
-        <ol style={{ position: "relative", listStyle: "none", padding: 0, margin: 0 }}>
+        <ol className="relative m-0 list-none p-0">
           <span
             aria-hidden
-            className="hidden md:block"
-            style={{
-              position: "absolute",
-              left: "50%",
-              top: 24,
-              bottom: 24,
-              width: 2,
-              background:
-                "linear-gradient(180deg, rgba(186, 131, 240, 0.6), rgba(186, 131, 240, 0.05))",
-              transform: "translateX(-1px)",
-            }}
+            className="absolute left-1/2 top-6 bottom-6 hidden w-0.5 -translate-x-px bg-gradient-to-b from-brand-light/60 to-brand-light/5 md:block"
           />
           {steps.map((step, i) => {
             const left = i % 2 === 0
             return (
               <li
                 key={step._key || i}
-                className="grid grid-cols-1 md:grid-cols-2"
-                style={{
-                  gap: 24,
-                  marginBottom: 28,
-                  alignItems: "center",
-                }}
+                className="mb-7 grid grid-cols-1 items-center gap-6 md:grid-cols-2"
               >
                 <div className={left ? "md:order-1" : "md:order-2"}>
-                  <article
-                    style={{
-                      background: "rgba(255,255,255,0.04)",
-                      backdropFilter: "blur(10px)",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      borderRadius: 20,
-                      padding: 24,
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: 12,
-                        fontWeight: 700,
-                        letterSpacing: 1,
-                        color: "#ba83f0",
-                      }}
-                    >
+                  <article className="rounded-card border border-white/10 bg-white/[0.04] p-6 backdrop-blur-[10px]">
+                    <div className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand-light">
                       {stepLabel} {step.number}
                     </div>
-                    <h3
-                      className="text-card-title"
-                      style={{ marginTop: 6, color: "#fff" }}
-                    >
-                      {step.title}
-                    </h3>
-                    <p
-                      style={{
-                        marginTop: 10,
-                        fontSize: 15,
-                        lineHeight: 1.6,
-                        color: "rgba(255,255,255,0.72)",
-                      }}
-                    >
-                      {step.description}
-                    </p>
+                    <h3 className="text-card-title mt-1.5 text-white">{step.title}</h3>
+                    <p className="text-body-sm mt-2.5 text-white/70">{step.description}</p>
                   </article>
                 </div>
 
                 <div
-                  className={`hidden md:flex ${left ? "md:order-2" : "md:order-1"}`}
-                  style={{ justifyContent: left ? "flex-start" : "flex-end" }}
+                  className={`hidden md:flex ${
+                    left ? "md:order-2 justify-start" : "md:order-1 justify-end"
+                  }`}
                 >
-                  <span
-                    style={{
-                      width: 64,
-                      height: 64,
-                      borderRadius: 9999,
-                      background: "linear-gradient(135deg, #8015e8, #4674FB)",
-                      color: "#fff",
-                      fontWeight: 700,
-                      fontSize: 22,
-                      display: "inline-flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      boxShadow: "0 0 0 6px rgba(128, 21, 232, 0.15)",
-                    }}
-                  >
+                  <span className="inline-flex h-16 w-16 items-center justify-center rounded-pill bg-gradient-to-br from-brand to-brand-light text-[22px] font-bold text-white shadow-[0_0_0_6px_rgba(128,21,232,0.15)]">
                     {step.number}
                   </span>
                 </div>
@@ -945,115 +588,52 @@ function ApproachTabs({
   if (!tabs?.length) return null
   const current = tabs[active]
   return (
-    <section style={{ paddingTop: 96, paddingBottom: 96, background: "var(--surface)" }}>
-      <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
-        <div className="text-center" style={{ marginBottom: 40 }}>
+    <section className="bg-surface py-14 md:py-24">
+      <div className="mx-auto max-w-[1240px] px-4 md:px-6 lg:px-8">
+        <div className="mb-10 text-center">
           {eyebrow && (
-            <span
-              style={{
-                padding: "4px 12px",
-                borderRadius: 9999,
-                background: "rgba(128, 21, 232, 0.08)",
-                color: "var(--purple-dark)",
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: 0.8,
-                textTransform: "uppercase",
-              }}
-            >
+            <span className="inline-flex items-center rounded-pill bg-brand-soft px-3 py-1 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand-dark">
               {eyebrow}
             </span>
           )}
           {(heading || headingAccent) && (
-            <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--text-body)" }}>
+            <h2 className="text-section-h2 mt-4">
               {heading}
               {headingAccent && (
                 <>
                   {" "}
-                  <span style={{ color: "var(--purple-primary)" }}>{headingAccent}</span>
+                  <span className="text-brand">{headingAccent}</span>
                 </>
               )}
             </h2>
           )}
         </div>
 
-        <div
-          className="flex flex-wrap justify-center"
-          style={{
-            gap: 8,
-            padding: 6,
-            background: "#f4f0fb",
-            borderRadius: 9999,
-            margin: "0 auto 40px",
-            width: "fit-content",
-            maxWidth: "100%",
-          }}
-        >
+        <div className="mx-auto mb-10 flex w-fit max-w-full flex-wrap justify-center gap-2 rounded-[28px] bg-brand-soft p-1.5">
           {tabs.map((t, i) => (
             <button
               key={t._key || i}
               onClick={() => setActive(i)}
-              style={{
-                padding: "10px 22px",
-                borderRadius: 9999,
-                background: i === active ? "var(--dark-bg)" : "transparent",
-                color: i === active ? "#fff" : "var(--dark-bg)",
-                fontWeight: 600,
-                fontSize: 14,
-                cursor: "pointer",
-                border: "none",
-                transition: "all 0.2s",
-                whiteSpace: "nowrap",
-              }}
+              className={`cursor-pointer whitespace-nowrap rounded-pill border-none px-[22px] py-2.5 text-sm font-semibold transition-colors ${
+                i === active ? "bg-surface-dark text-white" : "bg-transparent text-surface-dark"
+              }`}
             >
               {t.label}
             </button>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {(current?.items ?? []).map((item, i) => (
             <article
               key={item._key || i}
-              className="dark:shadow-none"
-              style={{
-                padding: 24,
-                borderRadius: 20,
-                background: "var(--surface-raised)",
-                border: "1px solid var(--border-ui)",
-                boxShadow: "0 8px 24px -16px rgba(16, 0, 58, 0.12)",
-                position: "relative",
-                overflow: "hidden",
-              }}
+              className="relative overflow-hidden rounded-card border border-ui bg-surface-raised p-6 shadow-[0_8px_24px_-16px_rgba(16,0,58,0.12)] dark:shadow-none"
             >
-              <div
-                style={{
-                  fontSize: 40,
-                  fontWeight: 700,
-                  color: "transparent",
-                  WebkitTextStroke: "1.5px rgba(128, 21, 232, 0.5)",
-                  letterSpacing: "-0.02em",
-                  lineHeight: 1,
-                }}
-              >
+              <div className="text-[40px] font-bold leading-none tracking-[-0.02em] text-transparent [-webkit-text-stroke:1.5px_rgba(128,21,232,0.5)]">
                 {item.number}
               </div>
-              <h3
-                className="text-card-title"
-                style={{ marginTop: 12, color: "var(--text-body)" }}
-              >
-                {item.title}
-              </h3>
-              <p
-                style={{
-                  marginTop: 10,
-                  fontSize: 14,
-                  lineHeight: 1.6,
-                  color: "var(--text-muted-fg)",
-                }}
-              >
-                {item.description}
-              </p>
+              <h3 className="text-card-title mt-3">{item.title}</h3>
+              <p className="mt-2.5 text-sm leading-relaxed text-muted">{item.description}</p>
             </article>
           ))}
         </div>
@@ -1077,89 +657,41 @@ function GlobalPresence({
 }) {
   if (!offices?.length) return null
   return (
-    <section className="dark:bg-none" style={{ paddingTop: 96, paddingBottom: 96, background: "linear-gradient(180deg, #ecf1fc 0%, #ffffff 100%)", backgroundColor: "var(--surface-subtle)" }}>
-      <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
-        <div className="text-center" style={{ marginBottom: 56 }}>
+    <section className="bg-surface-subtle bg-gradient-to-b from-surface-subtle to-surface py-14 md:py-24 dark:bg-none">
+      <div className="mx-auto max-w-[1240px] px-4 md:px-6 lg:px-8">
+        <div className="mb-10 text-center md:mb-14">
           {eyebrow && (
-            <span
-              style={{
-                padding: "4px 12px",
-                borderRadius: 9999,
-                background: "rgba(128, 21, 232, 0.08)",
-                color: "var(--purple-dark)",
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: 0.8,
-                textTransform: "uppercase",
-              }}
-            >
+            <span className="inline-flex items-center rounded-pill bg-brand-soft px-3 py-1 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand-dark">
               {eyebrow}
             </span>
           )}
           {(heading || headingAccent) && (
-            <h2 className="text-section-h2" style={{ marginTop: 16, color: "var(--text-body)" }}>
+            <h2 className="text-section-h2 mt-4">
               {heading}
               {headingAccent && (
                 <>
                   {" "}
-                  <span style={{ color: "var(--purple-primary)" }}>{headingAccent}</span>
+                  <span className="text-brand">{headingAccent}</span>
                 </>
               )}
             </h2>
           )}
           {body && (
-            <p
-              className="text-body-lead"
-              style={{ marginTop: 12, color: "var(--text-muted-fg)", maxWidth: 640, marginLeft: "auto", marginRight: "auto" }}
-            >
-              {body}
-            </p>
+            <p className="text-body-lead text-muted mx-auto mt-3 max-w-[640px]">{body}</p>
           )}
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-5" style={{ gap: 16 }}>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
           {offices.map((o, i) => (
             <div
               key={o._key || o.city || i}
-              className="dark:shadow-none"
-              style={{
-                padding: 22,
-                borderRadius: 18,
-                background: "var(--surface-raised)",
-                border: "1px solid rgba(128, 21, 232, 0.12)",
-                boxShadow: "0 8px 24px -18px rgba(16, 0, 58, 0.18)",
-                textAlign: "left",
-              }}
+              className="rounded-[18px] border border-brand/10 bg-surface-raised p-5 text-left shadow-[0_8px_24px_-18px_rgba(16,0,58,0.18)] dark:shadow-none"
             >
-              <div style={{ fontSize: 28 }}>{o.flag}</div>
-              <div
-                style={{
-                  marginTop: 10,
-                  fontSize: 18,
-                  fontWeight: 700,
-                  color: "var(--text-body)",
-                }}
-              >
-                {o.city}
-              </div>
-              <div style={{ fontSize: 13, color: "var(--text-muted-fg)", marginTop: 2 }}>
-                {o.country}
-              </div>
+              <div className="text-[28px]">{o.flag}</div>
+              <div className="mt-2.5 text-lg font-bold">{o.city}</div>
+              <div className="mt-0.5 text-sm text-muted">{o.country}</div>
               {o.note && (
-                <div
-                  style={{
-                    marginTop: 10,
-                    display: "inline-block",
-                    fontSize: 11,
-                    fontWeight: 700,
-                    letterSpacing: 0.6,
-                    textTransform: "uppercase",
-                    color: "var(--purple-primary)",
-                    background: "rgba(128, 21, 232, 0.08)",
-                    padding: "3px 8px",
-                    borderRadius: 9999,
-                  }}
-                >
+                <div className="mt-2.5 inline-block rounded-pill bg-brand-soft px-2 py-[3px] font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-brand">
                   {o.note}
                 </div>
               )}
@@ -1174,49 +706,23 @@ function GlobalPresence({
 function PartnerStack({ badges, eyebrow }: { badges: PartnerBadge[]; eyebrow?: string }) {
   if (!badges?.length) return null
   return (
-    <section style={{ paddingTop: 64, paddingBottom: 64, background: "var(--surface)" }}>
-      <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1240 }}>
+    <section className="bg-surface py-10 md:py-16">
+      <div className="mx-auto max-w-[1240px] px-4 md:px-6 lg:px-8">
         {eyebrow && (
-          <div className="text-center" style={{ marginBottom: 32 }}>
-            <div
-              style={{
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: 1,
-                textTransform: "uppercase",
-                color: "var(--text-muted-fg)",
-              }}
-            >
+          <div className="mb-8 text-center">
+            <div className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               {eyebrow}
             </div>
           </div>
         )}
-        <div
-          className="flex flex-wrap items-center justify-center"
-          style={{
-            gap: 36,
-            padding: "28px 24px",
-            borderRadius: 24,
-            background: "var(--surface-subtle)",
-            border: "1px solid var(--border-ui)",
-          }}
-        >
+        <div className="flex flex-wrap items-center justify-center gap-6 rounded-card border border-ui bg-surface-subtle px-6 py-7 md:gap-9">
           {badges.map((b, i) => {
             const u = badgeUrl(b)
             if (!u) return null
             return (
               <FramedMedia key={b._key || i} className="dark:!p-1.5">
-                <span
-                  className="relative inline-block"
-                  style={{ height: 44, width: 130 }}
-                >
-                  <Image
-                    src={u}
-                    alt={b.name || ""}
-                    fill
-                    sizes="130px"
-                    style={{ objectFit: "contain" }}
-                  />
+                <span className="relative inline-block h-11 w-[130px]">
+                  <Image src={u} alt={b.name || ""} fill sizes="130px" className="object-contain" />
                 </span>
               </FramedMedia>
             )
@@ -1243,53 +749,21 @@ function ClosingCta({
   secondaryUrl?: string
 }) {
   return (
-    <section style={{ paddingTop: 96, paddingBottom: 96, background: "var(--surface)" }}>
-      <div className="mx-auto px-4 sm:px-6 lg:px-8" style={{ maxWidth: 1100 }}>
-        <div
-          style={{
-            position: "relative",
-            overflow: "hidden",
-            borderRadius: 32,
-            padding: "64px 48px",
-            background: "linear-gradient(135deg, #8015e8 0%, #4674FB 100%)",
-            color: "#fff",
-            textAlign: "center",
-            boxShadow: "0 30px 80px -30px rgba(70, 116, 251, 0.55)",
-          }}
-        >
+    <section className="bg-surface py-14 md:py-24">
+      <div className="mx-auto max-w-[1100px] px-4 md:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-brand to-brand-light px-6 py-12 text-center text-white shadow-[0_30px_80px_-30px_rgba(128,21,232,0.55)] md:px-12 md:py-16">
           <span
             aria-hidden
-            style={{
-              position: "absolute",
-              inset: 0,
-              background:
-                "radial-gradient(500px 200px at 80% 100%, rgba(255,255,255,0.2), transparent 60%)",
-            }}
+            className="absolute inset-0 bg-[radial-gradient(500px_200px_at_80%_100%,rgba(255,255,255,0.2),transparent_60%)]"
           />
           <div className="relative">
             {heading && (
-              <h2
-                className="text-section-h2"
-                style={{ color: "#fff", maxWidth: 720, margin: "0 auto" }}
-              >
-                {heading}
-              </h2>
+              <h2 className="text-section-h2 mx-auto max-w-[720px] text-white">{heading}</h2>
             )}
             {body && (
-              <p
-                className="text-body-lead"
-                style={{
-                  marginTop: 16,
-                  color: "rgba(255,255,255,0.88)",
-                  maxWidth: 560,
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                }}
-              >
-                {body}
-              </p>
+              <p className="text-body-lead mx-auto mt-4 max-w-[560px] text-white/90">{body}</p>
             )}
-            <div className="flex flex-wrap justify-center" style={{ marginTop: 28, gap: 14 }}>
+            <div className="mt-7 flex flex-wrap justify-center gap-4">
               {primaryLabel && (
                 <CtaButton
                   href={calendlyUrl}
@@ -1380,7 +854,7 @@ export default function AboutModern(props: AboutModernProps) {
 
   return (
     <div>
-      <StickyCtaBar label={croSections?.stickyCtaLabel} href={croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={croSections?.stickyCtaLabel} href={bookingHref(croSections?.stickyCtaUrl || calendlyUrl)} />
       <HeroSection
         eyebrow={heroEyebrow}
         headingPart1={heroHeadingPart1}
@@ -1389,7 +863,7 @@ export default function AboutModern(props: AboutModernProps) {
         subheading={heroSubheading}
         heroImage={heroImage}
         primaryCtaLabel={primaryCtaLabel}
-        primaryCtaUrl={primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={secondaryCtaLabel}
         secondaryCtaUrl={secondaryCtaUrl}
         partnerBadges={allBadges}
@@ -1431,7 +905,7 @@ export default function AboutModern(props: AboutModernProps) {
         offices={offices}
       />
       <PartnerStack badges={allBadges} eyebrow={partnerStackEyebrow} />
-      <CroSections data={croSections} primaryCtaLabel={primaryCtaLabel} primaryCtaUrl={primaryCtaUrl || calendlyUrl} />
+      <CroSections data={croSections} primaryCtaLabel={primaryCtaLabel} primaryCtaUrl={bookingHref(primaryCtaUrl || calendlyUrl)} />
       {faqTabs.length > 0 && faqHeading && (
         <FaqAccordion
           heading={faqHeading}

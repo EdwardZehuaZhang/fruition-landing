@@ -57,7 +57,7 @@ export default function CookieNotice() {
     <div
       role="region"
       aria-label="Visitor identification notice"
-      className="fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-4 sm:inset-x-auto sm:left-6 sm:bottom-6 sm:justify-start sm:px-0 sm:pb-0"
+      className="fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-4 md:inset-x-auto md:left-6 md:bottom-6 md:justify-start md:px-0 md:pb-0"
     >
       <div
         style={{
@@ -106,7 +106,7 @@ export default function CookieNotice() {
           <button
             type="button"
             onClick={() => decide("accepted")}
-            className="inline-flex h-10 flex-1 items-center justify-center rounded-pill bg-[linear-gradient(to_right,#8015e8,#ba83f0)] px-4 text-[14px] font-bold text-white transition-colors hover:bg-[#4674FB] hover:bg-none"
+            className="inline-flex h-10 flex-1 items-center justify-center rounded-pill bg-[linear-gradient(to_right,#8015e8,#ba83f0)] px-4 text-[14px] font-bold text-white transition-colors hover:bg-brand-dark hover:bg-none"
           >
             Got it
           </button>

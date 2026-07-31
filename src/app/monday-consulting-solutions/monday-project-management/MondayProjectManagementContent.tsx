@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -43,9 +44,9 @@ export default function MondayProjectManagementContent({
 }: Props) {
   if (!page) return null
 
-  const calendlyUrl =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const rawCalendly =
+    siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const comparisonTabs = page.comparisonTabs ?? []
   const capabilitiesColumns =
@@ -82,9 +83,9 @@ export default function MondayProjectManagementContent({
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
       />
 
       {/* Logo cloud */}
@@ -111,7 +112,7 @@ export default function MondayProjectManagementContent({
       <CalendlySection
         heading={calendlyHeading}
         subheading={calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* 3. FAQ */}
@@ -169,7 +170,7 @@ export default function MondayProjectManagementContent({
           stats={page.joinStats}
           footnote={page.joinFootnote}
           ctaLabel={page.joinCtaLabel}
-          ctaUrl={page.joinCtaUrl || calendlyUrl}
+          ctaUrl={bookingHref(page.joinCtaUrl || calendlyUrl)}
           siteSettings={siteSettings || undefined}
         />
       )}

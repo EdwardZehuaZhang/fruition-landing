@@ -49,7 +49,9 @@ export interface PracticePage {
 }
 
 /** Same Calendly link the navbar CTA uses (siteSettings.calendlyLink). */
-export const DISCOVERY_CALL_URL = 'https://calendly.com/global-calendar-fruitionservices'
+import { BOOKING_ANCHOR } from '@/lib/bookingLink'
+
+export const DISCOVERY_CALL_URL = BOOKING_ANCHOR
 
 export const GEO_REGIONS = [
   {

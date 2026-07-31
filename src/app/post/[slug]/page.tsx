@@ -34,6 +34,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     alternates: { canonical: `/post/${slug}` },
     title,
     description,
+    ...(post.seoKeyword ? { keywords: [post.seoKeyword] } : {}),
     ...buildOgMetadata({
       title,
       description,

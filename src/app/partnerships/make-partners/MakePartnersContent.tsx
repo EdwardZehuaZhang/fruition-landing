@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import { useState } from "react"
 import type { LucideIcon } from "lucide-react"
 import {
@@ -211,28 +212,23 @@ function MakeFeatureTabsSection({ tabs }: { tabs: MakeFeatureTab[] }) {
   const active = tabs[activeIdx]
   if (!active) return null
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 32, lineHeight: "40px", marginBottom: 32 }}>
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto max-w-[1100px]">
+        <h2 className="text-section-h2 text-body text-center mb-8">
           {active.heading}
         </h2>
 
         {/* Tab buttons */}
-        <div className="flex flex-wrap justify-center" style={{ gap: 12, marginBottom: 40 }}>
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
           {tabs.map((tab, i) => (
             <button
               key={tab.key}
               onClick={() => setActiveIdx(i)}
-              className="cursor-pointer transition-all whitespace-nowrap"
-              style={{
-                padding: "10px 26px",
-                borderRadius: 999,
-                fontSize: 14,
-                fontWeight: 600,
-                ...(i === activeIdx
-                  ? { background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", border: "none", boxShadow: "0 10px 22px -12px rgba(128,21,232,0.55)" }
-                  : { background: "var(--surface-raised)", color: "var(--text-body)", border: "1px solid var(--border-ui)" }),
-              }}
+              className={`cursor-pointer transition-all whitespace-nowrap rounded-pill px-[26px] py-2.5 text-sm font-semibold ${
+                i === activeIdx
+                  ? "bg-gradient-to-r from-brand to-brand-light text-white shadow-[0_10px_22px_-12px_rgba(128,21,232,0.55)]"
+                  : "bg-surface-raised text-body ring-1 ring-ui"
+              }`}
             >
               {tab.label}
             </button>
@@ -240,58 +236,38 @@ function MakeFeatureTabsSection({ tabs }: { tabs: MakeFeatureTab[] }) {
         </div>
 
         {/* Groups */}
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 24 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {active.groups.map((g: MakeFeatureGroup) => (
             <div
               key={g.number}
-              className="dark:shadow-none"
-              style={{
-                padding: 24,
-                borderRadius: 18,
-                background: "var(--surface-raised)",
-                border: "1px solid rgba(128,21,232,0.08)",
-                boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)",
-                display: "flex",
-                flexDirection: "column",
-                gap: 14,
-              }}
+              className="dark:shadow-none rounded-card shadow-whisper ring-1 ring-ui bg-surface-raised p-6 flex flex-col gap-3.5"
             >
-              <div className="flex items-center" style={{ gap: 14 }}>
-                <span
-                  className="flex items-center justify-center font-bold"
-                  style={{
-                    width: 38,
-                    height: 38,
-                    borderRadius: 12,
-                    background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)",
-                    color: "white",
-                    fontSize: 13,
-                  }}
-                >
+              <div className="flex items-center gap-3.5">
+                <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-chip bg-gradient-to-br from-brand to-brand-light font-mono text-xs font-semibold text-white">
                   {g.number}
                 </span>
                 {g.title && (
-                  <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 15, lineHeight: "22px" }}>
+                  <p className="text-body-sm font-bold text-body">
                     {g.title}
                   </p>
                 )}
               </div>
-              <ul className="flex flex-col" style={{ gap: 10 }}>
+              <ul className="flex flex-col gap-2.5">
                 {g.bullets.map((b: { icon?: LucideIcon; emoji?: string; text: string }, bi: number) => {
                   // Hardcoded fallback bullets carry a LucideIcon component;
                   // Sanity-driven bullets carry an `emoji` string (no icon).
                   // Default to Sparkles so a missing icon never renders `undefined`.
                   const Icon = typeof b.icon === "function" ? b.icon : null
                   return (
-                    <li key={b.text || bi} className="flex items-start" style={{ gap: 10 }}>
+                    <li key={b.text || bi} className="flex items-start gap-2.5">
                       {Icon ? (
-                        <Icon size={18} aria-hidden style={{ flexShrink: 0, marginTop: 1, color: "#8015e8" }} />
+                        <Icon size={18} aria-hidden className="shrink-0 mt-px text-brand" />
                       ) : b.emoji ? (
-                        <span aria-hidden style={{ flexShrink: 0, marginTop: 1, fontSize: 16, lineHeight: "20px" }}>{b.emoji}</span>
+                        <span aria-hidden className="shrink-0 mt-px text-base leading-5">{b.emoji}</span>
                       ) : (
-                        <Sparkles size={18} aria-hidden style={{ flexShrink: 0, marginTop: 1, color: "#8015e8" }} />
+                        <Sparkles size={18} aria-hidden className="shrink-0 mt-px text-brand" />
                       )}
-                      <span style={{ color: "var(--text-muted-fg)", fontSize: 13, lineHeight: "20px" }}>{b.text}</span>
+                      <span className="text-sm text-muted leading-relaxed">{b.text}</span>
                     </li>
                   )
                 })}
@@ -301,7 +277,7 @@ function MakeFeatureTabsSection({ tabs }: { tabs: MakeFeatureTab[] }) {
         </div>
 
         {active.outro && (
-          <p className="text-center mx-auto" style={{ color: "var(--text-muted-fg)", fontSize: 14, lineHeight: "24px", maxWidth: 880, marginTop: 36 }}>
+          <p className="text-center mx-auto text-sm text-muted leading-relaxed max-w-[880px] mt-9">
             {active.outro}
           </p>
         )}
@@ -417,7 +393,8 @@ export default function MakePartnersContent({
   caseStudies = [],
   pageData,
 }: Props) {
-  const calendlyUrl = siteSettings?.calendlyLink || ""
+  const rawCalendly = siteSettings?.calendlyLink || ""
+  const calendlyUrl = bookingHref(rawCalendly)
   const partnerBadges = siteSettings?.navbarPartnerBadges || []
 
   void caseStudies
@@ -484,12 +461,12 @@ export default function MakePartnersContent({
 
   return (
     <div>
-      <StickyCtaBar label={pageData?.croSections?.stickyCtaLabel} href={pageData?.croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={pageData?.croSections?.stickyCtaLabel} href={bookingHref(pageData?.croSections?.stickyCtaUrl || rawCalendly)} />
       {/* 1. Hero */}
       <section className="bg-surface">
-        <div className="mx-auto flex flex-col items-center px-6 md:px-16 lg:px-[273px] py-[80px]">
+        <div className="mx-auto flex flex-col items-center px-6 md:px-16 lg:px-[273px] py-14 md:py-20">
           {partnerBadges.length > 0 && (
-            <div className="flex items-center flex-wrap justify-center" style={{ gap: 22 }}>
+            <div className="flex items-center flex-wrap justify-center gap-5">
               {partnerBadges.map((badge, i) => {
                 const src = safeSrc(badge.image)
                 if (!src) return null
@@ -510,54 +487,41 @@ export default function MakePartnersContent({
           )}
 
           {(pageData?.heroHeadingPart1 || pageData?.heroHeadingAccent) && (
-            <h1
-              className="text-center font-bold"
-              style={{ fontSize: "clamp(32px, 8vw, 48px)", lineHeight: 1.2, marginTop: 42, maxWidth: 924 }}
-            >
+            <h1 className="text-display text-center mt-10 max-w-[924px]">
               {pageData?.heroHeadingPart1 && <span className="text-body">{pageData.heroHeadingPart1}</span>}
-              {pageData?.heroHeadingAccent && <span style={{ color: "#8015e8" }}>{pageData.heroHeadingAccent}</span>}
+              {pageData?.heroHeadingAccent && <span className="text-brand">{pageData.heroHeadingAccent}</span>}
             </h1>
           )}
 
           {pageData?.heroSubheading && (
-            <p
-              style={{
-                fontSize: 18,
-                lineHeight: "25.2px",
-                color: "var(--text-body)",
-                marginTop: 31,
-                textAlign: "center",
-                maxWidth: 859,
-                whiteSpace: "pre-line",
-              }}
-            >
+            <p className="text-body-lead text-muted text-center mt-8 max-w-[859px] whitespace-pre-line">
               {pageData.heroSubheading}
             </p>
           )}
 
           {(pageData?.heroPrimaryCtaLabel || pageData?.heroSecondaryCtaLabel) && (
-            <div className="flex flex-col sm:flex-row items-center justify-center" style={{ gap: 20, marginTop: 40 }}>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-5 mt-10 w-full">
               {pageData?.heroPrimaryCtaLabel && (pageData.heroPrimaryCtaUrl || calendlyUrl) && (
                 <CtaButton
-                  href={pageData.heroPrimaryCtaUrl || calendlyUrl}
+                  href={bookingHref(pageData.heroPrimaryCtaUrl || rawCalendly)}
                   label={pageData.heroPrimaryCtaLabel}
                   variant="outline"
-                  style={{ width: 330 }}
+                  className="w-full max-w-[330px]"
                 />
               )}
               {pageData?.heroSecondaryCtaLabel && (pageData.heroSecondaryCtaUrl || calendlyUrl) && (
                 <CtaButton
-                  href={pageData.heroSecondaryCtaUrl || calendlyUrl}
+                  href={bookingHref(pageData.heroSecondaryCtaUrl || rawCalendly)}
                   label={pageData.heroSecondaryCtaLabel}
                   variant="primary"
-                  style={{ width: 330 }}
+                  className="w-full max-w-[330px]"
                 />
               )}
             </div>
           )}
 
           {heroImageSrc && (
-            <FramedMedia style={{ marginTop: 40, width: "100%", maxWidth: 1042 }}>
+            <FramedMedia className="mt-10 w-full max-w-[1042px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroImageSrc}
@@ -571,16 +535,16 @@ export default function MakePartnersContent({
 
       {/* 2. Partnership Announcement */}
       {(pageData?.announcementHeading || pageData?.announcementBody || announcementImageSrc) && (
-        <section className="bg-surface-subtle py-[80px] px-4">
-          <div className="mx-auto flex flex-col md:flex-row items-center justify-center gap-12" style={{ maxWidth: 1100 }}>
-            <div style={{ flex: 1, maxWidth: 650 }}>
+        <section className="bg-surface-subtle py-14 md:py-24 px-4">
+          <div className="mx-auto flex flex-col md:flex-row items-center justify-center gap-12 max-w-[1100px]">
+            <div className="flex-1 max-w-[650px]">
               {pageData?.announcementHeading && (
-                <h2 className="text-section-h2 text-body" style={{ marginBottom: 20 }}>
+                <h2 className="text-section-h2 text-body mb-5">
                   {pageData.announcementHeading}
                 </h2>
               )}
               {pageData?.announcementBody && (
-                <p style={{ fontSize: 18, lineHeight: "28.8px", color: "var(--text-body)" }}>
+                <p className="text-body-lead text-muted">
                   {pageData.announcementBody}
                 </p>
               )}
@@ -653,7 +617,7 @@ export default function MakePartnersContent({
       <CroSections
         data={pageData?.croSections}
         primaryCtaLabel={pageData?.heroPrimaryCtaLabel}
-        primaryCtaUrl={pageData?.heroPrimaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(pageData?.heroPrimaryCtaUrl || rawCalendly)}
       />
 
       {/* 6. Calendly */}
@@ -661,45 +625,42 @@ export default function MakePartnersContent({
         <CalendlySection
           heading={pageData?.calendlyHeading}
           subheading={pageData?.calendlySubheading}
-          calendlyUrl={calendlyUrl}
+          calendlyUrl={rawCalendly}
         />
       )}
 
       {/* 7. Showcase */}
       {resolvedShowcaseCards.length > 0 && (
-        <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
-          <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
-            <div className="flex flex-col items-center text-center" style={{ marginBottom: 60 }}>
+        <section className="bg-surface py-14 md:py-24">
+          <div className="mx-auto px-4 max-w-[1200px]">
+            <div className="flex flex-col items-center text-center mb-10 md:mb-14">
               {pageData?.showcaseHeading && (
-                <h2 className="text-section-h2 text-body" style={{ maxWidth: 900 }}>
+                <h2 className="text-section-h2 text-body max-w-[900px]">
                   {pageData.showcaseHeading}
                 </h2>
               )}
               {pageData?.showcaseSubheading && (
-                <p className="text-body" style={{ fontSize: 20, marginTop: 12, maxWidth: 760 }}>
+                <p className="text-body-lead text-muted mt-3 max-w-[760px]">
                   {pageData.showcaseSubheading}
                 </p>
               )}
             </div>
 
-            <div className="flex flex-col" style={{ gap: 60 }}>
+            <div className="flex flex-col gap-10 md:gap-14">
               {resolvedShowcaseCards.map((card, i) => (
                 <div
                   key={`showcase-${i}`}
                   className={`flex flex-col items-center gap-10 ${card.imageRight ? "md:flex-row" : "md:flex-row-reverse"}`}
                 >
-                  <div style={{ flex: 1 }}>
-                    <h3 style={{ fontSize: 28, fontWeight: 600, color: "var(--text-body)", lineHeight: "36px" }}>
+                  <div className="flex-1">
+                    <h3 className="text-section-h3 text-body">
                       {card.heading}
                     </h3>
-                    <p style={{ fontSize: 16, lineHeight: "25.6px", color: "var(--text-body)", marginTop: 20 }}>
+                    <p className="text-body mt-5">
                       {card.body}
                     </p>
                   </div>
-                  <FramedMedia
-                    className="rounded-card overflow-hidden w-full"
-                    style={{ flex: 1, aspectRatio: "16 / 10" }}
-                  >
+                  <FramedMedia className="rounded-card overflow-hidden w-full flex-1 aspect-[16/10]">
                     {card.mediaType === "video" ? (
                       <video
                         src={card.mediaSrc}
@@ -732,7 +693,7 @@ export default function MakePartnersContent({
         headingPart2={pageData?.joinHeadingPart2}
         stats={pageData?.joinStats}
         ctaLabel={pageData?.joinCtaLabel}
-        ctaUrl={pageData?.joinCtaUrl || calendlyUrl}
+        ctaUrl={bookingHref(pageData?.joinCtaUrl || rawCalendly)}
         siteSettings={siteSettings || undefined}
       />
 

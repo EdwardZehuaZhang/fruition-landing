@@ -14,12 +14,16 @@ export default function NavigationProgress() {
     if (pathname === prevPathRef.current) return
     prevPathRef.current = pathname
     if (timerRef.current) clearInterval(timerRef.current)
-    setProgress(100)
+    // Deferred a frame: synchronous setState in an effect cascades renders.
+    const raf = requestAnimationFrame(() => setProgress(100))
     const hide = setTimeout(() => {
       setVisible(false)
       setProgress(0)
     }, 300)
-    return () => clearTimeout(hide)
+    return () => {
+      cancelAnimationFrame(raf)
+      clearTimeout(hide)
+    }
   }, [pathname])
 
   // Intercept internal link clicks to start the bar immediately

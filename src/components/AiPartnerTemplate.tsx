@@ -1,6 +1,10 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import type { CSSProperties, ReactNode } from "react"
+import FaqAccordion from "@/components/sections/FaqAccordion"
+import ClosingCtaSection, { type ClosingCtaCopy } from "@/components/sections/ClosingCtaSection"
+import type { FaqTab } from "@/components/sections/types"
 
 /**
  * AiPartnerTemplate — renders an `aiPartnerPage` Sanity document.
@@ -53,15 +57,19 @@ function Heading({
 export default function AiPartnerTemplate({
   page,
   siteSettings,
+  faqTabs,
+  closingCta,
 }: {
   page: Doc | null
   siteSettings?: SiteSettings | null
+  /** Central Sanity faqItems for this page, pre-grouped into tabs by the caller. */
+  faqTabs?: FaqTab[]
+  /** Central closingCta doc for this page (caller fetches via getClosingCtaForPage). */
+  closingCta?: ClosingCtaCopy | null
 }) {
   if (!page) return null
 
-  const calendly =
-    siteSettings?.calendlyLink ||
-    "https://calendly.com/global-calendar-fruitionservices"
+  const calendly = bookingHref(siteSettings?.calendlyLink)
 
   const rootStyle = {
     "--accent": page.accentColor || "#8015e8",
@@ -387,43 +395,36 @@ export default function AiPartnerTemplate({
         </section>
       )}
 
-      {/* FAQ */}
-      {(page.faq?.length ?? 0) > 0 && (
-        <section className="ap-section section-alt" id="faq">
-          <div className="ap-wrap">
-            <div className="section-head">
-              {page.faqEyebrow && <div className="eyebrow">{page.faqEyebrow}</div>}
-              <h2><Heading text={page.faqHeading} accent={page.faqHeadingAccent} /></h2>
-            </div>
-            <div className="faq-list">
-              {page.faq.map((f: Doc, i: number) => (
-                <details className="faq-item" key={i}>
-                  <summary className="faq-q">
-                    <span className="faq-num">{String(i + 1).padStart(2, "0")}</span>
-                    <span>{f.question}</span>
-                    <span className="faq-chev" aria-hidden>+</span>
-                  </summary>
-                  <div className="faq-a">{f.answer}</div>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
+      {/* FAQ — shared site-wide accordion (impl-packages style). Central Sanity
+          faqItems arrive via the faqTabs prop; the page doc's own faq list is
+          the fallback until that page's items are migrated. */}
+      {((faqTabs?.length ?? 0) > 0 || (page.faq?.length ?? 0) > 0) && (
+        <FaqAccordion
+          heading={page.faqHeading || "Frequently asked questions"}
+          tabs={
+            faqTabs?.length
+              ? faqTabs
+              : [{
+                  label: page.faqEyebrow || "General Questions",
+                  items: (page.faq || []).map((f: Doc) => ({ question: f.question, answer: f.answer })),
+                }]
+          }
+        />
       )}
 
-      {/* FINAL CTA */}
-      {page.ctaHeading && (
-        <section className="final-cta">
-          <div className="ap-wrap">
-            {page.ctaEyebrow && <div className="eyebrow">{page.ctaEyebrow}</div>}
-            <h2><Heading text={page.ctaHeading} accent={page.ctaHeadingAccent} /></h2>
-            {page.ctaBody && <p>{page.ctaBody}</p>}
-            <div className="cta-row cta-center">
-              {cta(page.ctaLabel || page.primaryCtaLabel, page.ctaUrl || page.primaryCtaUrl, "primary")}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* FINAL CTA — shared site-wide banner; Sanity closingCta doc wins,
+          this page doc's own cta fields are the verbatim fallback */}
+      <ClosingCtaSection
+        cta={closingCta}
+        fallback={{
+          eyebrow: page.ctaEyebrow,
+          heading: page.ctaHeading,
+          headingAccent: page.ctaHeadingAccent,
+          lead: page.ctaBody,
+          primaryLabel: page.ctaLabel || page.primaryCtaLabel,
+          primaryUrl: page.ctaUrl || page.primaryCtaUrl || calendly,
+        }}
+      />
 
       <style>{CSS}</style>
     </div>
@@ -436,7 +437,7 @@ const CSS = `
   --ink-soft: var(--text-muted-fg);
   --rule: var(--border-ui);
   --paper: var(--surface-subtle);
-  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --mono: var(--font-jetbrains), 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
   --purple: #8015e8;
   --purple-light: #ba83f0;
   color: var(--ink);
@@ -612,7 +613,13 @@ const CSS = `
 .aipartner .final-cta h2 { font-size: clamp(32px, 4.4vw, 60px); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 18px; }
 .aipartner .final-cta p { color: rgba(255,255,255,0.66); font-size: 18px; max-width: 56ch; margin: 0 auto; }
 
-@media (max-width: 900px) {
+/* Tablet (768-1023px): dense desktop grids step down to two-up */
+@media (max-width: 1023px) {
+  .aipartner .showcase-grid, .aipartner .process-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobile (up to 767px): single column, tighter shell */
+@media (max-width: 767px) {
   .aipartner .hero-grid, .aipartner .cap-grid, .aipartner .showcase-grid, .aipartner .process-grid,
   .aipartner .case-grid, .aipartner .geo-grid, .aipartner .operator { grid-template-columns: 1fr; }
   .aipartner .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -622,11 +629,7 @@ const CSS = `
   .aipartner .ap-wrap { padding: 0 20px; }
   .aipartner .ap-hero { padding: 56px 0; }
   .aipartner .ap-section { padding: 56px 0; }
-  .aipartner .final-cta { padding: 72px 0; }
   .aipartner .operator { padding: 28px; }
 }
 
-@media (max-width: 480px) {
-  .aipartner .stats-grid { grid-template-columns: 1fr; }
-}
 `

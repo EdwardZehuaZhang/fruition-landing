@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next"
 import Script from "next/script"
-import { Poppins, Montserrat } from "next/font/google"
+import { Poppins, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
@@ -39,10 +39,11 @@ const poppins = Poppins({
   weight: ["200", "300", "400", "500", "600", "700"],
 })
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+// The mono accent voice (DESIGN.md): eyebrows, tags, stats, pricing metadata.
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600", "700"],
 })
 
 // Light-only: declaring a single scheme also stops browsers (notably mobile
@@ -219,7 +220,7 @@ export default async function RootLayout({
         />
         <script dangerouslySetInnerHTML={{ __html: REB2B_LOADER }} />
       </head>
-      <body className={`${poppins.variable} ${montserrat.variable} antialiased`}>
+      <body className={`${poppins.variable} ${jetbrainsMono.variable} antialiased`}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe

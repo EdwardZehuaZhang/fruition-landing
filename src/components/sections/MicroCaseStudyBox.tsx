@@ -16,10 +16,10 @@ export default function MicroCaseStudyBox({
   if (!cases.length) return null
 
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 72, paddingBottom: 72 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
+    <section className="bg-surface px-4 py-[72px]">
+      <div className="mx-auto max-w-[1100px]">
         {heading && (
-          <h2 className="text-section-h2 text-center text-body" style={{ marginBottom: 40 }}>
+          <h2 className="text-section-h2 text-center text-body mb-10">
             {heading}
           </h2>
         )}
@@ -27,24 +27,23 @@ export default function MicroCaseStudyBox({
           {cases.map((c, i) => (
             <div
               key={c._key || i}
-              className="rounded-card flex flex-col"
-              style={{ border: "1px solid var(--border-ui)", background: "var(--surface-raised)", padding: 28, gap: 14 }}
+              className="rounded-card shadow-whisper ring-1 ring-ui bg-surface-raised flex flex-col p-7 gap-3.5"
             >
               {c.challenge && (
-                <Row label="The Challenge" value={c.challenge} color="#c0392b" />
+                <Row label="The Challenge" value={c.challenge} colorClass="text-[#c0392b]" />
               )}
               {c.solution && (
-                <Row label="The Solution" value={c.solution} color="#8015e8" />
+                <Row label="The Solution" value={c.solution} colorClass="text-brand" />
               )}
               {c.impact && (
-                <Row label="The Impact" value={c.impact} color="#1e8449" />
+                <Row label="The Impact" value={c.impact} colorClass="text-[#1e8449]" />
               )}
               {(c.metric || c.metricLabel) && (
-                <div className="mt-2 flex items-baseline gap-3" style={{ borderTop: "1px solid var(--border-ui)", paddingTop: 16 }}>
-                  <span className="font-bold" style={{ fontSize: 34, lineHeight: "38px", color: "var(--purple-primary)" }}>
+                <div className="mt-2 flex items-baseline gap-3 border-t border-ui pt-4">
+                  <span className="font-bold text-[34px] leading-[38px] text-brand">
                     {c.metric}
                   </span>
-                  <span style={{ fontSize: 13, lineHeight: "18px", color: "var(--text-muted-fg)" }}>{c.metricLabel}</span>
+                  <span className="font-mono text-xs font-semibold text-muted">{c.metricLabel}</span>
                 </div>
               )}
             </div>
@@ -55,13 +54,13 @@ export default function MicroCaseStudyBox({
   )
 }
 
-function Row({ label, value, color }: { label: string; value: string; color: string }) {
+function Row({ label, value, colorClass }: { label: string; value: string; colorClass: string }) {
   return (
     <div>
-      <div className="font-bold" style={{ fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", color, marginBottom: 4 }}>
+      <div className={`font-mono text-xs font-semibold uppercase tracking-[0.14em] mb-1 ${colorClass}`}>
         {label}
       </div>
-      <p style={{ fontSize: 15, lineHeight: "22px", color: "var(--text-body)" }}>{value}</p>
+      <p className="text-[15px] leading-[22px] text-body">{value}</p>
     </div>
   )
 }

@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import {
   getIndustryPageBySlug,
   getSiteSettings,
@@ -42,8 +43,9 @@ export default async function Page() {
 
   if (!page) return null
 
-  const calendlyUrl =
+  const rawCalendly =
     siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const featuredTestimonial =
     caseStudies?.find(
@@ -61,9 +63,9 @@ export default async function Page() {
         heroImage={page.heroImage}
         heroImageUrl={page.heroImageUrl}
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
       />
 
       {/* 2. Logo Cloud */}
@@ -144,7 +146,7 @@ export default async function Page() {
                 {page.caseStudyCtaLabel && (
                   <div style={{ marginTop: 8 }}>
                     <CtaButton
-                      href={page.caseStudyCtaUrl || calendlyUrl}
+                      href={bookingHref(page.caseStudyCtaUrl || calendlyUrl)}
                       label={page.caseStudyCtaLabel}
                       variant="primary"
                     />
@@ -165,7 +167,7 @@ export default async function Page() {
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* 7. Why the best use monday.com — 9 capability cards (real estate) */}
@@ -180,7 +182,7 @@ export default async function Page() {
                 {page.whyBestHeading}
               </h2>
             )}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: 24 }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 24 }}>
               {page.capabilitiesCards.map((card: { _key?: string; emoji?: string; title?: string; description?: string }) => (
                 <div
                   key={card._key}
@@ -206,7 +208,7 @@ export default async function Page() {
         primaryCtaLabel={page.testimonialBannerPrimaryCtaLabel}
         primaryCtaUrl={calendlyUrl}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
         testimonial={featuredTestimonial}
         testimonials={caseStudies}
       />

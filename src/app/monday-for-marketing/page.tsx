@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import {
   getIndustryPageBySlug,
   getSiteSettings,
@@ -44,8 +45,9 @@ export default async function Page() {
 
   if (!page) return null
 
-  const calendlyUrl =
+  const rawCalendly =
     siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const faqTabs = groupFaqsIntoTabs(centralFaqs)
   const effectiveFaqTabs = faqTabs.length > 0 ? faqTabs : page.faqTabs || []
@@ -66,9 +68,9 @@ export default async function Page() {
         heroImage={page.heroImage}
         partnerImageSrc={page.heroPartnerImagePath}
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
       />
 
       {/* 2. Logo Cloud */}
@@ -92,7 +94,7 @@ export default async function Page() {
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* 5. FAQ */}
@@ -131,7 +133,7 @@ export default async function Page() {
               {page.whyBestHeading}
             </h2>
           )}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: 24 }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 24 }}>
             {(page.whyBestCards || []).map((card: { _key?: string; emoji?: string; title?: string; description?: string }) => (
               <div
                 key={card._key}
@@ -159,7 +161,7 @@ export default async function Page() {
         primaryCtaLabel={page.testimonialBannerPrimaryCtaLabel}
         primaryCtaUrl={calendlyUrl}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
         testimonial={featuredTestimonial}
         testimonials={caseStudies}
       />

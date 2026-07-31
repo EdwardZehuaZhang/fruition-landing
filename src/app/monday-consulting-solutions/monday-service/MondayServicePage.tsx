@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import { useState } from "react"
 import Link from "next/link"
 import {
@@ -116,7 +117,8 @@ function safeImageUrl(ref?: SanityImageRef): string | null {
 }
 
 export default function MondayServicePage({ page, siteSettings }: Props) {
-  const calendlyUrl = siteSettings?.calendlyLink || ""
+  const rawCalendly = siteSettings?.calendlyLink || ""
+  const calendlyUrl = bookingHref(rawCalendly)
   const partnerBadges: PartnerBadge[] = siteSettings?.navbarPartnerBadges || []
 
   const heroTitle = page?.heroHeading || page?.title
@@ -241,7 +243,7 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
           headingPart1={page.fourCardsHeadingPart1}
           headingAccent={page.fourCardsHeadingAccent}
           ctaLabel={page.fourCardsCtaLabel}
-          ctaUrl={page.fourCardsCtaUrl || calendlyUrl}
+          ctaUrl={bookingHref(page.fourCardsCtaUrl || rawCalendly)}
           cards={page.fourCards}
         />
       )}
@@ -250,7 +252,7 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
       <CalendlySection
         heading={page?.calendlyHeading || MS_CALENDLY_HEADING}
         subheading={page?.calendlySubheading || MS_CALENDLY_SUBHEADING}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* 6. FAQ */}
@@ -280,7 +282,7 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
         subheading={page?.joinSubheading}
         stats={page?.joinStats}
         ctaLabel={page?.joinCtaLabel}
-        ctaUrl={page?.joinCtaUrl || calendlyUrl}
+        ctaUrl={bookingHref(page?.joinCtaUrl || rawCalendly)}
         siteSettings={siteSettings || undefined}
       />
 

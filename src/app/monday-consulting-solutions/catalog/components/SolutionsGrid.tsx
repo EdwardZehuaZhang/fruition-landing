@@ -219,7 +219,7 @@ export default function SolutionsGrid({ onOpen }: SolutionsGridProps) {
 
   return (
     <section id="solutions" className="bg-surface">
-      <div className="max-w-6xl mx-auto px-5 sm:px-7 py-16 lg:py-20">
+      <div className="max-w-6xl mx-auto px-5 md:px-7 py-16 lg:py-20">
         <div className="max-w-[820px] mb-8">
           <div className="text-micro font-semibold tracking-[0.16em] uppercase text-[var(--purple-primary)]">
             Solutions Catalog
@@ -285,7 +285,7 @@ export default function SolutionsGrid({ onOpen }: SolutionsGridProps) {
                     </svg>
                   </span>
                   <span className="text-card-title text-[var(--text-dark)]">{meta.title}</span>
-                  <span className="text-caption text-[var(--color-text-secondary)] hidden sm:inline">
+                  <span className="text-caption text-[var(--color-text-secondary)] hidden md:inline">
                     <strong className="text-[var(--text-dark)]">{items.length}</strong> of{" "}
                     {total} solutions
                   </span>
@@ -306,7 +306,7 @@ export default function SolutionsGrid({ onOpen }: SolutionsGridProps) {
                         No solutions match your current filters in this category.
                       </p>
                     ) : (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {items.map((s) => (
                           <SolutionCard key={s.key} solution={s} onOpen={onOpen} />
                         ))}
@@ -345,7 +345,7 @@ function SolutionCard({
       <div className="text-[10px] uppercase tracking-wider font-semibold text-[var(--purple-primary)] mb-2">
         {solution.tag}
       </div>
-      <h3 className="text-base sm:text-card-title text-[var(--text-dark)] leading-tight pr-10 sm:pr-12">
+      <h3 className="text-base md:text-card-title text-[var(--text-dark)] leading-tight pr-10 md:pr-12">
         {solution.title}
       </h3>
       <p className="text-body-sm text-[var(--color-text-secondary)] mt-2 leading-relaxed">

@@ -39,17 +39,14 @@ export default function CaseStudyCardsSection({
   if (cards.length === 0) return null
 
   return (
-    <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
+    <section className="bg-surface py-20">
+      <div className="mx-auto px-4 max-w-[1200px]">
         {heading && (
-          <h2
-            className="text-section-h2 text-body"
-            style={{ marginBottom: 48 }}
-          >
+          <h2 className="text-section-h2 text-body mb-12">
             {heading}
           </h2>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 28 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
           {cards.map((card, i) => {
             const imageSrc = safeImageUrl(card.image) || card.imageUrl || null
             const embedUrl = toEmbedUrl(card.videoUrl)
@@ -60,11 +57,11 @@ export default function CaseStudyCardsSection({
               >
                 {/* Media: video or image */}
                 {embedUrl ? (
-                  <div style={{ aspectRatio: "16 / 9" }}>
+                  <div className="aspect-video">
                     <YouTubeEmbed url={embedUrl} title={card.title || "Case study video"} />
                   </div>
                 ) : imageSrc ? (
-                  <div style={{ aspectRatio: "16 / 9" }}>
+                  <div className="aspect-video">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={imageSrc}
@@ -75,49 +72,24 @@ export default function CaseStudyCardsSection({
                 ) : null}
 
                 {/* Content */}
-                <div style={{ padding: 28, flex: 1 }}>
+                <div className="p-7 flex-1">
                   {card.title && (
-                    <h3
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 600,
-                        color: "var(--text-body)",
-                      }}
-                    >
+                    <h3 className="text-xl font-semibold text-body">
                       {card.title}
                     </h3>
                   )}
                   {card.description && (
-                    <p
-                      style={{
-                        fontSize: 15,
-                        lineHeight: "22.5px",
-                        color: "var(--text-body)",
-                        marginTop: 12,
-                        whiteSpace: "pre-line",
-                      }}
-                    >
+                    <p className="text-[15px] leading-[22.5px] text-body mt-3 whitespace-pre-line">
                       {card.description}
                     </p>
                   )}
                   {card.personName && (
-                    <div style={{ marginTop: 16 }}>
-                      <p
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 600,
-                          color: "var(--text-body)",
-                        }}
-                      >
+                    <div className="mt-4">
+                      <p className="text-sm font-semibold text-body">
                         {card.personName}
                       </p>
                       {card.personRole && (
-                        <p
-                          style={{
-                            fontSize: 13,
-                            color: "var(--text-muted-fg)",
-                          }}
-                        >
+                        <p className="text-[13px] text-muted">
                           {card.personRole}
                         </p>
                       )}

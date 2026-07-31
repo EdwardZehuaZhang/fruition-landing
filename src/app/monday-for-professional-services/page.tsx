@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import {
   getIndustryPageBySlug,
   getSiteSettings,
@@ -45,8 +46,9 @@ export default async function Page() {
 
   if (!page) return null
 
-  const calendlyUrl =
+  const rawCalendly =
     siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const faqTabs = groupFaqsIntoTabs(centralFaqs)
   const effectiveFaqTabs = faqTabs.length > 0 ? faqTabs : page.faqTabs || []
@@ -71,9 +73,9 @@ export default async function Page() {
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
       />
 
       {/* 2. Logo Cloud */}
@@ -123,7 +125,7 @@ export default async function Page() {
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       {/* 8. FAQ */}
@@ -154,7 +156,7 @@ export default async function Page() {
         primaryCtaLabel={page.testimonialBannerPrimaryCtaLabel}
         primaryCtaUrl={calendlyUrl}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || calendlyUrl)}
         testimonial={featuredTestimonial}
         testimonials={caseStudies}
       />

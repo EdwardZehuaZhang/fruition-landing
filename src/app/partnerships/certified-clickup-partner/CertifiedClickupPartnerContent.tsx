@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import { useState } from "react"
 import {
   HeroBanner,
@@ -31,12 +32,12 @@ type EverythingAppFeature = { number?: string; title?: string; body?: string }
 
 function PartnershipIntroSection() {
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 60, paddingBottom: 60 }}>
-      <div className="mx-auto text-center" style={{ maxWidth: 880 }}>
-        <p style={{ fontSize: 16, lineHeight: "26px", color: "var(--text-muted-fg)" }}>
+    <section className="bg-surface px-4 py-10 md:py-16">
+      <div className="mx-auto text-center w-full max-w-[880px]">
+        <p className="text-body text-muted">
           Fruition certifies partnership with ClickUp, an all-in-one productivity platform that brings work together in one place.
         </p>
-        <p style={{ fontSize: 16, lineHeight: "26px", color: "var(--text-muted-fg)", marginTop: 14 }}>
+        <p className="text-body text-muted mt-3.5">
           As a certified ClickUp Implementation Partners, we deliver comprehensive workspace solutions that transform how teams collaborate, eliminate app-switching, and save organisations a day of work every week.
         </p>
       </div>
@@ -46,25 +47,25 @@ function PartnershipIntroSection() {
 
 function EverythingAppSection({ cards }: { cards: EverythingAppCard[] }) {
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <div className="text-center" style={{ marginBottom: 40 }}>
-          <h2 className="font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 14 }}>
-            Transform Your Business with ClickUp&apos;s <span style={{ color: "#8015e8" }}>Everything App for Work</span>
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <div className="text-center mb-10">
+          <h2 className="text-section-h2 text-body mb-4">
+            Transform Your Business with ClickUp&apos;s <span className="text-brand">Everything App for Work</span>
           </h2>
-          <p className="mx-auto" style={{ color: "var(--text-muted-fg)", fontSize: 16, lineHeight: "26px", maxWidth: 820 }}>
+          <p className="mx-auto text-body text-muted max-w-[820px]">
             ClickUp replaces multiple tools with one unified platform, eliminating the app-switching that fragments work, steals time, and kills productivity.
           </p>
-          <p className="mx-auto" style={{ color: "var(--text-muted-fg)", fontSize: 16, lineHeight: "26px", maxWidth: 820, marginTop: 12 }}>
+          <p className="mx-auto text-body text-muted max-w-[820px] mt-3">
             As your certified ClickUp implementation partner, we help organisations across Australia, US, and UK unlock ClickUp&apos;s full potential through expert configuration, seamless migration, and comprehensive training.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {cards.map((c, i) => (
-            <div key={c.title || i} className="dark:shadow-none" style={{ padding: 24, borderRadius: 18, background: "var(--surface-raised)", border: "1px solid var(--border-ui)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 10 }}>
-              <span style={{ fontSize: 28 }}>{c.emoji}</span>
-              <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 18 }}>{c.title}</p>
-              <p style={{ color: "var(--text-muted-fg)", fontSize: 14, lineHeight: "22px" }}>{c.body}</p>
+            <div key={c.title || i} className="dark:shadow-none rounded-card shadow-whisper ring-1 ring-ui bg-surface-raised p-6 flex flex-col gap-2.5">
+              <span className="text-[28px]">{c.emoji}</span>
+              <p className="font-bold text-lg">{c.title}</p>
+              <p className="text-sm text-muted leading-relaxed">{c.body}</p>
             </div>
           ))}
         </div>
@@ -78,47 +79,42 @@ function ServicesTabsSection({ tabs }: { tabs: FeatureTab[] }) {
   const active = tabs[activeIdx]
   if (!active) return null
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <div className="flex flex-wrap justify-center" style={{ gap: 12, marginBottom: 40 }}>
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
           {tabs.map((tab, i) => (
             <button
               key={tab.key || tab.label || i}
               onClick={() => setActiveIdx(i)}
-              style={{
-                padding: "10px 26px",
-                borderRadius: 999,
-                fontSize: 14,
-                fontWeight: 600,
-                cursor: "pointer",
-                ...(i === activeIdx
-                  ? { background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", border: "none", boxShadow: "0 10px 22px -12px rgba(128,21,232,0.55)" }
-                  : { background: "var(--surface-raised)", color: "var(--text-body)", border: "1px solid var(--border-ui)" }),
-              }}
+              className={`px-6 py-2.5 rounded-pill text-sm font-semibold cursor-pointer ${
+                i === activeIdx
+                  ? "bg-gradient-to-r from-brand to-brand-light text-white shadow-[0_10px_22px_-12px_rgba(128,21,232,0.55)]"
+                  : "bg-surface-raised text-body ring-1 ring-ui"
+              }`}
             >
               {tab.label}
             </button>
           ))}
         </div>
         {active.heading && (
-          <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 32, lineHeight: "40px", marginBottom: 32 }}>
+          <h2 className="text-center text-section-h2 text-body mb-8">
             {active.heading}
           </h2>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {(active.groups || []).map((g: FeatureGroup, gi: number) => (
-            <div key={g.number || gi} className="dark:shadow-none" style={{ padding: 24, borderRadius: 18, background: "var(--surface-raised)", border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", gap: 14 }}>
-              <div className="flex items-center" style={{ gap: 14 }}>
-                <span className="flex items-center justify-center font-bold" style={{ width: 38, height: 38, borderRadius: 12, background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)", color: "white", fontSize: 13 }}>
+            <div key={g.number || gi} className="dark:shadow-none rounded-card shadow-whisper ring-1 ring-brand/10 bg-surface-raised p-6 flex flex-col gap-3.5">
+              <div className="flex items-center gap-3.5">
+                <span className="flex items-center justify-center font-bold w-[38px] h-[38px] shrink-0 rounded-chip bg-gradient-to-br from-brand to-brand-light text-white text-[13px]">
                   {g.number}
                 </span>
-                <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 15, lineHeight: "22px" }}>{g.title}</p>
+                <p className="font-bold text-body-sm leading-snug">{g.title}</p>
               </div>
-              <ul className="flex flex-col" style={{ gap: 10 }}>
+              <ul className="flex flex-col gap-2.5">
                 {(g.bullets || []).map((b: { emoji: string; text: string }, bi: number) => (
-                  <li key={b.text || bi} className="flex items-start" style={{ gap: 10 }}>
-                    <span style={{ fontSize: 18, lineHeight: "22px", flexShrink: 0 }}>{b.emoji}</span>
-                    <span style={{ color: "var(--text-muted-fg)", fontSize: 13, lineHeight: "20px" }}>{b.text}</span>
+                  <li key={b.text || bi} className="flex items-start gap-2.5">
+                    <span className="text-lg leading-[22px] shrink-0">{b.emoji}</span>
+                    <span className="text-sm text-muted leading-relaxed">{b.text}</span>
                   </li>
                 ))}
               </ul>
@@ -135,40 +131,35 @@ function IndustryTabsSection({ tabs }: { tabs: IndustryTab[] }) {
   const active = tabs[activeIdx]
   if (!active) return null
   return (
-    <section className="px-4" style={{ paddingTop: 80, paddingBottom: 80, background: "linear-gradient(180deg, #faf6ff 0%, #ebd9ff 100%)" }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "#10003a", fontSize: 36, lineHeight: "44px", marginBottom: 32 }}>
-          Implement ClickUp for <span style={{ color: "#8015e8" }}>any team</span>
+    <section className="px-4 py-14 md:py-24 bg-gradient-to-b from-brand-soft/50 to-brand-light/30">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <h2 className="text-center text-section-h2 text-surface-dark mb-8">
+          Implement ClickUp for <span className="text-brand">any team</span>
         </h2>
-        <div className="flex flex-wrap justify-center" style={{ gap: 12, marginBottom: 32 }}>
+        <div className="flex flex-wrap justify-center gap-3 mb-8">
           {tabs.map((tab, i) => (
             <button
               key={tab.label || i}
               onClick={() => setActiveIdx(i)}
-              style={{
-                padding: "10px 22px",
-                borderRadius: 999,
-                fontSize: 14,
-                fontWeight: 600,
-                cursor: "pointer",
-                ...(i === activeIdx
-                  ? { background: "linear-gradient(to right, #8015e8, #ba83f0)", color: "white", border: "none" }
-                  : { background: "white", color: "#2b074d", border: "1px solid #e8e6e6" }),
-              }}
+              className={`px-5 py-2.5 rounded-pill text-sm font-semibold cursor-pointer ${
+                i === activeIdx
+                  ? "bg-gradient-to-r from-brand to-brand-light text-white"
+                  : "bg-white text-surface-dark-2 ring-1 ring-ui"
+              }`}
             >
               {tab.label}
             </button>
           ))}
         </div>
-        <div className="bg-white" style={{ padding: 32, borderRadius: 20, border: "1px solid rgba(128,21,232,0.08)", boxShadow: "0 18px 36px -24px rgba(64,12,140,0.2)" }}>
-          <h3 className="font-bold" style={{ color: "#10003a", fontSize: 22, marginBottom: 10 }}>{active.label}</h3>
-          <p style={{ color: "#444", fontSize: 15, lineHeight: "24px", marginBottom: 22 }}>{active.description}</p>
-          <p className="font-bold" style={{ color: "#8015e8", fontSize: 13, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 12 }}>Key Features</p>
-          <ul className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 10 }}>
+        <div className="bg-white rounded-card ring-1 ring-brand/10 shadow-card p-6 md:p-8">
+          <h3 className="text-card-title text-surface-dark mb-2.5">{active.label}</h3>
+          <p className="text-body-sm text-muted mb-5">{active.description}</p>
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-brand mb-3">Key Features</p>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
             {(active.features || []).map((f: { emoji: string; text: string }, fi: number) => (
-              <li key={f.text || fi} className="flex items-start" style={{ gap: 10 }}>
-                <span style={{ fontSize: 18, lineHeight: "22px", flexShrink: 0 }}>{f.emoji}</span>
-                <span style={{ color: "#444", fontSize: 14, lineHeight: "22px" }}>{f.text}</span>
+              <li key={f.text || fi} className="flex items-start gap-2.5">
+                <span className="text-lg leading-[22px] shrink-0">{f.emoji}</span>
+                <span className="text-sm text-muted leading-relaxed">{f.text}</span>
               </li>
             ))}
           </ul>
@@ -180,17 +171,17 @@ function IndustryTabsSection({ tabs }: { tabs: IndustryTab[] }) {
 
 function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 40 }}>
-          Proven <span style={{ color: "#8015e8" }}>ClickUp</span> Results
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <h2 className="text-center text-section-h2 text-body mb-10">
+          Proven <span className="text-brand">ClickUp</span> Results
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {stats.map((s, i) => (
-            <div key={s.value || i} className="text-center" style={{ padding: 28, borderRadius: 18, background: "linear-gradient(180deg, #f6efff 0%, #ebd9ff 100%)", border: "1px solid rgba(128,21,232,0.1)", boxShadow: "0 12px 28px -22px rgba(64,12,140,0.18)", display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
-              <span className="flex items-center justify-center" style={{ width: 52, height: 52, borderRadius: 999, background: "white", fontSize: 22, boxShadow: "0 4px 14px -8px rgba(64,12,140,0.25)" }}>{s.emoji}</span>
-              <p className="font-bold" style={{ color: "#8015e8", fontSize: 22, lineHeight: 1.1 }}>{s.value}</p>
-              <p style={{ color: "#444", fontSize: 13, lineHeight: "20px", maxWidth: 220 }}>{s.body}</p>
+            <div key={s.value || i} className="text-center p-7 rounded-card ring-1 ring-brand/10 shadow-whisper bg-gradient-to-b from-brand-soft to-brand-light/30 flex flex-col items-center gap-3">
+              <span className="flex items-center justify-center w-[52px] h-[52px] rounded-pill bg-white text-[22px] shadow-micro">{s.emoji}</span>
+              <p className="font-bold text-brand text-[22px] leading-tight">{s.value}</p>
+              <p className="text-sm text-muted leading-relaxed max-w-[220px]">{s.body}</p>
             </div>
           ))}
         </div>
@@ -201,20 +192,20 @@ function ProvenResultsSection({ stats }: { stats: ProvenStat[] }) {
 
 function EverythingAppFeaturesSection({ features }: { features: EverythingAppFeature[] }) {
   return (
-    <section className="bg-surface px-4" style={{ paddingTop: 80, paddingBottom: 80 }}>
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <h2 className="text-center font-bold" style={{ color: "var(--text-body)", fontSize: 36, lineHeight: "44px", marginBottom: 40 }}>
+    <section className="bg-surface px-4 py-14 md:py-24">
+      <div className="mx-auto w-full max-w-[1100px]">
+        <h2 className="text-center text-section-h2 text-body mb-10">
           The Everything App for Work
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 20 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {features.map((f, i) => (
-            <div key={f.number || i} style={{ padding: 24, borderRadius: 16, background: "var(--surface-raised)", border: "1px solid var(--border-ui)", display: "flex", gap: 16, alignItems: "flex-start" }}>
-              <span className="flex items-center justify-center font-bold" style={{ width: 40, height: 40, borderRadius: 10, background: "linear-gradient(135deg, #8015e8 0%, #ba83f0 100%)", color: "white", fontSize: 13, flexShrink: 0 }}>
+            <div key={f.number || i} className="rounded-card shadow-whisper ring-1 ring-ui bg-surface-raised p-6 flex items-start gap-4">
+              <span className="flex items-center justify-center font-bold w-10 h-10 shrink-0 rounded-chip bg-gradient-to-br from-brand to-brand-light text-white text-[13px]">
                 {f.number}
               </span>
               <div>
-                <p className="font-bold" style={{ color: "var(--text-body)", fontSize: 16, marginBottom: 6 }}>{f.title}</p>
-                <p style={{ color: "var(--text-muted-fg)", fontSize: 13, lineHeight: "20px" }}>{f.body}</p>
+                <p className="font-bold text-base mb-1.5">{f.title}</p>
+                <p className="text-sm text-muted leading-relaxed">{f.body}</p>
               </div>
             </div>
           ))}
@@ -228,7 +219,8 @@ function EverythingAppFeaturesSection({ features }: { features: EverythingAppFea
 
 export default function CertifiedClickupPartnerContent({ page, siteSettings, faqTabs }: Props) {
   if (!page) return null
-  const calendlyUrl = siteSettings?.calendlyLink ?? ""
+  const rawCalendly = siteSettings?.calendlyLink ?? ""
+  const calendlyUrl = bookingHref(rawCalendly)
 
   const resolvedFaqTabs = faqTabs ?? []
   const everythingAppCards: EverythingAppCard[] = page.everythingAppCards ?? []
@@ -254,9 +246,9 @@ export default function CertifiedClickupPartnerContent({ page, siteSettings, faq
             : siteSettings?.navbarPartnerBadges || []
         }
         primaryCtaLabel={page.primaryCtaLabel}
-        primaryCtaUrl={page.primaryCtaUrl || calendlyUrl}
+        primaryCtaUrl={bookingHref(page.primaryCtaUrl || rawCalendly)}
         secondaryCtaLabel={page.secondaryCtaLabel}
-        secondaryCtaUrl={page.secondaryCtaUrl || calendlyUrl}
+        secondaryCtaUrl={bookingHref(page.secondaryCtaUrl || rawCalendly)}
       />
 
       <PartnershipIntroSection />
@@ -277,7 +269,7 @@ export default function CertifiedClickupPartnerContent({ page, siteSettings, faq
       <CalendlySection
         heading={page.calendlyHeading}
         subheading={page.calendlySubheading}
-        calendlyUrl={calendlyUrl}
+        calendlyUrl={rawCalendly}
       />
 
       <FaqAccordion heading={page.faqHeading || "Frequently asked questions"} tabs={resolvedFaqTabs} />

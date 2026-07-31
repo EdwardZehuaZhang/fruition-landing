@@ -1,3 +1,4 @@
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { getFaqItems, getPageBySlug, getSiteSettings } from "@/sanity/queries"
 import { generateFaqJsonLd } from "@/lib/faqSchema"
@@ -27,7 +28,8 @@ export default async function FaqsPage() {
     getSiteSettings(),
   ])
 
-  const calendlyUrl = siteSettings?.calendlyLink || ""
+  const rawCalendly = siteSettings?.calendlyLink || ""
+  const calendlyUrl = bookingHref(rawCalendly)
   const faqJsonLd = generateFaqJsonLd(faqs ?? [])
 
   return (
@@ -70,7 +72,7 @@ export default async function FaqsPage() {
             )}
             {page.primaryCtaLabel && (
               <Link
-                href={page.primaryCtaUrl || calendlyUrl}
+                href={bookingHref(page.primaryCtaUrl || rawCalendly)}
                 className="ui-cta-btn ui-cta-btn-secondary mt-8"
                 style={{ minWidth: 260 }}
               >

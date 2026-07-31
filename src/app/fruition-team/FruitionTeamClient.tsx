@@ -1,5 +1,6 @@
 "use client"
 
+import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { useMemo, useState } from "react"
 import { urlFor } from "@/sanity/image"
@@ -111,7 +112,7 @@ export default function FruitionTeamClient({
 
   return (
     <div>
-      <StickyCtaBar label={croSections?.stickyCtaLabel} href={croSections?.stickyCtaUrl || calendlyUrl} />
+      <StickyCtaBar label={croSections?.stickyCtaLabel} href={bookingHref(croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* Hero */}
       <section className="bg-surface">
         <div
@@ -252,7 +253,7 @@ export default function FruitionTeamClient({
             </p>
           ) : (
             <div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
               style={{ gap: 28 }}
             >
               {filteredMembers.map((m) => {
