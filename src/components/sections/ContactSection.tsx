@@ -1,6 +1,6 @@
 "use client"
 
-import BookingSection from "./BookingSection"
+import CalendlySection from "./CalendlySection"
 import WorldMap, { type MapOffice } from "./WorldMap"
 
 export interface ContactOffice extends MapOffice {
@@ -32,11 +32,9 @@ export default function ContactSection({
     <>
       <ContactHero offices={offices} salesEmail={salesEmail} supportEmail={supportEmail} phone={phone} phoneTel={phoneTel} />
       <OfficeBand offices={offices} />
-      <BookingSection
-        eyebrow="Contact us"
+      <CalendlySection
         heading="Tell us what you’re building"
-        sub="Pick a time and talk it through with a specialist — or email us and we’ll reply within one business day."
-        email={salesEmail}
+        subheading="Pick a time and talk it through with a specialist — or email us and we’ll reply within one business day."
       />
     </>
   )

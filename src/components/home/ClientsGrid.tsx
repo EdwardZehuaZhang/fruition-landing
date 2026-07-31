@@ -13,12 +13,21 @@ interface Props {
 }
 
 /**
- * Client logo wall — a dense five-across grid with the "800+ more" counter as
- * the last cell. The row count follows however many logos `carouselLogos` has
- * in Sanity (11 today, so it renders 5/5/2); add more there to fill it out.
+ * Client logo wall — a dense 5×4 grid drawn from the first 19 usable entries in
+ * `siteSettings.carouselLogos`, with the "800+ more" counter as the last cell.
+ * Reorder them in Studio to change which clients lead.
  */
+/** 5 columns × 4 rows, with the "800+ more" counter taking the last cell. */
+const MAX_TILES = 19
+
+/** Exports that reached the CMS without a usable name — hidden until renamed. */
+const UNNAMED = /^(screenshot\b|logo(\s|$))/i
+
 export default function ClientsGrid({ logos }: Props) {
-  const usable = logos.filter((logo) => logo?.image?.asset?._ref)
+  const usable = logos
+    .filter((logo) => logo?.image?.asset?._ref)
+    .filter((logo) => !UNNAMED.test(logo.alt ?? ""))
+    .slice(0, MAX_TILES)
 
   return (
     <section id="clients" className="scroll-mt-24 bg-surface pt-12 pb-16 md:pb-20 lg:pt-18 lg:pb-24">

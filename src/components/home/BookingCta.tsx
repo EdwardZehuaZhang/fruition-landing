@@ -5,13 +5,7 @@ import { useEffect, useRef } from "react"
 import { Mail, Phone } from "lucide-react"
 import Reveal from "./Reveal"
 
-declare global {
-  interface Window {
-    Calendly?: {
-      initInlineWidget: (opts: { url: string; parentElement: HTMLElement }) => void
-    }
-  }
-}
+// `Window.Calendly` is declared once, in components/sections/CalendlySection.
 
 const SCRIPT_SRC = "https://assets.calendly.com/assets/external/widget.js"
 
