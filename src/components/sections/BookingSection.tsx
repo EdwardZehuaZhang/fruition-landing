@@ -202,7 +202,8 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
   const [failed, setFailed] = useState(false)
   const [dayKey, setDayKey] = useState<string | null>(null)
   const [slot, setSlot] = useState<Slot | null>(null)
-  const [monthOffset, setMonthOffset] = useState(0)
+  // null = follow availability; a number = the visitor paged with ‹ ›
+  const [monthOffsetOverride, setMonthOffsetOverride] = useState<number | null>(null)
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [f, setF] = useState<Record<string, string>>({})
   const [topic, setTopic] = useState("")
@@ -267,6 +268,21 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
 
   /* month grid cells — a day is enabled only if it has ≥1 slot in this tz */
   const todayKey = useMemo(() => dayFmt(tz).format(new Date()), [tz])
+
+  /**
+   * Months from now to the first month that actually has a slot. Opening on
+   * the current month shows an empty grid whenever the month is booked out —
+   * e.g. on 31 July the next opening is 3 August, so the visitor would land on
+   * a July grid with every date greyed and assume there is no availability.
+   * Derived rather than set from an effect so paging with ‹ › still wins.
+   */
+  const firstAvailableOffset = useMemo(() => {
+    if (dayKeys.length === 0) return 0
+    const t = partsOf(todayKey)
+    const first = partsOf(dayKeys[0])
+    return Math.max(0, (first.y - t.y) * 12 + (first.m - t.m))
+  }, [dayKeys, todayKey])
+  const monthOffset = monthOffsetOverride ?? firstAvailableOffset
   const cells = useMemo<CalCell[]>(() => {
     const t = partsOf(todayKey)
     const base = new Date(t.y, t.m - 1 + monthOffset, 1)
@@ -525,8 +541,8 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
               {MONTH_FULL[monthBase.getMonth()]} {monthBase.getFullYear()}
             </span>
             <div style={{ display: "flex", gap: 6 }}>
-              <button type="button" disabled={monthOffset <= 0} onClick={() => setMonthOffset((m) => Math.max(0, m - 1))} style={navBtn(monthOffset <= 0)} aria-label="Previous month">‹</button>
-              <button type="button" onClick={() => setMonthOffset((m) => m + 1)} style={navBtn(false)} aria-label="Next month">›</button>
+              <button type="button" disabled={monthOffset <= firstAvailableOffset} onClick={() => setMonthOffsetOverride(Math.max(firstAvailableOffset, monthOffset - 1))} style={navBtn(monthOffset <= firstAvailableOffset)} aria-label="Previous month">‹</button>
+              <button type="button" onClick={() => setMonthOffsetOverride(monthOffset + 1)} style={navBtn(false)} aria-label="Next month">›</button>
             </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 5 }}>
