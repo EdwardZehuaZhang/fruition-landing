@@ -21,6 +21,10 @@ interface Slot {
   url: string
 }
 
+/** Mirrors LeadRegion in @/lib/leadNotify — redeclared so this client
+ *  component doesn't pull the server-only lead pipeline into the bundle. */
+type BookingRegion = "APAC" | "SEA" | "IND" | "NA" | "UK"
+
 export interface BookingSectionProps {
   eyebrow?: string
   heading?: string
@@ -199,6 +203,17 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
 }) {
   const [tz, setTz] = useState("Australia/Sydney")
   const [rawSlots, setRawSlots] = useState<Slot[] | null>(null)
+  /**
+   * The region the slots were fetched for, echoed back when booking.
+   *
+   * Both routes derive the region independently, but from different inputs —
+   * /availability from the country header alone, /book from country *and* the
+   * visitor's timezone. Wherever `cf-ipcountry` is absent those disagree (an
+   * Asia/Singapore visitor gets APAC slots, then books against SEA), the slot
+   * doesn't exist on that event type, and the booking silently falls back to
+   * Calendly. Pinning it keeps both halves on one event type.
+   */
+  const [region, setRegion] = useState<BookingRegion | null>(null)
   const [failed, setFailed] = useState(false)
   const [dayKey, setDayKey] = useState<string | null>(null)
   const [slot, setSlot] = useState<Slot | null>(null)
@@ -227,8 +242,9 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
     let live = true
     fetch("/api/scheduling/availability")
       .then((r) => r.json())
-      .then((d: { slots?: Slot[] }) => {
+      .then((d: { slots?: Slot[]; region?: BookingRegion }) => {
         if (!live) return
+        if (d.region) setRegion(d.region)
         if (d.slots && d.slots.length > 0) setRawSlots(d.slots)
         else setFailed(true)
       })
@@ -324,6 +340,8 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
           teamSize: size,
           office,
           timezone: tz,
+          // Book against the same event type the slots came from.
+          ...(region ? { region } : {}),
           // Attributes the lead to the page it was booked from.
           sourcePage: window.location.pathname,
           website: f.website ?? "",
