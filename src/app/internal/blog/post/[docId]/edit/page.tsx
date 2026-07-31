@@ -18,6 +18,7 @@ interface SanityPost {
   author?: string
   industry?: string
   excerpt?: string
+  seoKeyword?: string
   seoTitle?: string
   seoDescription?: string
   body?: unknown
@@ -57,6 +58,7 @@ export default async function EditPublishedPostPage({
     excerpt: post.excerpt,
     industry: post.industry,
     categoryIds: post.categoryIds ?? undefined,
+    seoKeyword: post.seoKeyword,
     seoTitle: post.seoTitle,
     seoDescription: post.seoDescription,
     // datetime-local inputs need "YYYY-MM-DDTHH:mm".

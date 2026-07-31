@@ -51,10 +51,18 @@ export default async function EditDraftPage({
     excerpt: typeof meta.excerpt === "string" ? meta.excerpt : undefined,
     industry: typeof meta.industry === "string" ? meta.industry : undefined,
     categoryIds: Array.isArray(meta.categoryIds) ? (meta.categoryIds as string[]) : undefined,
+    // Generated drafts store the keyword as target_keyword; editor saves use seoKeyword.
+    seoKeyword:
+      typeof meta.seoKeyword === "string"
+        ? meta.seoKeyword
+        : typeof meta.target_keyword === "string"
+          ? meta.target_keyword
+          : undefined,
     seoTitle: typeof meta.seoTitle === "string" ? meta.seoTitle : undefined,
     seoDescription: typeof meta.seoDescription === "string" ? meta.seoDescription : undefined,
     publishedAt: typeof meta.publishedAt === "string" ? meta.publishedAt : undefined,
     author: typeof meta.author === "string" ? meta.author : undefined,
+    metadata: meta,
   }
 
   return (

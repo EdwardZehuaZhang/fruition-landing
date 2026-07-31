@@ -1,0 +1,74 @@
+[
+  {
+    "_key": "0-bfjtp2",
+    "_type": "office",
+    "address": "64 York Street, Sydney NSW 2000 Australia",
+    "addressUrl": "https://maps.app.goo.gl/1tHxQSq7Db3Xq4Rk7",
+    "city": "Sydney, Australia",
+    "flag": "🇦🇺",
+    "href": "/monday-partner-australia",
+    "label": "Head Office",
+    "phone": "+61 483 955 931",
+    "phoneTel": "+61483955931"
+  },
+  {
+    "_key": "1-j2ncbz",
+    "_type": "office",
+    "address": "205 W 37th St, New York, NY 10018, United States",
+    "addressUrl": "https://maps.app.goo.gl/4u1KjFHfUgiXGGta9",
+    "city": "New York, US Office",
+    "flag": "🇺🇸",
+    "href": "/monday-partner-us",
+    "label": "North America Office",
+    "phone": "+1 302 330 2496",
+    "phoneTel": "+13023302496"
+  },
+  {
+    "_key": "2-nvlnlp",
+    "_type": "office",
+    "address": "Medius House, 2 Sheraton St, London W1F 8BH, United Kingdom",
+    "addressUrl": "https://maps.app.goo.gl/H8gDDCChm9Q5uMDm8",
+    "city": "London, UK",
+    "flag": "🇬🇧",
+    "href": "/monday-partner-uk",
+    "label": "EMEA Office",
+    "phone": "+44 7822 019548",
+    "phoneTel": "+447822019548"
+  },
+  {
+    "_key": "3-65mxz7",
+    "_type": "office",
+    "address": "Address coming soon, Singapore",
+    "addressUrl": "",
+    "city": "Singapore",
+    "flag": "🇸🇬",
+    "href": "#",
+    "label": "APAC Office",
+    "phone": "+65 0000 0000",
+    "phoneTel": "+6500000000"
+  },
+  {
+    "_key": "4-9tmh9b",
+    "_type": "office",
+    "address": "Address coming soon, India",
+    "addressUrl": "",
+    "city": "India",
+    "flag": "🇮🇳",
+    "href": "#",
+    "label": "India Office",
+    "phone": "+91 00000 00000",
+    "phoneTel": "+910000000000"
+  },
+  {
+    "_key": "5-268985",
+    "_type": "office",
+    "address": "Address coming soon, Philippines",
+    "addressUrl": "",
+    "city": "Philippines",
+    "flag": "🇵🇭",
+    "href": "#",
+    "label": "Philippines Office",
+    "phone": "+63 000 000 0000",
+    "phoneTel": "+630000000000"
+  }
+]
