@@ -142,7 +142,7 @@ export const HERO_NODES = [
   { slug: "hubspot", label: "HubSpot", x: 446, y: 130, path: "M432 138 L318 210" },
   { slug: "claude", label: "Claude", x: 92, y: 306, path: "M104 306 L230 256" },
   { slug: "openai", label: "OpenAI", x: 468, y: 306, path: "M456 306 L330 256" },
-  { slug: "githubcopilot", label: "Copilot", x: 176, y: 418, path: "M192 418 L258 280" },
+  { slug: "microsoftcopilot", label: "Copilot", x: 176, y: 418, path: "M192 418 L258 280" },
   { slug: "n8n", label: "n8n", x: 380, y: 418, path: "M368 418 L302 280" },
 ] as const
 
