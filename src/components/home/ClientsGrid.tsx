@@ -13,9 +13,9 @@ interface Props {
 }
 
 /**
- * Client logo wall. The design lays out eleven tiles plus a "300+ more" tile;
- * with a different number of logos the grid simply reflows and the counter
- * stays as the last cell.
+ * Client logo wall — a dense five-across grid with the "800+ more" counter as
+ * the last cell. The row count follows however many logos `carouselLogos` has
+ * in Sanity (11 today, so it renders 5/5/2); add more there to fill it out.
  */
 export default function ClientsGrid({ logos }: Props) {
   const usable = logos.filter((logo) => logo?.image?.asset?._ref)
@@ -26,7 +26,7 @@ export default function ClientsGrid({ logos }: Props) {
         <Reveal className="mx-auto max-w-[660px] text-center">
           <p className="text-micro font-bold tracking-[0.12em] uppercase text-brand">Our clients</p>
           <h2 className="text-section-h2 mt-3.5 text-foreground lg:text-[42px]" style={{ textWrap: "pretty" }}>
-            Trusted by teams across 300+ implementations.
+            Trusted by teams across 800+ implementations.
           </h2>
           <p className="text-body mx-auto mt-4 max-w-[560px] text-muted lg:text-[17px]" style={{ textWrap: "pretty" }}>
             From national services groups to public-sector agencies in six markets — we stay on
@@ -36,24 +36,24 @@ export default function ClientsGrid({ logos }: Props) {
         </Reveal>
 
         {usable.length > 0 && (
-          <Reveal className="mt-10 grid grid-cols-2 gap-[18px] md:grid-cols-3 lg:mt-12 lg:grid-cols-4">
+          <Reveal className="mt-10 grid grid-cols-3 gap-3 sm:grid-cols-4 lg:mt-12 lg:grid-cols-5 lg:gap-4">
             {usable.map((logo, i) => (
               <div
                 key={logo._key ?? i}
-                className="flex h-[132px] items-center justify-center rounded-2xl bg-mist px-[30px] py-[26px] transition-colors duration-200 hover:bg-mist-hover"
+                className="flex h-[92px] items-center justify-center rounded-xl bg-mist px-4 py-3.5 transition-colors duration-200 hover:bg-mist-hover lg:h-[104px] lg:px-6 lg:py-5"
               >
                 <Image
-                  src={urlFor(logo.image).width(320).fit("max").auto("format").url()}
+                  src={urlFor(logo.image).width(260).fit("max").auto("format").url()}
                   alt={logo.alt || "Client logo"}
-                  width={160}
-                  height={80}
+                  width={130}
+                  height={64}
                   className="max-h-full w-auto object-contain"
                 />
               </div>
             ))}
-            <div className="flex h-[132px] items-center justify-center px-[30px] py-[26px]">
-              <span className="text-[26px] leading-none font-semibold tracking-[-0.02em] text-brand">
-                300+ more
+            <div className="flex h-[92px] items-center justify-center px-4 lg:h-[104px]">
+              <span className="text-xl leading-none font-semibold tracking-[-0.02em] text-brand lg:text-[22px]">
+                800+ more
               </span>
             </div>
           </Reveal>

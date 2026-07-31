@@ -13,7 +13,7 @@ import PlatformsCertified from '@/components/home/PlatformsCertified'
 import AiCapability from '@/components/home/AiCapability'
 import InsightsGrid, { type HomePost } from '@/components/home/InsightsGrid'
 import FaqSplit from '@/components/home/FaqSplit'
-import BookingSection from '@/components/sections/BookingSection'
+import BookingCta from '@/components/home/BookingCta'
 
 const FALLBACK_EMAIL = 'contact@fruitionservices.io'
 
@@ -56,10 +56,7 @@ export default async function Home() {
   const bookingHref = '#book'
 
   const offices = settings.offices ?? []
-  const officeLine = offices
-    .map((office) => (office.city ?? '').split(',')[0].trim())
-    .filter(Boolean)
-    .join(' · ')
+  const hq = offices.find((office) => /head office/i.test(office.label ?? '')) ?? offices[0]
 
   return (
     <>
@@ -75,17 +72,16 @@ export default async function Home() {
       <AiCapability bookingHref={bookingHref} />
       <InsightsGrid posts={data.posts ?? []} />
       <FaqSplit contactEmail={contactEmail} />
-      {/* Same custom day/slot picker the rest of the site books through — the
-          design's mock calendar and the deprecated Calendly embed are gone. */}
-      <BookingSection
-        eyebrow="Book a discovery call"
-        heading="Let's design the way your business should run."
-        sub="30 minutes. No obligation. Speak to a consultant, not a salesperson."
-        email={contactEmail}
-        offices={officeLine || undefined}
-        proof="monday.com Platinum Partner · 300+ implementations"
-        {...(calendlyUrl ? { calendlyUrl } : {})}
-      />
+      {/* Books through Calendly's own widget for now — see BookingCta. */}
+      {calendlyUrl && (
+        <BookingCta
+          calendlyUrl={calendlyUrl}
+          contactEmail={contactEmail}
+          phone={hq?.phone}
+          phoneTel={hq?.phoneTel}
+          phoneLabel={(hq?.city ?? '').split(',')[0].trim() || undefined}
+        />
+      )}
     </>
   )
 }
