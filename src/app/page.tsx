@@ -13,7 +13,7 @@ import PlatformsCertified from '@/components/home/PlatformsCertified'
 import AiCapability from '@/components/home/AiCapability'
 import InsightsGrid, { type HomePost } from '@/components/home/InsightsGrid'
 import FaqSplit from '@/components/home/FaqSplit'
-import BookingCta from '@/components/home/BookingCta'
+import CalendlySection from '@/components/sections/CalendlySection'
 
 const FALLBACK_EMAIL = 'contact@fruitionservices.io'
 
@@ -56,7 +56,6 @@ export default async function Home() {
   const bookingHref = '#book'
 
   const offices = settings.offices ?? []
-  const hq = offices.find((office) => /head office/i.test(office.label ?? '')) ?? offices[0]
 
   return (
     <>
@@ -72,16 +71,13 @@ export default async function Home() {
       <AiCapability bookingHref={bookingHref} />
       <InsightsGrid posts={data.posts ?? []} />
       <FaqSplit contactEmail={contactEmail} />
-      {/* Books through Calendly's own widget for now — see BookingCta. */}
-      {calendlyUrl && (
-        <BookingCta
-          calendlyUrl={calendlyUrl}
-          contactEmail={contactEmail}
-          phone={hq?.phone}
-          phoneTel={hq?.phoneTel}
-          phoneLabel={(hq?.city ?? '').split(',')[0].trim() || undefined}
-        />
-      )}
+      {/* The site's single contact/scheduling surface, shared with every
+          other page via CalendlySection → BookingSection. */}
+      <CalendlySection
+        heading="Let's design the way your business should run."
+        subheading="30 minutes. No obligation. Speak to a consultant, not a salesperson."
+        calendlyUrl={calendlyUrl || undefined}
+      />
     </>
   )
 }

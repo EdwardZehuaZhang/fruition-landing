@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import type { ChangeEvent, CSSProperties, ReactNode } from "react"
 
 /**
@@ -195,6 +195,60 @@ function Field({ label: l, name, type = "text", placeholder, value, onChange }: 
 interface BlankCell { blank: true; id: string }
 interface DayCell { blank?: false; id: string; label: string; key: string; disabled: boolean }
 type CalCell = BlankCell | DayCell
+
+declare global {
+  interface Window {
+    Calendly?: {
+      initInlineWidget: (opts: { url: string; parentElement: HTMLElement }) => void
+    }
+  }
+}
+
+/** The account page every booking goes through. */
+const CALENDLY_ACCOUNT = "https://calendly.com/global-calendar-fruitionservices"
+const CALENDLY_SCRIPT = "https://assets.calendly.com/assets/external/widget.js"
+
+/**
+ * Calendly's own inline widget, filling the section's white card.
+ *
+ * `calendlyUrl` reaches us from Sanity via `bookingHref`, which rewrites
+ * Calendly links to the on-site anchor (/contact-us#book) so CTA buttons stay
+ * on the site. That's right for a link and very wrong for an embed — feeding it
+ * in made the page iframe itself — so anything that isn't an absolute
+ * calendly.com URL falls back to the account page.
+ */
+function CalendlyEmbed({ calendlyUrl }: { calendlyUrl?: string }) {
+  const hostRef = useRef<HTMLDivElement>(null)
+  const src = calendlyUrl && /^https?:\/\/([a-z0-9-]+\.)?calendly\.com\//i.test(calendlyUrl)
+    ? calendlyUrl
+    : CALENDLY_ACCOUNT
+
+  useEffect(() => {
+    const embedUrl = `${src}${src.includes("?") ? "&" : "?"}hide_gdpr_banner=1&embed_type=Inline`
+    const init = () => {
+      if (!window.Calendly || !hostRef.current) return
+      hostRef.current.innerHTML = ""
+      window.Calendly.initInlineWidget({ url: embedUrl, parentElement: hostRef.current })
+    }
+    if (window.Calendly) {
+      init()
+      return
+    }
+    const existing = document.querySelector<HTMLScriptElement>(`script[src="${CALENDLY_SCRIPT}"]`)
+    if (existing) {
+      existing.addEventListener("load", init)
+      return () => existing.removeEventListener("load", init)
+    }
+    const script = document.createElement("script")
+    script.src = CALENDLY_SCRIPT
+    script.async = true
+    script.addEventListener("load", init)
+    document.body.appendChild(script)
+    return () => script.removeEventListener("load", init)
+  }, [src])
+
+  return <div ref={hostRef} style={{ width: "100%", height: 700 }} />
+}
 
 function BookingCard({ duration, askTeamSize, calendlyUrl }: {
   duration: number
@@ -652,8 +706,8 @@ export default function BookingSection({
           </div>
         </div>
 
-        <div style={{ background: "#fff", borderRadius: 24, boxShadow: "0 34px 70px -26px rgba(8,0,32,.65)", padding: 30, minHeight: 474 }}>
-          <BookingCard duration={duration} askTeamSize={askTeamSize} calendlyUrl={calendlyUrl} />
+        <div style={{ background: "#fff", borderRadius: 24, boxShadow: "0 34px 70px -26px rgba(8,0,32,.65)", padding: 12, minHeight: 474 }}>
+          <CalendlyEmbed calendlyUrl={calendlyUrl} />
         </div>
       </div>
 
