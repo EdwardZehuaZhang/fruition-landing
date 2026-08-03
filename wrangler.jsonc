@@ -30,6 +30,9 @@
       "service": "fruition-landing"
     }
   ],
+  "vars": {
+    "NEXT_PUBLIC_OAIQ_PIXEL_ID": "RNJ1b2hooXBRHiYSWb3K6h"
+  },
   "images": {
     "binding": "IMAGES"
   }
