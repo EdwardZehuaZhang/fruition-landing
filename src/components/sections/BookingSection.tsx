@@ -303,7 +303,14 @@ function CalendlyEmbed({ calendlyUrl, onScheduled }: { calendlyUrl?: string; onS
       // Origin check first — any page can post to us.
       if (e.origin !== "https://calendly.com") return
       const data = e.data as { event?: string } | null
-      if (data?.event === "calendly.event_scheduled") scheduledRef.current?.()
+      if (data?.event !== "calendly.event_scheduled") return
+      scheduledRef.current?.()
+      // Same event also attributes the booking for OpenAI Ads (FRUIT-6). Kept in
+      // this listener so the origin check above guards it too.
+      const oaiq = (window as unknown as { oaiq?: (...args: unknown[]) => void }).oaiq
+      if (typeof oaiq === "function") {
+        oaiq("measure", "appointment_scheduled", { type: "customer_action" })
+      }
     }
     window.addEventListener("message", onMessage)
     return () => window.removeEventListener("message", onMessage)
