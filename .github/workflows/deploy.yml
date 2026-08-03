@@ -17,9 +17,11 @@ name: Deploy
 #     NEXT_PUBLIC_SANITY_DATASET
 #     NEXT_PUBLIC_SANITY_API_VERSION
 #
-# Preview URLs require the Worker's workers.dev preview URLs to be enabled
-# (Cloudflare dashboard -> the Worker -> Settings -> Domains & Routes ->
-# Preview URLs). If disabled, the version still uploads but no URL is printed.
+# Preview URLs require the Worker's workers.dev preview URLs to be enabled.
+# These are pinned in `wrangler.jsonc` (`workers_dev: true`, `preview_urls:
+# true`), so every deploy reasserts them and the dashboard cannot drift out of
+# sync. If that config is ever removed, the version still uploads but no URL is
+# printed, and the PR comment says so.
 
 on:
   pull_request:
@@ -62,24 +64,36 @@ jobs:
           set -o pipefail
           npm run upload 2>&1 | tee upload.log
           # wrangler prints e.g. "Version Preview URL: https://<hash>-fruition-landing.<sub>.workers.dev"
-          # "|| true": no match must not fail the step (Actions runs bash -e) —
-          # a missing URL just means preview URLs are disabled for the Worker,
-          # which the branch below and the PR comment already handle.
+          # "|| true": no match must not fail the step (Actions runs bash -e).
+          # A missing URL here means the upload ran but printed no URL; the
+          # comment step reports that case separately from an upload failure.
           URL="$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9-]+\.workers\.dev' upload.log | head -1 || true)"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           if [ -n "$URL" ]; then echo "Preview URL: $URL"; else echo "No preview URL found (are preview URLs enabled for this Worker?)"; fi
 
+      # Never comment when the run was cancelled. `concurrency` above cancels
+      # the in-flight run on every new push, and `always()` would let that
+      # doomed run overwrite the comment with a "no preview URL" notice — a
+      # false alarm that GitHub emails out immediately and never retracts,
+      # even though the superseding run posts the real URL a few minutes later.
       - name: Comment preview URL on the PR
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/github-script@v7
         with:
           script: |
-            const url = process.env.PREVIEW_URL;
-            const marker = '<!-- cf-preview-deploy -->';
-            const body = url
-              ? `${marker}\n### ⚡ Cloudflare preview deployed\n\n**${url}**\n\nUpdated automatically on every push to this PR (commit \`${context.sha.slice(0,7)}\`).`
-              : `${marker}\n### ⚡ Cloudflare preview\n\nThe preview version uploaded, but no preview URL was returned. Enable **Preview URLs** for the \`fruition-landing\` Worker in the Cloudflare dashboard (Settings → Domains & Routes → Preview URLs), then re-run this job.`;
             const { owner, repo } = context.repo;
+            const url = process.env.PREVIEW_URL;
+            const uploadOk = process.env.UPLOAD_OUTCOME === 'success';
+            const marker = '<!-- cf-preview-deploy -->';
+            const commit = context.sha.slice(0, 7);
+            let body;
+            if (url) {
+              body = `${marker}\n### ⚡ Cloudflare preview deployed\n\n**${url}**\n\nUpdated automatically on every push to this PR (commit \`${commit}\`).`;
+            } else if (uploadOk) {
+              body = `${marker}\n### ⚡ Cloudflare preview\n\nThe preview version uploaded, but no preview URL was returned. Enable **Preview URLs** for the \`fruition-landing\` Worker in the Cloudflare dashboard (Settings → Domains & Routes → Preview URLs), then re-run this job.`;
+            } else {
+              body = `${marker}\n### ⚡ Cloudflare preview failed\n\nThe preview upload step did not complete for commit \`${commit}\`, so no preview URL is available. See the [workflow run](${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}) for the error.`;
+            }
             const issue_number = context.payload.pull_request.number;
             const comments = await github.rest.issues.listComments({ owner, repo, issue_number });
             const existing = comments.data.find(c => c.body && c.body.includes(marker));
@@ -90,6 +104,7 @@ jobs:
             }
         env:
           PREVIEW_URL: ${{ steps.upload.outputs.url }}
+          UPLOAD_OUTCOME: ${{ steps.upload.outcome }}
 
   deploy:
     name: Production deploy
