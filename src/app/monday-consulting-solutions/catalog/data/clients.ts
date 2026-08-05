@@ -1,4 +1,4 @@
-// 289 client engagements across US, Australia/APAC, and UK regions.
+// 288 client engagements across US, Australia/APAC, and UK regions.
 // Lifted from the 2026 Solutions Atlas mock; corroborated against monday.com
 // CRM, Fireflies, and Google Drive activity 2024–2026.
 
@@ -197,7 +197,7 @@ export const CLIENTS: Client[] = [
   { region: "apac", name: "Cricket Wales", meta: "Sports Governing Body" },
   { region: "apac", name: "Creata", meta: "Global Promotions" },
 
-  // United Kingdom — 107 delivered
+  // United Kingdom — 106 delivered
   { region: "uk", name: "Vistry Homes", meta: "Major UK Housebuilder" },
   { region: "uk", name: "Lynch Brother Homes", meta: "Residential Homebuilder" },
   { region: "uk", name: "Glencar", meta: "Commercial Contractor" },
@@ -238,7 +238,6 @@ export const CLIENTS: Client[] = [
   { region: "uk", name: "Solent University", meta: "University" },
   { region: "uk", name: "Chestnut Education Group", meta: "Education Group" },
   { region: "uk", name: "Givergy", meta: "Charity Fundraising Tech" },
-  { region: "uk", name: "Goodlaw Project", meta: "Legal Advocacy" },
   { region: "uk", name: "Girls Not Brides", meta: "Global Advocacy" },
   { region: "uk", name: "Bags of Taste", meta: "Food Poverty Charity" },
   { region: "uk", name: "GGI Development & Research", meta: "Research Org" },
