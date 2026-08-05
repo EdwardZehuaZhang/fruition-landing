@@ -3,7 +3,9 @@ import {
   getIndustryPageBySlug,
   getSiteSettings,
   getCaseStudies,
+  getFaqItemsForPage,
 } from "@/sanity/queries"
+import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -13,6 +15,7 @@ import {
   TestimonialCtaBanner,
   JoinStatsSection,
   TextContentSection,
+  FaqAccordion,
 } from "@/components/sections"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import CtaButton from "@/components/CtaButton"
@@ -35,13 +38,19 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const [page, siteSettings, caseStudies] = await Promise.all([
+  const [page, siteSettings, caseStudies, centralFaqs] = await Promise.all([
     getIndustryPageBySlug("monday-for-real-estate"),
     getSiteSettings(),
     getCaseStudies(),
+    getFaqItemsForPage("monday-for-real-estate"),
   ])
 
   if (!page) return null
+
+  // Page-doc faqTabs win; the central faqItem store is the fallback.
+  const faqTabs = page.faqTabs?.length
+    ? page.faqTabs
+    : groupFaqsIntoTabs(centralFaqs)
 
   const rawCalendly =
     siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
@@ -170,7 +179,12 @@ export default async function Page() {
         calendlyUrl={rawCalendly}
       />
 
-      {/* 7. Why the best use monday.com — 9 capability cards (real estate) */}
+      {/* 7. FAQ */}
+      {!page.hideFaqSection && (
+        <FaqAccordion heading={page.faqHeading} tabs={faqTabs} />
+      )}
+
+      {/* 8. Why the best use monday.com — 9 capability cards (real estate) */}
       {page.capabilitiesCards?.length > 0 && (
         <section style={{ backgroundColor: "var(--surface-subtle)", paddingTop: 80, paddingBottom: 80 }}>
           <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
@@ -203,7 +217,7 @@ export default async function Page() {
         </section>
       )}
 
-      {/* 8. Join 500+ CTA */}
+      {/* 9. Join 500+ CTA */}
       <TestimonialCtaBanner
         primaryCtaLabel={page.testimonialBannerPrimaryCtaLabel}
         primaryCtaUrl={calendlyUrl}
@@ -213,7 +227,7 @@ export default async function Page() {
         testimonials={caseStudies}
       />
 
-      {/* 9. Text section — Additional tips */}
+      {/* 10. Text section — Additional tips */}
       {page.textContentSections?.map(
         (section: { _key?: string; heading?: string; body?: string; theme?: "light" | "tint" }) => (
           <TextContentSection
@@ -225,7 +239,7 @@ export default async function Page() {
         ),
       )}
 
-      {/* 10. Stats — Years / Projects / Clients */}
+      {/* 11. Stats — Years / Projects / Clients */}
       <JoinStatsSection
         headingPart1=""
         headingAccent=""

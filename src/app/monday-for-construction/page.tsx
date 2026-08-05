@@ -53,12 +53,20 @@ export default async function Page() {
   if (page && centralTestimonials?.length) {
     page.industryTestimonials = centralTestimonials.map((t: any) => ({ title: t.headline, quote: t.quote, name: t.clientName, role: t.clientRole, image: safePhotoUrl(t.profilePhoto) }))
   }
+
+  // The page doc's own faqTabs win: they're the industry-specific set an editor
+  // curated in Sanity. The central faqItem store is the fallback for pages that
+  // have none — see about-us for the same precedence.
+  const faqTabs = page?.faqTabs?.length
+    ? page.faqTabs
+    : groupFaqsIntoTabs(centralFaqs)
+
   return (
     <MondayForConstructionContent
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
-      faqTabs={groupFaqsIntoTabs(centralFaqs)}
+      faqTabs={page?.hideFaqSection ? [] : faqTabs}
     />
   )
 }
