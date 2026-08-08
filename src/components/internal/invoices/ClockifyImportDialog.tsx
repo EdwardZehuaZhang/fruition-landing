@@ -26,7 +26,12 @@ interface Props {
 async function extractPdfLines(file: File): Promise<string[]> {
   // Dynamic import pdfjs-dist
   const pdfjsLib = await import('pdfjs-dist')
-  pdfjsLib.GlobalWorkerOptions.workerSrc = ''
+  // pdfjs v4+ requires a real worker script; the bundler emits this as an asset
+  // and keeps it version-locked to the installed pdfjs-dist API.
+  pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.min.mjs',
+    import.meta.url
+  ).toString()
 
   const arrayBuffer = await file.arrayBuffer()
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
@@ -306,7 +311,7 @@ export default function ClockifyImportDialog({ profile, onSave }: Props) {
             </p>
             {parsed && (
               <p className="text-xs font-semibold text-green-600">
-                &check; Parsed {lineItems.length} billable project(s)
+                ✓ Parsed {lineItems.length} billable project(s)
               </p>
             )}
           </div>
