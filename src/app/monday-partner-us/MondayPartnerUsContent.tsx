@@ -154,6 +154,28 @@ export default function MondayPartnerUsContent({
         logos={siteSettings?.carouselLogos || []}
       />
 
+      {/* Customer testimonials — social proof sits directly below the fold */}
+      <TestimonialsGrid
+        heading={page.testimonialsGridHeading}
+        ctaLabel={page.testimonialsGridCtaLabel}
+        ctaUrl={calendlyUrl}
+        statCardValue={page.testimonialsGridStatValue}
+        statCardSubtitle={page.testimonialsGridStatSubtitle}
+        statCardCtaLabel={page.testimonialsGridStatCtaLabel}
+        statCardCtaUrl={page.testimonialsGridStatCtaUrl}
+        caseStudies={partnerCaseStudies}
+      />
+
+      {/* Calendly — booking CTA follows immediately on the proof that earns it */}
+      <CalendlySection
+        heading={page.calendlyHeading || "Book A 30-Min Consultation With A monday.com Expert"}
+        subheading={
+          page.calendlySubheading ||
+          "Schedule a personalized monday.com demonstration with our certified monday.com implementation consultants to discover how the platform can be tailored to your unique business requirements.\n\nUnlock monday.com's complete potential with our exclusive 4-week extended free trial period, providing comprehensive time to explore advanced workflow features and achieve measurable productivity results."
+        }
+        calendlyUrl={rawCalendly}
+      />
+
       {/* 3-tab comparison */}
       <ComparisonTabsSection
         heading={page.comparisonHeading}
@@ -178,28 +200,6 @@ export default function MondayPartnerUsContent({
         data={page.croSections}
         primaryCtaLabel={page.primaryCtaLabel}
         primaryCtaUrl={bookingHref(page.primaryCtaUrl || rawCalendly)}
-      />
-
-      {/* Calendly */}
-      <CalendlySection
-        heading={page.calendlyHeading || "Book A 30-Min Consultation With A monday.com Expert"}
-        subheading={
-          page.calendlySubheading ||
-          "Schedule a personalized monday.com demonstration with our certified monday.com implementation consultants to discover how the platform can be tailored to your unique business requirements.\n\nUnlock monday.com's complete potential with our exclusive 4-week extended free trial period, providing comprehensive time to explore advanced workflow features and achieve measurable productivity results."
-        }
-        calendlyUrl={rawCalendly}
-      />
-
-      {/* Customer testimonials */}
-      <TestimonialsGrid
-        heading={page.testimonialsGridHeading}
-        ctaLabel={page.testimonialsGridCtaLabel}
-        ctaUrl={calendlyUrl}
-        statCardValue={page.testimonialsGridStatValue}
-        statCardSubtitle={page.testimonialsGridStatSubtitle}
-        statCardCtaLabel={page.testimonialsGridStatCtaLabel}
-        statCardCtaUrl={page.testimonialsGridStatCtaUrl}
-        caseStudies={partnerCaseStudies}
       />
 
       {/* FAQ */}

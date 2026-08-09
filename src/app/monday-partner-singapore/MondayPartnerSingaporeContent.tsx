@@ -177,6 +177,28 @@ export default function MondayPartnerSingaporeContent({
         logos={siteSettings?.carouselLogos || []}
       />
 
+      {/* Customer testimonials — social proof sits directly below the fold */}
+      <TestimonialsGrid
+        heading={page.testimonialsGridHeading}
+        ctaLabel={page.testimonialsGridCtaLabel}
+        ctaUrl={calendlyUrl}
+        statCardValue={page.testimonialsGridStatValue}
+        statCardSubtitle={page.testimonialsGridStatSubtitle}
+        statCardCtaLabel={page.testimonialsGridStatCtaLabel}
+        statCardCtaUrl={page.testimonialsGridStatCtaUrl}
+        caseStudies={partnerCaseStudies}
+      />
+
+      {/* Calendly — booking CTA follows immediately on the proof that earns it */}
+      <CalendlySection
+        heading={page.calendlyHeading || "Schedule a 30 minute Call With One of Our monday.com Consultants Today"}
+        subheading={
+          page.calendlySubheading ||
+          "From initial process discovery to full system adoption, our proven methodology ensures seamless digital transformation that empowers your team and drives sustainable operational efficiency."
+        }
+        calendlyUrl={rawCalendly}
+      />
+
       {/* 3-tab comparison */}
       <ComparisonTabsSection
         heading={page.comparisonHeading}
@@ -194,28 +216,6 @@ export default function MondayPartnerSingaporeContent({
         ctaUrl={page.teamGridCtaUrl}
         members={teamMembers}
         region="APAC"
-      />
-
-      {/* Calendly */}
-      <CalendlySection
-        heading={page.calendlyHeading || "Schedule a 30 minute Call With One of Our monday.com Consultants Today"}
-        subheading={
-          page.calendlySubheading ||
-          "From initial process discovery to full system adoption, our proven methodology ensures seamless digital transformation that empowers your team and drives sustainable operational efficiency."
-        }
-        calendlyUrl={rawCalendly}
-      />
-
-      {/* Customer testimonials */}
-      <TestimonialsGrid
-        heading={page.testimonialsGridHeading}
-        ctaLabel={page.testimonialsGridCtaLabel}
-        ctaUrl={calendlyUrl}
-        statCardValue={page.testimonialsGridStatValue}
-        statCardSubtitle={page.testimonialsGridStatSubtitle}
-        statCardCtaLabel={page.testimonialsGridStatCtaLabel}
-        statCardCtaUrl={page.testimonialsGridStatCtaUrl}
-        caseStudies={partnerCaseStudies}
       />
 
       {/* FAQ */}

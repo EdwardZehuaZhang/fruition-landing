@@ -214,6 +214,28 @@ export default function MondayPartnerAustraliaContent({
         logos={siteSettings?.carouselLogos || []}
       />
 
+      {/* Customer testimonials carousel — social proof sits directly below the fold */}
+      <TestimonialsGrid
+        heading={page.testimonialsGridHeading}
+        ctaLabel={page.testimonialsGridCtaLabel}
+        ctaUrl={calendlyUrl}
+        statCardValue={page.testimonialsGridStatValue}
+        statCardSubtitle={page.testimonialsGridStatSubtitle}
+        statCardCtaLabel={page.testimonialsGridStatCtaLabel}
+        statCardCtaUrl={page.testimonialsGridStatCtaUrl}
+        caseStudies={partnerCaseStudies}
+      />
+
+      {/* Calendly — booking CTA follows immediately on the proof that earns it */}
+      <CalendlySection
+        heading={page.calendlyHeading || "Book A 30-Min Consultation With A monday.com Expert"}
+        subheading={
+          page.calendlySubheading ||
+          "Schedule a personalised monday.com demo with our certified monday.com consultants to discover how the platform can be customised for your specific business needs."
+        }
+        calendlyUrl={rawCalendly}
+      />
+
       {/* 3-tab comparison */}
       <ComparisonTabsSection
         heading={page.comparisonHeading}
@@ -238,28 +260,6 @@ export default function MondayPartnerAustraliaContent({
         ctaUrl={page.teamGridCtaUrl}
         members={teamMembers}
         region="APAC"
-      />
-
-      {/* Calendly */}
-      <CalendlySection
-        heading={page.calendlyHeading || "Book A 30-Min Consultation With A monday.com Expert"}
-        subheading={
-          page.calendlySubheading ||
-          "Schedule a personalised monday.com demo with our certified monday.com consultants to discover how the platform can be customised for your specific business needs."
-        }
-        calendlyUrl={rawCalendly}
-      />
-
-      {/* Customer testimonials carousel */}
-      <TestimonialsGrid
-        heading={page.testimonialsGridHeading}
-        ctaLabel={page.testimonialsGridCtaLabel}
-        ctaUrl={calendlyUrl}
-        statCardValue={page.testimonialsGridStatValue}
-        statCardSubtitle={page.testimonialsGridStatSubtitle}
-        statCardCtaLabel={page.testimonialsGridStatCtaLabel}
-        statCardCtaUrl={page.testimonialsGridStatCtaUrl}
-        caseStudies={partnerCaseStudies}
       />
 
       {/* FAQ */}
