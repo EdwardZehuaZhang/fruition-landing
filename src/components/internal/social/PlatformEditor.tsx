@@ -1,6 +1,8 @@
 "use client"
 
-import { useId, useState } from "react"
+import { useId, useRef, useState } from "react"
+import { Loader2, Upload } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 /**
  * The editing surface for one platform's post: title, subreddit, caption,
@@ -37,17 +39,24 @@ export default function PlatformEditor({
   value,
   images,
   disabled = false,
+  uploading = false,
   onChange,
+  onUpload,
 }: {
   spec: PlatformEditorSpec
   value: PlatformEditorValue
   /** Selectable images (uploads, blog cover, body images). */
   images: string[]
   disabled?: boolean
+  /** An upload for THIS channel is in flight. */
+  uploading?: boolean
   onChange: (patch: Partial<PlatformEditorValue>) => void
+  /** Upload straight into this channel. Omitted where the caller has no store. */
+  onUpload?: (file: File) => void
 }) {
   const [showLimits, setShowLimits] = useState(false)
   const limitsId = useId()
+  const fileInput = useRef<HTMLInputElement>(null)
 
   const content = value.content ?? ""
   const title = value.title ?? ""
@@ -105,14 +114,41 @@ export default function PlatformEditor({
 
       {spec.supportsMedia && (
         <div>
-          <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-            Image{spec.needsMedia ? " · required" : ""}
-          </span>
+          <div className="mb-1.5 flex items-center justify-between gap-2">
+            <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+              Image{spec.needsMedia ? " · required" : ""}
+            </span>
+            {onUpload && (
+              <>
+                <input
+                  ref={fileInput}
+                  type="file"
+                  accept="image/*"
+                  className="sr-only"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) onUpload(file)
+                    e.target.value = ""
+                  }}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="xs"
+                  disabled={disabled || uploading}
+                  onClick={() => fileInput.current?.click()}
+                >
+                  {uploading ? <Loader2 className="animate-spin" /> : <Upload />}
+                  Upload
+                </Button>
+              </>
+            )}
+          </div>
           {choices.length === 0 && !spec.needsMedia && (
-            <p className="text-xs text-muted-foreground">No images uploaded yet.</p>
+            <p className="text-xs text-muted-foreground">No image. Upload one for this channel.</p>
           )}
           {choices.length === 0 && spec.needsMedia && (
-            <p className="text-xs text-destructive">Upload an image above — {spec.label} won&apos;t publish without one.</p>
+            <p className="text-xs text-destructive">{spec.label} won&apos;t publish without an image — upload one.</p>
           )}
           {choices.length > 0 && (
             <div className="flex items-center gap-2 overflow-x-auto pb-1">

@@ -9,7 +9,11 @@ import type { AnalyticsOverview, AnalyticsRow, PostAnalytics } from "@/lib/socia
 import { rollupStatus } from "@/lib/social/status"
 import { PlatformNameIcon } from "@/components/internal/SocialIcons"
 import { Button } from "@/components/ui/button"
+import PageHeader from "@/components/internal/PageHeader"
 import { Badge } from "@/components/ui/badge"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart"
+import { Bar, BarChart, CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
 
 /**
  * /internal/social — two jobs, kept apart on purpose.
@@ -89,6 +93,20 @@ type FeedRow =
   | { kind: "post"; id: string; createdAt?: string; status: string; post: SocialRow }
 
 const nf = new Intl.NumberFormat()
+const compact = new Intl.NumberFormat(undefined, { notation: "compact", maximumFractionDigits: 1 })
+
+const PLATFORM_LABELS: Record<string, string> = {
+  twitter: "X",
+  googlebusiness: "Google",
+  instagram: "Instagram",
+  linkedin: "LinkedIn",
+  pinterest: "Pinterest",
+  reddit: "Reddit",
+}
+
+const CHART_CONFIG = {
+  impressions: { label: "Impressions", color: "var(--primary)" },
+} satisfies ChartConfig
 
 /** Only the numbers worth reading at a glance; zero-only rows say nothing. */
 function metricLine(m: PostAnalytics): string | null {
@@ -314,16 +332,21 @@ export default function SocialDashboard() {
   }
 
   return (
-    <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
-      <div className="mb-1 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-xl font-semibold text-foreground">Social posts</h1>
-        <Button size="sm" render={<Link href="/internal/social/new" />}>
-          <PenSquare />
-          New post
-        </Button>
-      </div>
+    // min-w-0 matters: without it this flex/grid child refuses to shrink below
+    // its longest unbroken caption and pushes the whole page sideways.
+    <div className="min-w-0">
+      <PageHeader
+        title="Social posts"
+        description="Everything sent through Zernio, and how it performed."
+        actions={
+          <Button size="sm" render={<Link href="/internal/social/new" />}>
+            <PenSquare />
+            New post
+          </Button>
+        }
+      />
 
-      <div className="mb-4 flex gap-1 border-b border-border">
+      <div className="mb-4 flex gap-1 overflow-x-auto border-b border-border">
         {(["posts", "performance"] as const).map((t) => (
           <button
             key={t}
@@ -369,30 +392,30 @@ export default function SocialDashboard() {
         {tab === "posts" && (
           <>
             <span className="mx-1 h-4 w-px bg-border" />
-            <select
-              value={source}
-              onChange={(e) => setSource(e.target.value as SourceFilter)}
-              aria-label="Filter by source"
-              className="h-8 rounded-full border border-border bg-background px-3 text-xs font-medium text-foreground outline-none"
-            >
-              {SOURCE_FILTERS.map((s) => (
-                <option key={s.key} value={s.key}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value as StatusFilter)}
-              aria-label="Filter by status"
-              className="h-8 rounded-full border border-border bg-background px-3 text-xs font-medium text-foreground outline-none"
-            >
-              {STATUS_FILTERS.map((s) => (
-                <option key={s} value={s}>
-                  {s === "all" ? "All statuses" : s === "cancelled" ? "unpublished" : s}
-                </option>
-              ))}
-            </select>
+            <Select value={source} onValueChange={(v) => setSource(v as SourceFilter)}>
+              <SelectTrigger size="sm" className="w-[10.5rem] rounded-full" aria-label="Filter by source">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {SOURCE_FILTERS.map((s) => (
+                  <SelectItem key={s.key} value={s.key}>
+                    {s.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={status} onValueChange={(v) => setStatus(v as StatusFilter)}>
+              <SelectTrigger size="sm" className="w-[9.5rem] rounded-full" aria-label="Filter by status">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {STATUS_FILTERS.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {s === "all" ? "All statuses" : s === "cancelled" ? "unpublished" : s}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </>
         )}
       </div>
@@ -523,7 +546,7 @@ function CompositionRow({
   const line = totals ? metricLine(totals) : null
 
   return (
-    <li className="rounded-lg border border-border p-4">
+    <li className="min-w-0 rounded-lg border border-border p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="mb-1 flex flex-wrap items-center gap-2">
@@ -615,7 +638,7 @@ function PostRow({
         const line = metrics ? metricLine(metrics) : null
 
         return (
-          <li className="flex gap-3 rounded-lg border border-border p-4">
+          <li className="flex min-w-0 gap-3 rounded-lg border border-border p-4">
             {row.mediaUrl && (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={row.mediaUrl} alt="" className="size-16 shrink-0 rounded-md object-cover" />
@@ -715,50 +738,166 @@ function PerformanceList({
     )
   }
 
+  const totals = rows.reduce(
+    (a, r) => ({
+      impressions: a.impressions + r.metrics.impressions,
+      reach: a.reach + r.metrics.reach,
+      engagements:
+        a.engagements + r.metrics.likes + r.metrics.comments + r.metrics.shares + r.metrics.saves,
+      clicks: a.clicks + r.metrics.clicks,
+    }),
+    { impressions: 0, reach: 0, engagements: 0, clicks: 0 },
+  )
+
+  // By channel: what's actually carrying the numbers.
+  const byPlatform = Object.entries(
+    rows.reduce<Record<string, { impressions: number; engagements: number; posts: number }>>((acc, r) => {
+      const k = r.platform || "unknown"
+      const cur = acc[k] ?? { impressions: 0, engagements: 0, posts: 0 }
+      cur.impressions += r.metrics.impressions
+      cur.engagements += r.metrics.likes + r.metrics.comments + r.metrics.shares + r.metrics.saves
+      cur.posts += 1
+      acc[k] = cur
+      return acc
+    }, {}),
+  )
+    .map(([platform, v]) => ({ platform, label: PLATFORM_LABELS[platform] ?? platform, ...v }))
+    .sort((a, b) => b.impressions - a.impressions)
+
+  // Over time: one point per day published, oldest first.
+  const overTime = Object.entries(
+    rows.reduce<Record<string, number>>((acc, r) => {
+      if (!r.publishedAt) return acc
+      const day = r.publishedAt.slice(0, 10)
+      acc[day] = (acc[day] ?? 0) + r.metrics.impressions
+      return acc
+    }, {}),
+  )
+    .map(([day, impressions]) => ({ day, impressions }))
+    .sort((a, b) => a.day.localeCompare(b.day))
+    .slice(-30)
+
+  const top = [...rows].sort((a, b) => b.metrics.impressions - a.metrics.impressions)
+
   return (
-    <>
-      {overview?.lastSync && (
-        <p className="mb-3 text-xs text-muted-foreground">
-          {rows.length} published posts · synced {new Date(overview.lastSync).toLocaleString()}
-        </p>
-      )}
-      <ul className="space-y-2">
-        {rows.map((row) => (
-          <li key={row.analyticsId} className="flex items-start gap-3 rounded-lg border border-border p-3">
-            <span className="mt-0.5 text-primary">
-              <PlatformNameIcon name={row.platform} size={15} />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm text-foreground">{row.content.split("\n")[0] || "(no caption)"}</p>
-              <p className="mt-0.5 font-mono text-[11px] tabular-nums text-muted-foreground">
-                {metricLine(row.metrics) ?? "no engagement recorded yet"}
-              </p>
-            </div>
-            <div className="flex shrink-0 items-center gap-2">
-              {row.external && (
-                <span className="text-[11px] text-muted-foreground" title="Published outside this portal">
-                  posted elsewhere
-                </span>
-              )}
-              {row.publishedAt && (
-                <span className="text-[11px] text-muted-foreground">
-                  {new Date(row.publishedAt).toLocaleDateString()}
-                </span>
-              )}
-              {row.platformPostUrl && (
-                <a
-                  href={row.platformPostUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-xs font-medium text-primary underline-offset-2 hover:underline"
-                >
-                  View
-                </a>
-              )}
-            </div>
-          </li>
-        ))}
-      </ul>
-    </>
+    <div className="space-y-6">
+      <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Stat label="Impressions" value={totals.impressions} />
+        <Stat label="Reach" value={totals.reach} />
+        <Stat label="Engagements" value={totals.engagements} hint="likes, comments, shares, saves" />
+        <Stat label="Clicks" value={totals.clicks} />
+      </dl>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <section className="min-w-0 rounded-xl border border-border p-4">
+          <h2 className="text-sm font-semibold text-foreground">Impressions by channel</h2>
+          <p className="mt-0.5 text-xs text-muted-foreground">Across {rows.length} published posts.</p>
+          <ChartContainer config={CHART_CONFIG} className="mt-3 h-56 w-full">
+            <BarChart accessibilityLayer data={byPlatform} margin={{ left: 4, right: 4 }}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="label"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                interval={0}
+                tickFormatter={(v: string) => (v.length > 9 ? `${v.slice(0, 8)}…` : v)}
+              />
+              <YAxis tickLine={false} axisLine={false} width={44} tickFormatter={(v: number) => compact.format(v)} />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar dataKey="impressions" fill="var(--color-impressions)" radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ChartContainer>
+        </section>
+
+        <section className="min-w-0 rounded-xl border border-border p-4">
+          <h2 className="text-sm font-semibold text-foreground">Impressions over time</h2>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            {overTime.length ? `Last ${overTime.length} days with a post.` : "No publish dates recorded yet."}
+          </p>
+          <ChartContainer config={CHART_CONFIG} className="mt-3 h-56 w-full">
+            <LineChart accessibilityLayer data={overTime} margin={{ left: 4, right: 8 }}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="day"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={24}
+                tickFormatter={(v: string) => new Date(v).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+              />
+              <YAxis tickLine={false} axisLine={false} width={44} tickFormatter={(v: number) => compact.format(v)} />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Line
+                dataKey="impressions"
+                type="monotone"
+                stroke="var(--color-impressions)"
+                strokeWidth={2}
+                dot={false}
+              />
+            </LineChart>
+          </ChartContainer>
+        </section>
+      </div>
+
+      <section>
+        <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="text-sm font-semibold text-foreground">Every published post</h2>
+          {overview?.lastSync && (
+            <p className="text-xs text-muted-foreground">synced {new Date(overview.lastSync).toLocaleString()}</p>
+          )}
+        </div>
+        <ul className="space-y-2">
+          {top.map((row) => (
+            <li key={row.analyticsId} className="flex items-start gap-3 rounded-lg border border-border p-3">
+              <span className="mt-0.5 shrink-0 text-primary">
+                <PlatformNameIcon name={row.platform} size={15} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm text-foreground">{row.content.split("\n")[0] || "(no caption)"}</p>
+                <p className="mt-0.5 truncate font-mono text-[11px] tabular-nums text-muted-foreground">
+                  {metricLine(row.metrics) ?? "no engagement recorded yet"}
+                </p>
+              </div>
+              <div className="flex shrink-0 items-center gap-2">
+                {row.external && (
+                  <span className="hidden text-[11px] text-muted-foreground sm:inline" title="Published outside this portal">
+                    posted elsewhere
+                  </span>
+                )}
+                {row.publishedAt && (
+                  <span className="text-[11px] text-muted-foreground">
+                    {new Date(row.publishedAt).toLocaleDateString()}
+                  </span>
+                )}
+                {row.platformPostUrl && (
+                  <a
+                    href={row.platformPostUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs font-medium text-primary underline-offset-2 hover:underline"
+                  >
+                    View
+                  </a>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  )
+}
+
+/** A headline number. Big, tabular, with the label under it. */
+function Stat({ label, value, hint }: { label: string; value: number; hint?: string }) {
+  return (
+    <div className="min-w-0 rounded-xl border border-border p-4">
+      <dt className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">{label}</dt>
+      <dd className="mt-1 truncate text-2xl font-semibold tabular-nums text-foreground" title={nf.format(value)}>
+        {compact.format(value)}
+      </dd>
+      {hint && <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{hint}</p>}
+    </div>
   )
 }

@@ -113,7 +113,7 @@ export default function OnboardingForm({ regionOptions }: Props) {
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--purple-primary)]">
             All done
           </p>
-          <h2 className="mt-2 inline-flex items-center gap-2 text-2xl font-semibold text-ink-heading">
+          <h2 className="mt-2 inline-flex items-center gap-2 text-xl font-semibold tracking-tight text-foreground">
             Welcome, {name}
             <Hand size={24} aria-hidden />
           </h2>

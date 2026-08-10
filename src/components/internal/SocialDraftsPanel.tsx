@@ -445,7 +445,7 @@ function overLimit(p: PanelPlatform, edits: Partial<Record<PlatformKey, DraftEdi
 
 function Section({ children }: { children: React.ReactNode }) {
   return (
-    <section className="rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
+    <section className="min-w-0 rounded-xl border border-border p-5 sm:p-6">
       {children}
     </section>
   )

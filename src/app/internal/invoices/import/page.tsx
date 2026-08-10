@@ -27,7 +27,7 @@ export default async function ClockifyImportPage() {
         className="rounded-card bg-surface p-6 sm:p-8"
         style={{ boxShadow: 'var(--shadow-card)' }}
       >
-        <h1 className="mb-6 text-2xl font-semibold text-ink-heading">
+        <h1 className="mb-6 text-xl font-semibold tracking-tight text-foreground">
           Import Invoice from Clockify
         </h1>
         <ClockifyImportClient profile={profile} />
