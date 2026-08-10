@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Loader2, Sparkles, Trash2, Upload } from "lucide-react"
+import { Loader2, Sparkles, Trash2, Upload, Link as LinkIcon } from "lucide-react"
 import type { ComposerPlatform, ComposerState, CompositionPlatform } from "@/lib/social/composition"
 import type { PlatformKey } from "@/lib/social/zernio"
 import { problemsFor } from "@/lib/social/validate"
@@ -78,6 +78,7 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [scheduleAt, setScheduleAt] = useState("")
+  const [aiOpen, setAiOpen] = useState(false)
 
   const id = state?.composition.id
   // Stable identity: several hooks below depend on it.
@@ -128,6 +129,12 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
 
   const sendableKeys = selectedKeys.filter((k) => liveOf(k)?.status !== "published")
   const canSend = blockers.length === 0 && sendableKeys.length > 0
+  /**
+   * One channel is a different job from several. With one there's nothing to
+   * reconcile, so the shared post box would just be a second place to type the
+   * same words — the channel's own editor is the whole task.
+   */
+  const multi = selectedKeys.length > 1
 
   /* ---------------- channel selection ---------------- */
 
@@ -275,8 +282,14 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
     }
   }
 
-  async function upload(file: File) {
-    setBusy("upload")
+  /**
+   * Upload an image. Without `only` it's a shared upload and fills in every
+   * channel that hasn't picked one; with `only` it belongs to that channel and
+   * overrides whatever was there. Either way the URL joins the composition's
+   * pool, so any channel can pick it later.
+   */
+  async function upload(file: File, only?: PlatformKey) {
+    setBusy(only ? `upload:${only}` : "upload")
     setError(null)
     try {
       const form = new FormData()
@@ -288,14 +301,19 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
         return
       }
       patch((prev) => {
-        // An uploaded image becomes the default for channels with none chosen.
         const platforms: PlatformMap = { ...prev.platforms }
-        for (const spec of specs) {
-          const draft = platforms[spec.key]
-          if (!draft || !spec.supportsMedia || draft.mediaUrl) continue
-          platforms[spec.key] = { ...draft, mediaUrl: data.url }
+        if (only) {
+          const draft = platforms[only]
+          if (draft) platforms[only] = { ...draft, mediaUrl: data.url }
+        } else {
+          for (const spec of specs) {
+            const draft = platforms[spec.key]
+            if (!draft || !spec.supportsMedia || draft.mediaUrl) continue
+            platforms[spec.key] = { ...draft, mediaUrl: data.url }
+          }
         }
-        return { mediaUrls: [...prev.mediaUrls, data.url!], platforms }
+        const pool = prev.mediaUrls.includes(data.url!) ? prev.mediaUrls : [...prev.mediaUrls, data.url!]
+        return { mediaUrls: pool, platforms }
       })
     } finally {
       setBusy(null)
@@ -419,64 +437,33 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
 
   return (
     <div className="space-y-4 pb-28">
-      {/* ---------- what it is ---------- */}
-      <section className="rounded-xl border border-border bg-card p-5">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <input
-            value={edit.title}
-            onChange={(e) => patch({ title: e.target.value })}
-            placeholder="Name this post (internal only)"
-            className="min-w-0 flex-1 border-0 bg-transparent p-0 text-xl font-semibold text-foreground outline-none placeholder:text-muted-foreground/60"
-          />
-          <div className="flex items-center gap-2">
-            {dirty && <span className="text-xs text-muted-foreground">unsaved</span>}
-            <Button variant="outline" size="sm" onClick={() => void save()} disabled={working}>
-              {busy === "save" ? <Loader2 className="animate-spin" /> : null}
-              Save draft
-            </Button>
-            <Button variant="destructive" size="sm" onClick={() => void destroy()} disabled={working}>
-              <Trash2 />
-              Delete
-            </Button>
-          </div>
+      {/* ---------- name + save, one line, no panel ---------- */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <input
+          value={edit.title}
+          onChange={(e) => patch({ title: e.target.value })}
+          placeholder="Name this post (internal only)"
+          aria-label="Post name, internal only"
+          className="min-w-0 flex-1 border-0 bg-transparent p-0 text-lg font-semibold text-foreground outline-none placeholder:font-normal placeholder:text-muted-foreground"
+        />
+        <div className="flex items-center gap-2">
+          {dirty && <span className="text-xs text-muted-foreground">unsaved</span>}
+          <Button variant="outline" size="sm" onClick={() => void save()} disabled={working}>
+            {busy === "save" ? <Loader2 className="animate-spin" /> : null}
+            Save draft
+          </Button>
+          <Button variant="destructive" size="sm" onClick={() => void destroy()} disabled={working}>
+            <Trash2 />
+            Delete
+          </Button>
         </div>
+      </div>
 
-        <div className="mt-4 grid gap-3 md:grid-cols-2">
-          <label className="block">
-            <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-              What&apos;s it about
-            </span>
-            <textarea
-              value={edit.brief}
-              onChange={(e) => patch({ brief: e.target.value })}
-              rows={3}
-              placeholder="A sentence or two in your own words. Used to write the captions."
-              className="w-full resize-y rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
-            />
-          </label>
-          <label className="block">
-            <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-              Link (optional)
-            </span>
-            <input
-              value={edit.link}
-              onChange={(e) => patch({ link: e.target.value })}
-              placeholder="https://…"
-              inputMode="url"
-              className="h-9 w-full rounded-md border border-border bg-background px-3 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
-            />
-            <span className="mt-1.5 block text-xs text-muted-foreground">
-              Added to the channels where links work. Instagram and Pinterest captions never get one.
-            </span>
-          </label>
-        </div>
-      </section>
-
-      {/* ---------- who it goes to ---------- */}
+      {/* ---------- 1. pick the channels ---------- */}
       <section className="rounded-xl border border-border bg-card p-5">
         <h2 className="text-sm font-semibold text-foreground">Channels</h2>
         <p className="mt-0.5 text-xs text-muted-foreground">
-          Each one gets its own post, so you can word them differently.
+          Pick one to write a single post. Pick several and you can write once, then adapt each.
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           {specs.map((spec) => {
@@ -508,43 +495,87 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
         </div>
       </section>
 
-      {/* ---------- write it once ---------- */}
+      {/* Shared file input, used by the toolbar; channel cards have their own. */}
+      <input
+        ref={fileInput}
+        type="file"
+        accept="image/*"
+        className="sr-only"
+        onChange={(e) => {
+          const file = e.target.files?.[0]
+          if (file) void upload(file)
+        }}
+      />
+
+      {/* ---------- 2. tools + optional link, a row rather than a panel ---------- */}
       {selectedKeys.length > 0 && (
-        <section className="rounded-xl border border-border bg-card p-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h2 className="text-sm font-semibold text-foreground">The post</h2>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                Flows into every channel you haven&apos;t edited separately.
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                ref={fileInput}
-                type="file"
-                accept="image/*"
-                className="sr-only"
-                onChange={(e) => {
-                  const file = e.target.files?.[0]
-                  if (file) void upload(file)
-                }}
-              />
-              <Button variant="outline" size="sm" onClick={() => fileInput.current?.click()} disabled={working}>
-                {busy === "upload" ? <Loader2 className="animate-spin" /> : <Upload />}
-                Add image
-              </Button>
-              <Button size="sm" onClick={() => void generate()} disabled={working}>
-                {busy === "generate" ? <Loader2 className="animate-spin" /> : <Sparkles />}
-                Write with AI
-              </Button>
-            </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant={aiOpen ? "default" : "outline"} size="sm" onClick={() => setAiOpen((v) => !v)} disabled={working}>
+            <Sparkles />
+            Write with AI
+          </Button>
+          {multi && (
+            <Button variant="outline" size="sm" onClick={() => fileInput.current?.click()} disabled={working}>
+              {busy === "upload" ? <Loader2 className="animate-spin" /> : <Upload />}
+              Add image to all
+            </Button>
+          )}
+          <label className="flex min-w-[15rem] flex-1 items-center gap-2 rounded-md border border-border bg-background px-3 focus-within:border-primary focus-within:ring-[3px] focus-within:ring-primary/20">
+            <LinkIcon className="size-3.5 shrink-0 text-muted-foreground" />
+            <input
+              value={edit.link}
+              onChange={(e) => patch({ link: e.target.value })}
+              placeholder="Link (optional) — skipped on Instagram and Pinterest"
+              inputMode="url"
+              aria-label="Link"
+              className="h-9 w-full min-w-0 border-0 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+            />
+          </label>
+        </div>
+      )}
+
+      {/* AI brief, opened from the toolbar instead of sitting in a panel forever. */}
+      {selectedKeys.length > 0 && aiOpen && (
+        <section className="rounded-xl border border-border bg-card p-4">
+          <label className="block">
+            <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+              What&apos;s it about
+            </span>
+            <textarea
+              value={edit.brief}
+              onChange={(e) => patch({ brief: e.target.value })}
+              rows={2}
+              placeholder="A sentence or two in your own words. Everything else is written from this."
+              className="w-full resize-y rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
+            />
+          </label>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+            <p className="text-xs text-muted-foreground">
+              {multi
+                ? `Writes a version for each of the ${selectedKeys.length} channels, inside their limits.`
+                : `Writes it for ${specs.find((s) => s.key === selectedKeys[0])?.label}, inside its limits.`}
+            </p>
+            <Button size="sm" onClick={() => void generate()} disabled={working || !edit.brief.trim()}>
+              {busy === "generate" ? <Loader2 className="animate-spin" /> : <Sparkles />}
+              {multi ? `Write ${selectedKeys.length} versions` : "Write it"}
+            </Button>
           </div>
+        </section>
+      )}
+
+      {/* ---------- 3. the shared post — only worth having for several channels ---------- */}
+      {multi && (
+        <section className="rounded-xl border border-border bg-card p-5">
+          <h2 className="text-sm font-semibold text-foreground">The post</h2>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            Flows into every channel below that you haven&apos;t edited separately.
+          </p>
 
           <textarea
             value={edit.masterContent}
             onChange={(e) => setMaster(e.target.value)}
             rows={4}
-            placeholder="Write the post here, or describe it above and let AI draft it."
+            placeholder="Write it once here, then adjust any channel that needs different wording."
             className="mt-3 w-full resize-y rounded-md border border-border bg-background px-3 py-2 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
           />
 
@@ -552,9 +583,9 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
             <div className="mt-3 flex flex-wrap items-center gap-2">
               {edit.mediaUrls.map((url) => (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img key={url} src={url} alt="" className="h-12 w-12 rounded-md border border-border object-cover" />
+                <img key={url} src={url} alt="" className="size-12 rounded-md border border-border object-cover" />
               ))}
-              <span className="text-xs text-muted-foreground">Pick which image each channel uses below.</span>
+              <span className="text-xs text-muted-foreground">Each channel picks its own image below.</span>
             </div>
           )}
         </section>
@@ -570,7 +601,7 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
           </p>
         </section>
       ) : (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className={`grid gap-4 ${multi ? "lg:grid-cols-2" : ""}`}>
           {specs
             .filter((spec) => edit.platforms[spec.key])
             .map((spec) => {
@@ -610,15 +641,17 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
                     value={draft}
                     images={edit.mediaUrls}
                     disabled={published}
+                    uploading={busy === `upload:${spec.key}`}
                     onChange={(p) => patchPlatform(spec.key, p)}
+                    onUpload={(file) => void upload(file, spec.key)}
                   />
 
                   <footer className="mt-3 flex items-center justify-between gap-2 border-t border-border pt-3">
                     <span className="text-xs text-muted-foreground">
-                      {draft.customised ? "Edited for this channel" : "Following the shared post"}
+                      {!multi ? "" : draft.customised ? "Edited for this channel" : "Following the shared post"}
                     </span>
                     <div className="flex gap-2">
-                      {draft.customised && !published && (
+                      {multi && draft.customised && !published && (
                         <Button variant="ghost" size="xs" onClick={() => resetToMaster(spec.key)} disabled={working}>
                           Reset
                         </Button>

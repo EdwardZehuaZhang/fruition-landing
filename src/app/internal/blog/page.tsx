@@ -2,6 +2,7 @@ import Link from "next/link"
 import { requirePortalUser, getPortalAdmin } from "@/lib/portalAuth"
 import { getAllBlogPostsForPortal } from "@/sanity/queries"
 import PortalShell from "@/components/internal/PortalShell"
+import PageHeader from "@/components/internal/PageHeader"
 import { Button } from "@/components/ui/button"
 import BlogTable, { type PostRow } from "./BlogTable"
 
@@ -112,23 +113,12 @@ export default async function BlogIndexPage() {
 
   return (
     <PortalShell email={user.email} active="blog" title="Blog posts">
-      <div
-        className="rounded-card bg-surface p-6 sm:p-8"
-        style={{ boxShadow: "var(--shadow-card)" }}
-      >
-        <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h1 className="text-2xl font-semibold text-ink-heading">Blog posts</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {published} published on the site, {rows.length - published} in drafts. Marketa
-              drafts land here daily at 9am SGT.
-            </p>
-          </div>
-          <Button render={<Link href="/internal/blog/new" />}>New post</Button>
-        </div>
-
-        <BlogTable rows={rows} industries={industries} />
-      </div>
+      <PageHeader
+        title="Blog posts"
+        description={`${published} published on the site, ${rows.length - published} in drafts. Marketa drafts land here daily at 9am SGT.`}
+        actions={<Button render={<Link href="/internal/blog/new" />}>New post</Button>}
+      />
+      <BlogTable rows={rows} industries={industries} />
     </PortalShell>
   )
 }

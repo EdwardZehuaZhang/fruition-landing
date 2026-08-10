@@ -70,8 +70,8 @@ export default async function EditPublishedPostPage({
   }
 
   const editorPane = (
-    <div className="rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
-      <h1 className="mb-1 text-2xl font-semibold text-ink-heading">Edit published post</h1>
+    <div>
+      <h1 className="mb-1 text-xl font-semibold tracking-tight text-foreground">Edit published post</h1>
       <p className="mb-6 text-sm text-muted-foreground">
         This post is live. “Update post” edits it in place; “Unpublish” takes it off the site and
         keeps a copy in portal drafts.

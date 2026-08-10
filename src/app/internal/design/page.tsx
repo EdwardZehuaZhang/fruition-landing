@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Palette } from "lucide-react"
 import { requirePortalUser, getPortalAdmin } from "@/lib/portalAuth"
 import PortalShell from "@/components/internal/PortalShell"
+import PageHeader from "@/components/internal/PageHeader"
 import { Button } from "@/components/ui/button"
 
 export const dynamic = "force-dynamic"
@@ -25,19 +26,12 @@ export default async function DesignIndexPage() {
 
   return (
     <PortalShell email={user.email} title="Design documents">
-      <div
-        className="rounded-card bg-surface p-6 sm:p-8"
-        style={{ boxShadow: "var(--shadow-card)" }}
-      >
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h1 className="text-2xl font-semibold text-ink-heading">Design documents</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              PDFs redesigned in the Fruition document style. Only you can see your documents.
-            </p>
-          </div>
-          <Button render={<Link href="/internal/design/new" />}>New document</Button>
-        </div>
+      <>
+        <PageHeader
+          title="Design documents"
+          description="PDFs redesigned in the Fruition document style. Only you can see your documents."
+          actions={<Button render={<Link href="/internal/design/new" />}>New document</Button>}
+        />
 
         {docs.length === 0 ? (
           <div className="mt-8 flex flex-col items-center gap-2 rounded-card border border-dashed border-[var(--color-border)] p-10 text-center">
@@ -74,7 +68,7 @@ export default async function DesignIndexPage() {
             ))}
           </ul>
         )}
-      </div>
+      </>
     </PortalShell>
   )
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useState, useTransition } from "react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import RichTextEditor from "@/components/internal/RichTextEditor"
 
 export interface CategoryOption {
@@ -45,6 +46,9 @@ const INDUSTRIES = [
 ]
 
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024
+
+/** Radix Select has no empty-string value, so "use my byline" needs a sentinel. */
+const AUTHOR_DEFAULT = "__default__"
 
 function slugify(s: string): string {
   return s
@@ -272,25 +276,35 @@ export default function BlogEditor({
           />
         </Field>
         <Field label="Author" hint="From the team page">
-          <select value={author} onChange={(e) => setAuthor(e.target.value)} className={inputClass}>
-            <option value="">{currentAuthorName || "— you (default) —"}</option>
-            {authors
-              .filter((name) => name !== currentAuthorName)
-              .map((name) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-              ))}
-          </select>
+          <Select value={author || AUTHOR_DEFAULT} onValueChange={(v) => setAuthor(v === AUTHOR_DEFAULT || !v ? "" : v)}>
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={AUTHOR_DEFAULT}>{currentAuthorName || "You (default)"}</SelectItem>
+              {authors
+                .filter((name) => name !== currentAuthorName)
+                .map((name) => (
+                  <SelectItem key={name} value={name}>
+                    {name}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
         </Field>
         <Field label="Industry">
-          <select value={industry} onChange={(e) => setIndustry(e.target.value)} className={inputClass}>
-            {INDUSTRIES.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
+          <Select value={industry || INDUSTRIES[0]?.value} onValueChange={(v) => setIndustry(v ?? "")}>
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {INDUSTRIES.map((o) => (
+                <SelectItem key={o.value} value={o.value}>
+                  {o.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </Field>
         {categories.length > 0 && (
           <Field label="Categories">
