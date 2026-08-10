@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import type { PanelPlatform, PanelState } from "@/lib/social/panelState"
 import type { PlatformKey } from "@/lib/social/zernio"
 import PlatformIcon from "@/components/internal/SocialIcons"
+import PlatformEditor from "@/components/internal/social/PlatformEditor"
 
 /**
  * Per-platform social drafts for a blog (the "Social media" tab). Each
@@ -35,9 +36,6 @@ interface DraftEdit {
   subreddit?: string
   dirty: boolean
 }
-
-const inputClass =
-  "block w-full rounded-chip border border-[var(--color-border)] bg-surface px-4 py-3 text-sm text-ink-heading placeholder:text-ink-faint outline-none transition hover:border-[var(--purple-light)] focus:border-[var(--purple-primary)] focus:ring-2 focus:ring-[rgba(128,21,232,0.18)]"
 
 function StatusChip({ post, connected }: { post?: PanelPlatform["post"]; connected: boolean }) {
   let label = post ? post.status : "no draft"
@@ -484,7 +482,6 @@ function PlatformCard({
   const title = edit?.title ?? p.post?.title ?? ""
   const subreddit = edit?.subreddit ?? p.post?.subreddit ?? ""
   const media = effectiveMedia(p, edit, coverImageUrl)
-  const hasTitle = p.key === "pinterest" || p.key === "reddit"
   const over = content.length > p.limit
   const published = p.post?.status === "published"
   const cancelled = p.post?.status === "cancelled"
@@ -533,80 +530,17 @@ function PlatformCard({
 
       {p.post ? (
         <>
-          {hasTitle && (
-            <input
-              value={title}
-              onChange={(e) => onPatch({ title: e.target.value })}
-              placeholder={p.key === "pinterest" ? "Pin title" : "Reddit title"}
-              disabled={published}
-              className={`${inputClass} mb-2`}
-            />
-          )}
-          {p.key === "reddit" && (
-            <div className="mb-2 flex items-center gap-2">
-              <span className="text-sm font-medium text-[var(--color-text-secondary)]">r/</span>
-              <input
-                value={subreddit}
-                onChange={(e) => onPatch({ subreddit: e.target.value })}
-                placeholder="account default subreddit"
-                disabled={published}
-                className={inputClass}
-              />
-            </div>
-          )}
-          <textarea
-            value={content}
-            onChange={(e) => onPatch({ content: e.target.value })}
-            rows={p.key === "twitter" ? 4 : 6}
+          <PlatformEditor
+            spec={p}
+            value={{ content, title, subreddit, mediaUrl: media }}
+            images={imageChoices}
             disabled={published}
-            className={`${inputClass} resize-y font-normal`}
+            onChange={onPatch}
           />
 
-          {p.supportsMedia && (imageChoices.length > 0 || media) && (
-            <div className="mt-2">
-              <span className="mb-1 block text-xs font-medium text-[var(--color-text-secondary)]">
-                Image{p.needsMedia ? " (required)" : ""}
-              </span>
-              <div className="flex items-center gap-2 overflow-x-auto pb-1">
-                {imageChoices.map((url) => {
-                  const active = media === url
-                  return (
-                    <button
-                      key={url}
-                      type="button"
-                      onClick={() => onPatch({ mediaUrl: url })}
-                      disabled={published}
-                      title="Use this image"
-                      className="shrink-0 rounded-chip border-2 transition"
-                      style={{ borderColor: active ? "var(--purple-primary)" : "var(--color-border)" }}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={url} alt="Blog image" className="h-14 w-14 rounded-[6px] object-cover" />
-                    </button>
-                  )
-                })}
-                {!p.needsMedia && (
-                  <button
-                    type="button"
-                    onClick={() => onPatch({ mediaUrl: "" })}
-                    disabled={published}
-                    className="shrink-0 rounded-chip border px-3 py-2 text-xs font-medium transition"
-                    style={{
-                      borderColor: media === "" ? "var(--purple-primary)" : "var(--color-border)",
-                      color: media === "" ? "var(--purple-primary)" : "var(--color-text-secondary)",
-                    }}
-                  >
-                    No image
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
-
           <div className="mt-2 flex items-center justify-between gap-3">
-            <span className="text-xs" style={{ color: over ? "var(--danger-strong)" : "var(--color-text-secondary)" }}>
-              {content.length}/{p.limit}
-              {edit?.dirty ? " · unsaved" : ""}
+            <span className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+              {edit?.dirty ? "unsaved" : ""}
               {mediaBlocked ? " · needs an image (add a cover to the blog)" : ""}
             </span>
             <div className="flex gap-2">

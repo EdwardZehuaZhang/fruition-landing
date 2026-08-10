@@ -18,7 +18,8 @@ export const maxDuration = 120
 
 /**
  * Social drafts for a blog post — one Zernio draft per platform (X, Google
- * Business AU + SG, Instagram, LinkedIn, Pinterest, Reddit; YouTube excluded).
+ * Business AU + SG + UK + US, Instagram, LinkedIn, Pinterest, Reddit; YouTube
+ * excluded).
  *
  * GET    ?slug=&draftId=&docId=      → panel state (accounts, drafts, blog facts)
  * POST   {source, blog, keys?}       → generate captions + create/regenerate drafts
@@ -138,7 +139,7 @@ export async function POST(req: Request) {
       }
       if (toCreate.length) {
         const created = await createSocialDrafts({
-          source,
+          target: { kind: "blog", source },
           blogTitle: title,
           captions,
           blogUrl,
@@ -149,7 +150,7 @@ export async function POST(req: Request) {
       }
     } else {
       const created = await createSocialDrafts({
-        source,
+        target: { kind: "blog", source },
         blogTitle: title,
         captions,
         blogUrl,
