@@ -18,7 +18,7 @@ import StarterKit from "@tiptap/starter-kit"
 import Youtube from "@tiptap/extension-youtube"
 import { Table, TableCell, TableHeader, TableRow } from "@tiptap/extension-table"
 import { Markdown } from "tiptap-markdown"
-import { parseVideoUrl, videoEmbedSrc } from "@/lib/videoEmbed"
+import { parseVideoUrl, videoEmbedSrc, type ParsedVideo } from "@/lib/videoEmbed"
 
 /** Mirror of the server-side limit in /api/internal/blog/image. */
 export const MAX_BODY_IMAGE_BYTES = 8 * 1024 * 1024
@@ -43,6 +43,83 @@ export function sanitizeAlt(alt: unknown): string {
     .replace(/[[\]\n]/g, " ")
     .replace(/\s+/g, " ")
     .trim()
+}
+
+/* ------------------------------------------------------------------ */
+/*  Rebuilding video nodes when a draft is loaded                      */
+/*                                                                     */
+/*  Every video node serialises to a bare URL on its own line — the    */
+/*  shape loneVideoUrl() (sanityWriteClient) needs to emit a Sanity    */
+/*  `videoEmbed` block. Nothing parsed that shape back into a node, so */
+/*  on reload markdown-it's `linkify` turned the line into an ordinary */
+/*  paragraph holding a single autolink and the embed was gone. Worse, */
+/*  prosemirror-markdown serialises a link whose text equals its href  */
+/*  in the autolink form, so the *second* save wrote                   */
+/*  `<https://vimeo.com/123>` — which loneVideoUrl() rejects (it       */
+/*  requires the line to start with `http`), silently downgrading the  */
+/*  published video to a paragraph.                                    */
+/*                                                                     */
+/*  Rebuilding the node from the parsed DOM closes the loop: node ->   */
+/*  bare URL -> node -> the same bare URL, stable for any number of    */
+/*  save/load cycles. Matching the *anchor* rather than the raw text   */
+/*  also repairs drafts already saved in the `<url>` form, since       */
+/*  markdown-it parses both spellings into the same anchor.            */
+/* ------------------------------------------------------------------ */
+
+/** Blocks a serialised video URL can come back inside (cells carry no `<p>`). */
+const VIDEO_URL_BLOCKS = "p, td, th"
+
+/**
+ * Mirror of loneVideoUrl() in sanityWriteClient.ts — only a bare, whitespace
+ * free http(s) URL counts as a video, so `see https://vimeo.com/1 now` stays an
+ * ordinary inline link here exactly as it does at publish time.
+ */
+function loneVideoUrl(text: string): ParsedVideo | null {
+  const url = text.trim()
+  if (!url || /\s/.test(url) || !/^https?:\/\//i.test(url)) return null
+  return parseVideoUrl(url)
+}
+
+/**
+ * Replace every block whose entire content is an autolinked video URL with the
+ * DOM `build` returns, for the providers `accept` claims.
+ *
+ * The URL is passed through verbatim rather than canonicalised so that a
+ * save → load → save cycle is byte-stable.
+ */
+function restoreVideoNodes(
+  element: HTMLElement,
+  accept: (video: ParsedVideo) => boolean,
+  build: (doc: Document, url: string, video: ParsedVideo) => HTMLElement,
+): void {
+  const doc = element.ownerDocument
+  if (!doc) return
+
+  for (const block of Array.from(element.querySelectorAll(VIDEO_URL_BLOCKS))) {
+    const anchor = block.firstElementChild
+    // The anchor has to *be* the block — one child element, no other text.
+    if (
+      !anchor ||
+      anchor.tagName !== "A" ||
+      block.children.length !== 1 ||
+      block.textContent?.trim() !== anchor.textContent?.trim()
+    ) {
+      continue
+    }
+
+    const url = (anchor.textContent ?? "").trim()
+    // linkify only rewrites text it left intact; anything else is a real link.
+    if (url !== anchor.getAttribute("href")?.trim()) continue
+
+    const video = loneVideoUrl(url)
+    if (!video || !accept(video)) continue
+
+    const node = build(doc, url, video)
+    // A paragraph is replaced outright; a cell keeps its `<td>` and swaps
+    // its content, so the surrounding table grid is left alone.
+    if (block.tagName === "P") block.replaceWith(node)
+    else block.replaceChildren(node)
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -137,10 +214,27 @@ export const VideoEmbed = Node.create({
       markdown: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         serialize(state: any, node: any) {
-          state.write(node.attrs.src || "")
+          // Trim: the URL has to stay a bare, whitespace-free line for
+          // loneVideoUrl() to recognise it at publish time.
+          state.write(String(node.attrs.src ?? "").trim())
           state.closeBlock(node)
         },
-        parse: {},
+        parse: {
+          updateDOM(element: HTMLElement) {
+            restoreVideoNodes(
+              element,
+              // YouTube has its own node; see YoutubeWithMarkdown below.
+              (video) => video.provider !== "youtube",
+              (doc, url, video) => {
+                const div = doc.createElement("div")
+                div.setAttribute("data-video-embed", "")
+                div.setAttribute("data-src", url)
+                div.setAttribute("data-provider", video.provider)
+                return div
+              },
+            )
+          },
+        },
       },
     }
   },
@@ -220,10 +314,27 @@ export const YoutubeWithMarkdown = Youtube.extend({
       markdown: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         serialize(state: any, node: any) {
-          state.write(node.attrs.src || "")
+          state.write(String(node.attrs.src ?? "").trim())
           state.closeBlock(node)
         },
-        parse: {},
+        parse: {
+          updateDOM(element: HTMLElement) {
+            restoreVideoNodes(
+              element,
+              (video) => video.provider === "youtube",
+              (doc, url) => {
+                // The shape Youtube.parseHTML matches (`div[data-youtube-video]
+                // iframe`); it reads `src` straight off the iframe.
+                const wrapper = doc.createElement("div")
+                wrapper.setAttribute("data-youtube-video", "")
+                const iframe = doc.createElement("iframe")
+                iframe.setAttribute("src", url)
+                wrapper.appendChild(iframe)
+                return wrapper
+              },
+            )
+          },
+        },
       },
     }
   },
