@@ -37,7 +37,7 @@ interface CaseStudyCard {
 function safeImageUrl(ref: SanityImageRef): string | null {
   if (!ref?.asset?._ref) return null
   try {
-    return urlFor(ref).url()
+    return urlFor(ref).width(200).height(200).fit("crop").auto("format").url()
   } catch {
     return null
   }

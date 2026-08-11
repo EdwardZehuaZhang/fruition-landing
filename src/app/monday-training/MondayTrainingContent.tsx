@@ -178,7 +178,7 @@ interface MondayTrainingContentProps {
 function imageUrl(ref: SanityImageRef): string | null {
   if (!ref || !ref.asset?._ref) return null
   try {
-    return urlFor(ref).url()
+    return urlFor(ref).width(800).auto("format").url()
   } catch {
     return null
   }

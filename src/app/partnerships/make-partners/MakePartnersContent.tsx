@@ -381,7 +381,7 @@ interface Props {
 
 function safeSrc(ref: SanityImageRef): string | null {
   if (!ref?.asset?._ref) return null
-  try { return urlFor(ref).url() } catch { return null }
+  try { return urlFor(ref).width(800).auto("format").url() } catch { return null }
 }
 
 /* ------------------------------------------------------------------ */

@@ -20,7 +20,7 @@ interface TestimonialCtaBannerProps {
 
 function safeImageUrl(ref?: SanityImageRef): string | null {
   if (!ref?.asset?._ref) return null
-  try { return urlFor(ref).url() } catch { return null }
+  try { return urlFor(ref).width(400).auto("format").url() } catch { return null }
 }
 
 export default function TestimonialCtaBanner({

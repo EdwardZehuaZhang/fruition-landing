@@ -71,7 +71,7 @@ export interface BlogAuthorSummary {
  */
 export async function getBlogAuthors(): Promise<BlogAuthorSummary[]> {
   const rows: { author?: string; publishedAt?: string }[] = await client.fetch(
-    `*[_type == "blogPost" && defined(author) && author != ""]{ author, publishedAt }`
+    `*[_type == "blogPost" && defined(author) && author != ""]{ author, publishedAt } [0...500]`
   )
   const map = new Map<string, BlogAuthorSummary>()
   for (const row of rows) {
@@ -94,7 +94,7 @@ export async function getBlogAuthors(): Promise<BlogAuthorSummary[]> {
 
 export async function getPostsByAuthor(authorName: string) {
   return client.fetch(
-    `*[_type == "blogPost" && author == $authorName] | order(publishedAt desc) {
+    `*[_type == "blogPost" && author == $authorName] | order(publishedAt desc) [0...100] {
       _id,
       title,
       "slug": slug.current,
@@ -120,14 +120,14 @@ export async function getTeamMemberByName(name: string) {
 
 export async function getBlogCategories() {
   return client.fetch(
-    `*[_type == "blogCategory"] | order(title asc) { _id, title, "slug": slug.current, description }`
+    `*[_type == "blogCategory"] | order(title asc) [0...100] { _id, title, "slug": slug.current, description }`
   )
 }
 
 /** Every published post, in the shape the internal portal's blog table needs. */
 export async function getAllBlogPostsForPortal() {
   return client.fetch(
-    `*[_type == "blogPost"] | order(coalesce(publishedAt, _updatedAt) desc) {
+    `*[_type == "blogPost"] | order(coalesce(publishedAt, _updatedAt) desc) [0...200] {
       _id, title, "slug": slug.current, publishedAt, _updatedAt, author, industry, excerpt
     }`
   )
@@ -488,7 +488,7 @@ export async function getServicePageBySlug(slug: string) {
 
 export async function getAllSolutionPages() {
   return client.fetch(
-    `*[_type == "solutionPage"] | order(title asc) {
+    `*[_type == "solutionPage"] | order(title asc) [0...200] {
       _id, title, "slug": slug.current, heroSubheading
     }`
   )
@@ -496,7 +496,7 @@ export async function getAllSolutionPages() {
 
 export async function getAllPartnershipPages() {
   return client.fetch(
-    `*[_type == "partnershipPage"] | order(title asc) {
+    `*[_type == "partnershipPage"] | order(title asc) [0...200] {
       _id, title, "slug": slug.current, partnerName, partnerLogo, heroSubheading
     }`
   )
@@ -504,7 +504,7 @@ export async function getAllPartnershipPages() {
 
 export async function getAllIndustryPages() {
   return client.fetch(
-    `*[_type == "industryPage"] | order(title asc) {
+    `*[_type == "industryPage"] | order(title asc) [0...200] {
       _id, title, "slug": slug.current, industryName, heroSubheading
     }`
   )
@@ -512,7 +512,7 @@ export async function getAllIndustryPages() {
 
 export async function getAllLocationPages() {
   return client.fetch(
-    `*[_type == "locationPage"] | order(title asc) {
+    `*[_type == "locationPage"] | order(title asc) [0...200] {
       _id, title, "slug": slug.current, country, region, heroSubheading
     }`
   )
@@ -520,7 +520,7 @@ export async function getAllLocationPages() {
 
 export async function getAllServicePages() {
   return client.fetch(
-    `*[_type == "servicePage"] | order(title asc) {
+    `*[_type == "servicePage"] | order(title asc) [0...100] {
       _id, title, "slug": slug.current, heroSubheading
     }`
   )
@@ -572,7 +572,7 @@ export const getSiteSettings = cache(async () => {
 
 export async function getTeamMembers() {
   return client.fetch(
-    `*[_type == "teamMember"] | order(order asc) { _id, name, role, emoji, photo, bio, linkedinUrl, regions, order, certifications }`
+    `*[_type == "teamMember"] | order(order asc) [0...200] { _id, name, role, emoji, photo, bio, linkedinUrl, regions, order, certifications }`
   )
 }
 
@@ -589,13 +589,13 @@ export async function getTeamMemberById(id: string) {
 
 export async function getCaseStudies() {
   return client.fetch(
-    `*[_type == "caseStudy"] { _id, clientName, clientRole, clientCompany, quote, logo, profilePhoto, linkedinUrl }`
+    `*[_type == "caseStudy"] [0...200] { _id, clientName, clientRole, clientCompany, quote, logo, profilePhoto, linkedinUrl }`
   )
 }
 
 export async function getFaqItems() {
   return client.fetch(
-    `*[_type == "faqItem"] | order(coalesce(categoryOrder, 99) asc, order asc) {
+    `*[_type == "faqItem"] | order(coalesce(categoryOrder, 99) asc, order asc) [0...500] {
       _id, question, answer, category, categoryOrder, order, pages
     }`
   )
@@ -610,21 +610,18 @@ export async function getFaqItems() {
  * schema's `pages` dropdown). The /faqs page uses `"faqs"`.
  */
 export async function getFaqItemsForPage(pageKey: string) {
-  const specific = await client.fetch(
-    `*[_type == "faqItem" && $pageKey in pages] | order(coalesce(categoryOrder, 99) asc, order asc) {
-      _id, question, answer, category, categoryOrder, order
+  const items = await client.fetch(
+    `*[_type == "faqItem" && ($pageKey in pages || "faqs" in pages)] | order(coalesce(categoryOrder, 99) asc, order asc) [0...200] {
+      _id, question, answer, category, categoryOrder, order, pages
     }`,
     { pageKey }
   )
-  if (specific && specific.length > 0) return specific
-  // Fallback: when a page has no specific FAQ entries, surface the curated /faqs set
-  // so visitors aren't dropped into a missing-section state. Pages that should stay
-  // FAQ-less can opt out via `hideFaqSection: true` on the page document.
-  return client.fetch(
-    `*[_type == "faqItem" && "faqs" in pages] | order(coalesce(categoryOrder, 99) asc, order asc) {
-      _id, question, answer, category, categoryOrder, order
-    }`
-  )
+  // Prefer page-specific items; fall back to curated /faqs set when the page
+  // has none, so visitors aren't dropped into a missing-section state.
+  // Pages that should stay FAQ-less can opt out via `hideFaqSection: true`.
+  const specific = items.filter((i: { pages?: string[] }) => i.pages?.includes(pageKey))
+  if (specific.length > 0) return specific
+  return items.filter((i: { pages?: string[] }) => i.pages?.includes("faqs"))
 }
 
 /** Canonical fallbacks when the proofStats doc is absent — matches the live
@@ -698,7 +695,7 @@ export async function getClosingCtaForPage(pageKey: string) {
  */
 export async function getFaqItemsForPageStrict(pageKey: string) {
   return client.fetch(
-    `*[_type == "faqItem" && $pageKey in pages] | order(coalesce(categoryOrder, 99) asc, order asc) {
+    `*[_type == "faqItem" && $pageKey in pages] | order(coalesce(categoryOrder, 99) asc, order asc) [0...200] {
       _id, question, answer, category, categoryOrder, order
     }`,
     { pageKey }
