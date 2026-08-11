@@ -13,6 +13,7 @@ import { getSiteSettings } from "@/sanity/queries"
 import { urlFor } from "@/sanity/image"
 import { buildOgMetadata, defaultOgImage } from "@/lib/metadata"
 import CalendlyBookingTracker from "@/components/CalendlyBookingTracker"
+import FaqHeadJsonLd from "@/components/FaqHeadJsonLd"
 
 
 
@@ -209,6 +210,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <FaqHeadJsonLd />
         <link rel="preconnect" href="https://cdn.sanity.io" />
         <link rel="dns-prefetch" href="https://cdn.sanity.io" />
         <script

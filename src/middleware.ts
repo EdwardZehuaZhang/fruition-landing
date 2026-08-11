@@ -21,5 +21,9 @@ export function middleware(request: NextRequest) {
     url.port = ""
     return NextResponse.redirect(url, 301)
   }
-  return NextResponse.next()
+  // Forward x-pathname so server components (e.g. FaqHeadJsonLd) can
+  // determine the current route without a client-side bootstrap.
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set("x-pathname", request.nextUrl.pathname)
+  return NextResponse.next({ request: { headers: requestHeaders } })
 }
