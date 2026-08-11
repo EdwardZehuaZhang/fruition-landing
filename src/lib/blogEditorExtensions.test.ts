@@ -11,11 +11,18 @@
  * `blogEditorExtensions()` the portal UI uses, so they cover the actual
  * serialiser rather than a stand-in helper.
  *
- * Bug they lock down: tiptap-markdown's built-in GFM table serialiser bailed to
- * an HTML fallback for any table that wasn't "simple" (no header row, a cell
- * with more than one block, merged cells). With `html: false` that fallback
- * wrote the literal placeholder `[table]`, so the table — and any image inside
- * it — was destroyed on save.
+ * Bugs they lock down:
+ *
+ * - tiptap-markdown's built-in GFM table serialiser bailed to an HTML fallback
+ *   for any table that wasn't "simple" (no header row, a cell with more than
+ *   one block, merged cells). With `html: false` that fallback wrote the
+ *   literal placeholder `[table]`, so the table — and any image inside it —
+ *   was destroyed on save.
+ * - Video nodes serialised to a bare URL but had no parse side, so a reload
+ *   turned them into autolinked paragraphs and the *second* save wrote the
+ *   `<url>` autolink form, which the publish pipeline no longer recognises as
+ *   a video. Anything asserting round-trip stability therefore runs more than
+ *   one cycle (see `saveCycles`).
  */
 import { beforeAll, afterEach, describe, expect, it } from "vitest"
 import { Editor } from "@tiptap/core"
@@ -63,6 +70,30 @@ function saveReloadSave(content: JSONContent | string): {
   return { saved, reloaded, doc: e.getJSON() }
 }
 
+/**
+ * Markdown after each of `cycles` successive save → reload passes, plus the doc
+ * the last reload produced.
+ *
+ * `saves[0]` is the first save; `saves[1]` is the save after one reload, and so
+ * on. Some drift only shows up from `saves[1]` onward — the editor round-trips
+ * a node correctly once and then degrades what it parsed back — so anything
+ * claiming to be stable has to be checked over more than one cycle.
+ */
+function saveCycles(
+  content: JSONContent | string,
+  cycles: number,
+): { saves: string[]; doc: JSONContent } {
+  const saves = [save(content)]
+  let e = makeEditor(saves[0])
+  while (saves.length < cycles) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const next = (e.storage as any).markdown.getMarkdown() as string
+    saves.push(next)
+    e = makeEditor(next)
+  }
+  return { saves, doc: e.getJSON() }
+}
+
 /* ----------------------------- doc builders ----------------------------- */
 
 const para = (text: string): JSONContent => ({
@@ -78,6 +109,16 @@ const doc = (...content: JSONContent[]): JSONContent => ({ type: "doc", content 
 
 const IMG_URL = "https://cdn.sanity.io/images/abc123/production/deadbeef-800x600.png"
 const image = (src: string, alt: string): JSONContent => ({ type: "image", attrs: { src, alt } })
+
+const VIMEO_URL = "https://vimeo.com/76979871"
+const LOOM_URL = "https://www.loom.com/share/0f1e2d3c4b5a69788796a5b4c3d2e1f0"
+const TWITCH_URL = "https://www.twitch.tv/videos/1234567890"
+const YT_URL = "https://www.youtube.com/watch?v=aBcDeFgHiJk"
+const video = (src: string, provider: string): JSONContent => ({
+  type: "videoEmbed",
+  attrs: { src, provider },
+})
+const youtube = (src: string): JSONContent => ({ type: "youtube", attrs: { src } })
 
 /** Every node type present in a doc, flattened. */
 function nodeTypes(node: JSONContent): string[] {
@@ -266,6 +307,100 @@ describe("image persistence through save + reload", () => {
   })
 })
 
+/* -------------------------------- videos -------------------------------- */
+
+describe("video persistence through repeated save + reload", () => {
+  // Regression: a video node serialises to a bare URL on its own line, but
+  // nothing parsed that line back into a node. markdown-it's `linkify` turned
+  // it into a paragraph holding an autolink, so (a) the embed was gone from the
+  // editor and (b) prosemirror-markdown re-emitted it in the `<url>` autolink
+  // form on the *second* save. loneVideoUrl() (publish) requires the line to
+  // start with `http`, so the published post lost its videoEmbed block too.
+  // One cycle looked fine, which is why this has to run at least two.
+
+  it("keeps a video URL bare and byte-stable across two round trips", () => {
+    const { saves, doc: out } = saveCycles(doc(para("before"), video(VIMEO_URL, "vimeo"), para("after")), 3)
+
+    for (const saved of saves) {
+      expect(saved).not.toContain("<http")
+      expect(saved).not.toContain(">")
+      expect(saved).toContain(`\n${VIMEO_URL}\n`)
+    }
+    // The second save is where the angle brackets used to appear.
+    expect(saves[1]).toBe(saves[0])
+    expect(saves[2]).toBe(saves[0])
+    // And the embed is still an embed, not a paragraph with a link in it.
+    expect(nodeTypes(out)).toContain("videoEmbed")
+    const embed = out.content!.find((n) => n.type === "videoEmbed")!
+    expect(embed.attrs).toMatchObject({ src: VIMEO_URL, provider: "vimeo" })
+  })
+
+  it.each([
+    ["vimeo", VIMEO_URL],
+    ["loom", LOOM_URL],
+    ["twitch", TWITCH_URL],
+  ])("keeps a %s embed intact over two round trips", (provider, url) => {
+    const { saves, doc: out } = saveCycles(doc(video(url, provider)), 3)
+
+    expect(saves[0].trim()).toBe(url)
+    expect(saves[1]).toBe(saves[0])
+    expect(saves[2]).toBe(saves[0])
+    expect(saves[1]).not.toContain("<")
+    expect(nodeTypes(out)).toContain("videoEmbed")
+  })
+
+  it("keeps a YouTube embed intact over two round trips", () => {
+    // Same serialiser family, same bug: Youtube's markdown storage also writes
+    // a bare URL and had no parse side.
+    const { saves, doc: out } = saveCycles(doc(youtube(YT_URL)), 3)
+
+    expect(saves[0].trim()).toBe(YT_URL)
+    expect(saves[1]).toBe(saves[0])
+    expect(saves[2]).toBe(saves[0])
+    expect(saves[1]).not.toContain("<")
+    expect(nodeTypes(out)).toContain("youtube")
+    expect(out.content!.find((n) => n.type === "youtube")!.attrs).toMatchObject({ src: YT_URL })
+  })
+
+  it("repairs a draft that was already saved in the <url> form", () => {
+    // Drafts saved before this fix are sitting in the database angle-bracketed.
+    // markdown-it parses both spellings into the same anchor, so loading one
+    // rebuilds the node and the next save writes it bare again.
+    const { saves, doc: out } = saveCycles(`intro\n\n<${VIMEO_URL}>\n\noutro`, 2)
+
+    expect(saves[0]).toContain(VIMEO_URL)
+    expect(saves[0]).not.toContain("<http")
+    expect(saves[1]).toBe(saves[0])
+    expect(nodeTypes(out)).toContain("videoEmbed")
+  })
+
+  it("keeps a video inside a table cell bare across two round trips", () => {
+    const { saves } = saveCycles(
+      doc(table(row(hdr("Clip"), hdr("Note")), row(cell(video(VIMEO_URL, "vimeo")), txtCell("ok")))),
+      3,
+    )
+
+    expect(saves[0]).toContain(`| ${VIMEO_URL} |`)
+    expect(saves[1]).toBe(saves[0])
+    expect(saves[2]).toBe(saves[0])
+    expect(saves[1]).not.toContain("<http")
+  })
+
+  it("leaves a video URL that has text around it as an ordinary link", () => {
+    // Only a whole-line bare URL is a video — the same rule loneVideoUrl uses
+    // at publish time. Nothing here should be promoted to an embed.
+    const { saves, doc: out } = saveCycles(doc(para(`watch ${VIMEO_URL} today`)), 3)
+
+    expect(nodeTypes(out)).not.toContain("videoEmbed")
+    expect(allText(out)).toContain("watch")
+    expect(allText(out)).toContain("today")
+    // markdown-it's linkify normalises a bare URL sitting in prose to the
+    // `<url>` autolink form. That is pre-existing, valid, and harmless for a
+    // paragraph — it just has to settle rather than keep changing.
+    expect(saves[2]).toBe(saves[1])
+  })
+})
+
 /* ------------------- the markdown the publish step sees ------------------ */
 
 describe("saved markdown still feeds the Sanity publish pipeline", () => {
@@ -291,6 +426,18 @@ describe("saved markdown still feeds the Sanity publish pipeline", () => {
     const blocks = bodyToPortableText(saved) as { _type: string; rows?: { cells?: string[] }[] }[]
     const tableBlock = blocks.find((b) => b._type === "table")!
     expect(tableBlock.rows![1].cells).toEqual(["x | y", "2"])
+  })
+
+  it("still turns a twice-round-tripped video into a videoEmbed block", () => {
+    // The user-visible half of the bug: once the second save wrote `<url>`,
+    // loneVideoUrl() stopped matching and publishing silently downgraded the
+    // video to a paragraph of link text.
+    const { saves } = saveCycles(doc(para("intro"), video(VIMEO_URL, "vimeo")), 3)
+
+    const blocks = bodyToPortableText(saves[2]) as { _type: string; url?: string }[]
+    const embed = blocks.find((b) => b._type === "videoEmbed")
+    expect(embed).toBeDefined()
+    expect(embed!.url).toBe(VIMEO_URL)
   })
 
   it("turns a round-tripped body image into a Portable Text image block", () => {
