@@ -3,21 +3,12 @@ import Link from 'next/link'
 import CtaButton from '@/components/CtaButton'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/image'
+import RegionalPhonePopup from '@/components/RegionalPhonePopup'
+import { isRealPhone, telHref, type Office } from '@/lib/officePhone'
 
 interface FooterLink {
   label?: string
   href?: string
-}
-
-interface Office {
-  flag?: string
-  city?: string
-  label?: string
-  href?: string
-  address?: string
-  addressUrl?: string
-  phone?: string
-  phoneTel?: string
 }
 
 interface SocialLink {
@@ -69,20 +60,6 @@ function EnvelopeIcon() {
   )
 }
 
-function PhoneIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-[2px]">
-      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
-    </svg>
-  )
-}
-
-/** Placeholder numbers seeded as all zeros (e.g. "+91 00000 00000") are never rendered. */
-function isRealPhone(phone?: string): boolean {
-  if (!phone) return false
-  return !/0{6,}/.test(phone.replace(/\D/g, ''))
-}
-
 /**
  * Every footer link comes from Sanity, and an entry saved without a URL used
  * to fall back to `href="#"` - a link that looks live, is keyboard-focusable,
@@ -93,10 +70,6 @@ function isRealPhone(phone?: string): boolean {
 function linkHref(href?: string): string | null {
   const trimmed = (href ?? '').trim()
   return trimmed && trimmed !== '#' ? trimmed : null
-}
-
-function telHref(phone?: string, phoneTel?: string): string {
-  return `tel:${phoneTel || (phone || '').replace(/\s/g, '')}`
 }
 
 export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsProp | null }) {
@@ -161,21 +134,8 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
             </a>
           )}
 
-          {/* Phone numbers (one per office; placeholder numbers hidden) */}
-          <div className="flex items-start gap-2">
-            <PhoneIcon />
-            <div className="flex flex-col gap-y-0.5 md:flex-row md:flex-wrap md:gap-x-6 text-[13px] leading-[20px] text-white">
-              {offices.filter((o) => isRealPhone(o.phone)).map((o, i) => (
-                <a
-                  key={`${o.phoneTel || o.phone}-${i}`}
-                  href={telHref(o.phone, o.phoneTel)}
-                  className="hover:opacity-80 transition-opacity"
-                >
-                  {o.phone}
-                </a>
-              ))}
-            </div>
-          </div>
+          {/* Regional phone numbers, behind one labelled button (#17) */}
+          <RegionalPhonePopup offices={offices} />
         </div>
 
         {/* Partner Expertise */}
