@@ -1,7 +1,6 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 import type { Invoice, ConsultantProfile } from '@/types/invoice'
 import InvoiceForm from '@/components/internal/invoices/InvoiceForm'
 
@@ -11,10 +10,7 @@ interface Props {
 
 export default function NewInvoiceClient({ profile }: Props) {
   const router = useRouter()
-  const [error, setError] = useState('')
-
   const handleSave = async (invoice: Invoice) => {
-    setError('')
     const res = await fetch('/api/internal/invoices', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -30,14 +26,5 @@ export default function NewInvoiceClient({ profile }: Props) {
     router.refresh()
   }
 
-  return (
-    <div>
-      {error && (
-        <div className="mb-4 rounded-lg border border-destructive/30 bg-destructive/10 p-3">
-          <p className="text-sm text-destructive">{error}</p>
-        </div>
-      )}
-      <InvoiceForm profile={profile} onSave={handleSave} />
-    </div>
-  )
+  return <InvoiceForm profile={profile} onSave={handleSave} />
 }

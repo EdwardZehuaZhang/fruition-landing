@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "node scripts/copy-pdf-worker.mjs",
     "dev": "next dev",
     "dev:nav-v2": "NAV_V2_PREVIEW=1 next dev -p 3005",
     "build": "next build",
