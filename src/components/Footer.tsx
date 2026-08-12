@@ -83,6 +83,22 @@ function isRealPhone(phone?: string): boolean {
   return !/0{6,}/.test(phone.replace(/\D/g, ''))
 }
 
+/**
+ * Every footer link comes from Sanity, and an entry saved without a URL used
+ * to fall back to `href="#"` - a link that looks live, is keyboard-focusable,
+ * and jumps the page to the top. Treat "#" and empty as "not a link" so the
+ * label renders as plain text instead. WhereWeWork already guards offices the
+ * same way.
+ */
+function linkHref(href?: string): string | null {
+  const trimmed = (href ?? '').trim()
+  return trimmed && trimmed !== '#' ? trimmed : null
+}
+
+function telHref(phone?: string, phoneTel?: string): string {
+  return `tel:${phoneTel || (phone || '').replace(/\s/g, '')}`
+}
+
 export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsProp | null }) {
   const calendlyUrl = siteSettings?.calendlyLink ? bookingHref(siteSettings.calendlyLink) : ''
   const offices = siteSettings?.offices ?? []
@@ -114,7 +130,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
             {logoSrc && (
               <Image
                 src={logoSrc}
-                alt="Site logo"
+                alt="Fruition Services"
                 width={1241}
                 height={255}
                 className="h-[28px] w-auto"
@@ -149,10 +165,10 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
           <div className="flex items-start gap-2">
             <PhoneIcon />
             <div className="flex flex-col gap-y-0.5 md:flex-row md:flex-wrap md:gap-x-6 text-[13px] leading-[20px] text-white">
-              {offices.filter((o) => isRealPhone(o.phone)).map((o) => (
+              {offices.filter((o) => isRealPhone(o.phone)).map((o, i) => (
                 <a
-                  key={o.phoneTel || o.phone}
-                  href={`tel:${o.phoneTel || (o.phone || '').replace(/\s/g, '')}`}
+                  key={`${o.phoneTel || o.phone}-${i}`}
+                  href={telHref(o.phone, o.phoneTel)}
                   className="hover:opacity-80 transition-opacity"
                 >
                   {o.phone}
@@ -180,8 +196,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
                     alt={p.name || 'Partner logo'}
                     width={w}
                     height={h}
-                    className="object-contain"
-                    style={{ width: w, height: h }}
+                    className="h-auto max-w-full object-contain"
                     unoptimized
                   />
                 </div>
@@ -194,11 +209,12 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
         <div className="flex items-center gap-[9px]">
           {socials.map((s, i) => {
             const src = s.icon ? urlFor(s.icon).width(52).height(52).url() : null
-            if (!src) return null
+            const href = linkHref(s.href)
+            if (!src || !href) return null
             return (
               <a
                 key={`${s.label}-${i}`}
-                href={s.href || '#'}
+                href={href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:opacity-80 transition-opacity"
@@ -212,15 +228,19 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
         {/* Legal links */}
         {legalLinks.length > 0 && (
           <div className="flex items-center gap-[14px]">
-            {legalLinks.map((link, i) => (
-              <Link
-                key={`${link.href}-${i}`}
-                href={link.href || '#'}
-                className="text-white text-[12px] hover:opacity-80 transition-opacity"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {legalLinks.map((link, i) => {
+              const href = linkHref(link.href)
+              if (!href) return null
+              return (
+                <Link
+                  key={`${href}-${i}`}
+                  href={href}
+                  className="text-white text-[12px] hover:opacity-80 transition-opacity"
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
           </div>
         )}
 
@@ -244,15 +264,19 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
               <h4 className="text-white font-semibold text-[16px] leading-tight mb-4">{siteSettings.footerServicesHeading}</h4>
             )}
             <div className="flex flex-col">
-              {servicesLinks.map((link, i) => (
-                <Link
-                  key={`${link.href}-${i}`}
-                  href={link.href || '#'}
-                  className="text-white text-[12px] leading-[17px] py-[5.5px] hover:opacity-80 transition-opacity"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {servicesLinks.map((link, i) => {
+                const href = linkHref(link.href)
+                if (!href) return null
+                return (
+                  <Link
+                    key={`${href}-${i}`}
+                    href={href}
+                    className="text-white text-[12px] leading-[17px] py-[5.5px] hover:opacity-80 transition-opacity"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              })}
             </div>
           </div>
 
@@ -262,15 +286,19 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
               <h4 className="text-white font-semibold text-[16px] leading-tight mb-4">{siteSettings.footerDepartmentSolutionsHeading}</h4>
             )}
             <div className="flex flex-col">
-              {departmentLinks.map((link, i) => (
-                <Link
-                  key={`${link.href}-${i}`}
-                  href={link.href || '#'}
-                  className="text-white text-[12px] leading-[17px] py-[5.5px] hover:opacity-80 transition-opacity"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {departmentLinks.map((link, i) => {
+                const href = linkHref(link.href)
+                if (!href) return null
+                return (
+                  <Link
+                    key={`${href}-${i}`}
+                    href={href}
+                    className="text-white text-[12px] leading-[17px] py-[5.5px] hover:opacity-80 transition-opacity"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              })}
             </div>
           </div>
 
@@ -280,15 +308,19 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
               <h4 className="text-white font-semibold text-[16px] leading-tight mb-4">{siteSettings.footerIndustrySolutionsHeading}</h4>
             )}
             <div className="flex flex-col">
-              {industryLinks.map((link, i) => (
-                <Link
-                  key={`${link.href}-${i}`}
-                  href={link.href || '#'}
-                  className="text-white text-[12px] leading-[17px] py-[5.5px] hover:opacity-80 transition-opacity"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {industryLinks.map((link, i) => {
+                const href = linkHref(link.href)
+                if (!href) return null
+                return (
+                  <Link
+                    key={`${href}-${i}`}
+                    href={href}
+                    className="text-white text-[12px] leading-[17px] py-[5.5px] hover:opacity-80 transition-opacity"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -299,40 +331,49 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
             <h4 className="text-white font-semibold text-[16px] leading-tight mb-5">{siteSettings.footerOurLocationsHeading}</h4>
           )}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6">
-            {offices.map((loc, i) => (
-              <div key={`${loc.phoneTel}-${i}`}>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[18px] leading-none">{loc.flag}</span>
-                  <Link
-                    href={loc.href || '#'}
-                    className="text-[#d2acf7] text-[12px] font-medium hover:opacity-80 transition-opacity"
-                  >
-                    {loc.city}
-                  </Link>
+            {offices.map((loc, i) => {
+              const cityHref = linkHref(loc.href)
+              const addressHref = linkHref(loc.addressUrl)
+              return (
+                <div key={`${loc.city || loc.phoneTel}-${i}`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[18px] leading-none" aria-hidden>{loc.flag}</span>
+                    {cityHref ? (
+                      <Link
+                        href={cityHref}
+                        className="text-[#d2acf7] text-[12px] font-medium hover:opacity-80 transition-opacity"
+                      >
+                        {loc.city}
+                      </Link>
+                    ) : (
+                      <span className="text-[#d2acf7] text-[12px] font-medium">{loc.city}</span>
+                    )}
+                  </div>
+                  {loc.label && <p className="text-white/70 text-[11px] mb-0.5">({loc.label})</p>}
+                  {loc.address &&
+                    (addressHref ? (
+                      <a
+                        href={addressHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-white text-[12px] leading-[18px] hover:opacity-80 transition-opacity block mb-1"
+                      >
+                        {loc.address}
+                      </a>
+                    ) : (
+                      <p className="text-white text-[12px] leading-[18px] mb-1">{loc.address}</p>
+                    ))}
+                  {isRealPhone(loc.phone) && (
+                    <a
+                      href={telHref(loc.phone, loc.phoneTel)}
+                      className="text-white text-[12px] hover:opacity-80 transition-opacity"
+                    >
+                      {loc.phone}
+                    </a>
+                  )}
                 </div>
-                <p className="text-white/70 text-[11px] mb-0.5">({loc.label})</p>
-                {loc.addressUrl ? (
-                  <a
-                    href={loc.addressUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white text-[12px] leading-[18px] hover:opacity-80 transition-opacity block mb-1"
-                  >
-                    {loc.address}
-                  </a>
-                ) : (
-                  <p className="text-white text-[12px] leading-[18px] mb-1">{loc.address}</p>
-                )}
-                {isRealPhone(loc.phone) && (
-                  <a
-                    href={`tel:${loc.phoneTel || (loc.phone || '').replace(/\s/g, '')}`}
-                    className="text-white text-[12px] hover:opacity-80 transition-opacity"
-                  >
-                    {loc.phone}
-                  </a>
-                )}
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </div>
