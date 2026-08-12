@@ -11,7 +11,13 @@ import {
   updateComposition,
   type CompositionPlatform,
 } from "@/lib/social/composition"
-import { deleteZernioPost, updateSocialDraft, type PlatformKey } from "@/lib/social/zernio"
+import {
+  deleteZernioPost,
+  platformSpec,
+  unpublishZernioPost,
+  updateSocialDraft,
+  type PlatformKey,
+} from "@/lib/social/zernio"
 
 export const runtime = "nodejs"
 export const maxDuration = 120
@@ -212,14 +218,35 @@ export async function DELETE(req: Request) {
     const composition = await getComposition(id)
     if (!composition) return NextResponse.json({ error: "Post not found." }, { status: 404 })
 
+    // Delete means delete: take it off the platforms first rather than making
+    // someone unpublish each channel by hand and come back.
     const state = await buildComposerState(composition)
     const live = state.platforms.filter((p) => p.live?.status === "published")
-    if (live.length) {
+    const warnings: string[] = []
+    const failures: string[] = []
+
+    for (const platform of live) {
+      const postId = platform.live?.postId
+      if (!postId) continue
+      if (platform.key === "instagram") {
+        // Instagram's API genuinely can't delete a post. Say so plainly instead
+        // of pretending the whole thing is gone.
+        warnings.push("The Instagram post is still live — Instagram won't let us delete it. Remove it in the app.")
+        continue
+      }
+      try {
+        await unpublishZernioPost(postId, platformSpec(platform.key).platform)
+      } catch (err) {
+        failures.push(`${platform.label}: ${err instanceof Error ? err.message : String(err)}`)
+      }
+    }
+
+    // A live post we couldn't take down must keep its record, or it's orphaned
+    // out there with nothing in the portal pointing at it.
+    if (failures.length) {
       return NextResponse.json(
-        {
-          error: `Still live on ${live.map((p) => p.label).join(", ")} — unpublish first, then delete.`,
-        },
-        { status: 409 },
+        { error: `Couldn't take it down — ${failures.join(" · ")}. Nothing was deleted.` },
+        { status: 502 },
       )
     }
 
@@ -227,7 +254,11 @@ export async function DELETE(req: Request) {
       await deleteZernioPost(postId).catch(() => {}) // already gone in Zernio is fine
     }
     await deleteComposition(id)
-    return NextResponse.json({ ok: true })
+    return NextResponse.json({
+      ok: true,
+      ...(live.length ? { removedFrom: live.map((p) => p.label) } : {}),
+      ...(warnings.length ? { warning: warnings.join(" ") } : {}),
+    })
   } catch (err) {
     return NextResponse.json({ error: message(err, "Delete failed") }, { status: 502 })
   }

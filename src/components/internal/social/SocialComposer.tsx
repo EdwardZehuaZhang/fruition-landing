@@ -8,6 +8,7 @@ import type { PlatformKey } from "@/lib/social/zernio"
 import { problemsFor } from "@/lib/social/validate"
 import PlatformIcon from "@/components/internal/SocialIcons"
 import PlatformEditor from "@/components/internal/social/PlatformEditor"
+import ScheduleField from "@/components/internal/social/ScheduleField"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 
@@ -713,13 +714,7 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
               </Button>
             ) : (
               <>
-                <input
-                  type="datetime-local"
-                  value={scheduleAt}
-                  onChange={(e) => setScheduleAt(e.target.value)}
-                  aria-label="Schedule date and time"
-                  className="h-8 rounded-md border border-border bg-background px-2 text-xs text-foreground outline-none focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
-                />
+                <ScheduleField value={scheduleAt} onChange={setScheduleAt} disabled={working} />
                 <Button
                   variant="outline"
                   size="sm"
