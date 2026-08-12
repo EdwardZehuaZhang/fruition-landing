@@ -17,6 +17,8 @@ const eslintConfig = defineConfig([
     "dist/**",
     ".wrangler/**",
     ".vercel/**",
+    // Vendored pdfjs worker, copied verbatim from node_modules on postinstall.
+    "public/pdf.worker.min.mjs",
     // One-off operational/migration utilities — not shipped code. They predate
     // the Lint CI gate and fail no-require-imports / no-explicit-any en masse;
     // linting them adds no safety to the deployed site.
