@@ -96,7 +96,109 @@ const auditRedirects: Redirect[] = [
     destination: "/monday-for-manufacturing",
     permanent: true,
   },
+
+  // ── Dead-end repairs (August 2026 redirect audit) ──
+  // Both of these were the tail of a Wix chain that landed on a page which
+  // no longer exists, so the visitor got a 301 straight into a 404.
+  { source: "/monday-com-training", destination: "/monday-training", permanent: true },
+  { source: "/monday-crm-demo", destination: "/monday-crm-consulting", permanent: true },
+
+  // ── Common URLs that were 404ing (August 2026 redirect audit) ──
+  // Legal and policy shorthands people type or link directly.
+  { source: "/privacy", destination: "/data-privacy", permanent: true },
+  { source: "/privacy-policy", destination: "/data-privacy", permanent: true },
+  { source: "/cookie-policy", destination: "/data-privacy", permanent: true },
+  { source: "/gdpr", destination: "/data-privacy", permanent: true },
+  { source: "/terms", destination: "/terms-and-conditions", permanent: true },
+  { source: "/tos", destination: "/terms-and-conditions", permanent: true },
+  { source: "/terms-of-service", destination: "/terms-and-conditions", permanent: true },
+  // Singular/alternate spellings of pages that already exist.
+  { source: "/faq", destination: "/faqs", permanent: true },
+  { source: "/our-team", destination: "/fruition-team", permanent: true },
+  { source: "/company", destination: "/about-us", permanent: true },
+  { source: "/about-fruition", destination: "/about-us", permanent: true },
+  { source: "/news", destination: "/consulting-blog", permanent: true },
+  { source: "/partners", destination: "/certifications-and-awards", permanent: true },
+  { source: "/training", destination: "/monday-training", permanent: true },
+  { source: "/jobs", destination: "/careers", permanent: true },
+  { source: "/work-with-us", destination: "/careers", permanent: true },
+  { source: "/clients", destination: "/customer-testimonials", permanent: true },
+  { source: "/testimonials", destination: "/customer-testimonials", permanent: true },
+  { source: "/reviews", destination: "/customer-testimonials", permanent: true },
+  { source: "/case-study", destination: "/customer-testimonials", permanent: true },
+  { source: "/index", destination: "/", permanent: true },
+  { source: "/sitemap", destination: "/sitemap.xml", permanent: true },
+  // High-intent booking / enquiry shorthands. Consultation and quote land on
+  // the packages page, matching the existing /book-online and
+  // /service-page/free-consult-indicative-quote entries above.
+  { source: "/book", destination: "/contact-us", permanent: true },
+  { source: "/booking", destination: "/contact-us", permanent: true },
+  { source: "/book-a-call", destination: "/contact-us", permanent: true },
+  { source: "/book-a-demo", destination: "/contact-us", permanent: true },
+  { source: "/demo", destination: "/contact-us", permanent: true },
+  { source: "/schedule", destination: "/contact-us", permanent: true },
+  { source: "/get-started", destination: "/contact-us", permanent: true },
+  { source: "/contact-sales", destination: "/contact-us", permanent: true },
+  { source: "/support", destination: "/contact-us", permanent: true },
+  { source: "/help", destination: "/contact-us", permanent: true },
+  { source: "/quote", destination: "/implementation-packages", permanent: true },
+  { source: "/free-consultation", destination: "/implementation-packages", permanent: true },
+  // Platform shorthands, matching where the Wix /monday-com chain already ends.
+  { source: "/monday", destination: "/partnerships/monday-consulting-partner", permanent: true },
+  { source: "/monday-com-consulting", destination: "/monday-implementation-consultants", permanent: true },
+  { source: "/atlassian", destination: "/atlassian-consulting", permanent: true },
+  { source: "/hubspot", destination: "/hubspot-consulting", permanent: true },
+  { source: "/ai", destination: "/ai-consulting", permanent: true },
+  { source: "/ai-consulting-services", destination: "/ai-consulting", permanent: true },
+  // Country shorthands for the regional partner pages. `/au` is the only one
+  // that already exists as a path prefix (the two AU landing routes), and an
+  // exact-path redirect does not shadow `/au/<page>`.
+  { source: "/au", destination: "/monday-partner-australia", permanent: true },
+  { source: "/australia", destination: "/monday-partner-australia", permanent: true },
+  { source: "/uk", destination: "/monday-partner-uk", permanent: true },
+  { source: "/us", destination: "/monday-partner-us", permanent: true },
+  { source: "/usa", destination: "/monday-partner-us", permanent: true },
+  { source: "/monday-partner-usa", destination: "/monday-partner-us", permanent: true },
+  { source: "/monday-partner-united-states", destination: "/monday-partner-us", permanent: true },
+  { source: "/india", destination: "/monday-partner-india", permanent: true },
+  { source: "/singapore", destination: "/monday-partner-singapore", permanent: true },
+  { source: "/philippines", destination: "/monday-partner-philippines", permanent: true },
 ];
+
+/**
+ * Collapse redirect chains to a single hop.
+ *
+ * The Wix table was generated per-URL, so a slug that was renamed twice
+ * produces `/partnership/make` → `/partnership/make-partner` →
+ * `/platforms/make-partner` → … → `/partnerships/make-partners`: five 301s
+ * for one visitor. Chains cost a round trip each, and search engines stop
+ * following (and stop passing link equity) after a few hops.
+ *
+ * Rather than hand-flatten 49 entries and re-flatten every time one is added,
+ * resolve each destination through the table at config build time. Every
+ * source in both tables is a literal path with no `:param` or `has:`
+ * conditions, so a plain map lookup is exact. The first hop's `permanent`
+ * flag is kept, since that is the status code the visitor was already served.
+ */
+function flattenRedirectChains(list: Redirect[]): Redirect[] {
+  // First definition wins, matching Next's own first-match-wins ordering.
+  const bySource = new Map<string, string>();
+  for (const r of list) {
+    if (!bySource.has(r.source)) bySource.set(r.source, r.destination);
+  }
+
+  return list.map((r) => {
+    let destination = r.destination;
+    const seen = new Set<string>([r.source]);
+    // External destinations and self-references terminate immediately.
+    while (!/^https?:/.test(destination) && bySource.has(destination)) {
+      if (seen.has(destination)) break; // cycle guard
+      seen.add(destination);
+      destination = bySource.get(destination)!;
+    }
+    return destination === r.destination ? r : { ...r, destination };
+  });
+}
 
 const nextConfig: NextConfig = {
   // Barrel-file tree-shaking for heavy libraries — keeps only the icons/charts
@@ -112,7 +214,7 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
-    return [...auditRedirects, ...wixRedirects];
+    return flattenRedirectChains([...auditRedirects, ...wixRedirects]);
   },
   async rewrites() {
     return [
@@ -125,10 +227,9 @@ const nextConfig: NextConfig = {
         source: "/_files/ugd/39b8ef_1dc32166aa204f2f997e63c60548c9dd.pdf",
         destination: "/legal/deprecated/us",
       },
-      {
-        source: "/_files/ugd/a280a5_11fba06999d94082af98412eb473461c.pdf",
-        destination: "/legal/deprecated/uk",
-      },
+      // The UK PDF is not listed here: redirects run before rewrites, and
+      // auditRedirects already 301s that exact path to /legal/deprecated/uk,
+      // so a rewrite for it could never match.
       // Old NAM MSA PDF path → US deprecation page
       {
         source: "/fruition-master-services-agreement.pdf",
