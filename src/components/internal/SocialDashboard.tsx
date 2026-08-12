@@ -297,8 +297,15 @@ export default function SocialDashboard() {
     }
   }
 
-  async function deleteComposition(composition: Composition) {
-    if (!window.confirm(`Delete “${composition.title}” and its drafts? This can't be undone.`)) return
+  async function deleteComposition(composition: Composition, liveLabels: string[] = []) {
+    if (
+      !window.confirm(
+        liveLabels.length
+          ? `Delete “${composition.title}”? It comes off ${liveLabels.join(", ")} first, then the post and its drafts go. This can't be undone.`
+          : `Delete “${composition.title}” and its drafts? This can't be undone.`,
+      )
+    )
+      return
     setBusyId(composition.id)
     setError(null)
     setNotice(null)
@@ -306,9 +313,10 @@ export default function SocialDashboard() {
       const r = await fetch(`/api/internal/social/compose?id=${encodeURIComponent(composition.id)}`, {
         method: "DELETE",
       })
-      const data = (await r.json().catch(() => ({}))) as { error?: string }
+      const data = (await r.json().catch(() => ({}))) as { error?: string; warning?: string; removedFrom?: string[] }
       if (!r.ok) setError(data.error ?? "Delete failed.")
-      else setNotice("Post deleted.")
+      else if (data.warning) setNotice(`Deleted. ${data.warning}`)
+      else setNotice(data.removedFrom?.length ? `Deleted, and taken off ${data.removedFrom.join(", ")}.` : "Post deleted.")
       await load()
     } finally {
       setBusyId(null)
@@ -316,15 +324,22 @@ export default function SocialDashboard() {
   }
 
   async function deleteRecord(row: SocialRow) {
-    if (!window.confirm("Delete this Zernio record? (Does not touch any live platform post.)")) return
+    if (
+      !window.confirm(
+        row.status === "published"
+          ? "Delete this post? It comes off the platform first, then the record goes."
+          : "Delete this record?",
+      )
+    )
+      return
     setBusyId(row.id)
     setError(null)
     setNotice(null)
     try {
       const r = await fetch(`/api/internal/social/posts?id=${encodeURIComponent(row.id)}`, { method: "DELETE" })
-      const data = (await r.json().catch(() => ({}))) as { error?: string }
+      const data = (await r.json().catch(() => ({}))) as { error?: string; warning?: string }
       if (!r.ok) setError(data.error ?? "Delete failed.")
-      else setNotice("Record deleted.")
+      else setNotice(data.warning ? `Deleted. ${data.warning}` : "Deleted.")
       await load()
     } finally {
       setBusyId(null)
@@ -465,7 +480,7 @@ function PostsList({
   onUnpublish: (row: SocialRow) => void
   onDelete: (row: SocialRow) => void
   onDuplicate: (composition: Composition) => void
-  onDeleteComposition: (composition: Composition) => void
+  onDeleteComposition: (composition: Composition, liveLabels: string[]) => void
 }) {
   if (!loaded) {
     return (
@@ -525,7 +540,7 @@ function CompositionRow({
   entry: Extract<FeedRow, { kind: "composition" }>
   busy: boolean
   onDuplicate: (composition: Composition) => void
-  onDelete: (composition: Composition) => void
+  onDelete: (composition: Composition, liveLabels: string[]) => void
 }) {
   const c = entry.composition
   // entry.status, not c.status: the row-level cache lags behind the channels.
@@ -573,7 +588,19 @@ function CompositionRow({
           <Button variant="outline" size="xs" onClick={() => onDuplicate(c)} disabled={busy}>
             Duplicate
           </Button>
-          <Button variant="destructive" size="xs" onClick={() => onDelete(c)} disabled={busy}>
+          <Button
+            variant="destructive"
+            size="xs"
+            onClick={() =>
+              onDelete(
+                c,
+                entry.channels
+                  .filter((ch) => ch.status === "published")
+                  .map((ch) => PLATFORM_LABELS[ch.platform] ?? ch.platform),
+              )
+            }
+            disabled={busy}
+          >
             {busy ? "…" : "Delete"}
           </Button>
         </div>
