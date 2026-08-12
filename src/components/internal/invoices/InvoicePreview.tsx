@@ -19,11 +19,18 @@ export default function InvoicePreview({ invoice }: Props) {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div className="flex flex-col gap-1">
             <p className="text-lg font-semibold">{invoice.consultant_name}</p>
-            <p className="whitespace-pre-line text-sm text-muted-foreground">
-              {invoice.consultant_address}
-            </p>
-            <p className="text-sm text-muted-foreground">{invoice.consultant_phone}</p>
-            <p className="text-sm text-muted-foreground">{invoice.consultant_email}</p>
+            {/* Only rendered when present — these aren't set on new invoices. */}
+            {invoice.consultant_address && (
+              <p className="whitespace-pre-line text-sm text-muted-foreground">
+                {invoice.consultant_address}
+              </p>
+            )}
+            {invoice.consultant_phone && (
+              <p className="text-sm text-muted-foreground">{invoice.consultant_phone}</p>
+            )}
+            {invoice.consultant_email && (
+              <p className="text-sm text-muted-foreground">{invoice.consultant_email}</p>
+            )}
             <div className="mt-4 w-full border-t pt-3">
               <p className="mb-2 text-xs font-semibold">Kindly make payment to:</p>
               <div className="flex flex-col gap-0.5">
