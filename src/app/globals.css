@@ -207,6 +207,33 @@
     letter-spacing: -0.02em;
   }
 
+  /* Hero H1 for long headings that sit in a half-width hero column.
+     `.text-display` is a fixed 48px (32px under 768px), which is sized for a
+     full-bleed heading. From 1024px the network hero splits into two columns,
+     so the heading column drops to roughly 480px at 1024px and only reaches
+     its designed ~650px at the 1348px max-width. A fixed 52px there wraps a
+     long heading onto five or six lines. Scale fluidly across that band
+     instead, so the type tracks the column it has to fit into. */
+  .text-hero-display {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  @media (min-width: 768px) {
+    .text-hero-display {
+      font-size: 48px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .text-hero-display {
+      font-size: clamp(40px, 3.9vw, 52px);
+      line-height: 1.16;
+    }
+  }
+
   /* Section H2: landing page scale 44px, bold, slightly tight */
   .text-section-h2 {
     font-size: 44px;
@@ -238,6 +265,7 @@
      size utilities (e.g. text-[24px]) and inline styles remain more specific /
      in a later layer, so intentional overrides still win. */
   .text-display span,
+  .text-hero-display span,
   .text-section-h2 span,
   .text-section-h3 span,
   .text-card-title span,
