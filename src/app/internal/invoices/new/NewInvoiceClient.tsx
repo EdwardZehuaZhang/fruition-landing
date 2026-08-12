@@ -6,9 +6,10 @@ import InvoiceForm from '@/components/internal/invoices/InvoiceForm'
 
 interface Props {
   profile: ConsultantProfile | null
+  defaultRate?: number
 }
 
-export default function NewInvoiceClient({ profile }: Props) {
+export default function NewInvoiceClient({ profile, defaultRate }: Props) {
   const router = useRouter()
   const handleSave = async (invoice: Invoice) => {
     const res = await fetch('/api/internal/invoices', {
@@ -26,5 +27,5 @@ export default function NewInvoiceClient({ profile }: Props) {
     router.refresh()
   }
 
-  return <InvoiceForm profile={profile} onSave={handleSave} />
+  return <InvoiceForm profile={profile} defaultRate={defaultRate} onSave={handleSave} />
 }

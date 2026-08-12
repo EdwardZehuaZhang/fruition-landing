@@ -2,23 +2,24 @@
 
 import { useRef, useState } from 'react'
 import { Upload } from 'lucide-react'
-import { parseClockifyPdf } from '@/lib/clockifyPdf'
-import type { LineItem } from '@/types/invoice'
+import { parseClockifyPdf, type ParsedProject } from '@/lib/clockifyPdf'
 
 interface Props {
-  /** Called with the parsed rows and the billing month read off the report. */
-  onParsed: (lineItems: LineItem[], billingMonth: string) => void
+  /** Called with the projects and the billing month read off the report. */
+  onParsed: (projects: ParsedProject[], billingMonth: string) => void
 }
 
 /**
- * Drop/click target that turns a Clockify Summary PDF into invoice line items.
+ * Drop/click target that turns a Clockify Summary PDF into billable projects.
  * Owns its own parse + error state so the surrounding form stays dumb.
  */
 export default function ClockifyDropzone({ onParsed }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [parsing, setParsing] = useState(false)
   const [parseError, setParseError] = useState('')
-  const [parsedCount, setParsedCount] = useState<number | null>(null)
+  const [summary, setSummary] = useState('')
+  const [warning, setWarning] = useState('')
+  const [dragOver, setDragOver] = useState(false)
 
   const handleFile = async (file: File) => {
     if (!file.name.toLowerCase().endsWith('.pdf')) {
@@ -27,17 +28,31 @@ export default function ClockifyDropzone({ onParsed }: Props) {
     }
     setParsing(true)
     setParseError('')
-    setParsedCount(null)
+    setSummary('')
+    setWarning('')
     try {
-      const { lineItems, billingMonth } = await parseClockifyPdf(file)
-      if (lineItems.length === 0) {
+      const { projects, billingMonth, reportedHours } = await parseClockifyPdf(file)
+      if (projects.length === 0) {
         setParseError(
           'No billable projects found in this PDF. Make sure it is a Clockify Summary report.'
         )
         return
       }
-      setParsedCount(lineItems.length)
-      onParsed(lineItems, billingMonth)
+
+      const hours = projects.reduce((sum, p) => sum + p.hours, 0)
+      setSummary(
+        `Parsed ${projects.length} project${projects.length === 1 ? '' : 's'}, ` +
+          `${hours.toFixed(2)} hours`
+      )
+      // The report prints its own total; if ours disagrees the sections were
+      // read wrong and the invoice would be over- or under-billed.
+      if (reportedHours !== null && Math.abs(reportedHours - hours) > 0.02) {
+        setWarning(
+          `Parsed ${hours.toFixed(2)} hours but the report totals ` +
+            `${reportedHours.toFixed(2)}. Check the line items before saving.`
+        )
+      }
+      onParsed(projects, billingMonth)
     } catch (err) {
       console.error('PDF parse error:', err)
       setParseError(
@@ -47,8 +62,6 @@ export default function ClockifyDropzone({ onParsed }: Props) {
       setParsing(false)
     }
   }
-
-  const [dragOver, setDragOver] = useState(false)
 
   return (
     <div className="flex flex-col gap-3">
@@ -90,10 +103,8 @@ export default function ClockifyDropzone({ onParsed }: Props) {
           <p className="text-xs text-muted-foreground">
             Clockify Summary report (.pdf) — fills the line items below
           </p>
-          {parsedCount !== null && (
-            <p className="text-xs font-semibold text-green-600">
-              ✓ Parsed {parsedCount} billable project{parsedCount === 1 ? '' : 's'}
-            </p>
+          {summary && (
+            <p className="text-xs font-semibold text-green-600">✓ {summary}</p>
           )}
         </div>
       </div>
@@ -110,6 +121,12 @@ export default function ClockifyDropzone({ onParsed }: Props) {
           e.target.value = ''
         }}
       />
+
+      {warning && (
+        <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3">
+          <p className="text-sm text-amber-700 dark:text-amber-400">{warning}</p>
+        </div>
+      )}
 
       {parseError && (
         <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3">

@@ -3,7 +3,7 @@ import { requirePortalUser } from '@/lib/portalAuth'
 import PortalShell from '@/components/internal/PortalShell'
 import PageHeader from '@/components/internal/PageHeader'
 import { Button } from '@/components/ui/button'
-import { Plus, Upload } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import InvoiceListClient from './InvoiceListClient'
 
 export const dynamic = 'force-dynamic'
@@ -17,16 +17,12 @@ export default async function InvoicesPage() {
         <PageHeader
           title="Invoices"
           description="Manage your invoices. Data is stored securely in Supabase."
-          actions={<>
-            <Button variant="outline" render={<Link href="/internal/invoices/import" />}>
-              <Upload className="mr-2 size-4" />
-              Import Clockify
-            </Button>
+          actions={
             <Button render={<Link href="/internal/invoices/new" />}>
               <Plus className="mr-2 size-4" />
               New Invoice
             </Button>
-          </>}
+          }
         />
         <InvoiceListClient userId={user.id} />
       </>
