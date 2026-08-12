@@ -1,5 +1,5 @@
 import { cache } from 'react'
-import { client } from './client'
+import { client, freshClient } from './client'
 import { authorSlug } from './authorSlug'
 
 /* ================================================================== */
@@ -593,8 +593,16 @@ export async function getCaseStudies() {
   )
 }
 
+/**
+ * FAQ reads bypass the Sanity CDN (see freshClient).
+ *
+ * FAQs are the content editors iterate on most and verify straight after
+ * publishing, and the CDN's ~60s hold on top of the route's ISR window made
+ * an edit look like it had not saved. The route still revalidates on its own
+ * schedule; this just removes one stale layer from the chain.
+ */
 export async function getFaqItems() {
-  return client.fetch(
+  return freshClient.fetch(
     `*[_type == "faqItem"] | order(coalesce(categoryOrder, 99) asc, order asc) {
       _id, question, answer, category, categoryOrder, order, pages
     }`
@@ -610,7 +618,7 @@ export async function getFaqItems() {
  * schema's `pages` dropdown). The /faqs page uses `"faqs"`.
  */
 export async function getFaqItemsForPage(pageKey: string) {
-  const specific = await client.fetch(
+  const specific = await freshClient.fetch(
     `*[_type == "faqItem" && $pageKey in pages] | order(coalesce(categoryOrder, 99) asc, order asc) {
       _id, question, answer, category, categoryOrder, order
     }`,
@@ -620,7 +628,7 @@ export async function getFaqItemsForPage(pageKey: string) {
   // Fallback: when a page has no specific FAQ entries, surface the curated /faqs set
   // so visitors aren't dropped into a missing-section state. Pages that should stay
   // FAQ-less can opt out via `hideFaqSection: true` on the page document.
-  return client.fetch(
+  return freshClient.fetch(
     `*[_type == "faqItem" && "faqs" in pages] | order(coalesce(categoryOrder, 99) asc, order asc) {
       _id, question, answer, category, categoryOrder, order
     }`
@@ -697,7 +705,7 @@ export async function getClosingCtaForPage(pageKey: string) {
  * own fallback content (templates with hardcoded FAQs pre-migration).
  */
 export async function getFaqItemsForPageStrict(pageKey: string) {
-  return client.fetch(
+  return freshClient.fetch(
     `*[_type == "faqItem" && $pageKey in pages] | order(coalesce(categoryOrder, 99) asc, order asc) {
       _id, question, answer, category, categoryOrder, order
     }`,
