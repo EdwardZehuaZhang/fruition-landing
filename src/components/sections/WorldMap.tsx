@@ -35,9 +35,13 @@ const CITY_COORDS: Record<string, [number, number]> = {
   // Aliases for other office labels that may be configured in the CMS.
   "new york": [40.71, -74.01],
   singapore: [1.35, 103.82],
+  delhi: [28.61, 77.21],
+  "new delhi": [28.61, 77.21],
+  india: [28.61, 77.21], // Delhi - used when the office is labelled just "India"
+  // Legacy: the India office was in Bengaluru. Kept so any CMS office still
+  // carrying the old label still resolves to a pin instead of vanishing.
   bengaluru: [12.97, 77.59],
   bangalore: [12.97, 77.59],
-  india: [19.08, 72.88], // Mumbai - used when the office is labelled just "India"
   philippines: [14.6, 120.98], // Manila
   manila: [14.6, 120.98],
 }

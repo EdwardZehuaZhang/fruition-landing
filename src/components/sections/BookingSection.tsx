@@ -667,7 +667,7 @@ export default function BookingSection({
   heading = "Watch your sales process run on monday CRM.",
   sub = "Pick a time and we'll map your pipeline live on the call - your stages, your handoffs, your reporting. No slides.",
   email = "contact@fruitionservices.io",
-  offices = "Sydney · New York · London · Singapore · Bengaluru",
+  offices = "Sydney · New York · London · Singapore · Delhi",
   proof = "Platinum monday.com partner · 500+ implementations",
   duration = 30,
   askTeamSize = true,
