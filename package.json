@@ -33,6 +33,7 @@
     "migrate:homepage": "tsx scripts/sanity-migrate/homepage.ts",
     "migrate:case-studies": "tsx scripts/sanity-migrate/case-studies.ts",
     "migrate:seo-cro": "tsx scripts/sanity-migrate/seo-cro-text.ts",
+    "migrate:office-delhi": "tsx scripts/sanity-migrate/office-delhi.ts",
     "migrate:all": "tsx scripts/sanity-migrate/run-all.ts",
     "marketa:ideas": "tsx scripts/marketa-harness/generate-ideas.ts",
     "marketa:draft": "tsx scripts/marketa-harness/draft.ts",
