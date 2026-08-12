@@ -1,14 +1,14 @@
 import type { PracticePage } from './types'
 
 /**
- * /ai-consulting cluster — copy ported verbatim from the v2.1 mockups
+ * /ai-consulting cluster - copy ported verbatim from the v2.1 mockups
  * (ai-consulting.html + agent-development / governance-and-compliance /
  * rag-knowledge-systems / marketing-automation / sales-outbound /
  * customer-service / operations-back-office leaves), surname corrected
  * to Jebathilak.
  *
  * Capability Assessment, Strategy & Roadmap, n8n, and the AI platform
- * partner leaves from the mockups are NOT ported here — they already live
+ * partner leaves from the mockups are NOT ported here - they already live
  * at /ai-capability-assessment, /ai-strategy-and-execution, and
  * /partnerships/*; the hub's cards link to those real routes.
  */
@@ -18,13 +18,13 @@ const HUB = { label: 'AI Consulting', href: '/ai-consulting' }
 export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
   hub: {
     path: '/ai-consulting',
-    seoTitle: 'AI Consulting Firm | Fruition Services — Strategy, Agents & Implementation, AU · UK · US',
+    seoTitle: 'AI Consulting Firm | Fruition Services - Strategy, Agents & Implementation, AU · UK · US',
     seoDescription:
-      'Fruition is an AI consulting and implementation firm serving Australia, the UK, and the US. We assess, build, and govern AI systems on the platforms your teams already run — with fixed fees and practitioner-led delivery.',
+      'Fruition is an AI consulting and implementation firm serving Australia, the UK, and the US. We assess, build, and govern AI systems on the platforms your teams already run - with fixed fees and practitioner-led delivery.',
     breadcrumb: [HUB],
     eyebrow: '★ AI Consulting Hub',
     heading: 'AI consulting that starts from how your business actually works',
-    lead: 'Fruition is an AI consulting and implementation firm serving Australia, the UK, and the US. We assess, build, and govern AI systems on the platforms your teams already run — with fixed fees and practitioner-led delivery.',
+    lead: 'Fruition is an AI consulting and implementation firm serving Australia, the UK, and the US. We assess, build, and govern AI systems on the platforms your teams already run - with fixed fees and practitioner-led delivery.',
     targetQueries: [
       'AI consulting firm',
       'AI consultant Sydney',
@@ -37,11 +37,11 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
     approach: [
       {
         title: 'Assess before you spend',
-        body: 'The 4-week AI Capability Assessment scores your readiness across eight dimensions and delivers a costed roadmap — before you commit implementation budget.',
+        body: 'The 4-week AI Capability Assessment scores your readiness across eight dimensions and delivers a costed roadmap - before you commit implementation budget.',
       },
       {
         title: 'Build on your platforms',
-        body: 'We implement AI inside the tools your teams already use — monday.com, Microsoft 365, Google Workspace, HubSpot — not in a parallel system nobody opens.',
+        body: 'We implement AI inside the tools your teams already use - monday.com, Microsoft 365, Google Workspace, HubSpot - not in a parallel system nobody opens.',
       },
       {
         title: 'Govern from day one',
@@ -60,11 +60,11 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Agent Development',
-        body: 'Production AI agents — customer service, research, operations — built on Claude, Copilot Studio, Vertex AI, Bedrock, or n8n.',
+        body: 'Production AI agents - customer service, research, operations - built on Claude, Copilot Studio, Vertex AI, Bedrock, or n8n.',
       },
       {
         title: 'RAG & Knowledge Systems',
-        body: 'Grounded retrieval systems that make your documents, tickets, and CRM history answerable — with citations.',
+        body: 'Grounded retrieval systems that make your documents, tickets, and CRM history answerable - with citations.',
       },
       {
         title: 'Governance & Compliance',
@@ -134,7 +134,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'What is the difference between AI strategy and AI implementation?',
-        a: 'Strategy defines where AI creates value and in what order; implementation builds the systems. Fruition does both — and the same team delivers both, which is why our roadmaps are implementable rather than theoretical.',
+        a: 'Strategy defines where AI creates value and in what order; implementation builds the systems. Fruition does both - and the same team delivers both, which is why our roadmaps are implementable rather than theoretical.',
       },
       {
         q: 'Should we start with an AI pilot or an assessment?',
@@ -154,7 +154,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -165,13 +165,13 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
 
   'agent-development': {
     path: '/ai-consulting/agent-development',
-    seoTitle: 'AI Agent Development | Fruition — Production Agents on Claude, Copilot, Vertex, Bedrock',
+    seoTitle: 'AI Agent Development | Fruition - Production Agents on Claude, Copilot, Vertex, Bedrock',
     seoDescription:
-      'Fruition designs and builds production AI agents across Australia, the UK, and the US — customer service, research, operations, and outbound — with evaluation pipelines from day one.',
+      'Fruition designs and builds production AI agents across Australia, the UK, and the US - customer service, research, operations, and outbound - with evaluation pipelines from day one.',
     breadcrumb: [HUB, { label: 'Agent Development', href: '/ai-consulting/agent-development' }],
     eyebrow: 'AI Consulting · Agents',
     heading: 'Agents that handle real volume, not demo traffic',
-    lead: 'Fruition designs and builds production AI agents across Australia, the UK, and the US — customer service, research, operations, and outbound — with evaluation pipelines from day one.',
+    lead: 'Fruition designs and builds production AI agents across Australia, the UK, and the US - customer service, research, operations, and outbound - with evaluation pipelines from day one.',
     targetQueries: [
       'AI agent development company',
       'build enterprise AI agent',
@@ -186,7 +186,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Evaluation before launch',
-        body: 'Every agent ships with an evaluation harness — accuracy baselines, regression suites, and drift monitoring. Not optional.',
+        body: 'Every agent ships with an evaluation harness - accuracy baselines, regression suites, and drift monitoring. Not optional.',
       },
       {
         title: 'Human handoff designed in',
@@ -202,7 +202,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Research & analysis agents',
-        body: 'Agents that synthesise documents, market data, and CRM history into structured briefs — the pattern behind our financial services deployments.',
+        body: 'Agents that synthesise documents, market data, and CRM history into structured briefs - the pattern behind our financial services deployments.',
       },
       {
         title: 'Operations agents',
@@ -228,7 +228,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'What happens after the agent launches?',
-        a: 'Fruition provides post-launch monitoring covering drift, regression, and cost optimisation — either as a handover package for your team or an ongoing managed service.',
+        a: 'Fruition provides post-launch monitoring covering drift, regression, and cost optimisation - either as a handover package for your team or an ongoing managed service.',
       },
       {
         q: 'How much does AI agent consulting cost with Fruition?',
@@ -244,7 +244,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -255,13 +255,13 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
 
   'governance-and-compliance': {
     path: '/ai-consulting/governance-and-compliance',
-    seoTitle: 'AI Governance & Compliance Consulting | Fruition — EU AI Act, APRA, HIPAA Ready',
+    seoTitle: 'AI Governance & Compliance Consulting | Fruition - EU AI Act, APRA, HIPAA Ready',
     seoDescription:
-      'Fruition builds AI governance frameworks for organisations across Australia, the UK, and the US — usage policy, risk classification, evaluation pipelines, and the regulatory overlays your industry demands.',
+      'Fruition builds AI governance frameworks for organisations across Australia, the UK, and the US - usage policy, risk classification, evaluation pipelines, and the regulatory overlays your industry demands.',
     breadcrumb: [HUB, { label: 'Governance & Compliance', href: '/ai-consulting/governance-and-compliance' }],
     eyebrow: 'AI Consulting · Governance',
     heading: 'AI you can defend to a regulator, a board, and an auditor',
-    lead: 'Fruition builds AI governance frameworks for organisations across Australia, the UK, and the US — usage policy, risk classification, evaluation pipelines, and the regulatory overlays your industry demands.',
+    lead: 'Fruition builds AI governance frameworks for organisations across Australia, the UK, and the US - usage policy, risk classification, evaluation pipelines, and the regulatory overlays your industry demands.',
     targetQueries: [
       'AI governance framework',
       'EU AI Act compliance consulting',
@@ -272,11 +272,11 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
     approach: [
       {
         title: 'Risk-classified use cases',
-        body: 'Every AI use case is classified by risk tier — which determines the controls, human oversight, and documentation it requires. EU AI Act logic applied globally.',
+        body: 'Every AI use case is classified by risk tier - which determines the controls, human oversight, and documentation it requires. EU AI Act logic applied globally.',
       },
       {
         title: 'Controls that run automatically',
-        body: 'Audit logging, evaluation gates, and usage monitoring built into the systems — not into a policy PDF nobody reads.',
+        body: 'Audit logging, evaluation gates, and usage monitoring built into the systems - not into a policy PDF nobody reads.',
       },
       {
         title: 'Regulator-specific overlays',
@@ -288,7 +288,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
     services: [
       {
         title: 'AI usage policy',
-        body: 'Organisation-wide policy covering approved tools, data handling, disclosure requirements, and prohibited uses — written for humans.',
+        body: 'Organisation-wide policy covering approved tools, data handling, disclosure requirements, and prohibited uses - written for humans.',
       },
       {
         title: 'Risk framework & register',
@@ -296,7 +296,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Evaluation pipelines',
-        body: 'Automated accuracy, bias, and drift monitoring for production AI systems — with alert thresholds and review cadences.',
+        body: 'Automated accuracy, bias, and drift monitoring for production AI systems - with alert thresholds and review cadences.',
       },
       {
         title: 'Regulatory mapping',
@@ -313,7 +313,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
         a: 'A usage policy, a risk classification framework, a use-case register, evaluation and monitoring pipelines, incident response procedures, and regulatory mapping. Fruition delivers all six as an integrated package rather than isolated documents.',
       },
       {
-        q: 'When should governance be built — before or after implementation?',
+        q: 'When should governance be built - before or after implementation?',
         a: 'Before, or at minimum alongside. Retrofitting governance onto live AI systems costs 3–5× more than building it in, and interim ungoverned use creates the exact audit exposure the framework exists to prevent.',
       },
       {
@@ -330,7 +330,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -341,13 +341,13 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
 
   'rag-knowledge-systems': {
     path: '/ai-consulting/rag-knowledge-systems',
-    seoTitle: 'RAG & Enterprise Knowledge Systems | Fruition — Grounded AI Search & Retrieval',
+    seoTitle: 'RAG & Enterprise Knowledge Systems | Fruition - Grounded AI Search & Retrieval',
     seoDescription:
-      'Fruition designs and builds retrieval-augmented generation systems across Australia, the UK, and the US — grounded answers over your documents, tickets, wikis, and CRM, with citations your auditors can follow.',
+      'Fruition designs and builds retrieval-augmented generation systems across Australia, the UK, and the US - grounded answers over your documents, tickets, wikis, and CRM, with citations your auditors can follow.',
     breadcrumb: [HUB, { label: 'RAG & Knowledge Systems', href: '/ai-consulting/rag-knowledge-systems' }],
     eyebrow: 'AI Consulting · RAG',
     heading: 'Make everything your company knows answerable',
-    lead: 'Fruition designs and builds retrieval-augmented generation systems across Australia, the UK, and the US — grounded answers over your documents, tickets, wikis, and CRM, with citations your auditors can follow.',
+    lead: 'Fruition designs and builds retrieval-augmented generation systems across Australia, the UK, and the US - grounded answers over your documents, tickets, wikis, and CRM, with citations your auditors can follow.',
     targetQueries: [
       'RAG implementation partner',
       'enterprise knowledge base AI',
@@ -362,11 +362,11 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Citations as a feature',
-        body: 'Every answer traces to source documents. In regulated industries this isn’t nice-to-have — it’s the requirement.',
+        body: 'Every answer traces to source documents. In regulated industries this isn’t nice-to-have - it’s the requirement.',
       },
       {
         title: 'Evaluation-driven tuning',
-        body: 'Golden question sets, retrieval precision metrics, and answer-quality scoring drive tuning — not vibes.',
+        body: 'Golden question sets, retrieval precision metrics, and answer-quality scoring drive tuning - not vibes.',
       },
     ],
     servicesEyebrow: 'System types',
@@ -374,7 +374,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
     services: [
       {
         title: 'Internal knowledge assistants',
-        body: 'Grounded search over policies, wikis, and documentation — the ‘ask the company’ interface.',
+        body: 'Grounded search over policies, wikis, and documentation - the ‘ask the company’ interface.',
       },
       {
         title: 'Customer-facing knowledge',
@@ -386,13 +386,13 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Stack options',
-        body: 'Supabase pgvector, Vertex AI Search, Bedrock Knowledge Bases, or Azure AI Search — matched to your existing cloud posture.',
+        body: 'Supabase pgvector, Vertex AI Search, Bedrock Knowledge Bases, or Azure AI Search - matched to your existing cloud posture.',
       },
     ],
     faqs: [
       {
         q: 'What is RAG (retrieval-augmented generation)?',
-        a: 'RAG is an architecture where an AI model retrieves relevant content from your own knowledge sources before answering, grounding responses in your actual documents rather than the model’s training data — with citations back to source.',
+        a: 'RAG is an architecture where an AI model retrieves relevant content from your own knowledge sources before answering, grounding responses in your actual documents rather than the model’s training data - with citations back to source.',
       },
       {
         q: 'Why do RAG projects fail?',
@@ -416,7 +416,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -427,13 +427,13 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
 
   'marketing-automation': {
     path: '/ai-consulting/marketing-automation',
-    seoTitle: 'AI Marketing Automation Consulting | Fruition — Content, Campaigns & MarTech AI',
+    seoTitle: 'AI Marketing Automation Consulting | Fruition - Content, Campaigns & MarTech AI',
     seoDescription:
-      'Fruition builds AI marketing automation for teams across Australia, the UK, and the US — content operations, campaign intelligence, and lead workflows connected to the CRM and platforms you already run.',
+      'Fruition builds AI marketing automation for teams across Australia, the UK, and the US - content operations, campaign intelligence, and lead workflows connected to the CRM and platforms you already run.',
     breadcrumb: [HUB, { label: 'Marketing Automation', href: '/ai-consulting/marketing-automation' }],
     eyebrow: 'AI Consulting · Marketing',
     heading: 'Marketing output that scales without headcount',
-    lead: 'Fruition builds AI marketing automation for teams across Australia, the UK, and the US — content operations, campaign intelligence, and lead workflows connected to the CRM and platforms you already run.',
+    lead: 'Fruition builds AI marketing automation for teams across Australia, the UK, and the US - content operations, campaign intelligence, and lead workflows connected to the CRM and platforms you already run.',
     targetQueries: [
       'AI marketing automation agency',
       'AI content operations',
@@ -444,11 +444,11 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
     approach: [
       {
         title: 'Brand-safe content operations',
-        body: 'AI content pipelines with editorial gates, tone controls, and human review where it matters — volume without the slop.',
+        body: 'AI content pipelines with editorial gates, tone controls, and human review where it matters - volume without the slop.',
       },
       {
         title: 'CRM-connected intelligence',
-        body: 'Lead scoring, intent signals, and campaign attribution wired into HubSpot or monday CRM — where your team already works.',
+        body: 'Lead scoring, intent signals, and campaign attribution wired into HubSpot or monday CRM - where your team already works.',
       },
       {
         title: 'Measured against pipeline',
@@ -472,7 +472,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'SEO & AEO systems',
-        body: 'Content optimised for both search rankings and AI answer-engine citations — the discipline this very page demonstrates.',
+        body: 'Content optimised for both search rankings and AI answer-engine citations - the discipline this very page demonstrates.',
       },
     ],
     faqs: [
@@ -482,7 +482,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Will AI-generated content hurt our SEO?',
-        a: 'Unedited volume content will. AI content with editorial gates, original data, expert attribution, and genuine utility performs well — Google’s guidance targets low-quality content regardless of how it’s produced. Fruition builds the editorial controls into the pipeline.',
+        a: 'Unedited volume content will. AI content with editorial gates, original data, expert attribution, and genuine utility performs well - Google’s guidance targets low-quality content regardless of how it’s produced. Fruition builds the editorial controls into the pipeline.',
       },
       {
         q: 'How much does AI marketing automation consulting cost with Fruition?',
@@ -498,7 +498,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -509,13 +509,13 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
 
   'sales-outbound': {
     path: '/ai-consulting/sales-outbound',
-    seoTitle: 'AI Sales & Outbound Automation | Fruition — Lead Engines & Sales AI, AU · UK · US',
+    seoTitle: 'AI Sales & Outbound Automation | Fruition - Lead Engines & Sales AI, AU · UK · US',
     seoDescription:
-      'Fruition designs and builds AI outbound and sales systems for teams across Australia, the UK, and the US — lead sourcing, enrichment, genuine personalisation, and sequencing wired into your CRM.',
+      'Fruition designs and builds AI outbound and sales systems for teams across Australia, the UK, and the US - lead sourcing, enrichment, genuine personalisation, and sequencing wired into your CRM.',
     breadcrumb: [HUB, { label: 'Sales & Outbound', href: '/ai-consulting/sales-outbound' }],
     eyebrow: 'AI Consulting · Sales & Outbound',
     heading: 'An outbound engine that researches before it writes',
-    lead: 'Fruition designs and builds AI outbound and sales systems for teams across Australia, the UK, and the US — lead sourcing, enrichment, genuine personalisation, and sequencing wired into your CRM.',
+    lead: 'Fruition designs and builds AI outbound and sales systems for teams across Australia, the UK, and the US - lead sourcing, enrichment, genuine personalisation, and sequencing wired into your CRM.',
     targetQueries: [
       'AI outbound lead engine',
       'AI SDR implementation',
@@ -526,7 +526,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
     approach: [
       {
         title: 'Research-driven personalisation',
-        body: 'Agents that actually research each prospect — recent news, tech stack, hiring signals — before a single line is written.',
+        body: 'Agents that actually research each prospect - recent news, tech stack, hiring signals - before a single line is written.',
       },
       {
         title: 'Deliverability as engineering',
@@ -534,7 +534,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'CRM-native from day one',
-        body: 'Every touch, reply, and signal lands in HubSpot or monday CRM with attribution — no parallel spreadsheet universe.',
+        body: 'Every touch, reply, and signal lands in HubSpot or monday CRM with attribution - no parallel spreadsheet universe.',
       },
     ],
     servicesEyebrow: 'System components',
@@ -546,7 +546,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Personalisation engine',
-        body: 'Per-prospect research synthesis feeding genuinely specific first lines — not [FIRST_NAME] merge fields.',
+        body: 'Per-prospect research synthesis feeding genuinely specific first lines - not [FIRST_NAME] merge fields.',
       },
       {
         title: 'Sequencing & reply handling',
@@ -560,11 +560,11 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
     faqs: [
       {
         q: 'Do AI outbound systems actually work?',
-        a: 'Volume-first AI outbound is dying under inbox filters and buyer fatigue. Research-driven systems that generate genuinely specific relevance perform 3–8× volume approaches on reply rate. The architecture — research depth, deliverability engineering, reply handling — decides the outcome.',
+        a: 'Volume-first AI outbound is dying under inbox filters and buyer fatigue. Research-driven systems that generate genuinely specific relevance perform 3–8× volume approaches on reply rate. The architecture - research depth, deliverability engineering, reply handling - decides the outcome.',
       },
       {
         q: 'Can this integrate with our existing CRM?',
-        a: 'Yes. Fruition builds outbound engines natively integrated with HubSpot and monday CRM — both platforms we implement as certified partners — plus Salesforce and Pipedrive via API.',
+        a: 'Yes. Fruition builds outbound engines natively integrated with HubSpot and monday CRM - both platforms we implement as certified partners - plus Salesforce and Pipedrive via API.',
       },
       {
         q: 'How much does AI outbound consulting cost with Fruition?',
@@ -580,7 +580,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -591,13 +591,13 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
 
   'customer-service': {
     path: '/ai-consulting/customer-service',
-    seoTitle: 'AI Customer Service Consulting | Fruition — Support Agents & Deflection Systems',
+    seoTitle: 'AI Customer Service Consulting | Fruition - Support Agents & Deflection Systems',
     seoDescription:
-      'Fruition builds AI customer service systems for organisations across Australia, the UK, and the US — grounded support agents, ticket intelligence, and deflection that protects CSAT instead of gaming it.',
+      'Fruition builds AI customer service systems for organisations across Australia, the UK, and the US - grounded support agents, ticket intelligence, and deflection that protects CSAT instead of gaming it.',
     breadcrumb: [HUB, { label: 'Customer Service', href: '/ai-consulting/customer-service' }],
     eyebrow: 'AI Consulting · Customer Service',
     heading: 'Support that resolves before it queues',
-    lead: 'Fruition builds AI customer service systems for organisations across Australia, the UK, and the US — grounded support agents, ticket intelligence, and deflection that protects CSAT instead of gaming it.',
+    lead: 'Fruition builds AI customer service systems for organisations across Australia, the UK, and the US - grounded support agents, ticket intelligence, and deflection that protects CSAT instead of gaming it.',
     targetQueries: [
       'AI customer support implementation',
       'support ticket deflection',
@@ -608,7 +608,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
     approach: [
       {
         title: 'Grounded in resolved tickets',
-        body: 'Agents trained on your actual resolutions and help content — not generic model knowledge that invents policies you don’t have.',
+        body: 'Agents trained on your actual resolutions and help content - not generic model knowledge that invents policies you don’t have.',
       },
       {
         title: 'Confidence-gated responses',
@@ -616,7 +616,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Platform-embedded',
-        body: 'Built into monday Service, HubSpot Service Hub, or your existing helpdesk — agents work where your team works.',
+        body: 'Built into monday Service, HubSpot Service Hub, or your existing helpdesk - agents work where your team works.',
       },
     ],
     servicesEyebrow: 'What we build',
@@ -628,7 +628,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Agent-assist copilots',
-        body: 'Draft responses, ticket summarisation, and knowledge surfacing inside the agent workspace — cutting handle time 25–40%.',
+        body: 'Draft responses, ticket summarisation, and knowledge surfacing inside the agent workspace - cutting handle time 25–40%.',
       },
       {
         title: 'Ticket intelligence',
@@ -642,7 +642,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
     faqs: [
       {
         q: 'How much of our support volume can AI actually handle?',
-        a: 'Well-implemented grounded agents typically deflect 40–65% of tier-1 volume within three months, with agent-assist tooling cutting handle time on the remainder by 25–40%. The ceiling depends on your knowledge content quality — which the implementation audit addresses first.',
+        a: 'Well-implemented grounded agents typically deflect 40–65% of tier-1 volume within three months, with agent-assist tooling cutting handle time on the remainder by 25–40%. The ceiling depends on your knowledge content quality - which the implementation audit addresses first.',
       },
       {
         q: 'Will AI support hurt our customer satisfaction?',
@@ -662,7 +662,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -673,13 +673,13 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
 
   'operations-back-office': {
     path: '/ai-consulting/operations-back-office',
-    seoTitle: 'AI Operations Automation | Fruition — Back-Office AI for Finance, HR & Ops Teams',
+    seoTitle: 'AI Operations Automation | Fruition - Back-Office AI for Finance, HR & Ops Teams',
     seoDescription:
-      'Fruition automates operational workflows for organisations across Australia, the UK, and the US — document processing, reconciliation, approvals, and the cross-system glue-work that eats your team’s week.',
+      'Fruition automates operational workflows for organisations across Australia, the UK, and the US - document processing, reconciliation, approvals, and the cross-system glue-work that eats your team’s week.',
     breadcrumb: [HUB, { label: 'Operations & Back-Office', href: '/ai-consulting/operations-back-office' }],
     eyebrow: 'AI Consulting · Operations',
     heading: 'The back office, minus the re-keying',
-    lead: 'Fruition automates operational workflows for organisations across Australia, the UK, and the US — document processing, reconciliation, approvals, and the cross-system glue-work that eats your team’s week.',
+    lead: 'Fruition automates operational workflows for organisations across Australia, the UK, and the US - document processing, reconciliation, approvals, and the cross-system glue-work that eats your team’s week.',
     targetQueries: [
       'AI back office automation',
       'AI document processing',
@@ -690,7 +690,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
     approach: [
       {
         title: 'Process before automation',
-        body: 'Digitising a mess doesn’t fix it — it scales it. We restructure the workflow before we automate it, every time.',
+        body: 'Digitising a mess doesn’t fix it - it scales it. We restructure the workflow before we automate it, every time.',
       },
       {
         title: 'Human-in-the-loop by design',
@@ -698,7 +698,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Platform-connected',
-        body: 'Built across monday.com, Xero, your ERP, and your document stores — automating between systems, not inside another silo.',
+        body: 'Built across monday.com, Xero, your ERP, and your document stores - automating between systems, not inside another silo.',
       },
     ],
     servicesEyebrow: 'What we automate',
@@ -706,7 +706,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
     services: [
       {
         title: 'Document intelligence',
-        body: 'Invoice extraction, contract review, compliance document processing — structured data out of unstructured inputs.',
+        body: 'Invoice extraction, contract review, compliance document processing - structured data out of unstructured inputs.',
       },
       {
         title: 'Financial workflows',
@@ -744,7 +744,7 @@ export const AI_CONSULTING_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',

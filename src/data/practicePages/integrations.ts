@@ -1,13 +1,13 @@
 import type { PracticePage } from './types'
 
 /**
- * /integrations cluster — copy ported verbatim from the v2.1 mockups
+ * /integrations cluster - copy ported verbatim from the v2.1 mockups
  * (integrations.html + aircall / twilio / make / zapier leaves), surname
  * corrected to Jebathilak.
  *
  * n8n deliberately has no /integrations leaf: the mockup's n8n card points to
  * the AI practice, and the live credential page is
- * /partnerships/n8n-integration-partner — the hub card links there.
+ * /partnerships/n8n-integration-partner - the hub card links there.
  */
 
 const HUB = { label: 'Integrations', href: '/integrations' }
@@ -15,18 +15,18 @@ const HUB = { label: 'Integrations', href: '/integrations' }
 export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
   hub: {
     path: '/integrations',
-    seoTitle: 'Platform Integrations | Fruition — Aircall, Twilio, Make, n8n, Zapier Consulting',
+    seoTitle: 'Platform Integrations | Fruition - Aircall, Twilio, Make, n8n, Zapier Consulting',
     seoDescription:
-      'Fruition builds and maintains the integrations that make your stack behave like one system — telephony, automation middleware, and the API-level work packaged connectors can’t do. Australia, the UK, and the US.',
+      'Fruition builds and maintains the integrations that make your stack behave like one system - telephony, automation middleware, and the API-level work packaged connectors can’t do. Australia, the UK, and the US.',
     breadcrumb: [HUB],
     eyebrow: 'Integrations Hub',
     heading: 'The connective tissue between your platforms',
-    lead: 'Fruition builds and maintains the integrations that make your stack behave like one system — telephony, automation middleware, and the API-level work packaged connectors can’t do. Australia, the UK, and the US.',
+    lead: 'Fruition builds and maintains the integrations that make your stack behave like one system - telephony, automation middleware, and the API-level work packaged connectors can’t do. Australia, the UK, and the US.',
     approachHeading: 'Integrations as products, not favours.',
     approach: [
       {
         title: 'Error handling first',
-        body: 'Rate limits, retries, dead-letter queues, and alerting designed in — because integrations that fail silently corrupt trust in every connected system.',
+        body: 'Rate limits, retries, dead-letter queues, and alerting designed in - because integrations that fail silently corrupt trust in every connected system.',
       },
       {
         title: 'Documented and owned',
@@ -34,7 +34,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Platform-native where possible',
-        body: 'Native connectors where they suffice, middleware only where mapping and logic demand it — minimising the moving parts you pay to maintain.',
+        body: 'Native connectors where they suffice, middleware only where mapping and logic demand it - minimising the moving parts you pay to maintain.',
       },
     ],
     servicesEyebrow: 'The toolkit',
@@ -42,7 +42,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
     services: [
       {
         title: 'Aircall',
-        body: 'Cloud telephony wired into monday.com and HubSpot — call logging, ticket creation, and rep performance dashboards.',
+        body: 'Cloud telephony wired into monday.com and HubSpot - call logging, ticket creation, and rep performance dashboards.',
       },
       {
         title: 'Twilio',
@@ -54,11 +54,11 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'n8n',
-        body: 'Our preferred platform for AI-driven and self-hosted automation — covered in depth in the AI practice.',
+        body: 'Our preferred platform for AI-driven and self-hosted automation - covered in depth in the AI practice.',
       },
       {
         title: 'Zapier',
-        body: 'Quick-connect automation where speed beats sophistication — plus migrations off it when you outgrow it.',
+        body: 'Quick-connect automation where speed beats sophistication - plus migrations off it when you outgrow it.',
       },
     ],
     childrenEyebrow: 'Integration pages',
@@ -81,7 +81,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       },
       {
         label: 'n8n',
-        description: 'Agentic automation — covered in the AI practice',
+        description: 'Agentic automation - covered in the AI practice',
         href: '/partnerships/n8n-integration-partner',
       },
       {
@@ -92,7 +92,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
     ],
     faqs: [
       {
-        q: 'Which automation tool should we use — Zapier, Make, or n8n?',
+        q: 'Which automation tool should we use - Zapier, Make, or n8n?',
         a: 'Zapier for speed and simplicity at low volume; Make for visual complexity at mid-scale; n8n for AI-driven workflows, high volume, and self-hosting requirements. Fruition implements all three and migrates between them as teams grow.',
       },
       {
@@ -109,7 +109,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -120,18 +120,18 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
 
   aircall: {
     path: '/integrations/aircall',
-    seoTitle: 'Aircall Integration Consulting | Fruition — Telephony in Your CRM & Service Desk',
+    seoTitle: 'Aircall Integration Consulting | Fruition - Telephony in Your CRM & Service Desk',
     seoDescription:
-      'Fruition integrates Aircall with monday.com, HubSpot, and your service workflows across Australia, the UK, and the US — so calls create records, tickets, and follow-ups automatically.',
+      'Fruition integrates Aircall with monday.com, HubSpot, and your service workflows across Australia, the UK, and the US - so calls create records, tickets, and follow-ups automatically.',
     breadcrumb: [HUB, { label: 'Aircall', href: '/partnerships/aircall-partner' }],
     eyebrow: 'Integrations · Aircall',
     heading: 'Every call, logged where the work happens',
-    lead: 'Fruition integrates Aircall with monday.com, HubSpot, and your service workflows across Australia, the UK, and the US — so calls create records, tickets, and follow-ups automatically.',
+    lead: 'Fruition integrates Aircall with monday.com, HubSpot, and your service workflows across Australia, the UK, and the US - so calls create records, tickets, and follow-ups automatically.',
     approachHeading: 'Telephony as workflow, not hardware.',
     approach: [
       {
         title: 'CRM-native call records',
-        body: 'Calls, recordings, and outcomes logged against the right contact and deal automatically — no post-call admin.',
+        body: 'Calls, recordings, and outcomes logged against the right contact and deal automatically - no post-call admin.',
       },
       {
         title: 'Routing that reflects reality',
@@ -147,7 +147,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
     services: [
       {
         title: 'Aircall + monday.com',
-        body: 'Call events creating and updating items — sales activity logging, service ticket creation, and callback workflows.',
+        body: 'Call events creating and updating items - sales activity logging, service ticket creation, and callback workflows.',
       },
       {
         title: 'Aircall + HubSpot',
@@ -159,13 +159,13 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'AI-adjacent extensions',
-        body: 'Transcription and call-summary pipelines feeding your CRM — connected to our AI practice for teams going further.',
+        body: 'Transcription and call-summary pipelines feeding your CRM - connected to our AI practice for teams going further.',
       },
     ],
     faqs: [
       {
         q: 'Does Aircall integrate with monday.com?',
-        a: 'Yes — through native app options and deeper middleware builds. Fruition typically implements call logging, ticket creation, and activity tracking flows, with n8n middleware where routing logic or field mapping exceeds native capability.',
+        a: 'Yes - through native app options and deeper middleware builds. Fruition typically implements call logging, ticket creation, and activity tracking flows, with n8n middleware where routing logic or field mapping exceeds native capability.',
       },
       {
         q: 'How much does Aircall integration consulting cost with Fruition?',
@@ -181,7 +181,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -192,18 +192,18 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
 
   twilio: {
     path: '/integrations/twilio',
-    seoTitle: 'Twilio Consulting | Fruition — SMS, Voice & Programmable Comms Workflows',
+    seoTitle: 'Twilio Consulting | Fruition - SMS, Voice & Programmable Comms Workflows',
     seoDescription:
-      'Fruition builds Twilio-powered SMS and voice workflows for teams across Australia, the UK, and the US — appointment reminders, status notifications, and customer comms triggered by your actual systems.',
+      'Fruition builds Twilio-powered SMS and voice workflows for teams across Australia, the UK, and the US - appointment reminders, status notifications, and customer comms triggered by your actual systems.',
     breadcrumb: [HUB, { label: 'Twilio', href: '/integrations/twilio' }],
     eyebrow: 'Integrations · Twilio',
     heading: 'Programmable comms wired into your workflows',
-    lead: 'Fruition builds Twilio-powered SMS and voice workflows for teams across Australia, the UK, and the US — appointment reminders, status notifications, and customer comms triggered by your actual systems.',
+    lead: 'Fruition builds Twilio-powered SMS and voice workflows for teams across Australia, the UK, and the US - appointment reminders, status notifications, and customer comms triggered by your actual systems.',
     approachHeading: 'Compliance-aware comms engineering.',
     approach: [
       {
         title: 'Event-driven messaging',
-        body: 'SMS and voice triggered by real workflow events — status changes, bookings, escalations — not batch blasts.',
+        body: 'SMS and voice triggered by real workflow events - status changes, bookings, escalations - not batch blasts.',
       },
       {
         title: 'Regulatory discipline',
@@ -211,7 +211,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Two-way by default',
-        body: 'Replies routed back into monday, HubSpot, or your service desk — because one-way SMS is a missed conversation.',
+        body: 'Replies routed back into monday, HubSpot, or your service desk - because one-way SMS is a missed conversation.',
       },
     ],
     servicesEyebrow: 'What we build',
@@ -231,7 +231,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'AI voice foundations',
-        body: 'The Twilio infrastructure layer for teams exploring AI voice agents — bridged to our AI practice.',
+        body: 'The Twilio infrastructure layer for teams exploring AI voice agents - bridged to our AI practice.',
       },
     ],
     faqs: [
@@ -253,7 +253,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -264,18 +264,18 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
 
   make: {
     path: '/integrations/make',
-    seoTitle: 'Make (Integromat) Consulting | Fruition — Visual Automation Built Properly',
+    seoTitle: 'Make (Integromat) Consulting | Fruition - Visual Automation Built Properly',
     seoDescription:
-      'Fruition designs and builds Make automation for teams across Australia, the UK, and the US — multi-step scenarios with the error handling, documentation, and governance DIY builds skip.',
+      'Fruition designs and builds Make automation for teams across Australia, the UK, and the US - multi-step scenarios with the error handling, documentation, and governance DIY builds skip.',
     breadcrumb: [HUB, { label: 'Make', href: '/partnerships/make-partners' }],
     eyebrow: 'Integrations · Make',
     heading: 'Make scenarios that survive contact with production',
-    lead: 'Fruition designs and builds Make automation for teams across Australia, the UK, and the US — multi-step scenarios with the error handling, documentation, and governance DIY builds skip.',
+    lead: 'Fruition designs and builds Make automation for teams across Australia, the UK, and the US - multi-step scenarios with the error handling, documentation, and governance DIY builds skip.',
     approachHeading: 'Scenarios as maintainable systems.',
     approach: [
       {
         title: 'Architecture before modules',
-        body: 'Data flow mapped and system-of-record rules set before any scenario is built — sprawl prevention starts at design.',
+        body: 'Data flow mapped and system-of-record rules set before any scenario is built - sprawl prevention starts at design.',
       },
       {
         title: 'Error paths on everything',
@@ -283,7 +283,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Operations documentation',
-        body: 'Scenario maps and runbooks so your team can maintain what we build — or we do, under managed service.',
+        body: 'Scenario maps and runbooks so your team can maintain what we build - or we do, under managed service.',
       },
     ],
     servicesEyebrow: 'What we build',
@@ -308,7 +308,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
     ],
     faqs: [
       {
-        q: 'Make or Zapier — which is better?',
+        q: 'Make or Zapier - which is better?',
         a: 'Make offers stronger visual logic, cheaper high-volume operations, and better data transformation; Zapier offers speed and the broadest app catalogue. For AI-heavy or self-hosted needs, n8n beats both. Fruition implements all three and advises per workload.',
       },
       {
@@ -325,7 +325,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -336,13 +336,13 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
 
   zapier: {
     path: '/integrations/zapier',
-    seoTitle: 'Zapier Consulting | Fruition — Fast Connections & Structured Graduations',
+    seoTitle: 'Zapier Consulting | Fruition - Fast Connections & Structured Graduations',
     seoDescription:
-      'Fruition builds Zapier automation for teams across Australia, the UK, and the US — and runs the structured graduations to Make or n8n when volume, cost, or complexity says it’s time.',
+      'Fruition builds Zapier automation for teams across Australia, the UK, and the US - and runs the structured graduations to Make or n8n when volume, cost, or complexity says it’s time.',
     breadcrumb: [HUB, { label: 'Zapier', href: '/integrations/zapier' }],
     eyebrow: 'Integrations · Zapier',
     heading: 'Zapier for speed. A plan for when you outgrow it',
-    lead: 'Fruition builds Zapier automation for teams across Australia, the UK, and the US — and runs the structured graduations to Make or n8n when volume, cost, or complexity says it’s time.',
+    lead: 'Fruition builds Zapier automation for teams across Australia, the UK, and the US - and runs the structured graduations to Make or n8n when volume, cost, or complexity says it’s time.',
     approachHeading: 'Right tool, right stage.',
     approach: [
       {
@@ -393,7 +393,7 @@ export const INTEGRATIONS_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',

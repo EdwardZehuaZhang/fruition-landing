@@ -5,12 +5,12 @@ export const html = `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>monday.com Consulting Services Australia | Certified Platinum Partner — Fruition</title>
+<title>monday.com Consulting Services Australia | Certified Platinum Partner - Fruition</title>
 <meta name="description" content="Expert monday.com consulting services and implementation across Australia. monday CRM consultants, workflow automation and certified Platinum Partner delivery. Book a free consultation.">
 <meta name="keywords" content="monday consulting services, monday CRM consultants, monday implementation consultant, monday.com consulting services, monday.com certified partner, monday com consultant Australia">
 <meta name="robots" content="noindex, follow">
 <meta name="geo.region" content="AU"><meta name="geo.placename" content="Australia">
-<meta property="og:title" content="monday.com Consulting Services Australia | Fruition — Certified Platinum Partner">
+<meta property="og:title" content="monday.com Consulting Services Australia | Fruition - Certified Platinum Partner">
 <meta property="og:description" content="Streamline your workflows with Australia's monday.com Platinum Partner. Custom setups, integrations, end-to-end automation. Book a free consultation.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.fruitionservices.io/au/monday-consulting-services">
@@ -18,7 +18,7 @@ export const html = `<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"ProfessionalService","name":"Fruition Services — monday.com Consulting Services Australia","description":"monday.com Platinum Partner delivering consulting, implementation, CRM builds, integrations and training across Australia and New Zealand.","url":"https://www.fruitionservices.io/au/monday-consulting-services","provider":{"@type":"Organization","name":"Fruition Services Pty Ltd","identifier":"ABN 12 667 454 006","address":{"@type":"PostalAddress","streetAddress":"12/64 York Street","addressLocality":"Sydney","addressRegion":"NSW","postalCode":"2000","addressCountry":"AU"}},"areaServed":[{"@type":"Country","name":"Australia"},{"@type":"Country","name":"New Zealand"}],"serviceType":"monday.com consulting and implementation"}
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"Fruition Services - monday.com Consulting Services Australia","description":"monday.com Platinum Partner delivering consulting, implementation, CRM builds, integrations and training across Australia and New Zealand.","url":"https://www.fruitionservices.io/au/monday-consulting-services","provider":{"@type":"Organization","name":"Fruition Services Pty Ltd","identifier":"ABN 12 667 454 006","address":{"@type":"PostalAddress","streetAddress":"12/64 York Street","addressLocality":"Sydney","addressRegion":"NSW","postalCode":"2000","addressCountry":"AU"}},"areaServed":[{"@type":"Country","name":"Australia"},{"@type":"Country","name":"New Zealand"}],"serviceType":"monday.com consulting and implementation"}
 </script>
 <style>
 :root{--p9:#2D1450;--p7:#5B2A86;--p5:#7C3FB0;--p3:#B68FD9;--p1:#EFE5F7;--p05:#F7F2FB;
@@ -127,7 +127,7 @@ h2{font-family:'Fraunces',serif;font-weight:500;font-size:32px;letter-spacing:-.
 .form-btn:hover{background:var(--p9)}
 .form-trust{text-align:center;font-size:12px;color:var(--light);margin-top:12px}
 
-/* Footer minimal — no links */
+/* Footer minimal - no links */
 .foot{padding:28px 0;text-align:center;font-size:12px;color:var(--lighter);border-top:1px solid var(--line)}
 
 @media(max-width:900px){
@@ -165,7 +165,7 @@ section{padding:44px 0}
 </div>
 </div>
 <div class="dash" aria-hidden="true">
-<div class="dash-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="ttl">Sales Pipeline — Q3</span></div>
+<div class="dash-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="ttl">Sales Pipeline - Q3</span></div>
 <div class="dash-body">
 <div class="dash-row h"><span>Deal</span><span>Status</span><span>Owner</span><span>Progress</span></div>
 <div class="dash-row"><span class="dash-name">Acme Rollout</span><span class="pill pg">Won</span><span>N. M.</span><span class="bar"><i style="width:100%"></i></span></div>
@@ -192,7 +192,7 @@ section{padding:44px 0}
 <section><div class="wrap">
 <div class="eyebrow">What we deliver</div>
 <h2>Tailored monday Implementation Consultant Solutions for Every Workflow</h2>
-<p class="lede">Certified, keyword-deep expertise across the full monday.com product suite — built around how your teams actually work.</p>
+<p class="lede">Certified, keyword-deep expertise across the full monday.com product suite - built around how your teams actually work.</p>
 <div class="caps">
 <div class="cap">
 <h3>monday CRM Consultants</h3>
@@ -200,7 +200,7 @@ section{padding:44px 0}
 </div>
 <div class="cap">
 <h3>Workflow Automation &amp; Integrations</h3>
-<p>Connect your entire tech stack — Xero, QuickBooks, Salesforce, or HubSpot — using Make.com or custom API developments to reduce manual tasks.</p>
+<p>Connect your entire tech stack - Xero, QuickBooks, Salesforce, or HubSpot - using Make.com or custom API developments to reduce manual tasks.</p>
 </div>
 <div class="cap">
 <h3>monday Service &amp; Work Management</h3>

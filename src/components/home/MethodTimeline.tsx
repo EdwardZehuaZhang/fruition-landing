@@ -16,7 +16,7 @@ const BARS = METHOD_STEPS.map((step) => ({
 }))
 
 /**
- * The Fruition method — four phases against a rolling 12-week gantt.
+ * The Fruition method - four phases against a rolling 12-week gantt.
  *
  * A single rAF clock drives the week marker, the bar fills and the per-step
  * progress bars so they can never drift apart. Widths are written straight to
@@ -83,7 +83,7 @@ export default function MethodTimeline() {
             </p>
             <h2 className="text-section-h2 mt-4 text-white">Process before platform.</h2>
             <p className="text-body mt-4 max-w-[640px] text-white/70 lg:text-[17px]">
-              We design how your business should run first — then configure the platform to match.
+              We design how your business should run first - then configure the platform to match.
               Numbered because the sequence matters.
             </p>
           </div>
@@ -98,7 +98,7 @@ export default function MethodTimeline() {
         </div>
 
         <div className="mt-10 grid grid-cols-1 items-start gap-12 lg:mt-15 lg:grid-cols-[330px_1fr]">
-          {/* Steps — rows line up 1:1 with the gantt bars on lg. */}
+          {/* Steps - rows line up 1:1 with the gantt bars on lg. */}
           <div className="flex flex-col lg:pt-[65px]">
             {METHOD_STEPS.map((step, i) => {
               const active = week >= step.from && week <= step.to

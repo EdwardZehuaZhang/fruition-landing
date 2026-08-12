@@ -242,7 +242,7 @@ export const NAV_ICONS: Record<string, (props: IconProps) => ReactElement> = {
       <path d="M4 4h13l-2 4 2 4H4" />
     </svg>
   ),
-  // Anthropic — six-ray spark mark
+  // Anthropic - six-ray spark mark
   anthropic: (p) => (
     <svg {...base(p)}>
       <path d="M12 2v20" />
@@ -250,14 +250,14 @@ export const NAV_ICONS: Record<string, (props: IconProps) => ReactElement> = {
       <path d="M20.5 6.5 3.5 17.5" />
     </svg>
   ),
-  // OpenAI — interlocking hexagonal knot
+  // OpenAI - interlocking hexagonal knot
   openai: (p) => (
     <svg {...base(p)}>
       <path d="M12 3 19.8 7.5v9L12 21l-7.8-4.5v-9L12 3Z" />
       <path d="M12 7.5 16 9.75v4.5L12 16.5l-4-2.25v-4.5L12 7.5Z" />
     </svg>
   ),
-  // Openclaw — three-talon claw mark
+  // Openclaw - three-talon claw mark
   openclaw: (p) => (
     <svg {...base(p)}>
       <path d="M7 3c-1 6 0 10 2.5 13" />

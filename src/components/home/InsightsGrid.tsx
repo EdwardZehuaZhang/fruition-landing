@@ -43,7 +43,7 @@ interface Props {
   posts: HomePost[]
 }
 
-/** Latest thinking — one featured post plus the two behind it. */
+/** Latest thinking - one featured post plus the two behind it. */
 export default function InsightsGrid({ posts }: Props) {
   const usable = posts.filter((post) => post.title && post.slug).slice(0, 3)
   if (usable.length === 0) return null

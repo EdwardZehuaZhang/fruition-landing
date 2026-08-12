@@ -5,7 +5,7 @@
 // loader on future visits. The gate that reads this choice lives inline in the
 // document <head> (src/app/layout.tsx) so it runs before RB2B is injected.
 //
-// Storage key is shared with that head script — keep them in sync.
+// Storage key is shared with that head script - keep them in sync.
 import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 
@@ -23,7 +23,7 @@ export default function CookieNotice() {
     try {
       stored = window.localStorage.getItem(CONSENT_KEY)
     } catch {
-      // Private mode / storage blocked — treat as undecided, show the notice.
+      // Private mode / storage blocked - treat as undecided, show the notice.
     }
     if (stored === "accepted" || stored === "declined") return
 
@@ -45,7 +45,7 @@ export default function CookieNotice() {
     try {
       window.localStorage.setItem(CONSENT_KEY, choice)
     } catch {
-      // Can't persist — the notice still dismisses for this session.
+      // Can't persist - the notice still dismisses for this session.
     }
     setEntered(false)
     window.setTimeout(() => setMounted(false), EXIT_MS)

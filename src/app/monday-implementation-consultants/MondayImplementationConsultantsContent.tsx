@@ -179,7 +179,7 @@ interface Props {
   caseStudies: CaseStudy[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   siteSettings?: any
-  /** Central faqItem tabs — overrides `data.faqTabs` when non-empty. */
+  /** Central faqItem tabs - overrides `data.faqTabs` when non-empty. */
   faqTabs?: FaqTab[]
 }
 
@@ -225,7 +225,7 @@ export default function MondayImplementationConsultantsContent({
   const faqTabs = faqTabsOverride?.length ? faqTabsOverride : (data?.faqTabs ?? [])
   const stats = data?.joinSectionStats ?? []
 
-  // Carousel logos — duplicate for the marquee loop
+  // Carousel logos - duplicate for the marquee loop
   const normalizedLogos = carouselLogos
     .map((logo, i) => ({
       key: logo._key || `logo-${i}`,
@@ -353,7 +353,7 @@ export default function MondayImplementationConsultantsContent({
     <div>
       <StickyCtaBar label={data?.croSections?.stickyCtaLabel} href={bookingHref(data?.croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* ============================================================ */}
-      {/* SECTION 1 — Hero                                             */}
+      {/* SECTION 1 - Hero                                             */}
       {/* ============================================================ */}
       <section className="bg-surface">
         <div className="mx-auto flex flex-col items-center px-4 lg:px-[120px] py-14 md:py-20 w-full max-w-[1600px]">
@@ -466,7 +466,7 @@ export default function MondayImplementationConsultantsContent({
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 1b — monday product logos strip                       */}
+      {/* SECTION 1b - monday product logos strip                       */}
       {/* ============================================================ */}
       <section className="px-4 py-10 bg-gradient-to-b from-surface to-brand-soft">
         <div className="mx-auto flex flex-wrap items-center justify-center gap-x-[56px] gap-y-6 max-w-[1100px]">
@@ -488,7 +488,7 @@ export default function MondayImplementationConsultantsContent({
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 2 — Logo cloud marquee                               */}
+      {/* SECTION 2 - Logo cloud marquee                               */}
       {/* ============================================================ */}
       <section className="bg-surface py-14 md:py-20 px-4">
         <div className="flex flex-col gap-[35px] items-center w-full max-w-[1348px] mx-auto">
@@ -520,7 +520,7 @@ export default function MondayImplementationConsultantsContent({
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 2b — Video Embed                                     */}
+      {/* SECTION 2b - Video Embed                                     */}
       {/* ============================================================ */}
       {videoEmbedUrl && (
         <section className="bg-surface pb-14 md:pb-20">
@@ -533,7 +533,7 @@ export default function MondayImplementationConsultantsContent({
       )}
 
       {/* ============================================================ */}
-      {/* SECTION 4 — Comparison tabs (DIY / Benefits / Our Approach)  */}
+      {/* SECTION 4 - Comparison tabs (DIY / Benefits / Our Approach)  */}
       {/* ============================================================ */}
       <ComparisonTabsSection
         heading={teamsHeading}
@@ -545,7 +545,7 @@ export default function MondayImplementationConsultantsContent({
       <CroSections data={data?.croSections} primaryCtaLabel={data?.heroPrimaryCtaLabel} primaryCtaUrl={calendlyUrl} />
 
       {/* ============================================================ */}
-      {/* SECTION 5 — Calendly                                         */}
+      {/* SECTION 5 - Calendly                                         */}
       {/* ============================================================ */}
       {calendlyUrl && (
         <CalendlySection
@@ -555,16 +555,16 @@ export default function MondayImplementationConsultantsContent({
       )}
 
       {/* ============================================================ */}
-      {/* SECTION 7 — FAQ                                              */}
+      {/* SECTION 7 - FAQ                                              */}
       {/* ============================================================ */}
       <FaqAccordion heading={faqHeading} tabs={faqTabs as SharedFaqTab[]} />
 
       {/* ============================================================ */}
-      {/* SECTION 8 — Solution cards                                   */}
+      {/* SECTION 8 - Solution cards                                   */}
       {/* ============================================================ */}
       <section className="bg-surface py-14 md:py-20">
         <div className="mx-auto px-4 max-w-[1200px]">
-          {/* Solution cards — alternating sides.
+          {/* Solution cards - alternating sides.
               Re-map source data to match design: synthesize CRM card from
               section heading/intro + first card's eyebrow-as-CTA, then
               shift remaining cards down one slot. */}
@@ -649,7 +649,7 @@ export default function MondayImplementationConsultantsContent({
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 9 — Testimonials (shared carousel component)         */}
+      {/* SECTION 9 - Testimonials (shared carousel component)         */}
       {/* ============================================================ */}
       <TestimonialsGrid
         heading={testimonialsHeading}
@@ -665,7 +665,7 @@ export default function MondayImplementationConsultantsContent({
       {/* Discover CTA removed from this page */}
 
       {/* ============================================================ */}
-      {/* SECTION 11 — Join 500+ stats (shared StatsBlockView)         */}
+      {/* SECTION 11 - Join 500+ stats (shared StatsBlockView)         */}
       {/* ============================================================ */}
       <StatsBlockView
         heading={`${joinPart1 ?? ""}${joinAccent ?? ""}${joinPart2 ?? ""}`}
@@ -677,7 +677,7 @@ export default function MondayImplementationConsultantsContent({
       />
 
       {/* ============================================================ */}
-      {/* SECTION 12 — Security badge                                   */}
+      {/* SECTION 12 - Security badge                                   */}
       {/* ============================================================ */}
       <section className="bg-surface px-4 pt-10 pb-14 md:pb-20">
         <div className="mx-auto max-w-[976px]">

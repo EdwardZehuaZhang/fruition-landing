@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 
 /**
- * CalendlyBookingTracker — listens for Calendly's postMessage events and
+ * CalendlyBookingTracker - listens for Calendly's postMessage events and
  * fires a Google Ads conversion when a booking is scheduled.
  *
  * Calendly's inline/embed widget dispatches `calendly.event_scheduled`
@@ -39,6 +39,6 @@ export default function CalendlyBookingTracker() {
     return () => window.removeEventListener("message", onMessage)
   }, [])
 
-  // This component renders nothing — it only wires the event listener.
+  // This component renders nothing - it only wires the event listener.
   return null
 }

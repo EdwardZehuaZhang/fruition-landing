@@ -54,7 +54,7 @@ function renderHeading(heading: string, accents: string[]) {
   )
 }
 
-// Render subheading — supports newlines for paragraph breaks
+// Render subheading - supports newlines for paragraph breaks
 function renderSubheading(text: string) {
   const paragraphs = text.split(/\n{2,}|\r\n\r\n/).map((p) => p.trim()).filter(Boolean)
   if (paragraphs.length > 1) {

@@ -22,13 +22,13 @@ interface FeatureListBlockProps {
 }
 
 export default function FeatureListBlockView({ _key, heading, headingAccent, subheading, variant, features, siteSettings }: FeatureListBlockProps) {
-  // Platinum partner badge for the industries variant — pulled from Sanity navbarPartnerBadges
+  // Platinum partner badge for the industries variant - pulled from Sanity navbarPartnerBadges
   const platinumBadgeImage = siteSettings?.navbarPartnerBadges?.[0]?.image
   const platinumBadgeSrc = platinumBadgeImage?.asset
     ? urlFor(platinumBadgeImage).height(90).url()
     : null
 
-  // Auto-detect variant when CMS field is missing/default — home page content
+  // Auto-detect variant when CMS field is missing/default - home page content
   // lacks the variant flag but should render as Steps or Industries.
   const resolvedVariant = (() => {
     if (variant && variant !== 'default') return variant
@@ -156,7 +156,7 @@ export default function FeatureListBlockView({ _key, heading, headingAccent, sub
     )
   }
 
-  // ── Steps variant — dark purple bg with horizontal numbered steps ──
+  // ── Steps variant - dark purple bg with horizontal numbered steps ──
   if (isStepsBlock) {
     const stepsHeading = heading
     const stepsSubheading = subheading

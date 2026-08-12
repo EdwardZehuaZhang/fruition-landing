@@ -18,7 +18,7 @@ const DOTS = ["var(--accent-green)", "var(--accent-blue)", "var(--purple-primary
 const ROLL_SECONDS = 74
 
 function initials(name?: string) {
-  if (!name) return "—"
+  if (!name) return "-"
   return name
     .split(/\s+/)
     .filter(Boolean)
@@ -33,7 +33,7 @@ interface Props {
 }
 
 /**
- * Client proof — two columns of quotes rolling in opposite directions behind a
+ * Client proof - two columns of quotes rolling in opposite directions behind a
  * soft top/bottom mask. Each column repeats its cards once so the -50% travel
  * loops seamlessly; the duplicate copy is `aria-hidden` so screen readers and
  * crawlers see each quote exactly once.
@@ -103,7 +103,7 @@ export default function TestimonialsRoll({ testimonials, bookingHref }: Props) {
           </div>
         </div>
 
-        {/* Stacked fallback below lg — first six quotes, no motion. */}
+        {/* Stacked fallback below lg - first six quotes, no motion. */}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:hidden">
           {usable.slice(0, 6).map((t, i) => (
             <QuoteCard key={t._key ?? i} testimonial={t} index={i} />
@@ -147,7 +147,7 @@ function QuoteCard({
         {photoRef ? (
           <Image
             // Several profile photos are stored as HEIF, which browsers can't
-            // decode — `auto("format")` makes Sanity transcode to WebP.
+            // decode - `auto("format")` makes Sanity transcode to WebP.
             src={urlFor(testimonial.profilePhoto).width(92).height(92).fit("crop").auto("format").url()}
             alt=""
             width={46}

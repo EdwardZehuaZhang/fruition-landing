@@ -48,7 +48,7 @@ import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
 
 /* ------------------------------------------------------------------ */
-/*  Make Feature Tabs — hardcoded content                              */
+/*  Make Feature Tabs - hardcoded content                              */
 /* ------------------------------------------------------------------ */
 
 type MakeFeatureGroup = {
@@ -574,13 +574,13 @@ export default function MakePartnersContent({
         />
       )}
 
-      {/* 4. Make Feature Tabs — Sanity-driven with hardcoded fallback */}
+      {/* 4. Make Feature Tabs - Sanity-driven with hardcoded fallback */}
       <MakeFeatureTabsSection
         tabs={(pageData?.makeFeatureTabs && pageData.makeFeatureTabs.length > 0) ? pageData.makeFeatureTabs : MAKE_FEATURE_TABS}
       />
 
 
-      {/* Make scenario — the branching pipeline we build */}
+      {/* Make scenario - the branching pipeline we build */}
       <WorkflowConnector
         eyebrow="A Make scenario, visualized"
         heading="What a custom Make.com build actually looks like"
@@ -595,7 +595,7 @@ export default function MakePartnersContent({
         footnote="Make.com bundles actions into scenarios, billing full runs instead of every step."
       />
 
-      {/* Ecosystem connector grid — apps orbiting monday.com */}
+      {/* Ecosystem connector grid - apps orbiting monday.com */}
       <EcosystemGrid
         eyebrow="One connected ecosystem"
         heading="Every tool you run, synced into monday.com"

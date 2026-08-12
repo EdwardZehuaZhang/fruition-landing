@@ -1,7 +1,7 @@
 import type { PracticePage } from './types'
 
 /**
- * /atlassian-consulting cluster — copy ported verbatim from the v2.1 mockups
+ * /atlassian-consulting cluster - copy ported verbatim from the v2.1 mockups
  * (atlassian-consulting.html + jira / confluence / jira-service-management /
  * jira-to-monday-migration leaves), surname corrected to Jebathilak.
  */
@@ -11,13 +11,13 @@ const HUB = { label: 'Atlassian Consulting', href: '/atlassian-consulting' }
 export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
   hub: {
     path: '/atlassian-consulting',
-    seoTitle: 'Atlassian Consulting Partner | Fruition — Jira, Confluence & JSM, AU · UK · US',
+    seoTitle: 'Atlassian Consulting Partner | Fruition - Jira, Confluence & JSM, AU · UK · US',
     seoDescription:
-      'Fruition delivers Atlassian consulting across Australia, the UK, and the US — Jira, Confluence, and JSM implementation and optimisation, plus honest advice on when Atlassian is and isn’t your answer.',
+      'Fruition delivers Atlassian consulting across Australia, the UK, and the US - Jira, Confluence, and JSM implementation and optimisation, plus honest advice on when Atlassian is and isn’t your answer.',
     breadcrumb: [HUB],
     eyebrow: '★ Atlassian Consulting Hub',
     heading: 'Atlassian expertise from a firm that sees both sides',
-    lead: 'Fruition delivers Atlassian consulting across Australia, the UK, and the US — Jira, Confluence, and JSM implementation and optimisation, plus honest advice on when Atlassian is and isn’t your answer.',
+    lead: 'Fruition delivers Atlassian consulting across Australia, the UK, and the US - Jira, Confluence, and JSM implementation and optimisation, plus honest advice on when Atlassian is and isn’t your answer.',
     targetQueries: [
       'Atlassian consultant Sydney',
       'Jira consultant',
@@ -33,7 +33,7 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Integrate, don’t isolate',
-        body: 'Jira connected to monday.com, Slack, and your delivery stack — because dev tools that don’t talk to business tools create the visibility gap leadership complains about.',
+        body: 'Jira connected to monday.com, Slack, and your delivery stack - because dev tools that don’t talk to business tools create the visibility gap leadership complains about.',
       },
       {
         title: 'Migrate when it’s right',
@@ -86,15 +86,15 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
     faqs: [
       {
         q: 'What does an Atlassian consultant do?',
-        a: 'An Atlassian consultant implements, optimises, and integrates Jira, Confluence, and Jira Service Management — covering workflow design, permission architecture, plugin strategy, and cross-tool integration. Fruition delivers these services across Australia, the UK, and the US.',
+        a: 'An Atlassian consultant implements, optimises, and integrates Jira, Confluence, and Jira Service Management - covering workflow design, permission architecture, plugin strategy, and cross-tool integration. Fruition delivers these services across Australia, the UK, and the US.',
       },
       {
         q: 'Can Fruition help with a messy Jira instance?',
-        a: 'Yes — Jira rescue engagements are a core service: workflow consolidation, permission scheme cleanup, plugin audit, and board restructure. Most instances accumulate years of configuration debt that a structured 3–4 week cleanup resolves.',
+        a: 'Yes - Jira rescue engagements are a core service: workflow consolidation, permission scheme cleanup, plugin audit, and board restructure. Most instances accumulate years of configuration debt that a structured 3–4 week cleanup resolves.',
       },
       {
         q: 'Should we use Jira or monday.com?',
-        a: 'Jira wins for deep software delivery with heavy ecosystem needs; monday.com wins for cross-functional visibility and business-team adoption. Many organisations run both, integrated. Fruition partners with both vendors and advises per team — see our Jira-to-monday migration page for when switching makes sense.',
+        a: 'Jira wins for deep software delivery with heavy ecosystem needs; monday.com wins for cross-functional visibility and business-team adoption. Many organisations run both, integrated. Fruition partners with both vendors and advises per team - see our Jira-to-monday migration page for when switching makes sense.',
       },
       {
         q: 'How much does Atlassian consulting cost with Fruition?',
@@ -110,7 +110,7 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -121,13 +121,13 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
 
   jira: {
     path: '/atlassian-consulting/jira',
-    seoTitle: 'Jira Consultant | Fruition — Implementation, Optimisation & Workflow Rescue',
+    seoTitle: 'Jira Consultant | Fruition - Implementation, Optimisation & Workflow Rescue',
     seoDescription:
-      'Fruition delivers Jira consulting across Australia, the UK, and the US — implementations that start clean, rescues that untangle years of configuration debt, and integrations that end the visibility gap.',
+      'Fruition delivers Jira consulting across Australia, the UK, and the US - implementations that start clean, rescues that untangle years of configuration debt, and integrations that end the visibility gap.',
     breadcrumb: [HUB, { label: 'Jira', href: '/atlassian-consulting/jira' }],
     eyebrow: 'Atlassian · Jira',
     heading: 'Jira that developers tolerate and leaders can read',
-    lead: 'Fruition delivers Jira consulting across Australia, the UK, and the US — implementations that start clean, rescues that untangle years of configuration debt, and integrations that end the visibility gap.',
+    lead: 'Fruition delivers Jira consulting across Australia, the UK, and the US - implementations that start clean, rescues that untangle years of configuration debt, and integrations that end the visibility gap.',
     approachHeading: 'Configuration discipline.',
     approach: [
       {
@@ -136,7 +136,7 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Permission sanity',
-        body: 'Scheme consolidation and role-based access that admins can actually reason about — and auditors can actually audit.',
+        body: 'Scheme consolidation and role-based access that admins can actually reason about - and auditors can actually audit.',
       },
       {
         title: 'Business-tool bridges',
@@ -168,8 +168,8 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
         a: 'Fruition Jira engagements start at AUD $12,000 for a structured optimisation or focused implementation; instance rescues and scaled implementations are quoted after a configuration audit, typically AUD $15,000–$60,000.',
       },
       {
-        q: 'Our Jira is a mess — rebuild or restructure?',
-        a: 'Usually restructure. A configuration audit (week one of any rescue) determines whether consolidation is viable; full rebuilds are reserved for instances where migration cost is lower than cleanup cost — rarer than frustrated admins expect.',
+        q: 'Our Jira is a mess - rebuild or restructure?',
+        a: 'Usually restructure. A configuration audit (week one of any rescue) determines whether consolidation is viable; full rebuilds are reserved for instances where migration cost is lower than cleanup cost - rarer than frustrated admins expect.',
       },
       {
         q: 'Which regions does Fruition deliver Jira services in?',
@@ -181,7 +181,7 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -192,18 +192,18 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
 
   confluence: {
     path: '/atlassian-consulting/confluence',
-    seoTitle: 'Confluence Consulting | Fruition — Knowledge Architecture That Stays Findable',
+    seoTitle: 'Confluence Consulting | Fruition - Knowledge Architecture That Stays Findable',
     seoDescription:
-      'Fruition delivers Confluence consulting across Australia, the UK, and the US — space architecture, governance, and content structure that keeps knowledge findable at year three, not just week three.',
+      'Fruition delivers Confluence consulting across Australia, the UK, and the US - space architecture, governance, and content structure that keeps knowledge findable at year three, not just week three.',
     breadcrumb: [HUB, { label: 'Confluence', href: '/atlassian-consulting/confluence' }],
     eyebrow: 'Atlassian · Confluence',
     heading: 'Confluence as a knowledge base, not a document graveyard',
-    lead: 'Fruition delivers Confluence consulting across Australia, the UK, and the US — space architecture, governance, and content structure that keeps knowledge findable at year three, not just week three.',
+    lead: 'Fruition delivers Confluence consulting across Australia, the UK, and the US - space architecture, governance, and content structure that keeps knowledge findable at year three, not just week three.',
     approachHeading: 'Architecture beats enthusiasm.',
     approach: [
       {
         title: 'Space strategy first',
-        body: 'Deliberate space taxonomy, ownership models, and lifecycle rules — the difference between a knowledge base and 4,000 orphaned pages.',
+        body: 'Deliberate space taxonomy, ownership models, and lifecycle rules - the difference between a knowledge base and 4,000 orphaned pages.',
       },
       {
         title: 'Templates as governance',
@@ -211,7 +211,7 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'AI-ready knowledge',
-        body: 'Content structured for retrieval — which pays off doubly when you point RAG systems at it later. Our AI practice does exactly that.',
+        body: 'Content structured for retrieval - which pays off doubly when you point RAG systems at it later. Our AI practice does exactly that.',
       },
     ],
     servicesHeading: 'Confluence engagements.',
@@ -236,7 +236,7 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
     faqs: [
       {
         q: 'Why does our Confluence become unusable over time?',
-        a: 'Unmanaged growth: no space strategy, no ownership, no archival rules. Content accretes until search returns five conflicting versions of everything. A governance retrofit — taxonomy, ownership, lifecycle — reverses it in 4–6 weeks.',
+        a: 'Unmanaged growth: no space strategy, no ownership, no archival rules. Content accretes until search returns five conflicting versions of everything. A governance retrofit - taxonomy, ownership, lifecycle - reverses it in 4–6 weeks.',
       },
       {
         q: 'How much does Confluence consulting cost with Fruition?',
@@ -252,7 +252,7 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -263,18 +263,18 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
 
   'jira-service-management': {
     path: '/atlassian-consulting/jira-service-management',
-    seoTitle: 'Jira Service Management Consulting | Fruition — ITSM, Service Desks & SLAs',
+    seoTitle: 'Jira Service Management Consulting | Fruition - ITSM, Service Desks & SLAs',
     seoDescription:
-      'Fruition implements Jira Service Management for IT and support teams across Australia, the UK, and the US — service desks, SLA automation, asset management, and portals users actually use.',
+      'Fruition implements Jira Service Management for IT and support teams across Australia, the UK, and the US - service desks, SLA automation, asset management, and portals users actually use.',
     breadcrumb: [HUB, { label: 'Jira Service Management', href: '/atlassian-consulting/jira-service-management' }],
     eyebrow: 'Atlassian · JSM',
     heading: 'ITSM that resolves tickets instead of routing them in circles',
-    lead: 'Fruition implements Jira Service Management for IT and support teams across Australia, the UK, and the US — service desks, SLA automation, asset management, and portals users actually use.',
+    lead: 'Fruition implements Jira Service Management for IT and support teams across Australia, the UK, and the US - service desks, SLA automation, asset management, and portals users actually use.',
     approachHeading: 'Service design before tool config.',
     approach: [
       {
         title: 'Request-type discipline',
-        body: 'A curated request catalogue with smart forms — not 90 request types nobody can choose between.',
+        body: 'A curated request catalogue with smart forms - not 90 request types nobody can choose between.',
       },
       {
         title: 'SLAs that mean something',
@@ -301,13 +301,13 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Alternative honesty',
-        body: 'When JSM is overkill or underpowered, we’ll say so — monday Service and other options compared straight.',
+        body: 'When JSM is overkill or underpowered, we’ll say so - monday Service and other options compared straight.',
       },
     ],
     faqs: [
       {
-        q: 'Jira Service Management vs monday Service — which should we choose?',
-        a: 'JSM wins for IT teams deep in the Atlassian ecosystem with dev-connected incident workflows; monday Service wins for business-wide service teams already on monday.com. Fruition implements both and advises per situation — a genuine rarity among partners.',
+        q: 'Jira Service Management vs monday Service - which should we choose?',
+        a: 'JSM wins for IT teams deep in the Atlassian ecosystem with dev-connected incident workflows; monday Service wins for business-wide service teams already on monday.com. Fruition implements both and advises per situation - a genuine rarity among partners.',
       },
       {
         q: 'How much does Jira Service Management consulting cost with Fruition?',
@@ -323,7 +323,7 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -334,13 +334,13 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
 
   'jira-to-monday-migration': {
     path: '/atlassian-consulting/jira-to-monday-migration',
-    seoTitle: 'Jira to monday.com Migration | Fruition — The Structured Migration Playbook',
+    seoTitle: 'Jira to monday.com Migration | Fruition - The Structured Migration Playbook',
     seoDescription:
-      'Fruition runs structured Jira-to-monday.com migrations across Australia, the UK, and the US — as the rare partner certified on both platforms, with the Givergy case study to prove the playbook.',
+      'Fruition runs structured Jira-to-monday.com migrations across Australia, the UK, and the US - as the rare partner certified on both platforms, with the Givergy case study to prove the playbook.',
     breadcrumb: [HUB, { label: 'Jira → monday Migration', href: '/atlassian-consulting/jira-to-monday-migration' }],
     eyebrow: '★ Bridge Page · Atlassian × monday.com',
     heading: 'Leave Jira without leaving your history behind',
-    lead: 'Fruition runs structured Jira-to-monday.com migrations across Australia, the UK, and the US — as the rare partner certified on both platforms, with the Givergy case study to prove the playbook.',
+    lead: 'Fruition runs structured Jira-to-monday.com migrations across Australia, the UK, and the US - as the rare partner certified on both platforms, with the Givergy case study to prove the playbook.',
     targetQueries: [
       'Jira to monday.com migration',
       'migrate Jira to monday',
@@ -352,11 +352,11 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
     approach: [
       {
         title: 'Certified both sides',
-        body: 'Atlassian consulting practice plus monday.com Platinum status means we map Jira concepts to monday architecture correctly — epics, sprints, components, and custom fields all land somewhere sensible.',
+        body: 'Atlassian consulting practice plus monday.com Platinum status means we map Jira concepts to monday architecture correctly - epics, sprints, components, and custom fields all land somewhere sensible.',
       },
       {
         title: 'History preserved',
-        body: 'Issues, comments, attachments, and status history migrate with integrity — because losing three years of context is how migrations get reversed.',
+        body: 'Issues, comments, attachments, and status history migrate with integrity - because losing three years of context is how migrations get reversed.',
       },
       {
         title: 'Workflow rebuild, not replication',
@@ -376,7 +376,7 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Migration & validation (wk 4–6)',
-        body: 'Staged data migration with parallel-run validation. GitHub integration cutover for dev teams — the Givergy pattern.',
+        body: 'Staged data migration with parallel-run validation. GitHub integration cutover for dev teams - the Givergy pattern.',
       },
       {
         title: 'Training & cutover (wk 6–8)',
@@ -386,11 +386,11 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
     faqs: [
       {
         q: 'Why do teams migrate from Jira to monday.com?',
-        a: 'The recurring drivers: cross-functional visibility (business teams can’t or won’t use Jira), admin overhead, licence cost at scale, and configuration debt. Teams keeping deep dev-tool dependencies sometimes keep Jira for engineering and integrate — Fruition advises which pattern fits before any migration starts.',
+        a: 'The recurring drivers: cross-functional visibility (business teams can’t or won’t use Jira), admin overhead, licence cost at scale, and configuration debt. Teams keeping deep dev-tool dependencies sometimes keep Jira for engineering and integrate - Fruition advises which pattern fits before any migration starts.',
       },
       {
         q: 'Can Jira history and attachments migrate to monday.com?',
-        a: 'Yes — issues, comments, attachments, and status history migrate through Fruition’s staged process. Some Jira-specific constructs (complex workflow conditions, certain plugin data) are rebuilt rather than copied; the audit phase documents exactly what maps where.',
+        a: 'Yes - issues, comments, attachments, and status history migrate through Fruition’s staged process. Some Jira-specific constructs (complex workflow conditions, certain plugin data) are rebuilt rather than copied; the audit phase documents exactly what maps where.',
       },
       {
         q: 'How long does a Jira to monday migration take?',
@@ -398,7 +398,7 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'What did the Givergy migration achieve?',
-        a: 'Givergy moved from Jira and BitBucket silos to monday Dev with GitHub integration — automated branch tracking, unified multi-repository visibility, and role-based dashboards giving developers, QA, and management customised views of one source of truth.',
+        a: 'Givergy moved from Jira and BitBucket silos to monday Dev with GitHub integration - automated branch tracking, unified multi-repository visibility, and role-based dashboards giving developers, QA, and management customised views of one source of truth.',
       },
       {
         q: 'How much does Jira to monday migration consulting cost with Fruition?',
@@ -410,7 +410,7 @@ export const ATLASSIAN_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',

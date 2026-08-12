@@ -1,8 +1,8 @@
 import type { PracticePage } from './types'
 
 /**
- * /pricing — copy ported from the approved v2.1 mockups (pricing.html).
- * (The /ai-consulting/n8n page was pruned July 2026 — 301 →
+ * /pricing - copy ported from the approved v2.1 mockups (pricing.html).
+ * (The /ai-consulting/n8n page was pruned July 2026 - 301 →
  * /partnerships/n8n-integration-partner.)
  *
  * Notes on the port:
@@ -12,13 +12,13 @@ import type { PracticePage } from './types'
  * - The mockups credited "Josh Roszler"; the leader bio is a shared constant
  *   (PRACTICE_LEADER, already corrected to Jebathilak) and is not re-stated here.
  * - Pricing FAQ #3 read "How much does consulting consulting cost" in the mockup
- *   — a doubled-word artifact, de-duplicated to "consulting" here.
+ *   - a doubled-word artifact, de-duplicated to "consulting" here.
  */
 
 export const PRICING_N8N_PAGES: Record<string, PracticePage> = {
   pricing: {
     path: '/pricing',
-    seoTitle: 'Pricing | Fruition Services — Fixed-Fee Consulting Packages, AU · UK · US',
+    seoTitle: 'Pricing | Fruition Services - Fixed-Fee Consulting Packages, AU · UK · US',
     seoDescription:
       'Every Fruition engagement is a fixed-fee phase with a defined outcome. Here’s how pricing works across all four practices in Australia, the UK, and the US.',
     breadcrumb: [{ label: 'Pricing', href: '/pricing' }],
@@ -40,11 +40,11 @@ export const PRICING_N8N_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Defined outcomes',
-        body: 'Each phase ends with a named deliverable — a roadmap, a live system, a trained team. You always know what you’re buying.',
+        body: 'Each phase ends with a named deliverable - a roadmap, a live system, a trained team. You always know what you’re buying.',
       },
       {
         title: 'Regional pricing',
-        body: 'AUD for Australia, GBP for the UK, USD for the US — priced for each market, same deliverables everywhere.',
+        body: 'AUD for Australia, GBP for the UK, USD for the US - priced for each market, same deliverables everywhere.',
       },
     ],
     servicesEyebrow: 'Indicative engagement pricing',
@@ -127,7 +127,7 @@ export const PRICING_N8N_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms - so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',

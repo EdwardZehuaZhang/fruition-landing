@@ -163,7 +163,7 @@ export default function MondayPartnerUsContent({
         withPurpleCircle={false}
       />
 
-      {/* Meet the team — US region */}
+      {/* Meet the team - US region */}
       <TeamGridSection
         heading={page.teamGridHeading}
         subheading={page.teamGridSubheading}
@@ -214,7 +214,7 @@ export default function MondayPartnerUsContent({
       {/* CRM tutorial + video */}
       <CrmTutorialCta />
 
-      {/* Closing CTA — shared site-wide banner; Sanity copy wins, the previous
+      {/* Closing CTA - shared site-wide banner; Sanity copy wins, the previous
           hardcoded economic-impact banner copy is the verbatim fallback */}
       <ClosingCtaSection
         cta={closingCta}

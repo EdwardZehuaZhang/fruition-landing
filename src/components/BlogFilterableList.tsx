@@ -97,7 +97,7 @@ export default function BlogFilterableList({
 
   return (
     <>
-      {/* Filter pills — horizontal scroll with hidden scrollbar on mobile */}
+      {/* Filter pills - horizontal scroll with hidden scrollbar on mobile */}
       <div className="flex overflow-x-auto gap-2 mb-10 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <button
           type="button"

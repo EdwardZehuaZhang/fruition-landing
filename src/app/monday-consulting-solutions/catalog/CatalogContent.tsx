@@ -38,7 +38,7 @@ export default function CatalogContent({ calendlyUrl }: CatalogContentProps) {
       <DeliveryMethod />
       <CatalogCta calendlyUrl={calendlyUrl} />
 
-      {/* Mobile/tablet floating advisor — hidden on lg+ where it lives in the hero */}
+      {/* Mobile/tablet floating advisor - hidden on lg+ where it lives in the hero */}
       <div className="lg:hidden">
         <SolutionsAdvisor variant="floating" onOpenSolution={handleOpen} />
       </div>

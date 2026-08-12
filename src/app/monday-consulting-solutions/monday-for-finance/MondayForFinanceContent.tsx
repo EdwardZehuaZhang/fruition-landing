@@ -51,7 +51,7 @@ export default function MondayForFinanceContent({
 
   return (
     <div>
-      {/* 1. Hero — certificates on top, no small image */}
+      {/* 1. Hero - certificates on top, no small image */}
       <section className="bg-surface">
         <div className="mx-auto flex w-full max-w-[1148px] flex-col items-center px-4 py-14 md:py-20">
           {/* Three certificate badges */}

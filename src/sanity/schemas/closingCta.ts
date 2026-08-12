@@ -1,5 +1,5 @@
 /**
- * closingCta — copy for the site-wide ClosingCtaSection banner.
+ * closingCta - copy for the site-wide ClosingCtaSection banner.
  *
  * Resolution mirrors faqItem: a doc tagged with a page key overrides that
  * page's built-in copy. Pages keep their previous copy as a render fallback,

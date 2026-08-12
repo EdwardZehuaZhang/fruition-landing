@@ -90,16 +90,16 @@ export default function VisitorTrackingDisclosure() {
       <h3 className={h3}>Who receives this information</h3>
       <ul className={ul}>
         <li className="leading-relaxed">
-          <strong className={strong}>Retention.com (RB2B)</strong> — the
+          <strong className={strong}>Retention.com (RB2B)</strong> - the
           identification provider, acting as a data controller for the source
           contact data and as a processor for our visit signals.
         </li>
         <li className="leading-relaxed">
-          <strong className={strong}>monday.com</strong> — our CRM, where
+          <strong className={strong}>monday.com</strong> - our CRM, where
           identified leads are stored.
         </li>
         <li className="leading-relaxed">
-          <strong className={strong}>Slack Technologies</strong> — internal
+          <strong className={strong}>Slack Technologies</strong> - internal
           notifications to our sales team.
         </li>
       </ul>

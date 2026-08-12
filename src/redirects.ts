@@ -1,6 +1,6 @@
 // Auto-generated from Wix migration SEO redirects (fruitionservices.io).
 // Regenerate with: node scripts/generate-wix-redirects.mjs <wix-export.csv> --write
-// Do not hand-edit individual entries — re-run the generator instead.
+// Do not hand-edit individual entries - re-run the generator instead.
 
 import type { Redirect } from "next/dist/lib/load-custom-routes";
 

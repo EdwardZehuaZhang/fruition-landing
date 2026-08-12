@@ -49,7 +49,7 @@ export default function TabSectionBlockView({
 
   return (
     <section className="bg-surface pt-[80px] pb-[120px] px-4 relative">
-      {/* Decorative squiggle bg — only for the "Implement monday.com for any team" section */}
+      {/* Decorative squiggle bg - only for the "Implement monday.com for any team" section */}
       {isImplementSection && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -114,7 +114,7 @@ export default function TabSectionBlockView({
           )}
         </div>
 
-        {/* Tab content card — 816px wide */}
+        {/* Tab content card - 816px wide */}
         <div className="w-full max-w-[816px] rounded-card border border-ui bg-surface-raised p-[24px]">
           {isImplementSection ? (
             /* "Implement monday.com" layout: heading + button row, body text, emoji features grid */

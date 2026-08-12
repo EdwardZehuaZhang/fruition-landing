@@ -199,7 +199,7 @@ export default function MondayPartnerUkContent({
         primaryCtaUrl={bookingHref(page.primaryCtaUrl || rawCalendly)}
       />
 
-      {/* Meet the team — UK region */}
+      {/* Meet the team - UK region */}
       <TeamGridSection
         heading={page.teamGridHeading}
         subheading={page.teamGridSubheading}

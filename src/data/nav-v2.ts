@@ -1,5 +1,5 @@
 /**
- * Website Reorganisation Plan v1.0 (July 2026) — six-tab navigation.
+ * Website Reorganisation Plan v1.0 (July 2026) - six-tab navigation.
  * Services · Partnerships · Industries · Insights · About · Contact.
  *
  * Supersedes the earlier v2.1 five-tab menu. Menu labels and URL slugs are
@@ -8,7 +8,7 @@
  * exists (existing routes, the practice-cluster pages, or the industries /
  * case-studies / certifications / pricing / n8n pages built alongside this).
  *
- * Deliberate omissions (page does not exist yet — omitted rather than 404):
+ * Deliberate omissions (page does not exist yet - omitted rather than 404):
  *  - Services › monday.com "Managed Services / FDE" (P2, needs scoping w/ Josh)
  *  - Insights "Guides & Playbooks", "Video Library", "Webinars" (P3, month 3+)
  * These slot in once their pages are built.
@@ -53,7 +53,7 @@ export const NAV_V2: NavV2Item[] = [
             label: 'AI Capability Assessment',
             href: '/ai-capability-assessment',
             icon: 'sparkle',
-            description: 'Fixed-fee assessment — your AI roadmap in weeks',
+            description: 'Fixed-fee assessment - your AI roadmap in weeks',
             featured: true,
           },
           {
@@ -97,7 +97,7 @@ export const NAV_V2: NavV2Item[] = [
             label: 'Implementation Packages',
             href: '/implementation-packages',
             icon: 'package',
-            description: 'Fixed-fee packages — 500+ delivered',
+            description: 'Fixed-fee packages - 500+ delivered',
             featured: true,
           },
           {
@@ -340,7 +340,7 @@ export const NAV_V2: NavV2Item[] = [
         heading: 'Locations',
         columns: 2,
         items: [
-          { label: 'Australia', href: '/monday-partner-australia', icon: 'globe', description: 'Sydney HQ — APAC delivery' },
+          { label: 'Australia', href: '/monday-partner-australia', icon: 'globe', description: 'Sydney HQ - APAC delivery' },
           { label: 'United Kingdom', href: '/monday-partner-uk', icon: 'globe', description: 'London delivery centre' },
           { label: 'United States', href: '/monday-partner-us', icon: 'globe', description: 'New York delivery centre' },
           { label: 'Singapore', href: '/monday-partner-singapore', icon: 'globe', description: 'APAC delivery' },

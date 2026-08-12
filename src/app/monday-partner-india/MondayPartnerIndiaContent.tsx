@@ -183,7 +183,7 @@ export default function MondayPartnerIndiaContent({
         withPurpleCircle={false}
       />
 
-      {/* Meet the team — India members (filtered by name, no "IN" region tag in Sanity) */}
+      {/* Meet the team - India members (filtered by name, no "IN" region tag in Sanity) */}
       <TeamGridSection
         heading="Meet the Fruition India team"
         subheading="Our monday.com consultants have expertise across various industries. As a certified monday.com partner, we guarantee the delivery of the right solution and training to optimise your team's efficiency."
@@ -219,7 +219,7 @@ export default function MondayPartnerIndiaContent({
       {/* CRM tutorial + video */}
       <CrmTutorialCta calendlyUrl={calendlyUrl} />
 
-      {/* Closing CTA — shared site-wide banner; Sanity copy wins, the previous
+      {/* Closing CTA - shared site-wide banner; Sanity copy wins, the previous
           hardcoded economic-impact banner copy is the verbatim fallback */}
       <ClosingCtaSection
         cta={closingCta}

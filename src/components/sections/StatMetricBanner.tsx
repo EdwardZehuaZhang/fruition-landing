@@ -10,7 +10,7 @@ interface StatMetricBannerProps {
 
 /**
  * Full-width metric pull-out. Speaks directly to the bottom line of operations
- * managers (per PDF) — hard numbers in high-contrast type.
+ * managers (per PDF) - hard numbers in high-contrast type.
  */
 export default function StatMetricBanner({
   statement,

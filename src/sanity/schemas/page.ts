@@ -8,7 +8,7 @@ export default {
     { name: 'seoTitle', title: 'SEO Title', type: 'string' },
     { name: 'seoDescription', title: 'SEO Description', type: 'text' },
     { name: 'croSections', title: 'CRO Sections', type: 'croSections' },
-    // Leadership signature note (about-us) — renders only when a note is set.
+    // Leadership signature note (about-us) - renders only when a note is set.
     { name: 'leadershipNote', title: 'Leadership Note (signed message)', type: 'text' },
     { name: 'leadershipSignatureName', title: 'Signature Name', type: 'string' },
     { name: 'leadershipSignatureTitle', title: 'Signature Title', type: 'string' },
@@ -379,7 +379,7 @@ export default {
           { name: 'title', title: 'Title', type: 'string' },
           { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
           { name: 'product', title: 'Product / Solution (e.g. "monday CRM")', type: 'string' },
-          { name: 'industry', title: 'Industry (e.g. "Construction") — enables the industry filter', type: 'string' },
+          { name: 'industry', title: 'Industry (e.g. "Construction") - enables the industry filter', type: 'string' },
           { name: 'services', title: 'Services Description', type: 'text' },
           { name: 'timeline', title: 'Timeline (e.g. "4 weeks")', type: 'string' },
           { name: 'verifiedSource', title: 'Verified Source (e.g. "G2 Crowd", "Clutch.co")', type: 'string' },

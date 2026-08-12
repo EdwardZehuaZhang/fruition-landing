@@ -9,7 +9,7 @@ import type { NextRequest } from "next/server"
 //
 // This stays a middleware.ts (deprecated in Next 16 in favour of proxy.ts)
 // on purpose: proxy.ts always compiles to the Node.js runtime, which
-// @opennextjs/cloudflare rejects — only edge middleware is supported.
+// @opennextjs/cloudflare rejects - only edge middleware is supported.
 const CANONICAL_HOST = "www.fruitionservices.io"
 
 export function middleware(request: NextRequest) {

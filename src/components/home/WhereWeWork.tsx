@@ -12,7 +12,7 @@ export interface Office {
   href?: string
 }
 
-/** Display country per flag — `siteSettings.offices` has no country field. */
+/** Display country per flag - `siteSettings.offices` has no country field. */
 const COUNTRY: Record<string, string> = {
   "🇦🇺": "Australia",
   "🇸🇬": "Singapore",
@@ -39,7 +39,7 @@ export default function WhereWeWork({ offices }: Props) {
       const isHq = /head office/i.test(office.label ?? "")
       const country = COUNTRY[office.flag!]
       // Offices without a city yet store the country as their `city`, which
-      // would render "India / India" — drop the second line in that case.
+      // would render "India / India" - drop the second line in that case.
       const cityLine = place && place !== country ? place : ""
       return {
         key: office._key ?? office.flag!,

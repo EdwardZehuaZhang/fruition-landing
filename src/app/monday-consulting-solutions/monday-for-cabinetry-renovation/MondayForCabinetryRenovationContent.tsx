@@ -280,7 +280,7 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
         services={servicesList}
       />
 
-      {/* 5. Solution cards — top pair (PROJECT SCHEDULING + INVENTORY TRACKING) */}
+      {/* 5. Solution cards - top pair (PROJECT SCHEDULING + INVENTORY TRACKING) */}
       {solutionTop.length > 0 && <SolutionCardsSection cards={solutionTop} />}
 
       {/* 6. Calendly */}
@@ -293,7 +293,7 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
         calendlyUrl={rawCalendly}
       />
 
-      {/* 7. Solution cards — bottom pair (CLIENT COMMUNICATION + CHANGE ORDER MANAGEMENT) */}
+      {/* 7. Solution cards - bottom pair (CLIENT COMMUNICATION + CHANGE ORDER MANAGEMENT) */}
       {solutionBottom.length > 0 && <SolutionCardsSection cards={solutionBottom} />}
 
       {/* 8. Returns banner + testimonials carousel */}

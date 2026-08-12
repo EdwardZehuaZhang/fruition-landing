@@ -14,7 +14,7 @@ const CHIP_OFFSETS = INDUSTRIES.reduce<number[]>((acc, card, i) => {
 }, [])
 
 /**
- * Industries — four focus areas whose sub-sectors light up one at a time,
+ * Industries - four focus areas whose sub-sectors light up one at a time,
  * with the active board sending energy down into the Fruition hub.
  *
  * The highlight walks every chip in sequence (15 in total) so the section
@@ -53,7 +53,7 @@ export default function IndustriesHub() {
           </p>
           <h2 className="text-section-h2 mt-4 text-white">Four industries. One method.</h2>
           <p className="text-body mt-4 text-white/65 lg:text-[17px]">
-            We work deep in a small set of industries — so your processes aren&apos;t new to us.
+            We work deep in a small set of industries - so your processes aren&apos;t new to us.
           </p>
         </div>
 

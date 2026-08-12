@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 
 /**
  * Site-wide breadcrumb bar, rendered by SiteFrame directly under the navbar so
- * every marketing page — legacy and practice-cluster alike — gets the same
+ * every marketing page - legacy and practice-cluster alike - gets the same
  * trail (§05: breadcrumb schema on every page). Labels derive from the path;
  * LABELS overrides the prettifier where kebab-case can't be prettified into
  * the real page name.
@@ -13,7 +13,7 @@ import { usePathname } from 'next/navigation'
 
 const HIDDEN_PREFIXES = ['/internal', '/studio', '/post', '/api']
 
-/** Parents that exist as real pages — intermediates outside this set render as plain text. */
+/** Parents that exist as real pages - intermediates outside this set render as plain text. */
 const LINKABLE_PARENTS = new Set([
   '/ai-consulting',
   '/atlassian-consulting',
@@ -26,7 +26,7 @@ const LINKABLE_PARENTS = new Set([
 
 /**
  * Virtual hierarchy for flat legacy URLs: the crumb trail shows the logical
- * cluster (Home / Industries / …) without moving any ranked URL — §07 of the
+ * cluster (Home / Industries / …) without moving any ranked URL - §07 of the
  * v2.1 proposal forbids touching ranking monday.com slugs. Parents without an
  * href render as plain text and are omitted from the JSON-LD.
  */
@@ -140,7 +140,7 @@ export default function Breadcrumbs() {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
-      // virtual parents without a real page are visual-only — kept out of the schema
+      // virtual parents without a real page are visual-only - kept out of the schema
       ...crumbs
         .filter((c) => c.href)
         .map((c, i) => ({

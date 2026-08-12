@@ -200,7 +200,7 @@ export default function MondayForConstructionContent({
         logos={siteSettings?.carouselLogos || []}
       />
 
-      {/* Tab section — heading rotates with active tab */}
+      {/* Tab section - heading rotates with active tab */}
       <ConstructionTabs tabs={resolvedComparisonTabs} />
 
       {/* CRO action items */}

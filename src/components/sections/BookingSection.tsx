@@ -4,13 +4,13 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import type { ChangeEvent, CSSProperties, ReactNode } from "react"
 
 /**
- * Unified contact + booking section — dark brand band, big left copy, month
+ * Unified contact + booking section - dark brand band, big left copy, month
  * grid + time column card, three-step flow (pick time → details → confirmed).
  *
  * Availability comes from /api/scheduling/availability (regional event type
  * picked server-side from the visitor's location, slots in UTC); bookings go
  * through /api/scheduling/book, which also records the lead on the ILE board.
- * The visitor's timezone is auto-detected and can be switched manually — all
+ * The visitor's timezone is auto-detected and can be switched manually - all
  * day grouping and time labels are derived client-side with Intl. When the
  * booking API is unavailable the visitor finishes on the slot's own Calendly
  * page, so a booking is never blocked.
@@ -21,7 +21,7 @@ interface Slot {
   url: string
 }
 
-/** Mirrors LeadRegion in @/lib/leadNotify — redeclared so this client
+/** Mirrors LeadRegion in @/lib/leadNotify - redeclared so this client
  *  component doesn't pull the server-only lead pipeline into the bundle. */
 type BookingRegion = "APAC" | "SEA" | "IND" | "NA" | "UK"
 
@@ -74,7 +74,7 @@ function tzLabel(tz: string): string {
 function dayFmt(tz: string): Intl.DateTimeFormat {
   return new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" })
 }
-/** Slot label in the given timezone — 12h for the Americas, 24h elsewhere. */
+/** Slot label in the given timezone - 12h for the Americas, 24h elsewhere. */
 function fmtTime(iso: string, tz: string): string {
   const h12 = /America/.test(tz)
   return new Date(iso).toLocaleTimeString(h12 ? "en-US" : "en-GB", {
@@ -92,7 +92,7 @@ const dayShort = (key: string): string => {
 }
 
 /* ---------- atoms ---------- */
-/* flex:none — the slot list is a scrolling flex column, so pills would
+/* flex:none - the slot list is a scrolling flex column, so pills would
    otherwise shrink to their text height instead of scrolling. */
 const pill = (sel: boolean, wide?: boolean): CSSProperties => ({
   display: "flex", alignItems: "center", justifyContent: "center", height: 38, flex: "none", padding: "0 16px",
@@ -126,7 +126,7 @@ const field: CSSProperties = {
   outline: "none", transition: "border-color .16s ease, box-shadow .16s ease",
 }
 
-/* Pill CTA — gradient at rest, solid brand-dark on hover (.cta-btn-primary:hover) */
+/* Pill CTA - gradient at rest, solid brand-dark on hover (.cta-btn-primary:hover) */
 const ctaStyle = (hover: boolean, disabled?: boolean): CSSProperties => ({
   display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: 53,
   padding: "0 28px", borderRadius: 9999, border: "1px solid transparent", fontFamily: "var(--font-sans)",
@@ -213,8 +213,8 @@ const CALENDLY_SCRIPT = "https://assets.calendly.com/assets/external/widget.js"
  *
  * `calendlyUrl` reaches us from Sanity via `bookingHref`, which rewrites
  * Calendly links to the on-site anchor (/contact-us#book) so CTA buttons stay
- * on the site. That's right for a link and very wrong for an embed — feeding it
- * in made the page iframe itself — so anything that isn't an absolute
+ * on the site. That's right for a link and very wrong for an embed - feeding it
+ * in made the page iframe itself - so anything that isn't an absolute
  * calendly.com URL falls back to the account page.
  */
 function CalendlyEmbed({ calendlyUrl }: { calendlyUrl?: string }) {
@@ -260,7 +260,7 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
   /**
    * The region the slots were fetched for, echoed back when booking.
    *
-   * Both routes derive the region independently, but from different inputs —
+   * Both routes derive the region independently, but from different inputs -
    * /availability from the country header alone, /book from country *and* the
    * visitor's timezone. Wherever `cf-ipcountry` is absent those disagree (an
    * Asia/Singapore visitor gets APAC slots, then books against SEA), the slot
@@ -291,7 +291,7 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
     setOffice(officeFor(detected))
   }, [])
 
-  /* fetch the whole availability horizon once — UTC slots, regrouped per timezone */
+  /* fetch the whole availability horizon once - UTC slots, regrouped per timezone */
   useEffect(() => {
     let live = true
     fetch("/api/scheduling/availability")
@@ -336,12 +336,12 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
     setF((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   const ready = Boolean(f.first && f.last && f.email && EMAIL_RE.test(f.email) && f.company && topic)
 
-  /* month grid cells — a day is enabled only if it has ≥1 slot in this tz */
+  /* month grid cells - a day is enabled only if it has ≥1 slot in this tz */
   const todayKey = useMemo(() => dayFmt(tz).format(new Date()), [tz])
 
   /**
    * Months from now to the first month that actually has a slot. Opening on
-   * the current month shows an empty grid whenever the month is booked out —
+   * the current month shows an empty grid whenever the month is booked out -
    * e.g. on 31 July the next opening is 3 August, so the visitor would land on
    * a July grid with every date greyed and assume there is no availability.
    * Derived rather than set from an effect so paging with ‹ › still wins.
@@ -405,14 +405,14 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
       if (r.ok && body.ok) {
         setStep(3)
       } else if (body.fallbackUrl) {
-        // API booking unavailable — finish on Calendly with details prefilled.
+        // API booking unavailable - finish on Calendly with details prefilled.
         window.open(body.fallbackUrl, "_blank", "noopener")
         setFallbackNote(true)
       } else {
-        setSubmitError("That slot may have just been taken — pick another time.")
+        setSubmitError("That slot may have just been taken - pick another time.")
       }
     } catch {
-      setSubmitError("That slot may have just been taken — pick another time.")
+      setSubmitError("That slot may have just been taken - pick another time.")
     } finally {
       setSending(false)
     }
@@ -423,7 +423,7 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
     return (
       <div style={{ fontFamily: "var(--font-sans)", color: "var(--text-dark)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", gap: 18, minHeight: 414, padding: "22px 8px" }}>
         <span style={{ fontSize: 15, lineHeight: 1.55, color: "var(--color-text-secondary)", maxWidth: 380 }}>
-          Live availability couldn&rsquo;t load just now — pick your time on our calendar instead.
+          Live availability couldn&rsquo;t load just now - pick your time on our calendar instead.
         </span>
         <CtaLink href={calendlyUrl}>Open the booking calendar</CtaLink>
       </div>
@@ -454,7 +454,7 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
         </div>
         <div style={{ display: "flex", alignItems: "flex-start", gap: 9, textAlign: "left", marginTop: 8, padding: "13px 15px", borderRadius: 14, background: "var(--color-brand-soft)", border: "1px solid var(--border-ui)" }}>
           <span style={{ fontSize: 12.5, lineHeight: 1.5, color: "var(--color-text-secondary)" }}>
-            Your notes are already on the consultant&rsquo;s board — they&rsquo;ll read them before the call, so you won&rsquo;t repeat yourself.
+            Your notes are already on the consultant&rsquo;s board - they&rsquo;ll read them before the call, so you won&rsquo;t repeat yourself.
           </span>
         </div>
         <button type="button" onClick={() => { setStep(1); setSlot(null) }} style={{ background: "none", border: "none", fontFamily: "var(--font-sans)", fontSize: 12.5, fontWeight: 600, color: "var(--purple-primary)", cursor: "pointer", padding: 4 }}>
@@ -545,7 +545,7 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
           </button>
         </div>
 
-        {/* Honeypot — must stay empty */}
+        {/* Honeypot - must stay empty */}
         <input
           type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true"
           value={f.website || ""} onChange={onField}
@@ -567,7 +567,7 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
           )}
           {fallbackNote && (
             <span role="status" style={{ fontSize: 12.5, color: "var(--color-text-secondary)", textAlign: "center" }}>
-              Almost there — your booking continues on the Calendly page we just opened.
+              Almost there - your booking continues on the Calendly page we just opened.
             </span>
           )}
           <Cta type="submit" disabled={!ready || sending}>
@@ -629,7 +629,7 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
           </div>
         </div>
 
-        {/* time column — scrolls vertically, never wraps sideways */}
+        {/* time column - scrolls vertically, never wraps sideways */}
         <div className="fr-booking-times" style={{ display: "flex", flexDirection: "column", gap: 9, paddingLeft: 20, borderLeft: "1px solid var(--border-ui)", minHeight: 230, maxHeight: 318 }}>
           <span style={{ fontSize: 12.5, fontWeight: 600, color: "var(--color-text-secondary)", flex: "none" }}>
             {dayKey ? (() => { const dd = partsOf(dayKey); const dt = new Date(dd.y, dd.m - 1, dd.d); return `${DOW[(dt.getDay() + 6) % 7]} ${dd.d} ${MONTH_FULL[dd.m - 1]}` })() : "Pick a day"}
@@ -639,14 +639,14 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
               <button key={s.start} type="button" onClick={() => setSlot(s)} style={pill(s.start === slot?.start, true)}>{fmtTime(s.start, tz)}</button>
             ))}
             {daySlots.length === 0 && (
-              <span style={{ fontSize: 13, color: "var(--color-text-secondary)" }}>Nothing open — try another day.</span>
+              <span style={{ fontSize: 13, color: "var(--color-text-secondary)" }}>Nothing open - try another day.</span>
             )}
           </div>
         </div>
       </div>
 
       <span style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>
-        Times shown in {tzLabel(tz)} — we detected your timezone, switch it above if that&rsquo;s wrong.
+        Times shown in {tzLabel(tz)} - we detected your timezone, switch it above if that&rsquo;s wrong.
       </span>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -665,7 +665,7 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
 export default function BookingSection({
   eyebrow = "See it on your pipeline",
   heading = "Watch your sales process run on monday CRM.",
-  sub = "Pick a time and we'll map your pipeline live on the call — your stages, your handoffs, your reporting. No slides.",
+  sub = "Pick a time and we'll map your pipeline live on the call - your stages, your handoffs, your reporting. No slides.",
   email = "contact@fruitionservices.io",
   offices = "Sydney · New York · London · Singapore · Bengaluru",
   proof = "Platinum monday.com partner · 500+ implementations",

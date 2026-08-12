@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import CtaButton from "@/components/CtaButton"
 
 /* ------------------------------------------------------------------ */
-/*  Data — questions, scoring and report logic are the source-of-truth */
+/*  Data - questions, scoring and report logic are the source-of-truth */
 /*  from Josh's approved interactive mockup (monday item 2790599256).  */
 /* ------------------------------------------------------------------ */
 
@@ -53,17 +53,17 @@ const QUESTIONS: Question[] = [
     opt("Spreadsheets and email", "No shared system", 15), opt("A mix of point tools", "Some tools, poorly connected", 40), opt("One main platform, underused", "e.g. monday, Asana, Jira", 65), opt("Well-adopted connected platform", "Integrated and governed", 90)] },
   { dim: "data", title: "Where does your operational data live?", help: "Data Foundations", opts: [
     opt("Scattered files & inboxes", "Hard to find the truth", 15), opt("Departmental systems, no links", "Finance here, ops there", 40), opt("Central systems, some gaps", "Mostly connected", 70), opt("Clean, connected, reportable", "Single source of truth", 92)] },
-  { dim: "process", title: "If a new hire asked ‘how do we do X here’ — what would happen?", help: "Process Clarity", opts: [
+  { dim: "process", title: "If a new hire asked ‘how do we do X here’ - what would happen?", help: "Process Clarity", opts: [
     opt("They'd ask around", "Nothing written down", 15), opt("Some docs exist, mostly stale", "Tribal knowledge", 40), opt("Key processes documented", "Core workflows mapped", 70), opt("Documented and followed", "Living SOPs", 92)] },
   { dim: "team", title: "How is your team using AI today?", help: "Team Capability", opts: [
     opt("Not at all / banned", "", 10), opt("Individuals experiment quietly", "ChatGPT in pockets", 38), opt("Sanctioned tools, some training", "Copilot / Claude rolled out", 68), opt("AI in daily workflows", "Prompting is a core skill", 92)] },
   { dim: "gov", title: "Do you have rules for how AI and data can be used?", help: "Governance & Risk", opts: [
     opt("No policy at all", "", 12), opt("Informal guidance only", "", 38), opt("Written policy, not enforced", "", 65), opt("Policy, training & controls", "", 90)] },
   { dim: "change", title: "When you last rolled out a new system, what happened?", help: "Change Readiness", opts: [
-    opt("It flopped — people went back to old ways", "", 15), opt("Partial adoption after a struggle", "", 42), opt("Adopted with strong pushing", "", 68), opt("Adopted well — we're good at change", "", 90)] },
+    opt("It flopped - people went back to old ways", "", 15), opt("Partial adoption after a struggle", "", 42), opt("Adopted with strong pushing", "", 68), opt("Adopted well - we're good at change", "", 90)] },
   { dim: "comm", title: "Could you tie an AI investment to a measurable business number?", help: "Commercial Case", opts: [
-    opt("Not really — it's a feeling", "", 15), opt("Roughly — we know where the pain is", "", 45), opt("Yes — we track cost/time per process", "", 72), opt("Yes — with baselines and targets", "", 92)] },
-  { dim: "strat", title: "What's your AI ambition over the next 12 months?", help: "Strategic Alignment — this shapes your roadmap the most.", opts: [
+    opt("Not really - it's a feeling", "", 15), opt("Roughly - we know where the pain is", "", 45), opt("Yes - we track cost/time per process", "", 72), opt("Yes - with baselines and targets", "", 92)] },
+  { dim: "strat", title: "What's your AI ambition over the next 12 months?", help: "Strategic Alignment - this shapes your roadmap the most.", opts: [
     opt("Explore safely", "Understand what's real vs hype", 35), opt("Augment the team", "AI assistants inside daily work", 60), opt("Automate workflows", "Connected automations across systems", 78), opt("Agentic operations", "AI agents running whole processes", 90)] },
 ]
 
@@ -124,7 +124,7 @@ function buildBlueprint(answers: number[]): Blueprint {
   const objTxt = [
     "establish structured project and portfolio delivery with intake, governance, and real-time visibility",
     "implement a connected CRM covering pipeline, quoting, and a clean handover into delivery",
-    "run service and field operations — jobs, tickets, dispatch and SLA tracking — from one platform",
+    "run service and field operations - jobs, tickets, dispatch and SLA tracking - from one platform",
     "give the executive team one live command centre for KPIs, initiative status, and board reporting",
   ][obj]
   const ambTxt = [
@@ -138,7 +138,7 @@ function buildBlueprint(answers: number[]): Blueprint {
   const weakest: [string, string] = [weakestDims[0][1], weakestDims[1][1]]
 
   const core = [
-    { name: "monday.com Work Management", body: "Portfolio, intake and governance structure — the operating layer for delivery." },
+    { name: "monday.com Work Management", body: "Portfolio, intake and governance structure - the operating layer for delivery." },
     { name: "monday CRM", body: "Pipeline, quoting and automated handover from sale to delivery." },
     { name: "monday.com Work Management + Service", body: "Job and ticket management with SLA tracking and dispatch boards." },
     { name: "monday.com Work Management", body: "Executive command centre: KPI roll-up, initiative tracking, board reporting." },
@@ -150,7 +150,7 @@ function buildBlueprint(answers: number[]): Blueprint {
   if (scores.gov < 45) stack.push({ tag: "Governance", name: "AI use policy & guardrails", body: "A practical AI policy, access controls, and training so adoption is safe and defensible." })
 
   const phaseBase: [number, string, string, string][] = [
-    [16, "Discovery & Process Design", "Weeks 1–2", `Stakeholder workshops, process mapping, and solution design — with focus on your lowest-scoring dimensions (${weakest.join(", ")}).`],
+    [16, "Discovery & Process Design", "Weeks 1–2", `Stakeholder workshops, process mapping, and solution design - with focus on your lowest-scoring dimensions (${weakest.join(", ")}).`],
     [26, "Core Platform Build", "Weeks 2–5", `Configure the ${core.name} foundation: structure, workflows, dashboards and permissions matched to how your team actually works.`],
     [20, "Automation & AI Layer", "Weeks 5–7", amb >= 2 ? "Cross-system automations and AI-assisted workflows, sequenced behind the platform foundation." : "Targeted automations and AI assistants embedded where they remove the most manual effort."],
     [12, "Training, Go-Live & Hypercare", "Weeks 7–8", "Role-based training, go-live support, and a hypercare period so adoption sticks."],
@@ -176,7 +176,7 @@ function buildBlueprint(answers: number[]): Blueprint {
   const date = new Date().toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" })
   return {
     date,
-    title: `AI & Work Platform Blueprint — ${industry.split(" /")[0]}`,
+    title: `AI & Work Platform Blueprint - ${industry.split(" /")[0]}`,
     sub: `${QUESTIONS[0].opts[size].label} staff · ${QUESTIONS[1].opts[answers[1]].label} · Overall readiness ${avg}/100 (${tier})`,
     landscape: `Based on your answers, the primary objective is to ${objTxt}, building toward ${ambTxt}. Your overall readiness score of ${avg}/100 places you in the ${tier} band against comparable ${industry.toLowerCase()} organisations we have assessed. The plan below sequences the work so that foundational gaps are closed before AI capability is layered on top.`,
     avg,
@@ -208,7 +208,7 @@ function SpineRows({ values }: { values: Partial<Record<DimKey, number | null>> 
                 style={{ width: `${v ?? 0}%` }}
               />
             </span>
-            <span className="text-right font-mono text-micro text-white">{v ?? "—"}</span>
+            <span className="text-right font-mono text-micro text-white">{v ?? "-"}</span>
           </div>
         )
       })}
@@ -310,8 +310,8 @@ export default function AiBlueprintClient() {
             </h1>
             <p className="text-body-lead text-muted mt-6 max-w-[540px]">
               Answer 12 questions about your operation. We score your readiness across eight
-              dimensions and generate a tailored blueprint — recommended platforms, a phased
-              build plan, and an indicative investment — instantly.
+              dimensions and generate a tailored blueprint - recommended platforms, a phased
+              build plan, and an indicative investment - instantly.
             </p>
             <div className="mt-8 flex flex-col gap-4 md:flex-row">
               <CtaButton href="#assess" label="Build my blueprint" variant="primary" />
@@ -342,9 +342,9 @@ export default function AiBlueprintClient() {
       <section className="border-y border-ui bg-surface-subtle">
         <div className="mx-auto grid w-full max-w-[1280px] gap-6 px-4 py-9 md:grid-cols-3 md:gap-0 md:px-8 lg:px-10">
           {[
-            ["01 — ANSWER", "12 questions, no jargon", "Size, systems, data, ambition. If you run the business, you can answer them."],
-            ["02 — SCORE", "Readiness across 8 dimensions", "Benchmarked against 500+ organisations we've assessed across APAC, UK and US."],
-            ["03 — BLUEPRINT", "Products, phases, quote", "A recommended stack, a phased build plan, and an indicative investment — instantly."],
+            ["01 - ANSWER", "12 questions, no jargon", "Size, systems, data, ambition. If you run the business, you can answer them."],
+            ["02 - SCORE", "Readiness across 8 dimensions", "Benchmarked against 500+ organisations we've assessed across APAC, UK and US."],
+            ["03 - BLUEPRINT", "Products, phases, quote", "A recommended stack, a phased build plan, and an indicative investment - instantly."],
           ].map(([num, h, p], i) => (
             <div key={num} className={`md:px-7 ${i > 0 ? "md:border-l md:border-ui" : "md:pl-0"}`}>
               <div className="mb-1.5 font-mono text-micro font-semibold uppercase tracking-[0.12em] text-brand">{num}</div>
@@ -364,15 +364,15 @@ export default function AiBlueprintClient() {
               <h2 className="text-section-h2 text-body">Twelve questions. One blueprint.</h2>
               <p className="text-body-lead text-muted mt-3">
                 Your answers score the same eight dimensions we measure in the full 4-week
-                Capability Assessment — just faster, and free.
+                Capability Assessment - just faster, and free.
               </p>
             </div>
 
             <div className="grid items-start gap-8 lg:grid-cols-[300px_1fr] lg:gap-11">
               {/* Live spine */}
               <aside className="rounded-card bg-surface-dark p-6 lg:sticky lg:top-24" aria-label="Live readiness score">
-                <div className="font-mono text-micro uppercase tracking-[0.14em] text-brand-light">{"// readiness — live"}</div>
-                <div className="mt-2 text-4xl font-bold text-white">{liveAvg ?? "—"}</div>
+                <div className="font-mono text-micro uppercase tracking-[0.14em] text-brand-light">{"// readiness - live"}</div>
+                <div className="mt-2 text-4xl font-bold text-white">{liveAvg ?? "-"}</div>
                 <div className="mb-5 mt-1 min-h-4 font-mono text-micro uppercase tracking-[0.08em] text-brand-light">
                   {liveAvg != null
                     ? liveAvg >= 70 ? "advanced · ready to build" : liveAvg >= 45 ? "developing · foundations first" : "emerging · start with basics"
@@ -501,7 +501,7 @@ export default function AiBlueprintClient() {
                   <h3 className="text-card-title text-brand">Recommended stack</h3>
                   <p className="text-body-sm text-body mt-3 max-w-[760px]">
                     Vendor recommendations are indicative and refined during discovery. Everything
-                    below is something we implement ourselves — no handoffs.
+                    below is something we implement ourselves - no handoffs.
                   </p>
                   <div className="mt-5 grid gap-3.5 md:grid-cols-2 lg:grid-cols-3">
                     {blueprint.stack.map((s) => (
@@ -574,7 +574,7 @@ export default function AiBlueprintClient() {
                   </p>
                   {leadState === "done" ? (
                     <p className="text-body-sm mt-4 font-medium text-brand-light">
-                      ✓ Done — your blueprint is on its way. We&apos;ll follow up within one business day.
+                      ✓ Done - your blueprint is on its way. We&apos;ll follow up within one business day.
                     </p>
                   ) : (
                     <form onSubmit={submitLead} className="mt-4 flex flex-col gap-2.5 sm:flex-row">
@@ -606,7 +606,7 @@ export default function AiBlueprintClient() {
                   )}
                   {leadState === "error" && (
                     <p className="text-body-sm mt-2 text-white/80">
-                      Something went wrong — please try again or email us directly at hello@fruitionservices.io.
+                      Something went wrong - please try again or email us directly at hello@fruitionservices.io.
                     </p>
                   )}
                 </div>

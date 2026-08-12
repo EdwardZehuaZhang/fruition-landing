@@ -192,7 +192,7 @@ export default function HeroBanner({
       <div
         className="mx-auto flex flex-col items-center px-4 md:px-16 lg:px-24 max-w-[1588px] w-full py-20"
       >
-        {/* Partner badges — hidden when a single partnerImageUrl is used or hidePartnerBadges flag is set */}
+        {/* Partner badges - hidden when a single partnerImageUrl is used or hidePartnerBadges flag is set */}
         {showPartnerBadges && (
           <div className="flex flex-wrap items-center justify-center gap-[22px]">
             {partnerBadges.map((badge, i) => {
@@ -243,7 +243,7 @@ export default function HeroBanner({
           </p>
         )}
 
-        {/* Partner image — shown below hero text when partnerImageUrl is resolved */}
+        {/* Partner image - shown below hero text when partnerImageUrl is resolved */}
         {partnerImageUrl && (
           <div className="mt-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -275,7 +275,7 @@ export default function HeroBanner({
           )}
         </div>
 
-        {/* Hero media — video takes precedence over image */}
+        {/* Hero media - video takes precedence over image */}
         {heroVideoSrc ? (
           <FramedMedia className="w-full max-w-[1042px] mt-10">
             <video

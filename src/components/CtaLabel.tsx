@@ -1,7 +1,7 @@
 import { Rocket, Play } from "lucide-react"
 
 /*
- * CtaLabel — renders a CMS-authored CTA label cleanly.
+ * CtaLabel - renders a CMS-authored CTA label cleanly.
  *
  * Many CMS labels carry a leading decorative emoji (e.g. "🚀 Book a Meeting",
  * "▶️ Get Started", "📈 Our Solutions"). These render inconsistently across

@@ -73,7 +73,7 @@ interface Props {
 }
 
 /**
- * AI capability — the business functions laid out as an isometric board with
+ * AI capability - the business functions laid out as an isometric board with
  * the AI layer sitting underneath them all.
  *
  * The board is a CSS 3D transform of a fixed 642×382 plane, so like the hero it
@@ -96,7 +96,7 @@ export default function AiCapability({ bookingHref }: Props) {
             Every function, on one connected layer.
           </h2>
           <p className="text-body mt-5 text-muted lg:text-[17px]" style={{ textWrap: "pretty" }}>
-            We map the work your teams actually do, then put AI where it removes the handoffs —
+            We map the work your teams actually do, then put AI where it removes the handoffs -
             readiness, agent builds and adoption run as one programme.
           </p>
           <div className="mt-7 flex flex-col gap-3.25">

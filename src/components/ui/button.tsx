@@ -53,7 +53,7 @@ function Button({
       data-slot="button"
       render={render}
       // A custom `render` (e.g. a Next.js <Link>, which outputs an <a>) is not a
-      // native <button>, so drop native-button semantics to satisfy Base UI —
+      // native <button>, so drop native-button semantics to satisfy Base UI -
       // unless the caller explicitly sets nativeButton.
       nativeButton={nativeButton ?? (render ? false : undefined)}
       className={cn(buttonVariants({ variant, size, className }))}

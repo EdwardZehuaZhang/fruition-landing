@@ -186,7 +186,7 @@ export default function MondayPartnerSingaporeContent({
         withPurpleCircle={false}
       />
 
-      {/* Meet the team — SG region */}
+      {/* Meet the team - SG region */}
       <TeamGridSection
         heading={page.teamGridHeading}
         subheading={page.teamGridSubheading}

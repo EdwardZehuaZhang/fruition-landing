@@ -454,7 +454,7 @@ export async function getPartnershipPageBySlug(slug: string) {
 }
 
 export async function getAiPartnerPageBySlug(slug: string) {
-  // Full document — the bespoke AiPartnerTemplate consumes every field.
+  // Full document - the bespoke AiPartnerTemplate consumes every field.
   return client.fetch(
     `*[_type == "aiPartnerPage" && slug.current == $slug][0]`,
     { slug }
@@ -627,7 +627,7 @@ export async function getFaqItemsForPage(pageKey: string) {
   )
 }
 
-/** Canonical fallbacks when the proofStats doc is absent — matches the live
+/** Canonical fallbacks when the proofStats doc is absent - matches the live
  *  dataset's dominant values (audited 2026-07-18: 500+ appears 42× in Sanity
  *  content and 47× in code; 4.9 rating; 180,000+ monday customers). */
 export const PROOF_STATS_DEFAULTS = {
@@ -641,7 +641,7 @@ export const PROOF_STATS_DEFAULTS = {
 }
 
 /**
- * The proofStats singleton — Fruition's entity-signal numbers (implementation
+ * The proofStats singleton - Fruition's entity-signal numbers (implementation
  * count, rating, partner tiers, awards). Always returns a complete object:
  * missing doc or missing fields fall back to PROOF_STATS_DEFAULTS.
  */
@@ -661,7 +661,7 @@ export async function getProofStats(): Promise<typeof PROOF_STATS_DEFAULTS> {
 }
 
 /**
- * Quote testimonials for a page — caseStudy docs tagged with the page key,
+ * Quote testimonials for a page - caseStudy docs tagged with the page key,
  * in page order. Returns [] when none are tagged; callers keep their previous
  * page-field arrays as fallback, so a missing tag never breaks a page.
  */
@@ -676,7 +676,7 @@ export async function getCaseStudiesForPage(pageKey: string) {
 }
 
 /**
- * Closing CTA banner copy for a page — the closingCta doc tagged with the
+ * Closing CTA banner copy for a page - the closingCta doc tagged with the
  * page key, or null. Callers keep their previous hardcoded copy as fallback,
  * so a null result never breaks a page (and editors override any page just by
  * tagging a doc with its key).

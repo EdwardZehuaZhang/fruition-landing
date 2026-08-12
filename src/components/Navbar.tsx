@@ -71,7 +71,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
     <nav className="bg-surface dark:shadow-none sticky top-0 z-50 shadow-sm" onMouseLeave={() => setOpenMenu(null)}>
       <div className="mx-auto max-w-[1348px] px-4 w-full">
         <div className="flex justify-between items-center gap-4 h-[85px]">
-          {/* Logo — black on light, white in dark mode (prefers-color-scheme) */}
+          {/* Logo - black on light, white in dark mode (prefers-color-scheme) */}
           <Link href="/" className="shrink-0">
             <Image
               src="/images/logo-fruition-black.svg"
@@ -135,7 +135,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
               )
             })}
 
-            {/* Phone icon + CTA (partner badges removed from nav — they crowded
+            {/* Phone icon + CTA (partner badges removed from nav - they crowded
                 the six-tab row and overlapped the Contact tab) */}
             <div className="flex items-center gap-2 border-l border-ui pl-3" onMouseEnter={() => setOpenMenu(null)}>
               {/* Phone icon */}

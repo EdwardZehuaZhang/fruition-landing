@@ -165,7 +165,7 @@ function OverviewTab({ solution }: { solution: Solution }) {
             {solution.outcomes.map((o, i) => (
               <li
                 key={i}
-                className="text-body-sm text-[var(--color-text-secondary)] before:content-['—'] before:mr-2 before:text-[var(--purple-light)]"
+                className="text-body-sm text-[var(--color-text-secondary)] before:content-['-'] before:mr-2 before:text-[var(--purple-light)]"
               >
                 {o}
               </li>

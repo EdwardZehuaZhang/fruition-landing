@@ -139,7 +139,7 @@ function extractHeadings(body?: PortableTextBlock[]): TocEntry[] {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Portable text components — pixel-matched to Figma article body    */
+/*  Portable text components - pixel-matched to Figma article body    */
 /* ------------------------------------------------------------------ */
 /*  Figma rules:                                                       */
 /*    - Montserrat Regular/Bold                                        */
@@ -147,7 +147,7 @@ function extractHeadings(body?: PortableTextBlock[]): TocEntry[] {
 /*    - h2 (section): 28px Bold / leading-35px / pt-45px               */
 /*    - h3 (sub): 22px Bold / leading-27px / pt-36px                   */
 /*    - h4 (inline): 18px Bold / leading-27px / pt-32px                */
-/*    Headings carry no bottom padding — the next block's pt-27.5px    */
+/*    Headings carry no bottom padding - the next block's pt-27.5px    */
 /*    supplies the below-gap, so the gap above a heading is always     */
 /*    larger and each heading visually opens the section below it.     */
 /*    - between paragraphs: pt-27.5px                                  */
@@ -364,7 +364,7 @@ function AuthorMetaRow({
 }) {
   return (
     <div className="flex flex-wrap items-center gap-y-[4px] w-full">
-      {/* Avatar — 32px with 12px right padding */}
+      {/* Avatar - 32px with 12px right padding */}
       {author ? (
         <Link
           href={`/author/${authorSlug(author)}`}
@@ -494,7 +494,7 @@ function TagsRow({ categories }: { categories: BlogCategoryRef[] }) {
 function EngagementBar() {
   return (
     <div className="flex flex-col items-start w-full">
-      {/* Share icons row — divider top, 66px min-h, pt-24 pb-23 */}
+      {/* Share icons row - divider top, 66px min-h, pt-24 pb-23 */}
       <div className="relative flex items-center min-h-[66px] pt-[24px] pb-[23px] w-full border-t border-ui">
         <div className="flex gap-[30px] items-center">
           {/* Facebook */}
@@ -553,7 +553,7 @@ function EngagementBar() {
           </button>
         </div>
       </div>
-      {/* Like row — divider top, pt-19 */}
+      {/* Like row - divider top, pt-19 */}
       <div className="relative flex items-center justify-end pt-[19px] w-full border-t border-ui">
         <button
           aria-label="Like post"
@@ -645,7 +645,7 @@ function RelatedPostCard({ post }: { post: RelatedBlogPost }) {
       className="group bg-surface-raised relative flex-1 min-w-0 max-w-[290.67px] self-stretch rounded-card shadow-whisper ring-1 ring-ui hover:ring-brand-dark dark:shadow-none transition-colors overflow-hidden"
     >
       <div className="flex flex-col items-start h-full">
-        {/* Image — 162px tall, full card width */}
+        {/* Image - 162px tall, full card width */}
         <div className="relative w-full h-[162.36px] overflow-hidden">
           {imgSrc ? (
             <Image
@@ -666,7 +666,7 @@ function RelatedPostCard({ post }: { post: RelatedBlogPost }) {
               {post.title}
             </p>
           </div>
-          {/* Footer — divider top, pt-16, h-34 */}
+          {/* Footer - divider top, pt-16, h-34 */}
           <div className="mt-auto w-full pt-[16px] flex items-start justify-between h-[34px] border-t border-ui">
             <div className="flex items-center h-full">
               <div className="flex items-center gap-[6px]">

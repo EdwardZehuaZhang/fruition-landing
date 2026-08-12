@@ -58,7 +58,7 @@ interface CroSectionsProps {
 
 /**
  * Renders the CRO action-item sections for a page from `page.croSections`.
- * Every sub-section is independent — only populated ones render — so a page
+ * Every sub-section is independent - only populated ones render - so a page
  * opts in per element via Sanity. Order is fixed and sensible; place this once
  * in a Content component (typically just after the hero).
  *

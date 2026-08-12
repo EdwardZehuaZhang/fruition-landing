@@ -28,7 +28,7 @@ interface StatsBlockProps {
   showMondayPartnersBadge?: boolean
 }
 
-// ROI icons — kept hardcoded because they're decorative/design icons (not content).
+// ROI icons - kept hardcoded because they're decorative/design icons (not content).
 // Sanity stat.icon still wins when populated per-stat.
 const fallbackIcons = [
   '/images/icon-roi-1.png',

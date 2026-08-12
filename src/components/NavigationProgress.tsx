@@ -9,7 +9,7 @@ export default function NavigationProgress() {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const prevPathRef = useRef(pathname)
 
-  // Navigation complete — fill to 100% then fade out
+  // Navigation complete - fill to 100% then fade out
   useEffect(() => {
     if (pathname === prevPathRef.current) return
     prevPathRef.current = pathname
@@ -43,7 +43,7 @@ export default function NavigationProgress() {
         return
       if (href === prevPathRef.current) return
 
-      // Internal navigation — start progress
+      // Internal navigation - start progress
       setVisible(true)
       setProgress(20)
 

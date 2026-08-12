@@ -7,7 +7,7 @@ export interface Partner {
   name: string
   tier?: string
   description?: string
-  /** Inline SVG content for wordmark — legacy, not CMS-driven. */
+  /** Inline SVG content for wordmark - legacy, not CMS-driven. */
   wordmark?: React.ReactNode
   /** Sanity image reference for partner logo. */
   logo?: { asset?: { _ref: string } }

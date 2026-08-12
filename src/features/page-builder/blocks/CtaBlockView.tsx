@@ -41,7 +41,7 @@ export default function CtaBlockView({
           : 'bg-[var(--navy-900)]'
       }`}
     >
-      {/* Certification badge — show from Sanity or fallback to local image */}
+      {/* Certification badge - show from Sanity or fallback to local image */}
       {badgeImage?.asset ? (
         <div className="mb-6">
           {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -100,7 +100,7 @@ export default function BlogCard({
 
   return (
     <div className="group relative block">
-      {/* Stretched overlay link — whole card navigates to the post. Interactive
+      {/* Stretched overlay link - whole card navigates to the post. Interactive
           children (author link) sit above this via position+z-index. */}
       <Link
         href={`/post/${slug}`}

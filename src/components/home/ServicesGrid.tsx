@@ -20,7 +20,7 @@ export default function ServicesGrid() {
         <Reveal className="max-w-[820px]">
           <p className="text-micro font-bold tracking-[0.12em] uppercase text-brand">What we do</p>
           <h2 className="text-section-h2 mt-4 text-foreground" style={{ textWrap: "pretty" }}>
-            Six practices, one operating model — designed to make platforms fit your business.
+            Six practices, one operating model - designed to make platforms fit your business.
           </h2>
         </Reveal>
 

@@ -283,7 +283,7 @@ export default function SolarCrmSolutionContent({ page, siteSettings }: Props) {
         calendlyUrl={rawCalendly}
       />
 
-      {/* 6. Solution cards — top pair */}
+      {/* 6. Solution cards - top pair */}
       {solutionTop.length > 0 && <SolutionCardsSection cards={solutionTop} />}
 
       {/* 7. Returns banner with testimonials + CTAs */}
@@ -297,7 +297,7 @@ export default function SolarCrmSolutionContent({ page, siteSettings }: Props) {
         testimonials={testimonials}
       />
 
-      {/* 8. Solution cards — bottom pair */}
+      {/* 8. Solution cards - bottom pair */}
       {solutionBottom.length > 0 && <SolutionCardsSection cards={solutionBottom} />}
 
       {/* 9. Before vs After comparison */}

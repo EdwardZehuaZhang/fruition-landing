@@ -491,7 +491,7 @@ export default {
       }],
     },
 
-    // Lifecycle stages (n/title/body) — used by construction + HR
+    // Lifecycle stages (n/title/body) - used by construction + HR
     {
       name: 'lifecycleStages',
       title: 'Lifecycle Stages',
@@ -507,7 +507,7 @@ export default {
       }],
     },
 
-    // Fit reasons (title/body) — used by HR
+    // Fit reasons (title/body) - used by HR
     {
       name: 'fitReasons',
       title: 'Fit Reasons',
@@ -547,7 +547,7 @@ export default {
     { name: 'caseStudyCtaLabel', title: 'Case Study CTA Label', type: 'string' },
     { name: 'caseStudyCtaUrl', title: 'Case Study CTA URL', type: 'string' },
 
-    // Why-best cards (emoji/title/description) — Marketing
+    // Why-best cards (emoji/title/description) - Marketing
     {
       name: 'whyBestCards',
       title: 'Why Best Cards (emoji/title/description)',

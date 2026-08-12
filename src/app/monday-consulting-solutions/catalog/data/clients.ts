@@ -11,7 +11,7 @@ export interface Client {
 }
 
 export const CLIENTS: Client[] = [
-  // United States — 71 delivered
+  // United States - 71 delivered
   { region: "us", name: "Nsight Health", meta: "Healthcare Practice" },
   { region: "us", name: "Slick City", meta: "Entertainment Ops" },
   { region: "us", name: "Blue Voice", meta: "Service Ticketing" },
@@ -84,7 +84,7 @@ export const CLIENTS: Client[] = [
   { region: "us", name: "First Service Residential", meta: "Property Mgmt" },
   { region: "us", name: "Stand Industries", meta: "Industrial Ops" },
 
-  // Australia & APAC — 111 delivered
+  // Australia & APAC - 111 delivered
   { region: "apac", name: "Landcom", meta: "NSW Gov Property" },
   { region: "apac", name: "Sekisui House", meta: "Residential Developer" },
   { region: "apac", name: "Tourism Australia", meta: "Agency Enablement" },
@@ -197,7 +197,7 @@ export const CLIENTS: Client[] = [
   { region: "apac", name: "Cricket Wales", meta: "Sports Governing Body" },
   { region: "apac", name: "Creata", meta: "Global Promotions" },
 
-  // United Kingdom — 106 delivered
+  // United Kingdom - 106 delivered
   { region: "uk", name: "Vistry Homes", meta: "Major UK Housebuilder" },
   { region: "uk", name: "Lynch Brother Homes", meta: "Residential Homebuilder" },
   { region: "uk", name: "Glencar", meta: "Commercial Contractor" },

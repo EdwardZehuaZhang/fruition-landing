@@ -29,7 +29,7 @@ export default function TestimonialsGrid({
   heading = "What our customers say about us \uD83D\uDE4C",
   ctaLabel = "Start Your Transformation",
   ctaUrl = BOOKING_ANCHOR,
-  // Default mirrors the proofStats singleton (Sanity, _id "proofStats") — the
+  // Default mirrors the proofStats singleton (Sanity, _id "proofStats") - the
   // canonical entity-signal registry. Keep in sync via getProofStats/PROOF_STATS_DEFAULTS.
   statCardValue = "500+",
   statCardSubtitle = "have maximised their workflows with our monday.com expert support",
@@ -39,7 +39,7 @@ export default function TestimonialsGrid({
 }: TestimonialsGridProps) {
   // Build testimonial cards from case studies, then paginate into groups of 5.
   // Case studies without a quote (e.g. project write-ups with no testimonial)
-  // are dropped — they'd otherwise render as blank panels.
+  // are dropped - they'd otherwise render as blank panels.
   // Memoized so the React Compiler can preserve downstream memoization.
   const pages = useMemo(() => {
     const testimonials = caseStudies

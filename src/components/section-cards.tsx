@@ -11,16 +11,16 @@ export interface SectionCardsProps {
   pageViews?: string
   conversions?: string
   searchClicks?: string
-  /** True once GA4/GSC are connected — flips the caption from a hint to the range. */
+  /** True once GA4/GSC are connected - flips the caption from a hint to the range. */
   connected?: boolean
   rangeLabel?: string
 }
 
 export function SectionCards({
-  totalVisitors = "—",
-  pageViews = "—",
-  conversions = "—",
-  searchClicks = "—",
+  totalVisitors = "-",
+  pageViews = "-",
+  conversions = "-",
+  searchClicks = "-",
   connected = false,
   rangeLabel = "Last 28 days",
 }: SectionCardsProps) {

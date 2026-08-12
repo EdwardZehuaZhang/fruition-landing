@@ -166,7 +166,7 @@ interface MondayTrainingContentProps {
   carouselLogos?: CarouselLogo[]
   caseStudies?: CaseStudy[]
   siteSettings?: SiteSettings | null
-  /** Central faqItem tabs — overrides `data.faqTabs` when non-empty. */
+  /** Central faqItem tabs - overrides `data.faqTabs` when non-empty. */
   faqTabs?: FaqTab[]
   navbarPartnerBadges?: NavbarPartnerBadge[]
 }
@@ -202,7 +202,7 @@ export default function MondayTrainingContent({
 
   const [activeTrainingTab, setActiveTrainingTab] = useState<number>(0)
 
-  // Carousel logos — duplicate for the marquee effect
+  // Carousel logos - duplicate for the marquee effect
   const normalizedLogos = carouselLogos
     .map((logo, i) => ({
       key: logo._key || `logo-${i}`,
@@ -243,7 +243,7 @@ export default function MondayTrainingContent({
 
   const primaryCtaLabel = data?.heroPrimaryCtaLabel
   const primaryCtaUrl = data?.heroPrimaryCtaUrl
-  // Secondary CTA is optional — only render when both label and URL are set
+  // Secondary CTA is optional - only render when both label and URL are set
   const showSecondaryCta = Boolean(data?.heroSecondaryCtaLabel && data?.heroSecondaryCtaUrl)
   const secondaryCtaLabel = data?.heroSecondaryCtaLabel
   const secondaryCtaUrl = data?.heroSecondaryCtaUrl
@@ -355,7 +355,7 @@ export default function MondayTrainingContent({
             </div>
           )}
 
-          {/* CTA(s) — secondary is optional */}
+          {/* CTA(s) - secondary is optional */}
           {(primaryCtaUrl || showSecondaryCta) && (
             <div className="flex items-center justify-center flex-wrap gap-5 mt-10">
               {primaryCtaUrl && (
@@ -630,7 +630,7 @@ export default function MondayTrainingContent({
       <BookingSection
         eyebrow="monday.com training"
         heading="Book a FREE Training Consultation"
-        sub="Tell us about your team and the workflows you want to master — we’ll tailor the session live on the call."
+        sub="Tell us about your team and the workflows you want to master - we’ll tailor the session live on the call."
       />
 
       {/* ============================================================ */}

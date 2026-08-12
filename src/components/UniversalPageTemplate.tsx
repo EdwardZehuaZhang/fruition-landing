@@ -143,7 +143,7 @@ export default function UniversalPageTemplate({
         hidePartnerBadges={page.hideHeroPartnerBadges === true}
       />
 
-      {/* 1b. Calendly (top position) — opt-in via Sanity field calendlyPosition === "top" */}
+      {/* 1b. Calendly (top position) - opt-in via Sanity field calendlyPosition === "top" */}
       {page.calendlyPosition === "top" && (
         <CalendlySection
           heading={page.calendlyHeading}
@@ -171,7 +171,7 @@ export default function UniversalPageTemplate({
         </section>
       )}
 
-      {/* 3. Capabilities Grid ("Why X choose monday.com") — render here unless capabilitiesPosition === 'afterFaq' */}
+      {/* 3. Capabilities Grid ("Why X choose monday.com") - render here unless capabilitiesPosition === 'afterFaq' */}
       {!page.hideCapabilitiesSection && page.capabilitiesCards?.length > 0 && page.capabilitiesPosition !== "afterFaq" && (
         <CapabilitiesGrid
           eyebrow={page.capabilitiesEyebrow}
@@ -258,7 +258,7 @@ export default function UniversalPageTemplate({
         />
       )}
 
-      {/* 3b. Methodology — moved before Calendly to match prod sequence */}
+      {/* 3b. Methodology - moved before Calendly to match prod sequence */}
       {!shouldMergeMethodology && methodologySteps.length > 0 && (
         <MethodologySection
           heading={page.methodologyHeading}
@@ -266,7 +266,7 @@ export default function UniversalPageTemplate({
         />
       )}
 
-      {/* 4. Calendly (Book Your Personalised Demo) — skip when shown at top */}
+      {/* 4. Calendly (Book Your Personalised Demo) - skip when shown at top */}
       {page.calendlyPosition !== "top" && (
         <CalendlySection
           heading={page.calendlyHeading}
@@ -287,7 +287,7 @@ export default function UniversalPageTemplate({
           />
         ))}
 
-      {/* 5. FAQ — prefer central faqItem docs (single source of truth); fall
+      {/* 5. FAQ - prefer central faqItem docs (single source of truth); fall
           back to the page's embedded faqTabs when the page hasn't been
           migrated yet. */}
       {!page.hideFaqSection && ((faqTabs && faqTabs.length > 0) ? (
@@ -296,7 +296,7 @@ export default function UniversalPageTemplate({
         <FaqAccordion heading={page.faqHeading || "Frequently asked questions"} tabs={page.faqTabs} />
       ) : null)}
 
-      {/* 5b. Capabilities Grid (after FAQ) — opt-in via capabilitiesPosition === 'afterFaq' */}
+      {/* 5b. Capabilities Grid (after FAQ) - opt-in via capabilitiesPosition === 'afterFaq' */}
       {!page.hideCapabilitiesSection && page.capabilitiesCards?.length > 0 && page.capabilitiesPosition === "afterFaq" && (
         <CapabilitiesGrid
           eyebrow={page.capabilitiesEyebrow}
@@ -321,7 +321,7 @@ export default function UniversalPageTemplate({
         />
       )}
 
-      {/* 6b. Solution Cards - left/right (if populated) — render after case studies to match prod */}
+      {/* 6b. Solution Cards - left/right (if populated) - render after case studies to match prod */}
       {!page.hideSolutionCardsSection && page.solutionCards?.length > 0 && (
         <SolutionCardsSection cards={page.solutionCards} />
       )}
@@ -376,7 +376,7 @@ export default function UniversalPageTemplate({
         />
       )}
 
-      {/* 15. Testimonial CTA Banner (bottom) — defaults to "Join 500+ organisations …"
+      {/* 15. Testimonial CTA Banner (bottom) - defaults to "Join 500+ organisations …"
            but a page may override the copy via joinHeading* (most useful when
            hideJoinStatsSection is true so there's no duplicate banner). */}
       {!page.hideTestimonialBanner && (

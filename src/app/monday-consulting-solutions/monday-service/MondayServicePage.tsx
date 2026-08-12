@@ -97,7 +97,7 @@ interface Props {
   siteSettings?: SiteSettingsData | null
 }
 
-// Hardcoded fallbacks — used only when Sanity field is empty so the page
+// Hardcoded fallbacks - used only when Sanity field is empty so the page
 // stays visually identical if the doc is not yet migrated.
 const MS_CALENDLY_HEADING = "Schedule A 30-Min Consultation"
 const MS_CALENDLY_SUBHEADING =
@@ -286,7 +286,7 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
         siteSettings={siteSettings || undefined}
       />
 
-      {/* 9. Testimonial CTA banner — Join 500+ organisations */}
+      {/* 9. Testimonial CTA banner - Join 500+ organisations */}
       <TestimonialCtaBanner
         headingPart1={page?.testimonialBannerHeadingPart1 || MS_TB_HEADING_PART1}
         headingAccent={page?.testimonialBannerHeadingAccent || MS_TB_HEADING_ACCENT}

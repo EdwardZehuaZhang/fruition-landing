@@ -5,12 +5,12 @@ export const html = `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Consulting Services Australia | AI Strategy Consultants — Fruition</title>
+<title>AI Consulting Services Australia | AI Strategy Consultants - Fruition</title>
 <meta name="description" content="Enterprise-grade AI consulting services and strategy for Australian businesses. AI management consulting, AI business process automation, and custom LLM deployment. Book a free consultation.">
 <meta name="keywords" content="ai consultants, ai strategy consultants, ai consulting services, ai management consulting, ai for business, ai business process automation">
 <meta name="robots" content="noindex, follow">
 <meta name="geo.region" content="AU"><meta name="geo.placename" content="Australia">
-<meta property="og:title" content="AI Consulting Services Australia | Fruition — AI Strategy Consultants">
+<meta property="og:title" content="AI Consulting Services Australia | Fruition - AI Strategy Consultants">
 <meta property="og:description" content="Supercharge operations, eliminate manual bottlenecks, and scale with Australia's premier AI strategy consultants. Custom LLMs, intelligent workflows, agentic automation.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.fruitionservices.io/au/ai-business-consulting-services">
@@ -18,7 +18,7 @@ export const html = `<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"ProfessionalService","name":"Fruition Services — AI Consulting Services Australia","description":"AI strategy consultants delivering AI management consulting, business process automation, custom LLM deployment and agentic systems for Australian businesses.","url":"https://www.fruitionservices.io/au/ai-business-consulting-services","provider":{"@type":"Organization","name":"Fruition Services Pty Ltd","identifier":"ABN 12 667 454 006","address":{"@type":"PostalAddress","streetAddress":"12/64 York Street","addressLocality":"Sydney","addressRegion":"NSW","postalCode":"2000","addressCountry":"AU"}},"areaServed":[{"@type":"Country","name":"Australia"},{"@type":"Country","name":"New Zealand"}],"serviceType":"AI consulting and business process automation"}
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"Fruition Services - AI Consulting Services Australia","description":"AI strategy consultants delivering AI management consulting, business process automation, custom LLM deployment and agentic systems for Australian businesses.","url":"https://www.fruitionservices.io/au/ai-business-consulting-services","provider":{"@type":"Organization","name":"Fruition Services Pty Ltd","identifier":"ABN 12 667 454 006","address":{"@type":"PostalAddress","streetAddress":"12/64 York Street","addressLocality":"Sydney","addressRegion":"NSW","postalCode":"2000","addressCountry":"AU"}},"areaServed":[{"@type":"Country","name":"Australia"},{"@type":"Country","name":"New Zealand"}],"serviceType":"AI consulting and business process automation"}
 </script>
 <style>
 :root{--p9:#2D1450;--p7:#5B2A86;--p5:#7C3FB0;--p3:#B68FD9;--p1:#EFE5F7;--p05:#F7F2FB;
@@ -60,7 +60,7 @@ h1 em{font-style:italic;color:var(--p7)}
 .hf-btn:hover{background:var(--p9)}
 .hf-note{font-size:11.5px;color:var(--light);text-align:center;margin-top:9px}
 
-/* AI pipeline graphic — pure CSS */
+/* AI pipeline graphic - pure CSS */
 .pipe{background:var(--p9);border-radius:16px;padding:28px;box-shadow:0 24px 60px rgba(45,20,80,.25);position:relative;overflow:hidden}
 .pipe::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 10%,rgba(124,63,176,.4),transparent 55%)}
 .pipe-title{color:var(--p3);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px;position:relative}
@@ -168,7 +168,7 @@ section{padding:44px 0}
 </div>
 </div>
 <div class="pipe" aria-hidden="true">
-<div class="pipe-title"><span class="pulse"></span>Agentic Automation Pipeline — Live</div>
+<div class="pipe-title"><span class="pulse"></span>Agentic Automation Pipeline - Live</div>
 <div class="node-row">
 <div class="node">Inbound Email<small>Customer enquiry received</small></div>
 <span class="arrow">→</span>
@@ -206,7 +206,7 @@ section{padding:44px 0}
 <section><div class="wrap">
 <div class="eyebrow">What we build</div>
 <h2>Tailored AI for Business Transformation &amp; Architecture</h2>
-<p class="lede">Precisely matched to how Australian enterprises adopt AI — strategy, automation, and engineering under one roof.</p>
+<p class="lede">Precisely matched to how Australian enterprises adopt AI - strategy, automation, and engineering under one roof.</p>
 <div class="caps">
 <div class="cap">
 <h3>AI Management Consulting &amp; Strategy</h3>
@@ -263,7 +263,7 @@ section{padding:44px 0}
 <div class="tm-img">Natalia Mishenina</div>
 <div class="tm-body">
 <div class="tm-role">Technical Project Manager</div>
-<p>Expert in SaaS implementation and process mapping — guiding AI solution design from discovery and data audit through to secure system handover.</p>
+<p>Expert in SaaS implementation and process mapping - guiding AI solution design from discovery and data audit through to secure system handover.</p>
 </div>
 </div>
 <div class="tm">

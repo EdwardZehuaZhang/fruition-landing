@@ -180,7 +180,7 @@ export default async function CareersPage() {
         logos={siteSettings?.carouselLogos || []}
       />
 
-      {/* 4. Benefits — "Why Join Fruition" */}
+      {/* 4. Benefits - "Why Join Fruition" */}
       {page.capabilitiesCards?.length > 0 && (
         <CapabilitiesGrid
           eyebrow={page.capabilitiesEyebrow}

@@ -13,14 +13,14 @@ interface Props {
 }
 
 /**
- * Client logo wall — a dense 5×4 grid drawn from the first 19 usable entries in
+ * Client logo wall - a dense 5×4 grid drawn from the first 19 usable entries in
  * `siteSettings.carouselLogos`, with the "800+ more" counter as the last cell.
  * Reorder them in Studio to change which clients lead.
  */
 /** 5 columns × 4 rows, with the "800+ more" counter taking the last cell. */
 const MAX_TILES = 19
 
-/** Exports that reached the CMS without a usable name — hidden until renamed. */
+/** Exports that reached the CMS without a usable name - hidden until renamed. */
 const UNNAMED = /^(screenshot\b|logo(\s|$))/i
 
 export default function ClientsGrid({ logos }: Props) {
@@ -38,7 +38,7 @@ export default function ClientsGrid({ logos }: Props) {
             Trusted by teams across 800+ implementations.
           </h2>
           <p className="text-body mx-auto mt-4 max-w-[560px] text-muted lg:text-[17px]" style={{ textWrap: "pretty" }}>
-            From national services groups to public-sector agencies in six markets — we stay on
+            From national services groups to public-sector agencies in six markets - we stay on
             after go-live.
           </p>
           <span className="mx-auto mt-10 block h-px w-[228px] bg-lilac-quiet" />

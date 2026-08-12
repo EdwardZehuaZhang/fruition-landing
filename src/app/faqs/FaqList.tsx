@@ -41,7 +41,7 @@ const GROUPS: GroupDef[] = [
   {
     key: "products",
     label: "monday.com Products",
-    blurb: "Work Management, CRM, Dev, and Service — what each product does and who it fits.",
+    blurb: "Work Management, CRM, Dev, and Service - what each product does and who it fits.",
     categories: ["monday Work Management", "monday CRM", "monday Dev", "monday Service"],
   },
   {
@@ -77,7 +77,7 @@ const GROUPS: GroupDef[] = [
   {
     key: "general",
     label: "General Questions",
-    blurb: "Everything else — pricing, partnership, and getting started.",
+    blurb: "Everything else - pricing, partnership, and getting started.",
     categories: ["General Questions"],
   },
 ]
@@ -285,7 +285,7 @@ export default function FaqList({ items }: { items: FaqItem[] }) {
   const groupByKey = useMemo(() => new Map(groups.map((g) => [g.key, g])), [groups])
 
   // URL ↔ state sync so categories are deep-linkable and the browser back
-  // button returns to the grid (history API only — no server round-trip).
+  // button returns to the grid (history API only - no server round-trip).
   const syncFromUrl = useCallback(() => {
     if (typeof window === "undefined") return
     const c = new URLSearchParams(window.location.search).get("c") as GroupKey | null
@@ -332,7 +332,7 @@ export default function FaqList({ items }: { items: FaqItem[] }) {
 
   return (
     <div ref={topRef} className="flex flex-col gap-8 scroll-mt-24">
-      {/* Search — persistent across every view */}
+      {/* Search - persistent across every view */}
       <div className="relative">
         <svg
           aria-hidden

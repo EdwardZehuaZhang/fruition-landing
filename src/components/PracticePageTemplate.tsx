@@ -60,7 +60,7 @@ export default async function PracticePageTemplate({ page }: { page: PracticePag
     ? groupFaqsIntoTabs(centralFaqs)
     : [{ label: 'General Questions', items: page.faqs.map((f) => ({ question: f.q, answer: f.a })) }]
   return (
-    // <div>, not <main> — SiteFrame already wraps marketing pages in <main>
+    // <div>, not <main> - SiteFrame already wraps marketing pages in <main>
     <div className="bg-surface text-body">
 
       {/* Hero */}
@@ -197,12 +197,12 @@ export default async function PracticePageTemplate({ page }: { page: PracticePag
         </div>
       </section>
 
-      {/* FAQ — shared site-wide accordion (renders its own FAQPage JSON-LD + #faq anchor) */}
+      {/* FAQ - shared site-wide accordion (renders its own FAQPage JSON-LD + #faq anchor) */}
       <div className="border-b border-ui">
         <FaqAccordion heading="Frequently asked questions" tabs={faqTabs} />
       </div>
 
-      {/* Closing CTA — shared site-wide banner; Sanity copy wins, previous
+      {/* Closing CTA - shared site-wide banner; Sanity copy wins, previous
           hardcoded copy is the verbatim fallback */}
       <ClosingCtaSection
         cta={closingCta}

@@ -7,7 +7,7 @@ import ClosingCtaSection, { type ClosingCtaCopy } from "@/components/sections/Cl
 import type { FaqTab } from "@/components/sections/types"
 
 /**
- * AiPartnerTemplate — renders an `aiPartnerPage` Sanity document.
+ * AiPartnerTemplate - renders an `aiPartnerPage` Sanity document.
  *
  * Faithful port of the hand-designed partner landing layouts (Anthropic /
  * OpenAI / Openclaw) reskinned to the Fruition theme: white surface,
@@ -20,7 +20,7 @@ interface SiteSettings {
   calendlyLink?: string
 }
 
-// The doc is consumed loosely — every field is optional per layout.
+// The doc is consumed loosely - every field is optional per layout.
 type Doc = Record<string, any>
 
 // Wrap each emphasis substring (accent / strike) inline wherever it appears in
@@ -395,7 +395,7 @@ export default function AiPartnerTemplate({
         </section>
       )}
 
-      {/* FAQ — shared site-wide accordion (impl-packages style). Central Sanity
+      {/* FAQ - shared site-wide accordion (impl-packages style). Central Sanity
           faqItems arrive via the faqTabs prop; the page doc's own faq list is
           the fallback until that page's items are migrated. */}
       {((faqTabs?.length ?? 0) > 0 || (page.faq?.length ?? 0) > 0) && (
@@ -412,7 +412,7 @@ export default function AiPartnerTemplate({
         />
       )}
 
-      {/* FINAL CTA — shared site-wide banner; Sanity closingCta doc wins,
+      {/* FINAL CTA - shared site-wide banner; Sanity closingCta doc wins,
           this page doc's own cta fields are the verbatim fallback */}
       <ClosingCtaSection
         cta={closingCta}

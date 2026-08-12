@@ -236,7 +236,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
       {/*  RIGHT PANEL - dark background                               */}
       {/* ============================================================ */}
       <div className="flex-1 bg-black py-12 lg:py-16 px-8 md:px-12 lg:px-16">
-        {/* Three link columns — hidden on mobile (too tall); links stay in the DOM for crawlers */}
+        {/* Three link columns - hidden on mobile (too tall); links stay in the DOM for crawlers */}
         <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 lg:gap-8">
           {/* Services */}
           <div>
@@ -293,7 +293,7 @@ export default function Footer({ siteSettings }: { siteSettings?: SiteSettingsPr
           </div>
         </div>
 
-        {/* Our Locations — first visible block on mobile, so no top margin there */}
+        {/* Our Locations - first visible block on mobile, so no top margin there */}
         <div className="md:mt-12">
           {siteSettings?.footerOurLocationsHeading && (
             <h4 className="text-white font-semibold text-[16px] leading-tight mb-5">{siteSettings.footerOurLocationsHeading}</h4>

@@ -1,14 +1,14 @@
 /**
- * Practice pages — Site Architecture v2.1 clusters (Atlassian, HubSpot,
+ * Practice pages - Site Architecture v2.1 clusters (Atlassian, HubSpot,
  * AI consulting, integrations, monday products).
  *
  * Copy ported from Josh's approved mockups (fruition-site-architecture.vercel.app,
- * source HTML in the v2.1 proposal bundle). Content is hardcoded in TSX for now —
- * same pattern the Atlassian partnership page used before it was seeded to Sanity —
+ * source HTML in the v2.1 proposal bundle). Content is hardcoded in TSX for now -
+ * same pattern the Atlassian partnership page used before it was seeded to Sanity -
  * and can be migrated to Sanity later without changing the rendered output.
  *
  * NOTE: the mockups credited "Josh Roszler"; the correct surname is Jebathilak
- * (see commit 3b650e8) — all ported copy uses the corrected name.
+ * (see commit 3b650e8) - all ported copy uses the corrected name.
  */
 import type { Metadata } from 'next'
 import { buildOgMetadata } from '@/lib/metadata'
@@ -34,7 +34,7 @@ export interface PracticePage {
   eyebrow: string
   heading: string
   lead: string
-  /** Search queries this page targets — documentation only, never rendered */
+  /** Search queries this page targets - documentation only, never rendered */
   targetQueries?: string[]
   approachEyebrow?: string
   approachHeading: string

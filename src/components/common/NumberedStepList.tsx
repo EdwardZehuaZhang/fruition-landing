@@ -1,5 +1,5 @@
 /**
- * NumberedStepList — unified component for all numbered step layouts across site
+ * NumberedStepList - unified component for all numbered step layouts across site
  * Handles simple (title + description) and complex (title + description + bullets) step layouts
  * Single source of truth for step card spacing, typography, and responsive behavior
  */

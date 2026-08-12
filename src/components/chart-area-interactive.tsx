@@ -79,7 +79,7 @@ export function ChartAreaInteractive() {
       <CardHeader>
         <CardTitle>Site traffic</CardTitle>
         <CardDescription>
-          Placeholder visitor trend — wires to Google Analytics later.
+          Placeholder visitor trend - wires to Google Analytics later.
         </CardDescription>
         <CardAction>
           <div className="flex gap-1">

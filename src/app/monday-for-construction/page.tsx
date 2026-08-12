@@ -8,7 +8,7 @@ import {
 import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
 import { urlFor } from "@/sanity/image"
 
-/* Legacy Wix imports can carry malformed asset refs — never let urlFor throw. */
+/* Legacy Wix imports can carry malformed asset refs - never let urlFor throw. */
 function safePhotoUrl(img: unknown): string | undefined {
   try {
     // @ts-expect-error loose Sanity image shape

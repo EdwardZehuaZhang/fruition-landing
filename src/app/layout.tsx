@@ -25,7 +25,7 @@ import CalendlyBookingTracker from "@/components/CalendlyBookingTracker"
 // every later visit. Keep the key in sync with src/components/CookieNotice.tsx.
 const REB2B_LOADER = `(function(){try{if(window.localStorage.getItem("fruition-visitor-consent")==="declined")return;}catch(e){}!function(key){if(window.reb2b)return;window.reb2b={loaded:true};var s=document.createElement("script");s.async=true;s.src="https://ddwl4m2hdecbv.cloudfront.net/b/"+key+"/"+key+".js.gz";document.getElementsByTagName("script")[0].parentNode.insertBefore(s,document.getElementsByTagName("script")[0]);}("9NMMZHR9W0NW");})();`
 
-// Google tag (gtag.js) — Google Ads conversion tracking.
+// Google tag (gtag.js) - Google Ads conversion tracking.
 // Base tag ID: AW-71752570 (Google Ads conversion account).
 // Calendly booking conversion event (AW-71752570/7093414457) is fired
 // by the CalendlyBookingTracker component on calendly.event_scheduled.
@@ -59,13 +59,13 @@ export const viewport: Viewport = {
 // Fully-static (prerendered) pages otherwise ship `Cache-Control:
 // s-maxage=31536000` (one year), so Cloudflare keeps serving the build-time
 // HTML and NEW deploys don't appear live until the entry is evicted or the
-// cache is purged by hand — that's why sticky-CTA/content fixes lagged prod.
+// cache is purged by hand - that's why sticky-CTA/content fixes lagged prod.
 // Setting a route-segment `revalidate` turns these into ISR and lowers the
 // header to `s-maxage=60, stale-while-revalidate=...`, so a deploy self-heals
 // within ~a minute. Because the lowest `revalidate` in a route wins, this
 // applies site-wide from the root layout (a new page can't re-introduce the
 // 1-year cache by forgetting to set it). `force-dynamic` routes (the /internal
-// admin) are unaffected. Blog post/author pages drop from 3600s to 60s —
+// admin) are unaffected. Blog post/author pages drop from 3600s to 60s -
 // harmless (fresher, negligible extra revalidation).
 //
 // NOTE: this only governs cache entries written from here on. Existing 1-year
@@ -145,7 +145,7 @@ export default async function RootLayout({
         url: BASE,
         logo: logoUrl,
         description:
-          "Fruition is a consulting and implementation firm across monday.com (Platinum Partner), Atlassian, HubSpot, and AI platforms — serving Australia, the UK, and the US.",
+          "Fruition is a consulting and implementation firm across monday.com (Platinum Partner), Atlassian, HubSpot, and AI platforms - serving Australia, the UK, and the US.",
         // §05 AEO: entity signals for every practice, not just monday.com
         knowsAbout: [
           "monday.com",

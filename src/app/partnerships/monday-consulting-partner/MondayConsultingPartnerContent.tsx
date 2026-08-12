@@ -417,7 +417,7 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
         </div>
       </section>
 
-      {/* 7. Testimonials — use shared TestimonialsGrid */}
+      {/* 7. Testimonials - use shared TestimonialsGrid */}
       <TestimonialsGrid
         heading="What our customers say about us"
         ctaLabel="Start Your Transformation"

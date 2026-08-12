@@ -6,7 +6,7 @@ import Breadcrumbs from "./Breadcrumbs"
 /**
  * Wraps the marketing site chrome. The internal portal (/internal) renders its
  * own shell (shadcn sidebar), so we hide the external nav, footer, cookie
- * banner — and the marketing <main> wrapper — on those routes.
+ * banner - and the marketing <main> wrapper - on those routes.
  */
 export default function SiteFrame({
   header,

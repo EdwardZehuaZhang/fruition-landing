@@ -85,7 +85,7 @@ export default async function Page() {
         withPurpleCircle={false}
       />
 
-      {/* 4. Featured case study — video + stats + quote + CTA */}
+      {/* 4. Featured case study - video + stats + quote + CTA */}
       {(page.caseStudyVideoUrl || page.caseStudyQuote || (page.caseStudyStats?.length ?? 0) > 0) && (
         <section className="bg-surface" style={{ paddingTop: 80, paddingBottom: 80 }}>
           <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
@@ -158,7 +158,7 @@ export default async function Page() {
         </section>
       )}
 
-      {/* 5. Solution Cards — left/right */}
+      {/* 5. Solution Cards - left/right */}
       {page.solutionCards?.length > 0 && (
         <SolutionCardsSection cards={page.solutionCards} />
       )}
@@ -170,7 +170,7 @@ export default async function Page() {
         calendlyUrl={rawCalendly}
       />
 
-      {/* 7. Why the best use monday.com — 9 capability cards (real estate) */}
+      {/* 7. Why the best use monday.com - 9 capability cards (real estate) */}
       {page.capabilitiesCards?.length > 0 && (
         <section style={{ backgroundColor: "var(--surface-subtle)", paddingTop: 80, paddingBottom: 80 }}>
           <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
@@ -213,7 +213,7 @@ export default async function Page() {
         testimonials={caseStudies}
       />
 
-      {/* 9. Text section — Additional tips */}
+      {/* 9. Text section - Additional tips */}
       {page.textContentSections?.map(
         (section: { _key?: string; heading?: string; body?: string; theme?: "light" | "tint" }) => (
           <TextContentSection
@@ -225,7 +225,7 @@ export default async function Page() {
         ),
       )}
 
-      {/* 10. Stats — Years / Projects / Clients */}
+      {/* 10. Stats - Years / Projects / Clients */}
       <JoinStatsSection
         headingPart1=""
         headingAccent=""

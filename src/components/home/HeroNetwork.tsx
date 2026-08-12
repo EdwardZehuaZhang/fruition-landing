@@ -37,7 +37,7 @@ interface Props {
 }
 
 /**
- * Hero — the "network" variant from the design: copy on the left, and on the
+ * Hero - the "network" variant from the design: copy on the left, and on the
  * right an animated data-flow graphic where platform pills feed a Fruition hub
  * while a ring of integration logos orbits behind it.
  *
@@ -68,7 +68,7 @@ export default function HeroNetwork({ bookingHref }: Props) {
           <p className="text-body-lead mt-6 max-w-[560px] text-muted">
             Fruition is a monday.com Platinum Partner helping small businesses, mid-market and
             enterprise teams across Australia, India, the Philippines, Singapore, the UK and the US.
-            We design the way work should run — build it, and help you maintain it.
+            We design the way work should run - build it, and help you maintain it.
           </p>
           <div className="mt-9 flex flex-wrap gap-4">
             <CtaButton href={bookingHref} label="Book a discovery call" variant="primary" />

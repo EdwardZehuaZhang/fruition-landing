@@ -77,7 +77,7 @@ export default function PlatformsCertified() {
                 className="h-[84px] w-auto max-w-full self-start object-contain"
               />
               <h3 className="text-section-h3 mt-6.5 max-w-[460px] text-white lg:text-[30px] lg:leading-[1.28]" style={{ textWrap: "pretty" }}>
-                Platinum tier — the top 1% of monday.com partners.
+                Platinum tier - the top 1% of monday.com partners.
               </h3>
               <p className="text-body mt-3.5 max-w-[470px] text-white/76" style={{ textWrap: "pretty" }}>
                 Our founder spent six years in sales leadership at monday.com, so rollouts start from

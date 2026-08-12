@@ -101,7 +101,7 @@ export default function N8nIntegrationPartnerContent({
         logos={siteSettings?.carouselLogos || []}
       />
 
-      {/* Tech stack connector — apps orchestrated through n8n into monday.com */}
+      {/* Tech stack connector - apps orchestrated through n8n into monday.com */}
       <WorkflowConnector
         eyebrow="Tech stack connector"
         heading="Orchestrate your entire stack through one Work OS"

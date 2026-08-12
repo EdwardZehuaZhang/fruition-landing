@@ -111,7 +111,7 @@ export default async function Page() {
         <SolutionCardsSection cards={page.solutionCards} />
       )}
 
-      {/* 8. Full-width video + Why the best use monday.com — single unified section */}
+      {/* 8. Full-width video + Why the best use monday.com - single unified section */}
       <section style={{ backgroundColor: "var(--surface-subtle)", paddingTop: 80, paddingBottom: 80 }}>
         <div className="mx-auto px-4" style={{ maxWidth: 1200 }}>
           {page.bottomVideoUrl && (

@@ -48,7 +48,7 @@ export default {
           { value: 'partnerships/google-cloud-partner', title: 'Google Cloud Partner' },
           { value: 'partnerships/google-gemini-vertex-ai-partner', title: 'Google Gemini Vertex AI Partner' },
           { value: 'partnerships/microsoft-copilot-partner', title: 'Microsoft Copilot Partner' },
-          /* Practice cluster pages (PracticePageTemplate) — key = route path */
+          /* Practice cluster pages (PracticePageTemplate) - key = route path */
           { value: 'ai-consulting', title: 'AI Consulting (hub)' },
           { value: 'ai-consulting/agent-development', title: 'AI · Agent Development' },
           { value: 'ai-consulting/customer-service', title: 'AI · Customer Service' },

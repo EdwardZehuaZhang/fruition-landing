@@ -194,7 +194,7 @@ export default async function CustomerTestimonialsPage() {
         />
       )}
 
-      {/* Case studies — filterable by industry & solution */}
+      {/* Case studies - filterable by industry & solution */}
       <TestimonialFilterGrid
         heading={page?.caseStudySectionHeading}
         cards={caseStudyCards.map((s) => ({

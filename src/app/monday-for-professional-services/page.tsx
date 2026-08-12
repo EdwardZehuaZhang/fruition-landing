@@ -86,7 +86,7 @@ export default async function Page() {
         logos={siteSettings?.carouselLogos || []}
       />
 
-      {/* 3. Capabilities — "Run your services business on one platform" */}
+      {/* 3. Capabilities - "Run your services business on one platform" */}
       {page.capabilitiesCards?.length > 0 && (
         <CapabilitiesGrid
           heading={page.capabilitiesHeading}
@@ -97,7 +97,7 @@ export default async function Page() {
         />
       )}
 
-      {/* 4. NEW — Six-tab services workflow section */}
+      {/* 4. NEW - Six-tab services workflow section */}
       {page.workflowTabs?.length > 0 && (
         <ServicesWorkflowTabs
           heading={page.workflowTabsHeading}

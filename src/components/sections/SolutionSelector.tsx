@@ -98,7 +98,7 @@ export default function SolutionSelector({
             })}
           </div>
 
-          {/* Solution panel — re-keyed so it re-enters on change */}
+          {/* Solution panel - re-keyed so it re-enters on change */}
           <div
             key={active.key}
             role="tabpanel"

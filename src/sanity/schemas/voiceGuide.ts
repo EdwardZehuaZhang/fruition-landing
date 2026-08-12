@@ -2,12 +2,12 @@ export default {
   name: "voiceGuide",
   title: "Voice Guide",
   type: "document",
-  // Singleton — only one of these. Studio structure can pin it via desk structure.
+  // Singleton - only one of these. Studio structure can pin it via desk structure.
   fields: [
     { name: "title", title: "Title", type: "string", initialValue: "Fruition Voice Guide" },
     {
       name: "body",
-      title: "Voice guide body (plain text — injected verbatim into Marketa system prompts)",
+      title: "Voice guide body (plain text - injected verbatim into Marketa system prompts)",
       type: "text",
       rows: 40,
       description:

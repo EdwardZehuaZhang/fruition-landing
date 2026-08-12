@@ -24,13 +24,13 @@ export default {
       name: 'industry',
       title: 'Industry',
       type: 'string',
-      description: 'e.g. "Construction", "Solar & Renewables" — used for grouping/filtering.',
+      description: 'e.g. "Construction", "Solar & Renewables" - used for grouping/filtering.',
     },
     {
       name: 'platform',
       title: 'Platform / product',
       type: 'string',
-      description: 'e.g. "monday CRM", "Jira", "HubSpot" — used for grouping/filtering.',
+      description: 'e.g. "monday CRM", "Jira", "HubSpot" - used for grouping/filtering.',
     },
     {
       name: 'pages',

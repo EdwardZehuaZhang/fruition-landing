@@ -32,7 +32,7 @@ interface HomeData {
 export async function generateMetadata(): Promise<Metadata> {
   const homePage = await getHomePage()
   const title = homePage?.seoTitle ?? "Fruition | monday.com Platinum Partners | monday CRM Experts"
-  const description = homePage?.seoDescription ?? "monday.com Partner certified — Fruition is an expert in Monday implementation and integration."
+  const description = homePage?.seoDescription ?? "monday.com Partner certified - Fruition is an expert in Monday implementation and integration."
   return {
     alternates: { canonical: '/' },
     title,
@@ -50,7 +50,7 @@ export default async function Home() {
   const settings = data.settings ?? {}
 
   const contactEmail = settings.contactEmail || FALLBACK_EMAIL
-  // Last-resort link inside BookingSection if the availability API is down —
+  // Last-resort link inside BookingSection if the availability API is down -
   // the section itself is the booking destination, so on-page CTAs scroll to it.
   const calendlyUrl = settings.calendlyLink || ''
   const bookingHref = '#book'

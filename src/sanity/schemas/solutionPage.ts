@@ -270,7 +270,7 @@ export default {
       }],
     },
 
-    // Industry Product Solutions Tabs (Monday PM — dark gradient section)
+    // Industry Product Solutions Tabs (Monday PM - dark gradient section)
     { name: 'industryProductSolutionsHeading', title: 'Industry Product Solutions Heading', type: 'string' },
     {
       name: 'industryProductSolutionsTabs',
@@ -312,7 +312,7 @@ export default {
       }],
     },
 
-    // Product Development Tabs (Monday PM — tabs with image + bullets)
+    // Product Development Tabs (Monday PM - tabs with image + bullets)
     { name: 'productDevelopmentHeadingPart1', title: 'Product Development Heading (prefix)', type: 'string' },
     { name: 'productDevelopmentHeadingAccent', title: 'Product Development Heading (accent)', type: 'string' },
     { name: 'productDevelopmentHeadingPart2', title: 'Product Development Heading (suffix)', type: 'string' },

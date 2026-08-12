@@ -8,7 +8,7 @@ import worldMapData from "./worldMapData"
  * Dotted world map with glowing pins at each Fruition office.
  *
  * The dot grid is pre-computed (see worldMapData.ts, generated with
- * `getMapJSON`) so the heavy country geometry never ships to the browser —
+ * `getMapJSON`) so the heavy country geometry never ships to the browser -
  * we only import the lightweight `dotted-map/without-countries` runtime here.
  * Pins are projected through the same map instance (`getPin`) so they land
  * exactly on the grid, then positioned as a percentage of the SVG viewBox.
@@ -37,7 +37,7 @@ const CITY_COORDS: Record<string, [number, number]> = {
   singapore: [1.35, 103.82],
   bengaluru: [12.97, 77.59],
   bangalore: [12.97, 77.59],
-  india: [19.08, 72.88], // Mumbai — used when the office is labelled just "India"
+  india: [19.08, 72.88], // Mumbai - used when the office is labelled just "India"
   philippines: [14.6, 120.98], // Manila
   manila: [14.6, 120.98],
 }
@@ -46,7 +46,7 @@ const map = new DottedMap({ map: JSON.parse(worldMapData) })
 const MAP_W: number = map.image.width
 const MAP_H: number = map.image.height
 
-// The dot grid spans the FULL globe (the whole MAP_H). We never crop it —
+// The dot grid spans the FULL globe (the whole MAP_H). We never crop it -
 // cropping the viewBox slices the continents at the edges, which reads as the
 // map being "cut off". Instead we show the entire grid and add empty breathing
 // room above and below by letterboxing the SVG inside a taller box (BOX_H),
@@ -71,7 +71,7 @@ function placePins(offices: MapOffice[]): PlacedPin[] {
   const placed: PlacedPin[] = []
   for (const office of offices) {
     // CMS city values often carry a country suffix ("Sydney, Australia",
-    // "New York, US Office") — match on the segment before the first comma,
+    // "New York, US Office") - match on the segment before the first comma,
     // falling back to the whole string.
     const raw = (office.city || "").trim().toLowerCase()
     const coords = CITY_COORDS[raw.split(",")[0].trim()] || CITY_COORDS[raw]
@@ -100,7 +100,7 @@ export default function WorldMap({ offices }: { offices: MapOffice[] }) {
       role="group"
     >
       <div className="relative w-full" style={{ aspectRatio: `${MAP_W} / ${BOX_H}` }}>
-        {/* Dot grid — letterboxed vertically inside the taller box so the
+        {/* Dot grid - letterboxed vertically inside the taller box so the
             continents keep PAD_Y of empty space above and below. */}
         <div
           aria-hidden="true"

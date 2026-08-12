@@ -155,12 +155,12 @@ export default defineType({
       ],
     }),
 
-    // "Create a CRM or project management tool that fits you" — multi-solution section
+    // "Create a CRM or project management tool that fits you" - multi-solution section
     defineField({ name: 'solutionsHeadingPart1', title: 'Solutions Heading (prefix)', type: 'string' }),
     defineField({ name: 'solutionsHeadingAccent', title: 'Solutions Heading (accent)', type: 'string' }),
     defineField({ name: 'solutionsHeadingPart2', title: 'Solutions Heading (suffix)', type: 'string' }),
     defineField({ name: 'solutionsIntro', title: 'Solutions Intro', type: 'text' }),
-    defineField({ name: 'crmCardCtaUrl', title: 'Synthesised CRM Card — CTA URL', type: 'string' }),
+    defineField({ name: 'crmCardCtaUrl', title: 'Synthesised CRM Card - CTA URL', type: 'string' }),
     defineField({
       name: 'solutionCards',
       title: 'Solution Cards',
@@ -236,9 +236,9 @@ export default defineType({
     defineField({ name: 'discoverSecondaryCtaUrl', title: 'Discover Secondary CTA URL', type: 'string' }),
 
     // Join 500+ stats section
-    defineField({ name: 'joinSectionHeadingPart1', title: 'Join Section — "Join" prefix', type: 'string' }),
-    defineField({ name: 'joinSectionHeadingAccent', title: 'Join Section — "500+ businesses" accent', type: 'string' }),
-    defineField({ name: 'joinSectionHeadingPart2', title: 'Join Section — suffix', type: 'string' }),
+    defineField({ name: 'joinSectionHeadingPart1', title: 'Join Section - "Join" prefix', type: 'string' }),
+    defineField({ name: 'joinSectionHeadingAccent', title: 'Join Section - "500+ businesses" accent', type: 'string' }),
+    defineField({ name: 'joinSectionHeadingPart2', title: 'Join Section - suffix', type: 'string' }),
     defineField({ name: 'joinSectionSubheading', title: 'Join Section Subheading', type: 'string' }),
     defineField({
       name: 'joinSectionStats',

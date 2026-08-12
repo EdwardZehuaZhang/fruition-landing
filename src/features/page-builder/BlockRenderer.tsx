@@ -52,7 +52,7 @@ function groupConsecutiveTestimonials(blocks: ContentBlock[]): Array<ContentBloc
   return result
 }
 
-/* Hardcoded YouTube video section — matches Figma "Video" section */
+/* Hardcoded YouTube video section - matches Figma "Video" section */
 function VideoSection() {
   return (
     <section className="bg-surface py-[80px] px-[10px]">
@@ -77,14 +77,14 @@ export default function BlockRenderer({
 }) {
   if (!blocks || blocks.length === 0) return null
 
-  // Security badge — Sanity first, hardcoded fallback
+  // Security badge - Sanity first, hardcoded fallback
   const securityBadgeSrc = siteSettings?.badgeSecurity?.asset
     ? urlFor(siteSettings.badgeSecurity).width(976).height(94).url()
     : '/images/badge-security.png'
 
   // Filter out blocks that don't exist in the Figma design
   const filtered = blocks.filter((b) => {
-    // Filter out the standalone "500+" callout CTA — not in the Figma design
+    // Filter out the standalone "500+" callout CTA - not in the Figma design
     if (b._key === 'callout-500-01' || (b.heading as string) === '500+') return false
     // Filter out the "Teams Transformed" section and its companion CTA
     const heading = (b.heading as string) ?? ''
@@ -111,7 +111,7 @@ export default function BlockRenderer({
   return (
     <>
       {grouped.map((item, idx) => {
-        // Testimonial grid section — paginated 5 per page with auto-scroll
+        // Testimonial grid section - paginated 5 per page with auto-scroll
         if (Array.isArray(item)) {
           const testimonials = item.map((block) => ({
             _key: block._key,
@@ -155,7 +155,7 @@ export default function BlockRenderer({
               </section>
             )
           case 'logoCloudBlock':
-            // Skip the "Trusted Partner" block — it doesn't exist in the Figma design
+            // Skip the "Trusted Partner" block - it doesn't exist in the Figma design
             if ((block.heading as string)?.toLowerCase().includes('trusted partner')) return null
             // Render logo cloud + video embed below it
             return (

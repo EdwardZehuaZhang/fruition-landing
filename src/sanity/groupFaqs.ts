@@ -27,7 +27,7 @@ const PREFERRED_TAB_ORDER = [
  * Group central faqItem documents into the `FaqTab[]` shape that
  * `FaqAccordion` expects.
  *
- * The accordion renders plain-text answers — block text is flattened
+ * The accordion renders plain-text answers - block text is flattened
  * here with paragraph breaks so existing markup keeps working without
  * upgrading the accordion to full Portable Text.
  */

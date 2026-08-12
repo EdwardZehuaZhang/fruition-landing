@@ -1,5 +1,5 @@
 /**
- * AI Partner Page — bespoke, brand-styled partner landing pages
+ * AI Partner Page - bespoke, brand-styled partner landing pages
  * (Anthropic Claude, OpenAI ChatGPT, Openclaw). These reproduce the
  * hand-designed HTML layouts (hero side panel, capabilities, showcase
  * cards, process, cases, comparison table, geo, operator panel, FAQ)
@@ -30,14 +30,14 @@ export default {
     { name: 'brandName', title: 'Brand Name', type: 'string' },
     { name: 'partnerTag', title: 'Partner Tag (nav pill)', type: 'string' },
     { name: 'accentColor', title: 'Accent Colour (hex)', type: 'string' },
-    { name: 'accentColorDeep', title: 'Accent Colour — Deep (hex)', type: 'string' },
-    { name: 'accentColorSoft', title: 'Accent Colour — Soft (rgba/hex)', type: 'string' },
+    { name: 'accentColorDeep', title: 'Accent Colour - Deep (hex)', type: 'string' },
+    { name: 'accentColorSoft', title: 'Accent Colour - Soft (rgba/hex)', type: 'string' },
 
     // ── Hero ──────────────────────────────────────────────────────
     { name: 'heroEyebrow', title: 'Hero Eyebrow', type: 'string' },
     { name: 'heroHeading', title: 'Hero Heading', type: 'string' },
-    { name: 'heroHeadingAccent', title: 'Hero Heading — Accent words', type: 'string' },
-    { name: 'heroHeadingStrike', title: 'Hero Heading — Struck word (optional)', type: 'string' },
+    { name: 'heroHeadingAccent', title: 'Hero Heading - Accent words', type: 'string' },
+    { name: 'heroHeadingStrike', title: 'Hero Heading - Struck word (optional)', type: 'string' },
     { name: 'heroLead', title: 'Hero Lead', type: 'text' },
     { name: 'primaryCtaLabel', title: 'Primary CTA Label', type: 'string' },
     { name: 'primaryCtaUrl', title: 'Primary CTA URL', type: 'string' },
@@ -60,7 +60,7 @@ export default {
     { name: 'heroSidePanelTitle', title: 'Hero Side Panel Title', type: 'string' },
     {
       name: 'heroLogLines',
-      title: 'Hero — Terminal Log Lines',
+      title: 'Hero - Terminal Log Lines',
       type: 'array',
       of: [{
         type: 'object',
@@ -78,13 +78,13 @@ export default {
     },
     {
       name: 'heroCodeLines',
-      title: 'Hero — Code Snippet Lines',
+      title: 'Hero - Code Snippet Lines',
       type: 'array',
       of: [{ type: 'string' }],
     },
     {
       name: 'heroRegions',
-      title: 'Hero — Regions List',
+      title: 'Hero - Regions List',
       type: 'array',
       of: [{
         type: 'object',
@@ -123,7 +123,7 @@ export default {
     // ── Capabilities ──────────────────────────────────────────────
     { name: 'capEyebrow', title: 'Capabilities Eyebrow', type: 'string' },
     { name: 'capHeading', title: 'Capabilities Heading', type: 'string' },
-    { name: 'capHeadingAccent', title: 'Capabilities Heading — Accent', type: 'string' },
+    { name: 'capHeadingAccent', title: 'Capabilities Heading - Accent', type: 'string' },
     { name: 'capLead', title: 'Capabilities Lead', type: 'text' },
     {
       name: 'capabilities',
@@ -144,7 +144,7 @@ export default {
     // ── Showcase (agents / GPTs) ──────────────────────────────────
     { name: 'showcaseEyebrow', title: 'Showcase Eyebrow', type: 'string' },
     { name: 'showcaseHeading', title: 'Showcase Heading', type: 'string' },
-    { name: 'showcaseHeadingAccent', title: 'Showcase Heading — Accent', type: 'string' },
+    { name: 'showcaseHeadingAccent', title: 'Showcase Heading - Accent', type: 'string' },
     { name: 'showcaseLead', title: 'Showcase Lead', type: 'text' },
     {
       name: 'showcaseCards',
@@ -178,7 +178,7 @@ export default {
     // ── Process ───────────────────────────────────────────────────
     { name: 'processEyebrow', title: 'Process Eyebrow', type: 'string' },
     { name: 'processHeading', title: 'Process Heading', type: 'string' },
-    { name: 'processHeadingAccent', title: 'Process Heading — Accent', type: 'string' },
+    { name: 'processHeadingAccent', title: 'Process Heading - Accent', type: 'string' },
     { name: 'processLead', title: 'Process Lead', type: 'text' },
     {
       name: 'process',
@@ -199,7 +199,7 @@ export default {
     // ── Cases ─────────────────────────────────────────────────────
     { name: 'casesEyebrow', title: 'Cases Eyebrow', type: 'string' },
     { name: 'casesHeading', title: 'Cases Heading', type: 'string' },
-    { name: 'casesHeadingAccent', title: 'Cases Heading — Accent', type: 'string' },
+    { name: 'casesHeadingAccent', title: 'Cases Heading - Accent', type: 'string' },
     {
       name: 'cases',
       title: 'Case Cards',
@@ -220,11 +220,11 @@ export default {
     // ── Comparison ────────────────────────────────────────────────
     { name: 'compareEyebrow', title: 'Comparison Eyebrow', type: 'string' },
     { name: 'compareHeading', title: 'Comparison Heading', type: 'string' },
-    { name: 'compareHeadingAccent', title: 'Comparison Heading — Accent', type: 'string' },
+    { name: 'compareHeadingAccent', title: 'Comparison Heading - Accent', type: 'string' },
     { name: 'compareLead', title: 'Comparison Lead', type: 'text' },
-    { name: 'compareColLabel', title: 'Comparison — Row label column header', type: 'string' },
-    { name: 'compareColA', title: 'Comparison — Column A header (accent)', type: 'string' },
-    { name: 'compareColB', title: 'Comparison — Column B header', type: 'string' },
+    { name: 'compareColLabel', title: 'Comparison - Row label column header', type: 'string' },
+    { name: 'compareColA', title: 'Comparison - Column A header (accent)', type: 'string' },
+    { name: 'compareColB', title: 'Comparison - Column B header', type: 'string' },
     {
       name: 'compareRows',
       title: 'Comparison Rows',
@@ -243,7 +243,7 @@ export default {
     // ── Geo ───────────────────────────────────────────────────────
     { name: 'geoEyebrow', title: 'Geo Eyebrow', type: 'string' },
     { name: 'geoHeading', title: 'Geo Heading', type: 'string' },
-    { name: 'geoHeadingAccent', title: 'Geo Heading — Accent', type: 'string' },
+    { name: 'geoHeadingAccent', title: 'Geo Heading - Accent', type: 'string' },
     { name: 'geoLead', title: 'Geo Lead', type: 'text' },
     {
       name: 'geo',
@@ -264,7 +264,7 @@ export default {
     // ── Operator ──────────────────────────────────────────────────
     { name: 'operatorEyebrow', title: 'Operator Eyebrow', type: 'string' },
     { name: 'operatorHeading', title: 'Operator Heading', type: 'string' },
-    { name: 'operatorHeadingAccent', title: 'Operator Heading — Accent', type: 'string' },
+    { name: 'operatorHeadingAccent', title: 'Operator Heading - Accent', type: 'string' },
     { name: 'operatorName', title: 'Operator Name', type: 'string' },
     { name: 'operatorRole', title: 'Operator Role', type: 'string' },
     { name: 'operatorBody', title: 'Operator Body (paragraphs)', type: 'array', of: [{ type: 'text' }] },
@@ -287,7 +287,7 @@ export default {
     // ── FAQ ───────────────────────────────────────────────────────
     { name: 'faqEyebrow', title: 'FAQ Eyebrow', type: 'string' },
     { name: 'faqHeading', title: 'FAQ Heading', type: 'string' },
-    { name: 'faqHeadingAccent', title: 'FAQ Heading — Accent', type: 'string' },
+    { name: 'faqHeadingAccent', title: 'FAQ Heading - Accent', type: 'string' },
     {
       name: 'faq',
       title: 'FAQ',
@@ -305,7 +305,7 @@ export default {
     // ── Final CTA ─────────────────────────────────────────────────
     { name: 'ctaEyebrow', title: 'Final CTA Eyebrow', type: 'string' },
     { name: 'ctaHeading', title: 'Final CTA Heading', type: 'string' },
-    { name: 'ctaHeadingAccent', title: 'Final CTA Heading — Accent', type: 'string' },
+    { name: 'ctaHeadingAccent', title: 'Final CTA Heading - Accent', type: 'string' },
     { name: 'ctaBody', title: 'Final CTA Body', type: 'text' },
     { name: 'ctaLabel', title: 'Final CTA Button Label', type: 'string' },
     { name: 'ctaUrl', title: 'Final CTA Button URL', type: 'string' },

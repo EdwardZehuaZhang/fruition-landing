@@ -236,7 +236,7 @@ export default function MondayProductManagementContent({
         cards={page.whyProductTeamsCards}
       />
 
-      {/* 5. How to Manage Products — Strategic Approach */}
+      {/* 5. How to Manage Products - Strategic Approach */}
       <StrategicApproachSection
         headingPart1={page.strategicApproachHeadingPart1}
         headingAccent={page.strategicApproachHeadingAccent}
@@ -244,7 +244,7 @@ export default function MondayProductManagementContent({
         tabs={page.strategicApproachTabs}
       />
 
-      {/* 5b. Local Consultants — Product Development */}
+      {/* 5b. Local Consultants - Product Development */}
       <ProductDevelopmentSection
         headingPart1={page.productDevelopmentHeadingPart1}
         headingAccent={page.productDevelopmentHeadingAccent}
@@ -277,7 +277,7 @@ export default function MondayProductManagementContent({
         />
       )}
 
-      {/* 9. How to Manage Products — 3-card strategic approach */}
+      {/* 9. How to Manage Products - 3-card strategic approach */}
       <StrategicApproachCardsSection
         headingPart1={page.strategicApproachHeadingPart1}
         headingAccent={page.strategicApproachHeadingAccent}
@@ -303,7 +303,7 @@ export default function MondayProductManagementContent({
 }
 
 /* ------------------------------------------------------------------ */
-/*  How to Manage Products — Strategic Approach Cards                  */
+/*  How to Manage Products - Strategic Approach Cards                  */
 /* ------------------------------------------------------------------ */
 
 interface StrategicApproachCardsSectionProps {
@@ -418,7 +418,7 @@ function WhyProductTeamsSection({
 }
 
 /* ------------------------------------------------------------------ */
-/*  How to Manage Products — Strategic Approach Tabs                   */
+/*  How to Manage Products - Strategic Approach Tabs                   */
 /* ------------------------------------------------------------------ */
 
 interface StrategicApproachSectionProps {
@@ -586,7 +586,7 @@ function IndustrySpecificSection({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Local Consultants — Product Development                            */
+/*  Local Consultants - Product Development                            */
 /* ------------------------------------------------------------------ */
 
 interface ProductDevelopmentSectionProps {

@@ -13,7 +13,7 @@ interface YouTubeEmbedProps {
   style?: React.CSSProperties
   /**
    * VideoObject enrichment. This component is a click-to-load facade, so
-   * Googlebot can't see the video without structured data — these feed the
+   * Googlebot can't see the video without structured data - these feed the
    * emitted VideoObject JSON-LD. uploadDate (ISO 8601) is what makes a video
    * eligible for video results; description/duration are recommended.
    */
@@ -60,7 +60,7 @@ export default function YouTubeEmbed({
   const [playing, setPlaying] = useState(false)
   // Poster fallback chain: not every video has the higher resolutions, and
   // YouTube answers a missing size with a VALID 120x90 grey placeholder
-  // (so onError never fires) — onLoad checks naturalWidth to catch it.
+  // (so onError never fires) - onLoad checks naturalWidth to catch it.
   const [posterIdx, setPosterIdx] = useState(0)
   if (!id) return null
   const posters = [

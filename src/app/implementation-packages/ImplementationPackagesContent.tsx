@@ -429,7 +429,7 @@ export default function ImplementationPackagesContent({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroImageSrc}
-                alt="monday.com dashboards — project planning and team OKRs"
+                alt="monday.com dashboards - project planning and team OKRs"
                 width={1042}
                 height={312}
                 className="rounded-card w-full h-auto object-contain bg-white"
@@ -914,7 +914,7 @@ export default function ImplementationPackagesContent({
             <span className="text-brand">{methodologyHeadingAccent}</span>
           </h2>
 
-          {/* Steps grid — 2 columns on md+, 1 column on mobile */}
+          {/* Steps grid - 2 columns on md+, 1 column on mobile */}
           <div className="grid w-full grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-16 md:gap-y-12">
             {methodologySteps.map((step, si) => (
               <div

@@ -13,7 +13,7 @@ export default {
       title: "Cover Image Alt (legacy)",
       type: "string",
       description:
-        "Carried over from the Wix migration. Not rendered by the site — defined here so Studio stops flagging migrated posts with 'Unknown fields found'.",
+        "Carried over from the Wix migration. Not rendered by the site - defined here so Studio stops flagging migrated posts with 'Unknown fields found'.",
       readOnly: true,
     },
     {
@@ -21,7 +21,7 @@ export default {
       title: "Cover Image URL (legacy)",
       type: "string",
       description:
-        "Original Wix image URL from the migration. Not rendered by the site — the Cover Image field above is what renders.",
+        "Original Wix image URL from the migration. Not rendered by the site - the Cover Image field above is what renders.",
       readOnly: true,
     },
     {

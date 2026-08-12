@@ -183,7 +183,7 @@ export default defineType({
     // Discover CTA
     defineField({ name: 'discoverHeading', title: 'Discover Section Heading', type: 'string' }),
 
-    // Make Feature Tabs (nested groups + bullets) — mirrors MAKE_FEATURE_TABS
+    // Make Feature Tabs (nested groups + bullets) - mirrors MAKE_FEATURE_TABS
     // in MakePartnersContent.tsx. Editing here replaces the hardcoded fallback.
     defineField({
       name: 'makeFeatureTabs',
@@ -230,7 +230,7 @@ export default defineType({
       ],
     }),
 
-    // Showcase media overrides — keyed by lowercased showcase heading. Stored
+    // Showcase media overrides - keyed by lowercased showcase heading. Stored
     // as an array (Sanity attribute names can't contain spaces); the FE
     // reduces this back to a Record before merging with the hardcoded
     // fallback in MakePartnersContent.tsx.

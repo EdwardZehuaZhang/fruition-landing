@@ -12,12 +12,12 @@ const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.fruitionservices.i
 const CONTENT_SIGNAL = 'search=yes, ai-train=yes, ai-input=yes, use=reference'
 
 // Deliberately NOT disallowed:
-// - /consulting-blog/{tags,hashtags,search}/ — Wix-era URLs with a stale
+// - /consulting-blog/{tags,hashtags,search}/ - Wix-era URLs with a stale
 //   "noindex" classification in Search Console. They 404 on this site, but
 //   Google can only discover that if it is allowed to recrawl them.
-// - /consulting-blog/categories/ — noindexed via page metadata; a robots
+// - /consulting-blog/categories/ - noindexed via page metadata; a robots
 //   block would stop Google from ever seeing that tag.
-// - /faqs?category=... — consolidated onto /faqs via its canonical URL.
+// - /faqs?category=... - consolidated onto /faqs via its canonical URL.
 const DISALLOW = ['/internal/', '/studio/']
 
 const POLICY_PREAMBLE = `# As a condition of accessing this website, you agree to abide by the following

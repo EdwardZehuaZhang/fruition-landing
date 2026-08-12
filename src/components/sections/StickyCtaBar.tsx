@@ -20,7 +20,7 @@ interface StickyCtaBarProps {
  * Proportions follow `CTA Banner.dc.html` in Claude Design: the heading sits on
  * one line beside the CTA at `lg` and stacks above it below that. The design
  * keys off container width (560/900); this uses the project's three
- * breakpoints — base = its mobile, `md` = tablet, `lg` = desktop.
+ * breakpoints - base = its mobile, `md` = tablet, `lg` = desktop.
  *
  * Scaled to ~0.88 of the design's desktop figures so the card lines up with the
  * 1200px content column the pages actually use rather than the design's 1348px
@@ -82,13 +82,13 @@ export default function StickyCtaBar({
         aria-label="Consultation banner"
         className="relative mx-auto flex max-w-[1200px] flex-col gap-4 overflow-hidden rounded-[18px] bg-[linear-gradient(160deg,var(--dark-bg)_0%,var(--dark-bg-secondary)_48%,var(--purple-primary)_110%)] p-[20px_16px_16px_20px] shadow-[0_12px_32px_-14px_rgba(16,0,58,0.4)] md:gap-[18px] md:rounded-3xl md:bg-[linear-gradient(120deg,var(--dark-bg)_0%,var(--dark-bg-secondary)_46%,var(--purple-primary)_105%)] md:p-[24px_24px_24px_28px] md:shadow-[0_16px_40px_-16px_rgba(16,0,58,0.4)] lg:flex-row lg:items-center lg:gap-6 lg:bg-[linear-gradient(99deg,var(--dark-bg)_0%,var(--dark-bg-secondary)_44%,var(--purple-primary)_100%)] lg:rounded-[20px] lg:p-[24px_24px_24px_34px]"
       >
-        {/* Lilac glow — bottom-right on phones, top-right from md up. */}
+        {/* Lilac glow - bottom-right on phones, top-right from md up. */}
         <div
           aria-hidden
           className="pointer-events-none absolute -right-[100px] -bottom-[140px] h-[320px] w-[320px] rounded-full bg-[radial-gradient(closest-side,rgba(186,131,240,0.5),transparent_70%)] mix-blend-screen md:top-[-150px] md:right-[-110px] md:bottom-auto md:h-[380px] md:w-[380px] lg:top-[-160px] lg:right-[-120px] lg:h-[420px] lg:w-[420px]"
         />
 
-        {/* Heading row — carries the close button until lg, where it moves
+        {/* Heading row - carries the close button until lg, where it moves
             beside the CTA. */}
         <div className="relative flex items-start gap-2.5 md:gap-3 lg:min-w-0 lg:flex-1">
           <h2 className="m-0 min-w-0 flex-1 pt-2 text-[19px] leading-[1.35] font-semibold tracking-[-0.01em] text-white md:pt-[5px] md:text-[23px] md:leading-[1.3] lg:pt-0 lg:text-[clamp(19px,1.6vw,23px)]" style={{ textWrap: "pretty" }}>

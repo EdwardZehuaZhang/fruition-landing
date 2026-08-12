@@ -38,7 +38,7 @@ export default defineType({
       options: { hotspot: true },
     }),
     defineField({ name: 'heroCertificationBadge', title: 'Hero Certification Banner', type: 'image' }),
-    defineField({ name: 'heroImage', title: 'Hero Image (optional — leave empty to hide)', type: 'image', options: { hotspot: true } }),
+    defineField({ name: 'heroImage', title: 'Hero Image (optional - leave empty to hide)', type: 'image', options: { hotspot: true } }),
     defineField({ name: 'heroPrimaryCtaLabel', title: 'Hero Primary CTA Label', type: 'string' }),
     defineField({ name: 'heroPrimaryCtaUrl', title: 'Hero Primary CTA URL', type: 'string' }),
     defineField({ name: 'heroSecondaryCtaLabel', title: 'Hero Secondary CTA Label (optional)', type: 'string' }),
@@ -176,9 +176,9 @@ export default defineType({
     defineField({ name: 'discoverSecondaryCtaUrl', title: 'Discover Secondary CTA URL', type: 'string' }),
 
     // Join 500+ stats section (Forrester data)
-    defineField({ name: 'joinSectionHeadingPart1', title: 'Join Section — "Join" prefix', type: 'string' }),
-    defineField({ name: 'joinSectionHeadingAccent', title: 'Join Section — "500+ businesses" accent', type: 'string' }),
-    defineField({ name: 'joinSectionHeadingPart2', title: 'Join Section — suffix', type: 'string' }),
+    defineField({ name: 'joinSectionHeadingPart1', title: 'Join Section - "Join" prefix', type: 'string' }),
+    defineField({ name: 'joinSectionHeadingAccent', title: 'Join Section - "500+ businesses" accent', type: 'string' }),
+    defineField({ name: 'joinSectionHeadingPart2', title: 'Join Section - suffix', type: 'string' }),
     defineField({ name: 'joinSectionSubheading', title: 'Join Section Subheading (e.g. "The economic impact of")', type: 'string' }),
     defineField({
       name: 'joinSectionStats',

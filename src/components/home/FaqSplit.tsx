@@ -7,7 +7,7 @@ interface Props {
 }
 
 /**
- * FAQ — sticky intro beside a plain `<details>` list.
+ * FAQ - sticky intro beside a plain `<details>` list.
  *
  * Answers are deliberately short and self-contained, and the same set is
  * emitted as FAQPage JSON-LD so answer engines can lift them directly.
@@ -33,7 +33,7 @@ export default function FaqSplit({ contactEmail }: Props) {
         <Reveal className="lg:sticky lg:top-10">
           <p className="text-micro font-bold tracking-[0.12em] uppercase text-brand">FAQs</p>
           <h2 className="text-section-h2 mt-4 text-foreground lg:text-[42px]" style={{ textWrap: "pretty" }}>
-            Ask us anything — we answer in plain language.
+            Ask us anything - we answer in plain language.
           </h2>
           <p className="text-body mt-5 max-w-[340px] text-muted lg:text-[17px]">
             Every answer is under 50 words and self-contained, mirrored in FAQPage schema for AEO.

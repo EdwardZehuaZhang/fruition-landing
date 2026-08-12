@@ -1,5 +1,5 @@
 /**
- * ClosingCtaSection — the canonical end-of-page conversion banner (DESIGN.md).
+ * ClosingCtaSection - the canonical end-of-page conversion banner (DESIGN.md).
  *
  * One dark immersive surface site-wide: Voltage→Midnight gradient, centered
  * mono eyebrow, white section heading with an optional accent span, muted

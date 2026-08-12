@@ -24,7 +24,7 @@ export default function Reveal({ children, className = "", as: Tag = "div" }: Re
     const el = ref.current
     if (!el) return
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
-    // Already on screen — don't hide it just to animate it back in.
+    // Already on screen - don't hide it just to animate it back in.
     if (el.getBoundingClientRect().top < window.innerHeight * 0.9) return
 
     el.dataset.hidden = "true"

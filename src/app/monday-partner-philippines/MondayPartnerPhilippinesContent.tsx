@@ -184,7 +184,7 @@ export default function MondayPartnerPhilippinesContent({
         withPurpleCircle={false}
       />
 
-      {/* Meet the team — Philippines members (filtered by name) */}
+      {/* Meet the team - Philippines members (filtered by name) */}
       <TeamGridSection
         heading="Meet the Fruition Philippines team"
         subheading="Our monday.com consultants have expertise across various industries. As a certified monday.com partner, we guarantee the delivery of the right solution and training to optimise your team's efficiency."
@@ -220,7 +220,7 @@ export default function MondayPartnerPhilippinesContent({
       {/* CRM tutorial + video */}
       <CrmTutorialCta calendlyUrl={calendlyUrl} />
 
-      {/* Closing CTA — shared site-wide banner; Sanity copy wins, the previous
+      {/* Closing CTA - shared site-wide banner; Sanity copy wins, the previous
           hardcoded economic-impact banner copy is the verbatim fallback */}
       <ClosingCtaSection
         cta={closingCta}

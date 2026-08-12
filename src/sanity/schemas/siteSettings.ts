@@ -57,7 +57,7 @@ export default {
     { name: 'logoRound', title: 'Logo (round mark)', type: 'image' },
     { name: 'footerText', title: 'Footer Text', type: 'text' },
 
-    // Navigation — top-level items with sections and links
+    // Navigation - top-level items with sections and links
     {
       name: 'navigation',
       title: 'Navigation',
@@ -103,7 +103,7 @@ export default {
                       name: 'highlight',
                       title: 'Highlight section',
                       type: 'boolean',
-                      description: 'Visually dominant column (tinted panel) — e.g. monday.com in the Platforms menu.',
+                      description: 'Visually dominant column (tinted panel) - e.g. monday.com in the Platforms menu.',
                     },
                     {
                       name: 'badge',
@@ -133,7 +133,7 @@ export default {
                               name: 'icon',
                               title: 'Icon (key)',
                               type: 'string',
-                              description: 'Icon key — see Navbar nav-icons set',
+                              description: 'Icon key - see Navbar nav-icons set',
                             },
                           ],
                         },

@@ -25,7 +25,7 @@ interface Props {
   faqTabs?: FaqTab[]
 }
 
-// Hardcoded fallbacks — kept as defaults so the page renders correctly
+// Hardcoded fallbacks - kept as defaults so the page renders correctly
 // while Sanity is being migrated. When the corresponding field is populated
 // on the solutionPage doc, the FE prefers Sanity.
 const PM_LOGO_CLOUD_PART1 = "Clients who have used our "
@@ -143,7 +143,7 @@ export default function MondayProjectManagementContent({
         />
       )}
 
-      {/* 6. Solution cards — "The project management solution for your biggest challenges" */}
+      {/* 6. Solution cards - "The project management solution for your biggest challenges" */}
       {page.solutionCards?.length > 0 && (
         <SolutionCardsSection cards={page.solutionCards} />
       )}
@@ -156,7 +156,7 @@ export default function MondayProjectManagementContent({
         />
       )}
 
-      {/* Closing sections (testimonials / discover / stats / banner) — security badge omitted */}
+      {/* Closing sections (testimonials / discover / stats / banner) - security badge omitted */}
       {!page.hideTestimonialsSection && <TestimonialsGrid caseStudies={caseStudies} />}
       {!page.hideDiscoverSection && (
         <DiscoverCtaSection badge={siteSettings?.badgeCertifications} />

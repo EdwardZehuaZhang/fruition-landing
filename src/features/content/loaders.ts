@@ -28,7 +28,7 @@ export const getSiteSettings = cache(async () => {
  * Everything the 2026 home page needs, in one round trip.
  *
  * The page's copy lives in `src/components/home/data.ts`; this only fetches the
- * parts that must stay live — client logos, testimonials, office phone numbers
+ * parts that must stay live - client logos, testimonials, office phone numbers
  * and the three most recent posts. Testimonials still come from the homePage
  * `contentBlocks` so the marketing team keeps editing them where they always
  * have, even though the blocks are no longer rendered by BlockRenderer.
