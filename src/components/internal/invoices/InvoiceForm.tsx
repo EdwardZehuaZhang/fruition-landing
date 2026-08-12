@@ -12,20 +12,38 @@ import {
   getCurrentYearMonth,
 } from '@/types/invoice'
 import InvoicePreview from './InvoicePreview'
-import ProjectSelector from './ProjectSelector'
 import LineItemRow from './LineItemRow'
 import ClockifyDropzone from './ClockifyDropzone'
+import type { ParsedProject } from '@/lib/clockifyPdf'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 const monthOptions = generateMonthOptions()
 
+const round2 = (n: number) => Math.round(n * 100) / 100
+
+function toLineItem(project: ParsedProject, rate: number): LineItem {
+  return {
+    projectId: null,
+    projectName: project.name,
+    description: project.description,
+    hours: project.hours,
+    rate,
+    total: round2(project.hours * rate),
+  }
+}
+
 interface Props {
   /** Pre-fetched consultant profile from Supabase. */
   profile?: ConsultantProfile | null
+  /** Hourly rate to start from — carried over from the last invoice saved. */
+  defaultRate?: number
   /** Called after successful save. */
   onSave: (invoice: Invoice) => Promise<void>
 }
+
+/** Used when there's no previous invoice to carry a rate over from. */
+export const FALLBACK_RATE = 40
 
 const DEFAULT_PROFILE: ConsultantProfile = {
   consultant_name: 'Edward (Zehua) Zhang',
@@ -37,7 +55,11 @@ const DEFAULT_PROFILE: ConsultantProfile = {
   region: 'APAC',
 }
 
-export default function InvoiceForm({ profile, onSave }: Props) {
+export default function InvoiceForm({
+  profile,
+  defaultRate = FALLBACK_RATE,
+  onSave,
+}: Props) {
   const [consultantName, setConsultantName] = useState(
     profile?.consultant_name || DEFAULT_PROFILE.consultant_name
   )
@@ -60,9 +82,9 @@ export default function InvoiceForm({ profile, onSave }: Props) {
   const [billingMonth, setBillingMonth] = useState(getCurrentYearMonth())
   const [lineItems, setLineItems] = useState<LineItem[]>([])
   const [notes, setNotes] = useState('')
-  const [selectedProjects, setSelectedProjects] = useState<
-    { id: string; name: string; companyName?: string }[]
-  >([])
+  // One rate for the whole invoice — it's a property of the consultant, not of
+  // each project. Every line is billed at it.
+  const [rate, setRate] = useState(defaultRate)
   const [currency, setCurrency] = useState(profile?.region === 'APAC' ? 'SGD' : 'USD')
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState('')
@@ -104,62 +126,49 @@ export default function InvoiceForm({ profile, onSave }: Props) {
     notes,
   })
 
-  const addProjectLine = (project: { id: string; name: string; companyName?: string }) => {
-    setSelectedProjects([...selectedProjects, project])
-    setLineItems([
-      ...lineItems,
-      {
-        projectId: project.id,
-        projectName: project.name,
-        description: '',
-        hours: 0,
-        rate: 0,
-        total: 0,
-      },
-    ])
-  }
-
   const addManualLine = () => {
     setLineItems([
       ...lineItems,
-      {
-        projectId: null,
-        projectName: '',
-        description: '',
-        hours: 0,
-        rate: 0,
-        total: 0,
-      },
+      { projectId: null, projectName: '', description: '', hours: 0, rate, total: 0 },
     ])
   }
 
   // A parsed Clockify report replaces the line items outright — re-uploading a
   // corrected export should not stack duplicates on top of the previous run.
-  const applyParsedReport = (parsed: LineItem[], parsedMonth: string) => {
-    setLineItems(parsed)
-    setSelectedProjects([])
+  const applyParsedReport = (projects: ParsedProject[], parsedMonth: string) => {
+    setLineItems(projects.map((p) => toLineItem(p, rate)))
     setBillingMonth(parsedMonth)
   }
 
   const removeLine = (index: number) => {
-    const item = lineItems[index]
-    if (item.projectId) {
-      setSelectedProjects(selectedProjects.filter((p) => p.id !== item.projectId))
-    }
     setLineItems(lineItems.filter((_, i) => i !== index))
   }
 
-  const updateLine = (index: number, field: keyof LineItem, value: string | number) => {
-    const updated = [...lineItems]
-    if (field === 'projectName' || field === 'description') {
-      (updated[index] as unknown as Record<string, unknown>)[field] = value
-    } else {
-      (updated[index] as unknown as Record<string, unknown>)[field] = Number(value)
-    }
-    if (field === 'hours' || field === 'rate') {
-      updated[index].total = updated[index].hours * updated[index].rate
-    }
-    setLineItems(updated)
+  const updateLine = (
+    index: number,
+    field: 'projectName' | 'description' | 'hours',
+    value: string | number
+  ) => {
+    setLineItems(
+      lineItems.map((item, i) => {
+        if (i !== index) return item
+        if (field === 'hours') {
+          const hours = Number(value)
+          return { ...item, hours, total: round2(hours * rate) }
+        }
+        return { ...item, [field]: String(value) }
+      })
+    )
+  }
+
+  // Changing the rate re-prices every line — that's the point of it being one
+  // field. Keep `rate` on each stored line so the preview, the PDF and any
+  // already-saved invoice keep rendering unchanged.
+  const updateRate = (next: number) => {
+    setRate(next)
+    setLineItems((items) =>
+      items.map((item) => ({ ...item, rate: next, total: round2(item.hours * next) }))
+    )
   }
 
   const handleSave = async () => {
@@ -194,6 +203,8 @@ export default function InvoiceForm({ profile, onSave }: Props) {
   }
 
   const invoice = buildInvoice()
+  const totalHours = lineItems.reduce((sum, i) => sum + (i.hours || 0), 0)
+  const totalAmount = lineItems.reduce((sum, i) => sum + (i.total || 0), 0)
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
@@ -336,27 +347,29 @@ export default function InvoiceForm({ profile, onSave }: Props) {
           </p>
         </div>
 
-        {/* Project Selector */}
-        <div>
-          <label className="mb-1.5 block text-sm font-medium">
-            Add from Clockify
-          </label>
-          <ProjectSelector
-            region={region}
-            onSelect={addProjectLine}
-            selectedProjects={selectedProjects}
-          />
-        </div>
-
-        {/* Line Items Header */}
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold">Line Items</p>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Currency:</span>
+        {/* Rate & currency — set once, applied to every line below. */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label className="mb-1.5 block text-sm font-medium">
+              Hourly rate
+            </label>
+            <Input
+              type="number"
+              step="0.01"
+              min="0"
+              value={rate || ''}
+              onChange={(e) => updateRate(parseFloat(e.target.value) || 0)}
+            />
+            <p className="mt-1 text-xs text-muted-foreground">
+              Applies to every line item.
+            </p>
+          </div>
+          <div>
+            <label className="mb-1.5 block text-sm font-medium">Currency</label>
             <select
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
-              className="rounded-md border bg-background px-2 py-1 text-xs"
+              className="w-full rounded-md border bg-background px-3 py-2 text-sm"
             >
               {CURRENCIES.map((c) => (
                 <option key={c} value={c}>
@@ -368,7 +381,18 @@ export default function InvoiceForm({ profile, onSave }: Props) {
         </div>
 
         {/* Line Items */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
+          <div className="flex items-baseline justify-between">
+            <p className="text-sm font-semibold">
+              Line items {lineItems.length > 0 && `(${lineItems.length})`}
+            </p>
+            {lineItems.length > 0 && (
+              <p className="text-xs text-muted-foreground tabular-nums">
+                {totalHours.toFixed(2)} hrs · {currency} {totalAmount.toFixed(2)}
+              </p>
+            )}
+          </div>
+
           {lineItems.map((item, idx) => (
             <LineItemRow
               key={idx}
@@ -379,11 +403,17 @@ export default function InvoiceForm({ profile, onSave }: Props) {
               onRemove={removeLine}
             />
           ))}
+
+          {lineItems.length === 0 && (
+            <p className="rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">
+              Upload a Clockify report above, or add a line by hand.
+            </p>
+          )}
         </div>
 
         <Button variant="outline" onClick={addManualLine} type="button">
           <Plus className="mr-2 size-4" />
-          Add Manual Line
+          Add line
         </Button>
 
         {/* Notes */}

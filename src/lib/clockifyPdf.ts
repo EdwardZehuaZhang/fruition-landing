@@ -1,21 +1,40 @@
 /**
- * Clockify Summary report (PDF) → invoice line items.
+ * Clockify Summary report (PDF) → billable projects.
  *
  * Browser-only: pdfjs-dist is dynamically imported so it never lands in the
  * Cloudflare Worker bundle. The worker script is served from public/ (copied
  * there by scripts/copy-pdf-worker.mjs) — pdfjs v4+ hard-fails without a real
  * worker URL, and a static asset avoids every bundler edge case.
  *
- * Shared by the New Invoice form and the standalone Clockify import page.
+ * A Summary report has three sections, all of which use the same
+ * `<label>  <H:MM>  <percent>` shape, which is why order matters here:
+ *
+ *   Project              one row per project — THIS is what we bill
+ *   Description          the same time sliced by task, flat across projects
+ *   Project / Description  the same time again, grouped project → tasks
+ *
+ * Reading rows indiscriminately triple-counts the month. We take the hours
+ * from `Project` and the descriptions from `Project / Description`.
  */
-import type { LineItem } from '@/types/invoice'
 import { getCurrentYearMonth } from '@/types/invoice'
 
 /** Served from public/pdf.worker.min.mjs — kept in lockstep by postinstall. */
 const WORKER_SRC = '/pdf.worker.min.mjs'
 
-/** Rate applied to freshly-parsed rows; editable per line afterwards. */
-export const DEFAULT_PARSED_RATE = 40
+/** A project row: hours only. The rate lives on the invoice, not the line. */
+export interface ParsedProject {
+  name: string
+  description: string
+  hours: number
+}
+
+export interface ParsedClockifyReport {
+  projects: ParsedProject[]
+  /** YYYY-MM taken from the report's date range, the filename, or today. */
+  billingMonth: string
+  /** `Total:` as printed on the report — lets the caller sanity-check the sum. */
+  reportedHours: number | null
+}
 
 async function extractPdfLines(file: File): Promise<string[]> {
   const pdfjsLib = await import('pdfjs-dist')
@@ -52,64 +71,104 @@ async function extractPdfLines(file: File): Promise<string[]> {
   return allLines
 }
 
-function parseClockifyLines(lines: string[], rate: number): LineItem[] {
-  const projects: { name: string; hours: number; subTasks: string[] }[] = []
-  let currentProject: { name: string; hours: number; subTasks: string[] } | null = null
-  let inDetailSection = false
+function hoursFromDuration(hhmm: string): number {
+  const [h, m] = hhmm.split(':').map(Number)
+  return Math.round((h + m / 60) * 100) / 100
+}
+
+/**
+ * Clockify labels each project `<project> - <client>`. When the client is named
+ * after the project that reads as "Foo - Foo" on the invoice, so collapse the
+ * exact duplicate. Genuinely different clients are left intact.
+ */
+function cleanProjectName(raw: string): string {
+  const parts = raw.split(' - ')
+  if (parts.length === 2 && parts[0].trim() === parts[1].trim()) {
+    return parts[0].trim()
+  }
+  return raw.trim()
+}
+
+type Section = 'none' | 'projects' | 'descriptions' | 'byProject'
+
+/** `<label>  <H:MM>  <percent>` — the summary sections. */
+const ROW_WITH_PERCENT = /^(.+?)\s{2,}(\d+:\d{2})\s+[\d.]+\s*%$/
+/** `<label>  <H:MM>` — the project→task breakdown. */
+const ROW_WITH_DURATION = /^(.+?)\s{2,}(\d+:\d{2})$/
+
+function detectSection(line: string): Section | null {
+  if (/^Project\s*\/\s*Description\b/i.test(line)) return 'byProject'
+  if (/^Project(\s{2,}Duration)?$/i.test(line)) return 'projects'
+  if (/^Description(\s{2,}Duration)?$/i.test(line)) return 'descriptions'
+  return null
+}
+
+function parseClockifyLines(lines: string[]): ParsedProject[] {
+  const order: string[] = []
+  const byRawName = new Map<string, { name: string; hours: number; tasks: string[] }>()
+  let section: Section = 'none'
+  let current: { name: string; hours: number; tasks: string[] } | null = null
 
   for (const rawLine of lines) {
     const line = rawLine.trim()
     if (!line) continue
 
-    if (/^Project\s*\/\s*Description/i.test(line)) {
-      inDetailSection = true
-      currentProject = null
+    const next = detectSection(line)
+    if (next) {
+      section = next
+      current = null
       continue
     }
 
-    if (inDetailSection) {
-      const existingProject = projects.find((p) => line.startsWith(p.name))
-      if (existingProject) {
-        currentProject = existingProject
+    if (section === 'projects') {
+      const m = line.match(ROW_WITH_PERCENT)
+      if (!m) continue
+      const rawName = m[1].trim()
+      if (/^(Project|Duration|Total)$/i.test(rawName)) continue
+      if (!byRawName.has(rawName)) {
+        order.push(rawName)
+        byRawName.set(rawName, {
+          name: cleanProjectName(rawName),
+          hours: hoursFromDuration(m[2]),
+          tasks: [],
+        })
+      }
+      continue
+    }
+
+    if (section === 'byProject') {
+      const m = line.match(ROW_WITH_DURATION)
+      if (m) {
+        const label = m[1].trim()
+        // Project headers and task rows share a shape; the project names we
+        // already collected are what tells them apart.
+        const project = byRawName.get(label)
+        if (project) {
+          current = project
+          continue
+        }
+        if (current && !/^(Project|Duration|Total)$/i.test(label)) {
+          current.tasks.push(label)
+        }
         continue
       }
-      if (currentProject) {
-        const subMatch = line.match(/^(.+?)\s{2,}(\d+:\d+)\s*$/)
-        if (subMatch) {
-          const subName = subMatch[1].trim()
-          if (
-            subName &&
-            subName !== currentProject.name &&
-            subName !== 'Total' &&
-            subName !== 'Project' &&
-            subName !== 'Duration'
-          ) {
-            currentProject.subTasks.push(subName)
-          }
-        }
+      // No duration: a wrapped continuation of the task above it.
+      if (current && current.tasks.length > 0 && !/^Fruition\s+\d+$/.test(line)) {
+        current.tasks[current.tasks.length - 1] += ' ' + line
       }
       continue
     }
-
-    const projectMatch = line.match(/^(.+?)\s{2,}(\d+:\d+)\s+[\d.]+\s*%/)
-    if (projectMatch) {
-      const name = projectMatch[1].trim()
-      if (name === 'Project' || name === 'Duration' || name === 'Total') continue
-      const timeParts = projectMatch[2].split(':').map(Number)
-      const hours = timeParts[0] + timeParts[1] / 60
-      currentProject = { name, hours: Math.round(hours * 100) / 100, subTasks: [] }
-      projects.push(currentProject)
-    }
+    // 'descriptions' and 'none' carry no billable rows of their own.
   }
 
-  return projects.map((p) => ({
-    projectId: null,
-    projectName: p.name,
-    description: p.subTasks.join(', '),
-    hours: p.hours,
-    rate,
-    total: Math.round(p.hours * rate * 100) / 100,
-  }))
+  return order
+    .map((rawName) => byRawName.get(rawName)!)
+    .filter((p) => p.hours > 0)
+    .map((p) => ({
+      name: p.name,
+      description: p.tasks.join('\n'),
+      hours: p.hours,
+    }))
 }
 
 function extractBillingMonth(lines: string[], filename?: string): string {
@@ -127,23 +186,23 @@ function extractBillingMonth(lines: string[], filename?: string): string {
   return getCurrentYearMonth()
 }
 
-export interface ParsedClockifyReport {
-  lineItems: LineItem[]
-  /** YYYY-MM taken from the report's date range, the filename, or today. */
-  billingMonth: string
+function extractReportedHours(lines: string[]): number | null {
+  for (const line of lines) {
+    const m = line.trim().match(/^Total:\s+(\d+:\d{2})$/i)
+    if (m) return hoursFromDuration(m[1])
+  }
+  return null
 }
 
 /**
  * Parses a Clockify Summary report. Throws if the file isn't a readable PDF;
- * returns an empty `lineItems` array if it parses but holds no billable rows.
+ * returns an empty `projects` array if it parses but holds no billable rows.
  */
-export async function parseClockifyPdf(
-  file: File,
-  rate: number = DEFAULT_PARSED_RATE
-): Promise<ParsedClockifyReport> {
+export async function parseClockifyPdf(file: File): Promise<ParsedClockifyReport> {
   const lines = await extractPdfLines(file)
   return {
-    lineItems: parseClockifyLines(lines, rate),
+    projects: parseClockifyLines(lines),
     billingMonth: extractBillingMonth(lines, file.name),
+    reportedHours: extractReportedHours(lines),
   }
 }
