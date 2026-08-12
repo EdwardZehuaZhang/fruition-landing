@@ -1,6 +1,7 @@
 "use client"
 
 import { bookingHref } from "@/lib/bookingLink"
+import { withMondayUtm, UK_PARTNER_CAMPAIGN } from "@/lib/mondayUtm"
 import Link from "next/link"
 import { Rocket, Play } from "lucide-react"
 import FramedMedia from "@/components/common/FramedMedia"
@@ -30,6 +31,10 @@ interface Props {
   faqTabs?: FaqTab[]
   teamMembers: TeamMember[]
 }
+
+/* monday.com signup, UTM-tagged so partner reporting attributes the
+   referral to this page. */
+const MONDAY_SIGNUP_HREF = withMondayUtm("https://monday.com", UK_PARTNER_CAMPAIGN)
 
 type FeatureBlock = { title?: string; body?: string; ctaLabel?: string; ctaUrl?: string; image?: string }
 type RoiStat = { value?: string; label?: string }
@@ -77,7 +82,7 @@ function PartnerSectionCta({ calendlyUrl }: { calendlyUrl: string }) {
           <Link href={calendlyUrl} className="cta-btn cta-btn-primary">
             <Rocket size={16} aria-hidden /> Schedule a 30-minute Consultation
           </Link>
-          <Link href="https://monday.com" className="cta-btn cta-btn-outline">
+          <Link href={MONDAY_SIGNUP_HREF} className="cta-btn cta-btn-outline">
             <Play size={16} aria-hidden /> Get Started with monday.com
           </Link>
         </div>
@@ -101,7 +106,7 @@ function CrmTutorialCta({ calendlyUrl }: { calendlyUrl: string }) {
             <Link href={calendlyUrl} className="cta-btn cta-btn-primary">
               <Rocket size={16} aria-hidden /> Book a Consultation
             </Link>
-            <Link href="https://monday.com" className="cta-btn cta-btn-outline">
+            <Link href={MONDAY_SIGNUP_HREF} className="cta-btn cta-btn-outline">
               <Play size={16} aria-hidden /> Get Started with monday.com
             </Link>
           </div>

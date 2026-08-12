@@ -7,6 +7,7 @@ import {
 } from "@/sanity/queries"
 import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
 import { mergeTeamMembers } from "@/lib/mergeTeamMembers"
+import { addMondayUtm, UK_PARTNER_CAMPAIGN } from "@/lib/mondayUtm"
 import MondayPartnerUkContent from "./MondayPartnerUkContent"
 import { buildOgMetadata } from "@/lib/metadata"
 
@@ -36,9 +37,11 @@ export default async function Page() {
     getFaqItemsForPage(SLUG),
     getTeamMembers(),
   ])
+  // Any CTA an editor points at monday.com - hero secondary, sticky bar, CRO
+  // blocks, feature blocks, team grid - is tagged for partner attribution.
   return (
     <MondayPartnerUkContent
-      page={page}
+      page={addMondayUtm(page, UK_PARTNER_CAMPAIGN)}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
       faqTabs={groupFaqsIntoTabs(centralFaqs)}
