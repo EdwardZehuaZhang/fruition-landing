@@ -14,7 +14,12 @@ export async function GET() {
 
   if (error) {
     console.error('Failed to fetch invoices:', error)
-    return NextResponse.json({ error: 'Failed to fetch invoices' }, { status: 500 })
+    // Portal is auth-gated to the Workspace domain, so pass the real Postgres
+    // message through — a silent 500 hid a missing table for weeks.
+    return NextResponse.json(
+      { error: 'Failed to fetch invoices: ' + error.message },
+      { status: 500 }
+    )
   }
 
   return NextResponse.json(data)
@@ -57,7 +62,10 @@ export async function POST(req: NextRequest) {
 
   if (error) {
     console.error('Failed to create invoice:', error)
-    return NextResponse.json({ error: 'Failed to create invoice' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Failed to create invoice: ' + error.message },
+      { status: 500 }
+    )
   }
 
   return NextResponse.json(data, { status: 201 })

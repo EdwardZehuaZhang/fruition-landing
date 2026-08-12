@@ -14,6 +14,7 @@ import {
 import InvoicePreview from './InvoicePreview'
 import ProjectSelector from './ProjectSelector'
 import LineItemRow from './LineItemRow'
+import ClockifyDropzone from './ClockifyDropzone'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -64,6 +65,7 @@ export default function InvoiceForm({ profile, onSave }: Props) {
   >([])
   const [currency, setCurrency] = useState(profile?.region === 'APAC' ? 'SGD' : 'USD')
   const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState('')
 
   // Update state when profile prop changes
   useEffect(() => {
@@ -131,6 +133,14 @@ export default function InvoiceForm({ profile, onSave }: Props) {
     ])
   }
 
+  // A parsed Clockify report replaces the line items outright — re-uploading a
+  // corrected export should not stack duplicates on top of the previous run.
+  const applyParsedReport = (parsed: LineItem[], parsedMonth: string) => {
+    setLineItems(parsed)
+    setSelectedProjects([])
+    setBillingMonth(parsedMonth)
+  }
+
   const removeLine = (index: number) => {
     const item = lineItems[index]
     if (item.projectId) {
@@ -154,15 +164,20 @@ export default function InvoiceForm({ profile, onSave }: Props) {
 
   const handleSave = async () => {
     if (!consultantName || !region || lineItems.length === 0) {
-      alert('Please fill in consultant, region, and at least one line item')
+      setSaveError('Fill in consultant, region, and at least one line item.')
       return
     }
     setSaving(true)
+    setSaveError('')
     try {
       await onSave(buildInvoice())
     } catch (error) {
       console.error('Save failed:', error)
-      alert('Failed to save invoice')
+      // Show what actually went wrong — a swallowed "Failed to save invoice"
+      // hid a missing Supabase table for weeks.
+      setSaveError(
+        error instanceof Error ? error.message : 'Failed to save invoice.'
+      )
     } finally {
       setSaving(false)
     }
@@ -183,6 +198,15 @@ export default function InvoiceForm({ profile, onSave }: Props) {
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
       <div className="flex flex-col gap-6">
+        {/* Clockify upload — the default way in; everything below is editable
+            afterwards, and stays usable if you'd rather key an invoice by hand. */}
+        <div>
+          <label className="mb-1.5 block text-sm font-medium">
+            Upload Clockify report
+          </label>
+          <ClockifyDropzone onParsed={applyParsedReport} />
+        </div>
+
         {/* Consultant & Region */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
@@ -375,6 +399,12 @@ export default function InvoiceForm({ profile, onSave }: Props) {
             rows={3}
           />
         </div>
+
+        {saveError && (
+          <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3">
+            <p className="text-sm text-destructive">{saveError}</p>
+          </div>
+        )}
 
         {/* Actions */}
         <div className="flex flex-wrap gap-3">

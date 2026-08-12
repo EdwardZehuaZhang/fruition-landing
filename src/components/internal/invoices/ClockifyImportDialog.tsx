@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { Plus, Trash2, Upload } from 'lucide-react'
+import { useState } from 'react'
+import { Plus, Trash2 } from 'lucide-react'
 import {
   REGION_ADDRESSES,
   REGIONS,
@@ -12,6 +12,7 @@ import {
 } from '@/types/invoice'
 import type { Invoice, LineItem, ConsultantProfile } from '@/types/invoice'
 import InvoicePreview from './InvoicePreview'
+import ClockifyDropzone from './ClockifyDropzone'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -22,122 +23,7 @@ interface Props {
   onSave: (invoice: Invoice) => Promise<void>
 }
 
-// Parse PDF text lines into Clockify projects
-async function extractPdfLines(file: File): Promise<string[]> {
-  // Dynamic import pdfjs-dist
-  const pdfjsLib = await import('pdfjs-dist')
-  pdfjsLib.GlobalWorkerOptions.workerSrc = ''
-
-  const arrayBuffer = await file.arrayBuffer()
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
-  const allLines: string[] = []
-
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i)
-    const content = await page.getTextContent()
-
-    const itemsByY: Record<number, { x: number; str: string }[]> = {}
-    for (const item of content.items) {
-      if (!("str" in item) || !item.str.trim()) continue
-      const y = Math.round(("transform" in item ? (item as unknown as { transform: number[] }).transform[5] : 0))
-      if (!itemsByY[y]) itemsByY[y] = []
-      itemsByY[y].push({ x: (item as { transform: number[] }).transform[4], str: (item as { str: string }).str })
-    }
-
-    const sortedYs = Object.keys(itemsByY)
-      .map(Number)
-      .sort((a, b) => b - a)
-    for (const y of sortedYs) {
-      const items = itemsByY[y].sort((a, b) => a.x - b.x)
-      allLines.push(items.map((it) => it.str).join('  '))
-    }
-  }
-
-  return allLines
-}
-
-function parseClockifyLines(lines: string[]): LineItem[] {
-  const projects: { name: string; hours: number; subTasks: string[] }[] = []
-  let currentProject: { name: string; hours: number; subTasks: string[] } | null = null
-  let inDetailSection = false
-
-  for (const rawLine of lines) {
-    const line = rawLine.trim()
-    if (!line) continue
-
-    if (/^Project\s*\/\s*Description/i.test(line)) {
-      inDetailSection = true
-      currentProject = null
-      continue
-    }
-
-    if (inDetailSection) {
-      const existingProject = projects.find((p) => line.startsWith(p.name))
-      if (existingProject) {
-        currentProject = existingProject
-        continue
-      }
-      if (currentProject) {
-        const subMatch = line.match(/^(.+?)\s{2,}(\d+:\d+)\s*$/)
-        if (subMatch) {
-          const subName = subMatch[1].trim()
-          if (
-            subName &&
-            subName !== currentProject.name &&
-            subName !== 'Total' &&
-            subName !== 'Project' &&
-            subName !== 'Duration'
-          ) {
-            currentProject.subTasks.push(subName)
-          }
-        }
-      }
-      continue
-    }
-
-    const projectMatch = line.match(/^(.+?)\s{2,}(\d+:\d+)\s+[\d.]+\s*%/)
-    if (projectMatch) {
-      const name = projectMatch[1].trim()
-      if (name === 'Project' || name === 'Duration' || name === 'Total') continue
-      const timeParts = projectMatch[2].split(':').map(Number)
-      const hours = timeParts[0] + timeParts[1] / 60
-      currentProject = { name, hours: Math.round(hours * 100) / 100, subTasks: [] }
-      projects.push(currentProject)
-    }
-  }
-
-  return projects.map((p) => ({
-    projectId: null,
-    projectName: p.name,
-    description: p.subTasks.join(', '),
-    hours: p.hours,
-    rate: 40,
-    total: Math.round(p.hours * 40 * 100) / 100,
-  }))
-}
-
-function extractBillingMonth(lines: string[], filename?: string): string {
-  const fullText = lines.join(' ')
-  const dateRangeMatch = fullText.match(
-    /(\d{2})\/(\d{2})\/(\d{4})\s*[-\u2013]\s*\d{2}\/\d{2}\/\d{4}/
-  )
-  if (dateRangeMatch) {
-    return dateRangeMatch[3] + '-' + dateRangeMatch[2]
-  }
-  if (filename) {
-    const fnMatch = filename.match(/(\d{4})[-_](\d{2})/)
-    if (fnMatch) return fnMatch[1] + '-' + fnMatch[2]
-  }
-  return getCurrentYearMonth()
-}
-
 export default function ClockifyImportDialog({ profile, onSave }: Props) {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [parsing, setParsing] = useState(false)
-  const [parseError, setParseError] = useState('')
-  const [parsed, setParsed] = useState(false)
-  const [dragOver, setDragOver] = useState(false)
-
   const [consultantName, setConsultantName] = useState(
     profile?.consultant_name || 'Edward (Zehua) Zhang'
   )
@@ -153,46 +39,14 @@ export default function ClockifyImportDialog({ profile, onSave }: Props) {
     profile?.region === 'APAC' ? 'SGD' : 'USD'
   )
   const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState('')
 
-  const handleFile = async (file: File) => {
-    if (!file || !file.name.endsWith('.pdf')) {
-      setParseError('Please upload a PDF file.')
-      return
-    }
-    setParsing(true)
-    setParseError('')
-    try {
-      const lines = await extractPdfLines(file)
-      const items = parseClockifyLines(lines)
-      const month = extractBillingMonth(lines, file.name)
-
-      if (items.length === 0) {
-        setParseError(
-          'No billable projects found in PDF. Make sure this is a Clockify Summary report.'
-        )
-      } else {
-        setLineItems(items)
-        setBillingMonth(month)
-        setParsed(true)
-      }
-    } catch (err) {
-      console.error('PDF parse error:', err)
-      setParseError(
-        'Failed to parse PDF: ' + (err instanceof Error ? err.message : 'Unknown error')
-      )
-    } finally {
-      setParsing(false)
-    }
+  const applyParsedReport = (parsed: LineItem[], parsedMonth: string) => {
+    setLineItems(parsed)
+    setBillingMonth(parsedMonth)
   }
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    setDragOver(false)
-    const file = e.dataTransfer.files[0]
-    if (file) handleFile(file)
-  }
-
-  const updateLine = (index: number, field: keyof LineItem, value: string | number) => {
+  const updateLine =(index: number, field: keyof LineItem, value: string | number) => {
     const updated = [...lineItems]
     if (field === 'projectName' || field === 'description') {
       (updated[index] as unknown as Record<string, unknown>)[field] = value
@@ -243,15 +97,18 @@ export default function ClockifyImportDialog({ profile, onSave }: Props) {
 
   const handleSave = async () => {
     if (!consultantName || !region || lineItems.length === 0) {
-      alert('Please fill in consultant, region, and at least one line item')
+      setSaveError('Fill in consultant, region, and at least one line item.')
       return
     }
     setSaving(true)
+    setSaveError('')
     try {
       await onSave(buildInvoice())
-      alert('Invoice saved successfully!')
     } catch (error) {
-      alert('Failed to save invoice')
+      console.error('Save failed:', error)
+      setSaveError(
+        error instanceof Error ? error.message : 'Failed to save invoice.'
+      )
     } finally {
       setSaving(false)
     }
@@ -281,52 +138,7 @@ export default function ClockifyImportDialog({ profile, onSave }: Props) {
           </p>
         </div>
 
-        {/* Upload area */}
-        <div
-          className={`cursor-pointer rounded-xl border-2 border-dashed p-8 text-center transition-colors ${
-            dragOver
-              ? 'border-purple-600 bg-purple-50/50'
-              : 'border-muted-foreground/25 bg-muted/30'
-          }`}
-          onClick={() => fileInputRef.current?.click()}
-          onDragOver={(e) => {
-            e.preventDefault()
-            setDragOver(true)
-          }}
-          onDragLeave={() => setDragOver(false)}
-          onDrop={handleDrop}
-        >
-          <div className="flex flex-col items-center gap-3">
-            <Upload className={`size-8 ${dragOver ? 'text-purple-600' : 'text-muted-foreground'}`} />
-            <p className="font-medium">
-              {parsing ? 'Parsing PDF...' : 'Drop Clockify PDF here or click to upload'}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Clockify Summary report (.pdf)
-            </p>
-            {parsed && (
-              <p className="text-xs font-semibold text-green-600">
-                &check; Parsed {lineItems.length} billable project(s)
-              </p>
-            )}
-          </div>
-        </div>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".pdf"
-          className="hidden"
-          onChange={(e) => {
-            const file = e.target.files?.[0]
-            if (file) handleFile(file)
-          }}
-        />
-
-        {parseError && (
-          <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3">
-            <p className="text-sm text-destructive">{parseError}</p>
-          </div>
-        )}
+        <ClockifyDropzone onParsed={applyParsedReport} />
 
         {/* Consultant & Region */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -513,6 +325,12 @@ export default function ClockifyImportDialog({ profile, onSave }: Props) {
             rows={3}
           />
         </div>
+
+        {saveError && (
+          <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3">
+            <p className="text-sm text-destructive">{saveError}</p>
+          </div>
+        )}
 
         {/* Actions */}
         <div className="flex flex-wrap gap-3">
