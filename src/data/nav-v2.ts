@@ -18,6 +18,8 @@
  *  - src/app/layout.tsx       → local preview when NAV_V2_PREVIEW=1
  */
 
+import { PARTNER_REGIONS } from './regions'
+
 export interface NavV2Link {
   label: string
   href: string
@@ -340,12 +342,14 @@ export const NAV_V2: NavV2Item[] = [
         heading: 'Locations',
         columns: 2,
         items: [
-          { label: 'Australia', href: '/monday-partner-australia', icon: 'globe', description: 'Sydney HQ - APAC delivery' },
-          { label: 'United Kingdom', href: '/monday-partner-uk', icon: 'globe', description: 'London delivery centre' },
-          { label: 'United States', href: '/monday-partner-us', icon: 'globe', description: 'New York delivery centre' },
-          { label: 'Singapore', href: '/monday-partner-singapore', icon: 'globe', description: 'APAC delivery' },
-          { label: 'India', href: '/monday-partner-india', icon: 'globe', description: 'APAC delivery' },
-          { label: 'Philippines', href: '/monday-partner-philippines', icon: 'globe', description: 'APAC delivery' },
+          // Sourced from data/regions.ts so the nav and the on-page
+          // RegionCrossLinks strip can never drift apart.
+          ...PARTNER_REGIONS.map(({ label, href, description }) => ({
+            label,
+            href,
+            icon: 'globe',
+            description,
+          })),
         ],
       },
     ],

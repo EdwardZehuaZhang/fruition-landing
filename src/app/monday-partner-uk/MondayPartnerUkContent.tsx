@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Rocket, Play } from "lucide-react"
 import FramedMedia from "@/components/common/FramedMedia"
 import {
+  RegionCrossLinks,
   HeroBanner,
   LogoCloudMarquee,
   ComparisonTabsSection,
@@ -250,6 +251,9 @@ export default function MondayPartnerUkContent({
 
       {/* Economic impact */}
       <EconomicImpactSection stats={resolvedRoiStats} />
+
+      {/* Peer links to the other regional partner pages */}
+      <RegionCrossLinks currentHref="/monday-partner-uk" />
     </div>
   )
 }

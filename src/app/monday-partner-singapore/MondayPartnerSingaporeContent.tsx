@@ -4,6 +4,7 @@ import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { Rocket, Play } from "lucide-react"
 import {
+  RegionCrossLinks,
   HeroBanner,
   LogoCloudMarquee,
   ComparisonTabsSection,
@@ -232,6 +233,9 @@ export default function MondayPartnerSingaporeContent({
 
       {/* Economic impact */}
       <EconomicImpactSection stats={resolvedRoiStats} />
+
+      {/* Peer links to the other regional partner pages */}
+      <RegionCrossLinks currentHref="/monday-partner-singapore" />
     </div>
   )
 }
