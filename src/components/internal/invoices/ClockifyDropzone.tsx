@@ -31,10 +31,12 @@ export default function ClockifyDropzone({ onParsed }: Props) {
     setSummary('')
     setWarning('')
     try {
-      const { projects, billingMonth, reportedHours } = await parseClockifyPdf(file)
+      const { projects, billingMonth, reportedHours, reportType } =
+        await parseClockifyPdf(file)
       if (projects.length === 0) {
         setParseError(
-          'No billable projects found in this PDF. Make sure it is a Clockify Summary report.'
+          'No billable projects found in this PDF. Export a Summary or Detailed ' +
+            'report from Clockify (Reports → Summary or Detailed → Export → PDF).'
         )
         return
       }
@@ -42,7 +44,7 @@ export default function ClockifyDropzone({ onParsed }: Props) {
       const hours = projects.reduce((sum, p) => sum + p.hours, 0)
       setSummary(
         `Parsed ${projects.length} project${projects.length === 1 ? '' : 's'}, ` +
-          `${hours.toFixed(2)} hours`
+          `${hours.toFixed(2)} hours from the ${reportType} report`
       )
       // The report prints its own total; if ours disagrees the sections were
       // read wrong and the invoice would be over- or under-billed.
@@ -101,7 +103,7 @@ export default function ClockifyDropzone({ onParsed }: Props) {
             {parsing ? 'Parsing PDF…' : 'Drop Clockify PDF here or click to upload'}
           </p>
           <p className="text-xs text-muted-foreground">
-            Clockify Summary report (.pdf) — fills the line items below
+            Clockify Summary or Detailed report (.pdf) — fills the line items below
           </p>
           {summary && (
             <p className="text-xs font-semibold text-green-600">✓ {summary}</p>
