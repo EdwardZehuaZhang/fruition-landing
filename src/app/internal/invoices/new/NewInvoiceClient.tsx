@@ -2,14 +2,15 @@
 
 import { useRouter } from 'next/navigation'
 import type { Invoice, ConsultantProfile } from '@/types/invoice'
+import type { InvoiceDefaults } from '@/lib/invoiceDefaults'
 import InvoiceForm from '@/components/internal/invoices/InvoiceForm'
 
 interface Props {
   profile: ConsultantProfile | null
-  defaultRate?: number
+  defaults?: Partial<InvoiceDefaults>
 }
 
-export default function NewInvoiceClient({ profile, defaultRate }: Props) {
+export default function NewInvoiceClient({ profile, defaults }: Props) {
   const router = useRouter()
   const handleSave = async (invoice: Invoice) => {
     const res = await fetch('/api/internal/invoices', {
@@ -27,5 +28,5 @@ export default function NewInvoiceClient({ profile, defaultRate }: Props) {
     router.refresh()
   }
 
-  return <InvoiceForm profile={profile} defaultRate={defaultRate} onSave={handleSave} />
+  return <InvoiceForm profile={profile} defaults={defaults} onSave={handleSave} />
 }

@@ -15,6 +15,12 @@ import InvoicePreview from './InvoicePreview'
 import LineItemRow from './LineItemRow'
 import ClockifyDropzone from './ClockifyDropzone'
 import type { ParsedProject } from '@/lib/clockifyPdf'
+import {
+  FALLBACK_DEFAULTS,
+  readRememberedDefaults,
+  rememberDefaults,
+  type InvoiceDefaults,
+} from '@/lib/invoiceDefaults'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -36,45 +42,28 @@ function toLineItem(project: ParsedProject, rate: number): LineItem {
 interface Props {
   /** Pre-fetched consultant profile from Supabase. */
   profile?: ConsultantProfile | null
-  /** Hourly rate to start from — carried over from the last invoice saved. */
-  defaultRate?: number
+  /** Values carried over from the last invoice saved, read server-side. */
+  defaults?: Partial<InvoiceDefaults>
   /** Called after successful save. */
   onSave: (invoice: Invoice) => Promise<void>
 }
 
-/** Used when there's no previous invoice to carry a rate over from. */
-export const FALLBACK_RATE = 40
+export default function InvoiceForm({ profile, defaults, onSave }: Props) {
+  // Server defaults come from the last invoice saved; localStorage is layered
+  // on top in the effect below.
+  const initial: InvoiceDefaults = {
+    ...FALLBACK_DEFAULTS,
+    consultantName: profile?.consultant_name || FALLBACK_DEFAULTS.consultantName,
+    wiseName: profile?.wise_name ?? FALLBACK_DEFAULTS.wiseName,
+    wiseTag: profile?.wise_tag ?? FALLBACK_DEFAULTS.wiseTag,
+    region: profile?.region || FALLBACK_DEFAULTS.region,
+    ...defaults,
+  }
 
-const DEFAULT_PROFILE: ConsultantProfile = {
-  consultant_name: 'Edward (Zehua) Zhang',
-  consultant_address: '',
-  consultant_phone: '',
-  consultant_email: '',
-  wise_name: '',
-  wise_tag: '',
-  region: 'APAC',
-}
-
-export default function InvoiceForm({
-  profile,
-  defaultRate = FALLBACK_RATE,
-  onSave,
-}: Props) {
-  const [consultantName, setConsultantName] = useState(
-    profile?.consultant_name || DEFAULT_PROFILE.consultant_name
-  )
-  const [consultantAddress, setConsultantAddress] = useState(
-    profile?.consultant_address || ''
-  )
-  const [consultantPhone, setConsultantPhone] = useState(
-    profile?.consultant_phone || ''
-  )
-  const [consultantEmail, setConsultantEmail] = useState(
-    profile?.consultant_email || ''
-  )
-  const [wiseName, setWiseName] = useState(profile?.wise_name || '')
-  const [wiseTag, setWiseTag] = useState(profile?.wise_tag || '')
-  const [region, setRegion] = useState(profile?.region || 'APAC')
+  const [consultantName, setConsultantName] = useState(initial.consultantName)
+  const [wiseName, setWiseName] = useState(initial.wiseName)
+  const [wiseTag, setWiseTag] = useState(initial.wiseTag)
+  const [region, setRegion] = useState(initial.region)
   const [invoiceNo, setInvoiceNo] = useState('')
   const [invoiceDate, setInvoiceDate] = useState(
     new Date().toISOString().split('T')[0]
@@ -84,23 +73,33 @@ export default function InvoiceForm({
   const [notes, setNotes] = useState('')
   // One rate for the whole invoice — it's a property of the consultant, not of
   // each project. Every line is billed at it.
-  const [rate, setRate] = useState(defaultRate)
-  const [currency, setCurrency] = useState(profile?.region === 'APAC' ? 'SGD' : 'USD')
+  const [rate, setRate] = useState(initial.rate)
+  const [currency, setCurrency] = useState(initial.currency)
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState('')
 
-  // Update state when profile prop changes
+  // localStorage can only be read after mount — doing it during render would
+  // make the server and client markup disagree. Line items are empty at this
+  // point, so there is nothing to re-price.
   useEffect(() => {
-    if (profile) {
-      setConsultantName(profile.consultant_name || DEFAULT_PROFILE.consultant_name)
-      setConsultantAddress(profile.consultant_address || '')
-      setConsultantPhone(profile.consultant_phone || '')
-      setConsultantEmail(profile.consultant_email || '')
-      setWiseName(profile.wise_name || '')
-      setWiseTag(profile.wise_tag || '')
-      setRegion(profile.region || 'APAC')
-    }
-  }, [profile])
+    const remembered = readRememberedDefaults()
+    if (!remembered) return
+    if (remembered.consultantName) setConsultantName(remembered.consultantName)
+    if (remembered.wiseName !== undefined) setWiseName(remembered.wiseName)
+    if (remembered.wiseTag !== undefined) setWiseTag(remembered.wiseTag)
+    if (remembered.region) setRegion(remembered.region)
+    if (remembered.currency) setCurrency(remembered.currency)
+    if (remembered.rate) setRate(remembered.rate)
+  }, [])
+
+  const currentDefaults = (): InvoiceDefaults => ({
+    consultantName,
+    wiseName,
+    wiseTag,
+    region,
+    currency,
+    rate,
+  })
 
   const formatDate = (dateStr: string) => {
     if (!dateStr) return ''
@@ -114,9 +113,11 @@ export default function InvoiceForm({
     billing_month: billingMonth,
     billing_period: monthToBillingPeriod(billingMonth),
     consultant_name: consultantName,
-    consultant_address: consultantAddress,
-    consultant_phone: consultantPhone,
-    consultant_email: consultantEmail,
+    // No longer edited in the form. Kept on the record so a consultant profile
+    // (and any already-saved invoice) still renders a full header.
+    consultant_address: profile?.consultant_address || '',
+    consultant_phone: profile?.consultant_phone || '',
+    consultant_email: profile?.consultant_email || '',
     wise_name: wiseName,
     wise_tag: wiseTag,
     billing_address: REGION_ADDRESSES[region] || '',
@@ -180,6 +181,7 @@ export default function InvoiceForm({
     setSaveError('')
     try {
       await onSave(buildInvoice())
+      rememberDefaults(currentDefaults())
     } catch (error) {
       console.error('Save failed:', error)
       // Show what actually went wrong — a swallowed "Failed to save invoice"
@@ -194,12 +196,16 @@ export default function InvoiceForm({
 
   const handleExportPDF = async () => {
     if (!consultantName || !region || lineItems.length === 0) {
-      alert('Please fill in all required fields')
+      setSaveError('Fill in consultant, region, and at least one line item.')
       return
     }
+    setSaveError('')
     // Lazy-load pdfmake client-side only — keeps it out of the edge Worker bundle.
     const { exportInvoiceToPDF } = await import('@/lib/invoicePdf')
     await exportInvoiceToPDF(buildInvoice())
+    // Exporting doesn't touch the database, so remember here too — otherwise an
+    // export-only month would leave the next invoice blank.
+    rememberDefaults(currentDefaults())
   }
 
   const invoice = buildInvoice()
@@ -243,41 +249,6 @@ export default function InvoiceForm({
                 </option>
               ))}
             </select>
-          </div>
-        </div>
-
-        {/* Address / Phone / Email */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div>
-            <label className="mb-1.5 block text-sm font-medium">
-              Consultant Address
-            </label>
-            <textarea
-              placeholder="Enter full address"
-              value={consultantAddress}
-              onChange={(e) => setConsultantAddress(e.target.value)}
-              className="w-full rounded-md border bg-background px-3 py-2 text-sm resize-none"
-              rows={3}
-            />
-          </div>
-          <div className="flex flex-col gap-4">
-            <div>
-              <label className="mb-1.5 block text-sm font-medium">Phone</label>
-              <Input
-                placeholder="+1 234 567 8900"
-                value={consultantPhone}
-                onChange={(e) => setConsultantPhone(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="mb-1.5 block text-sm font-medium">Email</label>
-              <Input
-                type="email"
-                placeholder="consultant@example.com"
-                value={consultantEmail}
-                onChange={(e) => setConsultantEmail(e.target.value)}
-              />
-            </div>
           </div>
         </div>
 
