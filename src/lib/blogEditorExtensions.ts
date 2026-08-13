@@ -366,13 +366,25 @@ const CELL_BLOCK_JOINER = " "
 /**
  * Render `node`'s inline content to markdown and pull it back out of the
  * serializer's output buffer, so it can be escaped for a table cell.
+ *
+ * This has to leave the serializer exactly as it found it. `renderInline`
+ * writes, and `state.write()` starts by calling `flushClose()`, which spends
+ * the *previous* sibling block's pending close — the blank line that separates
+ * it from whatever comes next — and clears `state.closed`. Cells are rendered
+ * up front (buildGrid) before the table writes a single row, so a lost `closed`
+ * meant the table's first row was glued onto the end of the preceding block:
+ * `## Comparison| Feature | Value |`, which markdown-it then reads as a heading
+ * and paragraphs with no table in sight. Restoring `closed` alongside `out`
+ * keeps the pending separator alive for the real write.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function captureInline(state: any, node: any): string {
   const start: number = state.out.length
+  const closed = state.closed
   state.renderInline(node)
   const text: string = state.out.slice(start)
   state.out = state.out.slice(0, start)
+  state.closed = closed
   return text
 }
 

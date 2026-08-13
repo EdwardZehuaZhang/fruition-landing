@@ -107,6 +107,21 @@ const row = (...cells: JSONContent[]): JSONContent => ({ type: "tableRow", conte
 const table = (...rows: JSONContent[]): JSONContent => ({ type: "table", content: rows })
 const doc = (...content: JSONContent[]): JSONContent => ({ type: "doc", content })
 
+const heading = (text: string, level = 2): JSONContent => ({
+  type: "heading",
+  attrs: { level },
+  content: [{ type: "text", text }],
+})
+const bullets = (...items: string[]): JSONContent => ({
+  type: "bulletList",
+  content: items.map((text) => ({ type: "listItem", content: [para(text)] })),
+})
+const quote = (text: string): JSONContent => ({ type: "blockquote", content: [para(text)] })
+
+/** The 2x2 header table every "block before a table" case below reuses. */
+const simpleTable = (): JSONContent =>
+  table(row(hdr("Feature"), hdr("Value")), row(txtCell("Speed"), txtCell("Fast")))
+
 const IMG_URL = "https://cdn.sanity.io/images/abc123/production/deadbeef-800x600.png"
 const image = (src: string, alt: string): JSONContent => ({ type: "image", attrs: { src, alt } })
 
@@ -254,6 +269,97 @@ describe("table persistence through save + reload", () => {
 
     expect(saved).not.toContain("[table]")
     expect(saved).toContain("**bold**")
+  })
+})
+
+/* ------------- tables that follow another block (the glue bug) ----------- */
+
+describe("table persistence when preceded by other blocks", () => {
+  // Regression: the table serialiser renders every cell up front (buildGrid)
+  // before it writes a single row, and captureInline's renderInline spent the
+  // *previous* block's pending close in the process. By the time the first row
+  // was written the blank-line separator was gone, so the save produced
+  // `## Comparison| Feature | Value |` — glued. markdown-it read that as a
+  // heading plus paragraphs and the table node was gone on reload. Save alone
+  // looked fine in the database; the damage only showed on the way back in.
+
+  it.each([
+    ["heading", heading("Comparison"), "## Comparison"],
+    ["paragraph", para("Intro copy."), "Intro copy."],
+    // The marker is the block's *last* line — that's what the table would glue onto.
+    ["bullet list", bullets("one", "two"), "- two"],
+    ["blockquote", quote("quoted"), "> quoted"],
+  ])("keeps the table when a %s comes first", (_label, before, beforeMarkdown) => {
+    const { saved, reloaded, doc: out } = saveReloadSave(doc(before, simpleTable()))
+
+    // The preceding block ends its own line — the table is not glued onto it.
+    expect(saved).toContain(`${beforeMarkdown}\n\n| Feature | Value |`)
+    expect(saved).not.toContain(`${beforeMarkdown}|`)
+    expect(nodeTypes(out)).toContain("table")
+    // Header and body cells both came back as real cells.
+    expect(nodeTypes(out)).toContain("tableHeader")
+    expect(nodeTypes(out)).toContain("tableCell")
+    for (const value of ["Feature", "Value", "Speed", "Fast"]) {
+      expect(allText(out)).toContain(value)
+    }
+    expect(reloaded).toBe(saved)
+  })
+
+  it("keeps two back-to-back tables as two tables", () => {
+    // Glued, the second table's header row landed in the first table's body and
+    // the two merged into one on reload.
+    const { saved, reloaded, doc: out } = saveReloadSave(
+      doc(
+        table(row(hdr("A"), hdr("B")), row(txtCell("1"), txtCell("2"))),
+        table(row(hdr("C"), hdr("D")), row(txtCell("3"), txtCell("4"))),
+      ),
+    )
+
+    expect(saved).toContain("| 1 | 2 |\n\n| C | D |")
+    expect(nodeTypes(out).filter((t) => t === "table")).toHaveLength(2)
+    expect(reloaded).toBe(saved)
+  })
+
+  it("stays stable over repeated round trips with a heading in front", () => {
+    const { saves, doc: out } = saveCycles(doc(heading("Comparison"), simpleTable()), 3)
+
+    expect(saves[1]).toBe(saves[0])
+    expect(saves[2]).toBe(saves[0])
+    for (const saved of saves) expect(saved).toContain("## Comparison\n\n| Feature | Value |")
+    expect(nodeTypes(out)).toContain("table")
+    expect(nodeTypes(out)).toContain("heading")
+  })
+
+  it("keeps the reported draft shape: heading + paragraph + table with an in-cell image", () => {
+    // The exact shape from the reported draft. Before the fix this reloaded as
+    // heading + paragraph ("Here is how they stack up.| Shot | Note | | --- |")
+    // + a stray top-level image + a "| ok |" paragraph — no table at all.
+    const content = doc(
+      heading("Comparison"),
+      para("Here is how they stack up."),
+      table(row(hdr("Shot"), hdr("Note")), row(cell(image(IMG_URL, "screenshot")), txtCell("ok"))),
+    )
+    const { saved, reloaded, doc: out } = saveReloadSave(content)
+
+    expect(saved).toContain("Here is how they stack up.\n\n| Shot | Note |")
+    expect(saved).toContain(`![screenshot](${IMG_URL})`)
+    expect(reloaded).toBe(saved)
+
+    const types = nodeTypes(out)
+    expect(types).toContain("table")
+    expect(types).toContain("image")
+    // The image is inside the table, not stranded as a sibling of it.
+    const tableNode = out.content!.find((n) => n.type === "table")!
+    expect(nodeTypes(tableNode)).toContain("image")
+    expect(out.content!.some((n) => n.type === "image")).toBe(false)
+    expect(allText(out)).toContain("ok")
+
+    // And the publish pipeline still sees a table block, not stray prose.
+    const blocks = bodyToPortableText(saved) as { _type: string; rows?: { cells?: string[] }[] }[]
+    const tableBlock = blocks.find((b) => b._type === "table")
+    expect(tableBlock).toBeDefined()
+    expect(tableBlock!.rows?.[0].cells).toEqual(["Shot", "Note"])
+    expect(tableBlock!.rows?.[1].cells?.[1]).toBe("ok")
   })
 })
 
