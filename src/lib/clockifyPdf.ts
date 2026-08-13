@@ -1,12 +1,12 @@
 /**
- * Clockify Summary report (PDF) → billable projects.
+ * Clockify report (PDF) → billable projects. Handles both export types.
  *
  * Browser-only: pdfjs-dist is dynamically imported so it never lands in the
  * Cloudflare Worker bundle. The worker script is served from public/ (copied
  * there by scripts/copy-pdf-worker.mjs) — pdfjs v4+ hard-fails without a real
  * worker URL, and a static asset avoids every bundler edge case.
  *
- * A Summary report has three sections, all of which use the same
+ * A **Summary** report has three sections, all of which use the same
  * `<label>  <H:MM>  <percent>` shape, which is why order matters here:
  *
  *   Project              one row per project — THIS is what we bill
@@ -15,6 +15,17 @@
  *
  * Reading rows indiscriminately triple-counts the month. We take the hours
  * from `Project` and the descriptions from `Project / Description`.
+ *
+ * A **Detailed** report is one block per time entry instead, with the project
+ * on the LAST line of each block:
+ *
+ *   31/07/2026  <description…>  0:20  <user>
+ *   <description continues…>            18:30 - 18:50
+ *   Non-Billable Website - Non-Billable Website
+ *
+ * Note the two exports disagree on label order: Summary prints
+ * `<project> - <client>`, Detailed prints `<client> - <project>`. Detailed is
+ * flipped on the way in so both produce the same line item names.
  */
 import { getCurrentYearMonth } from '@/types/invoice'
 
@@ -34,6 +45,8 @@ export interface ParsedClockifyReport {
   billingMonth: string
   /** `Total:` as printed on the report — lets the caller sanity-check the sum. */
   reportedHours: number | null
+  /** Which export this was read as. */
+  reportType: 'summary' | 'detailed'
 }
 
 async function extractPdfLines(file: File): Promise<string[]> {
@@ -71,9 +84,29 @@ async function extractPdfLines(file: File): Promise<string[]> {
   return allLines
 }
 
-function hoursFromDuration(hhmm: string): number {
+/**
+ * Durations are accumulated in whole minutes and converted to hours once, at
+ * the end. Rounding each entry to 2dp first and summing those loses ~8 minutes
+ * across a month of 20-minute entries (0:20 → 0.33, short by 0.0033 each time).
+ */
+function minutesFromDuration(hhmm: string): number {
   const [h, m] = hhmm.split(':').map(Number)
-  return Math.round((h + m / 60) * 100) / 100
+  return h * 60 + m
+}
+
+function hoursFromMinutes(minutes: number): number {
+  return Math.round((minutes / 60) * 100) / 100
+}
+
+/**
+ * Rejoins a line that the PDF wrapped. A fragment ending in an ASCII hyphen is
+ * a broken word or URL — `(github.com/Fruition-` + `Service/…` — so it closes
+ * up with no space. Em dashes used as punctuation are left alone.
+ */
+function joinWrapped(prev: string, next: string): string {
+  if (!prev) return next
+  if (!next) return prev
+  return prev.endsWith('-') ? prev + next : prev + ' ' + next
 }
 
 /**
@@ -105,9 +138,9 @@ function detectSection(line: string): Section | null {
 
 function parseClockifyLines(lines: string[]): ParsedProject[] {
   const order: string[] = []
-  const byRawName = new Map<string, { name: string; hours: number; tasks: string[] }>()
+  const byRawName = new Map<string, { name: string; minutes: number; tasks: string[] }>()
   let section: Section = 'none'
-  let current: { name: string; hours: number; tasks: string[] } | null = null
+  let current: { name: string; minutes: number; tasks: string[] } | null = null
 
   for (const rawLine of lines) {
     const line = rawLine.trim()
@@ -129,7 +162,7 @@ function parseClockifyLines(lines: string[]): ParsedProject[] {
         order.push(rawName)
         byRawName.set(rawName, {
           name: cleanProjectName(rawName),
-          hours: hoursFromDuration(m[2]),
+          minutes: minutesFromDuration(m[2]),
           tasks: [],
         })
       }
@@ -153,8 +186,9 @@ function parseClockifyLines(lines: string[]): ParsedProject[] {
         continue
       }
       // No duration: a wrapped continuation of the task above it.
-      if (current && current.tasks.length > 0 && !/^Fruition\s+\d+$/.test(line)) {
-        current.tasks[current.tasks.length - 1] += ' ' + line
+      if (current && current.tasks.length > 0 && !PAGE_FOOTER.test(line)) {
+        const last = current.tasks.length - 1
+        current.tasks[last] = joinWrapped(current.tasks[last], line)
       }
       continue
     }
@@ -163,11 +197,96 @@ function parseClockifyLines(lines: string[]): ParsedProject[] {
 
   return order
     .map((rawName) => byRawName.get(rawName)!)
-    .filter((p) => p.hours > 0)
+    .filter((p) => p.minutes > 0)
     .map((p) => ({
       name: p.name,
       description: p.tasks.join('\n'),
-      hours: p.hours,
+      hours: hoursFromMinutes(p.minutes),
+    }))
+}
+
+/** `DD/MM/YYYY  <description>  <H:MM>  <user>` — a Detailed report entry. */
+const DETAILED_ENTRY = /^\d{2}\/\d{2}\/\d{4}\s{2,}(.+?)\s{2,}(\d+:\d{2})\s{2,}.+$/
+/** A trailing `18:30 - 18:50` clock range, which rides along on wrapped lines. */
+const TRAILING_TIME_RANGE = /\s*\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}\s*$/
+/** Page footer, e.g. `Fruition  9`. */
+const PAGE_FOOTER = /^\S+\s{2,}\d+$/
+
+function isDetailedReport(lines: string[]): boolean {
+  return lines.some(
+    (l) =>
+      /^Detailed report$/i.test(l.trim()) ||
+      /^Date\s{2,}Description\s{2,}Duration\b/i.test(l.trim())
+  )
+}
+
+/**
+ * Clockify prints Detailed rows as `<client> - <project>` but Summary rows as
+ * `<project> - <client>`. Flip so both exports name a project the same way.
+ */
+function flipClientProject(label: string): string {
+  const parts = label.split(' - ')
+  if (parts.length !== 2) return label
+  return parts[1].trim() + ' - ' + parts[0].trim()
+}
+
+function parseDetailedLines(lines: string[]): ParsedProject[] {
+  // Each entry runs from its date line up to the next one; the project is the
+  // last line of the block.
+  const blocks: { minutes: number; head: string; rest: string[] }[] = []
+  for (const rawLine of lines) {
+    const line = rawLine.trim()
+    if (!line) continue
+
+    const m = line.match(DETAILED_ENTRY)
+    if (m) {
+      blocks.push({
+        minutes: minutesFromDuration(m[2]),
+        head: m[1].replace(TRAILING_TIME_RANGE, '').trim(),
+        rest: [],
+      })
+      continue
+    }
+    if (blocks.length === 0) continue // still in the report header
+    if (PAGE_FOOTER.test(line)) continue
+    const stripped = line.replace(TRAILING_TIME_RANGE, '').trim()
+    if (!stripped) continue // a bare `18:30 - 18:50` line
+    blocks[blocks.length - 1].rest.push(stripped)
+  }
+
+  const order: string[] = []
+  const byProject = new Map<string, { minutes: number; tasks: Set<string> }>()
+
+  for (const block of blocks) {
+    // Last line is the project; anything before it is wrapped description.
+    const projectLabel = block.rest.length > 0 ? block.rest[block.rest.length - 1] : ''
+    const continuation = block.rest.slice(0, -1)
+    const name = projectLabel
+      ? cleanProjectName(flipClientProject(projectLabel))
+      : 'No project'
+    const description = [block.head, ...continuation]
+      .reduce(joinWrapped, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+
+    let entry = byProject.get(name)
+    if (!entry) {
+      entry = { minutes: 0, tasks: new Set() }
+      byProject.set(name, entry)
+      order.push(name)
+    }
+    entry.minutes += block.minutes
+    // The same task recurs on many days; list it once.
+    if (description) entry.tasks.add(description)
+  }
+
+  return order
+    .map((name) => ({ name, entry: byProject.get(name)! }))
+    .filter((p) => p.entry.minutes > 0)
+    .map((p) => ({
+      name: p.name,
+      description: [...p.entry.tasks].join('\n'),
+      hours: hoursFromMinutes(p.entry.minutes),
     }))
 }
 
@@ -189,20 +308,23 @@ function extractBillingMonth(lines: string[], filename?: string): string {
 function extractReportedHours(lines: string[]): number | null {
   for (const line of lines) {
     const m = line.trim().match(/^Total:\s+(\d+:\d{2})$/i)
-    if (m) return hoursFromDuration(m[1])
+    if (m) return hoursFromMinutes(minutesFromDuration(m[1]))
   }
   return null
 }
 
 /**
- * Parses a Clockify Summary report. Throws if the file isn't a readable PDF;
- * returns an empty `projects` array if it parses but holds no billable rows.
+ * Parses a Clockify Summary or Detailed report. Throws if the file isn't a
+ * readable PDF; returns an empty `projects` array if it parses but holds no
+ * billable rows.
  */
 export async function parseClockifyPdf(file: File): Promise<ParsedClockifyReport> {
   const lines = await extractPdfLines(file)
+  const detailed = isDetailedReport(lines)
   return {
-    projects: parseClockifyLines(lines),
+    projects: detailed ? parseDetailedLines(lines) : parseClockifyLines(lines),
     billingMonth: extractBillingMonth(lines, file.name),
     reportedHours: extractReportedHours(lines),
+    reportType: detailed ? 'detailed' : 'summary',
   }
 }
