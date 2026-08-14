@@ -112,7 +112,8 @@ export async function getPostsByAuthor(authorName: string) {
 export async function getTeamMemberByName(name: string) {
   return client.fetch(
     `*[_type == "teamMember" && lower(name) == lower($name)][0] {
-      name, role, emoji, photo, bio, linkedinUrl, regions
+      name, role, emoji, photo, bio, linkedinUrl, regions,
+      "photoUrl": photo.asset->url
     }`,
     { name }
   )

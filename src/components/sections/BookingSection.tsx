@@ -5,25 +5,44 @@ import type { ChangeEvent, CSSProperties, ReactNode } from "react"
 
 /**
  * Unified contact + booking section — dark brand band, big left copy, month
- * grid + time column card, three-step flow (pick time → details → confirmed).
+ * grid + time column card, three-step flow (pick time → details → confirm).
  *
- * Availability comes from /api/scheduling/availability (regional event type
- * picked server-side from the visitor's location, slots in UTC); bookings go
- * through /api/scheduling/book, which also records the lead on the ILE board.
- * The visitor's timezone is auto-detected and can be switched manually — all
- * day grouping and time labels are derived client-side with Intl. When the
- * booking API is unavailable the visitor finishes on the slot's own Calendly
- * page, so a booking is never blocked.
+ * Availability comes from /api/scheduling/availability, which reads the real
+ * calendar of the consultant who covers the visitor's region (detected from
+ * Cloudflare's cf-ipcountry). Slots arrive as UTC instants; the visitor's
+ * timezone is auto-detected and switchable, and all day grouping and time
+ * labels are derived client-side with Intl.
+ *
+ * Details are captured by /api/scheduling/lead *before* the booking is
+ * confirmed — that records the enquiry on the ILE board even if the visitor
+ * never finishes — and the visitor then confirms on the consultant's own
+ * Calendly, deep-linked to the slot they already chose with their details
+ * prefilled. Nothing in the flow can block a booking: every failure path still
+ * lands them on a calendar.
  */
 
+/** A bookable slot: UTC ISO start, and which consultant owns it. */
 interface Slot {
   start: string
-  url: string
+  /** Consultant.key — a region may pool several calendars. */
+  host: string
 }
 
 /** Mirrors LeadRegion in @/lib/leadNotify — redeclared so this client
  *  component doesn't pull the server-only lead pipeline into the bundle. */
 type BookingRegion = "APAC" | "SEA" | "IND" | "NA" | "UK"
+
+/** A consultant in the region's pool. */
+interface ConsultantInfo {
+  key?: string
+  name?: string
+  firstName?: string
+  /** Their own booking page — the fallback when live availability fails. */
+  calendlyUrl?: string
+  /** Sanity team photo — the same one used on /fruition-team. */
+  photoUrl?: string | null
+  role?: string | null
+}
 
 export interface BookingSectionProps {
   eyebrow?: string
@@ -45,12 +64,9 @@ const TZS: [string, string][] = [
   ["America/New_York", "New York (EDT)"],
   ["America/Los_Angeles", "Los Angeles (PDT)"],
 ]
-const TOPICS = [
-  "monday.com implementation", "Workflow automation", "Integrations & Make",
-  "Training & enablement", "CRM & sales ops", "Something else",
-]
+/** The platforms we implement — answers "What should we prepare for?". */
+const PLATFORMS = ["monday.com", "HubSpot", "ClickUp", "Make", "n8n", "Aircall", "Other"]
 const SIZES = ["1–10", "11–50", "51–200", "200+"]
-const OFFICES = ["Australia", "United States", "United Kingdom", "Singapore", "India", "Somewhere else"]
 const DOW = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 const MONTH_FULL = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -58,14 +74,6 @@ const MONTH_FULL = ["January", "February", "March", "April", "May", "June", "Jul
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 /* ---------- helpers ---------- */
-function officeFor(tz: string): string {
-  if (/Australia/.test(tz)) return "Australia"
-  if (/America/.test(tz)) return "United States"
-  if (/London|Dublin/.test(tz)) return "United Kingdom"
-  if (/Singapore|Kuala/.test(tz)) return "Singapore"
-  if (/Kolkata|Calcutta/.test(tz)) return "India"
-  return "Somewhere else"
-}
 function tzLabel(tz: string): string {
   const hit = TZS.find((x) => x[0] === tz)
   return hit ? hit[1] : (tz.split("/").pop() ?? tz).replace(/_/g, " ")
@@ -137,6 +145,43 @@ const ctaStyle = (hover: boolean, disabled?: boolean): CSSProperties => ({
   transition: "background-color .18s ease, background-image .18s ease",
 })
 
+/**
+ * The consultant's face, from the same Sanity photo as /fruition-team.
+ *
+ * Falls back to their initials rather than a generic mark: not every team
+ * member has a photo, and "NG" still tells the visitor a specific person is
+ * taking the call. A plain <img> (not next/image) keeps the Sanity CDN out of
+ * the remotePatterns config for what is a single 38px thumbnail.
+ */
+function Avatar({ name, photoUrl }: { name?: string; photoUrl?: string | null }) {
+  const [broken, setBroken] = useState(false)
+  const initials = (name ?? "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? "")
+    .join("")
+  const base: CSSProperties = {
+    width: 38, height: 38, borderRadius: "50%", flex: "none",
+    background: "var(--color-brand-soft)", color: "var(--purple-primary)",
+  }
+  if (photoUrl && !broken) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={photoUrl} alt={name ? `${name}, Fruition consultant` : ""}
+        onError={() => setBroken(true)}
+        style={{ ...base, objectFit: "cover" }}
+      />
+    )
+  }
+  return (
+    <div aria-hidden={!initials} style={{ ...base, display: "flex", alignItems: "center", justifyContent: "center", fontSize: initials.length > 1 ? 14 : 17, fontWeight: 700 }}>
+      {initials || "F"}
+    </div>
+  )
+}
+
 function Cta({ children, disabled, onClick, type = "button" }: {
   children: ReactNode
   disabled?: boolean
@@ -166,27 +211,44 @@ function CtaLink({ children, href }: { children: ReactNode; href: string }) {
     </a>
   )
 }
-function Field({ label: l, name, type = "text", placeholder, value, onChange }: {
+const ERROR_COLOR = "#e2445c"
+
+/**
+ * `error` shows whenever the field holds something invalid and isn't currently
+ * focused — no "touched" tracking, because a value that fails validation was
+ * necessarily typed. Suppressing it while focused avoids correcting someone
+ * mid-word; showing it the moment they look away is what stops a rejected
+ * email from looking like a form that simply refuses to submit.
+ */
+function Field({ label: l, name, type = "text", placeholder, value, onChange, error }: {
   label: string
   name: string
   type?: string
   placeholder?: string
   value: string
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  error?: string
 }) {
   const [focus, setFocus] = useState(false)
+  const show = Boolean(error) && !focus
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       <label htmlFor={name} style={label}>{l}</label>
       <input
         id={name} name={name} type={type} placeholder={placeholder} value={value} onChange={onChange}
-        onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}
+        aria-invalid={show || undefined}
+        aria-describedby={show ? `${name}-error` : undefined}
+        onFocus={() => setFocus(true)}
+        onBlur={() => setFocus(false)}
         style={{
           ...field,
-          borderColor: focus ? "var(--purple-primary)" : "var(--color-border)",
-          boxShadow: focus ? "0 0 0 3px rgba(186,131,240,.25)" : "none",
+          borderColor: show ? ERROR_COLOR : focus ? "var(--purple-primary)" : "var(--color-border)",
+          boxShadow: focus ? `0 0 0 3px ${show ? "rgba(226,68,92,.22)" : "rgba(186,131,240,.25)"}` : "none",
         }}
       />
+      {show && (
+        <span id={`${name}-error`} role="alert" style={{ fontSize: 12.5, color: ERROR_COLOR }}>{error}</span>
+      )}
     </div>
   )
 }
@@ -217,11 +279,33 @@ const CALENDLY_SCRIPT = "https://assets.calendly.com/assets/external/widget.js"
  * in made the page iframe itself — so anything that isn't an absolute
  * calendly.com URL falls back to the account page.
  */
-function CalendlyEmbed({ calendlyUrl }: { calendlyUrl?: string }) {
+function CalendlyEmbed({ calendlyUrl, onScheduled }: { calendlyUrl?: string; onScheduled?: () => void }) {
   const hostRef = useRef<HTMLDivElement>(null)
   const src = calendlyUrl && /^https?:\/\/([a-z0-9-]+\.)?calendly\.com\//i.test(calendlyUrl)
     ? calendlyUrl
     : CALENDLY_ACCOUNT
+
+  /**
+   * Calendly's embed posts `calendly.event_scheduled` when a booking completes.
+   * This is how the lead reaches "Meeting Booked": the invitee.created webhook
+   * is scoped to the shared account and never fires for a consultant's own
+   * calendar, so without this the item would stay in New Leads.
+   *
+   * Kept in a ref so the listener is installed once and can't miss the event by
+   * being torn down and re-added on a re-render.
+   */
+  const scheduledRef = useRef(onScheduled)
+  scheduledRef.current = onScheduled
+  useEffect(() => {
+    const onMessage = (e: MessageEvent) => {
+      // Origin check first — any page can post to us.
+      if (e.origin !== "https://calendly.com") return
+      const data = e.data as { event?: string } | null
+      if (data?.event === "calendly.event_scheduled") scheduledRef.current?.()
+    }
+    window.addEventListener("message", onMessage)
+    return () => window.removeEventListener("message", onMessage)
+  }, [])
 
   useEffect(() => {
     const embedUrl = `${src}${src.includes("?") ? "&" : "?"}hide_gdpr_banner=1&embed_type=Inline`
@@ -256,6 +340,12 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
   calendlyUrl: string
 }) {
   const [tz, setTz] = useState("Australia/Sydney")
+  /**
+   * The timezone we *detected*, kept apart from `tz` (which the visitor can
+   * change). Only the detected one picks the region — switching the display
+   * timezone to compare times must not reassign the lead to another desk.
+   */
+  const [detectedTz, setDetectedTz] = useState<string | null>(null)
   const [rawSlots, setRawSlots] = useState<Slot[] | null>(null)
   /**
    * The region the slots were fetched for, echoed back when booking.
@@ -268,6 +358,12 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
    * Calendly. Pinning it keeps both halves on one event type.
    */
   const [region, setRegion] = useState<BookingRegion | null>(null)
+  /**
+   * Everyone covering this region. The card shows whoever owns the selected
+   * slot, so in a pooled region the face changes when the visitor picks a time
+   * only the second consultant has free.
+   */
+  const [pool, setPool] = useState<ConsultantInfo[]>([])
   const [failed, setFailed] = useState(false)
   const [dayKey, setDayKey] = useState<string | null>(null)
   const [slot, setSlot] = useState<Slot | null>(null)
@@ -275,36 +371,40 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
   const [monthOffsetOverride, setMonthOffsetOverride] = useState<number | null>(null)
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [f, setF] = useState<Record<string, string>>({})
-  const [topic, setTopic] = useState("")
+  const [platform, setPlatform] = useState("")
   const [size, setSize] = useState("")
-  const [office, setOffice] = useState("Australia")
   const [showOptional, setShowOptional] = useState(false)
   const [sending, setSending] = useState(false)
   const [submitError, setSubmitError] = useState("")
-  const [fallbackNote, setFallbackNote] = useState(false)
+  const [bookingUrl, setBookingUrl] = useState("")
 
-  /* auto-detect timezone once */
+  /* auto-detect timezone once. Set in an effect, not a lazy initial state, so
+     server and client render the same thing on first paint. */
   useEffect(() => {
     let detected = "Australia/Sydney"
     try { detected = Intl.DateTimeFormat().resolvedOptions().timeZone || detected } catch { /* keep default */ }
     setTz(detected)
-    setOffice(officeFor(detected))
+    setDetectedTz(detected)
   }, [])
 
-  /* fetch the whole availability horizon once — UTC slots, regrouped per timezone */
+  /* fetch the whole availability horizon once — UTC slots, regrouped per
+     timezone. Waits for detection so the server can fall back to the browser
+     timezone wherever cf-ipcountry is missing. */
   useEffect(() => {
+    if (!detectedTz) return
     let live = true
-    fetch("/api/scheduling/availability")
+    fetch(`/api/scheduling/availability?tz=${encodeURIComponent(detectedTz)}`)
       .then((r) => r.json())
-      .then((d: { slots?: Slot[]; region?: BookingRegion }) => {
+      .then((d: { slots?: Slot[]; region?: BookingRegion; consultants?: ConsultantInfo[] }) => {
         if (!live) return
         if (d.region) setRegion(d.region)
+        if (d.consultants?.length) setPool(d.consultants)
         if (d.slots && d.slots.length > 0) setRawSlots(d.slots)
         else setFailed(true)
       })
       .catch(() => { if (live) setFailed(true) })
     return () => { live = false }
-  }, [])
+  }, [detectedTz])
 
   /* group slots by calendar day in the selected timezone */
   const slotsByDay = useMemo(() => {
@@ -332,9 +432,39 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
     if (!dayKey || !slotsByDay.has(dayKey)) setDayKey(dayKeys[0])
   }, [slotsByDay, dayKeys, dayKey, slot, tz])
 
+  /**
+   * Whoever the card should be showing: the host of the selected slot, else the
+   * region's first choice. In a pooled region picking an overflow time swaps the
+   * photo and the name, so the visitor always sees who they'll actually meet.
+   */
+  const consultant = useMemo(
+    () => (slot ? pool.find((c) => c.key === slot.host) : undefined) ?? pool[0],
+    [pool, slot],
+  )
+
   const onField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setF((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-  const ready = Boolean(f.first && f.last && f.email && EMAIL_RE.test(f.email) && f.company && topic)
+
+  /**
+   * What's still missing, in the order the fields appear. Naming it on the
+   * button matters: every field can look filled while the email is quietly
+   * rejected, and a blanket "fill in your details" then reads as a form that
+   * simply won't submit.
+   */
+  const emailValue = (f.email ?? "").trim()
+  const emailError = emailValue && !EMAIL_RE.test(emailValue) ? "Enter a valid email, like you@company.com" : undefined
+  const missing = !f.name?.trim()
+    ? "Add your name to continue"
+    : !emailValue
+      ? "Add your work email to continue"
+      : emailError
+        ? "Check your work email to continue"
+        : !f.company?.trim()
+          ? "Add your company to continue"
+          : !platform
+            ? "Pick what we should prepare for"
+            : null
+  const ready = missing === null
 
   /* month grid cells — a day is enabled only if it has ≥1 slot in this tz */
   const todayKey = useMemo(() => dayFmt(tz).format(new Date()), [tz])
@@ -372,47 +502,47 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
     return new Date(t.y, t.m - 1 + monthOffset, 1)
   }, [todayKey, monthOffset])
 
-  async function onBook() {
+  /**
+   * Record the enquiry, then move to the confirm step. The lead lands on the
+   * board here rather than after the booking, so someone who abandons on
+   * Calendly is still a lead we know about — the invitee.created webhook later
+   * promotes the ones who do finish.
+   */
+  async function onContinue() {
     if (!ready || !slot || sending) return
     setSending(true)
     setSubmitError("")
-    setFallbackNote(false)
     try {
-      const r = await fetch("/api/scheduling/book", {
+      const r = await fetch("/api/scheduling/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           start: slot.start,
-          slotUrl: slot.url,
-          firstName: f.first ?? "",
-          lastName: f.last ?? "",
+          host: slot.host,
+          name: f.name ?? "",
           email: f.email ?? "",
           company: f.company ?? "",
+          title: f.title ?? "",
           phone: f.phone ?? "",
-          service: topic,
+          service: platform,
           notes: f.message ?? "",
           teamSize: size,
-          office,
           timezone: tz,
-          // Book against the same event type the slots came from.
+          // Confirm against the same consultant the slots came from.
           ...(region ? { region } : {}),
           // Attributes the lead to the page it was booked from.
           sourcePage: window.location.pathname,
           website: f.website ?? "",
         }),
       })
-      const body = (await r.json().catch(() => ({}))) as { ok?: boolean; fallbackUrl?: string | null }
-      if (r.ok && body.ok) {
-        setStep(3)
-      } else if (body.fallbackUrl) {
-        // API booking unavailable — finish on Calendly with details prefilled.
-        window.open(body.fallbackUrl, "_blank", "noopener")
-        setFallbackNote(true)
-      } else {
-        setSubmitError("That slot may have just been taken — pick another time.")
-      }
+      const body = (await r.json().catch(() => ({}))) as { ok?: boolean; bookingUrl?: string }
+      // A capture failure must not cost the booking — fall through to the
+      // generic calendar rather than stranding them on the form.
+      setBookingUrl(r.ok && body.ok && body.bookingUrl ? body.bookingUrl : calendlyUrl)
+      setStep(3)
     } catch {
-      setSubmitError("That slot may have just been taken — pick another time.")
+      setBookingUrl(calendlyUrl)
+      setStep(3)
     } finally {
       setSending(false)
     }
@@ -421,11 +551,17 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
   /* ---- availability failed or empty: last-resort Calendly link ---- */
   if (failed) {
     return (
-      <div style={{ fontFamily: "var(--font-sans)", color: "var(--text-dark)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", gap: 18, minHeight: 414, padding: "22px 8px" }}>
+      <div style={{ fontFamily: "var(--font-sans)", color: "var(--text-dark)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", gap: 18, minHeight: 414, padding: 30 }}>
         <span style={{ fontSize: 15, lineHeight: 1.55, color: "var(--color-text-secondary)", maxWidth: 380 }}>
-          Live availability couldn&rsquo;t load just now — pick your time on our calendar instead.
+          {consultant?.firstName
+            ? `Live availability couldn\u2019t load just now \u2014 pick your time on ${consultant.firstName}\u2019s calendar instead.`
+            : "Live availability couldn\u2019t load just now \u2014 pick your time on our calendar instead."}
         </span>
-        <CtaLink href={calendlyUrl}>Open the booking calendar</CtaLink>
+        {/* The region's own consultant, not the shared account: that account's
+            availability belongs to nobody, so falling back to it would undo
+            exactly what this component fixes. Only if the region never resolved
+            do we use the generic link. */}
+        <CtaLink href={consultant?.calendlyUrl || calendlyUrl}>Open the booking calendar</CtaLink>
       </div>
     )
   }
@@ -433,33 +569,52 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
   /* ---- loading ---- */
   if (rawSlots === null) {
     return (
-      <div role="status" style={{ fontFamily: "var(--font-sans)", display: "flex", alignItems: "center", justifyContent: "center", minHeight: 414, fontSize: 15, color: "var(--color-text-secondary)" }}>
+      <div role="status" style={{ fontFamily: "var(--font-sans)", display: "flex", alignItems: "center", justifyContent: "center", minHeight: 414, padding: 30, fontSize: 15, color: "var(--color-text-secondary)" }}>
         Loading available times…
       </div>
     )
   }
 
-  /* ---- step 3: confirmed ---- */
+  /* ---- step 3: confirm on the consultant's own calendar ---- */
   if (step === 3 && slot && dayKey) {
     return (
-      <div style={{ fontFamily: "var(--font-sans)", color: "var(--text-dark)", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 14, padding: "22px 8px 10px" }}>
-        <div style={{ width: 56, height: 56, borderRadius: "50%", background: "rgba(0,202,114,.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#0a8c52" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "22px 30px 14px" }}>
+          <button
+            type="button" onClick={() => setStep(2)} aria-label="Back to your details"
+            style={{ flex: "none", width: 30, height: 30, borderRadius: 9999, border: "1px solid var(--color-border)", background: "#fff", color: "var(--text-dark)", fontSize: 16, lineHeight: 1, cursor: "pointer", fontFamily: "var(--font-sans)" }}
+          >
+            ‹
+          </button>
+          <div style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0 }}>
+            <span style={{ fontFamily: "var(--font-sans)", fontSize: 15, fontWeight: 600, letterSpacing: "-.01em", color: "var(--text-dark)" }}>
+              Last step — confirm {dayShort(dayKey)} at {fmtTime(slot.start, tz)}
+            </span>
+            <span style={{ fontFamily: "var(--font-sans)", fontSize: 12.5, color: "var(--color-text-secondary)" }}>
+              {consultant?.firstName ? `${consultant.firstName} has your details already — just press Schedule.` : "Your details are filled in already — just press Schedule."}
+            </span>
+          </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <span style={{ fontSize: 24, fontWeight: 600, letterSpacing: "-.015em" }}>You&rsquo;re booked in</span>
-          <span style={{ fontSize: 15, color: "var(--color-text-secondary)", maxWidth: 400 }}>
-            {dayShort(dayKey)} at {fmtTime(slot.start, tz)} · {duration} minutes. The invite is on its way to {f.email || "your inbox"}.
-          </span>
-        </div>
-        <div style={{ display: "flex", alignItems: "flex-start", gap: 9, textAlign: "left", marginTop: 8, padding: "13px 15px", borderRadius: 14, background: "var(--color-brand-soft)", border: "1px solid var(--border-ui)" }}>
-          <span style={{ fontSize: 12.5, lineHeight: 1.5, color: "var(--color-text-secondary)" }}>
-            Your notes are already on the consultant&rsquo;s board — they&rsquo;ll read them before the call, so you won&rsquo;t repeat yourself.
-          </span>
-        </div>
-        <button type="button" onClick={() => { setStep(1); setSlot(null) }} style={{ background: "none", border: "none", fontFamily: "var(--font-sans)", fontSize: 12.5, fontWeight: 600, color: "var(--purple-primary)", cursor: "pointer", padding: 4 }}>
-          Need a different time?
-        </button>
+        <CalendlyEmbed
+          calendlyUrl={bookingUrl || calendlyUrl}
+          onScheduled={() => {
+            // Fire-and-forget: the booking already exists in Calendly, this
+            // only advances our CRM copy. keepalive so it survives the visitor
+            // navigating away the moment they see "You are scheduled".
+            void fetch("/api/scheduling/booked", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              keepalive: true,
+              body: JSON.stringify({
+                email: f.email ?? "",
+                start: slot.start,
+                timezone: tz,
+                ...(region ? { region } : {}),
+                host: slot.host,
+              }),
+            }).catch(() => { /* CRM status is best-effort; the meeting is booked either way */ })
+          }}
+        />
       </div>
     )
   }
@@ -469,9 +624,10 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
     const dd = partsOf(dayKey)
     return (
       <form
-        onSubmit={(e) => { e.preventDefault(); onBook() }}
+        onSubmit={(e) => { e.preventDefault(); onContinue() }}
         noValidate
-        style={{ fontFamily: "var(--font-sans)", color: "var(--text-dark)", display: "flex", flexDirection: "column", gap: 18 }}
+        className="fr-booking-pad"
+        style={{ fontFamily: "var(--font-sans)", color: "var(--text-dark)", display: "flex", flexDirection: "column", gap: 18, padding: 30 }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 13, padding: "13px 15px", borderRadius: 14, background: "var(--color-brand-soft)", border: "1px solid var(--border-ui)" }}>
           <div style={{ width: 40, height: 42, borderRadius: 10, background: "#fff", border: "1px solid var(--border-ui)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: "none" }}>
@@ -490,38 +646,43 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <Field label="Name" name="name" placeholder="Alex Morgan" value={f.name || ""} onChange={onField} />
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-            <Field label="First name" name="first" placeholder="Alex" value={f.first || ""} onChange={onField} />
-            <Field label="Last name" name="last" placeholder="Morgan" value={f.last || ""} onChange={onField} />
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-            <Field label="Work email" name="email" type="email" placeholder="you@company.com" value={f.email || ""} onChange={onField} />
+            <Field label="Work email" name="email" type="email" placeholder="you@company.com" value={f.email || ""} onChange={onField} error={emailError} />
             <Field label="Company" name="company" placeholder="Acme Pty Ltd" value={f.company || ""} onChange={onField} />
           </div>
-
           <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
             <span style={label}>What should we prepare for?</span>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {TOPICS.map((t) => (
-                <button key={t} type="button" onClick={() => setTopic(t)} style={chip(t === topic)}>{t}</button>
+              {PLATFORMS.map((t) => (
+                <button key={t} type="button" onClick={() => setPlatform(t)} style={chip(t === platform)}>{t}</button>
               ))}
             </div>
           </div>
 
+          {/* The one thing that most changes how the call goes — asked up front,
+              not buried behind a disclosure. */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <label htmlFor="message" style={label}>Anything we should read first? (optional)</label>
+            <textarea
+              id="message" name="message" rows={3} value={f.message || ""} onChange={onField}
+              placeholder="We run sales in spreadsheets and quotes in email…"
+              style={{ ...field, height: "auto", padding: "12px 16px", resize: "vertical", lineHeight: 1.55 }}
+            />
+          </div>
+
+          {/* Everything the call can proceed without. Title and phone are
+              genuinely useful to the consultant but asking for them up front
+              makes a booking form look like a qualification form. */}
           {showOptional && (
             <div style={{ display: "flex", flexDirection: "column", gap: 14, paddingTop: 2 }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-                <Field label="Phone (optional)" name="phone" placeholder="+61 400 000 000" value={f.phone || ""} onChange={onField} />
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  <label htmlFor="office" style={label}>Which office should take this?</label>
-                  <select id="office" value={office} onChange={(e) => setOffice(e.target.value)} style={{ ...field, cursor: "pointer" }}>
-                    {OFFICES.map((c) => <option key={c} value={c}>{c}</option>)}
-                  </select>
-                </div>
+                <Field label="Title" name="title" placeholder="Head of Operations" value={f.title || ""} onChange={onField} />
+                <Field label="Phone" name="phone" placeholder="+61 400 000 000" value={f.phone || ""} onChange={onField} />
               </div>
               {askTeamSize && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-                  <span style={label}>How many people would use monday? (optional)</span>
+                  <span style={label}>How many people would use it?</span>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {SIZES.map((s) => (
                       <button key={s} type="button" onClick={() => setSize(s)} style={chip(s === size)}>{s} people</button>
@@ -529,19 +690,13 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
                   </div>
                 </div>
               )}
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <label htmlFor="message" style={label}>Anything we should read first? (optional)</label>
-                <textarea
-                  id="message" name="message" rows={3} value={f.message || ""} onChange={onField}
-                  placeholder="We run sales in spreadsheets and quotes in email…"
-                  style={{ ...field, height: "auto", padding: "12px 16px", resize: "vertical", lineHeight: 1.55 }}
-                />
-              </div>
             </div>
           )}
 
           <button type="button" onClick={() => setShowOptional((v) => !v)} style={{ alignSelf: "flex-start", background: "none", border: "none", padding: "2px 0", fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 600, color: "var(--purple-primary)", cursor: "pointer" }}>
-            {showOptional ? "− Hide extra details" : "+ Add phone, team size or a note (optional)"}
+            {showOptional
+              ? "− Hide extra details"
+              : askTeamSize ? "+ Add title, phone or team size (optional)" : "+ Add title or phone (optional)"}
           </button>
         </div>
 
@@ -565,13 +720,8 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
               </button>
             </span>
           )}
-          {fallbackNote && (
-            <span role="status" style={{ fontSize: 12.5, color: "var(--color-text-secondary)", textAlign: "center" }}>
-              Almost there — your booking continues on the Calendly page we just opened.
-            </span>
-          )}
           <Cta type="submit" disabled={!ready || sending}>
-            {sending ? "Booking…" : ready ? "Confirm booking" : "Fill in your details to confirm"}
+            {sending ? "One moment…" : (missing ?? "Continue to confirm")}
           </Cta>
           <span style={{ fontSize: 12, color: "var(--color-text-secondary)", textAlign: "center" }}>
             By booking you agree to our privacy policy. We never share your details.
@@ -584,20 +734,28 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
   /* ---- step 1: pick a time ---- */
   const daySlots = dayKey ? slotsByDay.get(dayKey) ?? [] : []
   return (
-    <div style={{ fontFamily: "var(--font-sans)", color: "var(--text-dark)", display: "flex", flexDirection: "column", gap: 20 }}>
+    <div className="fr-booking-pad" style={{ fontFamily: "var(--font-sans)", color: "var(--text-dark)", display: "flex", flexDirection: "column", gap: 20, padding: 30 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
-          <div aria-hidden="true" style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--color-brand-soft)", color: "var(--purple-primary)", flex: "none", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, fontWeight: 700 }}>
-            F
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 11, flex: "1 1 240px", minWidth: 0 }}>
+          <Avatar name={consultant?.name} photoUrl={consultant?.photoUrl} />
+          {/* minWidth:0 + ellipsis so a long role ("Founder & CEO,
+              ex-monday.com") truncates instead of wrapping the timezone
+              picker onto its own line. */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0 }}>
             <span style={{ fontSize: 15, fontWeight: 600, letterSpacing: "-.01em" }}>Discovery call · {duration} min</span>
-            <span style={{ fontSize: 12.5, color: "var(--color-text-secondary)" }}>with a certified monday consultant</span>
+            <span
+              title={consultant?.name ? `${consultant.name}${consultant.role ? ` · ${consultant.role}` : ""}` : undefined}
+              style={{ fontSize: 12.5, color: "var(--color-text-secondary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
+            >
+              {consultant?.name
+                ? `with ${consultant.name}${consultant.role ? ` · ${consultant.role}` : ""}`
+                : "with a certified monday consultant"}
+            </span>
           </div>
         </div>
         <label style={{ display: "flex", alignItems: "center", gap: 6, flex: "none", height: 34, padding: "0 8px 0 12px", border: "1px solid var(--color-border)", borderRadius: 9999, background: "#fff" }}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-secondary)" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="9" /><path d="M12 7.5v5l3 2" /></svg>
-          <select value={tz} onChange={(e) => { setTz(e.target.value); setOffice(officeFor(e.target.value)) }} style={{ border: "none", background: "transparent", fontFamily: "var(--font-sans)", fontSize: 12.5, fontWeight: 500, color: "var(--color-text-secondary)", outline: "none", cursor: "pointer", height: 32 }}>
+          <select value={tz} onChange={(e) => setTz(e.target.value)} style={{ border: "none", background: "transparent", fontFamily: "var(--font-sans)", fontSize: 12.5, fontWeight: 500, color: "var(--color-text-secondary)", outline: "none", cursor: "pointer", height: 32 }}>
             {(TZS.some((x) => x[0] === tz) ? TZS : ([[tz, `${tzLabel(tz)} · detected`] as [string, string], ...TZS])).map(([v, l]) => (
               <option key={v} value={v}>{l}</option>
             ))}
@@ -650,11 +808,11 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
       </span>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        <Cta disabled={slot == null} onClick={() => { if (slot != null) { setSubmitError(""); setFallbackNote(false); setStep(2) } }}>
+        <Cta disabled={slot == null} onClick={() => { if (slot != null) { setSubmitError(""); setStep(2) } }}>
           {slot == null || !dayKey ? "Pick a time to continue" : `Continue · ${dayShort(dayKey)} at ${fmtTime(slot.start, tz)}`}
         </Cta>
         <span style={{ fontSize: 12, color: "var(--color-text-secondary)", textAlign: "center" }}>
-          Two fields and you&rsquo;re booked · calendar invite sent instantly
+          {consultant?.firstName ? `Live availability from ${consultant.firstName}'s calendar` : "Live availability · real consultant calendars"}
         </span>
       </div>
     </div>
@@ -706,8 +864,11 @@ export default function BookingSection({
           </div>
         </div>
 
-        <div style={{ background: "#fff", borderRadius: 24, boxShadow: "0 34px 70px -26px rgba(8,0,32,.65)", padding: 12, minHeight: 474 }}>
-          <CalendlyEmbed calendlyUrl={calendlyUrl} />
+        {/* No padding here — each step sets its own, because the Calendly
+            step is flush to the card edge while the picker and form are inset.
+            overflow:hidden keeps the flush iframe inside the rounded corners. */}
+        <div style={{ background: "#fff", borderRadius: 24, boxShadow: "0 34px 70px -26px rgba(8,0,32,.65)", overflow: "hidden", minHeight: 474 }}>
+          <BookingCard duration={duration} askTeamSize={askTeamSize} calendlyUrl={calendlyUrl} />
         </div>
       </div>
 
@@ -719,6 +880,7 @@ export default function BookingSection({
           .fr-booking-grid h2 { font-size: 34px !important; }
         }
         @media (max-width: 560px) {
+          .fr-booking-pad { padding: 20px !important; }
           .fr-booking-card-grid { grid-template-columns: 1fr !important; }
           .fr-booking-times {
             padding-left: 0 !important;

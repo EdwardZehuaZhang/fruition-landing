@@ -1,5 +1,5 @@
 import { classifyLead, type EnquiryCategory } from "@/lib/leadClassify"
-import { changeColumnValues, createItem, createUpdate, moveItemToGroupTop } from "@/lib/mondayClient"
+import { changeColumnValues, createItem, createUpdate, findItemByColumnValue, moveItemToGroup, moveItemToGroupTop } from "@/lib/mondayClient"
 
 /**
  * Shared lead-notification sinks used by the intake forms.
@@ -42,6 +42,19 @@ export interface LeadPayload {
   country?: string
   /** IANA timezone (e.g. a Calendly invitee's) — used when there's no geo header */
   timezone?: string
+  /**
+   * The desk this lead is already committed to. Set it when the caller has
+   * *acted* on a region — the scheduler shows one consultant's calendar and
+   * hands off to that consultant, so re-deriving here from timezone would
+   * assign the lead to someone who isn't on the call. Omitted means detect.
+   */
+  region?: LeadRegion
+  /**
+   * monday user id to own this lead, when the caller knows the specific person
+   * rather than just the desk — a pooled region can hand a booking to someone
+   * other than its first-choice consultant. Falls back to REGION_OWNER_IDS.
+   */
+  ownerId?: number
   /** Free-form additional answers keyed by label */
   fields?: Record<string, string>
 }
@@ -62,6 +75,8 @@ interface LeadBoard {
     owner?: string
     phone?: string
     company?: string
+    /** Text column for the contact's job title */
+    title?: string
     status?: string
     /** Status column — gets the label "Website" */
     source?: string
@@ -92,6 +107,7 @@ const ILE_BOARD: LeadBoard = {
     owner: "people",
     phone: "lead_phone",
     company: "text3",
+    title: "text_mm2wbjym",
     status: "lead_status",
     source: "color_mm2wasnj",
     region: "region",
@@ -152,12 +168,11 @@ const ENQUIRY_GROUPS: Record<Exclude<EnquiryCategory, "lead">, { groupId: string
  */
 export const REGION_OWNER_IDS: Record<LeadRegion, number> = {
   APAC: 42426115, // Josh Jebathilak
-  // SEA and IND book into the APAC calendar (see REGION_EVENT_TYPES), so Josh
-  // is the one on the call and owns the lead. Hand these back to Nikki
-  // Glucksman (74789722) and Nikhil Kumar Tiwari (65603104) when their own
-  // Calendly calendars exist. The Region labels stay SEA / I&UAE either way.
-  SEA: 42426115,
-  IND: 42426115,
+  // SEA and IND used to fall to Josh because the shared calendar had no event
+  // type for either. Both now book into their own consultant's Calendly (see
+  // REGION_CONSULTANTS), so the person on the call owns the lead again.
+  SEA: 74789722, // Nikki Glucksman
+  IND: 65603104, // Nikhil Kumar Tiwari
   UK: 62091155, // Kevin Zhao
   NA: 51981029, // Zach Weller
 }
@@ -411,6 +426,8 @@ async function pushToBoard(
   if (phone && c.phone) cols[c.phone] = { phone }
   const company = p.company?.trim() || p.fields?.["Company"]?.trim()
   if (company && c.company) cols[c.company] = company
+  const jobTitle = p.fields?.["Title"]?.trim()
+  if (jobTitle && c.title) cols[c.title] = jobTitle
   if (c.status) cols[c.status] = { label: statusLabel }
   // "calendly" is the marker the webhook uses when a booking carries no page
   // attribution — i.e. it was made straight on calendly.com, not on the site.
@@ -419,10 +436,12 @@ async function pushToBoard(
   if (c.source) cols[c.source] = { label: fromSite ? "Website" : "Calendly (direct)" }
   if (p.source && c.utmSource) cols[c.utmSource] = p.source
   if (c.creationDate) cols[c.creationDate] = { date: new Date().toISOString().slice(0, 10) }
-  const region = detectRegion(p)
+  const region = p.region ?? detectRegion(p)
   if (c.region) cols[c.region] = { label: REGION_LABELS[region] }
-  // Route to the desk that owns the region so nothing sits unassigned.
-  if (c.owner) cols[c.owner] = { personsAndTeams: [{ id: REGION_OWNER_IDS[region], kind: "person" }] }
+  // Route to whoever owns this lead — the specific consultant when the caller
+  // named one, otherwise the region's desk — so nothing sits unassigned.
+  const ownerId = p.ownerId ?? REGION_OWNER_IDS[region]
+  if (c.owner) cols[c.owner] = { personsAndTeams: [{ id: ownerId, kind: "person" }] }
   const headerCc = p.country?.trim().toUpperCase()
   const cc = headerCc && /^[A-Z]{2}$/.test(headerCc) ? headerCc : countryFromTimezone(p.timezone)
   if (cc && c.country) {
@@ -443,7 +462,7 @@ async function pushToBoard(
   // Keys that have their own column — never duplicated into the notes blob.
   // "Meeting time"/"Event" stay here only when the board has no Next Steps
   // column (the Enquiries fallback), so the detail isn't silently lost.
-  const reserved = ["Message", "Phone", "Service", "Company"]
+  const reserved = ["Message", "Phone", "Service", "Company", "Title"]
   if (c.nextSteps) reserved.push("Meeting time", "Event")
   const extras = Object.entries(p.fields ?? {})
     .filter(([k, v]) => !reserved.includes(k) && v && String(v).trim())
@@ -518,6 +537,84 @@ export async function pushMeetingToMonday(p: LeadPayload): Promise<string | null
   const fallback = fallbackBoard()
   if (!fallback) return null
   return pushToBoard(p, fallback, "fallback:booking")
+}
+
+/**
+ * Promote the lead a visitor created on our own form to "Meeting Booked" once
+ * they finish on Calendly.
+ *
+ * The form records the lead *before* the calendar step — that's the point of
+ * the flow, it captures the people who never pick a slot — so by the time
+ * invitee.created arrives the item already exists. Creating another one here
+ * would give every completed booking a duplicate in the CRM.
+ *
+ * Falls back to creating when no lead matches: the booking is real either way,
+ * and a stray extra item beats a lost meeting.
+ */
+export async function promoteLeadToBooked(
+  p: LeadPayload,
+  opts: { createIfMissing?: boolean } = {},
+): Promise<string | null> {
+  const { createIfMissing = true } = opts
+  const email = p.email?.trim()
+  if (!email) return createIfMissing ? pushMeetingToMonday(p) : null
+
+  let existing: Awaited<ReturnType<typeof findItemByColumnValue>> = null
+  try {
+    existing = await findItemByColumnValue(ILE_BOARD.boardId, ILE_BOARD.cols.email, email)
+  } catch (err) {
+    console.warn("[leads] monday ILE:promote lookup failed:", errMsg(err))
+  }
+  // createIfMissing is off for the browser-reported path: that request is not
+  // authenticated, so it may only advance a lead that already exists — never
+  // conjure a new CRM item from an arbitrary email.
+  if (!existing) return createIfMissing ? pushMeetingToMonday(p) : null
+
+  const c = ILE_BOARD.cols
+  const cols: Record<string, unknown> = {}
+  if (c.status) cols[c.status] = { label: "Meeting Booked" }
+  // Meeting logistics arrive only now — the form had no slot to report.
+  const logistics = [p.fields?.["Meeting time"], p.fields?.["Event"]]
+    .map((v) => v?.trim())
+    .filter(Boolean)
+  if (logistics.length > 0 && c.nextSteps) cols[c.nextSteps] = { text: logistics.join("\n") }
+  // Calendly may have collected a phone the form didn't ask for. Same
+  // normalisation as pushToBoard — spaces fail the whole write.
+  const phone = p.fields?.["Phone"]?.replace(/[^\d+]/g, "")
+  if (phone && c.phone) cols[c.phone] = { phone }
+
+  const wrote = await writeColumnsDroppingRejects(ILE_BOARD.boardId, existing.id, cols, "ILE:promote")
+  if (!wrote) console.warn("[leads] monday ILE:promote wrote no columns")
+  // A promoted lead must actually land in "Meeting Booked" — that group is
+  // what the sales view filters on, so this is more than cosmetic.
+  try {
+    await moveItemToGroup(existing.id, ILE_BOOKING_GROUP)
+  } catch (err) {
+    console.warn("[leads] monday ILE:promote regroup failed:", errMsg(err))
+  }
+  return existing.id
+}
+
+/**
+ * A scheduler enquiry, straight onto the ILE board — no classifier, so nothing
+ * from the booking flow is ever diverted to Website Enquiries.
+ *
+ * The screening that `pushToMonday` does is right for an open contact form,
+ * where most non-leads arrive. It is the wrong trade here: someone who picked a
+ * slot and is being handed to a calendar has already shown booking intent, and
+ * a false "vendor_pitch" on that path files a real meeting where nobody looks.
+ * A stray junk row in the CRM is cheap; a lost booking is not. The honeypot in
+ * the route still stops naive bots before this is reached.
+ *
+ * To restore screening, call pushToMonday from the scheduler route instead.
+ */
+export async function pushSchedulerLead(p: LeadPayload): Promise<string | null> {
+  const viaIle = await pushToBoard(p, ILE_BOARD, "ILE:scheduler")
+  if (viaIle) return viaIle
+  // ILE unreachable — land it on the fallback intake board rather than lose it.
+  const fallback = fallbackBoard()
+  if (!fallback) return null
+  return pushToBoard(p, fallback, "fallback:scheduler")
 }
 
 export async function pushToMonday(p: LeadPayload): Promise<string | null> {

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { createHmac, timingSafeEqual } from "node:crypto"
-import { CALENDLY_DIRECT_SOURCE, pushMeetingToMonday } from "@/lib/leadNotify"
+import { LEAD_FIRST_UTM_SOURCE } from "@/lib/consultants"
+import { CALENDLY_DIRECT_SOURCE, promoteLeadToBooked, pushMeetingToMonday } from "@/lib/leadNotify"
 
 export const runtime = "nodejs"
 export const maxDuration = 30
@@ -85,6 +86,8 @@ export async function POST(req: Request) {
       fields["Phone"] = answer
     } else if (!fields["Company"] && /company|organisation|organization|employer|business name/i.test(qa.question)) {
       fields["Company"] = answer
+    } else if (!fields["Title"] && /^\s*(job )?title\s*$/i.test(qa.question)) {
+      fields["Title"] = answer
     } else {
       fields[qa.question] = answer
     }
@@ -95,12 +98,16 @@ export async function POST(req: Request) {
   const utmContent = p.tracking?.utm_content?.trim()
   const source = utmContent?.startsWith("/") ? utmContent : CALENDLY_DIRECT_SOURCE
 
-  const mondayId = await pushMeetingToMonday({
+  // A booking that started on our own form already has a lead on the board —
+  // promote that one to "Meeting Booked" instead of adding a second item.
+  const leadFirst = (p.tracking?.utm_source ?? "") === LEAD_FIRST_UTM_SOURCE
+  const record = leadFirst ? promoteLeadToBooked : pushMeetingToMonday
+  const mondayId = await record({
     name: name || email,
     email,
     source,
     timezone: p.timezone,
     fields,
   })
-  return NextResponse.json({ ok: true, mondayId: mondayId ?? undefined })
+  return NextResponse.json({ ok: true, mondayId: mondayId ?? undefined, promoted: leadFirst })
 }
