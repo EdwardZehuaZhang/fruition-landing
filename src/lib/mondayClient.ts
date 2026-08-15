@@ -73,6 +73,23 @@ export async function moveItemToGroupTop(itemId: string, groupId: string): Promi
   )
 }
 
+/**
+ * Move an item into another group.
+ *
+ * Distinct from moveItemToGroupTop, which repositions within a group via
+ * `change_item_position` — that mutation is absent from the pinned
+ * API-Version 2024-01 and fails there, so anything that must actually change
+ * group uses this documented mutation instead.
+ */
+export async function moveItemToGroup(itemId: string, groupId: string): Promise<void> {
+  await gql(
+    `mutation ($item: ID!, $group: String!) {
+      move_item_to_group(item_id: $item, group_id: $group) { id }
+    }`,
+    { item: itemId, group: groupId },
+  )
+}
+
 /** Post a plain-text update (comment) on a monday item. */
 export async function createUpdate(itemId: string, body: string): Promise<string> {
   const data = await gql<{ create_update: { id: string } }>(
