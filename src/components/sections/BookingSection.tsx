@@ -295,7 +295,9 @@ function CalendlyEmbed({ calendlyUrl, onScheduled }: { calendlyUrl?: string; onS
    * being torn down and re-added on a re-render.
    */
   const scheduledRef = useRef(onScheduled)
-  scheduledRef.current = onScheduled
+  // Synced in an effect, not during render — writing a ref while rendering is
+  // unsafe under concurrent rendering, which is why the lint rule flags it.
+  useEffect(() => { scheduledRef.current = onScheduled }, [onScheduled])
   useEffect(() => {
     const onMessage = (e: MessageEvent) => {
       // Origin check first — any page can post to us.
