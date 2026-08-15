@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { getPortalApiUser } from "@/lib/portalAuth"
-import { deleteZernioPost, listZernioPosts, type ZernioPost } from "@/lib/social/zernio"
+import { deleteZernioPost, listZernioPosts, unpublishZernioPost, type ZernioPost } from "@/lib/social/zernio"
 
 export const runtime = "nodejs"
 export const maxDuration = 60
@@ -79,9 +79,11 @@ export async function GET() {
 }
 
 /**
- * Delete a Zernio RECORD (drafts, failed, cancelled — cleanup). This never
- * touches live platform posts; published rows must be unpublished instead,
- * and the API refuses them so a live post can't be orphaned by accident.
+ * Delete a Zernio record. A live post is taken off the platform first, so
+ * "delete" is one action rather than unpublish-then-come-back-and-delete.
+ * If the takedown fails the record is kept, because a live post with no record
+ * pointing at it is worse than a stale row. Instagram is the known exception:
+ * its API can't delete a post, so the record goes and the caller is told.
  */
 export async function DELETE(req: Request) {
   const user = await getPortalApiUser()
@@ -93,14 +95,33 @@ export async function DELETE(req: Request) {
   try {
     const posts = await listZernioPosts(200)
     const post = posts.find((p) => p._id === id)
+
+    // Live posts come down first. Asking someone to unpublish, then come back
+    // and delete, is two steps for one intention.
+    const warnings: string[] = []
     if (post?.status === "published") {
-      return NextResponse.json(
-        { error: "This post is live — use Unpublish to remove it from the platform first." },
-        { status: 409 },
-      )
+      for (const entry of post.platforms ?? []) {
+        if (entry.platform === "instagram") {
+          warnings.push("The Instagram post is still live — Instagram won't let us delete it. Remove it in the app.")
+          continue
+        }
+        try {
+          await unpublishZernioPost(id, entry.platform)
+        } catch (err) {
+          return NextResponse.json(
+            {
+              error: `Couldn't take it down from ${entry.platform}: ${
+                err instanceof Error ? err.message : String(err)
+              }. Nothing was deleted.`,
+            },
+            { status: 502 },
+          )
+        }
+      }
     }
+
     await deleteZernioPost(id)
-    return NextResponse.json({ ok: true })
+    return NextResponse.json({ ok: true, ...(warnings.length ? { warning: warnings.join(" ") } : {}) })
   } catch (err) {
     return NextResponse.json(
       { error: `Delete failed: ${err instanceof Error ? err.message : String(err)}` },

@@ -24,6 +24,8 @@ const KEY_TO_ICON: Record<PlatformKey, keyof typeof PATHS> = {
   twitter: "x",
   "gbp-au": "google",
   "gbp-sg": "google",
+  "gbp-uk": "google",
+  "gbp-us": "google",
   instagram: "instagram",
   linkedin: "linkedin",
   pinterest: "pinterest",

@@ -49,9 +49,15 @@ export async function exportInvoiceToPDF(invoice: Invoice) {
             width: '50%',
             stack: [
               { text: invoice.consultant_name, style: 'consultantName' },
-              { text: invoice.consultant_address || '', style: 'consultantInfo' },
-              { text: invoice.consultant_phone || '', style: 'consultantInfo' },
-              { text: invoice.consultant_email || '', style: 'consultantInfo' },
+              // Dropped entirely when blank — an empty line still takes vertical
+              // space in pdfmake, which left a gap under the name.
+              ...[
+                invoice.consultant_address,
+                invoice.consultant_phone,
+                invoice.consultant_email,
+              ]
+                .filter((v): v is string => !!v && v.trim() !== '')
+                .map((text) => ({ text, style: 'consultantInfo' })),
               { text: '', margin: [0, 10, 0, 0] },
               { text: 'Kindly make payment to:', style: 'paymentLabel' },
               { text: 'Wise account', style: 'consultantInfo' },

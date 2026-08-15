@@ -41,7 +41,10 @@ const MODULES: { label: string; items: NavItem[] }[] = [
   },
   {
     label: "Social",
-    items: [{ title: "Social posts", href: "/internal/social", icon: Share2, match: "prefix" }],
+    items: [
+      { title: "Social posts", href: "/internal/social", icon: Share2, match: "exact" },
+      { title: "New post", href: "/internal/social/new", icon: PenSquare, match: "prefix" },
+    ],
   },
   {
     label: "Design",

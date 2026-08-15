@@ -29,7 +29,7 @@ export default function ProjectBuildsIndex() {
             Project Builds Index
           </div>
           <h2 className="text-section-h2 mt-2 mb-3">
-            289 client engagements across the US, Australia, APAC, and the UK.
+            288 client engagements across the US, Australia, APAC, and the UK.
           </h2>
           <p className="text-body-lead text-[var(--color-text-secondary)]">
             Every build below has been delivered and is in active support across our three

@@ -8,7 +8,7 @@ interface CatalogHeroProps {
 
 const STATS = [
   "45 solutions",
-  "289 client builds",
+  "288 client builds",
   "US, APAC & UK",
   "monday.com Platinum Partner",
 ]

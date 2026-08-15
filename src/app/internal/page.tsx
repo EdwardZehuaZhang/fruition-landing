@@ -66,7 +66,7 @@ export default async function DashboardPage() {
     <PortalShell email={user.email} active="dashboard">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold text-ink-heading">
+          <h1 className="text-xl font-semibold tracking-tight text-foreground">
             Welcome{user.user_metadata?.full_name ? `, ${user.user_metadata.full_name}` : ""}
           </h1>
           <p className="mt-1 text-sm text-[var(--color-text-secondary)]">

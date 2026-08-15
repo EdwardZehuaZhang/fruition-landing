@@ -9,6 +9,7 @@
 import {
   PLATFORMS,
   findSocialPosts,
+  listZernioAccounts,
   type PlatformKey,
   type SocialSource,
   type ZernioPost,
@@ -35,8 +36,13 @@ export interface PanelPlatform {
   key: PlatformKey
   label: string
   limit: number
+  /** Cap on the separate title field (Pinterest, Reddit). */
+  titleLimit?: number
+  titleRequired?: boolean
   needsMedia: boolean
   supportsMedia: boolean
+  /** Plain-English limitations, shown next to the editor. */
+  notes: string[]
   /** Account handle/name shown under the label. */
   account: string
   connected: boolean
@@ -55,26 +61,6 @@ export interface PanelState {
 
 const SITE_BASE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.fruitionservices.io").replace(/\/+$/, "")
 const DASHBOARD_URL = process.env.ZERNIO_DASHBOARD_URL || "https://zernio.com/dashboard"
-
-interface ZernioAccount {
-  _id: string
-  platform: string
-  displayName?: string
-  username?: string
-  isActive?: boolean
-  enabled?: boolean
-}
-
-async function listAccounts(): Promise<ZernioAccount[]> {
-  const key = process.env.ZERNIO_API_KEY
-  if (!key) return []
-  const res = await fetch("https://zernio.com/api/v1/accounts", {
-    headers: { Authorization: `Bearer ${key}` },
-  })
-  if (!res.ok) return []
-  const data = (await res.json()) as { accounts?: ZernioAccount[] }
-  return data.accounts ?? []
-}
 
 function panelPost(post: ZernioPost | undefined): PanelPost | undefined {
   if (!post) return undefined
@@ -157,7 +143,7 @@ export async function draftBodyImages(draftId: string | undefined): Promise<stri
 /** Assemble the full panel state for a blog (draft or published). */
 export async function buildPanelState(source: SocialSource): Promise<PanelState> {
   const [accounts, posts, blog, mdImages] = await Promise.all([
-    listAccounts(),
+    listZernioAccounts(),
     findSocialPosts(source).catch(() => ({}) as Partial<Record<PlatformKey, ZernioPost>>),
     publishedBlogFacts(source.slug),
     draftBodyImages(source.draftId),
@@ -176,8 +162,11 @@ export async function buildPanelState(source: SocialSource): Promise<PanelState>
         key: spec.key,
         label: spec.label,
         limit: spec.limit,
+        titleLimit: spec.titleLimit,
+        titleRequired: spec.titleRequired,
         needsMedia: spec.needsMedia,
         supportsMedia: spec.supportsMedia,
+        notes: spec.notes,
         account: account?.username || account?.displayName || spec.label,
         connected: Boolean(account && account.isActive !== false && account.enabled !== false),
         post: panelPost(posts[spec.key]),
