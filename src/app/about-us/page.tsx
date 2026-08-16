@@ -4,7 +4,7 @@ import {
   getSiteSettings,
   getFaqItemsForPage,
 } from "@/sanity/queries"
-import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
+import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import AboutModern from "./AboutModern"
 import { buildOgMetadata } from "@/lib/metadata"
 
@@ -36,9 +36,7 @@ export default async function Page() {
   const rawCalendly = siteSettings?.calendlyLink ?? ""
   const calendlyUrl = bookingHref(rawCalendly)
 
-  const centralTabs = groupFaqsIntoTabs(centralFaqs)
-  const faqTabs =
-    page.faqTabs?.length > 0 ? page.faqTabs : centralTabs
+  const faqTabs = resolveFaqTabs(page.faqTabs, centralFaqs)
 
   return (
     <AboutModern

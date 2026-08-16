@@ -5,7 +5,7 @@ import {
   getCaseStudies,
   getFaqItemsForPage,
 } from "@/sanity/queries"
-import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
+import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import UniversalPageTemplate from "@/components/UniversalPageTemplate"
 import { buildOgMetadata } from "@/lib/metadata"
 
@@ -62,7 +62,7 @@ export default async function SolutionPage({
       page={adjustedPage}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
-      faqTabs={groupFaqsIntoTabs(centralFaqs)}
+      faqTabs={resolveFaqTabs(page?.faqTabs, centralFaqs)}
     />
   )
 }

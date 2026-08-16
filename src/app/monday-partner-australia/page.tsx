@@ -5,7 +5,7 @@ import {
   getFaqItemsForPage,
   getTeamMembers,
 } from "@/sanity/queries"
-import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
+import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import { mergeTeamMembers } from "@/lib/mergeTeamMembers"
 import MondayPartnerAustraliaContent from "./MondayPartnerAustraliaContent"
 import { buildOgMetadata } from "@/lib/metadata"
@@ -41,7 +41,7 @@ export default async function Page() {
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
-      faqTabs={groupFaqsIntoTabs(centralFaqs)}
+      faqTabs={resolveFaqTabs(page?.faqTabs, centralFaqs)}
       teamMembers={mergeTeamMembers(teamMembers || [], siteSettings?.excludedTeamMemberNames || [])}
     />
   )

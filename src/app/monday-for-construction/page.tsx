@@ -5,7 +5,7 @@ import {
   getFaqItemsForPage,
   getCaseStudiesForPage,
 } from "@/sanity/queries"
-import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
+import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import { urlFor } from "@/sanity/image"
 
 /* Legacy Wix imports can carry malformed asset refs — never let urlFor throw. */
@@ -58,7 +58,7 @@ export default async function Page() {
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
-      faqTabs={groupFaqsIntoTabs(centralFaqs)}
+      faqTabs={resolveFaqTabs(page?.faqTabs, centralFaqs)}
     />
   )
 }

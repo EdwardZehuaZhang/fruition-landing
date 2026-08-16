@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { getSiteSettings, getPageBySlug, getFaqItemsForPage } from "@/sanity/queries"
-import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
+import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import { urlFor } from "@/sanity/image"
 import {
   LogoCloudMarquee,
@@ -42,9 +42,7 @@ export default async function CareersPage() {
     getFaqItemsForPage("careers"),
   ])
 
-  const faqTabs = centralFaqs?.length > 0
-    ? groupFaqsIntoTabs(centralFaqs)
-    : page.faqTabs || []
+  const faqTabs = resolveFaqTabs(page.faqTabs, centralFaqs)
 
   const partnerCards: Partner[] = page.partnerEcosystemCards || []
   const heroImageSrc = safeImageUrl(page.heroImage)

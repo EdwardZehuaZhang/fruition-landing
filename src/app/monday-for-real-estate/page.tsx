@@ -3,12 +3,15 @@ import {
   getIndustryPageBySlug,
   getSiteSettings,
   getCaseStudies,
+  getFaqItemsForPage,
 } from "@/sanity/queries"
+import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import {
   HeroBanner,
   LogoCloudMarquee,
   ComparisonTabsSection,
   CalendlySection,
+  FaqAccordion,
   SolutionCardsSection,
   TestimonialCtaBanner,
   JoinStatsSection,
@@ -35,10 +38,11 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const [page, siteSettings, caseStudies] = await Promise.all([
+  const [page, siteSettings, caseStudies, centralFaqs] = await Promise.all([
     getIndustryPageBySlug("monday-for-real-estate"),
     getSiteSettings(),
     getCaseStudies(),
+    getFaqItemsForPage("monday-for-real-estate"),
   ])
 
   if (!page) return null
@@ -46,6 +50,8 @@ export default async function Page() {
   const rawCalendly =
     siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
   const calendlyUrl = bookingHref(rawCalendly)
+
+  const faqTabs = resolveFaqTabs(page.faqTabs, centralFaqs)
 
   const featuredTestimonial =
     caseStudies?.find(
@@ -225,7 +231,10 @@ export default async function Page() {
         ),
       )}
 
-      {/* 10. Stats — Years / Projects / Clients */}
+      {/* 10. FAQ */}
+      {!page.hideFaqSection && faqTabs.length > 0 && <FaqAccordion tabs={faqTabs} />}
+
+      {/* 11. Stats — Years / Projects / Clients */}
       <JoinStatsSection
         headingPart1=""
         headingAccent=""
