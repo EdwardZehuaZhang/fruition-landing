@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import PaperPlaneIcon from '@/components/common/icons/PaperPlaneIcon'
 import { NavIcon } from '@/components/common/icons/NavIcons'
-import RegionalCallPopover, { type CallOffice } from '@/components/RegionalCallPopover'
+import RegionalCallPopover, { MobileCallList, type CallOffice } from '@/components/RegionalCallPopover'
 
 interface NavLink {
   label?: string
@@ -306,6 +306,10 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                 {ctaLabel}
               </a>
             )}
+
+            {/* Regional numbers — the phone icon is desktop-only, and calling is
+                the more likely action on a phone. */}
+            <MobileCallList offices={offices} fallbackPhone={phoneAu} onNavigate={closeMobile} />
           </div>
         )}
       </div>

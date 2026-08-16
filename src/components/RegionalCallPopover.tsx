@@ -165,3 +165,63 @@ function PhoneGlyph() {
     </svg>
   )
 }
+
+/**
+ * The same regional numbers for the mobile sheet, where the desktop phone icon
+ * does not exist and tapping to call is the likelier action.
+ */
+export function MobileCallList({
+  offices,
+  fallbackPhone,
+  onNavigate,
+}: Props & { onNavigate?: () => void }) {
+  const rows = offices
+    .filter((o) => o.flag && COUNTRY[o.flag] && (o.phone || o.phoneTel))
+    .sort((a, b) => ORDER.indexOf(a.flag!) - ORDER.indexOf(b.flag!))
+
+  if (rows.length === 0) {
+    if (!fallbackPhone) return null
+    return (
+      <a
+        href={`tel:${fallbackPhone.replace(/\s/g, "")}`}
+        onClick={onNavigate}
+        className="mt-5 mx-2 flex min-h-11 items-center gap-2.5 text-body-sm font-medium text-foreground"
+      >
+        <PhoneGlyph /> {fallbackPhone}
+      </a>
+    )
+  }
+
+  return (
+    <div className="mt-6 mx-2 border-t border-ui pt-4">
+      <p className="text-micro mb-1 font-bold tracking-[0.12em] uppercase text-brand">
+        Call an office
+      </p>
+      <ul className="flex flex-col">
+        {rows.map((o) => {
+          const country = COUNTRY[o.flag!]
+          const place = (o.city ?? "").split(",")[0].trim()
+          return (
+            <li key={o._key ?? o.flag!}>
+              <a
+                href={`tel:${(o.phoneTel ?? o.phone!).replace(/[^\d+]/g, "")}`}
+                onClick={onNavigate}
+                className="flex min-h-11 items-center justify-between gap-3 py-2.5"
+              >
+                <span className="flex items-center gap-2.5">
+                  <span aria-hidden className="text-base leading-none">{o.flag}</span>
+                  <span className="text-body-sm font-medium text-foreground">
+                    {place && place !== country ? `${country} · ${place}` : country}
+                  </span>
+                </span>
+                <span className="font-mono text-micro whitespace-nowrap text-muted">
+                  {o.phone ?? o.phoneTel}
+                </span>
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
