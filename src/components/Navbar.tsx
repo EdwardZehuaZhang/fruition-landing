@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import PaperPlaneIcon from '@/components/common/icons/PaperPlaneIcon'
 import { NavIcon } from '@/components/common/icons/NavIcons'
+import RegionalCallPopover, { type CallOffice } from '@/components/RegionalCallPopover'
 
 interface NavLink {
   label?: string
@@ -44,6 +45,7 @@ interface SiteSettingsProp {
   navigation?: NavItem[]
   navbarPartnerBadges?: PartnerBadge[]
   navbarCtaLabel?: string
+  offices?: CallOffice[]
 }
 
 export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsProp | null }) {
@@ -63,6 +65,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
   const phoneAu = siteSettings?.phone
   const navItems: NavItem[] = siteSettings?.navigation || []
   const ctaLabel = siteSettings?.navbarCtaLabel || ''
+  const offices: CallOffice[] = siteSettings?.offices || []
 
   const isNavItemActive = (item: NavItem) =>
     item.sections?.some((s) => s.items?.some((link) => link.href && pathname === link.href)) ?? false
@@ -138,18 +141,9 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
             {/* Phone icon + CTA (partner badges removed from nav — they crowded
                 the six-tab row and overlapped the Contact tab) */}
             <div className="flex items-center gap-2 border-l border-ui pl-3" onMouseEnter={() => setOpenMenu(null)}>
-              {/* Phone icon */}
-              {phoneAu && (
-                <a
-                  href={`tel:${phoneAu.replace(/\s/g, '')}`}
-                  className="flex items-center justify-center w-[36px] h-[32px] rounded-[7px] hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
-                  aria-label="Call us"
-                >
-                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-brand">
-                    <path d="M17.22 22.167h-.047a15.633 15.633 0 0 1-6.803-2.987 15.388 15.388 0 0 1-4.678-5.133A15.517 15.517 0 0 1 3.85 7.583a3.395 3.395 0 0 1 .77-2.753A4.667 4.667 0 0 1 6.44 3.5h1.633c.98-.01 1.84.647 2.1 1.587.18.72.432 1.42.747 2.093a2.333 2.333 0 0 1-.525 2.567l-.688.688a11.667 11.667 0 0 0 5.858 5.858l.688-.688a2.333 2.333 0 0 1 2.567-.525c.673.316 1.373.567 2.093.747a2.18 2.18 0 0 1 1.587 2.147v1.633a2.333 2.333 0 0 1-2.333 2.333 3.267 3.267 0 0 1-.467.035l-.48-.007Z" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </a>
-              )}
+              {/* Phone icon — opens the regional numbers rather than dialling
+                  the Sydney office for every visitor. */}
+              <RegionalCallPopover offices={offices} fallbackPhone={phoneAu} />
 
               {/* CTA */}
               {ctaLabel && calendlyUrl && (
