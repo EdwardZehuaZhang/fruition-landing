@@ -20,7 +20,7 @@ export const PROOF_PAGES: Record<string, PracticePage> = {
   'certifications-and-awards': {
     path: '/certifications-and-awards',
     seoTitle:
-      'Partners & Certifications | Fruition — monday.com Platinum, Atlassian, HubSpot, AI Platforms',
+      'Partners & Certifications | Fruition, monday.com Platinum, Atlassian, HubSpot, AI Platforms',
     seoDescription:
       'Fruition holds formal partnerships across monday.com (Platinum), Atlassian, and HubSpot, and delivers daily across every major AI platform. Multiple partnerships keep our advice honest.',
     breadcrumb: [{ label: 'Certifications & Awards', href: '/certifications-and-awards' }],
@@ -47,19 +47,19 @@ export const PROOF_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Certified humans, not logos',
-        body: 'Every certification is held by named consultants on active delivery — not parked in a compliance folder.',
+        body: 'Every certification is held by named consultants on active delivery, not parked in a compliance folder.',
       },
     ],
     servicesEyebrow: 'Current partnerships',
     servicesHeading: 'The credential list.',
     services: [
       {
-        title: 'monday.com — Platinum Partner',
+        title: 'monday.com: Platinum Partner',
         body: 'Highest partner tier. 500+ implementations. Rising Star Award 2026 (Prague Partner Summit). Certified across CRM, Work Management, Dev, and Service.',
       },
       {
         title: 'Atlassian',
-        body: 'Consulting and implementation across Jira, Confluence, and Jira Service Management — including cross-platform migration practice.',
+        body: 'Consulting and implementation across Jira, Confluence, and Jira Service Management, including cross-platform migration practice.',
       },
       {
         title: 'HubSpot',
@@ -78,8 +78,8 @@ export const PROOF_PAGES: Record<string, PracticePage> = {
     childrenHeading: 'Explore each partnership.',
     children: [
       {
-        label: 'monday.com — Platinum Partner',
-        description: 'Highest partner tier — 500+ implementations, Rising Star 2026.',
+        label: 'monday.com: Platinum Partner',
+        description: 'Highest partner tier: 500+ implementations, Rising Star 2026.',
         href: '/partnerships/monday-consulting-partner',
       },
       {
@@ -145,7 +145,7 @@ export const PROOF_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Does being a partner bias Fruition’s recommendations?',
-        a: 'The opposite — Fruition deliberately holds partnerships across competing vendors (monday.com and Atlassian, HubSpot and monday CRM) so no single vendor relationship dictates advice. We recommend per workload.',
+        a: 'The opposite: Fruition deliberately holds partnerships across competing vendors (monday.com and Atlassian, HubSpot and monday CRM) so no single vendor relationship dictates advice. We recommend per workload.',
       },
       {
         q: 'How much does consulting consulting cost with Fruition?',
@@ -161,7 +161,7 @@ export const PROOF_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms, so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',

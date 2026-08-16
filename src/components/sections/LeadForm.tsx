@@ -34,7 +34,7 @@ export default function LeadForm({
   source,
   fields = [],
   submitLabel = "Request a free workflow audit",
-  successMessage = "Thanks — we'll be in touch within one business day.",
+  successMessage = "Thanks, we'll be in touch within one business day.",
 }: LeadFormProps) {
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle")
   const [error, setError] = useState<string>("")

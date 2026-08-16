@@ -145,7 +145,7 @@ export default async function RootLayout({
         url: BASE,
         logo: logoUrl,
         description:
-          "Fruition is a consulting and implementation firm across monday.com (Platinum Partner), Atlassian, HubSpot, and AI platforms — serving Australia, the UK, and the US.",
+          "Fruition is a consulting and implementation firm across monday.com (Platinum Partner), Atlassian, HubSpot, and AI platforms, serving Australia, the UK, and the US.",
         // §05 AEO: entity signals for every practice, not just monday.com
         knowsAbout: [
           "monday.com",

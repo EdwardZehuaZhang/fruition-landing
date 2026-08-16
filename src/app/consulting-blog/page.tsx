@@ -11,7 +11,7 @@ const INITIAL_PAGE_SIZE = 12
 
 export async function generateMetadata() {
   const page = await getPageBySlug("consulting-blog")
-  const title = page?.seoTitle ?? "Consulting Blog — Fruition"
+  const title = page?.seoTitle ?? "Consulting Blog: Fruition"
   const description = page?.seoDescription ?? "Expert insights on monday.com, AI consulting, Atlassian, HubSpot, and workflow automation."
   return {
     alternates: { canonical: "/consulting-blog" },

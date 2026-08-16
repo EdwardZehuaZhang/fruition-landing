@@ -630,7 +630,7 @@ export default function MondayTrainingContent({
       <BookingSection
         eyebrow="monday.com training"
         heading="Book a FREE Training Consultation"
-        sub="Tell us about your team and the workflows you want to master — we’ll tailor the session live on the call."
+        sub="Tell us about your team and the workflows you want to master, we’ll tailor the session live on the call."
       />
 
       {/* ============================================================ */}

@@ -12,13 +12,13 @@ const HUB = { label: 'HubSpot Consulting', href: '/hubspot-consulting' }
 export const HUBSPOT_PAGES: Record<string, PracticePage> = {
   hub: {
     path: '/hubspot-consulting',
-    seoTitle: 'HubSpot Consulting Partner | Fruition — Implementation, Breeze AI & Integration, AU · UK · US',
+    seoTitle: 'HubSpot Consulting Partner | Fruition: Implementation, Breeze AI & Integration, AU · UK · US',
     seoDescription:
-      'Fruition delivers HubSpot consulting across Australia, the UK, and the US — implementation, Breeze AI enablement, and integrations — as a multi-platform firm that recommends HubSpot when it fits and says so when it doesn’t.',
+      'Fruition delivers HubSpot consulting across Australia, the UK, and the US (implementation, Breeze AI enablement, and integrations) as a multi-platform firm that recommends HubSpot when it fits and says so when it doesn’t.',
     breadcrumb: [HUB],
     eyebrow: '★ HubSpot Consulting Hub',
     heading: 'HubSpot advice from a partner with nothing to defend',
-    lead: 'Fruition delivers HubSpot consulting across Australia, the UK, and the US — implementation, Breeze AI enablement, and integrations — as a multi-platform firm that recommends HubSpot when it fits and says so when it doesn’t.',
+    lead: 'Fruition delivers HubSpot consulting across Australia, the UK, and the US (implementation, Breeze AI enablement, and integrations) as a multi-platform firm that recommends HubSpot when it fits and says so when it doesn’t.',
     targetQueries: [
       'HubSpot consultant Australia',
       'HubSpot implementation partner',
@@ -30,11 +30,11 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
     approach: [
       {
         title: 'HubSpot where it’s strongest',
-        body: 'HubSpot’s Marketing Hub is genuinely excellent. We implement it properly — and integrate it with the CRM and project platforms where your operations actually run.',
+        body: 'HubSpot’s Marketing Hub is genuinely excellent. We implement it properly, and integrate it with the CRM and project platforms where your operations actually run.',
       },
       {
         title: 'Breeze AI, governed',
-        body: 'HubSpot’s AI layer configured with the same governance discipline as our broader AI practice — because ungoverned AI in your CRM is a compliance incident waiting.',
+        body: 'HubSpot’s AI layer configured with the same governance discipline as our broader AI practice, because ungoverned AI in your CRM is a compliance incident waiting.',
       },
       {
         title: 'Two-way migration honesty',
@@ -53,11 +53,11 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'monday ↔ HubSpot integration',
-        body: 'The two platforms working as one system — marketing in HubSpot, delivery in monday, data flowing both ways.',
+        body: 'The two platforms working as one system: marketing in HubSpot, delivery in monday, data flowing both ways.',
       },
       {
         title: 'HubSpot → monday migration',
-        body: 'Structured CRM migration when teams consolidate onto monday — with full history preservation.',
+        body: 'Structured CRM migration when teams consolidate onto monday, with full history preservation.',
       },
     ],
     childrenEyebrow: 'HubSpot pages',
@@ -87,15 +87,15 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
     faqs: [
       {
         q: 'What does a HubSpot consulting partner do?',
-        a: 'A HubSpot partner implements and optimises HubSpot’s Marketing, Sales, and Service Hubs — covering portal setup, lifecycle architecture, automation, reporting, and integration with your wider stack. Fruition delivers these services across Australia, the UK, and the US.',
+        a: 'A HubSpot partner implements and optimises HubSpot’s Marketing, Sales, and Service Hubs, covering portal setup, lifecycle architecture, automation, reporting, and integration with your wider stack. Fruition delivers these services across Australia, the UK, and the US.',
       },
       {
         q: 'Is HubSpot or monday CRM better for our sales team?',
-        a: 'HubSpot wins when marketing automation is the centre of gravity; monday CRM wins for teams wanting sales, projects, and operations on one flexible platform, typically at lower admin cost. Fruition implements both and publishes honest comparisons — the answer depends on where your operational weight sits.',
+        a: 'HubSpot wins when marketing automation is the centre of gravity; monday CRM wins for teams wanting sales, projects, and operations on one flexible platform, typically at lower admin cost. Fruition implements both and publishes honest comparisons, the answer depends on where your operational weight sits.',
       },
       {
         q: 'Can Fruition connect HubSpot to monday.com?',
-        a: 'Yes — the monday↔HubSpot integration is one of our signature builds: leads captured and nurtured in HubSpot flowing into monday for delivery, with status and revenue data syncing back. See the dedicated integration page for architecture details.',
+        a: 'Yes: the monday↔HubSpot integration is one of our signature builds: leads captured and nurtured in HubSpot flowing into monday for delivery, with status and revenue data syncing back. See the dedicated integration page for architecture details.',
       },
       {
         q: 'How much does HubSpot consulting cost with Fruition?',
@@ -111,7 +111,7 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms, so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -122,18 +122,18 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
 
   implementation: {
     path: '/hubspot-consulting/implementation',
-    seoTitle: 'HubSpot Implementation | Fruition — Marketing, Sales & Service Hub Setups',
+    seoTitle: 'HubSpot Implementation | Fruition: Marketing, Sales & Service Hub Setups',
     seoDescription:
-      'Fruition implements HubSpot for teams across Australia, the UK, and the US — portal architecture, lifecycle design, and automation that make the platform earn its licence fee.',
+      'Fruition implements HubSpot for teams across Australia, the UK, and the US: portal architecture, lifecycle design, and automation that make the platform earn its licence fee.',
     breadcrumb: [HUB, { label: 'Implementation', href: '/hubspot-consulting/implementation' }],
     eyebrow: 'HubSpot · Implementation',
     heading: 'HubSpot set up right the first time',
-    lead: 'Fruition implements HubSpot for teams across Australia, the UK, and the US — portal architecture, lifecycle design, and automation that make the platform earn its licence fee.',
+    lead: 'Fruition implements HubSpot for teams across Australia, the UK, and the US: portal architecture, lifecycle design, and automation that make the platform earn its licence fee.',
     approachHeading: 'Architecture before automation.',
     approach: [
       {
         title: 'Lifecycle stages that mean something',
-        body: 'Deal stages, lifecycle stages, and lead status mapped to your actual funnel — the foundation everything else depends on.',
+        body: 'Deal stages, lifecycle stages, and lead status mapped to your actual funnel: the foundation everything else depends on.',
       },
       {
         title: 'Data hygiene from day one',
@@ -149,7 +149,7 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
     services: [
       {
         title: 'Marketing Hub',
-        body: 'Email, forms, landing pages, lead scoring, and campaign attribution — HubSpot’s strongest surface, configured properly.',
+        body: 'Email, forms, landing pages, lead scoring, and campaign attribution: HubSpot’s strongest surface, configured properly.',
       },
       {
         title: 'Sales Hub',
@@ -170,8 +170,8 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
         a: 'A focused single-Hub implementation runs 3–5 weeks; multi-Hub deployments with migrations and integrations run 6–12 weeks. Fruition fixes scope and price per phase before work begins.',
       },
       {
-        q: 'We already have HubSpot but it’s a mess — can you fix it?',
-        a: 'Yes — portal rescue engagements (property cleanup, lifecycle rebuild, automation audit, deduplication) are as common as fresh implementations. A portal audit in week one scopes the fix.',
+        q: 'We already have HubSpot but it’s a mess, can you fix it?',
+        a: 'Yes: portal rescue engagements (property cleanup, lifecycle rebuild, automation audit, deduplication) are as common as fresh implementations. A portal audit in week one scopes the fix.',
       },
       {
         q: 'How much does HubSpot implementation consulting cost with Fruition?',
@@ -187,7 +187,7 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms, so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -198,13 +198,13 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
 
   'breeze-ai': {
     path: '/hubspot-consulting/breeze-ai',
-    seoTitle: 'HubSpot Breeze AI Consulting | Fruition — Agents, Copilot & AI Governance',
+    seoTitle: 'HubSpot Breeze AI Consulting | Fruition: Agents, Copilot & AI Governance',
     seoDescription:
-      'Fruition enables HubSpot’s Breeze AI for teams across Australia, the UK, and the US — agents, copilot, and intelligence features configured with real AI governance, by a firm that builds AI systems beyond HubSpot too.',
+      'Fruition enables HubSpot’s Breeze AI for teams across Australia, the UK, and the US: agents, copilot, and intelligence features configured with real AI governance, by a firm that builds AI systems beyond HubSpot too.',
     breadcrumb: [HUB, { label: 'Breeze AI', href: '/hubspot-consulting/breeze-ai' }],
     eyebrow: '★ Bridge Page · HubSpot × AI Consulting',
     heading: 'Breeze AI configured by an actual AI practice',
-    lead: 'Fruition enables HubSpot’s Breeze AI for teams across Australia, the UK, and the US — agents, copilot, and intelligence features configured with real AI governance, by a firm that builds AI systems beyond HubSpot too.',
+    lead: 'Fruition enables HubSpot’s Breeze AI for teams across Australia, the UK, and the US: agents, copilot, and intelligence features configured with real AI governance, by a firm that builds AI systems beyond HubSpot too.',
     targetQueries: [
       'HubSpot Breeze AI setup',
       'Breeze agents consultant',
@@ -223,7 +223,7 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Escalation without handoff',
-        body: 'When workloads outgrow Breeze — custom agents, deep RAG, cross-platform orchestration — our AI consulting practice continues the work. Same team.',
+        body: 'When workloads outgrow Breeze (custom agents, deep RAG, cross-platform orchestration), our AI consulting practice continues the work. Same team.',
       },
     ],
     servicesEyebrow: 'What we configure',
@@ -235,7 +235,7 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Breeze copilot',
-        body: 'Team enablement on the CRM-embedded assistant — the prompts and patterns that produce real output.',
+        body: 'Team enablement on the CRM-embedded assistant, the prompts and patterns that produce real output.',
       },
       {
         title: 'Breeze intelligence',
@@ -269,7 +269,7 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms, so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -280,13 +280,13 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
 
   'monday-hubspot-integration': {
     path: '/hubspot-consulting/monday-hubspot-integration',
-    seoTitle: 'monday.com HubSpot Integration | Fruition — Two Platforms, One System',
+    seoTitle: 'monday.com HubSpot Integration | Fruition: Two Platforms, One System',
     seoDescription:
-      'Fruition builds monday↔HubSpot integrations for teams across Australia, the UK, and the US — certified on both platforms, so the sync architecture respects how each side actually works.',
+      'Fruition builds monday↔HubSpot integrations for teams across Australia, the UK, and the US: certified on both platforms, so the sync architecture respects how each side actually works.',
     breadcrumb: [HUB, { label: 'monday ↔ HubSpot Integration', href: '/hubspot-consulting/monday-hubspot-integration' }],
     eyebrow: '★ Bridge Page · monday.com × HubSpot',
     heading: 'Marketing in HubSpot. Delivery in monday. One system',
-    lead: 'Fruition builds monday↔HubSpot integrations for teams across Australia, the UK, and the US — certified on both platforms, so the sync architecture respects how each side actually works.',
+    lead: 'Fruition builds monday↔HubSpot integrations for teams across Australia, the UK, and the US: certified on both platforms, so the sync architecture respects how each side actually works.',
     targetQueries: [
       'monday.com HubSpot integration',
       'sync HubSpot with monday',
@@ -297,7 +297,7 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
     approach: [
       {
         title: 'Clear system-of-record rules',
-        body: 'Every field has one owner. Contacts master in HubSpot, delivery status masters in monday — ambiguity is where syncs rot.',
+        body: 'Every field has one owner. Contacts master in HubSpot, delivery status masters in monday: ambiguity is where syncs rot.',
       },
       {
         title: 'Native first, n8n where needed',
@@ -305,7 +305,7 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Built for failure modes',
-        body: 'Rate limits, deletion handling, and conflict resolution designed in — the difference between an integration and a demo.',
+        body: 'Rate limits, deletion handling, and conflict resolution designed in: the difference between an integration and a demo.',
       },
     ],
     servicesEyebrow: 'Integration patterns',
@@ -331,11 +331,11 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
     faqs: [
       {
         q: 'Does monday.com integrate natively with HubSpot?',
-        a: 'Yes — a native integration exists and covers common contact/deal syncing. Complex field mapping, transformation logic, and robust error handling typically require middleware (n8n or Make), which Fruition architects and manages.',
+        a: 'Yes, a native integration exists and covers common contact/deal syncing. Complex field mapping, transformation logic, and robust error handling typically require middleware (n8n or Make), which Fruition architects and manages.',
       },
       {
-        q: 'Which should be our system of record — HubSpot or monday?',
-        a: 'Typically HubSpot masters contacts and marketing data while monday masters delivery and operations. The precise split depends on your team structure — Fruition documents system-of-record rules per field as the first integration deliverable.',
+        q: 'Which should be our system of record: HubSpot or monday?',
+        a: 'Typically HubSpot masters contacts and marketing data while monday masters delivery and operations. The precise split depends on your team structure: Fruition documents system-of-record rules per field as the first integration deliverable.',
       },
       {
         q: 'How much does monday-HubSpot integration consulting cost with Fruition?',
@@ -351,7 +351,7 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms, so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -362,20 +362,20 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
 
   'hubspot-to-monday-migration': {
     path: '/hubspot-consulting/hubspot-to-monday-migration',
-    seoTitle: 'HubSpot to monday CRM Migration | Fruition — Structured CRM Migration Playbook',
+    seoTitle: 'HubSpot to monday CRM Migration | Fruition: Structured CRM Migration Playbook',
     seoDescription:
-      'Fruition runs structured HubSpot-to-monday CRM migrations across Australia, the UK, and the US — as the partner certified on both platforms, with a playbook built from dozens of CRM moves.',
+      'Fruition runs structured HubSpot-to-monday CRM migrations across Australia, the UK, and the US, as the partner certified on both platforms, with a playbook built from dozens of CRM moves.',
     breadcrumb: [HUB, { label: 'HubSpot → monday Migration', href: '/hubspot-consulting/hubspot-to-monday-migration' }],
     eyebrow: '★ Bridge Page · HubSpot × monday.com',
     heading: 'Leave HubSpot with your pipeline history intact',
-    lead: 'Fruition runs structured HubSpot-to-monday CRM migrations across Australia, the UK, and the US — as the partner certified on both platforms, with a playbook built from dozens of CRM moves.',
+    lead: 'Fruition runs structured HubSpot-to-monday CRM migrations across Australia, the UK, and the US, as the partner certified on both platforms, with a playbook built from dozens of CRM moves.',
     targetQueries: [
       'HubSpot to monday CRM migration',
       'migrate off HubSpot',
       'HubSpot alternative CRM',
       'monday CRM vs HubSpot cost',
     ],
-    approachHeading: 'Why teams make this move — and how.',
+    approachHeading: 'Why teams make this move, and how.',
     approach: [
       {
         title: 'The consolidation driver',
@@ -413,11 +413,11 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
     faqs: [
       {
         q: 'Why do teams migrate from HubSpot to monday CRM?',
-        a: 'The recurring drivers: consolidating CRM and delivery onto one platform, reducing technical administration cost (HubSpot development becomes expensive as sophistication grows), and gaining project-management capability HubSpot lacks. Teams centred on marketing automation often rightly stay — Fruition assesses fit honestly before any migration.',
+        a: 'The recurring drivers: consolidating CRM and delivery onto one platform, reducing technical administration cost (HubSpot development becomes expensive as sophistication grows), and gaining project-management capability HubSpot lacks. Teams centred on marketing automation often rightly stay: Fruition assesses fit honestly before any migration.',
       },
       {
         q: 'What migrates from HubSpot to monday CRM?',
-        a: 'Contacts, companies, deals with full pipeline history, notes, activity timelines, and attachments. HubSpot workflows are rebuilt as monday automations rather than copied — usually an upgrade, since the rebuild removes years of workflow debt.',
+        a: 'Contacts, companies, deals with full pipeline history, notes, activity timelines, and attachments. HubSpot workflows are rebuilt as monday automations rather than copied: usually an upgrade, since the rebuild removes years of workflow debt.',
       },
       {
         q: 'How long does a HubSpot to monday migration take?',
@@ -437,7 +437,7 @@ export const HUBSPOT_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms, so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',

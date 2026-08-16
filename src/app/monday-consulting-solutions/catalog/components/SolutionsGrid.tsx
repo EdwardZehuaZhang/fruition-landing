@@ -78,7 +78,7 @@ const FOLDER_META: Record<
   },
   crm: {
     title: "CRM",
-    sub: "Sales-first CRM patterns across verticals — residential, commercial, financial, retail, solar, and more.",
+    sub: "Sales-first CRM patterns across verticals: residential, commercial, financial, retail, solar, and more.",
     total: 0,
   },
   rnd: {

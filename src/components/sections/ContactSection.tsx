@@ -35,7 +35,7 @@ export default function ContactSection({
       <BookingSection
         eyebrow="Contact us"
         heading="Tell us what you’re building"
-        sub="Pick a time and talk it through with a specialist — or email us and we’ll reply within one business day."
+        sub="Pick a time and talk it through with a specialist, or email us and we’ll reply within one business day."
         email={salesEmail}
       />
     </>
@@ -98,7 +98,7 @@ function ContactHero({ offices, salesEmail, supportEmail, phone, phoneTel }: Con
           <Channel
             title="Phone"
             blurb="Monday to Friday, business hours AEST."
-            value={phone || "—"}
+            value={phone || ", "}
             href={telHref ? `tel:${telHref}` : undefined}
           />
           <Channel

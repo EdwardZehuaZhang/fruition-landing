@@ -111,7 +111,7 @@ export async function getGa4Overview(days = 28): Promise<Ga4Overview | null> {
       limit: 6,
     })
     topCountries = (geo.rows ?? []).map((r) => ({
-      country: r.dimensionValues[0]?.value ?? "—",
+      country: r.dimensionValues[0]?.value ?? ", ",
       users: Number(r.metricValues[0]?.value ?? 0),
     }))
   } catch {

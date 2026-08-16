@@ -6,7 +6,7 @@ import { buildOgMetadata } from "@/lib/metadata"
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const catName = slug.replace(/-/g, " ")
-  const title = catName + " — Fruition Blog"
+  const title = catName + ": Fruition Blog"
   const description = "Browse all Fruition consulting blog posts in the " + catName + " category."
   return {
     title,

@@ -10,7 +10,7 @@ export const html = `<!DOCTYPE html>
 <meta name="keywords" content="ai consultants, ai strategy consultants, ai consulting services, ai management consulting, ai for business, ai business process automation">
 <meta name="robots" content="noindex, follow">
 <meta name="geo.region" content="AU"><meta name="geo.placename" content="Australia">
-<meta property="og:title" content="AI Consulting Services Australia | Fruition — AI Strategy Consultants">
+<meta property="og:title" content="AI Consulting Services Australia | Fruition: AI Strategy Consultants">
 <meta property="og:description" content="Supercharge operations, eliminate manual bottlenecks, and scale with Australia's premier AI strategy consultants. Custom LLMs, intelligent workflows, agentic automation.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.fruitionservices.io/au/ai-business-consulting-services">
@@ -18,7 +18,7 @@ export const html = `<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"ProfessionalService","name":"Fruition Services — AI Consulting Services Australia","description":"AI strategy consultants delivering AI management consulting, business process automation, custom LLM deployment and agentic systems for Australian businesses.","url":"https://www.fruitionservices.io/au/ai-business-consulting-services","provider":{"@type":"Organization","name":"Fruition Services Pty Ltd","identifier":"ABN 12 667 454 006","address":{"@type":"PostalAddress","streetAddress":"12/64 York Street","addressLocality":"Sydney","addressRegion":"NSW","postalCode":"2000","addressCountry":"AU"}},"areaServed":[{"@type":"Country","name":"Australia"},{"@type":"Country","name":"New Zealand"}],"serviceType":"AI consulting and business process automation"}
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"Fruition Services: AI Consulting Services Australia","description":"AI strategy consultants delivering AI management consulting, business process automation, custom LLM deployment and agentic systems for Australian businesses.","url":"https://www.fruitionservices.io/au/ai-business-consulting-services","provider":{"@type":"Organization","name":"Fruition Services Pty Ltd","identifier":"ABN 12 667 454 006","address":{"@type":"PostalAddress","streetAddress":"12/64 York Street","addressLocality":"Sydney","addressRegion":"NSW","postalCode":"2000","addressCountry":"AU"}},"areaServed":[{"@type":"Country","name":"Australia"},{"@type":"Country","name":"New Zealand"}],"serviceType":"AI consulting and business process automation"}
 </script>
 <style>
 :root{--p9:#2D1450;--p7:#5B2A86;--p5:#7C3FB0;--p3:#B68FD9;--p1:#EFE5F7;--p05:#F7F2FB;

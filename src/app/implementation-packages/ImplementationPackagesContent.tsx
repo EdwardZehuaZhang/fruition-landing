@@ -429,7 +429,7 @@ export default function ImplementationPackagesContent({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroImageSrc}
-                alt="monday.com dashboards — project planning and team OKRs"
+                alt="monday.com dashboards, project planning and team OKRs"
                 width={1042}
                 height={312}
                 className="rounded-card w-full h-auto object-contain bg-white"

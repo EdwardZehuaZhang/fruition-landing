@@ -41,7 +41,7 @@ const GROUPS: GroupDef[] = [
   {
     key: "products",
     label: "monday.com Products",
-    blurb: "Work Management, CRM, Dev, and Service — what each product does and who it fits.",
+    blurb: "Work Management, CRM, Dev, and Service: what each product does and who it fits.",
     categories: ["monday Work Management", "monday CRM", "monday Dev", "monday Service"],
   },
   {
@@ -77,7 +77,7 @@ const GROUPS: GroupDef[] = [
   {
     key: "general",
     label: "General Questions",
-    blurb: "Everything else — pricing, partnership, and getting started.",
+    blurb: "Everything else: pricing, partnership, and getting started.",
     categories: ["General Questions"],
   },
 ]

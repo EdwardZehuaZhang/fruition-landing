@@ -50,10 +50,10 @@ export interface ClassifyInput {
 }
 
 export async function classifyLead(input: ClassifyInput): Promise<LeadVerdict> {
-  const fallback: LeadVerdict = { category: "lead", reason: "Classifier unavailable — defaulted to lead" }
+  const fallback: LeadVerdict = { category: "lead", reason: "Classifier unavailable, defaulted to lead" }
   const apiKey = process.env.OPENROUTER_API_KEY
   if (!apiKey) {
-    console.warn("[leadClassify] OPENROUTER_API_KEY missing — skipping classification")
+    console.warn("[leadClassify] OPENROUTER_API_KEY missing, skipping classification")
     return fallback
   }
 
@@ -99,7 +99,7 @@ export async function classifyLead(input: ClassifyInput): Promise<LeadVerdict> {
     // The model can still reach for "spam" from its own priors; with detection
     // off that verdict is discarded and the submission goes through as a lead.
     if (!SPAM_DETECTION && verdict.category === "spam") {
-      return { category: "lead", reason: "Spam detection off — routed as a lead for manual review" }
+      return { category: "lead", reason: "Spam detection off, routed as a lead for manual review" }
     }
     if (!verdict.category || !CATEGORIES.has(verdict.category)) return fallback
     return {
