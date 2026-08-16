@@ -29,6 +29,31 @@ const auditRedirects: Redirect[] = [
   { source: "/monday-products/ai", destination: "/implementation-packages", permanent: true },
   { source: "/monday-products/enterprise", destination: "/implementation-packages", permanent: true },
 
+  // ── Blog consolidation (August 2026 content audit, board item 2816307976) ──
+  // Sixteen thin/overlapping consultant posts folded into the canonical piece
+  // for each cluster. Source and destination are taken verbatim from the
+  // "Edward:" instructions in the audit sheet.
+  //
+  // NOTE: every source below still serves its own content. These are only safe
+  // once Ishani's "get useful content and merge" step is done for that row —
+  // otherwise the merge loses the material it was supposed to pull across.
+  { source: "/post/mondaycom-implementation-consultants", destination: "/post/mondaycom-implementation-roi", permanent: true },
+  { source: "/post/mondaycom-implementation-consultant-diy-self-service", destination: "/post/mondaycom-consulting-packages-vs-diy", permanent: true },
+  { source: "/post/monday-crm-implementation-consultant", destination: "/post/monday-crm-for-sales-teams-implementing-strategies", permanent: true },
+  { source: "/post/monday-crm-sales-teams-implementing-strategies", destination: "/post/monday-crm-for-sales-teams-implementing-strategies", permanent: true },
+  { source: "/post/monday-crm-consultants", destination: "/post/monday-crm-for-sales-teams-implementing-strategies", permanent: true },
+  { source: "/post/monday-crm-implementation", destination: "/monday-implementation-consultants", permanent: true },
+  { source: "/post/monday-crm-consultant", destination: "/post/how-to-find-the-right-monday-crm-consultant", permanent: true },
+  { source: "/post/monday-consultants", destination: "/post/how-to-find-the-right-monday-crm-consultant", permanent: true },
+  { source: "/post/monday-com-partner-fruition-services", destination: "/post/how-to-find-the-right-monday-crm-consultant", permanent: true },
+  { source: "/post/monday-com-implementation-certified-experts", destination: "/post/how-to-find-the-right-monday-crm-consultant", permanent: true },
+  { source: "/post/how-can-you-find-a-reliable-monday-com-certified-partner-for-your-business", destination: "/post/how-to-find-the-right-monday-crm-consultant", permanent: true },
+  { source: "/post/hire-mondaycom-partner-questions", destination: "/post/how-to-find-the-right-monday-crm-consultant", permanent: true },
+  { source: "/post/monday-com-implementation", destination: "/post/mondaycom-consulting-packages-vs-diy", permanent: true },
+  { source: "/post/hire-monday-com-experts", destination: "/post/mondaycom-consulting-packages-vs-diy", permanent: true },
+  { source: "/post/monday-com-consultants-help", destination: "/monday-crm-consulting", permanent: true },
+  { source: "/post/monday-com-consultant-implementation-framework", destination: "/monday-crm-consulting", permanent: true },
+
   // ── Legacy Wix URLs still receiving traffic (GA4, July 2026) ──
   { source: "/leadership", destination: "/fruition-team", permanent: true },
   { source: "/members", destination: "/fruition-team", permanent: true },
