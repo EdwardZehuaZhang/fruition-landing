@@ -183,6 +183,28 @@ export default function MondayPartnerUkContent({
         logos={siteSettings?.carouselLogos || []}
       />
 
+      {/* Customer testimonials carousel */}
+      <TestimonialsGrid
+        heading={page.testimonialsGridHeading}
+        ctaLabel={page.testimonialsGridCtaLabel}
+        ctaUrl={calendlyUrl}
+        statCardValue={page.testimonialsGridStatValue}
+        statCardSubtitle={page.testimonialsGridStatSubtitle}
+        statCardCtaLabel={page.testimonialsGridStatCtaLabel}
+        statCardCtaUrl={page.testimonialsGridStatCtaUrl}
+        caseStudies={partnerCaseStudies}
+      />
+
+      {/* Calendly */}
+      <CalendlySection
+        heading={page.calendlyHeading || "Book A 30-Min Consultation with A monday.com Expert"}
+        subheading={
+          page.calendlySubheading ||
+          "Schedule a personalised monday.com demo with our certified monday.com consultants to discover how the platform can be customised for your specific business needs.\n\nExperience the full potential of monday.com with our exclusive 4-week extended free trial, giving you ample time to explore advanced features and see measurable results."
+        }
+        calendlyUrl={rawCalendly}
+      />
+
       {/* 3-tab comparison */}
       <ComparisonTabsSection
         heading={page.comparisonHeading}
@@ -207,28 +229,6 @@ export default function MondayPartnerUkContent({
         ctaUrl={page.teamGridCtaUrl}
         members={teamMembers}
         region="UK"
-      />
-
-      {/* Calendly */}
-      <CalendlySection
-        heading={page.calendlyHeading || "Book A 30-Min Consultation with A monday.com Expert"}
-        subheading={
-          page.calendlySubheading ||
-          "Schedule a personalised monday.com demo with our certified monday.com consultants to discover how the platform can be customised for your specific business needs.\n\nExperience the full potential of monday.com with our exclusive 4-week extended free trial, giving you ample time to explore advanced features and see measurable results."
-        }
-        calendlyUrl={rawCalendly}
-      />
-
-      {/* Customer testimonials carousel */}
-      <TestimonialsGrid
-        heading={page.testimonialsGridHeading}
-        ctaLabel={page.testimonialsGridCtaLabel}
-        ctaUrl={calendlyUrl}
-        statCardValue={page.testimonialsGridStatValue}
-        statCardSubtitle={page.testimonialsGridStatSubtitle}
-        statCardCtaLabel={page.testimonialsGridStatCtaLabel}
-        statCardCtaUrl={page.testimonialsGridStatCtaUrl}
-        caseStudies={partnerCaseStudies}
       />
 
       {/* FAQ */}

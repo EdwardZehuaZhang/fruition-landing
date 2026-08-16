@@ -172,6 +172,24 @@ export default function MondayPartnerPhilippinesContent({
         logos={siteSettings?.carouselLogos || []}
       />
 
+      {/* Customer testimonials */}
+      <TestimonialsGrid
+        heading="What our customers say about us"
+        ctaLabel="Start Your Transformation"
+        ctaUrl={calendlyUrl}
+        statCardSubtitle="have maximised their workflows with our monday.com expert support"
+        statCardCtaLabel="Read our case studies"
+        statCardCtaUrl="/customer-testimonials"
+        caseStudies={partnerCaseStudies}
+      />
+
+      {/* Calendly */}
+      <CalendlySection
+        heading={page.calendlyHeading || "Schedule A 30-Min Consultation With One of Our monday.com Implementation Consultants"}
+        subheading={page.calendlySubheading}
+        calendlyUrl={rawCalendly}
+      />
+
       {/* "Teams Transformed" small caption */}
       <TeamsTransformedStrip />
 
@@ -191,24 +209,6 @@ export default function MondayPartnerPhilippinesContent({
         ctaLabel="Learn More About Us"
         ctaUrl="/fruition-team"
         members={philippinesTeamMembers}
-      />
-
-      {/* Calendly */}
-      <CalendlySection
-        heading={page.calendlyHeading || "Schedule A 30-Min Consultation With One of Our monday.com Implementation Consultants"}
-        subheading={page.calendlySubheading}
-        calendlyUrl={rawCalendly}
-      />
-
-      {/* Customer testimonials */}
-      <TestimonialsGrid
-        heading="What our customers say about us"
-        ctaLabel="Start Your Transformation"
-        ctaUrl={calendlyUrl}
-        statCardSubtitle="have maximised their workflows with our monday.com expert support"
-        statCardCtaLabel="Read our case studies"
-        statCardCtaUrl="/customer-testimonials"
-        caseStudies={partnerCaseStudies}
       />
 
       {/* Feature blocks */}
