@@ -18,6 +18,8 @@ interface NavLink {
 
 interface NavSubSection {
   heading?: string
+  /** Partner mark shown beside the heading (path under /public). */
+  logo?: string
   items?: NavLink[]
   columns?: number
   highlight?: boolean
@@ -244,10 +246,21 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                             >
                               <span className="text-xs font-semibold text-muted uppercase tracking-wider flex items-center gap-2">
                                 {section.heading}
-                                {section.badge && (
-                                  <span className="inline-flex items-center rounded-full ring-1 ring-ui text-muted text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 whitespace-nowrap">
-                                    {section.badge}
-                                  </span>
+                                {section.logo ? (
+                                  <Image
+                                    src={section.logo}
+                                    alt={section.badge ?? ''}
+                                    width={150}
+                                    height={38}
+                                    className="h-[22px] w-auto shrink-0 rounded-[4px] object-contain"
+                                    unoptimized
+                                  />
+                                ) : (
+                                  section.badge && (
+                                    <span className="inline-flex items-center rounded-full ring-1 ring-ui text-muted text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 whitespace-nowrap">
+                                      {section.badge}
+                                    </span>
+                                  )
                                 )}
                               </span>
                               <svg
@@ -337,10 +350,21 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                           }`}
                         >
                           {section.heading}
-                          {section.badge && (
-                            <span className="inline-flex items-center rounded-full ring-1 ring-ui text-muted text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 whitespace-nowrap">
-                              {section.badge}
-                            </span>
+                          {section.logo ? (
+                            <Image
+                              src={section.logo}
+                              alt={section.badge ?? ''}
+                              width={150}
+                              height={38}
+                              className="h-[26px] w-auto shrink-0 rounded-[4px] object-contain"
+                              unoptimized
+                            />
+                          ) : (
+                            section.badge && (
+                              <span className="inline-flex items-center rounded-full ring-1 ring-ui text-muted text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 whitespace-nowrap">
+                                {section.badge}
+                              </span>
+                            )
                           )}
                         </p>
                       )}

@@ -28,6 +28,8 @@ export interface NavV2Link {
 
 export interface NavV2Section {
   heading: string
+  /** Partner mark shown beside the heading (path under /public). */
+  logo?: string
   columns?: number
   highlight?: boolean
   badge?: string
@@ -90,6 +92,7 @@ export const NAV_V2: NavV2Item[] = [
       },
       {
         heading: 'monday.com',
+        logo: '/images/home/partner-monday.png',
         highlight: true,
         badge: 'Platinum Partner',
         items: [
@@ -127,7 +130,9 @@ export const NAV_V2: NavV2Item[] = [
         ],
       },
       {
-        heading: 'Atlassian & HubSpot',
+        heading: 'Atlassian',
+        logo: '/images/home/partner-atlassian.png',
+        badge: 'Platinum Partner',
         items: [
           {
             label: 'Jira',
@@ -148,28 +153,29 @@ export const NAV_V2: NavV2Item[] = [
             description: 'ITSM, service desks & SLAs',
           },
           {
+            label: 'Jira → monday Migration',
+            href: '/atlassian-consulting/jira-to-monday-migration',
+            icon: 'zap',
+            description: 'The structured migration playbook',
+          },
+        ],
+      },
+      {
+        heading: 'HubSpot',
+        logo: '/images/home/partner-hubspot.png',
+        badge: 'Solution Partner',
+        items: [
+          {
             label: 'HubSpot Implementation',
             href: '/hubspot-consulting/implementation',
             icon: 'megaphone',
             description: 'CRM & Marketing Hub, done right',
           },
           {
-            label: 'Breeze AI',
+            label: 'HubSpot Agent Hub',
             href: '/hubspot-consulting/breeze-ai',
             icon: 'sparkle',
             description: 'HubSpot’s AI, deployed with governance',
-          },
-          {
-            label: 'Jira → monday Migration',
-            href: '/atlassian-consulting/jira-to-monday-migration',
-            icon: 'zap',
-            description: 'The structured migration playbook',
-          },
-          {
-            label: 'HubSpot → monday Migration',
-            href: '/hubspot-consulting/hubspot-to-monday-migration',
-            icon: 'zap',
-            description: 'Move CRM without losing history',
           },
         ],
       },
