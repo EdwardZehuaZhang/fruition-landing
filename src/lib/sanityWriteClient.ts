@@ -3,6 +3,7 @@
  * Kept separate from src/sanity/client.ts so the read-only client can
  * stay `useCdn: true`.
  */
+import { parseInlineMarkdown } from "@/lib/inlineMarkdown"
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
 const DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET
@@ -250,62 +251,25 @@ function span(text: string, marks: string[]): PortableTextSpan {
 }
 
 /**
- * Split a run of plain text (no links) into spans, applying `em` marks on top
- * of any base marks. Handles `*italic*` and `_italic_`.
- */
-function splitItalic(text: string, baseMarks: string[], out: PortableTextSpan[]): void {
-  const re = /(\*|_)(.+?)\1/g
-  let idx = 0
-  let m: RegExpExecArray | null
-  while ((m = re.exec(text))) {
-    if (m.index > idx) {
-      const pre = text.slice(idx, m.index)
-      if (pre) out.push(span(pre, baseMarks))
-    }
-    out.push(span(m[2], [...baseMarks, "em"]))
-    idx = m.index + m[0].length
-  }
-  const rest = text.slice(idx)
-  if (rest) out.push(span(rest, baseMarks))
-}
-
-/**
- * Split a run of plain text (no links) into spans, applying `strong` first
- * (`**bold**` / `__bold__`) then `em` inside each run.
- */
-function splitMarks(text: string): PortableTextSpan[] {
-  const out: PortableTextSpan[] = []
-  const re = /(\*\*|__)(.+?)\1/g
-  let idx = 0
-  let m: RegExpExecArray | null
-  while ((m = re.exec(text))) {
-    if (m.index > idx) splitItalic(text.slice(idx, m.index), [], out)
-    splitItalic(m[2], ["strong"], out)
-    idx = m.index + m[0].length
-  }
-  if (idx < text.length) splitItalic(text.slice(idx), [], out)
-  return out
-}
-
-/**
  * Parse a single line of inline markdown into Portable Text spans + link
- * markDefs. Links (`[text](url)`) are extracted first, then bold/italic are
- * applied within the non-link runs.
+ * markDefs, using the same tokenizer the blog renderer uses on table cells
+ * (src/lib/inlineMarkdown.ts) so the two can never drift apart.
  */
 function parseInline(text: string): { children: PortableTextSpan[]; markDefs: LinkMarkDef[] } {
   const markDefs: LinkMarkDef[] = []
   const children: PortableTextSpan[] = []
-  const linkRe = /\[([^\]]+)\]\(([^)\s]+)\)/g
-  let idx = 0
-  let m: RegExpExecArray | null
-  while ((m = linkRe.exec(text))) {
-    if (m.index > idx) children.push(...splitMarks(text.slice(idx, m.index)))
-    const key = nextKey()
-    markDefs.push({ _key: key, _type: "link", href: m[2] })
-    children.push(span(m[1], [key]))
-    idx = m.index + m[0].length
+  for (const run of parseInlineMarkdown(text)) {
+    if (run.href) {
+      const key = nextKey()
+      markDefs.push({ _key: key, _type: "link", href: run.href })
+      children.push(span(run.text, [key]))
+      continue
+    }
+    const marks: string[] = []
+    if (run.strong) marks.push("strong")
+    if (run.em) marks.push("em")
+    children.push(span(run.text, marks))
   }
-  if (idx < text.length) children.push(...splitMarks(text.slice(idx)))
   // A block must always have at least one child span.
   if (children.length === 0) children.push(span("", []))
   return { children, markDefs }
