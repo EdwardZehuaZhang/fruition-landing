@@ -17,7 +17,7 @@ const OFFICES = [
   { city: 'New York', country: 'United States', flag: '🇺🇸' },
   { city: 'London', country: 'United Kingdom', flag: '🇬🇧' },
   { city: 'Singapore', country: 'Singapore', flag: '🇸🇬' },
-  { city: 'Bengaluru', country: 'India', flag: '🇮🇳' },
+  { city: 'New Delhi', country: 'India', flag: '🇮🇳' },
 ]
 
 async function main() {
