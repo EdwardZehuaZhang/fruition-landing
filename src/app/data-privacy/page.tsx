@@ -1,13 +1,21 @@
 import { getPageBySlug } from "@/sanity/queries"
 import PolicyContent from "@/components/PolicyContent"
 import VisitorTrackingDisclosure from "@/components/VisitorTrackingDisclosure"
+import { buildOgMetadata } from "@/lib/metadata"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("data-privacy")
+  const title = page?.seoTitle
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/data-privacy" },
-    title: page?.seoTitle,
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/data-privacy",
+    }),
   }
 }
 

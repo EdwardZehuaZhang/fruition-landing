@@ -6,13 +6,21 @@ import FruitionTeamClient, {
   type HeroDescriptionBlock,
 } from "./FruitionTeamClient"
 import { mergeTeamMembers } from "@/lib/mergeTeamMembers"
+import { buildOgMetadata } from "@/lib/metadata"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("fruition-team")
+  const title = page?.seoTitle
+  const description = page?.seoDescription
   return {
     alternates: { canonical: "/fruition-team" },
-    title: page?.seoTitle,
-    description: page?.seoDescription,
+    title,
+    description,
+    ...buildOgMetadata({
+      title,
+      description,
+      path: "/fruition-team",
+    }),
   }
 }
 
