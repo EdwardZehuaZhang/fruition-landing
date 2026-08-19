@@ -1,5 +1,5 @@
 import { getAiPartnerPageBySlug, getSiteSettings, getFaqItemsForPageStrict, getClosingCtaForPage } from "@/sanity/queries"
-import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
+import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import AiPartnerTemplate from "@/components/AiPartnerTemplate"
 import { buildOgMetadata } from "@/lib/metadata"
 
@@ -28,5 +28,5 @@ export default async function Page() {
     getFaqItemsForPageStrict("partnerships/openclaw-partner"),
     getClosingCtaForPage("partnerships/openclaw-partner"),
   ])
-  return <AiPartnerTemplate page={page} siteSettings={siteSettings} faqTabs={groupFaqsIntoTabs(centralFaqs)} closingCta={closingCta} />
+  return <AiPartnerTemplate page={page} siteSettings={siteSettings} faqTabs={resolveFaqTabs(page?.faqTabs, centralFaqs)} closingCta={closingCta} />
 }

@@ -28,6 +28,8 @@ export interface NavV2Link {
 
 export interface NavV2Section {
   heading: string
+  /** Partner mark shown beside the heading (path under /public). */
+  logo?: string
   columns?: number
   highlight?: boolean
   badge?: string
@@ -53,7 +55,7 @@ export const NAV_V2: NavV2Item[] = [
             label: 'AI Capability Assessment',
             href: '/ai-capability-assessment',
             icon: 'sparkle',
-            description: 'Fixed-fee assessment — your AI roadmap in weeks',
+            description: 'Fixed-fee assessment, your AI roadmap in weeks',
             featured: true,
           },
           {
@@ -90,6 +92,7 @@ export const NAV_V2: NavV2Item[] = [
       },
       {
         heading: 'monday.com',
+        logo: '/images/home/partner-monday.png',
         highlight: true,
         badge: 'Platinum Partner',
         items: [
@@ -97,7 +100,7 @@ export const NAV_V2: NavV2Item[] = [
             label: 'Implementation Packages',
             href: '/implementation-packages',
             icon: 'package',
-            description: 'Fixed-fee packages — 500+ delivered',
+            description: 'Fixed-fee packages: 500+ delivered',
             featured: true,
           },
           {
@@ -127,7 +130,9 @@ export const NAV_V2: NavV2Item[] = [
         ],
       },
       {
-        heading: 'Atlassian & HubSpot',
+        heading: 'Atlassian',
+        logo: '/images/home/partner-atlassian.png',
+        badge: 'Platinum Partner',
         items: [
           {
             label: 'Jira',
@@ -148,28 +153,29 @@ export const NAV_V2: NavV2Item[] = [
             description: 'ITSM, service desks & SLAs',
           },
           {
+            label: 'Jira → monday Migration',
+            href: '/atlassian-consulting/jira-to-monday-migration',
+            icon: 'zap',
+            description: 'The structured migration playbook',
+          },
+        ],
+      },
+      {
+        heading: 'HubSpot',
+        logo: '/images/home/partner-hubspot.png',
+        badge: 'Solution Partner',
+        items: [
+          {
             label: 'HubSpot Implementation',
             href: '/hubspot-consulting/implementation',
             icon: 'megaphone',
             description: 'CRM & Marketing Hub, done right',
           },
           {
-            label: 'Breeze AI',
+            label: 'HubSpot Agent Hub',
             href: '/hubspot-consulting/breeze-ai',
             icon: 'sparkle',
             description: 'HubSpot’s AI, deployed with governance',
-          },
-          {
-            label: 'Jira → monday Migration',
-            href: '/atlassian-consulting/jira-to-monday-migration',
-            icon: 'zap',
-            description: 'The structured migration playbook',
-          },
-          {
-            label: 'HubSpot → monday Migration',
-            href: '/hubspot-consulting/hubspot-to-monday-migration',
-            icon: 'zap',
-            description: 'Move CRM without losing history',
           },
         ],
       },
@@ -340,7 +346,7 @@ export const NAV_V2: NavV2Item[] = [
         heading: 'Locations',
         columns: 2,
         items: [
-          { label: 'Australia', href: '/monday-partner-australia', icon: 'globe', description: 'Sydney HQ — APAC delivery' },
+          { label: 'Australia', href: '/monday-partner-australia', icon: 'globe', description: 'Sydney HQ: APAC delivery' },
           { label: 'United Kingdom', href: '/monday-partner-uk', icon: 'globe', description: 'London delivery centre' },
           { label: 'United States', href: '/monday-partner-us', icon: 'globe', description: 'New York delivery centre' },
           { label: 'Singapore', href: '/monday-partner-singapore', icon: 'globe', description: 'APAC delivery' },

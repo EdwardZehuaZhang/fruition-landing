@@ -4,7 +4,7 @@ import {
   getCaseStudies,
   getFaqItemsForPage,
 } from "@/sanity/queries"
-import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
+import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import N8nIntegrationPartnerContent from "./N8nIntegrationPartnerContent"
 import { buildOgMetadata } from "@/lib/metadata"
 
@@ -38,7 +38,7 @@ export default async function Page() {
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
-      faqTabs={groupFaqsIntoTabs(centralFaqs)}
+      faqTabs={resolveFaqTabs(page?.faqTabs, centralFaqs)}
     />
   )
 }

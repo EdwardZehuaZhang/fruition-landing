@@ -32,7 +32,7 @@ interface HomeData {
 export async function generateMetadata(): Promise<Metadata> {
   const homePage = await getHomePage()
   const title = homePage?.seoTitle ?? "Fruition | monday.com Platinum Partners | monday CRM Experts"
-  const description = homePage?.seoDescription ?? "monday.com Partner certified — Fruition is an expert in Monday implementation and integration."
+  const description = homePage?.seoDescription ?? "monday.com Partner certified: Fruition is an expert in Monday implementation and integration."
   return {
     alternates: { canonical: '/' },
     title,

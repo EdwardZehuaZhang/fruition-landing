@@ -40,6 +40,7 @@ function toSanityNav() {
           _type: 'navSection',
           heading: section.heading,
           ...(section.columns ? { columns: section.columns } : {}),
+          ...(section.logo ? { logo: section.logo } : {}),
           ...(section.highlight ? { highlight: true } : {}),
           ...(section.badge ? { badge: section.badge } : {}),
           items: section.items.map((link) =>

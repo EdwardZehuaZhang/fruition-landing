@@ -94,6 +94,12 @@ export default {
                   fields: [
                     { name: 'heading', title: 'Heading', type: 'string' },
                     {
+                      name: 'logo',
+                      title: 'Heading logo',
+                      type: 'string',
+                      description: 'Partner mark shown beside the heading, e.g. "/images/home/partner-monday.png".',
+                    },
+                    {
                       name: 'columns',
                       title: 'Item columns',
                       type: 'number',

@@ -31,6 +31,30 @@ const PREFERRED_TAB_ORDER = [
  * here with paragraph breaks so existing markup keeps working without
  * upgrading the accordion to full Portable Text.
  */
+/**
+ * Pick which FAQ source a page renders.
+ *
+ * FAQs come from two places: the `faqTabs` array an editor curates on the page
+ * document, and the central `faqItem` collection. `getFaqItemsForPage` falls
+ * back to the curated `/faqs` set whenever a page has no `faqItem` docs tagged
+ * for it, so the central list is effectively never empty — a page that renders
+ * `groupFaqsIntoTabs(centralFaqs)` unconditionally (or guards on the central
+ * list being empty) silently discards every edit made on the page document.
+ * That is why FAQ changes made in Sanity "don't show up" on the site.
+ *
+ * Precedence: the page document's own tabs win, the central set is the
+ * fallback for pages that curate nothing.
+ */
+export function resolveFaqTabs(
+  pageFaqTabs: FaqTab[] | undefined | null,
+  centralItems: CentralFaqItem[],
+  preferredFirstCategory?: string,
+): FaqTab[] {
+  const curated = (pageFaqTabs ?? []).filter((tab) => tab?.items?.length)
+  if (curated.length > 0) return curated
+  return groupFaqsIntoTabs(centralItems, preferredFirstCategory)
+}
+
 export function groupFaqsIntoTabs(
   items: CentralFaqItem[],
   /** Category to surface as the very first tab (case-insensitive). Use for

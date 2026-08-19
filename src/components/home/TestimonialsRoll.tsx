@@ -18,7 +18,7 @@ const DOTS = ["var(--accent-green)", "var(--accent-blue)", "var(--purple-primary
 const ROLL_SECONDS = 74
 
 function initials(name?: string) {
-  if (!name) return "—"
+  if (!name) return ", "
   return name
     .split(/\s+/)
     .filter(Boolean)

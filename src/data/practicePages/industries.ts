@@ -14,24 +14,24 @@ const HUB = { label: 'Industries', href: '/industries' }
 export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
   hub: {
     path: '/industries',
-    seoTitle: 'Industry Solutions | Fruition — AI & Platform Consulting by Sector, AU · UK · US',
+    seoTitle: 'Industry Solutions | Fruition: AI & Platform Consulting by Sector, AU · UK · US',
     seoDescription:
-      'Fruition delivers AI and platform consulting shaped by sector — the compliance regimes, workflows, and data realities of construction, finance, healthcare, manufacturing, and more, across Australia, the UK, and the US.',
+      'Fruition delivers AI and platform consulting shaped by sector: the compliance regimes, workflows, and data realities of construction, finance, healthcare, manufacturing, and more, across Australia, the UK, and the US.',
     breadcrumb: [HUB],
     eyebrow: 'Industries Hub',
     heading: 'We speak your industry’s operational language',
     lead:
-      'Fruition delivers AI and platform consulting shaped by sector — the compliance regimes, workflows, and data realities of construction, finance, healthcare, manufacturing, and more, across Australia, the UK, and the US.',
+      'Fruition delivers AI and platform consulting shaped by sector: the compliance regimes, workflows, and data realities of construction, finance, healthcare, manufacturing, and more, across Australia, the UK, and the US.',
     approachEyebrow: 'Why vertical depth matters',
     approachHeading: 'Generic implementations fail specifically.',
     approach: [
       {
         title: 'Compliance is the constraint',
-        body: 'APRA in finance, HIPAA in healthcare, safety regimes in construction — the regulatory frame shapes the build, not the other way round.',
+        body: 'APRA in finance, HIPAA in healthcare, safety regimes in construction: the regulatory frame shapes the build, not the other way round.',
       },
       {
         title: 'Workflows carry sector DNA',
-        body: 'A construction variation order and a fund compliance review are both ‘approvals’ — and identical implementations of them both fail.',
+        body: 'A construction variation order and a fund compliance review are both ‘approvals’, and identical implementations of them both fail.',
       },
       {
         title: 'Proof per sector',
@@ -108,7 +108,7 @@ export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
     faqs: [
       {
         q: 'Does Fruition specialise in specific industries?',
-        a: 'Yes — construction, financial services, healthcare, manufacturing, professional services, solar and renewables, and government are established verticals, each with implementation precedent, compliance frameworks, and sector-specific templates from 500+ delivered projects.',
+        a: 'Yes: construction, financial services, healthcare, manufacturing, professional services, solar and renewables, and government are established verticals, each with implementation precedent, compliance frameworks, and sector-specific templates from 500+ delivered projects.',
       },
       {
         q: 'How much does industry consulting cost with Fruition?',
@@ -124,7 +124,7 @@ export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms, so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -135,14 +135,14 @@ export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
 
   'financial-services': {
     path: '/industries/financial-services',
-    seoTitle: 'AI & Platforms for Financial Services | Fruition — APRA-Aligned Implementation',
+    seoTitle: 'AI & Platforms for Financial Services | Fruition: APRA-Aligned Implementation',
     seoDescription:
-      'Fruition implements platforms and AI for financial services firms across Australia, the UK, and the US — client onboarding, compliance workflows, and AI deployments built to APRA, FCA, and SEC expectations.',
+      'Fruition implements platforms and AI for financial services firms across Australia, the UK, and the US: client onboarding, compliance workflows, and AI deployments built to APRA, FCA, and SEC expectations.',
     breadcrumb: [HUB, { label: 'Financial Services', href: '/industries/financial-services' }],
     eyebrow: 'Industries · Financial Services',
     heading: 'Innovation velocity inside a regulatory perimeter',
     lead:
-      'Fruition implements platforms and AI for financial services firms across Australia, the UK, and the US — client onboarding, compliance workflows, and AI deployments built to APRA, FCA, and SEC expectations.',
+      'Fruition implements platforms and AI for financial services firms across Australia, the UK, and the US: client onboarding, compliance workflows, and AI deployments built to APRA, FCA, and SEC expectations.',
     approachHeading: 'Compliance as architecture.',
     approach: [
       {
@@ -151,11 +151,11 @@ export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Auditability everywhere',
-        body: 'Approval trails, permission logs, and data lineage designed in — because ‘show me’ is the only compliance test that matters.',
+        body: 'Approval trails, permission logs, and data lineage designed in, because ‘show me’ is the only compliance test that matters.',
       },
       {
         title: 'AI with guardrails',
-        body: 'Governed AI for research, document review, and client comms — with the human-oversight gates regulated advice demands.',
+        body: 'Governed AI for research, document review, and client comms, with the human-oversight gates regulated advice demands.',
       },
     ],
     servicesEyebrow: 'What we build',
@@ -181,7 +181,7 @@ export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
     faqs: [
       {
         q: 'Can financial services firms use AI under APRA expectations?',
-        a: 'Yes — with governance designed in: risk-classified use cases, human oversight on client-affecting outputs, audit logging, and vendor due diligence aligned to CPS 230/234. Fruition builds these controls into the implementation rather than documenting them afterwards.',
+        a: 'Yes, with governance designed in: risk-classified use cases, human oversight on client-affecting outputs, audit logging, and vendor due diligence aligned to CPS 230/234. Fruition builds these controls into the implementation rather than documenting them afterwards.',
       },
       {
         q: 'How much does financial services technology consulting cost with Fruition?',
@@ -197,7 +197,7 @@ export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms, so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -208,23 +208,23 @@ export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
 
   healthcare: {
     path: '/industries/healthcare',
-    seoTitle: 'Healthcare Workflow & AI Solutions | Fruition — HIPAA-Configured Implementation',
+    seoTitle: 'Healthcare Workflow & AI Solutions | Fruition: HIPAA-Configured Implementation',
     seoDescription:
-      'Fruition implements HIPAA-configured platforms and governed AI for healthcare organisations across Australia, the UK, and the US — patient workflows, referral management, and back-office automation with compliance built in.',
+      'Fruition implements HIPAA-configured platforms and governed AI for healthcare organisations across Australia, the UK, and the US: patient workflows, referral management, and back-office automation with compliance built in.',
     breadcrumb: [HUB, { label: 'Healthcare', href: '/industries/healthcare' }],
     eyebrow: 'Industries · Healthcare',
     heading: 'Less admin between clinicians and care',
     lead:
-      'Fruition implements HIPAA-configured platforms and governed AI for healthcare organisations across Australia, the UK, and the US — patient workflows, referral management, and back-office automation with compliance built in.',
+      'Fruition implements HIPAA-configured platforms and governed AI for healthcare organisations across Australia, the UK, and the US: patient workflows, referral management, and back-office automation with compliance built in.',
     approachHeading: 'PHI-aware by default.',
     approach: [
       {
         title: 'Compliance-first configuration',
-        body: 'HIPAA BAAs, encryption, audit logging, and permission architecture as the foundation — not the retrofit.',
+        body: 'HIPAA BAAs, encryption, audit logging, and permission architecture as the foundation: not the retrofit.',
       },
       {
         title: 'Clinical-adjacent, not clinical',
-        body: 'We automate the workflows around care — intake, referrals, scheduling, billing — where the admin burden actually lives.',
+        body: 'We automate the workflows around care (intake, referrals, scheduling, billing), where the admin burden actually lives.',
       },
       {
         title: 'Governed AI only',
@@ -254,7 +254,7 @@ export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
     faqs: [
       {
         q: 'Can monday.com be used in healthcare with patient data?',
-        a: 'Yes — on the Enterprise plan with a signed BAA, encryption, audit logging, and properly configured permissions. Standard plans aren’t HIPAA-suitable. Fruition delivers these configurations as standard for healthcare clients.',
+        a: 'Yes, on the Enterprise plan with a signed BAA, encryption, audit logging, and properly configured permissions. Standard plans aren’t HIPAA-suitable. Fruition delivers these configurations as standard for healthcare clients.',
       },
       {
         q: 'How much does healthcare technology consulting cost with Fruition?',
@@ -270,7 +270,7 @@ export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms, so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',
@@ -281,14 +281,14 @@ export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
 
   'solar-renewables': {
     path: '/industries/solar-renewables',
-    seoTitle: 'Solar CRM & Workflow Systems | Fruition — Install Pipeline, Scheduling & Rebates',
+    seoTitle: 'Solar CRM & Workflow Systems | Fruition: Install Pipeline, Scheduling & Rebates',
     seoDescription:
-      'Fruition implements CRM and workflow systems for solar and renewables companies across Australia, the UK, and the US — install pipelines, crew scheduling, rebate workflows, and the compliance chain in between.',
+      'Fruition implements CRM and workflow systems for solar and renewables companies across Australia, the UK, and the US: install pipelines, crew scheduling, rebate workflows, and the compliance chain in between.',
     breadcrumb: [HUB, { label: 'Solar & Renewables', href: '/industries/solar-renewables' }],
     eyebrow: 'Industries · Solar & Renewables',
     heading: 'From lead to grid connection, one pipeline',
     lead:
-      'Fruition implements CRM and workflow systems for solar and renewables companies across Australia, the UK, and the US — install pipelines, crew scheduling, rebate workflows, and the compliance chain in between.',
+      'Fruition implements CRM and workflow systems for solar and renewables companies across Australia, the UK, and the US: install pipelines, crew scheduling, rebate workflows, and the compliance chain in between.',
     approachHeading: 'Built for the install-volume business.',
     approach: [
       {
@@ -297,11 +297,11 @@ export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
       },
       {
         title: 'Rebates as workflow',
-        body: 'STC, state rebate, and financing document chains tracked per job — because missed paperwork is missed revenue.',
+        body: 'STC, state rebate, and financing document chains tracked per job, because missed paperwork is missed revenue.',
       },
       {
         title: 'Crew-day optimisation',
-        body: 'Scheduling boards balancing install crews, travel, and weather reality — visible to office and field alike.',
+        body: 'Scheduling boards balancing install crews, travel, and weather reality: visible to office and field alike.',
       },
     ],
     servicesEyebrow: 'What we build',
@@ -327,7 +327,7 @@ export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
     faqs: [
       {
         q: 'What’s the best CRM for a solar company?',
-        a: 'One that models the full install lifecycle — sales, approvals, scheduling, rebates, and service — in a single system. Fruition builds this on monday.com with solar-specific stage architecture, drawing on established renewables implementations across Australia.',
+        a: 'One that models the full install lifecycle (sales, approvals, scheduling, rebates, and service) in a single system. Fruition builds this on monday.com with solar-specific stage architecture, drawing on established renewables implementations across Australia.',
       },
       {
         q: 'How much does solar business systems consulting cost with Fruition?',
@@ -343,7 +343,7 @@ export const INDUSTRIES_PAGES: Record<string, PracticePage> = {
       },
       {
         q: 'Why choose Fruition over a Big-4 consulting firm?',
-        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms — so recommendations are cross-platform and honest.',
+        a: 'Fruition is practitioner-led: the person who scopes your engagement is the person who delivers it. We publish fixed fees, hold 500+ implementations of delivery history, and are certified partners across monday.com (Platinum), Atlassian, HubSpot, and the major AI platforms, so recommendations are cross-platform and honest.',
       },
       {
         q: 'Can Fruition deliver this remotely?',

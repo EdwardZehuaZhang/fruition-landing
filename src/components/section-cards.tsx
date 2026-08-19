@@ -17,10 +17,10 @@ export interface SectionCardsProps {
 }
 
 export function SectionCards({
-  totalVisitors = "—",
-  pageViews = "—",
-  conversions = "—",
-  searchClicks = "—",
+  totalVisitors = ", ",
+  pageViews = ", ",
+  conversions = ", ",
+  searchClicks = ", ",
   connected = false,
   rangeLabel = "Last 28 days",
 }: SectionCardsProps) {

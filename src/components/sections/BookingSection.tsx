@@ -600,7 +600,7 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
               Last step — confirm {dayShort(dayKey)} at {fmtTime(slot.start, tz)}
             </span>
             <span style={{ fontFamily: "var(--font-sans)", fontSize: 12.5, color: "var(--color-text-secondary)" }}>
-              {consultant?.firstName ? `${consultant.firstName} has your details already — just press Schedule.` : "Your details are filled in already — just press Schedule."}
+              {consultant?.firstName ? `${consultant.firstName} has your details already, just press Schedule.` : "Your details are filled in already, just press Schedule."}
             </span>
           </div>
         </div>
@@ -832,9 +832,9 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
 export default function BookingSection({
   eyebrow = "See it on your pipeline",
   heading = "Watch your sales process run on monday CRM.",
-  sub = "Pick a time and we'll map your pipeline live on the call — your stages, your handoffs, your reporting. No slides.",
+  sub = "Pick a time and we'll map your pipeline live on the call: your stages, your handoffs, your reporting. No slides.",
   email = "contact@fruitionservices.io",
-  offices = "Sydney · New York · London · Singapore · Delhi",
+  offices = "Sydney · New York · London · Singapore · New Delhi · Taguig",
   proof = "Platinum monday.com partner · 500+ implementations",
   duration = 30,
   askTeamSize = true,

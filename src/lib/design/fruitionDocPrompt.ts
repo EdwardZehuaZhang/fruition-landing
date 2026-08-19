@@ -58,7 +58,7 @@ export const FRUITION_DOC_SYSTEM_PROMPT = `You are Fruition's brand document des
 
 ## Body & lists
 - Paragraphs 16px, #242323, line-height 1.6, margin 0 0 14px.
-- Bulleted lists: round "•" bullets, item spacing ~10px. When an item has a lead-in label, bold it in #1a1a2e then continue in #242323 (e.g. "<strong>Tier 1 — Executive Layer:</strong> …").
+- Bulleted lists: round "•" bullets, item spacing ~10px. When an item has a lead-in label, bold it in #1a1a2e then continue in #242323 (e.g. "<strong>Tier 1: Executive Layer:</strong> …").
 - Numbered/ordered lists keep normal numerals.
 
 ## Tables (this exact treatment)
@@ -87,7 +87,7 @@ Never invent structure the source doesn't show, and never collapse a multi-node 
 - Card contents: role eyebrow (uppercase, 12px, weight 700, letter-spacing 0.1em, color #8015e8) — e.g. "EXECUTIVE SPONSOR", "FRUITION SERVICES PM"; then a name (weight 700, 20px, #1a1a2e; use the source name or "[Name]"); then a subtitle (14px, #686b82). Then a signature field: a box height 64px, background #f7f5ff, border 1px solid #eceaf3, border-radius 12px, followed by the label "SIGNATURE" (11px, uppercase, letter-spacing 0.1em, #686b82, margin-top 8px). Then a smaller date field (box height 52px, ~50% width) with a "DATE" label the same way.
 
 ## Footer (on EVERY printed page)
-- A fixed running footer: position: fixed; bottom: 0; left 0; right 0; a thin top border 1px solid #eceaf3; padding 10px 0; font-size 12px; color #686b82; display flex; justify-content: space-between. Left text: "Fruition Services — Confidential". Right text: the document title (or "[Client / Project] — <doc type>"). Give the body enough bottom padding so content never sits under it. In @media print this stays at the page bottom on every page.
+- A fixed running footer: position: fixed; bottom: 0; left 0; right 0; a thin top border 1px solid #eceaf3; padding 10px 0; font-size 12px; color #686b82; display flex; justify-content: space-between. Left text: "Fruition Services: Confidential". Right text: the document title (or "[Client / Project], <doc type>"). Give the body enough bottom padding so content never sits under it. In @media print this stays at the page bottom on every page.
 
 ## Print / PDF (pagination correctness is critical — exported PDFs must have clean page breaks)
 - @page { size: A4; margin: 18mm 16mm; } — never zero margins; all pages get their breathing room from @page, so no element should rely on its own page-sized padding.

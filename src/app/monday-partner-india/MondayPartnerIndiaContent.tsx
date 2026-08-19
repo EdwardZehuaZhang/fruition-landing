@@ -77,7 +77,7 @@ function FeatureBlocksSection({ blocks }: { blocks: FeatureBlock[] }) {
   )
 }
 
-function PartnerSectionCta({ calendlyUrl }: { calendlyUrl: string }) {
+function PartnerSectionCta({ calendlyUrl, mondayUrl }: { calendlyUrl: string; mondayUrl: string }) {
   return (
     <section className="bg-surface px-4 pt-6 pb-14 md:pb-24">
       <div className="mx-auto text-center w-full max-w-[920px]">
@@ -88,7 +88,7 @@ function PartnerSectionCta({ calendlyUrl }: { calendlyUrl: string }) {
           <Link href={calendlyUrl} className="cta-btn cta-btn-primary">
             <Rocket size={16} aria-hidden /> Schedule a Consultation
           </Link>
-          <Link href="https://monday.com" className="cta-btn cta-btn-outline">
+          <Link href={mondayUrl} className="cta-btn cta-btn-outline">
             <Play size={16} aria-hidden /> Get Started with monday.com
           </Link>
         </div>
@@ -97,7 +97,7 @@ function PartnerSectionCta({ calendlyUrl }: { calendlyUrl: string }) {
   )
 }
 
-function CrmTutorialCta({ calendlyUrl }: { calendlyUrl: string }) {
+function CrmTutorialCta({ calendlyUrl, mondayUrl }: { calendlyUrl: string; mondayUrl: string }) {
   return (
     <section className="px-4 py-10 md:py-16 bg-gradient-to-b from-brand-soft/30 to-brand-soft">
       <div className="mx-auto w-full max-w-[1100px]">
@@ -132,6 +132,9 @@ export default function MondayPartnerIndiaContent({
   if (!page) return null
   const rawCalendly = siteSettings?.calendlyLink ?? ""
   const calendlyUrl = bookingHref(rawCalendly)
+  // The region's monday.com referral link, so partner UTM attribution stays
+  // editable in Sanity rather than hardcoded per page.
+  const mondayUrl = page.secondaryCtaUrl || "https://monday.com"
 
   const partnerCaseStudies = caseStudies
   const resolvedComparisonTabs: ComparisonTab[] = page.comparisonTabs ?? []
@@ -169,6 +172,24 @@ export default function MondayPartnerIndiaContent({
         headingAccent={page.logoCloudHeadingAccent ?? "monday.com consulting services"}
         description={page.logoCloudDescription}
         logos={siteSettings?.carouselLogos || []}
+      />
+
+      {/* Customer testimonials */}
+      <TestimonialsGrid
+        heading="What our customers say about us"
+        ctaLabel="Start Your Transformation"
+        ctaUrl={calendlyUrl}
+        statCardSubtitle="have maximised their workflows with our monday.com expert support"
+        statCardCtaLabel="Read our case studies"
+        statCardCtaUrl="/customer-testimonials"
+        caseStudies={partnerCaseStudies}
+      />
+
+      {/* Calendly */}
+      <CalendlySection
+        heading={page.calendlyHeading || "Schedule A 30-Min Consultation With One of Our monday.com Implementation Consultants"}
+        subheading={page.calendlySubheading}
+        calendlyUrl={rawCalendly}
       />
 
       {/* "Teams Transformed" small caption */}
@@ -214,10 +235,10 @@ export default function MondayPartnerIndiaContent({
       <FeatureBlocksSection blocks={resolvedFeatureBlocks} />
 
       {/* Work with partner CTA */}
-      <PartnerSectionCta calendlyUrl={calendlyUrl} />
+      <PartnerSectionCta calendlyUrl={calendlyUrl} mondayUrl={mondayUrl} />
 
       {/* CRM tutorial + video */}
-      <CrmTutorialCta calendlyUrl={calendlyUrl} />
+      <CrmTutorialCta calendlyUrl={calendlyUrl} mondayUrl={mondayUrl} />
 
       {/* Closing CTA — shared site-wide banner; Sanity copy wins, the previous
           hardcoded economic-impact banner copy is the verbatim fallback */}

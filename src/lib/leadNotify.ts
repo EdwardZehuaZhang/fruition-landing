@@ -387,7 +387,7 @@ async function writeColumnsDroppingRejects(
         console.warn(`[leads] monday ${label} write failed:`, errMsg(err))
         return false
       }
-      console.warn(`[leads] monday ${label} rejected column ${rejected} — retrying without it`)
+      console.warn(`[leads] monday ${label} rejected column ${rejected}, retrying without it`)
       delete remaining[rejected]
     }
   }

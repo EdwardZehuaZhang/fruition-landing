@@ -5,7 +5,7 @@ import {
   getCaseStudies,
   getFaqItemsForPage,
 } from "@/sanity/queries"
-import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
+import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import {
   HeroBanner,
   LogoCloudMarquee,
@@ -49,8 +49,7 @@ export default async function Page() {
     siteSettings?.calendlyLink || "https://calendly.com/global-calendar-fruitionservices"
   const calendlyUrl = bookingHref(rawCalendly)
 
-  const faqTabs = groupFaqsIntoTabs(centralFaqs)
-  const effectiveFaqTabs = faqTabs.length > 0 ? faqTabs : page.faqTabs || []
+  const effectiveFaqTabs = resolveFaqTabs(page.faqTabs, centralFaqs)
 
   const featuredTestimonial =
     caseStudies?.find(

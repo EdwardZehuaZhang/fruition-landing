@@ -28,13 +28,13 @@ export const SERVICES: ServiceCard[] = [
   {
     icon: "sparkles",
     title: "AI advisory & implementation",
-    body: "Readiness, adoption frameworks and agent builds on Claude, OpenAI and Copilot — with platform-native AI.",
+    body: "Readiness, adoption frameworks and agent builds on Claude, OpenAI and Copilot, with platform-native AI.",
     href: "/ai-consulting",
   },
   {
     icon: "users",
     title: "Change management & adoption",
-    body: "Stakeholder engagement, training, comms and measurement — the reason implementations stick.",
+    body: "Stakeholder engagement, training, comms and measurement: the reason implementations stick.",
     href: "/monday-training",
   },
   {
@@ -196,7 +196,7 @@ export const FAQS: FaqEntry[] = [
   {
     question: "Where does Fruition operate?",
     answer:
-      "Fruition is headquartered at 64 York Street, Sydney, with entities in Australia, the US and the UK, and consultants delivering across Australia, the UK, the US, Singapore, India and the Philippines — coverage in your time zone.",
+      "Fruition is headquartered at 64 York Street, Sydney, with entities in Australia, the US and the UK, and consultants delivering across Australia, the UK, the US, Singapore, India and the Philippines: coverage in your time zone.",
   },
   {
     question: "How much does a monday.com implementation cost?",
@@ -206,7 +206,7 @@ export const FAQS: FaqEntry[] = [
   {
     question: "Can you migrate us from another tool?",
     answer:
-      "Yes. We regularly migrate teams from Smartsheet, Asana, Trello, Wrike, SimPro and spreadsheets — including data, automations and integrations — with training and change management so the new platform actually gets adopted.",
+      "Yes. We regularly migrate teams from Smartsheet, Asana, Trello, Wrike, SimPro and spreadsheets (including data, automations and integrations) with training and change management so the new platform actually gets adopted.",
   },
   {
     question: "How is Fruition different from other partners?",
