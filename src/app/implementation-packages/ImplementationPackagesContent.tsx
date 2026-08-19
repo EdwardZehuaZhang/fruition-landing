@@ -175,7 +175,7 @@ interface Props {
 function imgSrc(image: SanityImage): string | null {
   if (!image || !image.asset) return null
   try {
-    return urlFor(image).url()
+    return urlFor(image).width(1200).auto("format").url()
   } catch {
     return null
   }

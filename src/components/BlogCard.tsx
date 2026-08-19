@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { authorSlug } from "@/sanity/authorSlug"
+import { urlFor } from "@/sanity/image"
 
 interface BlogCategory {
   _id?: string
@@ -20,8 +21,8 @@ interface BlogCardProps {
 }
 
 function buildImageUrl(ref: string) {
-  const cleaned = ref.replace("image-", "").replace(/-(\w+)$/, ".$1")
-  return `https://cdn.sanity.io/images/bt6nb58h/production/${cleaned}?w=800&h=600&fit=crop`
+  // CDN-optimized URL with size constraints via the urlFor builder.
+  return ref ? urlFor({ asset: { _ref: ref } }).width(800).height(600).fit("crop").auto("format").url() : ""
 }
 
 function initials(name: string) {
