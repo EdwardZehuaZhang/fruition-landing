@@ -283,12 +283,12 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                                 onClick={closeMobile}
                               >
                                 {sub.icon && (
-                                  <div className={`shrink-0 mt-0.5 w-7 h-7 rounded-md ring-1 ring-ui bg-surface-raised flex items-center justify-center ${isActive ? 'text-brand' : 'text-body'}`}>
+                                  <div className={`shrink-0 mt-0.5 w-7 h-7 rounded-md ring-1 bg-surface-raised flex items-center justify-center ${isActive ? 'text-brand ring-ui' : sub.featured ? 'text-brand ring-brand/30' : 'text-body ring-ui'}`}>
                                     <NavIcon iconKey={sub.icon} className="h-4 w-4" />
                                   </div>
                                 )}
                                 <div className="min-w-0">
-                                  <div className={`text-sm font-medium ${isActive ? 'text-brand dark:text-brand-light' : 'text-body'}`}>
+                                  <div className={`text-sm font-medium ${isActive || sub.featured ? 'text-brand dark:text-brand-light' : 'text-body'}`}>
                                     {sub.label}
                                   </div>
                                   {sub.description && (
@@ -386,10 +386,12 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                               onClick={() => setOpenMenu(null)}
                             >
                               <div
-                                className={`shrink-0 mt-0.5 w-8 h-8 rounded-md ring-1 ring-ui bg-surface-raised flex items-center justify-center transition-colors ${
+                                className={`shrink-0 mt-0.5 w-8 h-8 rounded-md ring-1 bg-surface-raised flex items-center justify-center transition-colors ${
                                   isActive
-                                    ? 'text-brand'
-                                    : 'text-body group-hover:text-brand group-hover:ring-brand/30'
+                                    ? 'text-brand ring-ui'
+                                    : sub.featured
+                                      ? 'text-brand ring-brand/30'
+                                      : 'text-body ring-ui group-hover:text-brand group-hover:ring-brand/30'
                                 }`}
                               >
                                 {sub.icon ? (
@@ -401,7 +403,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                               <div className="min-w-0">
                                 <div
                                   className={`text-sm font-semibold leading-tight ${
-                                    isActive
+                                    isActive || sub.featured
                                       ? 'text-brand dark:text-brand-light'
                                       : 'text-body group-hover:text-brand'
                                   }`}
