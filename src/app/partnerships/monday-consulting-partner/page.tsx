@@ -13,7 +13,7 @@ function safePhotoUrl(img: unknown): string | undefined {
   try {
     // @ts-expect-error loose Sanity image shape
     if (!img?.asset?._ref) return undefined
-    return urlFor(img).url()
+    return urlFor(img).width(800).auto("format").url()
   } catch {
     return undefined
   }

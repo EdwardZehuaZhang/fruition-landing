@@ -180,7 +180,7 @@ export default function MondayPartnerSingaporeContent({
         logos={siteSettings?.carouselLogos || []}
       />
 
-      {/* Customer testimonials */}
+      {/* Customer testimonials — social proof sits directly below the fold */}
       <TestimonialsGrid
         heading={page.testimonialsGridHeading}
         ctaLabel={page.testimonialsGridCtaLabel}
@@ -192,7 +192,7 @@ export default function MondayPartnerSingaporeContent({
         caseStudies={partnerCaseStudies}
       />
 
-      {/* Calendly */}
+      {/* Calendly — booking CTA follows immediately on the proof that earns it */}
       <CalendlySection
         heading={page.calendlyHeading || "Schedule a 30 minute Call With One of Our monday.com Consultants Today"}
         subheading={

@@ -80,7 +80,7 @@ function roleRank(role?: string): number {
 function safeBadgeUrl(ref: SanityImageRef): string | null {
   if (!ref?.asset?._ref) return null
   try {
-    return urlFor(ref).url()
+    return urlFor(ref).width(800).auto("format").url()
   } catch {
     return null
   }

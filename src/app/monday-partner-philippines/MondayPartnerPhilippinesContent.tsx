@@ -196,6 +196,24 @@ export default function MondayPartnerPhilippinesContent({
       {/* "Teams Transformed" small caption */}
       <TeamsTransformedStrip />
 
+      {/* Customer testimonials — social proof sits directly below the fold */}
+      <TestimonialsGrid
+        heading="What our customers say about us"
+        ctaLabel="Start Your Transformation"
+        ctaUrl={calendlyUrl}
+        statCardSubtitle="have maximised their workflows with our monday.com expert support"
+        statCardCtaLabel="Read our case studies"
+        statCardCtaUrl="/customer-testimonials"
+        caseStudies={partnerCaseStudies}
+      />
+
+      {/* Calendly — booking CTA follows immediately on the proof that earns it */}
+      <CalendlySection
+        heading={page.calendlyHeading || "Schedule A 30-Min Consultation With One of Our monday.com Implementation Consultants"}
+        subheading={page.calendlySubheading}
+        calendlyUrl={rawCalendly}
+      />
+
       {/* 3-tab comparison */}
       <ComparisonTabsSection
         heading={page.comparisonHeading || "Streamline Operations & Maximise Efficiency with Our monday.com Consultants"}

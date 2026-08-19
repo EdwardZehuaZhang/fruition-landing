@@ -101,7 +101,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch dynamic slugs from Sanity. Use allSettled so a single failing query
   // never breaks the whole sitemap (it just omits that section).
   const [postsR, authorsR, solutionsR, partnershipsR] = await Promise.allSettled([
-    getBlogPosts(1000, 0),
+    getBlogPosts(500, 0),
     getBlogAuthors(),
     getAllSolutionPages(),
     getAllPartnershipPages(),
