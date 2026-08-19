@@ -37,8 +37,6 @@ const CITY_COORDS: Record<string, [number, number]> = {
   singapore: [1.35, 103.82],
   "new delhi": [28.53, 77.21], // India office — WeWork Eldeco Centre, Malviya Nagar
   delhi: [28.53, 77.21],
-  bengaluru: [12.97, 77.59],
-  bangalore: [12.97, 77.59],
   india: [28.53, 77.21], // falls back to the New Delhi office
   taguig: [14.55, 121.05], // Philippines office — Menarco Tower, BGC
   philippines: [14.55, 121.05],

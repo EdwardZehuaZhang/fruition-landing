@@ -381,7 +381,7 @@ const pages: LocationPage[] = [
       { emoji: '🔐', title: 'Cybersecurity & Digital Risk', description: 'Protect against evolving threats while ensuring data privacy and regulatory compliance.' },
     ],
     comparisonHeading: 'monday.com features built for Indian teams',
-    comparisonSubheading: 'How monday.com transforms work for Indian businesses across Bengaluru, Mumbai, Delhi NCR, Hyderabad and beyond.',
+    comparisonSubheading: 'How monday.com transforms work for Indian businesses across Mumbai, Delhi NCR, Hyderabad and beyond.',
     comparisonTabs: [
       {
         label: 'monday.com Features',

@@ -57,7 +57,7 @@ const anthropic = {
   stats: withKeys([
     { _type: 'aiStat', value: '3', unit: 'yr', label: 'Building production Claude systems since the Claude 2 era.' },
     { _type: 'aiStat', value: '40', unit: '+', label: 'Enterprise AI engagements across APAC, UK and US.' },
-    { _type: 'aiStat', value: '5', unit: '', label: 'Delivery hubs: Sydney, London, NYC, Manila, Bangalore.' },
+    { _type: 'aiStat', value: '5', unit: '', label: 'Delivery hubs: Sydney, London, NYC, Manila, New Delhi.' },
     { _type: 'aiStat', value: '200', unit: 'k', label: 'Tokens of context routinely operated in agentic workflows.' },
   ]),
 
@@ -152,7 +152,7 @@ const anthropic = {
   geoLead:
     'We deliver Anthropic Claude implementations from three primary hubs and three engineering pods, covering APAC, the UK and the US under a single delivery framework.',
   geo: withKeys([
-    { _type: 'geoCard', region: 'Asia Pacific', city: 'Sydney · Singapore · India', body: 'Headquartered in Sydney with delivery pods in Manila, Bangkok and Bangalore. Local data residency guidance for Australian Privacy Principles, Singapore PDPA and India DPDP.', addr: '12/64 York Street, Sydney NSW 2000\nABN 12 667 454 006' },
+    { _type: 'geoCard', region: 'Asia Pacific', city: 'Sydney · Singapore · India', body: 'Headquartered in Sydney with delivery pods in Manila, Bangkok and New Delhi. Local data residency guidance for Australian Privacy Principles, Singapore PDPA and India DPDP.', addr: '12/64 York Street, Sydney NSW 2000\nABN 12 667 454 006' },
     { _type: 'geoCard', region: 'United Kingdom', city: 'London', body: 'UK operations covering financial services, professional services and the public sector. UK GDPR and ICO guidance built into every engagement. Claude deployment via UK-region cloud where required.', addr: 'London, United Kingdom\nUK Ltd entity' },
     { _type: 'geoCard', region: 'United States', city: 'New York · Remote-first', body: 'US delivery across financial services, healthcare-adjacent workflows and enterprise SaaS. Claude on AWS Bedrock for HIPAA-aligned environments and FedRAMP-aware architectures.', addr: 'New York, NY\nUS Inc entity' },
   ]),
@@ -192,7 +192,7 @@ const anthropic = {
     { _type: 'aiFaq', question: 'How is Claude different from ChatGPT for enterprise use?', answer: 'Claude is built around Constitutional AI principles, has industry-leading long-context performance, excels at tool use and structured outputs, and offers a transparent safety posture — making it the model of choice for regulated, brand-sensitive and high-complexity enterprise workflows. ChatGPT remains a strong product; the right choice depends on use case, integrations and procurement realities, and we advise objectively on both.' },
     { _type: 'aiFaq', question: 'Do you write the prompts and skills for our team?', answer: 'Yes — and we teach your team to write them. Our deliverables include production prompt libraries, evaluation harnesses, SKILL.md files and prompt engineering playbooks tailored to your domain and tone of voice.' },
     { _type: 'aiFaq', question: 'Are you a reseller of Anthropic Claude?', answer: 'No. We are an implementation and consulting partner. We can advise on commercial procurement of Claude through Anthropic, AWS Bedrock or Google Vertex AI, but our value is delivery and enablement — not reselling tokens.' },
-    { _type: 'aiFaq', question: 'Where is your team based?', answer: 'Sydney (headquarters), London and New York, with delivery support from Manila, Bangalore and Bangkok. Our model is local accountability with global delivery economics.' },
+    { _type: 'aiFaq', question: 'Where is your team based?', answer: 'Sydney (headquarters), London and New York, with delivery support from Manila, New Delhi and Bangkok. Our model is local accountability with global delivery economics.' },
     { _type: 'aiFaq', question: 'Can Claude be deployed in regulated industries?', answer: 'Yes. Claude is available with enterprise controls via Anthropic directly, AWS Bedrock and Google Vertex AI — supporting data residency, zero-retention configurations and HIPAA-ready deployments. We help select and configure the right deployment path for your regulatory posture.' },
   ]),
 
@@ -362,7 +362,7 @@ const openai = {
   geoLead:
     'Local accountability across APAC, the UK and the US. One delivery framework, three legal entities, full data residency awareness.',
   geo: withKeys([
-    { _type: 'geoCard', region: 'AU · SG · IN', city: 'Asia Pacific', body: 'Sydney HQ with delivery pods in Manila, Bangalore and Bangkok. OpenAI deployments aligned to Australian Privacy Principles, Singapore PDPA and India DPDP.', addr: '12/64 York Street, Sydney NSW 2000 · ABN 12 667 454 006' },
+    { _type: 'geoCard', region: 'AU · SG · IN', city: 'Asia Pacific', body: 'Sydney HQ with delivery pods in Manila, New Delhi and Bangkok. OpenAI deployments aligned to Australian Privacy Principles, Singapore PDPA and India DPDP.', addr: '12/64 York Street, Sydney NSW 2000 · ABN 12 667 454 006' },
     { _type: 'geoCard', region: 'GB', city: 'United Kingdom', body: 'London-based UK operations covering financial services, professional services and public sector. UK GDPR and ICO guidance built into every rollout.', addr: 'London, United Kingdom · UK Ltd entity' },
     { _type: 'geoCard', region: 'US', city: 'United States', body: 'New York–based US team. Deployments across financial services, enterprise SaaS and healthcare-adjacent workflows. HIPAA-aware and FedRAMP-aware architectures.', addr: 'New York, NY · US Inc entity' },
   ]),
@@ -404,7 +404,7 @@ const openai = {
     { _type: 'aiFaq', question: 'Can you fine-tune OpenAI models on our data?', answer: 'Yes. We run fine-tuning programs on GPT-4o, GPT-4.1 and selected o-series models, including data curation, evaluation harnesses and ongoing model lifecycle management.' },
     { _type: 'aiFaq', question: 'How do you handle data privacy?', answer: 'ChatGPT Enterprise and the OpenAI API offer zero-data-retention configurations and SOC 2 compliance. We design deployments aligned to Australian Privacy Principles, UK GDPR and applicable US frameworks (HIPAA, FedRAMP-aware) where required.' },
     { _type: 'aiFaq', question: 'Are you an OpenAI reseller?', answer: 'No. We are a services partner. We advise on procurement of ChatGPT Enterprise, Team and API credits — but our deliverables are implementation, integration and enablement, not licence resale.' },
-    { _type: 'aiFaq', question: 'Where is your team based?', answer: 'Sydney (headquarters), London and New York, with engineering delivery from Manila, Bangalore and Bangkok.' },
+    { _type: 'aiFaq', question: 'Where is your team based?', answer: 'Sydney (headquarters), London and New York, with engineering delivery from Manila, New Delhi and Bangkok.' },
   ]),
 
   ctaEyebrow: '// next_step()',
@@ -574,7 +574,7 @@ const openclaw = {
   geoLead:
     'Three legal entities, five delivery hubs, full coverage across APAC, the United Kingdom and the United States — under a single delivery framework.',
   geo: withKeys([
-    { _type: 'geoCard', region: 'AU · SG · IN — ASIA PACIFIC', city: 'Sydney HQ', body: 'Headquartered in Sydney with engineering pods in Manila, Bangalore and Bangkok. Agent deployments aligned to Australian Privacy Principles, Singapore PDPA and India DPDP.', addr: '12/64 York Street, Sydney NSW 2000\nABN 12 667 454 006' },
+    { _type: 'geoCard', region: 'AU · SG · IN — ASIA PACIFIC', city: 'Sydney HQ', body: 'Headquartered in Sydney with engineering pods in Manila, New Delhi and Bangkok. Agent deployments aligned to Australian Privacy Principles, Singapore PDPA and India DPDP.', addr: '12/64 York Street, Sydney NSW 2000\nABN 12 667 454 006' },
     { _type: 'geoCard', region: 'GB — UNITED KINGDOM', city: 'London', body: 'UK operations covering financial services, professional services and the public sector. UK GDPR and ICO-aligned agent governance baked into every engagement.', addr: 'London, United Kingdom\nUK Ltd entity' },
     { _type: 'geoCard', region: 'US — UNITED STATES', city: 'New York', body: 'US delivery across financial services, enterprise SaaS and healthcare-adjacent workflows. HIPAA-aware and FedRAMP-aware agent architectures where required.', addr: 'New York, NY\nUS Inc entity' },
   ]),
@@ -615,7 +615,7 @@ const openclaw = {
     { _type: 'aiFaq', question: 'What does an autonomous agent build cost?', answer: 'A first agent in production typically ranges from AUD $45,000 to $120,000 depending on integration surface and risk profile. Multi-agent systems start at AUD $150,000. Discovery engagements are fixed-price from AUD $15,000 and produce a costed implementation plan.' },
     { _type: 'aiFaq', question: 'Do you build on Model Context Protocol?', answer: 'Yes. MCP is a primary integration layer for our agents — we build custom MCP servers exposing internal tools and data, and integrate published MCP servers for systems including monday.com, GitHub, Slack and Google Workspace.' },
     { _type: 'aiFaq', question: 'Can agents take destructive actions safely?', answer: 'Yes — when architected correctly. We design action gating, two-step confirmation for irreversible operations, scoped credentials, sandboxed execution and full audit trails. Risk-tiered actions get human-in-the-loop approval; low-risk actions run unattended.' },
-    { _type: 'aiFaq', question: 'Where is your team based?', answer: 'Sydney (headquarters), London and New York, with engineering delivery from Manila, Bangalore and Bangkok.' },
+    { _type: 'aiFaq', question: 'Where is your team based?', answer: 'Sydney (headquarters), London and New York, with engineering delivery from Manila, New Delhi and Bangkok.' },
     { _type: 'aiFaq', question: 'Do you operate agents after launch?', answer: 'Yes. We run a managed operations service covering observability, drift detection, prompt regression testing, model upgrades and continuous evaluation — keeping agents performant as models and your business evolve.' },
   ]),
 
