@@ -97,7 +97,7 @@ function HeroGraphic() {
   return (
     <div
       aria-hidden
-      className="relative hidden h-[420px] justify-self-center overflow-hidden md:flex md:w-full md:items-center md:justify-center lg:h-[580px]"
+      className="relative hidden h-[460px] justify-self-center overflow-hidden md:flex md:w-full md:items-center md:justify-center lg:h-[620px]"
     >
       {/* Fixed-size stage, scaled to fit the breakpoint. */}
       <div className="relative h-[580px] w-[620px] shrink-0 scale-[0.72] lg:scale-100">

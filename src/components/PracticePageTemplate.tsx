@@ -8,7 +8,7 @@ import {
 import FaqAccordion from '@/components/sections/FaqAccordion'
 import ClosingCtaSection from '@/components/sections/ClosingCtaSection'
 import { getFaqItemsForPageStrict, getClosingCtaForPage } from '@/sanity/queries'
-import { groupFaqsIntoTabs } from '@/sanity/groupFaqs'
+import { groupFaqsForPage } from '@/sanity/groupFaqs'
 
 /**
  * Shared renderer for the Site Architecture v2.1 practice clusters
@@ -57,7 +57,7 @@ export default async function PracticePageTemplate({ page }: { page: PracticePag
     getClosingCtaForPage(pageKey),
   ])
   const faqTabs = centralFaqs?.length
-    ? groupFaqsIntoTabs(centralFaqs)
+    ? groupFaqsForPage(centralFaqs, pageKey)
     : [{ label: 'General Questions', items: page.faqs.map((f) => ({ question: f.q, answer: f.a })) }]
   return (
     // <div>, not <main> — SiteFrame already wraps marketing pages in <main>

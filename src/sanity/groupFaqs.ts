@@ -95,3 +95,95 @@ function portableTextToPlain(blocks: PortableTextBlock[] | undefined): string {
     .filter(Boolean)
     .join("\n\n")
 }
+
+/**
+ * Pages whose lead FAQ category can't be read off the route slug: the category
+ * is named differently from the page (a government page leads with "Public
+ * Sector"), or the page's subject is a product rather than an industry.
+ * Everything else resolves through the slug match in `leadFaqCategoryForPage`.
+ * A list means "first of these that the page actually has".
+ */
+const FAQ_LEAD_CATEGORY_BY_PAGE: Record<string, string | string[]> = {
+  'about-us': 'General Questions',
+  'ai-consulting/governance-and-compliance': 'Governance & Compliance',
+  'ai-consulting/marketing-automation': 'Agentic Marketing FAQs',
+  'ai-consulting/sales-outbound': 'Agentic Sales FAQs',
+  'ai-strategy-and-execution': 'AI FAQs',
+  'careers': 'General Questions',
+  'monday-consulting-solutions/monday-for-cabinetry-renovation': 'Construction',
+  'monday-consulting-solutions/monday-for-finance': 'Finance & Accounting',
+  'monday-consulting-solutions/monday-for-hr': 'HR',
+  'monday-consulting-solutions/monday-product-management': 'monday Dev',
+  'monday-consulting-solutions/solar-crm-solution': ['Solar & Renewables', 'monday CRM'],
+  'monday-crm-consulting': 'monday CRM',
+  'monday-for-finance': 'Finance & Accounting',
+  'monday-for-government': 'Public Sector',
+  'monday-for-marketing': 'Marketing & Creative',
+  'monday-implementation-consultants': 'Implementation Partner',
+  'monday-products/ai': 'monday AI',
+  'monday-products/crm': 'monday CRM',
+  'monday-products/dev': 'monday Dev',
+  'monday-products/service': 'monday Service',
+  'monday-products/work-management': 'Work Management',
+  'partnerships/aircall-partner': 'Aircall FAQs',
+  'partnerships/certified-atlassian-partner': 'Atlassian FAQs',
+  'partnerships/certified-clickup-partner': 'ClickUp FAQs',
+  'partnerships/certified-hubspot-partner': 'HubSpot FAQs',
+  'partnerships/monday-consulting-partner': 'Implementation Partner',
+  'partnerships/n8n-integration-partner': 'n8n FAQs',
+}
+
+/** "Marketing & Creative" -> "marketing-creative", "n8n" -> "n8n". */
+function slugifyCategory(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+/**
+ * The FAQ category a page should lead with, so a manufacturing page opens on
+ * the Manufacturing tab rather than whichever category sorts first globally.
+ *
+ * The explicit map wins; otherwise the page key is matched against the
+ * categories present in `items` — a route like `monday-for-manufacturing` or
+ * `ai-consulting/n8n` names its own category once the `monday-for-`/`monday-`
+ * prefix is dropped. No match leaves the default ordering untouched.
+ */
+export function leadFaqCategoryForPage(
+  pageKey: string | undefined,
+  items: CentralFaqItem[] | undefined,
+): string | undefined {
+  if (!pageKey || !items?.length) return undefined
+  const present = new Set(items.map((item) => item.category).filter(Boolean) as string[])
+
+  // Listed categories are tried in order: a page can name its ideal lead plus a
+  // broader stand-in for when it falls back to the curated /faqs set.
+  const mapped = FAQ_LEAD_CATEGORY_BY_PAGE[pageKey]
+  if (mapped) {
+    const match = (Array.isArray(mapped) ? mapped : [mapped]).find((c) => present.has(c))
+    if (match) return match
+  }
+
+  const lastSegment = pageKey.split('/').pop() ?? pageKey
+  const candidates = new Set([
+    pageKey,
+    lastSegment,
+    lastSegment.replace(/^monday-for-/, ''),
+    lastSegment.replace(/^monday-/, ''),
+  ])
+  return items.find((item) => item.category && candidates.has(slugifyCategory(item.category)))
+    ?.category
+}
+
+/**
+ * `groupFaqsIntoTabs` with the page's own category promoted to the first tab.
+ * Prefer this over calling `groupFaqsIntoTabs` directly from a page: the
+ * accordion opens on tab 0, so the lead tab is what visitors actually read.
+ */
+export function groupFaqsForPage(
+  items: CentralFaqItem[],
+  pageKey: string | undefined,
+): FaqTab[] {
+  return groupFaqsIntoTabs(items, leadFaqCategoryForPage(pageKey, items))
+}

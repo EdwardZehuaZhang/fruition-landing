@@ -114,7 +114,7 @@ export default function DesignGenerator() {
         className="rounded-card bg-surface p-6 sm:p-8"
         style={{ boxShadow: "var(--shadow-card)" }}
       >
-        <h1 className="text-2xl font-semibold text-ink-heading">New design document</h1>
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">New design document</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Upload any PDF and it will be redesigned in the Fruition document style — same content,
           new look. You can export the result as a PDF.

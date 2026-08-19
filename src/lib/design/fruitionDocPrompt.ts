@@ -87,13 +87,16 @@ Never invent structure the source doesn't show, and never collapse a multi-node 
 - Card contents: role eyebrow (uppercase, 12px, weight 700, letter-spacing 0.1em, color #8015e8) — e.g. "EXECUTIVE SPONSOR", "FRUITION SERVICES PM"; then a name (weight 700, 20px, #1a1a2e; use the source name or "[Name]"); then a subtitle (14px, #686b82). Then a signature field: a box height 64px, background #f7f5ff, border 1px solid #eceaf3, border-radius 12px, followed by the label "SIGNATURE" (11px, uppercase, letter-spacing 0.1em, #686b82, margin-top 8px). Then a smaller date field (box height 52px, ~50% width) with a "DATE" label the same way.
 
 ## Footer (on EVERY printed page)
-- A fixed running footer: position: fixed; bottom: 0; left 0; right 0; a thin top border 1px solid #eceaf3; padding 10px 0; font-size 12px; color #686b82; display flex; justify-content: space-between. Left text: "Fruition Services — Confidential". Right text: the document title (or "[Client / Project] — <doc type>"). Give the body enough bottom padding so content never sits under it. In @media print this stays at the page bottom on every page.
+- A fixed running footer, written as the LAST element in the document and a DIRECT child of <body> (not nested inside the content wrapper): <div class="footer">…</div>, with exactly that class name. Two children: left text "Fruition Services — Confidential", right text the document title (or "[Client / Project] — <doc type>"). Keep each side to a single short line.
+- Style it: position: fixed; bottom: 0; left: 0; right: 0; border-top 1px solid #eceaf3; padding 10px 48px; font-size 12px; color #686b82; display flex; justify-content: space-between; background #fff.
+- Do NOT try to reserve space for it yourself (no big body padding-bottom, no bottom @page margin for it) — the export pipeline reserves a strip at the foot of every page for this exact element. It only works if the class name and placement above are followed.
 
 ## Print / PDF (pagination correctness is critical — exported PDFs must have clean page breaks)
 - @page { size: A4; margin: 18mm 16mm; } — never zero margins; all pages get their breathing room from @page, so no element should rely on its own page-sized padding.
 - @media print { body { background:#fff; } a { color: inherit; text-decoration: none; } h1,h2,h3 { break-after: avoid; break-inside: avoid; } p { orphans: 3; widows: 3; } }
 - break-inside: avoid ONLY on units guaranteed shorter than a page: tr, li, figure, the cover card, callouts, figure cards, sign-off cards. NEVER on section, on a whole table, or on any wrapper that can grow taller than one page — an oversized avoid causes a page-sized blank gap and then a mid-element slice anyway.
 - Tables must flow across pages: table { break-inside: auto; } tr { break-inside: avoid; } and put the header row in <thead> with thead { display: table-header-group; } so it repeats on every page.
+- Never put a totals row in <tfoot> — a table footer group repeats on every page the table spans, so the totals print once per page. Make it an ordinary last <tr> in the <tbody> and style it with a class.
 - No fixed heights near page height anywhere; never use 100vh; never position: absolute for layout (the fixed running footer is the sole exception).
 - Do NOT force a page break after the cover — the document flows continuously like the reference.
 

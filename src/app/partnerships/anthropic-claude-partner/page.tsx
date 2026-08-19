@@ -1,5 +1,5 @@
 import { getAiPartnerPageBySlug, getSiteSettings, getFaqItemsForPageStrict, getClosingCtaForPage } from "@/sanity/queries"
-import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
+import { groupFaqsForPage } from "@/sanity/groupFaqs"
 import AiPartnerTemplate from "@/components/AiPartnerTemplate"
 import { buildOgMetadata } from "@/lib/metadata"
 
@@ -28,5 +28,5 @@ export default async function Page() {
     getFaqItemsForPageStrict("partnerships/anthropic-claude-partner"),
     getClosingCtaForPage("partnerships/anthropic-claude-partner"),
   ])
-  return <AiPartnerTemplate page={page} siteSettings={siteSettings} faqTabs={groupFaqsIntoTabs(centralFaqs)} closingCta={closingCta} />
+  return <AiPartnerTemplate page={page} siteSettings={siteSettings} faqTabs={groupFaqsForPage(centralFaqs, "partnerships/anthropic-claude-partner")} closingCta={closingCta} />
 }

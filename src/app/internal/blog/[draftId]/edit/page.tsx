@@ -73,8 +73,8 @@ export default async function EditDraftPage({
     (typeof meta.slug === "string" && meta.slug) || (title ? slugifyTitle(title) : "")
 
   const editorPane = (
-    <div className="rounded-card bg-surface p-6 sm:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
-      <h1 className="mb-6 text-2xl font-semibold text-ink-heading">Edit draft</h1>
+    <div>
+      <h1 className="mb-6 text-xl font-semibold tracking-tight text-foreground">Edit draft</h1>
       <BlogEditor
         categories={categories}
         authors={authors}

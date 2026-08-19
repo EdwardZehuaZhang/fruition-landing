@@ -6,7 +6,7 @@ import {
   getTeamMembers,
   getClosingCtaForPage,
 } from "@/sanity/queries"
-import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
+import { groupFaqsForPage } from "@/sanity/groupFaqs"
 import { mergeTeamMembers } from "@/lib/mergeTeamMembers"
 import MondayPartnerPhilippinesContent from "./MondayPartnerPhilippinesContent"
 import { buildOgMetadata } from "@/lib/metadata"
@@ -43,7 +43,7 @@ export default async function Page() {
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
-      faqTabs={groupFaqsIntoTabs(centralFaqs)}
+      faqTabs={groupFaqsForPage(centralFaqs, SLUG)}
       teamMembers={mergeTeamMembers(teamMembers || [], siteSettings?.excludedTeamMemberNames || [])}
       closingCta={closingCta}
     />

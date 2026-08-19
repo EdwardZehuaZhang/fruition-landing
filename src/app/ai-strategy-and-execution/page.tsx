@@ -4,7 +4,7 @@ import {
   getCaseStudies,
   getFaqItemsForPage,
 } from "@/sanity/queries"
-import { groupFaqsIntoTabs } from "@/sanity/groupFaqs"
+import { groupFaqsForPage } from "@/sanity/groupFaqs"
 import AiStrategyContent from "./AiStrategyContent"
 import { buildOgMetadata } from "@/lib/metadata"
 
@@ -36,7 +36,7 @@ export default async function Page() {
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
-      faqTabs={groupFaqsIntoTabs(centralFaqs)}
+      faqTabs={groupFaqsForPage(centralFaqs, "ai-strategy-and-execution")}
     />
   )
 }

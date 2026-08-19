@@ -1,3 +1,13 @@
+-- Internal portal invoices.
+--
+-- Apply by hand in the portal Supabase project's SQL editor — there are no
+-- local credentials for DDL on that project, and nothing runs this file
+-- automatically. Safe to re-run.
+--
+-- The API routes talk to these tables with the service-role key, which
+-- bypasses RLS; the policies below only matter if the tables are ever read
+-- with a user's own JWT.
+
 -- Invoices table
 CREATE TABLE IF NOT EXISTS fruition_invoices (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -20,7 +30,12 @@ CREATE TABLE IF NOT EXISTS fruition_invoices (
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
+-- The list route filters by user_id and orders by created_at.
+CREATE INDEX IF NOT EXISTS fruition_invoices_user_created_idx
+  ON fruition_invoices (user_id, created_at DESC);
+
 ALTER TABLE fruition_invoices ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can CRUD own invoices" ON fruition_invoices;
 CREATE POLICY "Users can CRUD own invoices" ON fruition_invoices
   FOR ALL USING (auth.uid() = user_id);
 
@@ -38,5 +53,6 @@ CREATE TABLE IF NOT EXISTS fruition_consultant_profiles (
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 ALTER TABLE fruition_consultant_profiles ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can CRUD own profile" ON fruition_consultant_profiles;
 CREATE POLICY "Users can CRUD own profile" ON fruition_consultant_profiles
   FOR ALL USING (auth.uid() = user_id);
