@@ -1,10 +1,12 @@
 import { BOOKING_ANCHOR, bookingHref } from "@/lib/bookingLink"
 import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react"
 import { PortableText } from "@portabletext/react"
+import { Fragment } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
 import { authorSlug } from "@/sanity/authorSlug"
+import { parseInlineMarkdown } from "@/lib/inlineMarkdown"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import { parseVideoUrl, videoEmbedSrc } from "@/lib/videoEmbed"
 
@@ -267,6 +269,49 @@ const blogPortableTextComponents: PortableTextComponents = {
   },
 }
 
+/**
+ * A table cell's inline markdown, rendered.
+ *
+ * Everywhere else in the body, bold/italic/links arrive as Portable Text marks
+ * and are styled by `blogPortableTextComponents.marks`. Table cells can't: the
+ * schema stores them as plain strings (blogPost.ts), so a cell the editor
+ * showed as bold publishes as the literal characters `**Use case**`. Parsing
+ * here — rather than at publish time — also repairs every post already live.
+ * Styling deliberately mirrors the `strong` / `em` / `link` marks above.
+ */
+function CellText({ text }: { text: string }) {
+  return (
+    <>
+      {parseInlineMarkdown(text).map((run, i) => {
+        if (run.href) {
+          // Relative hrefs stay in-app; anything absolute opens in a new tab,
+          // matching the `link` vs `internalLink` marks.
+          const internal = run.href.startsWith("/") || run.href.startsWith("#")
+          return internal ? (
+            <Link key={i} href={run.href} className="text-brand-dark underline hover:no-underline">
+              {run.text}
+            </Link>
+          ) : (
+            <a
+              key={i}
+              href={run.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand-dark underline hover:no-underline"
+            >
+              {run.text}
+            </a>
+          )
+        }
+        let node: React.ReactNode = run.text
+        if (run.em) node = <em className="italic">{node}</em>
+        if (run.strong) node = <strong className="font-bold">{node}</strong>
+        return <Fragment key={i}>{node}</Fragment>
+      })}
+    </>
+  )
+}
+
 /** Renders a blog `table` block. First row is treated as the header. */
 function BodyTable({ rows }: { rows?: { cells?: string[] }[] }) {
   if (!rows?.length) return null
@@ -282,7 +327,7 @@ function BodyTable({ rows }: { rows?: { cells?: string[] }[] }) {
                   key={i}
                   className="border border-ui bg-surface-raised p-[10px] text-left font-bold align-top"
                 >
-                  {c}
+                  <CellText text={c} />
                 </th>
               ))}
             </tr>
@@ -293,7 +338,7 @@ function BodyTable({ rows }: { rows?: { cells?: string[] }[] }) {
             <tr key={ri}>
               {(r.cells ?? []).map((c, ci) => (
                 <td key={ci} className="border border-ui p-[10px] align-top">
-                  {c}
+                  <CellText text={c} />
                 </td>
               ))}
             </tr>
