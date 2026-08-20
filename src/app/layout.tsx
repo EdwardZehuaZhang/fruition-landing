@@ -4,12 +4,14 @@ import { Poppins, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
+import { OfficeStrapProvider } from "@/components/OfficeStrapProvider"
 import NavigationProgress from "@/components/NavigationProgress"
 import CookieNotice from "@/components/CookieNotice"
 import SiteFrame from "@/components/SiteFrame"
 import AwardBanner from "@/components/home/AwardBanner"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { getSiteSettings } from "@/sanity/queries"
+import { officeStrap } from "@/data/offices"
 import { urlFor } from "@/sanity/image"
 import { buildOgMetadata, defaultOgImage } from "@/lib/metadata"
 import CalendlyBookingTracker from "@/components/CalendlyBookingTracker"
@@ -245,18 +247,20 @@ export default async function RootLayout({
         <CalendlyBookingTracker />
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           <NavigationProgress />
-          <SiteFrame
-            header={
-              <div key="site-header">
-                <AwardBanner />
-                <Navbar siteSettings={siteSettings} />
-              </div>
-            }
-            footer={<Footer key="site-footer" siteSettings={siteSettings} />}
-            cookie={<CookieNotice key="site-cookie" />}
-          >
-            {children}
-          </SiteFrame>
+          <OfficeStrapProvider value={officeStrap(siteSettings?.offices)}>
+            <SiteFrame
+              header={
+                <div key="site-header">
+                  <AwardBanner />
+                  <Navbar siteSettings={siteSettings} />
+                </div>
+              }
+              footer={<Footer key="site-footer" siteSettings={siteSettings} />}
+              cookie={<CookieNotice key="site-cookie" />}
+            >
+              {children}
+            </SiteFrame>
+          </OfficeStrapProvider>
         </ThemeProvider>
       </body>
     </html>

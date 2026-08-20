@@ -38,9 +38,9 @@ const CITY_COORDS: Record<string, [number, number]> = {
   "new delhi": [28.53, 77.21], // India office — WeWork Eldeco Centre, Malviya Nagar
   delhi: [28.53, 77.21],
   india: [28.53, 77.21], // falls back to the New Delhi office
-  taguig: [14.55, 121.05], // Philippines office — Menarco Tower, BGC
+  manila: [14.55, 121.05], // Philippines office — Menarco Tower, BGC, Taguig
+  taguig: [14.55, 121.05],
   philippines: [14.55, 121.05],
-  manila: [14.6, 120.98],
 }
 
 const map = new DottedMap({ map: JSON.parse(worldMapData) })
