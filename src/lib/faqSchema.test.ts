@@ -3,7 +3,12 @@
  */
 import { describe, expect, it } from "vitest"
 import type { PortableTextBlock } from "@portabletext/types"
-import { generateFaqJsonLd, answerToPlainText } from "@/lib/faqSchema"
+import {
+  generateFaqJsonLd,
+  generateFaqJsonLdFromPairs,
+  faqTabsToPairs,
+  answerToPlainText,
+} from "@/lib/faqSchema"
 
 /** Helper: build a minimal Portable Text span. */
 function span(text: string) {
@@ -166,5 +171,77 @@ describe("generateFaqJsonLd", () => {
     ]
     const result = generateFaqJsonLd(items)
     expect(result.mainEntity).toHaveLength(1)
+  })
+})
+
+describe("faqTabsToPairs", () => {
+  it("flattens every tab's items into a single pair list, in order", () => {
+    const pairs = faqTabsToPairs([
+      { _key: "t0", label: "Real estate", items: [
+        { _key: "a", question: "What is monday.com for real estate?", answer: "A work management platform." },
+        { _key: "b", question: "Is it good for brokers?", answer: "Yes." },
+      ] },
+      { _key: "t1", label: "Pricing", items: [
+        { _key: "c", question: "How much?", answer: "It depends on seats." },
+      ] },
+    ])
+    expect(pairs.map((p) => p.question)).toEqual([
+      "What is monday.com for real estate?",
+      "Is it good for brokers?",
+      "How much?",
+    ])
+  })
+
+  it("returns an empty list for undefined, empty, or item-less tabs", () => {
+    expect(faqTabsToPairs(undefined)).toEqual([])
+    expect(faqTabsToPairs(null)).toEqual([])
+    expect(faqTabsToPairs([])).toEqual([])
+    expect(faqTabsToPairs([{ _key: "t0", label: "Empty" }])).toEqual([])
+  })
+})
+
+describe("generateFaqJsonLdFromPairs", () => {
+  it("builds FAQPage markup from plain-text pairs", () => {
+    const out = generateFaqJsonLdFromPairs([
+      { question: "What is monday.com for real estate?", answer: "A work management platform." },
+    ])
+    expect(out["@type"]).toBe("FAQPage")
+    expect(out.mainEntity).toHaveLength(1)
+    expect(out.mainEntity[0]).toEqual({
+      "@type": "Question",
+      name: "What is monday.com for real estate?",
+      acceptedAnswer: { "@type": "Answer", text: "A work management platform." },
+    })
+  })
+
+  it("drops blanks, trims, strips leading markdown hashes and dedupes by question", () => {
+    const out = generateFaqJsonLdFromPairs([
+      { question: "  ## Does it integrate?  ", answer: "  Yes.  " },
+      { question: "Does it integrate?", answer: "Duplicate — dropped." },
+      { question: "No answer", answer: "   " },
+      { question: "", answer: "No question" },
+      { question: "Another", answer: undefined },
+    ])
+    expect(out.mainEntity).toHaveLength(1)
+    expect(out.mainEntity[0].name).toBe("Does it integrate?")
+    expect(out.mainEntity[0].acceptedAnswer.text).toBe("Yes.")
+  })
+
+  it("returns empty mainEntity when given nothing usable", () => {
+    expect(generateFaqJsonLdFromPairs([]).mainEntity).toEqual([])
+  })
+
+  it("agrees with generateFaqJsonLd for equivalent content", () => {
+    const fromBlocks = generateFaqJsonLd([
+      {
+        _id: "x",
+        question: "Does it integrate?",
+        answer: [
+          { _type: "block", children: [{ text: "Yes." }] },
+        ] as unknown as PortableTextBlock[],
+      },
+    ])
+    const fromPairs = generateFaqJsonLdFromPairs([{ question: "Does it integrate?", answer: "Yes." }])
+    expect(fromBlocks).toEqual(fromPairs)
   })
 })
