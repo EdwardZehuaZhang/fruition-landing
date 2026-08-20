@@ -1,16 +1,34 @@
 import { notFound } from "next/navigation"
 import { requirePortalUser, getPortalAdmin, authorDisplayName } from "@/lib/portalAuth"
-import { getBlogCategories, getTeamMembers } from "@/sanity/queries"
+import { getBlogCategories, getBlogPostForPortalEdit, getTeamMembers } from "@/sanity/queries"
 import PortalShell from "@/components/internal/PortalShell"
 import BlogEditor, {
   type CategoryOption,
   type BlogEditorInitial,
+  type BlogEditorFields,
 } from "@/components/internal/BlogEditor"
 import SocialDraftsPanel from "@/components/internal/SocialDraftsPanel"
 import BlogEditTabs from "@/components/internal/BlogEditTabs"
 import { slugifyTitle } from "@/lib/social/zernio"
+import { resolveLiveDocId } from "@/lib/blogDraftLink"
+import { portableTextToMarkdown } from "@/lib/portableTextToMarkdown"
 
 export const dynamic = "force-dynamic"
+
+/** The live Sanity post a draft is the working copy of, when there is one. */
+interface LivePost {
+  title?: string
+  slug?: string
+  publishedAt?: string
+  author?: string
+  industry?: string
+  excerpt?: string
+  seoKeyword?: string
+  seoTitle?: string
+  seoDescription?: string
+  body?: unknown
+  categoryIds?: string[]
+}
 
 interface DraftRow {
   id: string
@@ -46,35 +64,72 @@ export default async function EditDraftPage({
   ])
   const authors = [...new Set(team.map((m) => m.name).filter((n): n is string => Boolean(n)))]
   const meta = (draft.metadata ?? {}) as Record<string, unknown>
+  const metaSlug = typeof meta.slug === "string" ? meta.slug : undefined
+  // A draft can be the editing copy of a post that's already live. Resolving
+  // its Sanity id here is what turns the primary action into "Update post" and
+  // makes the write land on the live document instead of forking a new one.
+  const liveDocId = await resolveLiveDocId(meta, metaSlug).catch(() => null)
+  // The live post is the diff baseline: "Update post" lights up only when the
+  // draft differs from what readers currently see.
+  const livePost = liveDocId
+    ? ((await getBlogPostForPortalEdit(liveDocId).catch(() => null)) as LivePost | null)
+    : null
+  const live: BlogEditorFields | undefined = livePost
+    ? {
+        title: livePost.title,
+        slug: livePost.slug,
+        excerpt: livePost.excerpt,
+        industry: livePost.industry,
+        categoryIds: livePost.categoryIds ?? undefined,
+        seoKeyword: livePost.seoKeyword,
+        seoTitle: livePost.seoTitle,
+        seoDescription: livePost.seoDescription,
+        publishedAt: livePost.publishedAt?.slice(0, 10),
+        author: livePost.author,
+        body: portableTextToMarkdown(livePost.body),
+      }
+    : undefined
+
+  const metaStr = (key: string): string | undefined =>
+    typeof meta[key] === "string" && meta[key] ? (meta[key] as string) : undefined
+
+  // Sidebar fields fall back to the live post so the editor shows what's
+  // actually on the site. The slug especially: leaving it to be re-derived
+  // from the title would silently move a live post's URL on the next update.
   const initial: BlogEditorInitial = {
     draftId: draft.id,
-    title: draft.title ?? "",
-    body: draft.body_markdown ?? "",
-    slug: typeof meta.slug === "string" ? meta.slug : undefined,
-    excerpt: typeof meta.excerpt === "string" ? meta.excerpt : undefined,
-    industry: typeof meta.industry === "string" ? meta.industry : undefined,
-    categoryIds: Array.isArray(meta.categoryIds) ? (meta.categoryIds as string[]) : undefined,
+    docId: liveDocId ?? undefined,
+    live,
+    title: draft.title ?? live?.title ?? "",
+    body: draft.body_markdown ?? live?.body ?? "",
+    slug: metaSlug ?? live?.slug,
+    excerpt: metaStr("excerpt") ?? live?.excerpt,
+    industry: metaStr("industry") ?? live?.industry,
+    categoryIds: Array.isArray(meta.categoryIds)
+      ? (meta.categoryIds as string[])
+      : live?.categoryIds,
     // Generated drafts store the keyword as target_keyword; editor saves use seoKeyword.
-    seoKeyword:
-      typeof meta.seoKeyword === "string"
-        ? meta.seoKeyword
-        : typeof meta.target_keyword === "string"
-          ? meta.target_keyword
-          : undefined,
-    seoTitle: typeof meta.seoTitle === "string" ? meta.seoTitle : undefined,
-    seoDescription: typeof meta.seoDescription === "string" ? meta.seoDescription : undefined,
-    publishedAt: typeof meta.publishedAt === "string" ? meta.publishedAt : undefined,
-    author: typeof meta.author === "string" ? meta.author : undefined,
+    seoKeyword: metaStr("seoKeyword") ?? metaStr("target_keyword") ?? live?.seoKeyword,
+    seoTitle: metaStr("seoTitle") ?? live?.seoTitle,
+    seoDescription: metaStr("seoDescription") ?? live?.seoDescription,
+    publishedAt: metaStr("publishedAt")?.slice(0, 10) ?? live?.publishedAt,
+    author: metaStr("author") ?? live?.author,
     metadata: meta,
   }
 
   const title = draft.title ?? ""
-  const socialSlug =
-    (typeof meta.slug === "string" && meta.slug) || (title ? slugifyTitle(title) : "")
+  const socialSlug = initial.slug || (title ? slugifyTitle(title) : "")
 
   const editorPane = (
     <div>
-      <h1 className="mb-6 text-xl font-semibold tracking-tight text-foreground">Edit draft</h1>
+      <h1 className="mb-1 text-xl font-semibold tracking-tight text-foreground">
+        {liveDocId ? "Edit published post" : "Edit draft"}
+      </h1>
+      <p className="mb-6 text-sm text-muted-foreground">
+        {liveDocId
+          ? "This post is live. \u201cUpdate post\u201d writes your changes to Sanity and refreshes the page on the site."
+          : "Not on the site yet — \u201cPublish\u201d puts it live."}
+      </p>
       <BlogEditor
         categories={categories}
         authors={authors}

@@ -22,6 +22,14 @@
       // OpenNext incremental (ISR) cache — see open-next.config.ts.
       "binding": "NEXT_INC_CACHE_KV",
       "id": "74a7eb0e0e4542e8a9acdbc178a849af"
+    },
+    {
+      // OpenNext tag cache — the store `revalidatePath()` writes to, so an
+      // on-demand revalidation (e.g. updating a blog post from /internal)
+      // actually drops the cached page. Without it the adapter falls back to
+      // the "dummy" tag cache and revalidation is a silent no-op.
+      "binding": "NEXT_TAG_CACHE_KV",
+      "id": "97b71b6dcfc84ceba8b7f3e77773b243"
     }
   ],
   "services": [

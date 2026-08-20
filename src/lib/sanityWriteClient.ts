@@ -421,25 +421,74 @@ function buildBlogPostDoc(input: UpsertBlogPostInput): Record<string, unknown> {
   return doc
 }
 
-async function documentExists(docId: string): Promise<boolean> {
-  const url = `${base()}/data/query/${DATASET}?query=${encodeURIComponent(
-    "*[_id == $id][0]._id",
-  )}&%24id=${encodeURIComponent(JSON.stringify(docId))}`
-  const r = await fetch(url, { headers: { Authorization: `Bearer ${getToken()}` } })
+/**
+ * Run a GROQ query against the live API (not the CDN) with the write token, so
+ * reads taken around a mutation see the just-written state.
+ */
+async function groq<T>(query: string, params: Record<string, unknown> = {}): Promise<T> {
+  const search = new URLSearchParams({ query })
+  for (const [k, v] of Object.entries(params)) search.set(`$${k}`, JSON.stringify(v))
+  const r = await fetch(`${base()}/data/query/${DATASET}?${search.toString()}`, {
+    headers: { Authorization: `Bearer ${getToken()}` },
+  })
   if (!r.ok) throw new Error(`sanity query ${r.status} ${await r.text()}`)
-  const j = (await r.json()) as { result?: string | null }
-  return Boolean(j.result)
+  return ((await r.json()) as { result?: T }).result as T
+}
+
+/** The live post's id + current slug, or null when the document doesn't exist. */
+async function getExistingBlogPost(
+  docId: string,
+): Promise<{ _id: string; slug: string | null } | null> {
+  return groq<{ _id: string; slug: string | null } | null>(
+    `*[_id == $id][0]{ _id, "slug": slug.current }`,
+    { id: docId },
+  )
+}
+
+/** Slug + byline of a live post, read fresh — enough to flush its cached pages. */
+export async function getBlogPostCacheKeys(
+  docId: string,
+): Promise<{ slug: string | null; author: string | null } | null> {
+  return groq<{ slug: string | null; author: string | null } | null>(
+    `*[_id == $id][0]{ "slug": slug.current, author }`,
+    { id: docId },
+  )
+}
+
+/**
+ * Find the published post that owns a slug — the link between a portal draft
+ * and the live document when the draft has no recorded doc id (posts migrated
+ * in, published by Marketa, or created straight in the Studio).
+ */
+export async function findBlogPostIdBySlug(slug: string): Promise<string | null> {
+  if (!slug) return null
+  const found = await groq<{ _id: string } | null>(
+    `*[_type == "blogPost" && slug.current == $slug] | order(_createdAt asc) [0]{ _id }`,
+    { slug },
+  )
+  return found?._id ?? null
 }
 
 export async function upsertBlogPost(
   input: UpsertBlogPostInput,
-): Promise<{ id: string; slug: string }> {
+): Promise<{ id: string; slug: string; previousSlug?: string; created: boolean }> {
   const slug = input.slug || slugify(input.title)
+  const existing = await getExistingBlogPost(input.docId)
+
+  // A second document on the same slug is invisible in the worst way: the site
+  // resolves /post/<slug> to whichever doc GROQ returns first, so the edit
+  // "publishes" and nothing on the page changes. Refuse it instead.
+  const slugOwner = await findBlogPostIdBySlug(slug)
+  if (slugOwner && slugOwner !== input.docId) {
+    throw new Error(
+      `/post/${slug} already belongs to another post (${slugOwner}). Change the slug, or edit that post instead.`,
+    )
+  }
 
   // Republishing an existing post must PATCH, not replace: createOrReplace
   // would drop every field the editor doesn't resend — the cover image (when
   // no new file was uploaded), legacy fields like videoUrls/mainImage, etc.
-  if (await documentExists(input.docId)) {
+  if (existing) {
     const set: Record<string, unknown> = {
       title: input.title,
       slug: { _type: "slug", current: slug },
@@ -469,10 +518,15 @@ export async function upsertBlogPost(
       }
     }
     await patchDocument(input.docId, set)
-    return { id: input.docId, slug }
+    return {
+      id: input.docId,
+      slug,
+      previousSlug: existing.slug ?? undefined,
+      created: false,
+    }
   }
 
   const doc = buildBlogPostDoc(input)
   await mutate([{ createOrReplace: doc }])
-  return { id: input.docId, slug }
+  return { id: input.docId, slug, created: true }
 }

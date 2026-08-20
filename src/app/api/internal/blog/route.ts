@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server"
 import { getPortalApiUser, bylineFor } from "@/lib/portalAuth"
-import { upsertBlogPost, uploadImageAsset, deleteDocument } from "@/lib/sanityWriteClient"
+import {
+  upsertBlogPost,
+  uploadImageAsset,
+  deleteDocument,
+  getBlogPostCacheKeys,
+} from "@/lib/sanityWriteClient"
+import { revalidateBlogPaths } from "@/lib/revalidateSite"
 
 export const runtime = "nodejs"
 export const maxDuration = 60
@@ -127,7 +133,29 @@ export async function POST(req: Request) {
       coverImageAssetId,
       publishedAt: publishedAt || undefined,
     })
-    return NextResponse.json({ ok: true, id: result.id, slug: result.slug })
+
+    // Sanity is updated — now flush the cached pages, or the live site keeps
+    // serving the pre-edit render (see src/lib/revalidateSite.ts).
+    const { failed } = revalidateBlogPaths({
+      slug: result.slug,
+      previousSlug: result.previousSlug,
+      author: byline,
+    })
+
+    return NextResponse.json({
+      ok: true,
+      id: result.id,
+      slug: result.slug,
+      created: result.created,
+      // The body as actually stored, so the editor and the draft copy stay in
+      // step with the live document.
+      body,
+      ...(failed.length
+        ? {
+            cacheWarning: `Saved to Sanity, but the cached page(s) ${failed.join(", ")} could not be refreshed — they may take up to an hour to update.`,
+          }
+        : {}),
+    })
   } catch (err) {
     return NextResponse.json(
       { error: `Publish failed: ${err instanceof Error ? err.message : String(err)}` },
@@ -148,7 +176,13 @@ export async function DELETE(req: Request) {
   if (!docId) return NextResponse.json({ error: "Missing docId." }, { status: 400 })
 
   try {
+    // Read the slug before the delete — afterwards there's nothing to look up,
+    // and without it /post/<slug> would keep serving the cached page.
+    const live = await getBlogPostCacheKeys(docId).catch(() => null)
     await deleteDocument(docId)
+    if (live?.slug) {
+      revalidateBlogPaths({ slug: live.slug, author: live.author ?? undefined })
+    }
     return NextResponse.json({ ok: true })
   } catch (err) {
     return NextResponse.json(

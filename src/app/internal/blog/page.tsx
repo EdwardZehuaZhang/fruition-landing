@@ -34,13 +34,21 @@ interface SanityPost {
  */
 function buildRows(drafts: DraftRow[], posts: SanityPost[]): PostRow[] {
   const postsById = new Map(posts.map((p) => [p._id, p]))
+  const postsBySlug = new Map(posts.filter((p) => p.slug).map((p) => [p.slug as string, p]))
   const claimed = new Set<string>()
   const rows: PostRow[] = []
 
   for (const draft of drafts) {
     const meta = (draft.metadata ?? {}) as Record<string, unknown>
     const slug = typeof meta.slug === "string" ? meta.slug : null
-    const match = slug ? postsById.get(`blog-portal-${slug}`) : undefined
+    // Same resolution order as the editor (src/lib/blogDraftLink.ts): the id
+    // recorded at publish, then the portal's own id convention, then whichever
+    // post owns the slug — so posts published by Marketa, monday or the Studio
+    // still show as one row with their draft rather than two.
+    const recorded = typeof meta.sanity_doc_id === "string" ? meta.sanity_doc_id : null
+    const match =
+      (recorded ? postsById.get(recorded) : undefined) ??
+      (slug ? (postsById.get(`blog-portal-${slug}`) ?? postsBySlug.get(slug)) : undefined)
     if (match) claimed.add(match._id)
 
     const metaStatus = (meta.status as string) || "drafted"
