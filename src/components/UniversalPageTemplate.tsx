@@ -20,6 +20,7 @@ import {
   CaseStudyCardsSection,
   IndustryTabsSection,
   TestimonialCtaBanner,
+  AuditCtaBanner,
   RemoteTeamSection,
   ApplicationFormSection,
   TextContentSection,
@@ -265,6 +266,9 @@ export default function UniversalPageTemplate({
           withPurpleCircle={page.comparisonWithPurpleCircle ?? true}
         />
       )}
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* 3b. Methodology — moved before Calendly to match prod sequence */}
       {!shouldMergeMethodology && methodologySteps.length > 0 && (

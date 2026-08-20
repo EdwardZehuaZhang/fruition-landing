@@ -17,6 +17,7 @@ import TrainingRecommender from "@/components/sections/TrainingRecommender"
 import type { FaqTab as SharedFaqTab } from "@/components/sections/types"
 import type { SiteSettings } from "@/features/page-builder/types"
 import CtaLabel from "@/components/CtaLabel"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -511,6 +512,9 @@ export default function MondayTrainingContent({
           )}
         </div>
       </section>
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* Interactive training recommender */}
       <TrainingRecommender

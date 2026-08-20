@@ -18,6 +18,7 @@ import type {
   SanityImageRef,
 } from "@/components/sections/types"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface Props {
   page: any
@@ -235,6 +236,9 @@ export default function MondayProductManagementContent({
         subheading={page.whyProductTeamsSubheading}
         cards={page.whyProductTeamsCards}
       />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* 5. How to Manage Products — Strategic Approach */}
       <StrategicApproachSection

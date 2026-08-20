@@ -9,6 +9,7 @@ import FramedMedia from "@/components/common/FramedMedia"
 import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
 import StickyCtaBar from "@/components/sections/StickyCtaBar"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 export interface TeamMember {
   _id: string
@@ -376,6 +377,10 @@ export default function FruitionTeamClient({
           )}
         </div>
       </section>
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
+
       <CroSections data={croSections} primaryCtaUrl={calendlyUrl} />
     </div>
   )

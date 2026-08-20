@@ -3,6 +3,7 @@
 import { BOOKING_ANCHOR } from "@/lib/bookingLink"
 import { useEffect, useState } from "react"
 import CtaButton from "@/components/CtaButton"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 /* ------------------------------------------------------------------ */
 /*  Data — questions, scoring and report logic are the source-of-truth */
@@ -624,6 +625,9 @@ export default function AiBlueprintClient() {
           </div>
         </section>
       )}
+
+      {/* Conversion banner — after the assessment funnel, never mid-flow */}
+      <AuditCtaBanner />
     </main>
   )
 }

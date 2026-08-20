@@ -14,6 +14,7 @@ import AiCapability from '@/components/home/AiCapability'
 import InsightsGrid, { type HomePost } from '@/components/home/InsightsGrid'
 import FaqSplit from '@/components/home/FaqSplit'
 import CalendlySection from '@/components/sections/CalendlySection'
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 const FALLBACK_EMAIL = 'contact@fruitionservices.io'
 
@@ -65,6 +66,10 @@ export default async function Home() {
       <ClientsGrid logos={settings.carouselLogos ?? []} />
       <MethodTimeline />
       <WhereWeWork offices={offices} />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
+
       <TestimonialsRoll testimonials={data.testimonials ?? []} bookingHref={bookingHref} />
       <IndustriesHub />
       <PlatformsCertified />

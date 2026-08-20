@@ -13,6 +13,7 @@ import {
 import type { CaseStudy, SiteSettingsData, FaqTab, PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import FramedMedia from "@/components/common/FramedMedia"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface Props {
   page: any
@@ -157,6 +158,9 @@ export default function MondayForFinanceContent({
           </div>
         </section>
       )}
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* 4. Tab selector section */}
       <FinanceTabsSection

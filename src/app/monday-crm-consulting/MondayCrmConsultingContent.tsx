@@ -16,6 +16,7 @@ import {
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData, FaqTab } from "@/components/sections/types"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface MondayCrmConsultingContentProps {
   page: any
@@ -257,6 +258,9 @@ export default function MondayCrmConsultingContent({
           },
         ]}
       />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* 5. Testimonials (above Calendly) */}
       <TestimonialsGrid caseStudies={caseStudies} />

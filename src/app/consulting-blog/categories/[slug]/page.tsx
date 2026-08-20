@@ -2,6 +2,7 @@
 import { getBlogPosts, getBlogCategories } from "@/sanity/queries"
 import BlogCard from "@/components/BlogCard"
 import { buildOgMetadata } from "@/lib/metadata"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -38,6 +39,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
           <BlogCard key={post.slug} {...post} />
         ))}
       </div>
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner contained={false} className="mt-16" />
     </div>
   )
 }

@@ -18,6 +18,7 @@ import type {
   FaqTab,
   ComparisonTab,
 } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 type SanityImageRef = { asset?: { _ref?: string } } | null | undefined
 function safeImageUrl(ref: SanityImageRef): string | null {
@@ -279,6 +280,9 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
         servicesAccent={page.servicesListHeadingAccent || "Services"}
         services={servicesList}
       />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* 5. Solution cards — top pair (PROJECT SCHEDULING + INVENTORY TRACKING) */}
       {solutionTop.length > 0 && <SolutionCardsSection cards={solutionTop} />}

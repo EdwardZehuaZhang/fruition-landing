@@ -14,6 +14,7 @@ import StickyCtaBar from "@/components/sections/StickyCtaBar"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import CtaLabel from "@/components/CtaLabel"
 import type { ComparisonTab as SharedComparisonTab, FaqTab as SharedFaqTab } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -531,6 +532,9 @@ export default function MondayImplementationConsultantsContent({
           </div>
         </section>
       )}
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* ============================================================ */}
       {/* SECTION 4 — Comparison tabs (DIY / Benefits / Our Approach)  */}

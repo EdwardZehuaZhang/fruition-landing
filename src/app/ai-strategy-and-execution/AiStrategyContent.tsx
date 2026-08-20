@@ -11,6 +11,7 @@ import {
   CapabilitiesGrid,
 } from "@/components/sections"
 import type { CaseStudy, FaqTab, SiteSettingsData } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface AiStrategyContentProps {
   page: any
@@ -80,6 +81,9 @@ export default function AiStrategyContent({
           ctaUrl={page.capabilitiesCtaUrl}
         />
       )}
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {page.comparisonTabs?.length > 0 && (
         <ComparisonTabsSection

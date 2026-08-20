@@ -14,6 +14,7 @@ import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
 import CtaLabel from "@/components/CtaLabel"
 import FramedMedia from "@/components/common/FramedMedia"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface ComparisonItem {
   _key?: string
@@ -236,6 +237,9 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
           tabs={page.comparisonTabs}
         />
       )}
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* 4. Four image cards */}
       {page?.fourCards && page.fourCards.length > 0 && (

@@ -14,6 +14,7 @@ import StickyCtaBar from "@/components/sections/StickyCtaBar"
 import CtaLabel from "@/components/CtaLabel"
 import FramedMedia from "@/components/common/FramedMedia"
 import type { FaqTab as SharedFaqTab } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -810,6 +811,9 @@ export default function ImplementationPackagesContent({
           </div>
 
       </section>
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* ============================================================ */}
       {/* SECTION 5 -- Testimonials (shared carousel component)        */}

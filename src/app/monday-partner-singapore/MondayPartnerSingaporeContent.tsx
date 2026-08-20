@@ -19,6 +19,7 @@ import type {
   FaqTab,
   ComparisonTab,
 } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface Props {
   page: any
@@ -210,6 +211,9 @@ export default function MondayPartnerSingaporeContent({
         theme="light"
         withPurpleCircle={false}
       />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* Meet the team — SG region */}
       <TeamGridSection

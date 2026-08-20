@@ -16,6 +16,7 @@ import type {
   FaqTab,
   ComparisonTab,
 } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface Props {
   page: any
@@ -185,6 +186,9 @@ export default function CertifiedAtlassianPartnerContent({ page, siteSettings, f
 
       {/* FAQ */}
       <FaqAccordion heading="Frequently asked questions" tabs={resolvedFaqTabs} />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* Proven Atlassian Cloud Results */}
       <ProvenResultsSection stats={provenStats} />

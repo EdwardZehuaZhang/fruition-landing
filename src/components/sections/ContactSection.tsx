@@ -2,6 +2,7 @@
 
 import BookingSection from "./BookingSection"
 import WorldMap, { type MapOffice } from "./WorldMap"
+import AuditCtaBanner from "./AuditCtaBanner"
 
 export interface ContactOffice extends MapOffice {
   flag?: string
@@ -31,6 +32,10 @@ export default function ContactSection({
   return (
     <>
       <ContactHero offices={offices} salesEmail={salesEmail} supportEmail={supportEmail} phone={phone} phoneTel={phoneTel} />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
+
       <OfficeBand offices={offices} />
       <BookingSection
         eyebrow="Contact us"

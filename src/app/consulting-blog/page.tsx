@@ -1,6 +1,7 @@
 import { getBlogPosts, getBlogCategories, getPageBySlug } from "@/sanity/queries"
 import { buildOgMetadata } from "@/lib/metadata"
 import BlogFilterableList from "@/components/BlogFilterableList"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface BlogCategory {
   slug: string
@@ -46,6 +47,9 @@ export default async function BlogPage() {
         categories={categories as BlogCategory[]}
         pageSize={INITIAL_PAGE_SIZE}
       />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner contained={false} className="mt-16" />
     </div>
   )
 }

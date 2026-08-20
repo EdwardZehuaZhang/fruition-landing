@@ -1,4 +1,6 @@
-import { BOOKING_ANCHOR, bookingHref } from "@/lib/bookingLink"
+import { BOOKING_ANCHOR } from "@/lib/bookingLink"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
+
 import type { PortableTextBlock, PortableTextComponents } from "@portabletext/react"
 import { PortableText } from "@portabletext/react"
 import { Fragment } from "react"
@@ -650,36 +652,6 @@ function ArticleToc({ entries }: { entries: TocEntry[] }) {
   )
 }
 
-/** Bottom-of-article conversion CTA. */
-function InlineAuditCta({ calendlyUrl }: { calendlyUrl: string }) {
-  return (
-    <aside
-      className="relative w-full overflow-hidden rounded-card p-[32px] md:p-[40px] bg-gradient-to-br from-surface-dark-2 to-surface-dark"
-    >
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -top-[120px] -right-[100px] size-[300px] rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--color-brand)_40%,transparent)_0%,transparent_70%)]"
-      />
-      <div className="relative flex flex-col gap-[18px] md:flex-row md:items-center md:justify-between">
-        <div className="max-w-[540px]">
-          <h2 className="font-bold text-white text-[22px] leading-[30px] text-balance">
-            Scaling this workflow across 50+ users?
-          </h2>
-          <p className="mt-[8px] text-[15px] leading-[24px] text-white/[0.78]">
-            Book a complimentary 30-minute process audit with a Fruition consultant and we will map the build for your team.
-          </p>
-        </div>
-        <Link
-          href={bookingHref(calendlyUrl)}
-          className="flex-none cta-btn cta-btn-on-dark-primary"
-        >
-          Book a 30-Min System Audit
-        </Link>
-      </div>
-    </aside>
-  )
-}
-
 function RelatedPostCard({ post }: { post: RelatedBlogPost }) {
   const imgSrc = post.coverImage?.asset?._ref
     ? urlFor(post.coverImage).width(580).height(324).url()
@@ -848,7 +820,7 @@ export default function BlogPostTemplate({
           </div>
 
           {/* Bottom-of-article conversion CTA */}
-          <InlineAuditCta calendlyUrl={calendlyUrl} />
+          <AuditCtaBanner bookingUrl={calendlyUrl} contained={false} />
 
           {/* Tags (from categories) */}
           {post.categories && post.categories.length > 0 && (

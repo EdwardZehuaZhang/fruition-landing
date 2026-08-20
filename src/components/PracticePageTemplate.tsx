@@ -11,6 +11,7 @@ import { getFaqItemsForPageStrict, getClosingCtaForPage } from '@/sanity/queries
 import { getIndustryLogos, INDUSTRY_LOGO_KEYS } from '@/sanity/industryLogos'
 import ClientLogoSection from '@/components/sections/ClientLogoSection'
 import { groupFaqsIntoTabs } from '@/sanity/groupFaqs'
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 /**
  * Shared renderer for the Site Architecture v2.1 practice clusters
@@ -152,6 +153,9 @@ export default async function PracticePageTemplate({ page }: { page: PracticePag
           </div>
         </section>
       )}
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* Geographic coverage */}
       <section className="border-b border-ui">

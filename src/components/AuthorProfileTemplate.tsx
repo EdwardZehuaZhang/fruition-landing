@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
 import BlogCard from "@/components/BlogCard"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -178,6 +179,9 @@ export default function AuthorProfileTemplate({
             {bio}
           </p>
         )}
+
+        {/* Mid-page conversion banner — shared site-wide */}
+        <AuditCtaBanner contained={false} className="my-[32px]" />
 
         {/* Divider */}
         <div className="mt-10 md:mt-12 border-t border-ui" />
