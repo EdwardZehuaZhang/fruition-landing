@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import CtaButton from "@/components/CtaButton"
 
 interface StickyCtaBarProps {
+  /** Site-wide headline. Falls back to the copy the design ships with. */
+  heading?: string
   label?: string
   /** Shorter CTA label shown on mobile (below md) so the long CMS label can't
    *  wrap/overflow the button. Defaults to "Schedule a call". */
@@ -17,6 +19,10 @@ interface StickyCtaBarProps {
  * Floating bottom CTA that fades in once the visitor scrolls past the hero, so
  * a friction-free conversion path is always one click away. Dismissible.
  *
+ * Rendered ONCE, site-wide, by <SiteFrame> via <SiteStickyCta> — pages do not
+ * render this directly. A page tunes the copy with <StickyCtaConfig> (see
+ * StickyCtaContext.tsx); everything else inherits the Site Settings default.
+ *
  * Proportions follow `CTA Banner.dc.html` in Claude Design: the heading sits on
  * one line beside the CTA at `lg` and stacks above it below that. The design
  * keys off container width (560/900); this uses the project's three
@@ -27,6 +33,7 @@ interface StickyCtaBarProps {
  * canvas, which read oversized floating above real page content.
  */
 export default function StickyCtaBar({
+  heading = "Ready to scale your workflows?",
   label,
   mobileLabel = "Schedule a call",
   href,
@@ -92,7 +99,7 @@ export default function StickyCtaBar({
             beside the CTA. */}
         <div className="relative flex items-start gap-2.5 md:gap-3 lg:min-w-0 lg:flex-1">
           <h2 className="m-0 min-w-0 flex-1 pt-2 text-[19px] leading-[1.35] font-semibold tracking-[-0.01em] text-white md:pt-[5px] md:text-[23px] md:leading-[1.3] lg:pt-0 lg:text-[clamp(19px,1.6vw,23px)]" style={{ textWrap: "pretty" }}>
-            Ready to scale your workflows?
+            {heading}
           </h2>
           {closeButton("lg:hidden", 15)}
         </div>

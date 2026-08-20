@@ -11,7 +11,7 @@ import {
   FaqAccordion,
   TestimonialsGrid,
   CroSections,
-  StickyCtaBar,
+  StickyCtaConfig,
 } from "@/components/sections"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import type {
@@ -349,7 +349,7 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
 
   return (
     <div>
-      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={bookingHref(page.croSections?.stickyCtaUrl || calendlyUrl)} />
+      <StickyCtaConfig label={page.croSections?.stickyCtaLabel} mobileLabel={page.croSections?.stickyCtaMobileLabel} href={bookingHref(page.croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* 1. Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow || "monday.com Expert Consultants"}

@@ -12,7 +12,7 @@ import {
   FaqAccordion,
   TestimonialsGrid,
   CroSections,
-  StickyCtaBar,
+  StickyCtaConfig,
 } from "@/components/sections"
 import TeamGridSection, { type TeamMember } from "@/components/TeamGridSection"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
@@ -157,7 +157,7 @@ export default function MondayPartnerUkContent({
 
   return (
     <div>
-      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={bookingHref(page.croSections?.stickyCtaUrl || rawCalendly)} />
+      <StickyCtaConfig label={page.croSections?.stickyCtaLabel} mobileLabel={page.croSections?.stickyCtaMobileLabel} href={bookingHref(page.croSections?.stickyCtaUrl || rawCalendly)} />
       {/* Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow}

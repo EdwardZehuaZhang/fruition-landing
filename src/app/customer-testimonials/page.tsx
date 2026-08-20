@@ -1,6 +1,6 @@
 import { bookingHref } from "@/lib/bookingLink"
 import { getSiteSettings, getPageBySlug } from "@/sanity/queries"
-import { ClientLogoSection, CalendlySection, DiscoverCtaSection, CroSections, StickyCtaBar, TestimonialFilterGrid } from "@/components/sections"
+import { ClientLogoSection, CalendlySection, DiscoverCtaSection, CroSections, StickyCtaConfig, TestimonialFilterGrid } from "@/components/sections"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
@@ -108,7 +108,7 @@ export default async function CustomerTestimonialsPage() {
 
   return (
     <div>
-      <StickyCtaBar label={page?.croSections?.stickyCtaLabel} href={bookingHref(page?.croSections?.stickyCtaUrl || rawCalendly)} />
+      <StickyCtaConfig label={page?.croSections?.stickyCtaLabel} mobileLabel={page?.croSections?.stickyCtaMobileLabel} href={bookingHref(page?.croSections?.stickyCtaUrl || rawCalendly)} />
       {/* Hero */}
       <section className="bg-surface">
         <div
