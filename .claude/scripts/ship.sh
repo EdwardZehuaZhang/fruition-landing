@@ -1,14 +1,27 @@
 #!/usr/bin/env bash
-# Ship the current branch to production: commit -> push -> PR -> wait for CI -> squash merge.
+# Ship the current branch: commit -> push -> PR -> wait for CI -> squash merge.
 #
-# Usage: .claude/scripts/ship.sh "commit message"
-#        .claude/scripts/ship.sh --no-commit      # branch is already committed
+# Usage:  ship.sh "commit message"     commit everything, then ship
+#         ship.sh --no-commit          branch is already committed
+#         ship.sh --dry-run [...]      run every check, stop before push/PR/merge
+#
+# Run it from anywhere inside the target repo. The base branch is the repo's
+# own default branch (production here, main for marketa/fibreconx), so this
+# works across every repo under ~/Github/Fruition-Service.
 #
 # Refuses to merge unless every required check passes. Never force-pushes.
 set -euo pipefail
 
-BASE="production"
 POLL_TIMEOUT_MIN="${SHIP_TIMEOUT_MIN:-20}"
+
+# --dry-run does all the validation and then stops before anything leaves the
+# machine. Use it to exercise the guardrails; a bare run really does deploy.
+DRY=0
+ARGS=()
+for a in "$@"; do
+  if [ "$a" = "--dry-run" ]; then DRY=1; else ARGS+=("$a"); fi
+done
+set -- ${ARGS+"${ARGS[@]}"}
 
 die() { printf '\033[31mship: %s\033[0m\n' "$*" >&2; exit 1; }
 say() { printf '\033[36m==>\033[0m %s\n' "$*"; }
@@ -16,12 +29,22 @@ say() { printf '\033[36m==>\033[0m %s\n' "$*"; }
 command -v gh >/dev/null || die "gh CLI not found"
 gh auth status >/dev/null 2>&1 || die "gh is not authenticated (run: gh auth login)"
 
-cd "$(git rev-parse --show-toplevel)" || die "not inside a git repository"
+git rev-parse --git-dir >/dev/null 2>&1 || die "not inside a git repository.
+cd into the repo you want to ship first, e.g.:
+    cd ~/Github/Fruition-Service/fruition-website-monorepo"
+cd "$(git rev-parse --show-toplevel)"
+
+REPO="$(gh repo view --json nameWithOwner --jq .nameWithOwner)"
+BASE="${SHIP_BASE:-$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name)}"
+[ -z "$BASE" ] && die "could not determine the default branch for $REPO"
 
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-[ "$BRANCH" = "$BASE" ] && die "you are on '$BASE'. Create a feature branch first:
+[ "$BRANCH" = "$BASE" ] && die "you are on '$BASE' — that is what we merge into.
+Create a feature branch first:
     git switch -c fix/my-change"
 [ "$BRANCH" = "HEAD" ] && die "detached HEAD — check out a branch first"
+
+say "repo $REPO  |  $BRANCH -> $BASE"
 
 # ---------------------------------------------------------------- commit
 if [ "${1:-}" = "--no-commit" ]; then
@@ -29,7 +52,7 @@ if [ "${1:-}" = "--no-commit" ]; then
 else
   MSG="${1:-}"
   [ -z "$MSG" ] && die "need a commit message:
-    .claude/scripts/ship.sh \"fix(scope): what changed\"
+    ship.sh \"fix(scope): what changed\"
   or pass --no-commit if the branch is already committed."
 
   if [ -n "$(git status --porcelain)" ]; then
@@ -41,9 +64,16 @@ else
   fi
 fi
 
-git rev-parse --verify "origin/$BASE" >/dev/null 2>&1 || git fetch origin "$BASE" -q
+git fetch origin "$BASE" --quiet
 if [ -z "$(git log "origin/$BASE..HEAD" --oneline)" ]; then
   die "'$BRANCH' has no commits that '$BASE' doesn't already have — nothing to ship"
+fi
+
+if [ "$DRY" = "1" ]; then
+  say "DRY RUN — would push '$BRANCH' and open/merge a PR into '$BASE'. Stopping here."
+  say "commits that would ship:"
+  git log "origin/$BASE..HEAD" --oneline | sed 's/^/      /'
+  exit 0
 fi
 
 # ---------------------------------------------------------------- push
@@ -82,12 +112,11 @@ MERGEABLE="$(gh pr view "$PR" --json mergeable --jq .mergeable)"
 [ "$MERGEABLE" = "CONFLICTING" ] && die "PR #$PR conflicts with $BASE — rebase first. Nothing was merged."
 
 # ---------------------------------------------------------------- merge
-# Run the merge from outside the repo with an explicit --repo, so gh never tries
-# to switch or delete the LOCAL branch. That local step fails in a multi-worktree
-# checkout ("'production' is already used by worktree at ...") and would report a
-# failure *after* the PR had already merged. The remote branch is cleaned up by
-# the repo's delete_branch_on_merge setting.
-REPO="$(gh repo view --json nameWithOwner --jq .nameWithOwner)"
+# Merge from outside the repo with an explicit --repo so gh never tries to switch
+# or delete the LOCAL branch. That local step fails in a multi-worktree checkout
+# ("'production' is already used by worktree at ...") and would report a failure
+# *after* the PR had already merged. Remote branch cleanup comes from the repo's
+# delete_branch_on_merge setting.
 say "all checks green — squash-merging #$PR into $BASE"
 ( cd / && gh pr merge "$PR" --squash --repo "$REPO" ) || true
 
