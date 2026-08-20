@@ -230,6 +230,57 @@ async function waybackSnapshot(pageUrl: string): Promise<string | null> {
   }
 }
 
+/**
+ * Hosts the blog may have been archived under.
+ *
+ * CDX keys a capture by its exact host, so `www.` and the apex are separate
+ * lookups — asking for only one of them reports "no archived copy" for pages
+ * that were captured under the other.
+ */
+const ARCHIVE_HOSTS = ["https://www.fruitionservices.io", "https://fruitionservices.io"]
+
+/**
+ * One domain-wide CDX sweep, logged before the per-post work starts.
+ *
+ * Answers the question a run of "no archived copy" lines cannot: is the blog
+ * absent from the archive entirely, or were we asking under the wrong host?
+ */
+async function reportArchiveCoverage(): Promise<void> {
+  const cdx =
+    "https://web.archive.org/cdx/search/cdx" +
+    `?url=${encodeURIComponent("fruitionservices.io")}&matchType=domain` +
+    `&output=json&filter=statuscode:200&filter=original:.*/post/.*` +
+    `&to=${BEFORE}&collapse=urlkey&fl=original,timestamp&limit=2000`
+  try {
+    const res = await fetch(cdx, { signal: AbortSignal.timeout(60000) })
+    if (!res.ok) {
+      console.log(`archive coverage: CDX returned ${res.status}`)
+      return
+    }
+    const rows = (await res.json()) as string[][]
+    const data = rows.slice(1)
+    console.log(`archive coverage: ${data.length} distinct /post/ captures at or before ${BEFORE}`)
+    for (const [original, timestamp] of data.slice(0, 5)) {
+      console.log(`  e.g. ${timestamp}  ${original}`)
+    }
+    if (data.length === 0) {
+      console.log("  → the Wix blog was never crawled; body images cannot be recovered from the archive")
+    }
+  } catch (err) {
+    console.log(`archive coverage: lookup failed — ${err instanceof Error ? err.message : String(err)}`)
+  }
+}
+
+/** First archived capture of a post across every host spelling we know. */
+async function findSnapshot(slug: string): Promise<string | null> {
+  for (const host of ARCHIVE_HOSTS) {
+    const hit = await waybackSnapshot(`${host}/post/${slug}`)
+    if (hit) return hit
+    await sleep(DELAY)
+  }
+  return null
+}
+
 /** Wix wraps images in <wow-image data-image-info='{"imageData":{"uri":"…"}}'>. */
 function wowImageUri(el: HTMLElement): string | null {
   const raw = el.getAttribute("data-image-info")
@@ -256,11 +307,7 @@ function bodyContainer(root: HTMLElement): HTMLElement | null {
 
 /** Pull the cover and the ordered body images out of an archived Wix post page. */
 async function fetchArchivedPage(slug: string): Promise<ArchivedPage | null> {
-  const pageUrl = SOURCE_BASE
-    ? `${SOURCE_BASE}/post/${slug}`
-    : `https://www.fruitionservices.io/post/${slug}`
-
-  const target = SOURCE_BASE ? pageUrl : await waybackSnapshot(pageUrl)
+  const target = SOURCE_BASE ? `${SOURCE_BASE}/post/${slug}` : await findSnapshot(slug)
   if (!target) return null
   await sleep(DELAY)
 
@@ -373,6 +420,12 @@ async function main() {
   const posts: Post[] = await writeClient.fetch(QUERY, ONLY ? { only: ONLY } : {})
   const mode = APPLY ? "APPLY" : PLAN ? "PLAN" : "AUDIT"
   console.log(`${mode} — ${posts.length} post(s), sharpness target ${TARGET}px\n`)
+
+  // Only meaningful when we are actually going to consult the archive.
+  if (PLAN && !SOURCE_BASE) {
+    await reportArchiveCoverage()
+    console.log()
+  }
 
   const findings: Finding[] = []
   let postsTouched = 0
