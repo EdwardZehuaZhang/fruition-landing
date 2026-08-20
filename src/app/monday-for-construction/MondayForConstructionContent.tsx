@@ -4,7 +4,7 @@ import { bookingHref } from "@/lib/bookingLink"
 import { useState } from "react"
 import {
   HeroBanner,
-  LogoCloudMarquee,
+  ClientLogoSection,
   CalendlySection,
   FaqAccordion,
   TestimonialsGrid,
@@ -17,8 +17,12 @@ import type {
   FaqTab,
   ComparisonTab,
 } from "@/components/sections/types"
+import { resolveIndustryLogos } from "@/sanity/industryLogos"
+import type { CarouselLogo } from "@/components/sections/types"
 
 interface Props {
+  /** This page's own logo wall; falls back to the global carousel. */
+  industryLogos?: CarouselLogo[] | null
   page: any
   siteSettings?: SiteSettingsData | null
   caseStudies?: CaseStudy[]
@@ -150,6 +154,7 @@ function ConstructionTabs({ tabs }: { tabs: ComparisonTab[] }) {
 /* ----------------- Page ----------------- */
 
 export default function MondayForConstructionContent({
+  industryLogos,
   page,
   siteSettings,
   caseStudies = [],
@@ -193,11 +198,11 @@ export default function MondayForConstructionContent({
       <ConstructionIntroStrip />
 
       {/* Logo cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1}
         headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}
-        logos={siteSettings?.carouselLogos || []}
+        logos={resolveIndustryLogos(industryLogos, siteSettings?.carouselLogos)}
       />
 
       {/* Tab section — heading rotates with active tab */}

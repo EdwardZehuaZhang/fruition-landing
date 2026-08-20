@@ -4,7 +4,7 @@ import { bookingHref } from "@/lib/bookingLink"
 import { useState } from "react"
 import Link from "next/link"
 import {
-  LogoCloudMarquee,
+  ClientLogoSection,
   CalendlySection,
   JoinStatsSection,
   TestimonialCtaBanner,
@@ -219,7 +219,7 @@ export default function MondayServicePage({ page, siteSettings }: Props) {
 
       {/* 2. Logo Cloud */}
       {(page?.logoCloudHeadingPart1 || page?.logoCloudHeadingAccent) && (
-        <LogoCloudMarquee
+        <ClientLogoSection
           headingPart1={page?.logoCloudHeadingPart1}
           headingAccent={page?.logoCloudHeadingAccent}
           logos={siteSettings?.carouselLogos || []}

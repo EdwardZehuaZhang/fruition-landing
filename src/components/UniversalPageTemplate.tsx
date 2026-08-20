@@ -4,7 +4,7 @@ import { bookingHref } from "@/lib/bookingLink"
 import type { ReactNode } from "react"
 import {
   HeroBanner,
-  LogoCloudMarquee,
+  ClientLogoSection,
   ComparisonTabsSection,
   MethodologySection,
   TestimonialsGrid,
@@ -28,6 +28,8 @@ import type { CaseStudy, SiteSettingsData } from "@/components/sections/types"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 
 import type { FaqTab } from "@/components/sections/types"
+import { resolveIndustryLogos } from "@/sanity/industryLogos"
+import type { CarouselLogo } from "@/components/sections/types"
 
 interface UniversalPageTemplateProps {
   page: any // the Sanity page document
@@ -44,6 +46,11 @@ interface UniversalPageTemplateProps {
    * renders this image below the heading instead.
    */
   heroPartnerImageSrc?: string
+  /**
+   * This page's own client logo wall. Falls back to the global carousel when
+   * no industryLogoSet has been curated — see src/sanity/industryLogos.ts.
+   */
+  industryLogos?: CarouselLogo[] | null
 }
 
 function youtubeEmbedUrl(url?: string): string | null {
@@ -71,6 +78,7 @@ export default function UniversalPageTemplate({
   caseStudies = [],
   faqTabs,
   heroPartnerImageSrc,
+  industryLogos,
 }: UniversalPageTemplateProps) {
   if (!page) return null
 
@@ -153,11 +161,11 @@ export default function UniversalPageTemplate({
       )}
 
       {/* 2. Logo Cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1 || "Clients who have used our "}
         headingAccent={page.logoCloudHeadingAccent ?? "monday.com consulting services"}
         description={page.logoCloudDescription}
-        logos={siteSettings?.carouselLogos || []}
+        logos={resolveIndustryLogos(industryLogos, siteSettings?.carouselLogos)}
       />
 
       {/* 2b. Hero video (only when heroVideoUrl is set on the page doc) */}

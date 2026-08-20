@@ -3,7 +3,7 @@
 import { bookingHref } from "@/lib/bookingLink"
 import {
   HeroBanner,
-  LogoCloudMarquee,
+  ClientLogoSection,
   ComparisonTabsSection,
   CalendlySection,
   FaqAccordion,
@@ -94,7 +94,7 @@ export default function N8nIntegrationPartnerContent({
       />
 
       {/* Logo cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1}
         headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}

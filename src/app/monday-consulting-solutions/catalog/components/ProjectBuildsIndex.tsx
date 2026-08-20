@@ -1,7 +1,7 @@
 "use client"
 
-import { useMemo, useState } from "react"
-import { CLIENTS, type Region } from "../data/clients"
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react"
+import { CLIENTS, clientSlug, type Region } from "../data/clients"
 
 const REGIONS: { key: Region; label: string; flag: string; emoji: string }[] = [
   { key: "us", label: "United States", flag: "US", emoji: "🇺🇸" },
@@ -9,8 +9,45 @@ const REGIONS: { key: Region; label: string; flag: string; emoji: string }[] = [
   { key: "uk", label: "United Kingdom", flag: "UK", emoji: "🇬🇧" },
 ]
 
+const subscribeToLocation = (onChange: () => void) => {
+  window.addEventListener("popstate", onChange)
+  window.addEventListener("hashchange", onChange)
+  return () => {
+    window.removeEventListener("popstate", onChange)
+    window.removeEventListener("hashchange", onChange)
+  }
+}
+const readLocation = () => window.location.search + window.location.hash
+/** Server render has no location, so nothing is requested there. */
+const noLocation = () => ""
+
+/**
+ * Reads the client the visitor arrived for. The homepage logo wall links here as
+ * `?client=<slug>`; `#client-<slug>` is accepted too so the anchors are shareable.
+ *
+ * Deliberately reads `window.location` rather than `useSearchParams()` — this is a
+ * client-side-only enhancement, and useSearchParams would force the whole catalog
+ * behind a Suspense boundary to keep prerendering. useSyncExternalStore keeps that
+ * read hydration-safe without a setState-in-effect cascade.
+ */
+function useRequestedClient(): string | null {
+  const raw = useSyncExternalStore(subscribeToLocation, readLocation, noLocation)
+
+  return useMemo(() => {
+    const [search, hash = ""] = raw.split("#")
+    const fromQuery = new URLSearchParams(search).get("client")
+    const fromHash = hash.startsWith("client-") ? hash.slice("client-".length) : null
+    const requested = (fromQuery || fromHash || "").trim().toLowerCase()
+    return requested && CLIENTS.some((c) => clientSlug(c.name) === requested) ? requested : null
+  }, [raw])
+}
+
 export default function ProjectBuildsIndex() {
-  const [open, setOpen] = useState(false)
+  const requested = useRequestedClient()
+  // Arriving with ?client= expands the folder; the toggle still works on top of that.
+  const [toggled, setToggled] = useState<boolean | null>(null)
+  const open = toggled ?? Boolean(requested)
+  const scrolledFor = useRef<string | null>(null)
 
   const grouped = useMemo(() => {
     return REGIONS.map((r) => ({
@@ -21,6 +58,22 @@ export default function ProjectBuildsIndex() {
 
   const total = CLIENTS.length
 
+  useEffect(() => {
+    if (!requested || !open || scrolledFor.current === requested) return
+    const el = document.getElementById(`client-${requested}`)
+    if (!el) return
+    scrolledFor.current = requested
+
+    // Deferred a frame so the freshly-expanded folder has been laid out, and
+    // scrolled by absolute offset rather than scrollIntoView — the router can
+    // restore scroll to 0 right after mount, and this survives that.
+    const raf = requestAnimationFrame(() => {
+      const top = el.getBoundingClientRect().top + window.scrollY - window.innerHeight / 2
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" })
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [requested, open])
+
   return (
     <section id="builds" className="bg-surface">
       <div className="max-w-6xl mx-auto px-5 md:px-7 py-16 lg:py-20">
@@ -29,7 +82,7 @@ export default function ProjectBuildsIndex() {
             Project Builds Index
           </div>
           <h2 className="text-section-h2 mt-2 mb-3">
-            288 client engagements across the US, Australia, APAC, and the UK.
+            299 client engagements across the US, Australia, APAC, and the UK.
           </h2>
           <p className="text-body-lead text-[var(--color-text-secondary)]">
             Every build below has been delivered and is in active support across our three
@@ -42,7 +95,7 @@ export default function ProjectBuildsIndex() {
             type="button"
             aria-expanded={open}
             aria-controls="builds-folder-body"
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => setToggled(!open)}
             className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-surface-subtle transition-colors"
           >
             <span
@@ -81,23 +134,32 @@ export default function ProjectBuildsIndex() {
                     </span>
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                    {g.items.map((c, idx) => (
-                      <div
-                        key={`${g.key}-${c.name}-${idx}`}
-                        className="rounded-xl border border-[var(--color-border)] bg-surface-raised p-3 hover:border-[var(--purple-light)] hover:shadow-whisper dark:hover:shadow-none transition-all"
-                      >
-                        <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-[#16a34a] font-semibold mb-1.5">
-                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#16a34a]" />
-                          Delivered
+                    {g.items.map((c, idx) => {
+                      const slug = clientSlug(c.name)
+                      const isTarget = slug === requested
+                      return (
+                        <div
+                          key={`${g.key}-${c.name}-${idx}`}
+                          id={`client-${slug}`}
+                          className={`scroll-mt-28 rounded-xl border bg-surface-raised p-3 transition-all ${
+                            isTarget
+                              ? "border-[var(--purple-primary)] ring-2 ring-[var(--purple-primary)] ring-offset-2 ring-offset-[var(--color-surface)]"
+                              : "border-[var(--color-border)] hover:border-[var(--purple-light)] hover:shadow-whisper dark:hover:shadow-none"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-[#16a34a] font-semibold mb-1.5">
+                            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#16a34a]" />
+                            Delivered
+                          </div>
+                          <h4 className="text-sm font-semibold text-[var(--text-dark)] leading-tight">
+                            {c.name}
+                          </h4>
+                          <div className="text-xs text-[var(--color-text-secondary)] mt-1">
+                            {c.meta}
+                          </div>
                         </div>
-                        <h4 className="text-sm font-semibold text-[var(--text-dark)] leading-tight">
-                          {c.name}
-                        </h4>
-                        <div className="text-xs text-[var(--color-text-secondary)] mt-1">
-                          {c.meta}
-                        </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 </div>
               ))}

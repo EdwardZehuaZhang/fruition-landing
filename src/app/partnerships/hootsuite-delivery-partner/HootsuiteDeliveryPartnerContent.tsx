@@ -3,7 +3,7 @@
 import { bookingHref } from "@/lib/bookingLink"
 import {
   HeroBanner,
-  LogoCloudMarquee,
+  ClientLogoSection,
   ComparisonTabsSection,
   CalendlySection,
   JoinStatsSection,
@@ -54,7 +54,7 @@ export default function HootsuiteDeliveryPartnerContent({
       />
 
       {/* Logo cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1 || "Clients who have used our "}
         headingAccent={page.logoCloudHeadingAccent ?? "monday.com consulting services"}
         description={page.logoCloudDescription}

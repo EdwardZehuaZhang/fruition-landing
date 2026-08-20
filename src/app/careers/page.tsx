@@ -3,7 +3,7 @@ import { getSiteSettings, getPageBySlug, getFaqItemsForPage } from "@/sanity/que
 import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import { urlFor } from "@/sanity/image"
 import {
-  LogoCloudMarquee,
+  ClientLogoSection,
   CapabilitiesGrid,
   RemoteTeamSection,
   FaqAccordion,
@@ -172,7 +172,7 @@ export default async function CareersPage() {
       )}
 
       {/* 3. Client logo marquee */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1}
         headingAccent={page.logoCloudHeadingAccent}
         logos={siteSettings?.carouselLogos || []}

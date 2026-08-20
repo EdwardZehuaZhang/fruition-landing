@@ -554,7 +554,7 @@ export const getSiteSettings = cache(async () => {
     footerServicesLinks,
     footerDepartmentLinks,
     footerIndustryLinks,
-    carouselLogos[]{ alt, image },
+    carouselLogos[]{ alt, image, clientSlug },
     badgeCertifications,
     badgeSecurity,
     badgeForrester,

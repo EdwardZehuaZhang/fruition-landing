@@ -1,5 +1,6 @@
 export { default as HeroBanner } from "./HeroBanner"
-export { default as LogoCloudMarquee } from "./LogoCloudMarquee"
+export { default as ClientLogoSection } from "./ClientLogoSection"
+export { default as ClientLogoWall } from "./ClientLogoWall"
 export { default as ComparisonTabsSection } from "./ComparisonTabsSection"
 export { default as MethodologySection } from "./MethodologySection"
 export { default as TestimonialsGrid } from "./TestimonialsGrid"
