@@ -21,6 +21,7 @@ export default async function NewSocialPostPage() {
     id: "",
     title: "",
     mediaUrls: [],
+    shortenLinks: true,
     platforms: {},
     postIds: [],
     status: "draft",
