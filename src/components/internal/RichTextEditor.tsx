@@ -1,8 +1,10 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Node, mergeAttributes, nodePasteRule } from "@tiptap/core"
 import { useEditor, useEditorState, EditorContent, type Editor } from "@tiptap/react"
+import { TextSelection } from "@tiptap/pm/state"
+import type { EditorView } from "@tiptap/pm/view"
 import StarterKit from "@tiptap/starter-kit"
 import Youtube from "@tiptap/extension-youtube"
 import { TableKit } from "@tiptap/extension-table"
@@ -20,6 +22,7 @@ import {
   Link as LinkIcon,
   Video,
   Table as TableIcon,
+  Type,
   Undo2,
   Redo2,
 } from "lucide-react"
@@ -39,6 +42,126 @@ const MAX_BODY_IMAGE_BYTES = 8 * 1024 * 1024
 const VIMEO_PASTE = /(?:https?:\/\/)?(?:www\.)?vimeo\.com\/(?:video\/)?\d+\S*/gi
 const TWITCH_PASTE = /(?:https?:\/\/)?(?:www\.|clips\.)?twitch\.tv\/\S+/gi
 const LOOM_PASTE = /(?:https?:\/\/)?(?:www\.)?loom\.com\/(?:share|embed)\/[\w-]+\S*/gi
+
+/* ------------------------------------------------------------------ */
+/*  Image ingestion                                                    */
+/*  Three ways in — the toolbar button, a drag from the desktop or      */
+/*  another tab, and a paste. All of them end at the same endpoint, so  */
+/*  the body only ever references Sanity-hosted images: a remote URL    */
+/*  left in the markdown publishes as a stray `!` plus a link rather    */
+/*  than a picture (see sideloadBodyImages).                            */
+/* ------------------------------------------------------------------ */
+
+/** URLs worth handing to the server as an image, when all we have is a link. */
+const IMAGE_URL_HINT = /\.(?:png|jpe?g|gif|webp|avif|bmp|svg)(?:[?#]|$)/i
+/** monday keeps item images behind `…/resources/<assetId>/…`, extension-free. */
+const IMAGE_HOST_HINT = /(?:cdn\.sanity\.io|cloudinary\.com|\/resources\/\d+\/)/i
+
+/** One image waiting to be uploaded — either local bytes or a remote URL. */
+interface PendingImage {
+  file?: File
+  url?: string
+  alt: string
+}
+
+function altFromFilename(name: string): string {
+  return name
+    .replace(/\.[a-z0-9]+$/i, "")
+    .replace(/[-_]+/g, " ")
+    .trim()
+}
+
+async function postImage(init: RequestInit): Promise<string> {
+  const r = await fetch("/api/internal/blog/image", init)
+  const data = (await r.json().catch(() => ({}))) as { url?: string; error?: string }
+  if (!r.ok || !data.url) throw new Error(data.error ?? "Image upload failed.")
+  return data.url
+}
+
+/** Upload local bytes and get back the Sanity CDN URL. */
+async function uploadImageFile(file: File): Promise<string> {
+  if (!file.type.startsWith("image/")) throw new Error("That file isn't an image.")
+  if (file.size > MAX_BODY_IMAGE_BYTES) throw new Error("Image exceeds 8 MB.")
+  const fd = new FormData()
+  fd.set("image", file)
+  return postImage({ method: "POST", body: fd })
+}
+
+/** Ask the server to fetch an image hosted elsewhere and re-host it in Sanity. */
+async function uploadImageUrl(url: string): Promise<string> {
+  return postImage({
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url }),
+  })
+}
+
+function looksLikeImageUrl(raw: string): boolean {
+  if (!/^https?:\/\/\S+$/i.test(raw)) return false
+  return IMAGE_URL_HINT.test(raw) || IMAGE_HOST_HINT.test(raw)
+}
+
+/** Every image file on a clipboard or drag payload (screenshots, Finder drags). */
+function imageFilesFrom(dt: DataTransfer): PendingImage[] {
+  return Array.from(dt.files ?? [])
+    .filter((f) => f.type.startsWith("image/"))
+    .map((f) => ({ file: f, alt: altFromFilename(f.name) }))
+}
+
+/**
+ * A payload that is *only* a reference to one image — a lone `<img>`, a
+ * uri-list, or a bare image URL. Mixed rich text (an excerpt with pictures in
+ * it) returns null so the normal paste keeps the words.
+ */
+function loneImageRefFrom(dt: DataTransfer): PendingImage | null {
+  const html = dt.getData("text/html")
+  if (html) {
+    const doc = new DOMParser().parseFromString(html, "text/html")
+    const imgs = doc.querySelectorAll("img[src]")
+    if (imgs.length !== 1 || doc.body.textContent?.trim()) return null
+    const src = imgs[0].getAttribute("src") ?? ""
+    if (!/^https?:\/\//i.test(src)) return null
+    return { url: src, alt: (imgs[0].getAttribute("alt") ?? "").trim() }
+  }
+  const text = (dt.getData("text/uri-list") || dt.getData("text/plain") || "").trim()
+  // uri-list can hold several lines; the first non-comment one is the target.
+  const first = text.split(/\r?\n/).find((l) => l && !l.startsWith("#"))?.trim() ?? ""
+  return looksLikeImageUrl(first) ? { url: first, alt: "" } : null
+}
+
+/** What a paste or drop carries, if it carries an image at all. */
+function imagesFrom(dt: DataTransfer | null): PendingImage[] {
+  if (!dt) return []
+  const files = imageFilesFrom(dt)
+  if (files.length > 0) return files
+  const ref = loneImageRefFrom(dt)
+  return ref ? [ref] : []
+}
+
+/**
+ * True while a drag carries something we would ingest — used only to light up
+ * the editor border, so a false positive costs nothing.
+ */
+function dragHasImage(dt: DataTransfer | null): boolean {
+  if (!dt) return false
+  return Array.from(dt.types).some((t) => t === "Files" || t === "text/uri-list")
+}
+
+/**
+ * Drop the image into the document at `pos`, splitting the block if the
+ * cursor sits mid-paragraph. Returns the position just after it so a
+ * multi-image paste stacks in order.
+ */
+function insertImageAt(view: EditorView, pos: number, src: string, alt: string): number {
+  const type = view.state.schema.nodes.image
+  if (!type) return pos
+  const at = Math.min(Math.max(pos, 0), view.state.doc.content.size)
+  const tr = view.state.tr
+  tr.setSelection(TextSelection.near(tr.doc.resolve(at)))
+  tr.replaceSelectionWith(type.create({ src, alt: alt || null }))
+  view.dispatch(tr.scrollIntoView())
+  return view.state.selection.to
+}
 
 /** Host allowed to embed players in the editor (Twitch needs it). */
 function browserParents(): string[] | undefined {
@@ -323,9 +446,16 @@ function TableTextButton({
   )
 }
 
-function Toolbar({ editor }: { editor: Editor }) {
+function Toolbar({
+  editor,
+  onImageFile,
+  uploading,
+}: {
+  editor: Editor
+  onImageFile: (file: File) => void | Promise<void>
+  uploading: boolean
+}) {
   const imageInputRef = useRef<HTMLInputElement>(null)
-  const [uploadingImage, setUploadingImage] = useState(false)
 
   // Tiptap v3 doesn't re-render React on selection changes by default, so
   // reading editor.isActive() during render goes stale: the table strip (and
@@ -345,43 +475,19 @@ function Toolbar({ editor }: { editor: Editor }) {
       blockquote: e.isActive("blockquote"),
       link: e.isActive("link"),
       table: e.isActive("table"),
+      image: e.isActive("image"),
+      imageAlt: (e.getAttributes("image").alt as string | null) ?? "",
       canUndo: e.can().undo(),
       canRedo: e.can().redo(),
     }),
   })
 
-  async function onImageFile(file: File) {
-    if (!file.type.startsWith("image/")) {
-      window.alert("Choose an image file.")
-      return
-    }
-    if (file.size > MAX_BODY_IMAGE_BYTES) {
-      window.alert("Image exceeds 8 MB.")
-      return
-    }
-    const defaultAlt = file.name
-      .replace(/\.[a-z0-9]+$/i, "")
-      .replace(/[-_]+/g, " ")
-      .trim()
-    const alt = window.prompt("Image alt text (helps SEO)", defaultAlt)
-    if (alt === null) return
-    setUploadingImage(true)
-    try {
-      const fd = new FormData()
-      fd.set("image", file)
-      const r = await fetch("/api/internal/blog/image", { method: "POST", body: fd })
-      const data = (await r.json().catch(() => ({}))) as { url?: string; error?: string }
-      if (!r.ok || !data.url) {
-        window.alert(data.error ?? "Image upload failed.")
-        return
-      }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ;(editor.chain().focus() as any).setBlogImage({ src: data.url, alt: alt.trim() }).run()
-    } catch {
-      window.alert("Image upload failed.")
-    } finally {
-      setUploadingImage(false)
-    }
+  // Pasted and dropped images land with a guessed alt (filename, or whatever
+  // the source `<img>` carried), so the selected image needs a way to fix it.
+  function editAlt() {
+    const next = window.prompt("Image alt text (helps SEO)", ui.imageAlt)
+    if (next === null) return
+    editor.chain().focus().updateAttributes("image", { alt: next.trim() || null }).run()
   }
 
   function addLink() {
@@ -482,8 +588,8 @@ function Toolbar({ editor }: { editor: Editor }) {
         <LinkIcon size={16} />
       </ToolbarButton>
       <ToolbarButton
-        label={uploadingImage ? "Uploading image…" : "Insert image"}
-        disabled={uploadingImage}
+        label={uploading ? "Uploading image…" : "Insert image (or paste / drag one in)"}
+        disabled={uploading}
         onClick={() => imageInputRef.current?.click()}
       >
         <ImagePlus size={16} />
@@ -512,6 +618,18 @@ function Toolbar({ editor }: { editor: Editor }) {
       >
         <TableIcon size={16} />
       </ToolbarButton>
+
+      {ui.image && (
+        <span
+          className="ml-1 flex items-center gap-1 rounded-chip border px-1.5 py-1"
+          style={{ borderColor: "var(--purple-primary)" }}
+        >
+          <Type size={14} style={{ color: "var(--purple-primary)" }} aria-hidden />
+          <TableTextButton onClick={editAlt}>
+            {ui.imageAlt ? `Alt: ${ui.imageAlt.slice(0, 24)}` : "Add alt text"}
+          </TableTextButton>
+        </span>
+      )}
 
       {ui.table && (
         <span
@@ -576,6 +694,35 @@ export default function RichTextEditor({
   // tell an external replacement (load a draft) from its own round-trip and
   // avoid needless setContent() calls that would jump the cursor.
   const lastEmitted = useRef(value)
+  // Uploads in flight, so several pasted images share one "Uploading…" state.
+  const [uploads, setUploads] = useState(0)
+  const [imageError, setImageError] = useState<string | null>(null)
+  const [dragActive, setDragActive] = useState(false)
+
+  /**
+   * Upload each image and insert it at `pos`, in order. One failure reports
+   * itself and the rest of the batch carries on.
+   */
+  const ingestImages = useCallback(
+    async (view: EditorView, pos: number, items: PendingImage[]) => {
+      setImageError(null)
+      setUploads((n) => n + items.length)
+      let at = pos
+      for (const item of items) {
+        try {
+          const url = item.file
+            ? await uploadImageFile(item.file)
+            : await uploadImageUrl(item.url ?? "")
+          at = insertImageAt(view, at, url, item.alt)
+        } catch (err) {
+          setImageError(err instanceof Error ? err.message : "Image upload failed.")
+        } finally {
+          setUploads((n) => n - 1)
+        }
+      }
+    },
+    [],
+  )
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -590,7 +737,16 @@ export default function RichTextEditor({
         horizontalRule: false,
         link: {
           openOnClick: false,
-          autolink: true,
+          // No automatic links. Bare text like "monday.com" or a pasted URL
+          // stays plain text; a hyperlink is only ever created deliberately
+          // via the toolbar Link button (addLink -> setLink), which goes
+          // through setLink and is unaffected by these three flags.
+          // All three matter: `autolink` covers typing, `linkOnPaste` the
+          // paste handler, and `shouldAutoLink` the extension's paste *rule*,
+          // which linkifies URLs in any pasted text on its own.
+          autolink: false,
+          linkOnPaste: false,
+          shouldAutoLink: () => false,
           HTMLAttributes: { rel: "noopener noreferrer", target: "_blank" },
         },
       }),
@@ -608,7 +764,11 @@ export default function RichTextEditor({
       }),
       Markdown.configure({
         html: false,
-        linkify: true,
+        // markdown-it's linkify would turn bare domains/URLs in a loaded draft
+        // into links on parse, which then serialise back out as real
+        // `[text](url)` markdown and publish as link markDefs. Only explicit
+        // markdown links become links.
+        linkify: false,
         breaks: false,
         transformPastedText: false,
         transformCopiedText: false,
@@ -619,6 +779,31 @@ export default function RichTextEditor({
       attributes: {
         class: "blog-tiptap focus:outline-none",
         "aria-label": "Post body",
+      },
+      // Paste an image — a screenshot, a copied picture, or a copied image
+      // address. Anything else (text, a link, mixed rich text) falls through
+      // to the normal paste.
+      handlePaste(view, event) {
+        const items = imagesFrom(event.clipboardData)
+        if (items.length === 0) return false
+        event.preventDefault()
+        void ingestImages(view, view.state.selection.from, items)
+        return true
+      },
+      // Drag a file off the desktop, or an image out of another tab, and drop
+      // it where the cursor is. `moved` means an image already in the document
+      // is being re-ordered — that is ProseMirror's job, not ours.
+      handleDrop(view, event, _slice, moved) {
+        if (moved) return false
+        const items = imagesFrom(event.dataTransfer)
+        if (items.length === 0) return false
+        event.preventDefault()
+        setDragActive(false)
+        const at =
+          view.posAtCoords({ left: event.clientX, top: event.clientY })?.pos ??
+          view.state.selection.from
+        void ingestImages(view, at, items)
+        return true
       },
     },
     onCreate({ editor }) {
@@ -644,17 +829,52 @@ export default function RichTextEditor({
     }
   }, [value, editor])
 
+  /** Toolbar button: same pipeline as a paste, but alt text is asked for up front. */
+  async function insertImageFromToolbar(file: File) {
+    if (!editor) return
+    const alt = window.prompt("Image alt text (helps SEO)", altFromFilename(file.name))
+    if (alt === null) return
+    await ingestImages(editor.view, editor.state.selection.from, [{ file, alt: alt.trim() }])
+  }
+
   return (
     <div
       className="overflow-hidden rounded-chip border bg-surface"
-      style={{ borderColor: "var(--color-border)" }}
+      style={{ borderColor: dragActive ? "var(--purple-primary)" : "var(--color-border)" }}
+      onDragOver={(e) => {
+        if (dragHasImage(e.dataTransfer)) setDragActive(true)
+      }}
+      onDragLeave={(e) => {
+        // Ignore the dragleave fired when crossing between child elements.
+        const next = e.relatedTarget
+        if (!(next instanceof HTMLElement) || !e.currentTarget.contains(next)) setDragActive(false)
+      }}
+      onDrop={() => setDragActive(false)}
     >
-      {editor && <Toolbar editor={editor} />}
+      {editor && (
+        <Toolbar editor={editor} onImageFile={insertImageFromToolbar} uploading={uploads > 0} />
+      )}
       <EditorContent
         editor={editor}
         data-placeholder={placeholder}
         className="min-h-[640px] px-4 py-3 text-sm"
       />
+      {(uploads > 0 || imageError || dragActive) && (
+        <p
+          className="border-t px-4 py-2 text-xs"
+          style={{
+            borderColor: "var(--color-border)",
+            color: imageError ? "var(--danger-strong)" : "var(--color-text-secondary)",
+          }}
+          role="status"
+        >
+          {uploads > 0
+            ? `Uploading ${uploads} image${uploads > 1 ? "s" : ""}…`
+            : imageError
+              ? imageError
+              : "Drop to add the image here."}
+        </p>
+      )}
     </div>
   )
 }

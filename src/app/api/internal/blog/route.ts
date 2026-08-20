@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server"
 import { getPortalApiUser, bylineFor } from "@/lib/portalAuth"
-import { upsertBlogPost, uploadImageAsset, deleteDocument } from "@/lib/sanityWriteClient"
+import {
+  upsertBlogPost,
+  uploadImageAsset,
+  deleteDocument,
+  sideloadBodyImages,
+} from "@/lib/sanityWriteClient"
 
 export const runtime = "nodejs"
 export const maxDuration = 60
@@ -111,11 +116,25 @@ export async function POST(req: Request) {
   // Byline: an explicit form value wins, otherwise the signed-in author's profile.
   const byline = author || (await bylineFor(user))
 
+  // Pull any image hosted elsewhere into Sanity first. Without this a remote
+  // `![alt](url)` line publishes as a stray `!` plus a link instead of an
+  // image — the bug on monday item 2836162069.
+  let imageWarnings: string[] = []
+  let publishBody = body
+  try {
+    const sideloaded = await sideloadBodyImages(body)
+    publishBody = sideloaded.body
+    imageWarnings = sideloaded.warnings
+  } catch (err) {
+    // Never block a publish on the image pass; the body still goes out.
+    imageWarnings = [`Image side-loading failed: ${err instanceof Error ? err.message : String(err)}`]
+  }
+
   try {
     const result = await upsertBlogPost({
       docId,
       title,
-      body,
+      body: publishBody,
       slug,
       excerpt: excerpt || undefined,
       industry: industry || undefined,
@@ -127,7 +146,12 @@ export async function POST(req: Request) {
       coverImageAssetId,
       publishedAt: publishedAt || undefined,
     })
-    return NextResponse.json({ ok: true, id: result.id, slug: result.slug })
+    return NextResponse.json({
+      ok: true,
+      id: result.id,
+      slug: result.slug,
+      ...(imageWarnings.length ? { imageWarnings } : {}),
+    })
   } catch (err) {
     return NextResponse.json(
       { error: `Publish failed: ${err instanceof Error ? err.message : String(err)}` },

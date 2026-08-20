@@ -267,6 +267,23 @@ export async function getItemForWebhook(itemId: string): Promise<MondayItemSnaps
   return { name: item.name, columns, assets }
 }
 
+/**
+ * Resolve a monday asset id to a short-lived signed `public_url`.
+ *
+ * An image dragged or copied out of a monday item carries a
+ * `…/protected_static/…/resources/<assetId>/…` URL that only a logged-in
+ * browser can fetch; `public_url` is the server-side way in. Read-only, so it
+ * uses the read token when one is configured.
+ */
+export async function getAssetPublicUrl(assetId: string): Promise<string | null> {
+  const data = await gql<{ assets: Array<{ public_url: string | null }> | null }>(
+    `query ($ids: [ID!]!) { assets(ids: $ids) { public_url } }`,
+    { ids: [String(assetId)] },
+    { readOnly: true },
+  )
+  return data.assets?.[0]?.public_url ?? null
+}
+
 export async function downloadAsset(
   url: string,
   opts: { authenticated?: boolean } = {},
