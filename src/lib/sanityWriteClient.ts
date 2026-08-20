@@ -4,6 +4,8 @@
  * stay `useCdn: true`.
  */
 
+import { fetchRemoteImage, isSanityImageUrl } from "@/lib/remoteImage"
+
 const PROJECT_ID = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
 const DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET
 const API_VERSION = process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2024-01-01"
@@ -202,11 +204,25 @@ type BodyBlock = PortableTextBlock | VideoEmbedBlock | TableBlock | ImageBlock
  * on posts loaded back into the editor via portableTextToMarkdown.
  */
 function loneSanityImage(line: string): { ref: string; alt: string } | null {
-  const m = /^!\[([^\]]*)\]\(https:\/\/cdn\.sanity\.io\/images\/[^/)]+\/[^/)]+\/([A-Za-z0-9]+)-(\d+x\d+)\.([a-z0-9]+)\)$/.exec(
-    line,
+  const img = loneMarkdownImage(line)
+  if (!img) return null
+  // Tolerate a transform query string (`?w=800`) — the asset id is the path.
+  const m = /^https:\/\/cdn\.sanity\.io\/images\/[^/?]+\/[^/?]+\/([A-Za-z0-9]+)-(\d+x\d+)\.([a-z0-9]+)(?:\?.*)?$/.exec(
+    img.url,
   )
   if (!m) return null
-  return { ref: `image-${m[2]}-${m[3]}-${m[4]}`, alt: m[1] }
+  return { ref: `image-${m[1]}-${m[2]}-${m[3]}`, alt: img.alt }
+}
+
+/**
+ * If a line is nothing but a markdown image, return its alt + URL. Used both
+ * to recognise Sanity body images and to spot the remote ones that need
+ * side-loading before publish (see sideloadBodyImages).
+ */
+function loneMarkdownImage(line: string): { alt: string; url: string } | null {
+  const m = /^!\[([^\]]*)\]\(\s*(\S+?)(?:\s+["'(][^)]*)?\s*\)$/.exec(line.trim())
+  if (!m) return null
+  return { alt: m[1].trim(), url: m[2].trim() }
 }
 
 /**
@@ -332,9 +348,10 @@ function makeBlock(
  *   - GFM pipe tables (header row + `---` separator) → a `table` block
  *
  * Nested lists are out of scope; raw HTML passes through as plain text. Body
- * images round-trip only as lone `![alt](sanity-cdn-url)` lines (see
- * loneSanityImage) — the editor has no image upload for the body, the cover
- * image is handled separately.
+ * images become `image` blocks only from lone `![alt](sanity-cdn-url)` lines
+ * (see loneSanityImage); run sideloadBodyImages first so images hosted
+ * elsewhere are pulled into Sanity rather than dropped. The cover image is
+ * handled separately.
  */
 export function bodyToPortableText(body: string): BodyBlock[] {
   const blocks: BodyBlock[] = []
@@ -395,6 +412,14 @@ export function bodyToPortableText(body: string): BodyBlock[] {
       })
       continue
     }
+    // A lone markdown image that isn't a Sanity asset — sideloadBodyImages
+    // either failed to re-host it or was never run. parseInline would turn it
+    // into a stray `!` followed by a link on the live post (the bug on
+    // monday item 2836162069), so leave it out entirely.
+    if (loneMarkdownImage(line)) {
+      flushParagraph()
+      continue
+    }
     const heading = /^(#{1,4})\s+(.*)$/.exec(line)
     if (heading) {
       flushParagraph()
@@ -423,6 +448,76 @@ export function bodyToPortableText(body: string): BodyBlock[] {
   }
   flushParagraph()
   return blocks
+}
+
+/**
+ * Sanity asset id → its public CDN URL. A twin of the helper in
+ * portableTextToMarkdown.ts; kept local so this file mirrors into
+ * marketa-monorepo without dragging that module along.
+ */
+function assetIdToUrl(ref: string): string | null {
+  const m = /^image-([A-Za-z0-9]+)-(\d+x\d+)-([a-z0-9]+)$/.exec(ref)
+  if (!m || !PROJECT_ID || !DATASET) return null
+  return `https://cdn.sanity.io/images/${PROJECT_ID}/${DATASET}/${m[1]}-${m[2]}.${m[3]}`
+}
+
+export interface SideloadResult {
+  /** The body with every re-hosted image line rewritten to its Sanity URL. */
+  body: string
+  /** Images we could not fetch — the caller shows these to the publisher. */
+  warnings: string[]
+  /** How many images were pulled into Sanity. */
+  rehosted: number
+}
+
+/**
+ * Re-host every remote body image into Sanity, in place.
+ *
+ * bodyToPortableText only turns a lone `![alt](url)` line into an `image`
+ * block when the URL is a Sanity CDN asset; anything else used to fall through
+ * to parseInline and render as a stray `!` plus a link on the live post. AI
+ * drafts routinely reference images on other CDNs, and pasting one in from
+ * another tab does the same — so pull the bytes in before the conversion runs
+ * and rewrite the line.
+ *
+ * Failures are reported, never fatal: one dead external URL should not block a
+ * publish, and the line is dropped rather than published as a broken link.
+ */
+export async function sideloadBodyImages(body: string): Promise<SideloadResult> {
+  const lines = body.replace(/\r\n/g, "\n").split("\n")
+  const warnings: string[] = []
+  // The same image often appears twice in a post; upload it once.
+  const seen = new Map<string, string | null>()
+  let rehosted = 0
+
+  for (let i = 0; i < lines.length; i++) {
+    const img = loneMarkdownImage(lines[i].trim())
+    if (!img || !img.url || isSanityImageUrl(img.url)) continue
+
+    if (!seen.has(img.url)) {
+      try {
+        const remote = await fetchRemoteImage(img.url)
+        const assetId = await uploadImageAsset(remote.bytes, remote.mime, `blog-body-${remote.stem}`)
+        const url = assetIdToUrl(assetId)
+        if (!url) throw new Error(`unexpected asset id from Sanity: ${assetId}`)
+        seen.set(img.url, url)
+        rehosted++
+      } catch (err) {
+        seen.set(img.url, null)
+        warnings.push(
+          `Image left out — ${img.url}: ${err instanceof Error ? err.message : String(err)}`,
+        )
+      }
+    }
+
+    const hosted = seen.get(img.url)
+    if (hosted) {
+      const alt = img.alt.replace(/[[\]\n]/g, " ").replace(/\s+/g, " ").trim()
+      lines[i] = `![${alt}](${hosted})`
+    }
+  }
+
+  return { body: lines.join("\n"), warnings, rehosted }
 }
 
 function buildBlogPostDoc(input: UpsertBlogPostInput): Record<string, unknown> {
