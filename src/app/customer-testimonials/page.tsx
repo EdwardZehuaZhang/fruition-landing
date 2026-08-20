@@ -34,10 +34,32 @@ interface CaseStudyCard {
   verifiedSource?: string
 }
 
-function safeImageUrl(ref: SanityImageRef): string | null {
+/** Rendered height of a hero partner badge, in CSS pixels. */
+const BADGE_HEIGHT = 44
+
+/**
+ * Partner badges render at `h-[44px] w-auto`, so constrain by height only —
+ * these are wide wordmarks and a square crop lops the name off. `fit=max`
+ * preserves the aspect ratio and never upscales past the source.
+ */
+function badgeImageUrl(ref: SanityImageRef): string | null {
   if (!ref?.asset?._ref) return null
   try {
-    return urlFor(ref).width(200).height(200).fit("crop").auto("format").url()
+    return urlFor(ref).height(BADGE_HEIGHT * 2).fit("max").auto("format").url()
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Case-study cards render the image full-bleed inside a 1200px-max card, so it
+ * needs the full asset width — not a thumbnail. `fit=max` keeps the source
+ * aspect ratio and caps at the original resolution rather than upscaling.
+ */
+function cardImageUrl(ref: SanityImageRef): string | null {
+  if (!ref?.asset?._ref) return null
+  try {
+    return urlFor(ref).width(1600).fit("max").auto("format").url()
   } catch {
     return null
   }
@@ -47,7 +69,7 @@ function getCaseStudyImageSrc(image?: SanityImageRef | string): string | null {
   if (!image) return null
   // Support both Sanity image refs and legacy string paths
   if (typeof image === "string") return image
-  return safeImageUrl(image)
+  return cardImageUrl(image)
 }
 
 export default async function CustomerTestimonialsPage() {
@@ -96,16 +118,22 @@ export default async function CustomerTestimonialsPage() {
           {partnerBadges.length > 0 && (
             <div className="flex items-center flex-wrap justify-center" style={{ gap: 22 }}>
               {partnerBadges.map((badge, i) => {
-                const src = safeImageUrl(badge.image)
+                const src = badgeImageUrl(badge.image)
                 if (!src) return null
+                // Reserve the badge's real footprint so it doesn't shift on load —
+                // these wordmarks are all different shapes.
+                const intrinsicWidth =
+                  badge.width && badge.height
+                    ? Math.round((badge.width / badge.height) * BADGE_HEIGHT)
+                    : 120
                 return (
                   <FramedMedia key={badge._key || `badge-${i}`} className="dark:p-1.5">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={src}
                       alt={badge.name || "Partner badge"}
-                      width={120}
-                      height={44}
+                      width={intrinsicWidth}
+                      height={BADGE_HEIGHT}
                       className="h-[44px] w-auto rounded-[5px]"
                     />
                   </FramedMedia>
