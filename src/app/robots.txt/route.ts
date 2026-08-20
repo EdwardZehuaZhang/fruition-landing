@@ -18,7 +18,9 @@ const CONTENT_SIGNAL = 'search=yes, ai-train=yes, ai-input=yes, use=reference'
 // - /consulting-blog/categories/ — noindexed via page metadata; a robots
 //   block would stop Google from ever seeing that tag.
 // - /faqs?category=... — consolidated onto /faqs via its canonical URL.
-const DISALLOW = ['/internal/', '/studio/']
+// /s/ are short links that redirect to pages Google already has — indexing
+// them would only create duplicates of the destinations.
+const DISALLOW = ['/internal/', '/studio/', '/s/']
 
 const POLICY_PREAMBLE = `# As a condition of accessing this website, you agree to abide by the following
 # content signals:

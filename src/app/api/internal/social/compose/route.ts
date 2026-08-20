@@ -49,6 +49,8 @@ function platformsFrom(value: unknown): Partial<Record<PlatformKey, CompositionP
       subreddit: typeof raw.subreddit === "string" ? raw.subreddit : undefined,
       boardId: typeof raw.boardId === "string" ? raw.boardId : undefined,
       mediaUrl: typeof raw.mediaUrl === "string" ? raw.mediaUrl : undefined,
+      documentUrl: typeof raw.documentUrl === "string" ? raw.documentUrl : undefined,
+      documentName: typeof raw.documentName === "string" ? raw.documentName : undefined,
       customised: Boolean(raw.customised),
     }
   }
@@ -105,6 +107,7 @@ export async function POST(req: Request) {
         link: source.link,
         masterContent: source.masterContent,
         mediaUrls: source.mediaUrls,
+        shortenLinks: source.shortenLinks,
         platforms,
         createdBy: user.email ?? undefined,
       })
@@ -121,6 +124,7 @@ export async function POST(req: Request) {
       link: typeof body.link === "string" ? body.link : undefined,
       masterContent: typeof body.masterContent === "string" ? body.masterContent : undefined,
       mediaUrls: strings(body.mediaUrls) ?? [],
+      shortenLinks: typeof body.shortenLinks === "boolean" ? body.shortenLinks : undefined,
       platforms: platformsFrom(body.platforms),
       createdBy: user.email ?? undefined,
     })
@@ -167,6 +171,7 @@ export async function PUT(req: Request) {
       link: typeof body.link === "string" ? body.link : undefined,
       masterContent: typeof body.masterContent === "string" ? body.masterContent : undefined,
       mediaUrls: strings(body.mediaUrls),
+      shortenLinks: typeof body.shortenLinks === "boolean" ? body.shortenLinks : undefined,
       platforms,
       scheduledFor: body.scheduledFor === null ? null : undefined,
     })
@@ -187,6 +192,8 @@ export async function PUT(req: Request) {
               title: p.draft.title,
               blogUrl: composition.link,
               imageUrl: p.draft.mediaUrl,
+              documentUrl: p.supportsDocument ? p.draft.documentUrl : undefined,
+              documentName: p.draft.documentName,
               subreddit: p.draft.subreddit,
               boardId: p.draft.boardId,
             })

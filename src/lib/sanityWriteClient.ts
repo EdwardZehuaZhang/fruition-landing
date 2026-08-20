@@ -43,6 +43,37 @@ export async function uploadImageAsset(
   return id
 }
 
+/**
+ * Upload a non-image asset (a PDF for a LinkedIn carousel, today) and return
+ * its public CDN URL.
+ *
+ * Zernio takes documents by URL, so the file has to live somewhere it can
+ * reach — Sanity's file assets are already public and already where the
+ * portal's social images go, which keeps one store rather than two.
+ */
+export async function uploadFileAsset(
+  bytes: ArrayBuffer | Uint8Array,
+  mime: string,
+  filename: string,
+): Promise<{ id: string; url: string }> {
+  const url = `${base()}/assets/files/${DATASET}?filename=${encodeURIComponent(filename)}`
+  const u8 = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes)
+  const r = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": mime,
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: u8 as unknown as BodyInit,
+  })
+  if (!r.ok) throw new Error(`sanity file upload ${r.status} ${await r.text()}`)
+  const j = (await r.json()) as { document?: { _id?: string; url?: string } }
+  const id = j.document?._id
+  const assetUrl = j.document?.url
+  if (!id || !assetUrl) throw new Error("sanity file upload returned no url")
+  return { id, url: assetUrl }
+}
+
 export interface CreateTeamMemberInput {
   docId: string
   name: string

@@ -11,6 +11,7 @@ import {
   type CompositionPlatform,
 } from "@/lib/social/composition"
 import { problemsFor } from "@/lib/social/validate"
+import { shortenForChannel } from "@/lib/social/shortLinks"
 import {
   createDraftPost,
   getZernioPost,
@@ -20,6 +21,7 @@ import {
   scheduleSocialPost,
   unscheduleSocialPost,
   type PlatformKey,
+  type PlatformSpec,
 } from "@/lib/social/zernio"
 
 export const runtime = "nodejs"
@@ -42,6 +44,27 @@ interface PublishResult {
   key: PlatformKey
   status?: string
   error?: string
+}
+
+/**
+ * What one channel actually attaches, resolved the same way the composer
+ * shows it: an explicit "" means the writer removed the image deliberately,
+ * undefined falls back to the post's first image, and a PDF displaces the
+ * image entirely because LinkedIn carries one or the other.
+ *
+ * Deriving it once keeps validation and publishing looking at the same post —
+ * they used to compute the image separately, which is how a rule can pass on
+ * a picture that never gets sent.
+ */
+function attachments(
+  spec: PlatformSpec,
+  draft: CompositionPlatform,
+  fallbackImage: string | undefined,
+): { imageUrl?: string; documentUrl?: string } {
+  const documentUrl = spec.supportsDocument ? draft.documentUrl || undefined : undefined
+  if (documentUrl) return { documentUrl }
+  if (!spec.supportsMedia) return {}
+  return { imageUrl: draft.mediaUrl !== undefined ? draft.mediaUrl || undefined : fallbackImage }
 }
 
 export async function POST(req: Request) {
@@ -94,10 +117,13 @@ export async function POST(req: Request) {
   const problems = keys.flatMap((key) => {
     const draft = composition.platforms[key] as CompositionPlatform
     const spec = platformSpec(key)
+    const { imageUrl, documentUrl } = attachments(spec, draft, composition.mediaUrls[0])
     return problemsFor(constraintsOf(spec), {
       content: draft.content,
       title: draft.title,
-      mediaUrl: spec.supportsMedia ? draft.mediaUrl || composition.mediaUrls[0] : undefined,
+      mediaUrl: imageUrl,
+      documentUrl,
+      shortenLinks: composition.shortenLinks,
     })
   })
   if (problems.length) return NextResponse.json({ error: problems.join(" · ") }, { status: 400 })
@@ -107,8 +133,16 @@ export async function POST(req: Request) {
 
   for (const key of keys) {
     const draft = platforms[key] as CompositionPlatform
-    const imageUrl = draft.mediaUrl !== undefined ? draft.mediaUrl || undefined : composition.mediaUrls[0]
+    const { imageUrl, documentUrl } = attachments(platformSpec(key), draft, composition.mediaUrls[0])
+    const documentName = draft.documentName
     try {
+      const { content, link } = await shortenForChannel({
+        composition,
+        key,
+        content: draft.content,
+        createdBy: user.email ?? undefined,
+      })
+
       // Lazily create the Zernio draft the first time this channel is used.
       let postId = draft.zernioPostId
       if (!postId) {
@@ -116,10 +150,12 @@ export async function POST(req: Request) {
           target: { kind: "composition", compositionId: composition.id },
           key,
           name: composition.title,
-          content: draft.content,
+          content,
           title: draft.title,
           imageUrl,
-          link: composition.link,
+          documentUrl,
+          documentName,
+          link,
           subreddit: draft.subreddit,
           boardId: draft.boardId,
         })
@@ -129,9 +165,11 @@ export async function POST(req: Request) {
       const args = {
         postId,
         key,
-        content: draft.content,
+        content,
         title: draft.title,
         imageUrl,
+        documentUrl,
+        documentName,
         subreddit: draft.subreddit,
         boardId: draft.boardId,
       }
@@ -139,7 +177,7 @@ export async function POST(req: Request) {
       if (mode === "schedule") {
         const { status } = await scheduleSocialPost({
           ...args,
-          link: composition.link,
+          link,
           scheduledFor: body.scheduledFor!,
           timezone: body.timezone,
         })
@@ -155,8 +193,8 @@ export async function POST(req: Request) {
       // Zernio won't re-run a cancelled record; recreate it carrying the metadata.
       const { status, postId: newId } =
         current.status === "cancelled"
-          ? await republishCancelledPost({ ...args, blogUrl: composition.link ?? "", oldPost: current })
-          : { ...(await publishSocialDraft({ ...args, blogUrl: composition.link ?? "" })), postId }
+          ? await republishCancelledPost({ ...args, blogUrl: link ?? "", oldPost: current })
+          : { ...(await publishSocialDraft({ ...args, blogUrl: link ?? "" })), postId }
       if (newId !== postId) platforms[key] = { ...platforms[key]!, zernioPostId: newId }
       results.push({ key, status })
     } catch (err) {

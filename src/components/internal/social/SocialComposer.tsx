@@ -2,12 +2,15 @@
 
 import { useCallback, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Loader2, Sparkles, Trash2, Upload, Link as LinkIcon } from "lucide-react"
+import { Loader2, Sparkles, Trash2, Upload, X, Link as LinkIcon, Scissors } from "lucide-react"
 import type { ComposerPlatform, ComposerState, CompositionPlatform } from "@/lib/social/composition"
+import type { ShortLink } from "@/lib/social/shortLinks"
 import type { PlatformKey } from "@/lib/social/zernio"
 import { problemsFor } from "@/lib/social/validate"
+import { useCaretInsert } from "@/lib/social/caret"
 import PlatformIcon from "@/components/internal/SocialIcons"
 import PlatformEditor from "@/components/internal/social/PlatformEditor"
+import EmojiPicker from "@/components/internal/social/EmojiPicker"
 import ScheduleField from "@/components/internal/social/ScheduleField"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -33,6 +36,7 @@ interface Editable {
   link: string
   masterContent: string
   mediaUrls: string[]
+  shortenLinks: boolean
   platforms: PlatformMap
 }
 
@@ -44,6 +48,7 @@ function editableFrom(state: ComposerState | null): Editable {
     link: c?.link ?? "",
     masterContent: c?.masterContent ?? "",
     mediaUrls: c?.mediaUrls ?? [],
+    shortenLinks: c?.shortenLinks ?? true,
     platforms: c?.platforms ?? {},
   }
 }
@@ -71,6 +76,7 @@ function statusBadge(status: string | undefined): { label: string; variant: "def
 export default function SocialComposer({ initial }: { initial: ComposerState | null }) {
   const router = useRouter()
   const fileInput = useRef<HTMLInputElement>(null)
+  const masterBox = useRef<HTMLTextAreaElement>(null)
 
   const [state, setState] = useState<ComposerState | null>(initial)
   const [edit, setEdit] = useState<Editable>(() => editableFrom(initial))
@@ -95,6 +101,23 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
     setDirty(true)
   }, [])
 
+  // Emoji land where the cursor is in the shared box, same as in each channel.
+  const masterCaret = useCaretInsert(masterBox, (next) => setMaster(next))
+
+  /**
+   * Short links this post has handed out, by channel. They only exist once
+   * something has been sent, which is exactly when the click count starts
+   * being worth looking at.
+   */
+  const linksByPlatform = useMemo(() => {
+    const out = new Map<string, ShortLink[]>()
+    for (const link of state?.shortLinks ?? []) {
+      if (!link.platform) continue
+      out.set(link.platform, [...(out.get(link.platform) ?? []), link])
+    }
+    return out
+  }, [state])
+
   /** Live status per channel, straight from Zernio at last load. */
   const liveOf = useCallback(
     (key: PlatformKey) => specs.find((p) => p.key === key)?.live,
@@ -117,16 +140,21 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
         continue
       }
       if (liveOf(spec.key)?.status === "published") continue
+      // A PDF displaces the image, so don't hand the validator both.
+      const documentUrl = draft.documentUrl || undefined
       out.push(
         ...problemsFor(spec, {
           content: draft.content,
           title: draft.title,
-          mediaUrl: spec.supportsMedia ? draft.mediaUrl || edit.mediaUrls[0] : undefined,
+          mediaUrl:
+            spec.supportsMedia && !documentUrl ? draft.mediaUrl || edit.mediaUrls[0] : undefined,
+          documentUrl,
+          shortenLinks: edit.shortenLinks,
         }),
       )
     }
     return out
-  }, [specs, edit.platforms, edit.mediaUrls, liveOf])
+  }, [specs, edit.platforms, edit.mediaUrls, edit.shortenLinks, liveOf])
 
   const sendableKeys = selectedKeys.filter((k) => liveOf(k)?.status !== "published")
   const canSend = blockers.length === 0 && sendableKeys.length > 0
@@ -162,7 +190,17 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
     })
   }
 
-  function patchPlatform(key: PlatformKey, partial: Partial<CompositionPlatform>, markCustom = true) {
+  /**
+   * "Customised" means the wording has been pulled away from the shared post,
+   * so only a change to the words counts. Picking an image, attaching a PDF or
+   * naming a subreddit shouldn't quietly stop the shared caption flowing into
+   * this channel — that reads as the editor losing your text.
+   */
+  function patchPlatform(
+    key: PlatformKey,
+    partial: Partial<CompositionPlatform>,
+    markCustom = "content" in partial || "title" in partial,
+  ) {
     patch((prev) => {
       const current = prev.platforms[key]
       if (!current) return {}
@@ -226,6 +264,7 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
         link: edit.link,
         masterContent: edit.masterContent,
         mediaUrls: edit.mediaUrls,
+        shortenLinks: edit.shortenLinks,
         platforms: edit.platforms,
       }
       const data = id
@@ -319,6 +358,52 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
     } finally {
       setBusy(null)
       if (fileInput.current) fileInput.current.value = ""
+    }
+  }
+
+  /**
+   * Drop an image from the whole post, not just from the channel it was
+   * clicked on: it came from one pool, so leaving it attached elsewhere while
+   * it's gone from the picker is how you end up publishing an image you
+   * thought you'd deleted. Channels using it fall back to no image, which
+   * shows as a blocker on the two that require one.
+   *
+   * The Sanity asset itself stays — it may be in a post that's already live.
+   */
+  function removeImage(url: string) {
+    patch((prev) => {
+      const platforms: PlatformMap = { ...prev.platforms }
+      for (const key of Object.keys(platforms) as PlatformKey[]) {
+        const draft = platforms[key]
+        if (!draft || draft.mediaUrl !== url) continue
+        platforms[key] = { ...draft, mediaUrl: "" }
+      }
+      return { mediaUrls: prev.mediaUrls.filter((u) => u !== url), platforms }
+    })
+  }
+
+  /**
+   * Attach a PDF to one channel (LinkedIn, today). Unlike an image this is
+   * never shared across channels — only LinkedIn renders it, and it replaces
+   * whatever image that channel had.
+   */
+  async function uploadDocument(file: File, key: PlatformKey) {
+    setBusy(`doc:${key}`)
+    setError(null)
+    try {
+      const form = new FormData()
+      form.append("document", file)
+      const r = await fetch("/api/internal/social/document", { method: "POST", body: form })
+      const data = (await r.json().catch(() => ({}))) as { url?: string; name?: string; error?: string }
+      if (!r.ok || !data.url) {
+        setError(data.error ?? "Document upload failed.")
+        return
+      }
+      // Attaching a file isn't a copy edit, so it mustn't unlink the channel
+      // from the shared post.
+      patchPlatform(key, { documentUrl: data.url, documentName: data.name })
+    } finally {
+      setBusy(null)
     }
   }
 
@@ -532,6 +617,21 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
               className="h-9 w-full min-w-0 border-0 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
           </label>
+          <Button
+            variant={edit.shortenLinks ? "default" : "outline"}
+            size="sm"
+            aria-pressed={edit.shortenLinks}
+            onClick={() => patch({ shortenLinks: !edit.shortenLinks })}
+            disabled={working}
+            title={
+              edit.shortenLinks
+                ? "Links become fruitionservices.io/s/… when this sends, one code per channel so clicks split by platform"
+                : "Links go out exactly as written"
+            }
+          >
+            <Scissors />
+            Short links {edit.shortenLinks ? "on" : "off"}
+          </Button>
         </div>
       )}
 
@@ -567,14 +667,25 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
       {/* ---------- 3. the shared post — only worth having for several channels ---------- */}
       {multi && (
         <section className="rounded-xl border border-border bg-card p-5">
-          <h2 className="text-sm font-semibold text-foreground">The post</h2>
-          <p className="mt-0.5 text-xs text-muted-foreground">
-            Flows into every channel below that you haven&apos;t edited separately.
-          </p>
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <h2 className="text-sm font-semibold text-foreground">The post</h2>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Flows into every channel below that you haven&apos;t edited separately.
+              </p>
+            </div>
+            {/* No tag picker here: a tag is per-channel markup, and LinkedIn's
+                would arrive on X as literal brackets. */}
+            <EmojiPicker onPick={masterCaret.insert} onClose={masterCaret.restore} disabled={working} />
+          </div>
 
           <textarea
+            ref={masterBox}
             value={edit.masterContent}
             onChange={(e) => setMaster(e.target.value)}
+            onSelect={masterCaret.remember}
+            onKeyUp={masterCaret.remember}
+            onClick={masterCaret.remember}
             rows={4}
             placeholder="Write it once here, then adjust any channel that needs different wording."
             className="mt-3 w-full resize-y rounded-md border border-border bg-background px-3 py-2 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
@@ -583,10 +694,24 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
           {edit.mediaUrls.length > 0 && (
             <div className="mt-3 flex flex-wrap items-center gap-2">
               {edit.mediaUrls.map((url) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img key={url} src={url} alt="" className="size-12 rounded-md border border-border object-cover" />
+                <span key={url} className="relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={url} alt="" className="size-12 rounded-md border border-border object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(url)}
+                    disabled={working}
+                    aria-label="Delete this image from the post"
+                    title="Delete from the post"
+                    className="absolute -right-1.5 -top-1.5 flex size-5 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm transition hover:border-destructive hover:text-destructive disabled:opacity-50"
+                  >
+                    <X className="size-3" />
+                  </button>
+                </span>
               ))}
-              <span className="text-xs text-muted-foreground">Each channel picks its own image below.</span>
+              <span className="text-xs text-muted-foreground">
+                Each channel picks its own image below. Delete one here and it goes from every channel.
+              </span>
             </div>
           )}
         </section>
@@ -643,9 +768,39 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
                     images={edit.mediaUrls}
                     disabled={published}
                     uploading={busy === `upload:${spec.key}`}
+                    uploadingDocument={busy === `doc:${spec.key}`}
+                    shortenLinks={edit.shortenLinks}
                     onChange={(p) => patchPlatform(spec.key, p)}
                     onUpload={(file) => void upload(file, spec.key)}
+                    onUploadDocument={
+                      spec.supportsDocument ? (file) => void uploadDocument(file, spec.key) : undefined
+                    }
+                    onRemoveImage={removeImage}
                   />
+
+                  {(linksByPlatform.get(spec.key)?.length ?? 0) > 0 && (
+                    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border pt-3">
+                      <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+                        Short link
+                      </span>
+                      {linksByPlatform.get(spec.key)!.map((link) => (
+                        <span key={link.code} className="flex items-center gap-1.5 text-xs">
+                          <a
+                            href={link.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="font-mono text-primary underline-offset-2 hover:underline"
+                            title={link.targetUrl}
+                          >
+                            /s/{link.code}
+                          </a>
+                          <span className="tabular-nums text-muted-foreground">
+                            {link.clicks} click{link.clicks === 1 ? "" : "s"}
+                          </span>
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
                   <footer className="mt-3 flex items-center justify-between gap-2 border-t border-border pt-3">
                     <span className="text-xs text-muted-foreground">

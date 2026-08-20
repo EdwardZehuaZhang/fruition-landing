@@ -24,6 +24,7 @@ import {
   type ZernioPost,
 } from "@/lib/social/zernio"
 import { problemsFor, type PlatformConstraints } from "@/lib/social/validate"
+import { shortLinksForComposition, type ShortLink } from "@/lib/social/shortLinks"
 import { rollupStatus } from "@/lib/social/status"
 import { getPortalAdmin } from "@/lib/portalAuth"
 
@@ -46,6 +47,10 @@ export interface CompositionPlatform {
   boardId?: string
   /** Chosen image; "" means deliberately no image. */
   mediaUrl?: string
+  /** Attached PDF (LinkedIn carousel); "" means deliberately none. */
+  documentUrl?: string
+  /** Filename / carousel title for the attached PDF. */
+  documentName?: string
   /** Set once the copy is edited away from the master caption. */
   customised?: boolean
 }
@@ -57,6 +62,8 @@ export interface Composition {
   link?: string
   masterContent?: string
   mediaUrls: string[]
+  /** Swap links for fruitionservices.io/s/<code> when this post goes out. */
+  shortenLinks: boolean
   platforms: Partial<Record<PlatformKey, CompositionPlatform>>
   postIds: string[]
   scheduledFor?: string
@@ -74,6 +81,7 @@ export interface CompositionInput {
   link?: string
   masterContent?: string
   mediaUrls?: string[]
+  shortenLinks?: boolean
   platforms?: Partial<Record<PlatformKey, CompositionPlatform>>
   scheduledFor?: string | null
   timezone?: string | null
@@ -89,6 +97,7 @@ interface CompositionRow {
   link: string | null
   master_content: string | null
   media_urls: string[] | null
+  shorten_links: boolean | null
   platforms: Record<string, CompositionPlatform> | null
   post_ids: string[] | null
   scheduled_for: string | null
@@ -107,6 +116,7 @@ function fromRow(row: CompositionRow): Composition {
     link: row.link ?? undefined,
     masterContent: row.master_content ?? undefined,
     mediaUrls: Array.isArray(row.media_urls) ? row.media_urls : [],
+    shortenLinks: row.shorten_links !== false,
     platforms: (row.platforms ?? {}) as Partial<Record<PlatformKey, CompositionPlatform>>,
     postIds: Array.isArray(row.post_ids) ? row.post_ids : [],
     scheduledFor: row.scheduled_for ?? undefined,
@@ -132,6 +142,8 @@ function cleanPlatforms(
       ...(value.subreddit ? { subreddit: value.subreddit } : {}),
       ...(value.boardId ? { boardId: value.boardId } : {}),
       ...(value.mediaUrl !== undefined ? { mediaUrl: value.mediaUrl } : {}),
+      ...(value.documentUrl !== undefined ? { documentUrl: value.documentUrl } : {}),
+      ...(value.documentName ? { documentName: value.documentName } : {}),
       ...(value.customised ? { customised: true } : {}),
     }
   }
@@ -187,6 +199,7 @@ export async function createComposition(input: CompositionInput & { createdBy?: 
       link: input.link ?? null,
       master_content: input.masterContent ?? null,
       media_urls: input.mediaUrls ?? [],
+      shorten_links: input.shortenLinks ?? true,
       platforms,
       post_ids: postIdsOf(platforms),
       scheduled_for: input.scheduledFor ?? null,
@@ -208,6 +221,7 @@ export async function updateComposition(id: string, input: CompositionInput): Pr
   if (input.link !== undefined) patch.link = input.link
   if (input.masterContent !== undefined) patch.master_content = input.masterContent
   if (input.mediaUrls !== undefined) patch.media_urls = input.mediaUrls
+  if (input.shortenLinks !== undefined) patch.shorten_links = input.shortenLinks
   if (input.scheduledFor !== undefined) patch.scheduled_for = input.scheduledFor
   if (input.timezone !== undefined) patch.timezone = input.timezone
   if (input.status !== undefined) patch.status = input.status
@@ -240,6 +254,8 @@ export interface ComposerLive {
   error?: string
   /** Image currently attached to the Zernio draft. */
   mediaUrl?: string
+  /** Document currently attached to the Zernio draft. */
+  documentUrl?: string
   scheduledFor?: string
 }
 
@@ -252,6 +268,7 @@ export interface ComposerPlatform {
   titleRequired?: boolean
   needsMedia: boolean
   supportsMedia: boolean
+  supportsDocument?: boolean
   maxMedia: number
   aspect?: { min: number; max: number }
   linkInBody: boolean
@@ -271,6 +288,8 @@ export interface ComposerState {
   composition: Composition
   platforms: ComposerPlatform[]
   dashboardUrl: string
+  /** Short links this post has handed out, with their click counts. */
+  shortLinks: ShortLink[]
 }
 
 function liveOf(post: ZernioPost | undefined): ComposerLive | undefined {
@@ -282,6 +301,7 @@ function liveOf(post: ZernioPost | undefined): ComposerLive | undefined {
     platformUrl: entry?.platformPostUrl,
     error: entry?.error,
     mediaUrl: post.mediaItems?.find((m) => m.type === "image")?.url,
+    documentUrl: post.mediaItems?.find((m) => m.type === "document")?.url,
     scheduledFor: post.scheduledFor,
   }
 }
@@ -295,10 +315,28 @@ export function constraintsOf(spec: PlatformSpec): PlatformConstraints {
     titleRequired: spec.titleRequired,
     needsMedia: spec.needsMedia,
     supportsMedia: spec.supportsMedia,
+    supportsDocument: spec.supportsDocument,
   }
 }
 
-/** The image a platform would publish with right now. "" = deliberately none. */
+/** The PDF a platform would publish with right now. "" = none. */
+export function effectiveDocument(
+  draft: CompositionPlatform | undefined,
+  live: ComposerLive | undefined,
+  spec: PlatformSpec,
+): string {
+  if (!spec.supportsDocument) return ""
+  if (draft?.documentUrl !== undefined) return draft.documentUrl
+  return live?.documentUrl ?? ""
+}
+
+/**
+ * The image a platform would publish with right now. "" = deliberately none.
+ *
+ * A PDF displaces the image rather than sitting beside it: LinkedIn allows a
+ * post to carry one or the other, and the shared image pool would otherwise
+ * silently win over the document someone deliberately attached.
+ */
 export function effectiveMedia(
   draft: CompositionPlatform | undefined,
   live: ComposerLive | undefined,
@@ -306,6 +344,7 @@ export function effectiveMedia(
   spec: PlatformSpec,
 ): string {
   if (!spec.supportsMedia) return ""
+  if (effectiveDocument(draft, live, spec)) return ""
   if (draft?.mediaUrl !== undefined) return draft.mediaUrl
   return live?.mediaUrl ?? fallback ?? ""
 }
@@ -321,9 +360,11 @@ export async function buildComposerState(composition: Composition): Promise<Comp
     if (value?.zernioPostId) ids[key as PlatformKey] = value.zernioPostId
   }
 
-  const [accounts, posts] = await Promise.all([
+  const [accounts, posts, shortLinks] = await Promise.all([
     listZernioAccounts(),
     fetchPostsById(ids).catch(() => ({}) as Partial<Record<PlatformKey, ZernioPost>>),
+    // Click counts are a nicety; never fail the page over them.
+    composition.id ? shortLinksForComposition(composition.id).catch(() => []) : Promise.resolve([]),
   ])
   const accountById = new Map(accounts.map((a) => [a._id, a]))
   const fallbackImage = composition.mediaUrls[0]
@@ -334,6 +375,7 @@ export async function buildComposerState(composition: Composition): Promise<Comp
     const live = liveOf(posts[spec.key])
     const selected = Boolean(draft)
     const media = effectiveMedia(draft, live, fallbackImage, spec)
+    const document = effectiveDocument(draft, live, spec)
     return {
       key: spec.key,
       label: spec.label,
@@ -342,6 +384,7 @@ export async function buildComposerState(composition: Composition): Promise<Comp
       titleRequired: spec.titleRequired,
       needsMedia: spec.needsMedia,
       supportsMedia: spec.supportsMedia,
+      supportsDocument: spec.supportsDocument,
       maxMedia: spec.maxMedia,
       aspect: spec.aspect,
       linkInBody: spec.linkInBody,
@@ -356,12 +399,14 @@ export async function buildComposerState(composition: Composition): Promise<Comp
             content: draft?.content ?? "",
             title: draft?.title,
             mediaUrl: media || undefined,
+            documentUrl: document || undefined,
+            shortenLinks: composition.shortenLinks,
           })
         : [],
     }
   })
 
-  return { composition, platforms, dashboardUrl: DASHBOARD_URL }
+  return { composition, platforms, dashboardUrl: DASHBOARD_URL, shortLinks }
 }
 
 /* ------------------------------------------------------------------ */
