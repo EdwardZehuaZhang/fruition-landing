@@ -76,8 +76,8 @@ export default async function Page() {
 
       {/* 2. Logo Cloud */}
       <ClientLogoSection
-        headingPart1={page.logoCloudHeadingPart1 || ""}
-        headingAccent={page.logoCloudHeadingAccent ?? ""}
+        headingPart1={page.logoCloudHeadingPart1}
+        headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}
         logos={resolveIndustryLogos(industryLogos, siteSettings?.carouselLogos)}
       />

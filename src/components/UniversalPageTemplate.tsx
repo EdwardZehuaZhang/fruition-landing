@@ -162,8 +162,8 @@ export default function UniversalPageTemplate({
 
       {/* 2. Logo Cloud */}
       <ClientLogoSection
-        headingPart1={page.logoCloudHeadingPart1 || "Clients who have used our "}
-        headingAccent={page.logoCloudHeadingAccent ?? "monday.com consulting services"}
+        headingPart1={page.logoCloudHeadingPart1}
+        headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}
         logos={resolveIndustryLogos(industryLogos, siteSettings?.carouselLogos)}
       />
