@@ -55,7 +55,9 @@ concurrency:
 
 jobs:
   repair:
-    name: ${{ inputs.mode == 'apply' && 'Repair' || 'Plan' }} blog images
+    # Static: `inputs` is undefined on the push trigger, and an unevaluated
+    # expression here becomes the check name shown on every PR.
+    name: Blog image repair
     # The push path is opt-in per commit, so ordinary work on a branch does not
     # spend ten minutes talking to the Wayback Machine.
     if: >-
