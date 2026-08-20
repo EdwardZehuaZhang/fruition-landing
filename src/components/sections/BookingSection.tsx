@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { ChangeEvent, CSSProperties, ReactNode } from "react"
+import { useOfficeStrap } from "@/components/OfficeStrapProvider"
 
 /**
  * Unified contact + booking section — dark brand band, big left copy, month
@@ -49,6 +50,7 @@ export interface BookingSectionProps {
   heading?: string
   sub?: string
   email?: string
+  /** Overrides the CMS-driven office strap. Leave unset on real pages. */
   offices?: string
   proof?: string
   duration?: number
@@ -834,12 +836,15 @@ export default function BookingSection({
   heading = "Watch your sales process run on monday CRM.",
   sub = "Pick a time and we'll map your pipeline live on the call: your stages, your handoffs, your reporting. No slides.",
   email = "contact@fruitionservices.io",
-  offices = "Sydney · New York · London · Singapore · New Delhi · Taguig",
+  offices,
   proof = "Platinum monday.com partner · 500+ implementations",
   duration = 30,
   askTeamSize = true,
   calendlyUrl = "https://calendly.com/global-calendar-fruitionservices",
 }: BookingSectionProps) {
+  // The office strap follows the CMS office list (see OfficeStrapProvider) so
+  // adding or renaming an office is a single edit in Sanity.
+  const officeStrapText = useOfficeStrap()
   return (
     <section id="book" className="fr-booking-section" style={{ position: "relative", scrollMarginTop: 90, background: "linear-gradient(-38deg,#8015e8 0%,#4b0d8f 42%,#10003a 100%)", padding: "84px 72px", overflow: "hidden" }}>
       {/* brand glow motif */}
@@ -858,7 +863,7 @@ export default function BookingSection({
             </a>
             <span style={{ display: "flex", alignItems: "center", gap: 12, color: "#fff", fontSize: 15, fontWeight: 500 }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--purple-light)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2Z" /></svg>
-              {offices}
+              {offices ?? officeStrapText}
             </span>
           </div>
 
