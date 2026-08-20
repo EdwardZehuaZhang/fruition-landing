@@ -86,6 +86,11 @@ const WORD_FIXUPS: Record<string, string> = {
   aws: 'AWS',
   n8n: 'n8n',
   clickup: 'ClickUp',
+  langgraph: 'LangGraph',
+  elevenlabs: 'ElevenLabs',
+  vapi: 'Vapi',
+  supabase: 'Supabase',
+  azure: 'Azure',
   us: 'US',
   uk: 'UK',
 }
