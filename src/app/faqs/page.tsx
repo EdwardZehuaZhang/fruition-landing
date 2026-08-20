@@ -4,6 +4,7 @@ import { getFaqItems, getPageBySlug, getSiteSettings } from "@/sanity/queries"
 import { generateFaqJsonLd } from "@/lib/faqSchema"
 import FaqList, { type FaqItem } from "./FaqList"
 import { buildOgMetadata } from "@/lib/metadata"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("faqs")
@@ -58,6 +59,9 @@ export default async function FaqsPage() {
       <section className="mx-auto w-full max-w-4xl px-4 py-16 md:py-20">
         <FaqList items={faqs ?? []} />
       </section>
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {(page.calendlyHeading || page.calendlySubheading || page.primaryCtaLabel) && (
         <section className="bg-[color:var(--dark-bg)] text-white">

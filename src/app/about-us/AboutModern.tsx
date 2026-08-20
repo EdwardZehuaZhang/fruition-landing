@@ -22,6 +22,7 @@ import type {
   SiteSettingsData,
   StatItem,
 } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface TextSection {
   _key?: string
@@ -897,6 +898,10 @@ export default function AboutModern(props: AboutModernProps) {
         heading={approachHeading}
         headingAccent={approachHeadingAccent}
       />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
+
       <GlobalPresence
         eyebrow={globalPresenceEyebrow}
         heading={globalPresenceHeading}

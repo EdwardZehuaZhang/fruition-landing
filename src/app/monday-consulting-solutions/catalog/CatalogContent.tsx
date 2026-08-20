@@ -13,6 +13,7 @@ const SolutionModal = dynamic(() => import("./components/SolutionModal"), { ssr:
 import SolutionsAdvisor from "./components/SolutionsAdvisor"
 import SolutionsGrid from "./components/SolutionsGrid"
 import { SOLUTIONS } from "./data/solutions"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface CatalogContentProps {
   calendlyUrl: string
@@ -34,6 +35,10 @@ export default function CatalogContent({ calendlyUrl }: CatalogContentProps) {
       <CatalogHero advisorSlot={<SolutionsAdvisor onOpenSolution={handleOpen} />} />
       <SolutionsGrid onOpen={handleOpen} />
       <IndustryMap />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
+
       <ProjectBuildsIndex />
       <DeliveryMethod />
       <CatalogCta calendlyUrl={calendlyUrl} />

@@ -6,6 +6,7 @@ import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
 import FramedMedia from "@/components/common/FramedMedia"
 import { buildOgMetadata } from "@/lib/metadata"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("customer-testimonials")
@@ -236,6 +237,9 @@ export default async function CustomerTestimonialsPage() {
           imageUrl: getCaseStudyImageSrc(s.image),
         }))}
       />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* CRO action items */}
       <CroSections data={page?.croSections} primaryCtaLabel={primaryCtaLabel} primaryCtaUrl={primaryCtaUrl} />

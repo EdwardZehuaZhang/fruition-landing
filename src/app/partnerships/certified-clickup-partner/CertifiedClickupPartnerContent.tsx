@@ -13,6 +13,7 @@ import type {
   SiteSettingsData,
   FaqTab,
 } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface Props {
   page: any
@@ -263,6 +264,10 @@ export default function CertifiedClickupPartnerContent({ page, siteSettings, faq
 
       <EverythingAppSection cards={everythingAppCards} />
       <ServicesTabsSection tabs={servicesTabs} />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
+
       <IndustryTabsSection tabs={industryTabs} />
 
       {/* Calendly */}

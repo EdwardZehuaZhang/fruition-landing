@@ -19,6 +19,7 @@ import type {
 } from "@/components/sections/types"
 import { resolveIndustryLogos } from "@/sanity/industryLogos"
 import type { CarouselLogo } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface Props {
   /** This page's own logo wall; falls back to the global carousel. */
@@ -204,6 +205,9 @@ export default function MondayForConstructionContent({
         description={page.logoCloudDescription}
         logos={resolveIndustryLogos(industryLogos, siteSettings?.carouselLogos)}
       />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* Tab section — heading rotates with active tab */}
       <ConstructionTabs tabs={resolvedComparisonTabs} />

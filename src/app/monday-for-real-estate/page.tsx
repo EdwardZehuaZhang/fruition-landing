@@ -21,6 +21,7 @@ import YouTubeEmbed from "@/components/YouTubeEmbed"
 import CtaButton from "@/components/CtaButton"
 import { buildOgMetadata } from "@/lib/metadata"
 import { getIndustryLogos, resolveIndustryLogos } from "@/sanity/industryLogos"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-real-estate")
@@ -165,6 +166,9 @@ export default async function Page() {
           </div>
         </section>
       )}
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* 5. Solution Cards — left/right */}
       {page.solutionCards?.length > 0 && (

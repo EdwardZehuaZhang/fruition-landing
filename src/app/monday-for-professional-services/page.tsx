@@ -20,6 +20,7 @@ import {
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import { buildOgMetadata } from "@/lib/metadata"
 import { getIndustryLogos, resolveIndustryLogos } from "@/sanity/industryLogos"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-professional-services")
@@ -116,6 +117,9 @@ export default async function Page() {
           layout="tabs"
         />
       )}
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* 6. Solution Cards */}
       {page.solutionCards?.length > 0 && (

@@ -17,6 +17,7 @@ import type {
   SiteSettingsData,
   FaqTab,
 } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface Props {
   page: any
@@ -314,6 +315,9 @@ export default function AircallPartnerContent({ page, siteSettings, faqTabs }: P
         description={page.logoCloudDescription}
         logos={siteSettings?.carouselLogos || []}
       />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       <AircallTabsSection tabs={(page.aircallTabs && page.aircallTabs.length > 0) ? page.aircallTabs : AIRCALL_TABS} />
 

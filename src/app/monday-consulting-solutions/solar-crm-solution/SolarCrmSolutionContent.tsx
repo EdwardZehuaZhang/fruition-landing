@@ -16,6 +16,7 @@ import type {
   SiteSettingsData,
   FaqTab,
 } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface Props {
   page: any
@@ -265,6 +266,9 @@ export default function SolarCrmSolutionContent({ page, siteSettings }: Props) {
           cards={secondaryCards}
         />
       )}
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* 4. Key Features + Services 2-column section */}
       <KeyFeaturesSection

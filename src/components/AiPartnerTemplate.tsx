@@ -4,6 +4,7 @@ import { bookingHref } from "@/lib/bookingLink"
 import type { CSSProperties, ReactNode } from "react"
 import FaqAccordion from "@/components/sections/FaqAccordion"
 import ClosingCtaSection, { type ClosingCtaCopy } from "@/components/sections/ClosingCtaSection"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 import type { FaqTab } from "@/components/sections/types"
 
 /**
@@ -292,6 +293,13 @@ export default function AiPartnerTemplate({
           </div>
         </section>
       )}
+
+      {/* MID-PAGE CTA — shared site-wide conversion banner */}
+      <section className="ap-section">
+        <div className="ap-wrap">
+          <AuditCtaBanner contained={false} />
+        </div>
+      </section>
 
       {/* COMPARISON */}
       {(page.compareRows?.length ?? 0) > 0 && (

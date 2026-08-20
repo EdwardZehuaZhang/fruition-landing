@@ -46,6 +46,7 @@ import FramedMedia from "@/components/common/FramedMedia"
 import type { CaseStudy, SiteSettingsData, ComparisonTab } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 /* ------------------------------------------------------------------ */
 /*  Make Feature Tabs — hardcoded content                              */
@@ -594,6 +595,9 @@ export default function MakePartnersContent({
         ]}
         footnote="Make.com bundles actions into scenarios, billing full runs instead of every step."
       />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* Ecosystem connector grid — apps orbiting monday.com */}
       <EcosystemGrid

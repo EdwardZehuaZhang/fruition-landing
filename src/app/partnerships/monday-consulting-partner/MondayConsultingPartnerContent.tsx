@@ -20,6 +20,7 @@ import type {
   FaqTab,
   ComparisonTab,
 } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface Props {
   page: any
@@ -397,6 +398,9 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
 
       {/* 5. Why Choose Fruition */}
       <WhyFruitionSection items={resolvedWhyFruition} />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* 5b. CRO action items */}
       <CroSections

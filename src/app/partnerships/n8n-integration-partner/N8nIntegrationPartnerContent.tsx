@@ -18,6 +18,7 @@ import type {
   FaqTab,
   ComparisonTab,
 } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface Props {
   page: any
@@ -115,6 +116,9 @@ export default function N8nIntegrationPartnerContent({
         ]}
         footnote="Cloud or self-hosted. n8n charges per full workflow execution, not per step."
       />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* Our Comprehensive n8n Services */}
       {page.servicesCards?.length > 0 && (

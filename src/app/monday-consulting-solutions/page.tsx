@@ -4,6 +4,7 @@ import HeroSection from "@/components/HeroSection"
 import { CroSections, StickyCtaConfig } from "@/components/sections"
 import { getAllSolutionPages, getPageBySlug, getSiteSettings } from "@/sanity/queries"
 import { buildOgMetadata } from "@/lib/metadata"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 export async function generateMetadata() {
   const page = await getPageBySlug("monday-consulting-solutions")
@@ -52,6 +53,9 @@ export default async function SolutionsPage() {
           </Link>
         ))}
       </div>
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
     </div>
   )
 }

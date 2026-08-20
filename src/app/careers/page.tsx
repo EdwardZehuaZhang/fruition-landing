@@ -13,6 +13,7 @@ import {
 import type { Partner } from "@/components/sections/PartnerEcosystemSection"
 import type { SanityImageRef } from "@/components/sections/types"
 import { buildOgMetadata } from "@/lib/metadata"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 function safeImageUrl(ref: SanityImageRef): string | null {
   if (!ref?.asset?._ref) return null
@@ -190,6 +191,9 @@ export default async function CareersPage() {
           cards={page.capabilitiesCards}
         />
       )}
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* 5. Partner Ecosystem */}
       {partnerCards.length > 0 && (

@@ -22,6 +22,7 @@ import type {
   FaqTab,
   ComparisonTab,
 } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface Props {
   page: any
@@ -223,6 +224,9 @@ export default function MondayPartnerUkContent({
         primaryCtaLabel={page.primaryCtaLabel}
         primaryCtaUrl={bookingHref(page.primaryCtaUrl || rawCalendly)}
       />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* Meet the team — UK region */}
       <TeamGridSection

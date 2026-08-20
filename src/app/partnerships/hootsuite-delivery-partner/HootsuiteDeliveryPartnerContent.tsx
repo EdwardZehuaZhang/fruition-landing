@@ -14,6 +14,7 @@ import type {
   SiteSettingsData,
   FaqTab,
 } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface Props {
   page: any
@@ -71,6 +72,9 @@ export default function HootsuiteDeliveryPartnerContent({
           withPurpleCircle={false}
         />
       )}
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* YouTube video below tab section */}
       <section className="bg-surface px-4 pt-6 pb-14 md:pb-24">

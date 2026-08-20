@@ -17,6 +17,7 @@ import {
   TestimonialCtaBanner,
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData, FaqTab } from "@/components/sections/types"
+import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
 
 interface Props {
   page: any
@@ -117,6 +118,9 @@ export default function MondayProjectManagementContent({
 
       {/* 3. FAQ */}
       <FaqAccordion tabs={resolvedFaqTabs} />
+
+      {/* Mid-page conversion banner — shared site-wide */}
+      <AuditCtaBanner />
 
       {/* 4. Case studies */}
       {page.caseStudyCards?.length > 0 && (
