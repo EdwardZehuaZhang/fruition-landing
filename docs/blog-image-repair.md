@@ -79,9 +79,16 @@ Column-width and wider images render exactly as before.
 This does not put lost detail back. It stops a 147px thumbnail being blown up
 5× and presented as a hero.
 
-**2. The 17 real recoveries** are one workflow run away — see below.
+**2. Serve the quality the blog asks for.** Next 16 changed `images.qualities`
+to default to `[75]` and to *silently coerce* anything else to the nearest
+allowed value. All three article image call sites pass `quality={90}`, so since
+the upgrade every blog image had been served at 75. `next.config.ts` now
+declares `qualities: [75, 90]`. This is independent of the scrape damage — it
+was making the good images soft too.
 
-**3. The rest need new screenshots.** The worklist is at the end of this file.
+**3. The 17 real recoveries** are one workflow run away — see below.
+
+**4. The rest need new screenshots.** The worklist is at the end of this file.
 
 ## Running the repair
 
