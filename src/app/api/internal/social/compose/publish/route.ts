@@ -47,10 +47,10 @@ interface PublishResult {
 }
 
 /**
- * What one channel actually attaches, resolved the same way the composer
- * shows it: an explicit "" means the writer removed the image deliberately,
- * undefined falls back to the post's first image, and a PDF displaces the
- * image entirely because LinkedIn carries one or the other.
+ * What one channel actually attaches. A channel publishes ONLY the image it
+ * was given — the post's `mediaUrls` is a library of uploads, not a default,
+ * or an image meant for one channel goes out on all of them. A PDF displaces
+ * the image entirely, because LinkedIn carries one or the other.
  *
  * Deriving it once keeps validation and publishing looking at the same post —
  * they used to compute the image separately, which is how a rule can pass on
@@ -59,12 +59,11 @@ interface PublishResult {
 function attachments(
   spec: PlatformSpec,
   draft: CompositionPlatform,
-  fallbackImage: string | undefined,
 ): { imageUrl?: string; documentUrl?: string } {
   const documentUrl = spec.supportsDocument ? draft.documentUrl || undefined : undefined
   if (documentUrl) return { documentUrl }
   if (!spec.supportsMedia) return {}
-  return { imageUrl: draft.mediaUrl !== undefined ? draft.mediaUrl || undefined : fallbackImage }
+  return { imageUrl: draft.mediaUrl || undefined }
 }
 
 export async function POST(req: Request) {
@@ -117,7 +116,7 @@ export async function POST(req: Request) {
   const problems = keys.flatMap((key) => {
     const draft = composition.platforms[key] as CompositionPlatform
     const spec = platformSpec(key)
-    const { imageUrl, documentUrl } = attachments(spec, draft, composition.mediaUrls[0])
+    const { imageUrl, documentUrl } = attachments(spec, draft)
     return problemsFor(constraintsOf(spec), {
       content: draft.content,
       title: draft.title,
@@ -133,7 +132,7 @@ export async function POST(req: Request) {
 
   for (const key of keys) {
     const draft = platforms[key] as CompositionPlatform
-    const { imageUrl, documentUrl } = attachments(platformSpec(key), draft, composition.mediaUrls[0])
+    const { imageUrl, documentUrl } = attachments(platformSpec(key), draft)
     const documentName = draft.documentName
     try {
       const { content, link } = await shortenForChannel({

@@ -146,15 +146,16 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
         ...problemsFor(spec, {
           content: draft.content,
           title: draft.title,
-          mediaUrl:
-            spec.supportsMedia && !documentUrl ? draft.mediaUrl || edit.mediaUrls[0] : undefined,
+          // Only this channel's own image — the upload pool is a library, not
+          // a default (see effectiveMedia).
+          mediaUrl: spec.supportsMedia && !documentUrl ? draft.mediaUrl || undefined : undefined,
           documentUrl,
           shortenLinks: edit.shortenLinks,
         }),
       )
     }
     return out
-  }, [specs, edit.platforms, edit.mediaUrls, edit.shortenLinks, liveOf])
+  }, [specs, edit.platforms, edit.shortenLinks, liveOf])
 
   const sendableKeys = selectedKeys.filter((k) => liveOf(k)?.status !== "published")
   const canSend = blockers.length === 0 && sendableKeys.length > 0
@@ -323,10 +324,16 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
   }
 
   /**
-   * Upload an image. Without `only` it's a shared upload and fills in every
-   * channel that hasn't picked one; with `only` it belongs to that channel and
-   * overrides whatever was there. Either way the URL joins the composition's
-   * pool, so any channel can pick it later.
+   * Upload an image.
+   *
+   * `only` is the normal case: the image belongs to that channel and nothing
+   * else. Without it — the "Add image to all" button — the image is written
+   * onto every channel that can show one, which is the only way an image is
+   * ever shared. It's written rather than inherited so each card shows what it
+   * will actually publish.
+   *
+   * Either way the URL joins the composition's pool, so any channel can pick
+   * it later from its own picker.
    */
   async function upload(file: File, only?: PlatformKey) {
     setBusy(only ? `upload:${only}` : "upload")
@@ -346,9 +353,12 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
           const draft = platforms[only]
           if (draft) platforms[only] = { ...draft, mediaUrl: data.url }
         } else {
+          // "to all" means all: a channel that already had one is overwritten,
+          // because that's what the button says and every image stays in the
+          // pool to re-pick from.
           for (const spec of specs) {
             const draft = platforms[spec.key]
-            if (!draft || !spec.supportsMedia || draft.mediaUrl) continue
+            if (!draft || !spec.supportsMedia) continue
             platforms[spec.key] = { ...draft, mediaUrl: data.url }
           }
         }
@@ -710,7 +720,8 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
                 </span>
               ))}
               <span className="text-xs text-muted-foreground">
-                Each channel picks its own image below. Delete one here and it goes from every channel.
+                Uploaded to this post — each channel picks its own from here. Delete one and it goes
+                from every channel.
               </span>
             </div>
           )}

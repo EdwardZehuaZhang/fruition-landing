@@ -333,20 +333,27 @@ export function effectiveDocument(
 /**
  * The image a platform would publish with right now. "" = deliberately none.
  *
+ * Each channel answers for itself. `mediaUrls` is a LIBRARY of everything
+ * uploaded to this post, not a default — it used to be both, so an image
+ * dropped on LinkedIn alone became the first entry and every other channel
+ * quietly published it. Worse, those channels still showed "No image" as
+ * selected, so the composer said one thing and the post did another. Sharing
+ * an image across channels is now only what "Add image to all" does, and that
+ * writes it onto each channel where you can see it.
+ *
  * A PDF displaces the image rather than sitting beside it: LinkedIn allows a
- * post to carry one or the other, and the shared image pool would otherwise
- * silently win over the document someone deliberately attached.
+ * post to carry one or the other.
  */
 export function effectiveMedia(
   draft: CompositionPlatform | undefined,
   live: ComposerLive | undefined,
-  fallback: string | undefined,
   spec: PlatformSpec,
 ): string {
   if (!spec.supportsMedia) return ""
   if (effectiveDocument(draft, live, spec)) return ""
   if (draft?.mediaUrl !== undefined) return draft.mediaUrl
-  return live?.mediaUrl ?? fallback ?? ""
+  // No local choice: whatever is already on the Zernio draft is the truth.
+  return live?.mediaUrl ?? ""
 }
 
 /**
@@ -367,14 +374,13 @@ export async function buildComposerState(composition: Composition): Promise<Comp
     composition.id ? shortLinksForComposition(composition.id).catch(() => []) : Promise.resolve([]),
   ])
   const accountById = new Map(accounts.map((a) => [a._id, a]))
-  const fallbackImage = composition.mediaUrls[0]
 
   const platforms: ComposerPlatform[] = PLATFORMS.map((spec) => {
     const account = accountById.get(spec.accountId)
     const draft = composition.platforms[spec.key]
     const live = liveOf(posts[spec.key])
     const selected = Boolean(draft)
-    const media = effectiveMedia(draft, live, fallbackImage, spec)
+    const media = effectiveMedia(draft, live, spec)
     const document = effectiveDocument(draft, live, spec)
     return {
       key: spec.key,
