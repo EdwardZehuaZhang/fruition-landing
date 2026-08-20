@@ -6,7 +6,7 @@ import { PortableText } from "@portabletext/react"
 import { Fragment } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { urlFor } from "@/sanity/image"
+import { articleImage, urlFor } from "@/sanity/image"
 import { authorSlug } from "@/sanity/authorSlug"
 import { parseInlineMarkdown } from "@/lib/inlineMarkdown"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
@@ -240,7 +240,7 @@ const blogPortableTextComponents: PortableTextComponents = {
   types: {
     image: ({ value }) => {
       if (!value?.asset?._ref) return null
-      const src = urlFor(value).auto("format").quality(90).url()
+      const src = articleImage(value)
       return (
         <figure className="w-full flex flex-col items-start pt-[27.5px] isolate">
           <div className="relative w-full overflow-hidden">
@@ -474,7 +474,7 @@ function CoverFigure({
   alt: string
 }) {
   if (!image?.asset?._ref) return null
-  const src = urlFor(image).auto("format").quality(90).url()
+  const src = articleImage(image)
   return (
     <figure className="w-full flex flex-col items-start pt-[27.5px] isolate">
       <div className="relative w-full overflow-hidden">

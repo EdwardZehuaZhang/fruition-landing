@@ -24,6 +24,24 @@ export function cardImage(source: any, width = 800, height = 600) {
 export function thumbnailImage(source: any, size = 200) {
   return urlFor(source).width(size).height(size).fit("crop").auto("format").url()
 }
+/** The article body column, in CSS pixels. Blog covers and inline images fill it. */
+export const ARTICLE_IMAGE_WIDTH = 740
+
+/**
+ * An image sized for the article body column.
+ *
+ * Requests 2x the slot so it stays sharp on a retina display, and — because
+ * Sanity never upscales past the stored asset — keeps a full-resolution
+ * original from being shipped whole to the browser.
+ */
+export function articleImage(source: any) {
+  return urlFor(source)
+    .width(ARTICLE_IMAGE_WIDTH * 2)
+    .auto("format")
+    .quality(90)
+    .url()
+}
+
 export function ogImage(source: any) {
   return urlFor(source).width(1200).height(630).fit("crop").auto("format").url()
 }

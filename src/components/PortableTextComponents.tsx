@@ -1,7 +1,7 @@
 import type { PortableTextComponents } from "@portabletext/react"
 import Image from "next/image"
 import Link from "next/link"
-import { urlFor } from "@/sanity/image"
+import { articleImage } from "@/sanity/image"
 
 export const portableTextComponents: PortableTextComponents = {
   types: {
@@ -10,7 +10,7 @@ export const portableTextComponents: PortableTextComponents = {
       return (
         <div className="my-8 relative w-full rounded-xl overflow-hidden">
           <Image
-            src={urlFor(value).auto("format").quality(90).url()}
+            src={articleImage(value)}
             alt={value.alt || ""}
             width={740}
             height={416}
