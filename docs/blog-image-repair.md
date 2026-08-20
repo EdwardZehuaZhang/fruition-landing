@@ -89,6 +89,11 @@ Use the workflow — **Actions → Blog image repair → Run workflow**. `plan` 
 read-only and needs no credentials; `apply` needs a `SANITY_WRITE_TOKEN` repo
 secret (Settings → Secrets and variables → Actions) and fails fast without one.
 
+> GitHub only offers **Run workflow** for workflows that exist on the default
+> branch, so the button appears once this has merged to `production`. Before
+> then, the same plan runs by pushing a commit with `[probe-images]` in its
+> message to a `claude/**` branch.
+
 Locally, if you have the token in `.env.local`:
 
 ```bash
