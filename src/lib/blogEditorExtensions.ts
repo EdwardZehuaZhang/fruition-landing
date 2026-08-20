@@ -61,9 +61,15 @@ export function sanitizeAlt(alt: unknown): string {
 /*                                                                     */
 /*  Rebuilding the node from the parsed DOM closes the loop: node ->   */
 /*  bare URL -> node -> the same bare URL, stable for any number of    */
-/*  save/load cycles. Matching the *anchor* rather than the raw text   */
-/*  also repairs drafts already saved in the `<url>` form, since       */
-/*  markdown-it parses both spellings into the same anchor.            */
+/*  save/load cycles.                                                  */
+/*                                                                     */
+/*  A lone URL reaches this point in two spellings. With `linkify` off */
+/*  (no automatic hyperlinks — see blogEditorExtensions below) a bare  */
+/*  URL line stays plain text, which is what every video node now      */
+/*  serialises to. Drafts saved before that round trip was fixed hold  */
+/*  the `<url>` autolink form instead, and CommonMark's own autolink   */
+/*  rule — which `linkify: false` does not touch — still parses those  */
+/*  into an anchor. Both are repaired.                                 */
 /* ------------------------------------------------------------------ */
 
 /** Blocks a serialised video URL can come back inside (cells carry no `<p>`). */
@@ -81,8 +87,28 @@ function loneVideoUrl(text: string): ParsedVideo | null {
 }
 
 /**
- * Replace every block whose entire content is an autolinked video URL with the
- * DOM `build` returns, for the providers `accept` claims.
+ * The URL of a block that holds nothing but one URL, in either spelling a saved
+ * draft can carry it: bare text (what a video node serialises to) or a `<url>`
+ * autolink (older drafts). Anything else — prose around the URL, a link whose
+ * text differs from its href — is left alone.
+ */
+function loneUrlInBlock(block: Element): string | null {
+  const text = block.textContent?.trim() ?? ""
+  if (!text) return null
+  // Plain text: no markup at all inside the block.
+  if (block.children.length === 0) return text
+
+  const anchor = block.firstElementChild
+  // The anchor has to *be* the block — one child element, no other text.
+  if (!anchor || anchor.tagName !== "A" || block.children.length !== 1) return null
+  if (anchor.textContent?.trim() !== text) return null
+  // An autolink spells out its own href; a real link with custom text does not.
+  return text === anchor.getAttribute("href")?.trim() ? text : null
+}
+
+/**
+ * Replace every block whose entire content is one video URL with the DOM
+ * `build` returns, for the providers `accept` claims.
  *
  * The URL is passed through verbatim rather than canonicalised so that a
  * save → load → save cycle is byte-stable.
@@ -96,20 +122,8 @@ function restoreVideoNodes(
   if (!doc) return
 
   for (const block of Array.from(element.querySelectorAll(VIDEO_URL_BLOCKS))) {
-    const anchor = block.firstElementChild
-    // The anchor has to *be* the block — one child element, no other text.
-    if (
-      !anchor ||
-      anchor.tagName !== "A" ||
-      block.children.length !== 1 ||
-      block.textContent?.trim() !== anchor.textContent?.trim()
-    ) {
-      continue
-    }
-
-    const url = (anchor.textContent ?? "").trim()
-    // linkify only rewrites text it left intact; anything else is a real link.
-    if (url !== anchor.getAttribute("href")?.trim()) continue
+    const url = loneUrlInBlock(block)
+    if (!url) continue
 
     const video = loneVideoUrl(url)
     if (!video || !accept(video)) continue
@@ -531,7 +545,16 @@ export function blogEditorExtensions() {
       horizontalRule: false,
       link: {
         openOnClick: false,
-        autolink: true,
+        // No automatic links. Bare text like "monday.com", a typed URL and a
+        // pasted one all stay plain text; a hyperlink is only ever created
+        // deliberately, via the toolbar Link button (which calls setLink and
+        // is unaffected by these flags) or an explicit `[text](url)`.
+        // All three flags are needed: `autolink` covers typing, `linkOnPaste`
+        // the paste handler, and `shouldAutoLink` the extension's paste *rule*,
+        // which linkifies URLs in any pasted text on its own.
+        autolink: false,
+        linkOnPaste: false,
+        shouldAutoLink: () => false,
         HTMLAttributes: { rel: "noopener noreferrer", target: "_blank" },
       },
     }),
@@ -550,7 +573,11 @@ export function blogEditorExtensions() {
     TableCell,
     Markdown.configure({
       html: false,
-      linkify: true,
+      // markdown-it's linkify would turn bare domains and URLs in a loaded
+      // draft into links on parse. Those serialise straight back out as real
+      // markdown links, so a draft picked up autolinks it never asked for and
+      // published them. Only an explicit `[text](url)` becomes a link.
+      linkify: false,
       breaks: false,
       transformPastedText: false,
       transformCopiedText: false,

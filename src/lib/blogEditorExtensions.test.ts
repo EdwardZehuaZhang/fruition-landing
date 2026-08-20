@@ -142,6 +142,20 @@ function nodeTypes(node: JSONContent): string[] {
   return out
 }
 
+/** A text node carrying a link mark — what the toolbar Link button produces. */
+const link = (text: string, href: string): JSONContent => ({
+  type: "text",
+  text,
+  marks: [{ type: "link", attrs: { href } }],
+})
+
+/** Every mark type present in a doc, flattened. */
+function markTypes(node: JSONContent): string[] {
+  const out = (node.marks ?? []).map((m) => m.type)
+  for (const child of node.content ?? []) out.push(...markTypes(child))
+  return out
+}
+
 /** All text carried by a doc, so we can assert nothing was silently dropped. */
 function allText(node: JSONContent): string {
   if (node.type === "text") return node.text ?? ""
@@ -500,10 +514,78 @@ describe("video persistence through repeated save + reload", () => {
     expect(nodeTypes(out)).not.toContain("videoEmbed")
     expect(allText(out)).toContain("watch")
     expect(allText(out)).toContain("today")
-    // markdown-it's linkify normalises a bare URL sitting in prose to the
-    // `<url>` autolink form. That is pre-existing, valid, and harmless for a
-    // paragraph — it just has to settle rather than keep changing.
+    // It stays ordinary prose: with linkify off nothing promotes the URL to a
+    // link, so no `<url>` autolink form ever appears and the markdown settles.
+    expect(saves[2]).not.toContain("<http")
     expect(saves[2]).toBe(saves[1])
+  })
+})
+
+/* --------------------------- links ---------------------------- */
+
+describe("links are only ever created deliberately", () => {
+  // The editor used to manufacture links on its own: tiptap's `autolink` while
+  // typing, its paste rule on any pasted text, and markdown-it's `linkify`
+  // when a stored draft was parsed back in. The last one was the damaging one
+  // — a bare "monday.com" in a draft came back as a link, serialised out as
+  // real `[monday.com](http://monday.com)` markdown, and published as a live
+  // hyperlink nobody had asked for.
+
+  it("leaves a bare domain in prose as plain text", () => {
+    const { saves, doc: out } = saveCycles(doc(para("We are a monday.com partner.")), 3)
+
+    expect(markTypes(out)).not.toContain("link")
+    expect(saves[0]).toBe("We are a monday.com partner.")
+    // Reloading is where linkify used to strike, so check past the first save.
+    expect(saves[2]).toBe(saves[0])
+  })
+
+  it("leaves a bare URL in prose as plain text", () => {
+    const { saves, doc: out } = saveCycles(doc(para("Pricing is at https://monday.com/pricing.")), 3)
+
+    expect(markTypes(out)).not.toContain("link")
+    expect(saves[2]).not.toContain("<http")
+    expect(saves[2]).not.toContain("](")
+    expect(saves[2]).toBe(saves[0])
+  })
+
+  it("keeps a link the editor was told to make", () => {
+    // What the toolbar Link button produces — this must still survive.
+    const { saves, doc: out } = saveCycles(
+      doc({
+        type: "paragraph",
+        content: [{ type: "text", text: "See " }, link("monday.com", "https://monday.com")],
+      }),
+      3,
+    )
+
+    expect(markTypes(out)).toContain("link")
+    expect(saves[0]).toContain("[monday.com](https://monday.com)")
+    expect(saves[2]).toBe(saves[0])
+  })
+
+  it("publishes a bare domain with no link markDefs", () => {
+    const { saved } = saveReloadSave(doc(para("Ask us about monday.com and asana.com.")))
+
+    const blocks = bodyToPortableText(saved) as { _type: string; markDefs?: unknown[] }[]
+    expect(blocks.every((b) => (b.markDefs ?? []).length === 0)).toBe(true)
+  })
+
+  it("still publishes a deliberate link as a link markDef", () => {
+    const { saved } = saveReloadSave(
+      doc({
+        type: "paragraph",
+        content: [{ type: "text", text: "See " }, link("our partner", "https://monday.com")],
+      }),
+    )
+
+    const blocks = bodyToPortableText(saved) as {
+      _type: string
+      markDefs?: { _type: string; href: string }[]
+    }[]
+    const defs = blocks.flatMap((b) => b.markDefs ?? [])
+    expect(defs).toHaveLength(1)
+    expect(defs[0].href).toBe("https://monday.com")
   })
 })
 
