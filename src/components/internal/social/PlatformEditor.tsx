@@ -3,10 +3,15 @@
 import { useId, useRef, useState } from "react"
 import { FileText, Loader2, Upload, X } from "lucide-react"
 import { useCaretInsert } from "@/lib/social/caret"
-import { parseMentions, renderedLength, supportsTagging } from "@/lib/social/mentions"
+import {
+  parseMentions,
+  renderedLength,
+  replaceMentionQuery,
+  supportsTagging,
+} from "@/lib/social/mentions"
 import { shorteningSaving } from "@/lib/social/shortLinkText"
 import EmojiPicker from "@/components/internal/social/EmojiPicker"
-import TagPicker from "@/components/internal/social/TagPicker"
+import MentionMenu, { useMentionMenu } from "@/components/internal/social/MentionMenu"
 import { Button } from "@/components/ui/button"
 
 /**
@@ -82,6 +87,7 @@ export default function PlatformEditor({
 }) {
   const [showLimits, setShowLimits] = useState(false)
   const limitsId = useId()
+  const mentionListId = useId()
   const fileInput = useRef<HTMLInputElement>(null)
   const docInput = useRef<HTMLInputElement>(null)
   const body = useRef<HTMLTextAreaElement>(null)
@@ -115,6 +121,52 @@ export default function PlatformEditor({
   const choices = media && !images.includes(media) ? [media, ...images] : images
 
   const caret = useCaretInsert(body, (next) => onChange({ content: next }))
+  // The menu needs to know WHERE the cursor is, not just how to write to it.
+  const [caretAt, setCaretAt] = useState<number | null>(null)
+
+  const mention = useMentionMenu({
+    platformKey: tagKey,
+    content,
+    caret: caretAt,
+    enabled: !disabled,
+  })
+
+  /** Swap the half-typed "@name" for the finished tag. */
+  async function acceptMention(index: number) {
+    const q = mention.query
+    if (!q) return
+    const picked = await mention.choose(index)
+    if (!picked) return
+    const next = replaceMentionQuery(content, q, picked.text)
+    onChange({ content: next.text })
+    setCaretAt(next.caret)
+    requestAnimationFrame(() => {
+      const el = body.current
+      if (!el) return
+      el.focus()
+      el.setSelectionRange(next.caret, next.caret)
+    })
+  }
+
+  /** Arrow keys belong to the menu while it's open; everything else to the box. */
+  function onBodyKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (!mention.isOpen || !mention.options.length) return
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault()
+      const delta = e.key === "ArrowDown" ? 1 : -1
+      mention.setActive((i) => (i + delta + mention.options.length) % mention.options.length)
+      return
+    }
+    if (e.key === "Enter" || e.key === "Tab") {
+      e.preventDefault()
+      void acceptMention(mention.active)
+      return
+    }
+    if (e.key === "Escape") {
+      e.preventDefault()
+      mention.dismiss()
+    }
+  }
 
   /** Cut one tag's markup out of the caption, leaving the rest untouched. */
   function dropMention(start: number, end: number) {
@@ -160,31 +212,68 @@ export default function PlatformEditor({
       )}
 
       {/* Writing tools sit above the box they act on, so it's obvious what they act on. */}
-      <div className="flex items-center justify-end gap-1">
+      <div className="flex items-center justify-end gap-2">
         {tagKey && (
-          <TagPicker
-            platformKey={tagKey}
-            onPick={caret.insert}
-            onClose={caret.restore}
-            disabled={disabled}
-          />
+          <span className="mr-auto text-[11px] text-muted-foreground">
+            Type <span className="font-mono text-foreground">@</span> to tag an account
+          </span>
         )}
         <EmojiPicker onPick={caret.insert} onClose={caret.restore} disabled={disabled} />
       </div>
 
-      <textarea
-        ref={body}
-        value={content}
-        onChange={(e) => onChange({ content: e.target.value })}
-        onSelect={caret.remember}
-        onKeyUp={caret.remember}
-        onClick={caret.remember}
-        rows={spec.key === "twitter" ? 4 : 6}
-        placeholder={`What goes out on ${spec.label}`}
-        disabled={disabled}
-        aria-invalid={over > 0 || undefined}
-        className="w-full resize-y rounded-md border border-border bg-background px-3 py-2 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 disabled:opacity-60 aria-invalid:border-destructive"
-      />
+      <div className="relative">
+        <textarea
+          ref={body}
+          value={content}
+          onChange={(e) => {
+            onChange({ content: e.target.value })
+            setCaretAt(e.target.selectionStart)
+          }}
+          onSelect={(e) => {
+            caret.remember()
+            setCaretAt(e.currentTarget.selectionStart)
+          }}
+          onKeyUp={(e) => {
+            caret.remember()
+            setCaretAt(e.currentTarget.selectionStart)
+          }}
+          onKeyDown={onBodyKeyDown}
+          onClick={(e) => {
+            caret.remember()
+            setCaretAt(e.currentTarget.selectionStart)
+          }}
+          onBlur={() => {
+            // Let a click on a menu row land before the menu disappears.
+            window.setTimeout(() => setCaretAt(null), 150)
+          }}
+          rows={spec.key === "twitter" ? 4 : 6}
+          placeholder={`What goes out on ${spec.label}`}
+          disabled={disabled}
+          aria-invalid={over > 0 || undefined}
+          // The ARIA combobox pattern, but only on the channels that have a
+          // menu — a plain textarea claiming a combobox role would just lie.
+          role={tagKey ? "combobox" : undefined}
+          aria-autocomplete={tagKey ? "list" : undefined}
+          aria-expanded={tagKey ? mention.isOpen : undefined}
+          aria-controls={tagKey ? mentionListId : undefined}
+          aria-activedescendant={
+            tagKey && mention.isOpen ? `${mentionListId}-${mention.active}` : undefined
+          }
+          className="w-full resize-y rounded-md border border-border bg-background px-3 py-2 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/20 disabled:opacity-60 aria-invalid:border-destructive"
+        />
+        {tagKey && mention.isOpen && (
+          <MentionMenu
+            listId={mentionListId}
+            options={mention.options}
+            active={mention.active}
+            looking={mention.looking}
+            error={mention.lookupError}
+            platformKey={tagKey}
+            onHover={mention.setActive}
+            onPick={(i) => void acceptMention(i)}
+          />
+        )}
+      </div>
 
       {mentions.length > 0 && (
         <div className="flex flex-wrap items-center gap-1.5">
