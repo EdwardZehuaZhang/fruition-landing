@@ -23,11 +23,23 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
 
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    # Informational for now; promote to a required check once the app is lint-clean.
-    continue-on-error: true
+    # Promoted to a required check in the 2026-08-21 audit: the app is at 0 eslint
+    # errors, so any new error is a regression. Warnings remain non-blocking.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

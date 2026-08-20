@@ -61,3 +61,7 @@ cloudflare-env.d.ts
 
 # dark-mode QA screenshots
 qa/darkmode/
+
+# Sanity Studio build output — was committed by mistake (62MB, removed 2026-08-21).
+# The Studio is served by Next at /studio; this directory is never deployed.
+/dist/
