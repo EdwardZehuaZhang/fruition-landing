@@ -37,7 +37,8 @@
  *   --target <px>        width a blog image needs to be sharp (default 1480 = 740 @2x)
  *   --limit <n>          stop after n posts that need work
  *   --source-base <url>  scrape this origin instead of the Wayback Machine
- *   --before <YYYYMMDD>  newest archive snapshot to consider (default 20260301)
+ *   --before <YYYYMMDD>  newest archive snapshot to consider (default 20260520)
+ *   --snapshots <n>      captures to try per host, newest first (default 6)
  *   --delay <ms>         pause between upstream requests (default 1200)
  *   --report <path>      write the full findings as JSON
  *
@@ -68,7 +69,8 @@ if (has("--help") || has("-h")) {
       "  --target <px>        sharpness target (default 1480 = the 740px slot at 2x)",
       "  --limit <n>          stop after n posts that need work",
       "  --source-base <url>  scrape this origin instead of the Wayback Machine",
-      "  --before <YYYYMMDD>  newest archive snapshot to consider (default 20260301)",
+      "  --before <YYYYMMDD>  newest archive snapshot to consider (default 20260520)",
+      "  --snapshots <n>      captures to try per host, newest first (default 6)",
       "  --delay <ms>         pause between upstream requests (default 1200)",
       "  --report <path>      write the full findings as JSON",
     ].join("\n"),
@@ -82,7 +84,12 @@ const ONLY = opt("--only", "")
 const TARGET = Number(opt("--target", "1480"))
 const LIMIT = Number(opt("--limit", "0"))
 const SOURCE_BASE = opt("--source-base", "").replace(/\/+$/, "")
-const BEFORE = opt("--before", "20260301")
+// The last date the Wix site is *known* to have been serving: the scraper that
+// created these placeholders ran against it on 2026-05-19. The previous default
+// of 20260301 predated the affected posts entirely (published 2026-04-11), so
+// no capture could ever match and every one of them reported "no archived copy".
+const BEFORE = opt("--before", "20260520")
+const SNAPSHOTS = Number(opt("--snapshots", "6"))
 const DELAY = Number(opt("--delay", "1200"))
 const REPORT = opt("--report", "")
 
@@ -205,28 +212,32 @@ async function getHtml(url: string): Promise<HTMLElement | null> {
 }
 
 /**
- * Newest Wayback capture of a URL at or before --before. The cutoff matters:
- * captures after the Sanity migration are of the *new* site, which already
- * serves the blurry images we are trying to replace.
+ * Wayback captures of a URL at or before --before, newest first.
+ *
+ * Several are returned rather than just the newest because the exact date the
+ * site left Wix is not known: a capture taken after it carries the *new*
+ * site's markup, whose images are the blurry Sanity ones we are replacing.
+ * The caller walks the list until a capture actually contains Wix media, so a
+ * too-late cutoff costs a wasted fetch instead of a wrong answer.
  */
-async function waybackSnapshot(pageUrl: string): Promise<string | null> {
+async function waybackSnapshots(pageUrl: string): Promise<string[]> {
   const cdx =
     "https://web.archive.org/cdx/search/cdx" +
     `?url=${encodeURIComponent(pageUrl)}` +
     `&output=json&filter=statuscode:200&filter=mimetype:text/html` +
-    `&to=${BEFORE}&collapse=digest&limit=-3`
+    `&to=${BEFORE}&collapse=digest&limit=-${SNAPSHOTS}`
   try {
     const res = await fetch(cdx, { signal: AbortSignal.timeout(45000) })
-    if (!res.ok) return null
+    if (!res.ok) return []
     const rows = (await res.json()) as string[][]
-    const data = rows.slice(1)
-    if (data.length === 0) return null
-    const timestamp = data[data.length - 1][1]
-    // `id_` returns the original bytes, without Wayback's URL rewriting — so the
-    // wixstatic URLs in the markup are still the real ones.
-    return `https://web.archive.org/web/${timestamp}id_/${pageUrl}`
+    // CDX returns oldest first; `id_` gives the original bytes, without
+    // Wayback's URL rewriting, so the wixstatic URLs are still the real ones.
+    return rows
+      .slice(1)
+      .map(([, timestamp]) => `https://web.archive.org/web/${timestamp}id_/${pageUrl}`)
+      .reverse()
   } catch {
-    return null
+    return []
   }
 }
 
@@ -290,14 +301,14 @@ async function reportArchiveCoverage(): Promise<void> {
   }
 }
 
-/** First archived capture of a post across every host spelling we know. */
-async function findSnapshot(slug: string): Promise<string | null> {
+/** Candidate captures of a post, newest first, across every host spelling. */
+async function findSnapshots(slug: string): Promise<string[]> {
+  const out: string[] = []
   for (const host of ARCHIVE_HOSTS) {
-    const hit = await waybackSnapshot(`${host}/post/${slug}`)
-    if (hit) return hit
+    out.push(...(await waybackSnapshots(`${host}/post/${slug}`)))
     await sleep(DELAY)
   }
-  return null
+  return out
 }
 
 /** Wix wraps images in <wow-image data-image-info='{"imageData":{"uri":"…"}}'>. */
@@ -325,11 +336,8 @@ function bodyContainer(root: HTMLElement): HTMLElement | null {
 }
 
 /** Pull the cover and the ordered body images out of an archived Wix post page. */
-async function fetchArchivedPage(slug: string): Promise<ArchivedPage | null> {
-  const target = SOURCE_BASE ? `${SOURCE_BASE}/post/${slug}` : await findSnapshot(slug)
-  if (!target) return null
-  await sleep(DELAY)
-
+/** Read one captured page. Returns null when it holds no Wix media at all. */
+async function readWixPage(target: string): Promise<ArchivedPage | null> {
   const root = await getHtml(target)
   if (!root) return null
 
@@ -354,7 +362,26 @@ async function fetchArchivedPage(slug: string): Promise<ArchivedPage | null> {
     }
   }
 
-  return { url: target, cover: og ? wixOriginalUrl(og) : null, body }
+  const cover = og ? wixOriginalUrl(og) : null
+  // A capture taken after the site left Wix parses fine but carries only
+  // cdn.sanity.io URLs, which is exactly what we are replacing. Treat it as a
+  // miss so the caller falls back to an older capture.
+  if (!cover && body.length === 0) return null
+  return { url: target, cover, body }
+}
+
+async function fetchArchivedPage(slug: string): Promise<ArchivedPage | null> {
+  if (SOURCE_BASE) {
+    await sleep(DELAY)
+    return readWixPage(`${SOURCE_BASE}/post/${slug}`)
+  }
+
+  for (const target of await findSnapshots(slug)) {
+    await sleep(DELAY)
+    const page = await readWixPage(target)
+    if (page) return page
+  }
+  return null
 }
 
 /** Pick the archived image that belongs to a slot: alt text first, then order. */
