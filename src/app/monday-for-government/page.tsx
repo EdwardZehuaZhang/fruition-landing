@@ -7,6 +7,7 @@ import {
 import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import UniversalPageTemplate from "@/components/UniversalPageTemplate"
 import { buildOgMetadata } from "@/lib/metadata"
+import { getIndustryLogos } from "@/sanity/industryLogos"
 
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-government")
@@ -25,17 +26,19 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const [page, siteSettings, caseStudies, centralFaqs] = await Promise.all([
+  const [page, siteSettings, caseStudies, centralFaqs, industryLogos] = await Promise.all([
     getIndustryPageBySlug("monday-for-government"),
     getSiteSettings(),
     getCaseStudies(),
     getFaqItemsForPage("monday-for-government"),
+    getIndustryLogos("government"),
   ])
   return (
     <UniversalPageTemplate
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
+      industryLogos={industryLogos}
       faqTabs={resolveFaqTabs(page?.faqTabs, centralFaqs)}
     />
   )

@@ -6,6 +6,8 @@ export interface CarouselLogo {
   _key?: string
   alt?: string
   image?: SanityImageRef
+  /** Matches a name in the catalog's clients.ts — see `clientSlug()` there. */
+  clientSlug?: string
 }
 
 export interface CaseStudy {

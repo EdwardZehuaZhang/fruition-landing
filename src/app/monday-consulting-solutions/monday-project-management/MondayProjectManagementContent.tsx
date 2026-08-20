@@ -3,7 +3,7 @@
 import { bookingHref } from "@/lib/bookingLink"
 import {
   HeroBanner,
-  LogoCloudMarquee,
+  ClientLogoSection,
   ComparisonTabsSection,
   CalendlySection,
   FaqAccordion,
@@ -89,7 +89,7 @@ export default function MondayProjectManagementContent({
       />
 
       {/* Logo cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1 || PM_LOGO_CLOUD_PART1}
         headingAccent={page.logoCloudHeadingAccent ?? PM_LOGO_CLOUD_ACCENT}
         description={page.logoCloudDescription}

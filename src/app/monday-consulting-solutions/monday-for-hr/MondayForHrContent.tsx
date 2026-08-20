@@ -17,7 +17,7 @@ import {
 } from "lucide-react"
 import {
   HeroBanner,
-  LogoCloudMarquee,
+  ClientLogoSection,
   ComparisonTabsSection,
   CalendlySection,
   FaqAccordion,
@@ -253,7 +253,7 @@ export default function MondayForHrContent({
       />
 
       {/* Logo cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1}
         headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}

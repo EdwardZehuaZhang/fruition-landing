@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Rocket, Check } from "lucide-react"
 import {
   HeroBanner,
-  LogoCloudMarquee,
+  ClientLogoSection,
   ComparisonTabsSection,
   CalendlySection,
   FaqAccordion,
@@ -160,7 +160,7 @@ export default function CertifiedAtlassianPartnerContent({ page, siteSettings, f
       />
 
       {/* Logo cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1}
         headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}

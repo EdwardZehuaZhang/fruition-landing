@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Check } from "lucide-react"
 import {
   HeroBanner,
-  LogoCloudMarquee,
+  ClientLogoSection,
   CapabilitiesGrid,
   ComparisonTabsSection,
   CalendlySection,
@@ -246,7 +246,7 @@ export default function SolarCrmSolutionContent({ page, siteSettings }: Props) {
       )}
 
       {/* 2. Logo cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1}
         headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}

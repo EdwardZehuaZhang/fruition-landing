@@ -292,6 +292,15 @@ export default {
           fields: [
             { name: 'alt', title: 'Alt Text', type: 'string' },
             { name: 'image', title: 'Image', type: 'image' },
+            {
+              name: 'clientSlug',
+              title: 'Catalog client slug',
+              type: 'string',
+              description:
+                'Optional. When set, the homepage logo wall links this tile to ' +
+                '/monday-consulting-solutions/catalog?client=<slug>, which expands the ' +
+                'builds index and highlights that client. Must match a name in clients.ts.',
+            },
           ],
         },
       ],

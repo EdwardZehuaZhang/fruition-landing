@@ -8,7 +8,7 @@ import {
 import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import {
   HeroBanner,
-  LogoCloudMarquee,
+  ClientLogoSection,
   ComparisonTabsSection,
   CapabilitiesGrid,
   CalendlySection,
@@ -19,6 +19,7 @@ import {
 } from "@/components/sections"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import { buildOgMetadata } from "@/lib/metadata"
+import { getIndustryLogos, resolveIndustryLogos } from "@/sanity/industryLogos"
 
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-professional-services")
@@ -37,11 +38,12 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const [page, siteSettings, caseStudies, centralFaqs] = await Promise.all([
+  const [page, siteSettings, caseStudies, centralFaqs, industryLogos] = await Promise.all([
     getIndustryPageBySlug("monday-for-professional-services"),
     getSiteSettings(),
     getCaseStudies(),
     getFaqItemsForPage("monday-for-professional-services"),
+    getIndustryLogos("professional-services"),
   ])
 
   if (!page) return null
@@ -78,11 +80,11 @@ export default async function Page() {
       />
 
       {/* 2. Logo Cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1 || ""}
         headingAccent={page.logoCloudHeadingAccent ?? ""}
         description={page.logoCloudDescription}
-        logos={siteSettings?.carouselLogos || []}
+        logos={resolveIndustryLogos(industryLogos, siteSettings?.carouselLogos)}
       />
 
       {/* 3. Capabilities — "Run your services business on one platform" */}

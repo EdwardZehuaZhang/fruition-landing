@@ -4,7 +4,7 @@ import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
 import {
-  LogoCloudMarquee,
+  ClientLogoSection,
   ComparisonTabsSection,
   TestimonialsGrid,
   CalendlySection,
@@ -182,7 +182,7 @@ export default function MondayCrmConsultingContent({
       </section>
 
       {/* 2. Logo Cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1}
         headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}

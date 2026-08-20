@@ -41,7 +41,7 @@ export async function getHomeSectionData() {
         phone,
         calendlyLink,
         offices,
-        carouselLogos[]{ _key, alt, image }
+        carouselLogos[]{ _key, alt, image, clientSlug }
       },
       "testimonials": *[_type == "homePage"][0].contentBlocks[_type == "testimonialBlock"]{
         _key,

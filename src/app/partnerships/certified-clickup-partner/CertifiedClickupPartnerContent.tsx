@@ -4,7 +4,7 @@ import { bookingHref } from "@/lib/bookingLink"
 import { useState } from "react"
 import {
   HeroBanner,
-  LogoCloudMarquee,
+  ClientLogoSection,
   CalendlySection,
   FaqAccordion,
 } from "@/components/sections"
@@ -254,7 +254,7 @@ export default function CertifiedClickupPartnerContent({ page, siteSettings, faq
       <PartnershipIntroSection />
 
       {/* Logo cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1}
         headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}

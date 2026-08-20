@@ -34,7 +34,7 @@ import {
   Plug,
 } from "lucide-react"
 import {
-  LogoCloudMarquee,
+  ClientLogoSection,
   CalendlySection,
   JoinStatsSection,
   CroSections,
@@ -567,7 +567,7 @@ export default function MakePartnersContent({
 
       {/* 3. Logo Cloud */}
       {(pageData?.logoCloudHeadingPart1 || pageData?.logoCloudHeadingAccent) && (
-        <LogoCloudMarquee
+        <ClientLogoSection
           headingPart1={pageData?.logoCloudHeadingPart1}
           headingAccent={pageData?.logoCloudHeadingAccent}
           logos={siteSettings?.carouselLogos || []}

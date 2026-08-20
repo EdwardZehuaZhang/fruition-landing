@@ -1,4 +1,4 @@
-// 288 client engagements across US, Australia/APAC, and UK regions.
+// 299 client engagements across US, Australia/APAC, and UK regions.
 // Lifted from the 2026 Solutions Atlas mock; corroborated against monday.com
 // CRM, Fireflies, and Google Drive activity 2024–2026.
 
@@ -84,7 +84,18 @@ export const CLIENTS: Client[] = [
   { region: "us", name: "First Service Residential", meta: "Property Mgmt" },
   { region: "us", name: "Stand Industries", meta: "Industrial Ops" },
 
-  // Australia & APAC — 111 delivered
+  // Australia & APAC — 122 delivered
+  { region: "apac", name: "Transport for NSW", meta: "State Transport Authority" },
+  { region: "apac", name: "Queensland Health", meta: "State Health Service" },
+  { region: "apac", name: "VicHealth", meta: "Health Promotion Agency" },
+  { region: "apac", name: "St Vincent de Paul Society Queensland", meta: "Social Services" },
+  { region: "apac", name: "Specsavers", meta: "Optical Retail" },
+  { region: "apac", name: "SBS", meta: "National Broadcaster" },
+  { region: "apac", name: "Ticketek", meta: "Ticketing Platform" },
+  { region: "apac", name: "Scania Australia", meta: "Commercial Vehicles" },
+  { region: "apac", name: "EVT Limited", meta: "Hospitality & Entertainment" },
+  { region: "apac", name: "Retail Food Group", meta: "Multi-brand Franchising" },
+  { region: "apac", name: "Hume Bank", meta: "Regional Banking" },
   { region: "apac", name: "Landcom", meta: "NSW Gov Property" },
   { region: "apac", name: "Sekisui House", meta: "Residential Developer" },
   { region: "apac", name: "Tourism Australia", meta: "Agency Enablement" },
@@ -305,3 +316,22 @@ export const CLIENTS: Client[] = [
   { region: "uk", name: "Ths is Crowd", meta: "Creative Agency" },
   { region: "uk", name: "MBG Group", meta: "Marketing Group" },
 ]
+
+/**
+ * Stable URL key for a client, shared by the homepage logo wall (which links to
+ * `/monday-consulting-solutions/catalog?client=<slug>`) and the builds index
+ * (which expands and highlights the matching card). Derived from the name so
+ * there is only ever one source of truth.
+ */
+export function clientSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+}
+
+/** Reverse lookup used by the builds index when it reads `?client=`. */
+export function findClientBySlug(slug: string): Client | undefined {
+  return CLIENTS.find((c) => clientSlug(c.name) === slug)
+}

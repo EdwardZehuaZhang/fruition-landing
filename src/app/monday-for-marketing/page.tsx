@@ -8,7 +8,7 @@ import {
 import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import {
   HeroBanner,
-  LogoCloudMarquee,
+  ClientLogoSection,
   ComparisonTabsSection,
   CalendlySection,
   FaqAccordion,
@@ -18,6 +18,7 @@ import {
 } from "@/components/sections"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import { buildOgMetadata } from "@/lib/metadata"
+import { getIndustryLogos, resolveIndustryLogos } from "@/sanity/industryLogos"
 
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-marketing")
@@ -36,11 +37,12 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const [page, siteSettings, caseStudies, centralFaqs] = await Promise.all([
+  const [page, siteSettings, caseStudies, centralFaqs, industryLogos] = await Promise.all([
     getIndustryPageBySlug("monday-for-marketing"),
     getSiteSettings(),
     getCaseStudies(),
     getFaqItemsForPage("monday-for-marketing"),
+    getIndustryLogos("marketing"),
   ])
 
   if (!page) return null
@@ -73,11 +75,11 @@ export default async function Page() {
       />
 
       {/* 2. Logo Cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1 || ""}
         headingAccent={page.logoCloudHeadingAccent ?? ""}
         description={page.logoCloudDescription}
-        logos={siteSettings?.carouselLogos || []}
+        logos={resolveIndustryLogos(industryLogos, siteSettings?.carouselLogos)}
       />
 
       {/* 3. Three-tab "Why monday.com for Marketing & Creative?" */}

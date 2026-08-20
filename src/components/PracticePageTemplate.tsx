@@ -8,6 +8,8 @@ import {
 import FaqAccordion from '@/components/sections/FaqAccordion'
 import ClosingCtaSection from '@/components/sections/ClosingCtaSection'
 import { getFaqItemsForPageStrict, getClosingCtaForPage } from '@/sanity/queries'
+import { getIndustryLogos, INDUSTRY_LOGO_KEYS } from '@/sanity/industryLogos'
+import ClientLogoSection from '@/components/sections/ClientLogoSection'
 import { groupFaqsIntoTabs } from '@/sanity/groupFaqs'
 
 /**
@@ -52,9 +54,13 @@ export default async function PracticePageTemplate({ page }: { page: PracticePag
   // Fall back to the page's hardcoded faqs until the migration has seeded them.
   // FAQPage JSON-LD is emitted by FaqAccordion itself.
   const pageKey = page.path.replace(/^\//, '')
-  const [centralFaqs, closingCta] = await Promise.all([
+  // Only the industry practice pages have a logo wall; the rest of the cluster
+  // (atlassian, hubspot, ai-consulting, …) resolves to undefined and renders none.
+  const industryKey = INDUSTRY_LOGO_KEYS[page.path as keyof typeof INDUSTRY_LOGO_KEYS]
+  const [centralFaqs, closingCta, industryLogos] = await Promise.all([
     getFaqItemsForPageStrict(pageKey),
     getClosingCtaForPage(pageKey),
+    industryKey ? getIndustryLogos(industryKey) : Promise.resolve(null),
   ])
   const faqTabs = centralFaqs?.length
     ? groupFaqsIntoTabs(centralFaqs)
@@ -78,6 +84,8 @@ export default async function PracticePageTemplate({ page }: { page: PracticePag
           <CtaButtons />
         </div>
       </section>
+
+      {industryLogos?.length ? <ClientLogoSection logos={industryLogos} /> : null}
 
       {/* Approach */}
       <section className="border-b border-ui">

@@ -1,6 +1,6 @@
 import { bookingHref } from "@/lib/bookingLink"
 import { getSiteSettings, getPageBySlug } from "@/sanity/queries"
-import { LogoCloudMarquee, CalendlySection, DiscoverCtaSection, CroSections, StickyCtaBar, TestimonialFilterGrid } from "@/components/sections"
+import { ClientLogoSection, CalendlySection, DiscoverCtaSection, CroSections, StickyCtaBar, TestimonialFilterGrid } from "@/components/sections"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
@@ -187,7 +187,7 @@ export default async function CustomerTestimonialsPage() {
 
       {/* Client logos */}
       {(logoCloudPart1 || logoCloudAccent) && (
-        <LogoCloudMarquee
+        <ClientLogoSection
           headingPart1={logoCloudPart1}
           headingAccent={logoCloudAccent}
           logos={siteSettings?.carouselLogos || []}

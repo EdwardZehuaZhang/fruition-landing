@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Rocket, Play, Check } from "lucide-react"
 import {
   HeroBanner,
-  LogoCloudMarquee,
+  ClientLogoSection,
   ComparisonTabsSection,
   CalendlySection,
   FaqAccordion,
@@ -376,7 +376,7 @@ export default function MondayConsultingPartnerContent({ page, siteSettings, cas
       />
 
       {/* 2. Logo Cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1 || "Clients who have used our "}
         headingAccent={page.logoCloudHeadingAccent ?? "monday.com consulting services"}
         description={page.logoCloudDescription}

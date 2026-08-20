@@ -5,7 +5,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { urlFor } from "@/sanity/image"
 import {
-  LogoCloudMarquee,
+  ClientLogoSection,
   CalendlySection,
   FaqAccordion,
   TestimonialCtaBanner,
@@ -140,7 +140,7 @@ export default function MondayForFinanceContent({
       </section>
 
       {/* 2. Logo Cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1}
         headingAccent={page.logoCloudHeadingAccent}
         description={page.logoCloudDescription}

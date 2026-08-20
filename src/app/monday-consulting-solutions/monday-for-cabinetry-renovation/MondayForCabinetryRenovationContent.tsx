@@ -6,7 +6,7 @@ import { Check } from "lucide-react"
 import { urlFor } from "@/sanity/image"
 import {
   HeroBanner,
-  LogoCloudMarquee,
+  ClientLogoSection,
   CapabilitiesGrid,
   ComparisonTabsSection,
   CalendlySection,
@@ -252,7 +252,7 @@ export default function MondayForCabinetryRenovationContent({ page, siteSettings
       </section>
 
       {/* 2. Logo cloud */}
-      <LogoCloudMarquee
+      <ClientLogoSection
         headingPart1={page.logoCloudHeadingPart1 || "500+ clients globally use Fruition's "}
         headingAccent={page.logoCloudHeadingAccent ?? "monday.com consultants"}
         description={page.logoCloudDescription}
