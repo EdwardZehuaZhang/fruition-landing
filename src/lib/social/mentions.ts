@@ -108,6 +108,62 @@ export const TAG_SUGGESTIONS: TagSuggestion[] = [
   { name: "HubSpot", linkedin: "hubspot", x: "HubSpot" },
 ]
 
+/* ------------------------------------------------------------------ */
+/*  The "@" you type in the caption                                    */
+/* ------------------------------------------------------------------ */
+
+export interface MentionQuery {
+  /** What's been typed after the "@", up to the cursor. "" right after "@". */
+  query: string
+  /** Index of the "@" itself. */
+  start: number
+  /** The cursor, i.e. the end of the token being replaced. */
+  end: number
+}
+
+/** Longer than this and it isn't a name any more, it's a sentence. */
+const MAX_QUERY = 80
+
+/**
+ * The mention being typed at the cursor, if there is one.
+ *
+ * An "@" only opens the menu at the start of a word — otherwise every email
+ * address in a caption would trigger it. Text already converted to LinkedIn
+ * markup is skipped too: "@[monday.com](urn:…)" is a finished tag, not someone
+ * halfway through typing one.
+ */
+export function mentionQueryAt(text: string, caret: number): MentionQuery | null {
+  const end = Math.max(0, Math.min(caret, text.length))
+  for (let i = end - 1; i >= 0 && end - i <= MAX_QUERY + 1; i--) {
+    const ch = text[i]
+    if (/\s/.test(ch)) return null // hit whitespace before an "@"
+    if (ch !== "@") continue
+
+    const before = i > 0 ? text[i - 1] : ""
+    if (before && !/[\s(<]/.test(before)) return null // mid-word: an email, not a mention
+    if (text[i + 1] === "[") return null // already a finished tag
+
+    return { query: text.slice(i + 1, end), start: i, end }
+  }
+  return null
+}
+
+/**
+ * Swap the half-typed "@name" for the finished tag, leaving a trailing space so
+ * the next word doesn't run into it (and so the menu closes).
+ */
+export function replaceMentionQuery(text: string, q: MentionQuery, replacement: string): {
+  text: string
+  caret: number
+} {
+  const after = text.slice(q.end)
+  const spacer = after.startsWith(" ") || after.startsWith("\n") ? "" : " "
+  return {
+    text: text.slice(0, q.start) + replacement + spacer + after,
+    caret: q.start + replacement.length + spacer.length,
+  }
+}
+
 /** Channels where tagging does anything at all. */
 export function supportsTagging(key: string): key is "linkedin" | "twitter" {
   return key === "linkedin" || key === "twitter"
