@@ -66,6 +66,14 @@ export function NavUser({ user }: { user: { email: string } }) {
               </DropdownMenuLabel>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
+            {/*
+              A real navigation, not a <Link>: /internal/auth/signout is a route
+              handler (src/app/internal/auth/signout/route.ts) whose GET clears
+              the Supabase session and redirects. next/link would try to treat
+              it as a page. The rule only fires because the /internal/[...unknown]
+              catch-all makes every /internal/* path look like a page to it.
+            */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <DropdownMenuItem render={<a href="/internal/auth/signout" />}>
               <LogOut />
               Sign out
