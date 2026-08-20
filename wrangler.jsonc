@@ -24,6 +24,19 @@
       "id": "74a7eb0e0e4542e8a9acdbc178a849af"
     }
   ],
+  "d1_databases": [
+    {
+      // OpenNext tag cache — the store `revalidatePath()` writes to, so an
+      // on-demand revalidation (e.g. updating a blog post from /internal)
+      // actually drops the cached page. Schema: a single `revalidations`
+      // table, created with
+      //   wrangler d1 execute fruition-landing-tag-cache --remote --command \
+      //     "CREATE TABLE IF NOT EXISTS revalidations (tag TEXT NOT NULL, revalidatedAt INTEGER NOT NULL, stale INTEGER, expire INTEGER, PRIMARY KEY (tag, revalidatedAt))"
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "fruition-landing-tag-cache",
+      "database_id": "080b7fcb-1de1-4fb1-868a-9dcd5ba6e602"
+    }
+  ],
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",

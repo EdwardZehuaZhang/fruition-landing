@@ -64,8 +64,8 @@ export default async function EditPublishedPostPage({
     seoKeyword: post.seoKeyword,
     seoTitle: post.seoTitle,
     seoDescription: post.seoDescription,
-    // datetime-local inputs need "YYYY-MM-DDTHH:mm".
-    publishedAt: post.publishedAt ? post.publishedAt.slice(0, 16) : undefined,
+    // The publish-date field is a date input, so "YYYY-MM-DD".
+    publishedAt: post.publishedAt ? post.publishedAt.slice(0, 10) : undefined,
     author: post.author,
   }
 

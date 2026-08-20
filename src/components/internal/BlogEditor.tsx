@@ -9,10 +9,8 @@ export interface CategoryOption {
   title: string
 }
 
-export interface BlogEditorInitial {
-  draftId?: string
-  /** Sanity doc id — editing a published post updates it in place on publish. */
-  docId?: string
+/** The publishable fields of a post, shared by the editor state and the live copy. */
+export interface BlogEditorFields {
   title?: string
   slug?: string
   excerpt?: string
@@ -24,6 +22,19 @@ export interface BlogEditorInitial {
   publishedAt?: string
   body?: string
   author?: string
+}
+
+export interface BlogEditorInitial extends BlogEditorFields {
+  draftId?: string
+  /** Sanity doc id — editing a published post updates it in place on publish. */
+  docId?: string
+  /**
+   * The post exactly as it stands on the live site, when it differs from what
+   * the editor opens with (a draft is the working copy; Sanity is what readers
+   * see). The primary button compares against this to decide whether there is
+   * anything to update. Omit when the two are the same.
+   */
+  live?: BlogEditorFields
   /**
    * The draft's full metadata row, passed through so saving from the editor
    * preserves pipeline keys it doesn't edit (status, monday_item_id,
@@ -62,6 +73,45 @@ function slugify(s: string): string {
 const inputClass =
   "block w-full rounded-chip border border-[var(--color-border)] bg-surface px-4 py-3 text-sm text-ink-heading placeholder:text-ink-faint outline-none transition hover:border-[var(--purple-light)] focus:border-[var(--purple-primary)] focus:ring-2 focus:ring-[rgba(128,21,232,0.18)]"
 
+/** Ignore trailing spaces and runs of blank lines when diffing bodies. */
+function normaliseBody(s: string): string {
+  return s
+    .replace(/\r\n/g, "\n")
+    .split("\n")
+    .map((l) => l.trimEnd())
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim()
+}
+
+/**
+ * What a publish would leave in Sanity, as a comparable string.
+ *
+ * Mirrors the write rules in upsertBlogPost: an empty optional field means
+ * "leave what's there" rather than "clear it", so a draft that never filled in
+ * an excerpt doesn't read as a pending change to a live post that has one.
+ * `fallback` supplies those inherited values — pass the live post when there is
+ * one, so the fingerprint answers "would publishing change the site?".
+ */
+function publishFingerprint(fields: BlogEditorFields, fallback: BlogEditorFields): string {
+  const pick = (a?: string, b?: string) => (a?.trim() ? a.trim() : (b ?? "").trim())
+  const cats = fields.categoryIds?.length ? fields.categoryIds : (fallback.categoryIds ?? [])
+  return JSON.stringify({
+    title: (fields.title ?? "").trim(),
+    slug: slugify(fields.slug ?? fields.title ?? ""),
+    body: normaliseBody(fields.body ?? ""),
+    author: pick(fields.author, fallback.author),
+    excerpt: pick(fields.excerpt, fallback.excerpt),
+    industry: pick(fields.industry, fallback.industry),
+    seoKeyword: pick(fields.seoKeyword, fallback.seoKeyword),
+    seoTitle: pick(fields.seoTitle, fallback.seoTitle),
+    seoDescription: pick(fields.seoDescription, fallback.seoDescription),
+    // Only the calendar day is editable, so compare at that resolution.
+    publishedAt: pick(fields.publishedAt, fallback.publishedAt).slice(0, 10),
+    categoryIds: [...cats].sort(),
+  })
+}
+
 export default function BlogEditor({
   categories,
   authors = [],
@@ -97,13 +147,79 @@ export default function BlogEditor({
   const [unpublishing, startUnpublish] = useTransition()
 
   // Editing a live Sanity doc: the primary action updates it in place, and
-  // Unpublish becomes available.
-  const isPublished = Boolean(initial?.docId)
+  // Unpublish becomes available. Set once the post exists in Sanity — either
+  // because it was already live when the page loaded, or because publishing
+  // from here just put it there.
+  const [docId, setDocId] = useState(initial?.docId)
+  const isPublished = Boolean(docId)
+
+  /**
+   * Pipeline keys the editor doesn't render (status, monday_item_id,
+   * google_doc_url, and the sanity_doc_id written on publish). Held in state
+   * so a publish can add to them and a later draft save still carries them —
+   * the draft save replaces the whole metadata object.
+   */
+  const [pipelineMeta, setPipelineMeta] = useState<Record<string, unknown>>(
+    () => initial?.metadata ?? {},
+  )
 
   const effectiveSlug = useMemo(
     () => (slugTouched && slug ? slugify(slug) : slugify(title)),
     [slug, slugTouched, title],
   )
+
+  /**
+   * The published state to diff against. Starts as the live post (or, on a
+   * post with no separate live copy, the values the editor opened with) and is
+   * replaced after every successful publish, so the button settles back to
+   * "no changes" once the site matches.
+   */
+  const [published, setPublished] = useState<BlogEditorFields>(
+    () => initial?.live ?? (initial as BlogEditorFields | undefined) ?? {},
+  )
+  const publishedPrint = useMemo(
+    () => publishFingerprint(published, published),
+    [published],
+  )
+  const currentPrint = useMemo(
+    () =>
+      publishFingerprint(
+        {
+          title,
+          // Same derivation as effectiveSlug, so clearing the field falls back
+          // to the title rather than reading as a change to an empty slug.
+          slug: slugTouched && slug ? slug : title,
+          excerpt,
+          industry,
+          categoryIds,
+          seoKeyword,
+          seoTitle,
+          seoDescription,
+          publishedAt,
+          body,
+          author: author || currentAuthorName,
+        },
+        published,
+      ),
+    [
+      title,
+      slug,
+      slugTouched,
+      excerpt,
+      industry,
+      categoryIds,
+      seoKeyword,
+      seoTitle,
+      seoDescription,
+      publishedAt,
+      body,
+      author,
+      currentAuthorName,
+      published,
+    ],
+  )
+  // A newly picked cover image is a change no fingerprint can see.
+  const dirty = currentPrint !== publishedPrint || cover !== null
 
   function toggleCategory(id: string) {
     setCategoryIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]))
@@ -111,9 +227,10 @@ export default function BlogEditor({
 
   function metadata() {
     return {
-      // Preserve pipeline keys (status, monday_item_id, google_doc_url, …)
-      // the editor doesn't manage — the draft save replaces the whole object.
-      ...(initial?.metadata ?? {}),
+      // Preserve pipeline keys (status, monday_item_id, google_doc_url,
+      // sanity_doc_id, …) the editor doesn't manage — the draft save replaces
+      // the whole object.
+      ...pipelineMeta,
       excerpt,
       industry,
       categoryIds,
@@ -172,19 +289,81 @@ export default function BlogEditor({
     fd.set("seoTitle", seoTitle.trim())
     fd.set("seoDescription", seoDescription.trim())
     if (publishedAt) fd.set("publishedAt", new Date(publishedAt).toISOString())
-    if (initial?.docId) fd.set("docId", initial.docId)
+    // The doc id is what makes this an update rather than a second post at the
+    // same URL. It comes from the live post the page resolved for this draft.
+    if (docId) fd.set("docId", docId)
     categoryIds.forEach((id) => fd.append("categoryIds", id))
     if (cover) fd.set("coverImage", cover)
 
+    // What the site will hold once this write lands.
+    const justPublished: BlogEditorFields = {
+      title,
+      slug: effectiveSlug,
+      excerpt,
+      industry,
+      categoryIds,
+      seoKeyword,
+      seoTitle,
+      seoDescription,
+      publishedAt,
+      body,
+      author: author || currentAuthorName,
+    }
+    const wasPublished = isPublished
+
     startPublish(async () => {
       const r = await fetch("/api/internal/blog", { method: "POST", body: fd })
-      const data = (await r.json().catch(() => ({}))) as { slug?: string; error?: string }
+      const data = (await r.json().catch(() => ({}))) as {
+        id?: string
+        slug?: string
+        body?: string
+        error?: string
+        imageWarnings?: string[]
+        cacheWarning?: string
+      }
       if (!r.ok || !data.slug) {
         setError(data.error ?? "Publish failed.")
         return
       }
+
+      // Publishing can rewrite the body (remote images are pulled into
+      // Sanity), so adopt what was actually stored.
+      const storedBody = data.body ?? body
+      if (storedBody !== body) setBody(storedBody)
+      justPublished.body = storedBody
+
+      // Keep the portal copy in step with what's now live, and remember which
+      // Sanity document it is — that's what makes the *next* edit an update
+      // instead of a fork.
+      const nextMeta = {
+        ...pipelineMeta,
+        status: "published",
+        sanity_doc_id: data.id ?? docId,
+        last_published_at: new Date().toISOString(),
+      }
+      setPipelineMeta(nextMeta)
+      if (data.id) setDocId(data.id)
+      if (draftId) {
+        await fetch("/api/internal/blog/draft", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: draftId,
+            title,
+            body_markdown: storedBody,
+            metadata: { ...metadata(), ...nextMeta, slug: data.slug },
+          }),
+        }).catch(() => {})
+      }
+
+      setCover(null)
+      setPublished({ ...justPublished, slug: data.slug })
       setPublishedSlug(data.slug)
-      setStatus(isPublished ? "Updated — changes are live." : "Published to Sanity.")
+      const warnings = [...(data.imageWarnings ?? []), data.cacheWarning].filter(Boolean)
+      if (warnings.length) setError(warnings.join(" "))
+      setStatus(
+        wasPublished ? "Updated — the live post now matches this." : "Published to Sanity.",
+      )
     })
   }
 
@@ -194,7 +373,6 @@ export default function BlogEditor({
    * doc and jump to the new draft.
    */
   function onUnpublish() {
-    const docId = initial?.docId
     if (!docId) return
     if (
       !window.confirm(
@@ -386,6 +564,38 @@ export default function BlogEditor({
           </div>
         )}
 
+        {isPublished && (
+          <p className="text-xs text-[var(--color-text-secondary)]">
+            {dirty ? (
+              <>
+                Unpublished changes — “Update post” writes them to Sanity and refreshes{" "}
+                <a
+                  href={`/post/${published.slug || effectiveSlug}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline"
+                >
+                  the live page
+                </a>
+                .
+              </>
+            ) : (
+              <>
+                This editor matches{" "}
+                <a
+                  href={`/post/${published.slug || effectiveSlug}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline"
+                >
+                  the live post
+                </a>
+                .
+              </>
+            )}
+          </p>
+        )}
+
         <div className="flex gap-3 pt-1">
           <button
             type="button"
@@ -399,11 +609,24 @@ export default function BlogEditor({
           <button
             type="button"
             onClick={onPublish}
-            disabled={publishing || unpublishing}
+            // On a live post there is nothing to do until something changes;
+            // the label switches to "Update post" the moment there is.
+            disabled={publishing || unpublishing || (isPublished && !dirty)}
+            title={
+              isPublished && !dirty ? "Edit something first — the live post is already up to date." : undefined
+            }
             className="flex-1 rounded-pill px-4 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
             style={{ backgroundColor: "var(--purple-primary)" }}
           >
-            {publishing ? (isPublished ? "Updating…" : "Publishing…") : isPublished ? "Update post" : "Publish"}
+            {publishing
+              ? isPublished
+                ? "Updating…"
+                : "Publishing…"
+              : isPublished
+                ? dirty
+                  ? "Update post"
+                  : "No changes"
+                : "Publish"}
           </button>
         </div>
         {isPublished && (
