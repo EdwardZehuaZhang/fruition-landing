@@ -5,6 +5,7 @@ import {
   uploadImageAsset,
   deleteDocument,
   getBlogPostCacheKeys,
+  sideloadBodyImages,
 } from "@/lib/sanityWriteClient"
 import { revalidateBlogPaths } from "@/lib/revalidateSite"
 
@@ -117,11 +118,25 @@ export async function POST(req: Request) {
   // Byline: an explicit form value wins, otherwise the signed-in author's profile.
   const byline = author || (await bylineFor(user))
 
+  // Pull any image hosted elsewhere into Sanity first. Without this a remote
+  // `![alt](url)` line publishes as a stray `!` plus a link instead of an
+  // image — the bug on monday item 2836162069.
+  let imageWarnings: string[] = []
+  let publishBody = body
+  try {
+    const sideloaded = await sideloadBodyImages(body)
+    publishBody = sideloaded.body
+    imageWarnings = sideloaded.warnings
+  } catch (err) {
+    // Never block a publish on the image pass; the body still goes out.
+    imageWarnings = [`Image side-loading failed: ${err instanceof Error ? err.message : String(err)}`]
+  }
+
   try {
     const result = await upsertBlogPost({
       docId,
       title,
-      body,
+      body: publishBody,
       slug,
       excerpt: excerpt || undefined,
       industry: industry || undefined,
@@ -148,8 +163,10 @@ export async function POST(req: Request) {
       slug: result.slug,
       created: result.created,
       // The body as actually stored, so the editor and the draft copy stay in
-      // step with the live document.
-      body,
+      // step with the live document — side-loading rewrites remote image URLs
+      // to Sanity ones, so this is publishBody, not what was submitted.
+      body: publishBody,
+      ...(imageWarnings.length ? { imageWarnings } : {}),
       ...(failed.length
         ? {
             cacheWarning: `Saved to Sanity, but the cached page(s) ${failed.join(", ")} could not be refreshed — they may take up to an hour to update.`,
