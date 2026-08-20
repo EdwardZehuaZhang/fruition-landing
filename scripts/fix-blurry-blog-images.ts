@@ -245,29 +245,48 @@ const ARCHIVE_HOSTS = ["https://www.fruitionservices.io", "https://fruitionservi
  * Answers the question a run of "no archived copy" lines cannot: is the blog
  * absent from the archive entirely, or were we asking under the wrong host?
  */
-async function reportArchiveCoverage(): Promise<void> {
-  const cdx =
-    "https://web.archive.org/cdx/search/cdx" +
-    `?url=${encodeURIComponent("fruitionservices.io")}&matchType=domain` +
-    `&output=json&filter=statuscode:200&filter=original:.*/post/.*` +
-    `&to=${BEFORE}&collapse=urlkey&fl=original,timestamp&limit=2000`
+async function cdxRows(query: string): Promise<string[][] | null> {
   try {
-    const res = await fetch(cdx, { signal: AbortSignal.timeout(60000) })
+    const res = await fetch(`https://web.archive.org/cdx/search/cdx?${query}`, {
+      signal: AbortSignal.timeout(60000),
+    })
     if (!res.ok) {
-      console.log(`archive coverage: CDX returned ${res.status}`)
-      return
+      console.log(`  CDX returned ${res.status}`)
+      return null
     }
-    const rows = (await res.json()) as string[][]
-    const data = rows.slice(1)
-    console.log(`archive coverage: ${data.length} distinct /post/ captures at or before ${BEFORE}`)
-    for (const [original, timestamp] of data.slice(0, 5)) {
-      console.log(`  e.g. ${timestamp}  ${original}`)
-    }
-    if (data.length === 0) {
-      console.log("  → the Wix blog was never crawled; body images cannot be recovered from the archive")
-    }
+    const text = await res.text()
+    if (!text.trim()) return []
+    return (JSON.parse(text) as string[][]).slice(1)
   } catch (err) {
-    console.log(`archive coverage: lookup failed — ${err instanceof Error ? err.message : String(err)}`)
+    console.log(`  CDX lookup failed — ${err instanceof Error ? err.message : String(err)}`)
+    return null
+  }
+}
+
+async function reportArchiveCoverage(): Promise<void> {
+  const domain = `url=${encodeURIComponent("fruitionservices.io")}&matchType=domain&output=json&to=${BEFORE}`
+
+  // Two queries, because one number cannot tell "never archived" apart from
+  // "archived, but my filter was wrong".
+  const all = await cdxRows(`${domain}&collapse=urlkey&fl=original,timestamp&limit=5000`)
+  await sleep(DELAY)
+  const posts = all?.filter(([original]) => original?.includes("/post/")) ?? []
+
+  if (all === null) {
+    console.log("archive coverage: unknown — the sweep itself failed, treat misses below as inconclusive")
+    return
+  }
+  console.log(
+    `archive coverage: ${all.length} distinct URLs archived on the domain at or before ${BEFORE}, ` +
+      `${posts.length} of them blog posts`,
+  )
+  for (const [original, timestamp] of posts.slice(0, 5)) {
+    console.log(`  e.g. ${timestamp}  ${original}`)
+  }
+  if (all.length === 0) {
+    console.log("  → nothing from this domain is in the archive at all")
+  } else if (posts.length === 0) {
+    console.log("  → the domain was crawled but never a /post/ page; body images are unrecoverable from the archive")
   }
 }
 
