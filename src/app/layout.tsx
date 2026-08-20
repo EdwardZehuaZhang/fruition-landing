@@ -11,6 +11,7 @@ import SiteFrame from "@/components/SiteFrame"
 import AwardBanner from "@/components/home/AwardBanner"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { getSiteSettings } from "@/sanity/queries"
+import { bookingHref } from "@/lib/bookingLink"
 import { officeStrap } from "@/data/offices"
 import { urlFor } from "@/sanity/image"
 import { buildOgMetadata, defaultOgImage } from "@/lib/metadata"
@@ -257,6 +258,14 @@ export default async function RootLayout({
               }
               footer={<Footer key="site-footer" siteSettings={siteSettings} />}
               cookie={<CookieNotice key="site-cookie" />}
+              stickyCtaHeading={siteSettings?.stickyCtaHeading || undefined}
+              stickyCtaDefaults={{
+                label: siteSettings?.stickyCtaLabel || "Book a Free Consultation",
+                mobileLabel: siteSettings?.stickyCtaMobileLabel || undefined,
+                href: bookingHref(
+                  siteSettings?.stickyCtaUrl || siteSettings?.calendlyLink,
+                ),
+              }}
             >
               {children}
             </SiteFrame>

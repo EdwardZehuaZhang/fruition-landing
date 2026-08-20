@@ -38,7 +38,7 @@ import {
   CalendlySection,
   JoinStatsSection,
   CroSections,
-  StickyCtaBar,
+  StickyCtaConfig,
   WorkflowConnector,
   EcosystemGrid,
 } from "@/components/sections"
@@ -461,7 +461,7 @@ export default function MakePartnersContent({
 
   return (
     <div>
-      <StickyCtaBar label={pageData?.croSections?.stickyCtaLabel} href={bookingHref(pageData?.croSections?.stickyCtaUrl || rawCalendly)} />
+      <StickyCtaConfig label={pageData?.croSections?.stickyCtaLabel} mobileLabel={pageData?.croSections?.stickyCtaMobileLabel} href={bookingHref(pageData?.croSections?.stickyCtaUrl || rawCalendly)} />
       {/* 1. Hero */}
       <section className="bg-surface">
         <div className="mx-auto flex flex-col items-center px-6 md:px-16 lg:px-[273px] py-14 md:py-20">

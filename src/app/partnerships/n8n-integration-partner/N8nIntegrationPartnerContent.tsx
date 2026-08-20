@@ -9,7 +9,7 @@ import {
   FaqAccordion,
   ServicesCardsGrid,
   CroSections,
-  StickyCtaBar,
+  StickyCtaConfig,
   WorkflowConnector,
 } from "@/components/sections"
 import type {
@@ -72,7 +72,7 @@ export default function N8nIntegrationPartnerContent({
 
   return (
     <div>
-      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={bookingHref(page.croSections?.stickyCtaUrl || calendlyUrl)} />
+      <StickyCtaConfig label={page.croSections?.stickyCtaLabel} mobileLabel={page.croSections?.stickyCtaMobileLabel} href={bookingHref(page.croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* Hero */}
       <HeroBanner
         eyebrow={page.heroEyebrow}

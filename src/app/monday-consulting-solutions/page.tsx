@@ -1,7 +1,7 @@
 import { bookingHref } from "@/lib/bookingLink"
 import Link from "next/link"
 import HeroSection from "@/components/HeroSection"
-import { CroSections, StickyCtaBar } from "@/components/sections"
+import { CroSections, StickyCtaConfig } from "@/components/sections"
 import { getAllSolutionPages, getPageBySlug, getSiteSettings } from "@/sanity/queries"
 import { buildOgMetadata } from "@/lib/metadata"
 
@@ -33,7 +33,7 @@ export default async function SolutionsPage() {
 
   return (
     <div>
-      <StickyCtaBar label={page?.croSections?.stickyCtaLabel} href={bookingHref(page?.croSections?.stickyCtaUrl || rawCalendly)} />
+      <StickyCtaConfig label={page?.croSections?.stickyCtaLabel} mobileLabel={page?.croSections?.stickyCtaMobileLabel} href={bookingHref(page?.croSections?.stickyCtaUrl || rawCalendly)} />
       <HeroSection
         heading={page.heroHeading || ""}
         subheading={page.heroSubheading}

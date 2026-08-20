@@ -7,7 +7,7 @@ import { urlFor } from "@/sanity/image"
 import CtaLabel from "@/components/CtaLabel"
 import FramedMedia from "@/components/common/FramedMedia"
 import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
-import StickyCtaBar from "@/components/sections/StickyCtaBar"
+import StickyCtaConfig from "@/components/sections/StickyCtaContext"
 import type { PartnerBadge, SanityImageRef } from "@/components/sections/types"
 
 export interface TeamMember {
@@ -112,7 +112,7 @@ export default function FruitionTeamClient({
 
   return (
     <div>
-      <StickyCtaBar label={croSections?.stickyCtaLabel} href={bookingHref(croSections?.stickyCtaUrl || calendlyUrl)} />
+      <StickyCtaConfig label={croSections?.stickyCtaLabel} mobileLabel={croSections?.stickyCtaMobileLabel} href={bookingHref(croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* Hero */}
       <section className="bg-surface">
         <div

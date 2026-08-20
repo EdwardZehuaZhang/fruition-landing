@@ -10,7 +10,7 @@ import CtaButton from "@/components/CtaButton"
 import CalendlySection from "@/components/sections/CalendlySection"
 import FaqAccordion from "@/components/sections/FaqAccordion"
 import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
-import StickyCtaBar from "@/components/sections/StickyCtaBar"
+import StickyCtaConfig from "@/components/sections/StickyCtaContext"
 import FramedMedia from "@/components/common/FramedMedia"
 import type {
   CapabilityCard,
@@ -854,7 +854,7 @@ export default function AboutModern(props: AboutModernProps) {
 
   return (
     <div>
-      <StickyCtaBar label={croSections?.stickyCtaLabel} href={bookingHref(croSections?.stickyCtaUrl || calendlyUrl)} />
+      <StickyCtaConfig label={croSections?.stickyCtaLabel} mobileLabel={croSections?.stickyCtaMobileLabel} href={bookingHref(croSections?.stickyCtaUrl || calendlyUrl)} />
       <HeroSection
         eyebrow={heroEyebrow}
         headingPart1={heroHeadingPart1}

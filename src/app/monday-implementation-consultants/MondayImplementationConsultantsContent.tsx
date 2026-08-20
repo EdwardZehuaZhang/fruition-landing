@@ -10,7 +10,7 @@ import StatsBlockView from "@/features/page-builder/blocks/StatsBlockView"
 import ComparisonTabsSection from "@/components/sections/ComparisonTabsSection"
 import FaqAccordion from "@/components/sections/FaqAccordion"
 import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
-import StickyCtaBar from "@/components/sections/StickyCtaBar"
+import StickyCtaConfig from "@/components/sections/StickyCtaContext"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import CtaLabel from "@/components/CtaLabel"
 import type { ComparisonTab as SharedComparisonTab, FaqTab as SharedFaqTab } from "@/components/sections/types"
@@ -351,7 +351,7 @@ export default function MondayImplementationConsultantsContent({
 
   return (
     <div>
-      <StickyCtaBar label={data?.croSections?.stickyCtaLabel} href={bookingHref(data?.croSections?.stickyCtaUrl || calendlyUrl)} />
+      <StickyCtaConfig label={data?.croSections?.stickyCtaLabel} mobileLabel={data?.croSections?.stickyCtaMobileLabel} href={bookingHref(data?.croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* ============================================================ */}
       {/* SECTION 1 — Hero                                             */}
       {/* ============================================================ */}

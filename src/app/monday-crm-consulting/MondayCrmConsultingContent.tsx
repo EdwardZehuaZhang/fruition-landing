@@ -11,7 +11,7 @@ import {
   FaqAccordion,
   CapabilitiesGrid,
   CroSections,
-  StickyCtaBar,
+  StickyCtaConfig,
   SolutionSelector,
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData, FaqTab } from "@/components/sections/types"
@@ -101,7 +101,7 @@ export default function MondayCrmConsultingContent({
 
   return (
     <div>
-      <StickyCtaBar label={page.croSections?.stickyCtaLabel} href={bookingHref(page.croSections?.stickyCtaUrl || calendlyUrl)} />
+      <StickyCtaConfig label={page.croSections?.stickyCtaLabel} mobileLabel={page.croSections?.stickyCtaMobileLabel} href={bookingHref(page.croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* 1. Hero */}
       <section className="bg-surface">
         <div className="mx-auto flex flex-col items-center px-4 md:px-16 lg:px-24 max-w-[1588px] w-full py-14 md:py-20">

@@ -25,7 +25,9 @@ export { default as ServicesWorkflowTabs } from "./ServicesWorkflowTabs"
 
 /* CRO kit (PDF action items) */
 export { default as TrustBadgeRow } from "./TrustBadgeRow"
-export { default as StickyCtaBar } from "./StickyCtaBar"
+/* The bar renders once in <SiteFrame>; pages set their copy via this. */
+export { default as StickyCtaConfig } from "./StickyCtaContext"
+export type { StickyCtaValue } from "./StickyCtaContext"
 export { default as DualCtaRow } from "./DualCtaRow"
 export { default as BeforeAfterSection } from "./BeforeAfterSection"
 export { default as StatMetricBanner } from "./StatMetricBanner"

@@ -12,7 +12,7 @@ import PaperPlaneIcon from "@/components/common/icons/PaperPlaneIcon"
 import FaqAccordion from "@/components/sections/FaqAccordion"
 import LeftRightSection from "@/components/sections/LeftRightSection"
 import CroSections, { type CroSectionsData } from "@/components/sections/CroSections"
-import StickyCtaBar from "@/components/sections/StickyCtaBar"
+import StickyCtaConfig from "@/components/sections/StickyCtaContext"
 import TrainingRecommender from "@/components/sections/TrainingRecommender"
 import type { FaqTab as SharedFaqTab } from "@/components/sections/types"
 import type { SiteSettings } from "@/features/page-builder/types"
@@ -293,7 +293,7 @@ export default function MondayTrainingContent({
 
   return (
     <div>
-      <StickyCtaBar label={data?.croSections?.stickyCtaLabel} href={bookingHref(data?.croSections?.stickyCtaUrl || calendlyUrl)} />
+      <StickyCtaConfig label={data?.croSections?.stickyCtaLabel} mobileLabel={data?.croSections?.stickyCtaMobileLabel} href={bookingHref(data?.croSections?.stickyCtaUrl || calendlyUrl)} />
       {/* ============================================================ */}
       {/* SECTION 1 -- Hero                                            */}
       {/* ============================================================ */}

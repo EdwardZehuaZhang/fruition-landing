@@ -26,6 +26,34 @@ export default {
     { name: 'navbarCtaLabel', title: 'Navbar CTA Label', type: 'string' },
     { name: 'footerCtaLabel', title: 'Footer CTA Label', type: 'string' },
 
+    // Floating sticky CTA — the site-wide default. It shows on every marketing
+    // page; a page overrides this copy with its own CRO Sections > Sticky CTA
+    // fields. Leave blank to use the built-in defaults.
+    {
+      name: 'stickyCtaHeading',
+      title: 'Sticky CTA Heading',
+      type: 'string',
+      description: 'Defaults to "Ready to scale your workflows?".',
+    },
+    {
+      name: 'stickyCtaLabel',
+      title: 'Sticky CTA Label',
+      type: 'string',
+      description: 'Button text on pages that set no override. Defaults to "Book a Free Consultation".',
+    },
+    {
+      name: 'stickyCtaMobileLabel',
+      title: 'Sticky CTA Mobile Label',
+      type: 'string',
+      description: 'Shorter label for small screens. Defaults to "Schedule a call".',
+    },
+    {
+      name: 'stickyCtaUrl',
+      title: 'Sticky CTA URL',
+      type: 'string',
+      description: 'Defaults to the on-site booking section (/contact-us#book).',
+    },
+
     // Footer column headings
     { name: 'footerPartnerExpertiseHeading', title: 'Footer Heading: Partner Expertise', type: 'string' },
     { name: 'footerServicesHeading', title: 'Footer Heading: Services', type: 'string' },
