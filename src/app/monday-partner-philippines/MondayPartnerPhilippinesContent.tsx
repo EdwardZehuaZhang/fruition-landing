@@ -9,6 +9,7 @@ import {
   ComparisonTabsSection,
   CalendlySection,
   TestimonialsGrid,
+  FaqAccordion,
 } from "@/components/sections"
 import TeamGridSection, { type TeamMember } from "@/components/TeamGridSection"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
@@ -127,6 +128,7 @@ export default function MondayPartnerPhilippinesContent({
   page,
   siteSettings,
   caseStudies = [],
+  faqTabs,
   teamMembers,
   closingCta,
 }: Props) {
@@ -138,6 +140,7 @@ export default function MondayPartnerPhilippinesContent({
   const mondayUrl = page.secondaryCtaUrl || "https://monday.com"
 
   const partnerCaseStudies = caseStudies
+  const resolvedFaqTabs = faqTabs ?? []
   const resolvedComparisonTabs: ComparisonTab[] = page.comparisonTabs ?? []
   const resolvedFeatureBlocks: FeatureBlock[] = page.featureBlocks ?? []
   const philippinesTeamNames: string[] = page.teamMemberNames ?? []
@@ -173,24 +176,6 @@ export default function MondayPartnerPhilippinesContent({
         headingAccent={page.logoCloudHeadingAccent ?? "monday.com consulting services"}
         description={page.logoCloudDescription}
         logos={siteSettings?.carouselLogos || []}
-      />
-
-      {/* Customer testimonials */}
-      <TestimonialsGrid
-        heading="What our customers say about us"
-        ctaLabel="Start Your Transformation"
-        ctaUrl={calendlyUrl}
-        statCardSubtitle="have maximised their workflows with our monday.com expert support"
-        statCardCtaLabel="Read our case studies"
-        statCardCtaUrl="/customer-testimonials"
-        caseStudies={partnerCaseStudies}
-      />
-
-      {/* Calendly */}
-      <CalendlySection
-        heading={page.calendlyHeading || "Schedule A 30-Min Consultation With One of Our monday.com Implementation Consultants"}
-        subheading={page.calendlySubheading}
-        calendlyUrl={rawCalendly}
       />
 
       {/* "Teams Transformed" small caption */}
@@ -231,6 +216,9 @@ export default function MondayPartnerPhilippinesContent({
         ctaUrl="/fruition-team"
         members={philippinesTeamMembers}
       />
+
+      {/* FAQ */}
+      <FaqAccordion heading={page.faqHeading || "Frequently asked questions"} tabs={resolvedFaqTabs} />
 
       {/* Feature blocks */}
       <FeatureBlocksSection blocks={resolvedFeatureBlocks} />

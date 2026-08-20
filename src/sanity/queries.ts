@@ -690,6 +690,27 @@ export async function getClosingCtaForPage(pageKey: string) {
 }
 
 /**
+ * The `faqTabs` array curated on whichever document owns this slug, regardless
+ * of its _type. `FaqHeadJsonLd` sits in the root layout and only knows the
+ * request path, so it cannot go through the per-page loaders — but it still has
+ * to honour the same precedence they do (see resolveFaqTabs), or the FAQPage
+ * markup in <head> describes content that is not on the page.
+ */
+export async function getPageFaqTabsBySlug(pageKey: string) {
+  // Nested routes carry the full path ("partnerships/n8n-integration-partner")
+  // while the document's slug is only the last segment, so try both. Without
+  // the segment form those pages matched nothing and fell through to the
+  // curated /faqs set — 124 generic questions in the markup of a partner page.
+  const slug = pageKey.split("/").pop() || pageKey
+  return client.fetch(
+    `*[defined(faqTabs) && count(faqTabs) > 0 && slug.current in [$pageKey, $slug]][0].faqTabs[]{
+      _key, label, items[]{ _key, question, answer }
+    }`,
+    { pageKey, slug }
+  )
+}
+
+/**
  * Like getFaqItemsForPage but WITHOUT the curated-set fallback: returns []
  * when the page has no specific faqItem docs. For callers that carry their
  * own fallback content (templates with hardcoded FAQs pre-migration).
