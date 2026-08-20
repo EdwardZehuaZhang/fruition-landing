@@ -10,6 +10,8 @@ import {
   TestimonialsGrid,
   CroSections,
   StickyCtaConfig,
+  CapabilityBlocksSection,
+  BenefitLedgerSection,
 } from "@/components/sections"
 import type {
   CaseStudy,
@@ -20,6 +22,7 @@ import type {
 import { resolveIndustryLogos } from "@/sanity/industryLogos"
 import type { CarouselLogo } from "@/components/sections/types"
 import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
+import { getIndustrySections } from "@/data/industrySections"
 
 interface Props {
   /** This page's own logo wall; falls back to the global carousel. */
@@ -171,6 +174,7 @@ export default function MondayForConstructionContent({
   const resolvedLifecycleStages: LifecycleStage[] = page.lifecycleStages ?? []
   const resolvedConstructionTestimonials: ConstructionTestimonial[] = page.industryTestimonials ?? []
   const partnerCaseStudies = caseStudies
+  const { capabilityBlocks, benefitLedger } = getIndustrySections("monday-for-construction")
 
   return (
     <div>
@@ -212,12 +216,38 @@ export default function MondayForConstructionContent({
       {/* Tab section — heading rotates with active tab */}
       <ConstructionTabs tabs={resolvedComparisonTabs} />
 
+      {/* How the platform closes the site-to-office gap */}
+      {capabilityBlocks && (
+        <CapabilityBlocksSection
+          eyebrow={capabilityBlocks.eyebrow}
+          heading={capabilityBlocks.heading}
+          headingAccent={capabilityBlocks.headingAccent}
+          lead={capabilityBlocks.lead}
+          columns={capabilityBlocks.columns}
+          blocks={capabilityBlocks.blocks}
+          theme="tint"
+        />
+      )}
+
       {/* CRO action items */}
       <CroSections
         data={page.croSections}
         primaryCtaLabel={page.primaryCtaLabel}
         primaryCtaUrl={bookingHref(page.primaryCtaUrl || calendlyUrl)}
       />
+
+      {/* monday CRM benefits ledger */}
+      {benefitLedger && (
+        <BenefitLedgerSection
+          eyebrow={benefitLedger.eyebrow}
+          heading={benefitLedger.heading}
+          headingAccent={benefitLedger.headingAccent}
+          intro={benefitLedger.intro}
+          items={benefitLedger.items}
+          footnote={benefitLedger.footnote}
+          theme="tint"
+        />
+      )}
 
       {/* Calendly */}
       <CalendlySection

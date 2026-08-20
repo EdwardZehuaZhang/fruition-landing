@@ -151,3 +151,46 @@ export interface SiteSettingsData {
   badgeMondayPartners?: SanityImageRef
   [key: string]: unknown
 }
+
+/* ------------------------------------------------------------------ */
+/*  Long-form industry content sections                                */
+/*  Copy lives in src/data/industrySections.ts. Every string may       */
+/*  carry the inline-markdown subset (`**bold**`, `[text](/path)`)     */
+/*  that <RichText> renders.                                           */
+/* ------------------------------------------------------------------ */
+
+/** One point in a capability block or benefit ledger. `label` is the bold
+ *  lead-in; rows without one are a plain sentence. */
+export interface IndustryPoint {
+  label?: string
+  text: string
+}
+
+/** A numbered block: mono numeral, title, lead paragraph, point list. */
+export interface CapabilityBlock {
+  /** Mono numeral, e.g. "01". Falls back to the 1-based index. */
+  number?: string
+  title: string
+  lead?: string
+  points?: IndustryPoint[]
+  /** Closing aside, separated from the points by a hairline. */
+  note?: string
+}
+
+/** A labelled group of bullets inside a spec panel. */
+export interface SpecGroup {
+  label: string
+  bullets: string[]
+}
+
+/** One panel of a template spec — bullets, mono chips, or both. */
+export interface SpecPanel {
+  title: string
+  lead?: string
+  bullets?: string[]
+  /** Mono label above the chip row, e.g. "Customise the board with". */
+  chipsLabel?: string
+  chips?: string[]
+  groups?: SpecGroup[]
+  note?: string
+}

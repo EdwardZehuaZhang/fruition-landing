@@ -24,6 +24,12 @@ export { default as PartnerEcosystemSection } from "./PartnerEcosystemSection"
 export { default as IndustryCaseStudy } from "./IndustryCaseStudy"
 export { default as ServicesWorkflowTabs } from "./ServicesWorkflowTabs"
 
+/* Long-form industry content sections — copy in src/data/industrySections.ts */
+export { default as CapabilityBlocksSection } from "./CapabilityBlocksSection"
+export { default as BenefitLedgerSection } from "./BenefitLedgerSection"
+export { default as TemplateSpecSection } from "./TemplateSpecSection"
+export { default as RichText } from "./RichText"
+
 /* CRO kit (PDF action items) */
 export { default as TrustBadgeRow } from "./TrustBadgeRow"
 /* The bar renders once in <SiteFrame>; pages set their copy via this. */

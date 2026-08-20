@@ -16,11 +16,13 @@ import {
   SolutionCardsSection,
   TestimonialCtaBanner,
   ServicesWorkflowTabs,
+  CapabilityBlocksSection,
 } from "@/components/sections"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import { buildOgMetadata } from "@/lib/metadata"
 import { getIndustryLogos, resolveIndustryLogos } from "@/sanity/industryLogos"
 import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
+import { getIndustrySections } from "@/data/industrySections"
 
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-professional-services")
@@ -54,6 +56,8 @@ export default async function Page() {
   const calendlyUrl = bookingHref(rawCalendly)
 
   const effectiveFaqTabs = resolveFaqTabs(page.faqTabs, centralFaqs)
+
+  const { capabilityBlocks } = getIndustrySections("monday-for-professional-services")
 
   const featuredTestimonial =
     caseStudies?.find(
@@ -115,6 +119,19 @@ export default async function Page() {
           tabs={page.comparisonTabs}
           theme={page.comparisonTheme || "light"}
           layout="tabs"
+        />
+      )}
+
+      {/* 5b. What you can do with monday CRM for professional services */}
+      {capabilityBlocks && (
+        <CapabilityBlocksSection
+          eyebrow={capabilityBlocks.eyebrow}
+          heading={capabilityBlocks.heading}
+          headingAccent={capabilityBlocks.headingAccent}
+          lead={capabilityBlocks.lead}
+          columns={capabilityBlocks.columns}
+          blocks={capabilityBlocks.blocks}
+          theme="tint"
         />
       )}
 
