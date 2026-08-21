@@ -31,6 +31,9 @@ All three are fast; `npm run build` takes ~2min and is only needed for build-sha
   `auditRedirects` in `next.config.ts`.
 - **Unknown `/partnerships/<slug>` returns 200 with an empty shell, not a 404.** Link checkers
   cannot catch nav links pointing at pages that do not exist. Verify page files exist by hand.
+- **Never call `headers()` or `cookies()` in `src/app/layout.tsx`.** A dynamic API in the root
+  layout opts *every* route out of static rendering — it held the whole site at `no-store` with
+  1.4-2.3s TTFB until 2026-08-21. Check the build's static/dynamic counts after layout changes.
 - This repo no longer contains the Marketa blog pipeline — it lives in `marketa-monorepo`. Ignore
   any older doc that says otherwise.
 

@@ -21,9 +21,9 @@ export function middleware(request: NextRequest) {
     url.port = ""
     return NextResponse.redirect(url, 301)
   }
-  // Forward x-pathname so server components (e.g. FaqHeadJsonLd) can
-  // determine the current route without a client-side bootstrap.
-  const requestHeaders = new Headers(request.headers)
-  requestHeaders.set("x-pathname", request.nextUrl.pathname)
-  return NextResponse.next({ request: { headers: requestHeaders } })
+  // No header forwarding: the only consumer was FaqHeadJsonLd, which read
+  // x-pathname via headers() in the ROOT layout and thereby opted every route
+  // out of static rendering. FAQ JSON-LD now comes from FaqAccordion, built
+  // from the tabs the page already renders.
+  return NextResponse.next()
 }

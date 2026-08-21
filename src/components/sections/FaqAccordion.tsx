@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { faqTabsToPairs, generateFaqJsonLdFromPairs } from "@/lib/faqSchema"
 import type { FaqTab } from "./types"
 
 interface FaqAccordionProps {
@@ -17,6 +18,18 @@ export default function FaqAccordion({
   const [canScrollRight, setCanScrollRight] = useState(false)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const tabsRef = useRef<HTMLDivElement>(null)
+
+  // FAQPage JSON-LD is built from the very tabs this component renders, so the
+  // structured data can never advertise questions the page does not show.
+  // Google requires the Q&A to be visible on the page; markup that contradicts
+  // it risks the rich result being dropped or a manual action.
+  //
+  // This used to live in FaqHeadJsonLd in the root layout, which re-queried
+  // Sanity by pathname via headers(). A dynamic API in the root layout opted
+  // EVERY route out of static rendering, and its fallback to the curated /faqs
+  // set stamped 124 generic monday.com questions onto 257 pages that render no
+  // FAQ at all — author bios and blog posts included.
+  const faqJsonLd = generateFaqJsonLdFromPairs(faqTabsToPairs(tabs))
 
   useEffect(() => {
     const el = tabsRef.current
@@ -47,6 +60,12 @@ export default function FaqAccordion({
 
   return (
     <section id="faq" className="bg-surface pt-14 pb-20 md:pt-20 md:pb-[120px]">
+      {faqJsonLd.mainEntity.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <div className="mx-auto flex flex-col px-4 md:px-6 lg:px-8 max-w-[1200px] gap-6">
         {heading && (
           <h2 className="text-section-h2 text-brand">
