@@ -372,7 +372,10 @@ function parseWixDoc(root: HTMLElement, target: string): ArchivedPage | null {
     }
   }
 
-  const cover = og ? wixOriginalUrl(og) : null
+  // wixOriginalUrl() deliberately passes non-Wix URLs through untouched, so it
+  // cannot be used as the "is this a Wix page" test: a capture taken after the
+  // migration has a cdn.sanity.io og:image and would sail through.
+  const cover = parseWixMediaUrl(og)?.original ?? null
   // A capture taken after the site left Wix parses fine but carries only
   // cdn.sanity.io URLs, which is exactly what we are replacing. Treat it as a
   // miss so the caller falls back to an older capture.
@@ -400,14 +403,17 @@ async function commonCrawlIndexes(): Promise<string[]> {
       ccIndexes = []
       return ccIndexes
     }
-    const all = (await res.json()) as { id: string; "cdx-api": string }[]
-    // Crawls are named CC-MAIN-<year>-<week>. Keep those that could contain a
-    // page published 2026-04 and gone by 2026-05, newest first, and cap the
-    // list so a miss costs a handful of requests rather than dozens.
-    ccIndexes = all
-      .filter((c) => /^CC-MAIN-2026-/.test(c.id))
-      .map((c) => c["cdx-api"])
-      .slice(0, CC_INDEXES)
+    const all = (await res.json()) as { id: string; "cdx-api": string; from?: string; to?: string }[]
+    // Only crawls that ran while the site was still on Wix are any use: a later
+    // crawl captured the Sanity site, whose images are the ones we are
+    // replacing. collinfo.json carries each crawl's window, so use it rather
+    // than guessing from the CC-MAIN-<year>-<week> name.
+    const cutoff = `${BEFORE.slice(0, 4)}-${BEFORE.slice(4, 6)}-${BEFORE.slice(6, 8)}`
+    const dated = all.filter((c) => (c.from ?? c.to ?? "") && (c.from ?? c.to!) <= cutoff)
+    // Newest-first: the closest crawl before the migration is the best match.
+    const chosen = (dated.length ? dated : all).slice(0, CC_INDEXES)
+    console.log(`  common crawl: searching ${chosen.map((c) => c.id).join(", ") || "nothing"}`)
+    ccIndexes = chosen.map((c) => c["cdx-api"])
     return ccIndexes
   } catch {
     ccIndexes = []
