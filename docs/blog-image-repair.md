@@ -33,57 +33,41 @@ image was upscaled 5×.
 94 of the 99 bad body images are under 200px — straight Wix placeholders,
 clustered in 15 published posts.
 
-## What could actually be recovered: almost nothing
+## What is recoverable: nearly all of it
 
-A full `--plan` pass ran on a GitHub Actions runner
-(`.github/workflows/blog-image-repair.yml`, run
-[32431125290](https://github.com/Fruition-Service/fruition-website-monorepo/actions/runs/32431125290)).
-Of 625 images checked and 527 below the sharpness target:
+The old Wix site is **still live** at `www.fruition-services.io` (hyphenated),
+serving full-resolution media. A read-only pass against it
+([run 32438795040](https://github.com/Fruition-Service/fruition-website-monorepo/actions/runs/32438795040))
+resolves **166 replacements**, including **89 of the ~90 Wix placeholders**:
 
 | outcome | images |
 | --- | --- |
-| a better source exists | **20** — 17 covers, 3 body |
-| already the best source available | 156 |
-| no source found | 351 |
+| a better source exists | **166** |
+| already the best source available | 330 |
+| no source found | 31 |
 | fetch failed | 0 |
 
-Only **2 of those 20 are images that were actually blurry** (covers at 739px and
-624px). The other 18 are already column-width or wider and would only gain
-retina sharpness.
+Of the 106 visibly blurry images, **91 are recoverable**. The 15 that remain are
+ones whose Wix original is itself small; only 2 have no source at all.
 
-### Why the archive does not help
+Per-post it reads like `body #3 49px → 2908px available`.
 
-The blog *is* archived — 850 URLs from the domain, 293 of them blog posts. But
-the posts that need rescuing are not among them, and the reason is timing:
+> **Keep that domain alive** until the repair has run. It is the only surviving
+> copy: the Wayback Machine holds 293 other posts but never captured these (they
+> were live on Wix about five weeks), and Common Crawl's pre-migration crawls
+> did not either. A one-off archival scrape while it is up would be cheap
+> insurance.
 
-- they were published around **2026-04-11**;
-- the site was still on Wix as late as **2026-05-19** (the scraper that created
-  these placeholders ran against it that day);
-- the crawler did not visit them inside that roughly five-week window.
+### The archives, for the record
 
-So 53 posts report `no archived copy` against a cutoff that genuinely covers
-their whole life on Wix. Body images kept no source URL of their own, so with no
-archived page there is nothing left to point at.
-
-> Three earlier probes under-reported this, and each miss was self-inflicted:
-> the lookup asked for only the `www.` host (CDX keys captures by exact host);
-> it took only the newest capture; and `--before` defaulted to `20260301`, which
-> predates the affected posts entirely, so no capture could ever match. All
-> three are fixed. The conclusion survived, but the first two runs were not
-> evidence for it.
-
-Sources ruled out, so nobody repeats the search:
-
-- **Wayback Machine** — holds the blog, but not these posts; see above.
-- **A live Wix mirror** — none; the domain now serves the Next.js site, and its
-  images are the blurred Sanity ones.
-- **`coverImageUrl`** — covers only. This is where nearly all recoveries come from.
-- **Repo artifacts** (`scripts/extracted-content.json` and friends) — no Wix
-  media URLs survive anywhere in the repo.
-- **monday.com** — no `blogPost` carries a `mondayItemId`, so there is no item
-  to pull attachments from.
-- **Search-engine image indexes** — re-crawled; they now return the current
-  `cdn.sanity.io` URLs, not the Wix originals.
+Both were searched properly before the mirror turned up, and neither has these
+posts. Four earlier probes under-reported and every miss was self-inflicted: the
+lookup asked only for the `www.` host (CDX keys captures by exact host); it took
+only the newest capture; `--before` defaulted to `20260301`, which predates the
+affected posts entirely; and the "is this a Wix page" guard used
+`wixOriginalUrl()`, which passes non-Wix URLs through untouched, so captures of
+the *new* site were accepted as sources. All four are fixed — but the archive
+route is moot now that the origin is reachable.
 
 ## What was done instead
 
@@ -104,7 +88,7 @@ the upgrade every blog image had been served at 75. `next.config.ts` now
 declares `qualities: [75, 90]`. This is independent of the scrape damage — it
 was making the good images soft too.
 
-**3. The 20 real recoveries** are one workflow run away — see below.
+**3. The 166 recoveries** are one run away — see below.
 
 **4. The rest need new screenshots.** The worklist is at the end of this file.
 
@@ -122,9 +106,12 @@ secret (Settings → Secrets and variables → Actions) and fails fast without o
 Locally, if you have the token in `.env.local`:
 
 ```bash
-npx tsx scripts/fix-blurry-blog-images.ts                 # audit only, no writes
-npx tsx scripts/fix-blurry-blog-images.ts --plan          # resolve replacements, still no writes
-npx tsx scripts/fix-blurry-blog-images.ts --apply         # upload + repoint the references
+# audit only, no writes, no credentials
+npx tsx scripts/fix-blurry-blog-images.ts
+
+# the real repair: scrape the still-live Wix origin
+npx tsx scripts/fix-blurry-blog-images.ts --apply \
+  --source-base https://www.fruition-services.io
 ```
 
 Nothing is written unless the replacement downloads, decodes, and is
@@ -145,35 +132,12 @@ the one thing that would change this outcome.
 - Both ingest scripts refuse any image that decodes narrower than 400px
   (`src/lib/imageSize.ts`), whatever the URL claimed.
 
-## Worklist — images that need re-shooting
+## Worklist — superseded
 
-94 body images across 15 published posts. Alt text is given because it says what
-each screenshot was of; the filename records the position it held in the
-original post.
-
-| post | images | sizes |
-| --- | --- | --- |
-| `ai-call-recording-apps` | 13 | 49–147px |
-| `monday-crm-service-2026-roadmap` | 12 | 147px |
-| `australian-standards-for-building-materials-with-mondaycom` | 11 | 49–147px |
-| `monday-ai-work-management-updates-2026` | 9 | 147px |
-| `5-mondaycom-consultants-us` | 8 | 49–147px |
-| `makecom-use-cases-multi-step-logic` | 8 | 49–147px |
-| `ai-agent-playbook-deploy-without-draining-budget` | 7 | 49–147px |
-| `build-buy-orchestrate-enterprise-ai-vendor-decision-2026` | 7 | 49–147px |
-| `mondaycom-agile-sprint-management` | 6 | 49–147px |
-| `change-management-for-software-new-tool-fatigue` | 4 | 49–147px |
-| `mondaycom-ai-feature-prioritisation-risk-detection` | 4 | 49–147px |
-| `monday-ai-pricing-model-2026` | 2 | 568px |
-| `scoro-vs-monday-com` | 1 | 717px |
-| `ai-consulting-firm-8-factors-to-consider` | 1 | 700px |
-| `manage-purchase-orders-in-mondaycom` | 1 | 480px |
-
-The bottom four rows are only mildly undersized (480–717px against a 740px
-column) and now render at their own width, so they read as slightly small rather
-than blurry. The 90 images at 49–147px are the ones worth re-shooting.
-
-To regenerate this list at any time:
+An earlier version of this file listed 94 images as needing new screenshots.
+That is no longer true: the live Wix mirror supplies originals for 89 of them.
+Run the repair (see above) rather than re-shooting anything. Regenerate the
+current shortfall at any time with:
 
 ```groq
 *[_type=="blogPost" && count(body[_type=="image" && asset->metadata.dimensions.width < 740]) > 0]{

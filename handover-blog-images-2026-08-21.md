@@ -1,22 +1,33 @@
 # Handover — blurred blog images
 
-Everything that could be fixed in code is done and on PR #147
-(`claude/blurred-images-older-blogs-k0zhgk`). What is left needs network and a
-Sanity write token, neither of which the agent sandbox had.
+**You found the fix.** `www.fruition-services.io` is the old Wix site, still
+live and still serving full-resolution media. A full read-only pass against it
+resolves **166 replacements**, including **89 of the ~90 Wix placeholders** that
+looked unrecoverable an hour ago.
 
-**Your job is two commands.** Step 1 tells you whether this is a 10-minute fix
-or a 10-minute fix plus some screenshot work.
+Nothing needs re-shooting. This is now one command plus a spot-check.
+
+| | now | after you run this |
+| --- | --- | --- |
+| visibly blurry (<740px) | 106 | **15** |
+| Wix placeholders (<200px) | 89 | **0** |
+| no source anywhere | — | 2 |
+
+The 15 that remain are images whose Wix original is *itself* small (e.g. a
+717px screenshot). Only 2 have no source at all. None are the 49–147px smears.
+
+Evidence: run
+[32438795040](https://github.com/Fruition-Service/fruition-website-monorepo/actions/runs/32438795040).
+Per-post it reads like `body #3 49px → 2908px available`.
 
 ---
 
-## 0. Before you start
+## 0. Setup
 
-**Rotate the Sanity token.** A write token was pasted into the chat transcript in
-plaintext. Treat it as compromised: revoke it at
+**Rotate the Sanity token first.** A write token was pasted into the chat
+transcript in plaintext — treat it as compromised. Revoke it at
 <https://www.sanity.io/manage> → project `bt6nb58h` → API → Tokens, and issue a
 fresh one with **Editor** rights.
-
-Then, in the repo root:
 
 ```bash
 git fetch origin
@@ -30,56 +41,25 @@ Put the **new** token in `.env.local` (git-ignored):
 SANITY_WRITE_TOKEN=sk...
 ```
 
-Nothing else is needed — the project id and dataset are hardcoded in
-`scripts/sanity-client.ts`.
+Nothing else — project id and dataset are hardcoded in `scripts/sanity-client.ts`.
 
 ---
 
-## 1. Find out if the old Wix site is still up ← **do this first**
-
-You spotted `www.fruition-services.io` (hyphenated) serving `/post/<slug>`, the
-old Wix URL shape. If it is still the Wix site, **every** lost screenshot is
-recoverable and none need retaking. This is the single fact that decides the
-size of the job.
+## 1. One post first
 
 ```bash
-npx tsx scripts/fix-blurry-blog-images.ts --plan \
-  --source-base https://www.fruition-services.io \
-  --report mirror-plan.json
-```
-
-Read-only — it writes nothing. Takes a couple of minutes.
-
-**Interpreting it**, from the summary block at the end:
-
-| `recoverable` | meaning | go to |
-| --- | --- | --- |
-| **~100+** | it *is* the Wix site. Jackpot — everything comes back | step 2a |
-| **~20** | it is the new site on another domain; only covers recover | step 2b |
-| **0** and lots of `fetch failed` | domain unreachable or blocking; retry with `--delay 3000` | — |
-
-The distinction the script uses: a page only counts as a source if it actually
-serves `static.wixstatic.com` media. A capture or mirror of the *new* site is
-rejected, so a wrong answer here fails closed rather than writing garbage.
-
----
-
-## 2a. If the mirror is the real Wix site
-
-Do one post first and look at it on the site before doing the rest.
-
-```bash
-# one post, writes to Sanity
 npx tsx scripts/fix-blurry-blog-images.ts --apply \
   --source-base https://www.fruition-services.io \
   --only monday-crm-service-2026-roadmap
 ```
 
-Check <https://www.fruitionservices.io/post/monday-crm-service-2026-roadmap> —
-the twelve screenshots should be sharp and full width. Sanity serves the new
-asset immediately; the page may need a cache purge or a redeploy to pick it up.
+That post has twelve 147px placeholders, all of which resolve to 1200px. Check
+<https://www.fruitionservices.io/post/monday-crm-service-2026-roadmap> — the
+screenshots should be sharp and full width. Sanity serves the new asset
+immediately, but the page is cached, so purge Cloudflare's cache or redeploy if
+you still see the old ones.
 
-Happy? Do the lot:
+## 2. Then the rest
 
 ```bash
 npx tsx scripts/fix-blurry-blog-images.ts --apply \
@@ -87,30 +67,17 @@ npx tsx scripts/fix-blurry-blog-images.ts --apply \
   --report applied.json
 ```
 
-## 2b. If it is not the Wix site
-
-Recover what the archives can reach — about 20 images, 17 of them covers:
-
-```bash
-npx tsx scripts/fix-blurry-blog-images.ts --plan --report plan.json   # look first
-npx tsx scripts/fix-blurry-blog-images.ts --apply --report applied.json
-```
-
-This one is slow (10–30 min): it walks the Wayback Machine and Common Crawl with
-rate-limit delays. The remaining ~90 images need new screenshots — see §5.
-
----
+Expect ~15–25 minutes: it fetches and decodes every replacement before writing.
+`applied.json` records exactly what moved.
 
 ## 3. Verify
 
-Re-run the audit; it needs no token and writes nothing:
-
 ```bash
-npx tsx scripts/fix-blurry-blog-images.ts
+npx tsx scripts/fix-blurry-blog-images.ts     # audit only, no token needed
 ```
 
-`visibly blurry (<740px)` was **106** before any repair. Or query Sanity
-directly — this is the number that matters:
+`visibly blurry (<740px)` should read **15**, down from 106. Or straight from
+Sanity — baseline was `coversBelowSlot: 12`, `bodyBelowSlot: 99`:
 
 ```groq
 {
@@ -119,58 +86,55 @@ directly — this is the number that matters:
 }
 ```
 
-Baseline was `coversBelowSlot: 12`, `bodyBelowSlot: 99`.
+---
+
+## 4. Merge PR #147
+
+Independent of the data repair, and green. It fixes three separate causes of
+soft images:
+
+1. **Under-sized images were stretched across the column** — a 147px scrape
+   blown up to 740px is a 5× upscale. They now lay out at their true size. After
+   step 2 almost nothing hits this path, but it stops the next bad ingest from
+   looking like this one.
+2. **`quality={90}` was silently served as 75** on *every* blog image since the
+   Next 16 upgrade — `images.qualities` now declares `[75, 90]`. This affects
+   all 652 images, not just the broken ones, and is the one fix that improves
+   pages that were never part of this bug.
+3. **The scrapers** now refuse any image that decodes narrower than 400px, so
+   this class of damage cannot recur.
+
+**Before merging**, decide what the workflow should default to. It currently
+hardcodes `SOURCE_BASE` to the mirror for push-triggered runs — that was the
+probe. Either keep it (the mirror is now the known-best source) or set it back
+to `''` and pass it per-run from the dispatch input.
 
 ---
 
-## 4. Ship the render fixes
+## 5. Afterwards
 
-PR #147 is green and independent of any of the above. It fixes three separate
-causes of soft images:
-
-1. **Under-sized images were stretched across the column.** A 147px scrape blown
-   up to 740px is a 5× upscale. They now lay out at their true size.
-2. **`quality={90}` was silently being served as 75** on *every* blog image
-   since the Next 16 upgrade — `images.qualities` now declares `[75, 90]`. This
-   one affects all 652 images, not just the broken ones.
-3. **The scrapers** that created the placeholders now refuse any image that
-   decodes narrower than 400px.
-
-Merge it whenever; it does not depend on the data repair.
-
----
-
-## 5. What no tool can fix
-
-If step 1 said "not the Wix site", ~90 screenshots exist only as 49–147px
-blurred thumbnails. Their originals are not in the Wayback Machine (the posts
-were only live on Wix about five weeks and it never crawled them), not in Common
-Crawl's pre-migration crawls, not in the repo, not on any monday item, and not
-in search-engine image caches.
-
-Those need retaking. The per-post worklist — slug, position, and the alt text
-saying what each screenshot showed — is in
-[`docs/blog-image-repair.md`](docs/blog-image-repair.md#worklist--images-that-need-re-shooting).
-
-Once you have a replacement image, the quickest route in is Studio: open the
-post at `/studio`, click the image block, upload. No script needed.
+- **Keep `fruition-services.io` alive** until this is done and verified. It is
+  the only surviving copy of those originals — the Wayback Machine never
+  captured these posts, and neither did Common Crawl's pre-migration crawls. If
+  that domain lapses, the 89 screenshots are gone for real.
+- Worth considering: a one-off archival scrape of the whole Wix site while it is
+  still up, so this cannot bite again.
+- The 2 images with no source at all are listed in `applied.json` as
+  `unresolved`; they only need attention if you care about the last two.
 
 ---
 
 ## 6. Safety and rollback
 
-The script is conservative by design:
-
 - Writes **only** when the replacement downloads, decodes, and is meaningfully
-  wider than what is there. A failed recovery leaves the post untouched.
-- Only `asset._ref` moves. Alt text, captions and `_key`s stay put, so nothing
+  wider than what is there. A failed fetch leaves the post untouched.
+- Only `asset._ref` moves — alt text, captions and `_key`s stay put, so nothing
   reorders and no copy changes.
-- Idempotent — repaired images stop matching the filter, so re-running is safe.
-- Old assets are not deleted, so a bad swap is reversible from Sanity's history
-  (Studio → the document → the revision list).
-
-`--apply` refuses to start without `SANITY_WRITE_TOKEN`, so a dry run can never
-half-write.
+- Idempotent: repaired images stop matching the filter, so re-running is safe.
+- Old assets are not deleted; a bad swap is reversible from the document's
+  revision history in `/studio`.
+- `--apply` refuses to start without `SANITY_WRITE_TOKEN`, so a dry run cannot
+  half-write.
 
 ---
 
@@ -178,17 +142,12 @@ half-write.
 
 | | |
 | --- | --- |
-| Repair script | `scripts/fix-blurry-blog-images.ts` (`--help` lists all flags) |
-| Findings, sources ruled out, worklist | `docs/blog-image-repair.md` |
-| CI workflow (same thing, in Actions) | `.github/workflows/blog-image-repair.yml` |
+| Repair script | `scripts/fix-blurry-blog-images.ts` (`--help` for all flags) |
+| Findings and audit | `docs/blog-image-repair.md` |
+| CI workflow | `.github/workflows/blog-image-repair.yml` |
 | Branch / PR | `claude/blurred-images-older-blogs-k0zhgk` / #147 |
 
-If you would rather run it in CI than locally: add `SANITY_WRITE_TOKEN` under
-Settings → Secrets and variables → Actions, merge the PR so the workflow reaches
-the default branch, then Actions → **Blog image repair** → Run workflow. Same
-script, same flags, with an audit trail.
-
-**One thing to undo before merging:** the workflow currently hardcodes
-`SOURCE_BASE` to `https://www.fruition-services.io` for push-triggered runs —
-that was the probe from step 1. If the mirror turns out not to be the Wix site,
-set it back to `''`.
+Prefer CI to a laptop? Add `SANITY_WRITE_TOKEN` under Settings → Secrets and
+variables → Actions, merge the PR so the workflow reaches the default branch,
+then Actions → **Blog image repair** → Run workflow → `apply`. Same script, same
+flags, with an audit trail.
