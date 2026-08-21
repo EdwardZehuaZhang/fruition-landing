@@ -39,8 +39,12 @@ on:
         type: string
         default: "1480"
       source_base:
-        description: "Scrape this origin instead of the Wayback Machine (optional)"
+        # The old Wix site is still live here and still serves full-resolution
+        # media, which is where essentially every recovery comes from. Blank it
+        # to fall back to the archives.
+        description: "Origin to scrape instead of the archives"
         type: string
+        default: "https://www.fruition-services.io"
       before:
         description: "Newest archive snapshot to consider, YYYYMMDD (blank = the script's default)"
         type: string
@@ -93,9 +97,7 @@ jobs:
           MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'plan' }}
           ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.only || '' }}
           TARGET: ${{ github.event_name == 'workflow_dispatch' && inputs.target || '1480' }}
-          # A push-triggered probe can be pointed at a candidate mirror of the
-          # old Wix site by setting this. Empty means "use the archives".
-          SOURCE_BASE: ${{ github.event_name == 'workflow_dispatch' && inputs.source_base || 'https://www.fruition-services.io' }}
+          SOURCE_BASE: ${{ github.event_name == 'workflow_dispatch' && inputs.source_base || '' }}
           BEFORE: ${{ github.event_name == 'workflow_dispatch' && inputs.before || '' }}
         run: |
           set -o pipefail

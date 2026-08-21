@@ -70,6 +70,16 @@ npx tsx scripts/fix-blurry-blog-images.ts --apply \
 Expect ~15–25 minutes: it fetches and decodes every replacement before writing.
 `applied.json` records exactly what moved.
 
+### What it touches
+
+Sanity holds **14 draft blogPosts**, one of which
+(`mondaycom-agile-sprint-management`) has blurry body images. The script reads
+with the raw perspective, so it patches drafts as well as published documents.
+That is deliberate: fix only the published copy and publishing that draft later
+would put the blur straight back.
+
+Only `asset._ref` is set. No other field on a draft is touched.
+
 ## 3. Verify
 
 ```bash
@@ -104,10 +114,9 @@ soft images:
 3. **The scrapers** now refuse any image that decodes narrower than 400px, so
    this class of damage cannot recur.
 
-**Before merging**, decide what the workflow should default to. It currently
-hardcodes `SOURCE_BASE` to the mirror for push-triggered runs — that was the
-probe. Either keep it (the mirror is now the known-best source) or set it back
-to `''` and pass it per-run from the dispatch input.
+Nothing to undo before merging: the probe's hardcoded `SOURCE_BASE` has been
+reverted, and the mirror is now the default of the workflow's `source_base`
+input instead — so a manual **Run workflow** already points at the right origin.
 
 ---
 
