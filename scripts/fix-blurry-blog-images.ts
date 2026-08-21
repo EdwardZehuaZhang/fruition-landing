@@ -66,6 +66,7 @@ import { writeClient } from "./sanity-client.js"
 import { imageSize } from "../src/lib/imageSize.js"
 import { parseWixMediaUrl, wixOriginalUrl } from "../src/lib/wixImage.js"
 import { unlandedPaths, type PatchTargetDoc } from "../src/lib/sanityPatchPath.js"
+import { matchArchivedImage } from "../src/lib/archivedImageMatch.js"
 
 // ---------------------------------------------------------------- CLI
 
@@ -175,10 +176,6 @@ interface Finding extends Slot {
 function scrapeIndex(filename: string | null, fallback: number): number {
   const n = filename ? /-(?:body|img)-(\d+)$/.exec(filename)?.[1] : null
   return n ? Number(n) : fallback
-}
-
-function normaliseAlt(s: string | null | undefined): string {
-  return (s ?? "").toLowerCase().replace(/\s+/g, " ").trim()
 }
 
 /** Every body-image slot plus the cover, as uniform records. */
@@ -520,14 +517,9 @@ async function fetchArchivedPage(slug: string, deep: boolean): Promise<ArchivedP
 }
 
 /** Pick the archived image that belongs to a slot: alt text first, then order. */
-function matchArchived(slot: Slot, page: ArchivedPage): string | null {
+function matchArchived(slot: Slot, page: ArchivedPage, taken: Set<string>): string | null {
   if (slot.kind === "cover") return page.cover
-  const alt = normaliseAlt(slot.alt)
-  if (alt) {
-    const byAlt = page.body.find((img) => normaliseAlt(img.alt) === alt)
-    if (byAlt) return byAlt.src
-  }
-  return page.body[slot.index - 1]?.src ?? null
+  return matchArchivedImage({ index: slot.index, alt: slot.alt }, page.body, taken)
 }
 
 interface Downloaded {
@@ -643,6 +635,8 @@ async function main() {
     if (needsArchive && !page) console.log(`  ! no archived copy of /post/${slug}`)
 
     const patch: Record<string, string> = {}
+    // Source URLs already claimed by an earlier slot in this post.
+    const taken = new Set<string>()
 
     for (const slot of degraded) {
       const finding: Finding = { ...slot, postId: post._id, slug, outcome: "unresolved" }
@@ -651,7 +645,8 @@ async function main() {
       const label = slot.kind === "cover" ? "cover" : `body #${slot.index}`
       const stored =
         slot.kind === "cover" && post.coverImageUrl ? wixOriginalUrl(post.coverImageUrl) : null
-      const candidate = stored ?? (page ? matchArchived(slot, page) : null)
+      const candidate = stored ?? (page ? matchArchived(slot, page, taken) : null)
+      if (candidate) taken.add(candidate)
 
       if (!candidate) {
         console.log(`  - ${label} ${slot.width}px — no source found`)
