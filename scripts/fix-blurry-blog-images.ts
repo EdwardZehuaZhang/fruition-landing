@@ -39,6 +39,8 @@
  *   --source-base <url>  scrape this origin instead of the Wayback Machine
  *   --before <YYYYMMDD>  newest archive snapshot to consider (default 20260520)
  *   --snapshots <n>      captures to try per host, newest first (default 6)
+ *   --no-common-crawl    skip the Common Crawl fallback
+ *   --cc-indexes <n>     Common Crawl crawls to search (default 4)
  *   --delay <ms>         pause between upstream requests (default 1200)
  *   --report <path>      write the full findings as JSON
  *
@@ -71,6 +73,8 @@ if (has("--help") || has("-h")) {
       "  --source-base <url>  scrape this origin instead of the Wayback Machine",
       "  --before <YYYYMMDD>  newest archive snapshot to consider (default 20260520)",
       "  --snapshots <n>      captures to try per host, newest first (default 6)",
+      "  --no-common-crawl    skip the Common Crawl fallback",
+      "  --cc-indexes <n>     Common Crawl crawls to search (default 4)",
       "  --delay <ms>         pause between upstream requests (default 1200)",
       "  --report <path>      write the full findings as JSON",
     ].join("\n"),
@@ -90,6 +94,9 @@ const SOURCE_BASE = opt("--source-base", "").replace(/\/+$/, "")
 // no capture could ever match and every one of them reported "no archived copy".
 const BEFORE = opt("--before", "20260520")
 const SNAPSHOTS = Number(opt("--snapshots", "6"))
+const NO_CC = has("--no-common-crawl")
+const CC_INDEXES = Number(opt("--cc-indexes", "4"))
+const CC_RECORDS = Number(opt("--cc-records", "2"))
 const DELAY = Number(opt("--delay", "1200"))
 const REPORT = opt("--report", "")
 
@@ -340,7 +347,10 @@ function bodyContainer(root: HTMLElement): HTMLElement | null {
 async function readWixPage(target: string): Promise<ArchivedPage | null> {
   const root = await getHtml(target)
   if (!root) return null
+  return parseWixDoc(root, target)
+}
 
+function parseWixDoc(root: HTMLElement, target: string): ArchivedPage | null {
   const og = root.querySelector('meta[property="og:image"]')?.getAttribute("content") ?? ""
   const container = bodyContainer(root)
   const body: { src: string; alt: string }[] = []
@@ -370,7 +380,106 @@ async function readWixPage(target: string): Promise<ArchivedPage | null> {
   return { url: target, cover, body }
 }
 
-async function fetchArchivedPage(slug: string): Promise<ArchivedPage | null> {
+// ------------------------------------------------- Common Crawl (2nd archive)
+
+/**
+ * The Wayback Machine is not the only archive, and it missed the posts that
+ * matter here — they were only live on Wix for about five weeks. Common Crawl
+ * runs its own monthly crawls with an independent index, so a page Wayback
+ * never visited may still exist there.
+ */
+let ccIndexes: string[] | null = null
+
+async function commonCrawlIndexes(): Promise<string[]> {
+  if (ccIndexes) return ccIndexes
+  try {
+    const res = await fetch("https://index.commoncrawl.org/collinfo.json", {
+      signal: AbortSignal.timeout(45000),
+    })
+    if (!res.ok) {
+      ccIndexes = []
+      return ccIndexes
+    }
+    const all = (await res.json()) as { id: string; "cdx-api": string }[]
+    // Crawls are named CC-MAIN-<year>-<week>. Keep those that could contain a
+    // page published 2026-04 and gone by 2026-05, newest first, and cap the
+    // list so a miss costs a handful of requests rather than dozens.
+    ccIndexes = all
+      .filter((c) => /^CC-MAIN-2026-/.test(c.id))
+      .map((c) => c["cdx-api"])
+      .slice(0, CC_INDEXES)
+    return ccIndexes
+  } catch {
+    ccIndexes = []
+    return ccIndexes
+  }
+}
+
+interface CcRecord {
+  filename: string
+  offset: string
+  length: string
+  status?: string
+  mime?: string
+}
+
+/** Fetch the exact WARC byte range for a record and return its HTML body. */
+async function commonCrawlBody(rec: CcRecord): Promise<string | null> {
+  const start = Number(rec.offset)
+  const end = start + Number(rec.length) - 1
+  try {
+    const res = await fetch(`https://data.commoncrawl.org/${rec.filename}`, {
+      headers: { Range: `bytes=${start}-${end}` },
+      signal: AbortSignal.timeout(60000),
+    })
+    if (!res.ok) return null
+    const gz = Buffer.from(await res.arrayBuffer())
+    const { gunzipSync } = await import("node:zlib")
+    const raw = gunzipSync(gz).toString("utf8")
+    // WARC header, blank line, HTTP header, blank line, then the body.
+    const i = raw.indexOf("\r\n\r\n")
+    if (i < 0) return null
+    const j = raw.indexOf("\r\n\r\n", i + 4)
+    return j < 0 ? null : raw.slice(j + 4)
+  } catch {
+    return null
+  }
+}
+
+async function commonCrawlPage(slug: string): Promise<ArchivedPage | null> {
+  for (const api of await commonCrawlIndexes()) {
+    for (const host of ARCHIVE_HOSTS) {
+      const url = `${api}?url=${encodeURIComponent(`${host}/post/${slug}`)}&output=json`
+      await sleep(DELAY)
+      let lines: string[]
+      try {
+        const res = await fetch(url, { signal: AbortSignal.timeout(45000) })
+        // 404 is the index saying "not in this crawl" — normal, not an error.
+        if (!res.ok) continue
+        lines = (await res.text()).split("\n").filter(Boolean)
+      } catch {
+        continue
+      }
+      for (const line of lines.slice(-CC_RECORDS)) {
+        let rec: CcRecord
+        try {
+          rec = JSON.parse(line) as CcRecord
+        } catch {
+          continue
+        }
+        if (rec.status && rec.status !== "200") continue
+        await sleep(DELAY)
+        const html = await commonCrawlBody(rec)
+        if (!html) continue
+        const page = parseWixDoc(parse(html) as unknown as HTMLElement, `commoncrawl:${rec.filename}`)
+        if (page) return page
+      }
+    }
+  }
+  return null
+}
+
+async function fetchArchivedPage(slug: string, deep: boolean): Promise<ArchivedPage | null> {
   if (SOURCE_BASE) {
     await sleep(DELAY)
     return readWixPage(`${SOURCE_BASE}/post/${slug}`)
@@ -381,7 +490,12 @@ async function fetchArchivedPage(slug: string): Promise<ArchivedPage | null> {
     const page = await readWixPage(target)
     if (page) return page
   }
-  return null
+  // Common Crawl costs several requests per post, so it is reserved for the
+  // posts that actually hold placeholder scrapes rather than merely soft images.
+  if (NO_CC || !deep) return null
+  const cc = await commonCrawlPage(slug)
+  if (cc) console.log(`  found in Common Crawl: ${cc.url}`)
+  return cc
 }
 
 /** Pick the archived image that belongs to a slot: alt text first, then order. */
@@ -502,7 +616,9 @@ async function main() {
 
     // One archive fetch per post, and only when something actually needs it.
     const needsArchive = degraded.some((s) => s.kind === "body" || !post.coverImageUrl)
-    const page = needsArchive ? await fetchArchivedPage(slug) : null
+    // A sub-400px slot is a real placeholder scrape, worth the deeper search.
+    const deep = degraded.some((s) => s.width < 400)
+    const page = needsArchive ? await fetchArchivedPage(slug, deep) : null
     if (needsArchive && !page) console.log(`  ! no archived copy of /post/${slug}`)
 
     const patch: Record<string, string> = {}
