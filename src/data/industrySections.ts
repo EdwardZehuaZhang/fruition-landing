@@ -13,6 +13,11 @@ import type { CapabilityBlock, IndustryPoint, SpecPanel } from '@/components/sec
  *   - retail      → monday-com-for-retail
  *   - marketing   → top-marketing-challenges, 5-mondaycom-features-for-marketing-teams
  *   - government  → mondaycom-enterprise-permissions (Enterprise-plan controls)
+ *   - solar       → monday-com-for-solar
+ *
+ * The /industries leaves key off their full path ('industries/solar-renewables').
+ * Their approach trio comes from the practice-cluster data instead — see
+ * src/data/practicePages/toIndustryPage.ts.
  *
  * Every string may carry the inline-markdown subset `<RichText>` renders —
  * `**bold**` and `[text](/relative/path)`. Blog links are the current slugs,
@@ -22,7 +27,9 @@ import type { CapabilityBlock, IndustryPoint, SpecPanel } from '@/components/sec
 export interface CapabilityBlocksContent {
   eyebrow: string
   heading: string
-  headingAccent: string
+  /** Trailing half of the heading, in voltage purple. Omitted when the copy is
+   *  a single declarative sentence that reads worse split in two. */
+  headingAccent?: string
   lead?: string
   columns?: 2 | 3
   blocks: CapabilityBlock[]
@@ -31,7 +38,7 @@ export interface CapabilityBlocksContent {
 export interface BenefitLedgerContent {
   eyebrow: string
   heading: string
-  headingAccent: string
+  headingAccent?: string
   intro?: string
   items: IndustryPoint[]
   footnote?: string
@@ -40,8 +47,9 @@ export interface BenefitLedgerContent {
 export interface TemplateSpecContent {
   eyebrow: string
   heading: string
-  headingAccent: string
+  headingAccent?: string
   lead?: string
+  columns?: 2 | 3
   panels: SpecPanel[]
 }
 
@@ -651,6 +659,82 @@ const GOVERNMENT: IndustrySections = {
   },
 }
 
+
+const SOLAR_RENEWABLES: IndustrySections = {
+  benefitLedger: {
+    eyebrow: '// Solar operations suite',
+    heading: 'What the Solar Operations Suite',
+    headingAccent: 'actually does',
+    intro:
+      'Solar businesses rarely fail on demand. They fail on disconnected systems, project visibility gaps, inventory that nobody can see from the quote, and customer communication that breaks down between sales and the crew.\n\nFruition built a Solar Operations Suite on monday.com CRM and Work Management to close exactly those gaps.',
+    items: [
+      {
+        label: 'End-to-end lifecycle management',
+        text: 'Solution design and implementation across the whole job, rather than a CRM at one end and a scheduling board at the other.',
+      },
+      {
+        label: 'Sales-to-operations handoff',
+        text: 'Workflow customisation and template configuration, so an accepted quote becomes a project without anyone re-keying it.',
+      },
+      {
+        label: 'Integrated inventory management',
+        text: 'Third-party apps connected for solar operations and communication, with inventory linked directly to quotes.',
+      },
+      {
+        label: 'Automated proposal and quote generation',
+        text: 'Standardised CPQ that accelerates quote-to-cash instead of waiting on a spreadsheet.',
+      },
+      {
+        label: 'Real-time project visibility',
+        text: 'Portfolio-level reporting, plus the team adoption and training that makes people actually use it.',
+      },
+    ],
+    footnote:
+      'The suite ships as pre-configured boards for client acquisition, project execution and inventory; dashboards for the metrics that cross them; integrations for proposal generation, document signature and customer communication; and automations from quote-to-cash through to reordering.',
+  },
+  templateSpec: {
+    eyebrow: '// Use cases',
+    heading: 'Four ways solar teams',
+    headingAccent: 'use it',
+    lead: 'The parts of the suite crews and office staff touch every day.',
+    columns: 2,
+    panels: [
+      {
+        title: 'Smart invoicing',
+        lead: 'Invoices raised faster, with the automations and integrations already wired in.',
+        bullets: [
+          'Customer invoices managed and tracked in one place.',
+          'Standardised CPQ that shortens the quote-to-cash cycle.',
+        ],
+      },
+      {
+        title: 'Portfolio management',
+        lead: 'Installation and maintenance portfolios in one view.',
+        bullets: [
+          'Project and portfolio managers collaborate on the same boards.',
+          'Workflows execute with reporting that does not need assembling by hand.',
+        ],
+      },
+      {
+        title: 'Inventory tracking',
+        lead: 'The Inventory App integration tracks stock in real time.',
+        chipsLabel: 'Tracked in real time',
+        chips: ['Solar panels', 'Batteries', 'Inverters', 'Other components'],
+        note: 'Wired up properly, inventory links directly to the quote — so nobody sells what is not on the shelf.',
+      },
+      {
+        title: 'Sales dashboard',
+        lead: 'The financial forecasting layer over the pipeline.',
+        bullets: [
+          'Forecast revenue across active deals.',
+          'Break the forecast down by month and by region.',
+          'Pull data from multiple boards into one high-level view.',
+        ],
+      },
+    ],
+  },
+}
+
 /** Keyed by page slug, matching the route segment and the Sanity page key. */
 export const INDUSTRY_SECTIONS: Record<string, IndustrySections> = {
   'monday-for-construction': CONSTRUCTION,
@@ -660,6 +744,7 @@ export const INDUSTRY_SECTIONS: Record<string, IndustrySections> = {
   'monday-for-retail': RETAIL,
   'monday-for-marketing': MARKETING,
   'monday-for-government': GOVERNMENT,
+  'industries/solar-renewables': SOLAR_RENEWABLES,
 }
 
 /** Empty object for pages with no long-form sections, so callers can destructure. */

@@ -130,6 +130,7 @@ export default async function Page() {
           heading={templateSpec.heading}
           headingAccent={templateSpec.headingAccent}
           lead={templateSpec.lead}
+          columns={templateSpec.columns}
           panels={templateSpec.panels}
           theme="tint"
         />

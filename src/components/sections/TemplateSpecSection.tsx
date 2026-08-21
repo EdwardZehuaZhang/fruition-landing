@@ -9,6 +9,8 @@ interface TemplateSpecSectionProps {
   headingAccent?: string
   lead?: string
   panels?: SpecPanel[]
+  /** Widest column count; always 1 on mobile and 2 at `md:`. */
+  columns?: 2 | 3
   theme?: "light" | "tint"
 }
 
@@ -39,9 +41,15 @@ export default function TemplateSpecSection({
   headingAccent,
   lead,
   panels = [],
+  columns = 3,
   theme = "tint",
 }: TemplateSpecSectionProps) {
   if (panels.length === 0) return null
+
+  const gridClass =
+    columns === 2
+      ? "grid grid-cols-1 md:grid-cols-2"
+      : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
 
   return (
     <section
@@ -56,7 +64,7 @@ export default function TemplateSpecSection({
           headingAccent={headingAccent}
           lead={lead}
         />
-        <div className="grid grid-cols-1 gap-6 mt-12 md:grid-cols-2 lg:grid-cols-3">
+        <div className={`${gridClass} gap-6 mt-12`}>
           {panels.map((panel) => (
             <article
               key={panel.title}

@@ -33,7 +33,7 @@ import YouTubeEmbed from "@/components/YouTubeEmbed"
 
 import type { FaqTab } from "@/components/sections/types"
 import { resolveIndustryLogos } from "@/sanity/industryLogos"
-import { getIndustrySections } from "@/data/industrySections"
+import { getIndustrySections, type IndustrySections } from "@/data/industrySections"
 import type { CarouselLogo } from "@/components/sections/types"
 
 interface UniversalPageTemplateProps {
@@ -56,6 +56,12 @@ interface UniversalPageTemplateProps {
    * no industryLogoSet has been curated — see src/sanity/industryLogos.ts.
    */
   industryLogos?: CarouselLogo[] | null
+  /**
+   * Long-form sections for this page. Defaults to the registry entry for
+   * `page.slug`; pages whose copy lives outside Sanity (the /industries
+   * leaves) pass their own.
+   */
+  sections?: IndustrySections
 }
 
 function youtubeEmbedUrl(url?: string): string | null {
@@ -84,6 +90,7 @@ export default function UniversalPageTemplate({
   faqTabs,
   heroPartnerImageSrc,
   industryLogos,
+  sections,
 }: UniversalPageTemplateProps) {
   if (!page) return null
 
@@ -131,7 +138,7 @@ export default function UniversalPageTemplate({
     capabilityBlocks,
     benefitLedger,
     templateSpec,
-  } = getIndustrySections(page.slug)
+  } = sections ?? getIndustrySections(page.slug)
 
   const capabilitiesColumns =
     page.capabilitiesColumns === 2 || page.capabilitiesColumns === 3
@@ -310,6 +317,7 @@ export default function UniversalPageTemplate({
           heading={templateSpec.heading}
           headingAccent={templateSpec.headingAccent}
           lead={templateSpec.lead}
+          columns={templateSpec.columns}
           panels={templateSpec.panels}
           theme={capabilityBlocks && !benefitLedger ? "light" : "tint"}
         />
