@@ -42,9 +42,8 @@ on:
         description: "Scrape this origin instead of the Wayback Machine (optional)"
         type: string
       before:
-        description: "Newest archive snapshot to consider, YYYYMMDD"
+        description: "Newest archive snapshot to consider, YYYYMMDD (blank = the script's default)"
         type: string
-        default: "20260301"
   push:
     branches: ["claude/**"]
 
@@ -95,10 +94,14 @@ jobs:
           ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.only || '' }}
           TARGET: ${{ github.event_name == 'workflow_dispatch' && inputs.target || '1480' }}
           SOURCE_BASE: ${{ github.event_name == 'workflow_dispatch' && inputs.source_base || '' }}
-          BEFORE: ${{ github.event_name == 'workflow_dispatch' && inputs.before || '20260301' }}
+          BEFORE: ${{ github.event_name == 'workflow_dispatch' && inputs.before || '' }}
         run: |
           set -o pipefail
-          args=( "--${MODE}" --report report.json --target "$TARGET" --before "$BEFORE" --delay 1500 )
+          # Leave --before unset unless asked for: duplicating the cutoff here
+          # once silently overrode the script's own default and made every post
+          # report "no archived copy".
+          args=( "--${MODE}" --report report.json --target "$TARGET" --delay 1500 )
+          [ -n "$BEFORE" ] && args+=( --before "$BEFORE" )
           [ -n "$ONLY" ] && args+=( --only "$ONLY" )
           [ -n "$SOURCE_BASE" ] && args+=( --source-base "$SOURCE_BASE" )
           echo "running: fix-blurry-blog-images ${args[*]}"
