@@ -530,6 +530,30 @@ interface Downloaded {
 }
 
 /** Fetch a candidate and read its real dimensions before anything is written. */
+/**
+ * Run an upstream call, retrying a couple of times with backoff.
+ *
+ * Returns null once it has genuinely failed, so a single bad image can never
+ * abort a run that still has dozens of posts to repair.
+ */
+async function withRetry<T>(fn: () => Promise<T>, what: string, attempts = 3): Promise<T | null> {
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      return await fn()
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
+      if (i === attempts) {
+        console.log(`  ! ${what} failed after ${attempts} attempts — ${msg}`)
+        return null
+      }
+      const wait = DELAY * i * 2
+      console.log(`  … ${what} failed (${msg}); retrying in ${wait}ms`)
+      await sleep(wait)
+    }
+  }
+  return null
+}
+
 async function download(url: string): Promise<Downloaded | null> {
   try {
     const res = await fetch(url, {
@@ -676,10 +700,20 @@ async function main() {
       }
 
       const filename = slot.filename ?? `${slug}-${slot.kind}-${slot.index}`
-      const asset = await writeClient.assets.upload("image", got.bytes, {
-        filename,
-        contentType: got.mime,
-      })
+      // An upload that throws used to kill the whole run from main().catch,
+      // abandoning every post after it — that is how a real run stopped
+      // half-way through australian-standards. Retry the transient case, then
+      // give up on this one image and carry on with the rest.
+      const asset = await withRetry(
+        () => writeClient.assets.upload("image", got.bytes, { filename, contentType: got.mime }),
+        `upload ${filename}`,
+      )
+      if (!asset) {
+        finding.outcome = "fetch-failed"
+        finding.note = "upload failed"
+        console.log(`  ! ${label} — upload failed, skipping`)
+        continue
+      }
       patch[slot.path] = asset._id
       finding.outcome = "replaced"
       replaced++
@@ -691,10 +725,24 @@ async function main() {
       // does nothing if the path matches no node — the commit still succeeds.
       // Read the references back off the returned document so a no-op cannot
       // be reported as a repair.
-      const updated = (await writeClient
-        .patch(post._id)
-        .set(patch)
-        .commit({ returnDocuments: true })) as unknown as PatchTargetDoc
+      const updated = (await withRetry(
+        () => writeClient.patch(post._id).set(patch).commit({ returnDocuments: true }),
+        `patch ${post._id}`,
+      )) as unknown as PatchTargetDoc | null
+
+      if (!updated) {
+        // The uploads succeeded but the references did not move. Say so rather
+        // than counting them, and leave the rest of the run to continue.
+        console.log(`  !! ${post._id} — patch failed, images uploaded but not linked`)
+        for (const f of findings) {
+          if (f.postId === post._id && f.outcome === "replaced") {
+            f.outcome = "fetch-failed"
+            f.note = "patch failed"
+            replaced--
+          }
+        }
+        continue
+      }
 
       const missed = unlandedPaths(updated, patch)
       console.log(`  → patched ${post._id} (${Object.keys(patch).length - missed.length} image(s))`)
