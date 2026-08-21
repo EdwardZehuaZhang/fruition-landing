@@ -15,11 +15,15 @@ import {
   CaseStudyCardsSection,
   SolutionCardsSection,
   TestimonialCtaBanner,
+  CapabilityBlocksSection,
+  BenefitLedgerSection,
+  TemplateSpecSection,
 } from "@/components/sections"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import { buildOgMetadata } from "@/lib/metadata"
 import { getIndustryLogos, resolveIndustryLogos } from "@/sanity/industryLogos"
 import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
+import { getIndustrySections } from "@/data/industrySections"
 
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-marketing")
@@ -61,6 +65,9 @@ export default async function Page() {
         c.clientName?.toLowerCase().includes("louis stenmark"),
     ) || caseStudies?.[0]
 
+  const { capabilityBlocks, benefitLedger, templateSpec } =
+    getIndustrySections("monday-for-marketing")
+
   return (
     <div>
       {/* 1. Hero */}
@@ -91,6 +98,42 @@ export default async function Page() {
         layout="tabs"
         withPurpleCircle={false}
       />
+
+      {/* 3a. Long-form industry sections (src/data/industrySections.ts) */}
+      {capabilityBlocks && (
+        <CapabilityBlocksSection
+          eyebrow={capabilityBlocks.eyebrow}
+          heading={capabilityBlocks.heading}
+          headingAccent={capabilityBlocks.headingAccent}
+          lead={capabilityBlocks.lead}
+          columns={capabilityBlocks.columns}
+          blocks={capabilityBlocks.blocks}
+          theme="tint"
+        />
+      )}
+
+      {benefitLedger && (
+        <BenefitLedgerSection
+          eyebrow={benefitLedger.eyebrow}
+          heading={benefitLedger.heading}
+          headingAccent={benefitLedger.headingAccent}
+          intro={benefitLedger.intro}
+          items={benefitLedger.items}
+          footnote={benefitLedger.footnote}
+          theme="light"
+        />
+      )}
+
+      {templateSpec && (
+        <TemplateSpecSection
+          eyebrow={templateSpec.eyebrow}
+          heading={templateSpec.heading}
+          headingAccent={templateSpec.headingAccent}
+          lead={templateSpec.lead}
+          panels={templateSpec.panels}
+          theme="tint"
+        />
+      )}
 
       {/* 4. Calendly */}
       <CalendlySection

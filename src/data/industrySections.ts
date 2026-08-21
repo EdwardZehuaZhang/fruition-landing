@@ -2,11 +2,17 @@ import type { CapabilityBlock, IndustryPoint, SpecPanel } from '@/components/sec
 
 /**
  * Long-form copy for the industry landing pages, lifted from the Fruition blog
- * archive by the content team (Aug 2026 handover) and re-cut for the page.
+ * archive and re-cut for the page.
  *
- * The FAQ half of that handover already lives in Sanity as `faqItem` docs /
- * page `faqTabs`; only the sections marked "Use as H2" are here, because they
- * needed section designs that did not exist yet.
+ * Construction, real estate, professional services and manufacturing came from
+ * the content team's Aug 2026 handover. The FAQ half of that handover already
+ * lives in Sanity as `faqItem` docs / page `faqTabs`; only the sections marked
+ * "Use as H2" are here, because they needed section designs that did not exist
+ * yet. Retail, marketing and government were then mined from the same blog
+ * archive so every industry landing page carries the treatment:
+ *   - retail      → monday-com-for-retail
+ *   - marketing   → top-marketing-challenges, 5-mondaycom-features-for-marketing-teams
+ *   - government  → mondaycom-enterprise-permissions (Enterprise-plan controls)
  *
  * Every string may carry the inline-markdown subset `<RichText>` renders —
  * `**bold**` and `[text](/relative/path)`. Blog links are the current slugs,
@@ -323,12 +329,337 @@ const MANUFACTURING: IndustrySections = {
   },
 }
 
+
+const RETAIL: IndustrySections = {
+  capabilityBlocks: {
+    eyebrow: '// Retail operations',
+    heading: 'Run the whole retail operation on',
+    headingAccent: 'one platform',
+    lead: 'Campaigns, merchandising and store rollouts stop being three disconnected systems. This is how the work divides up.',
+    columns: 3,
+    blocks: [
+      {
+        number: '01',
+        title: 'Product management',
+        lead: 'Streamline the product portfolio and shorten time to market.',
+        points: [
+          {
+            label: 'End-to-end product process',
+            text: 'Private label or your own brand — from closing deals with manufacturers and package design through to in-store launch.',
+          },
+          {
+            label: 'Supply chain management',
+            text: 'Vendor communication in a comprehensive view of the supply chain, so blockers, inventory and vendor threads sit in one place.',
+          },
+          {
+            label: 'Smart merchandising',
+            text: 'Visualise in-store layouts and placements, with automations carrying the recurring parts.',
+          },
+        ],
+      },
+      {
+        number: '02',
+        title: 'Marketing management',
+        lead: 'Build awareness by tightening the process that creates demand.',
+        points: [
+          {
+            label: 'Product promotion',
+            text: 'Standardise go-to-market end to end: defining objectives, executing campaigns, monitoring and launch.',
+          },
+          {
+            label: 'Campaign and creative management',
+            text: "A bird's-eye view of every campaign in one platform — budget, spend per channel, ROI goals.",
+          },
+          {
+            label: 'Retail media',
+            text: 'Manage in-store and online advertising in one place, across sales, production and delivery.',
+          },
+        ],
+      },
+      {
+        number: '03',
+        title: 'Operations management',
+        lead: 'Lift operational efficiency across stores, staff and space.',
+        points: [
+          {
+            label: 'Store updates and rollouts',
+            text: 'Manage every part of a new store opening — inventory, hiring — plus the full franchise lifecycle.',
+          },
+          {
+            label: 'Team management',
+            text: 'Plan shift schedules and track employee performance across locations.',
+          },
+          {
+            label: 'Space and range planning',
+            text: 'Turn shelf organisation and product placement blueprints into action items.',
+          },
+        ],
+      },
+    ],
+  },
+  benefitLedger: {
+    eyebrow: '// What it solves',
+    heading: 'The retail problems monday.com',
+    headingAccent: 'actually solves',
+    intro:
+      'Retail chaos is not just stressful, it is expensive. Stockouts, unsold inventory and siloed teams trace back to the same thing: nowhere that campaigns, stock and store operations meet.\n\nmonday.com for retail closes that gap by:',
+    items: [
+      { text: 'Centralising campaign management, with every initiative tracked on one dashboard.' },
+      {
+        text: 'Eliminating the communication silos between operations, sales, marketing and on-site teams.',
+      },
+      { text: 'Monitoring stock levels across channels and locations for real-time inventory visibility.' },
+      {
+        text: 'Coordinating product launches, promotional activity and seasonal displays in one merchandising workflow.',
+      },
+      {
+        text: 'Cutting manual work with automations for task management, deadline tracking and notifications.',
+      },
+      { text: 'Backing decisions with the analytics and reporting the team already needs.' },
+    ],
+    footnote:
+      'Fruition builds the boards that visualise stock across stores, automate low-stock alerts, and connect your eCommerce and POS systems to monday WorkOS — so multi-location retail stops running on spreadsheets.',
+  },
+}
+
+const MARKETING: IndustrySections = {
+  capabilityBlocks: {
+    eyebrow: '// Marketing challenges',
+    heading: 'Six problems marketing teams bring us, and what',
+    headingAccent: 'fixes them',
+    lead: 'Every marketing and creative team we onboard arrives with some version of these. The fix is rarely more tools — it is one place where the work is visible.',
+    columns: 3,
+    blocks: [
+      {
+        number: '01',
+        title: 'Tight deadlines',
+        lead: 'Marketing and creative teams work under constant deadline pressure, and the stress compounds.',
+        points: [
+          {
+            text: 'A centralised timeline view of the whole portfolio — events, social, campaigns — so stakeholders can see what is coming.',
+          },
+          { text: 'Campaign intake through forms rather than email and chat, which ends the back-and-forth.' },
+          { text: 'Load-balanced resourcing, so every available person is actually used.' },
+        ],
+      },
+      {
+        number: '02',
+        title: 'Managing multiple projects',
+        lead: 'Juggling concurrent campaigns makes it hard to allocate people, prioritise, and still deliver on time.',
+        points: [
+          { text: 'Set team capacity and allocate tasks across everyone in a single view.' },
+          { text: 'Bring agile practice and workflow automation into how the team is structured.' },
+        ],
+      },
+      {
+        number: '03',
+        title: 'Maintaining brand consistency',
+        lead: 'Consistency across channels, campaigns and creative assets is hard once several teams touch the work.',
+        points: [
+          {
+            text: 'Digital asset management keeps the current version of every digital and print asset in one place.',
+          },
+          {
+            text: 'Integrations with Adobe CC, Figma, HubSpot, Hootsuite and PageProof keep the tools in sync and stop double handling.',
+          },
+        ],
+      },
+      {
+        number: '04',
+        title: 'Collaborating effectively',
+        lead: 'Remote teams working across timezones lose things in multi-threaded conversation.',
+        points: [
+          { text: 'Meetings, chats and email land in one place, against the work they belong to.' },
+          { text: 'Team meetings progress next steps instead of catching up on status.' },
+        ],
+      },
+      {
+        number: '05',
+        title: 'Demonstrating ROI',
+        lead: 'Budgets need justifying, and brand awareness does not measure itself.',
+        points: [
+          { text: 'ROI reporting per channel shows which ones actually return for your sector.' },
+          {
+            text: 'Make and Workato connect key data sources through the open API, so the ROI dashboard syncs live.',
+          },
+          { text: 'Audit advertising spend, and outsource low in-house expertise to a partner you can track.' },
+        ],
+      },
+      {
+        number: '06',
+        title: 'Managing client expectations',
+        lead: 'Aligning on objectives and delivering against them takes visible, continuous communication.',
+        points: [
+          { text: 'Automated notifications when milestones land or a bottleneck appears.' },
+          {
+            text: 'Unlimited guest collaborators at no extra cost on Pro and Enterprise, so clients can see the work.',
+          },
+          { text: 'Set deliverable and timeline expectations against real capacity visibility.' },
+        ],
+      },
+    ],
+  },
+  benefitLedger: {
+    eyebrow: '// Marketing features',
+    heading: 'Five monday.com features marketing teams',
+    headingAccent: 'lean on',
+    intro:
+      'The monday marketer template ships with these already configured. They are the ones teams keep using once the novelty wears off.',
+    items: [
+      {
+        label: 'WorkDocs',
+        text: 'A central place to brainstorm plans, goals and outlines, created straight from the files column on the marketing board.',
+      },
+      {
+        label: 'Gantt view',
+        text: 'An organised, fully interactive view of every project plan when several campaigns run at once.',
+      },
+      {
+        label: 'Chart view',
+        text: 'Board data as custom graphs — the quarterly budget chart shows how spend distributes across projects per quarter.',
+      },
+      {
+        label: 'Connected boards',
+        text: 'Link marketing initiatives to the campaign tracking board and manage them from either side.',
+      },
+      {
+        label: 'Filters and dashboards',
+        text: 'Advanced filters narrow the board to what matters — high-priority Q1 and Q2 work, say — and dashboard widgets roll it back up.',
+      },
+    ],
+    footnote:
+      "Fruition assesses the need, designs the marketing workflows and trains the team, so the template becomes your process rather than someone else's.",
+  },
+  templateSpec: {
+    eyebrow: '// Board anatomy',
+    heading: 'What the monday marketer',
+    headingAccent: 'template gives you',
+    lead: 'Over 200 templates ship with the platform. This is the bundle a marketing team starts from.',
+    panels: [
+      {
+        title: 'Marketing plan board',
+        lead: 'Every marketing project is an item, with the detail mapped across columns.',
+        bullets: [
+          '**Groups** — the quarter of the year the project runs in.',
+          '**Items** — the workflow for each marketing initiative.',
+          '**Columns** — owner, goal, timeline and budget.',
+        ],
+      },
+      {
+        title: 'Campaign templates',
+        lead: 'Content, social, paid media and product launches each start from a template rather than a blank board.',
+        chipsLabel: 'Included templates',
+        chips: [
+          'Content calendar',
+          'Digital asset management',
+          'Blog planning',
+          'Social media planner',
+          'Video production',
+          'Creative team planner',
+          'A/B testing',
+          'Campaign planning',
+          'Product launch',
+        ],
+      },
+      {
+        title: 'Dashboard widgets',
+        lead: 'The roll-up view leadership asks for.',
+        bullets: [
+          '**Chart widgets** — initiatives and goals, budget against spend per campaign.',
+          '**Number widgets** — total yearly budget against what is left.',
+          '**Gantt widget** — project timelines and the relationships between them.',
+        ],
+      },
+    ],
+  },
+}
+
+const GOVERNMENT: IndustrySections = {
+  capabilityBlocks: {
+    eyebrow: '// Public sector security',
+    heading: 'The security standards agencies',
+    headingAccent: 'cannot compromise on',
+    lead: 'Public-sector workflows carry records that must not leak. These are the Enterprise-plan controls that make monday.com usable for them.',
+    columns: 3,
+    blocks: [
+      {
+        number: '01',
+        title: 'Item-level permissions',
+        lead: 'The most granular control in the platform, and usually the reason an agency moves to Enterprise.',
+        points: [
+          { text: 'Board owners choose which people column governs item access.' },
+          { text: 'Team members see only the items they are named on.' },
+          { text: "'Only edit assigned content' restricts non-owners to their own work." },
+          { text: 'Guests and non-board members never reach the wider workspace.' },
+        ],
+        note: 'Without it, teams duplicate boards to keep data apart — which fragments reporting and duplicates the data anyway.',
+      },
+      {
+        number: '02',
+        title: 'Compliance-grade data handling',
+        lead: 'What regulated records require before they can live in a work platform at all.',
+        points: [
+          { text: 'HIPAA compliance, unlocked through a Business Associate Agreement.' },
+          { text: '256-bit encryption and comprehensive audit logging.' },
+          { text: 'Automatic broadcast disabling on sensitive boards.' },
+          { text: 'A panic button that locks the account down if something is compromised.' },
+        ],
+      },
+      {
+        number: '03',
+        title: 'Access control and identity',
+        lead: 'Credential abuse is the most common way in, so the perimeter matters as much as the permissions.',
+        points: [
+          { text: 'IP whitelisting, so unapproved networks cannot reach sensitive data.' },
+          { text: 'SSO with Azure AD, Okta, OneLogin or custom SAML, plus multi-factor authentication.' },
+          { text: 'Public link sharing for WorkDocs disabled at the admin level.' },
+          { text: 'Dashboard owners control widget and data visibility.' },
+        ],
+      },
+    ],
+  },
+  benefitLedger: {
+    eyebrow: '// Permission architecture',
+    heading: 'Five layers of permission control, from',
+    headingAccent: 'account to item',
+    intro:
+      'Standard and Pro carry the core measures — SOC 2, two-factor authentication, encryption, board-level permissions. Regulated public-sector work needs more than that, and the Enterprise plan layers it.\n\nEach layer overrides the one below it, so an account-level restriction cannot be escalated around further down.',
+    items: [
+      {
+        label: 'Account level',
+        text: 'Access by user type — member, viewer, guest — with admins defining who reaches billing, data export or integrations. Custom roles grant narrow privileges, like a billing-only admin.',
+      },
+      {
+        label: 'Workspace level',
+        text: 'Content actions and visibility per workspace. A closed workspace requires an invitation, and only its members see the boards inside.',
+      },
+      {
+        label: 'Board level',
+        text: "From 'edit everything' down to 'view and comment', including an 'only edit assigned items' setting that holds non-owners to their own work.",
+      },
+      {
+        label: 'Column level',
+        text: 'Hides sensitive fields — salary figures, client contract terms — from users who can otherwise see the board.',
+      },
+      {
+        label: 'Item level',
+        text: 'Board owners nominate a people column to govern which rows each person can see at all.',
+      },
+    ],
+    footnote:
+      'Together these map onto the frameworks agencies are held to: GDPR limiting personal data to authorised users, SOX segregating financial data, and contractual restrictions on sensitive projects. Fruition audits your user roles and configures the architecture to match.',
+  },
+}
+
 /** Keyed by page slug, matching the route segment and the Sanity page key. */
 export const INDUSTRY_SECTIONS: Record<string, IndustrySections> = {
   'monday-for-construction': CONSTRUCTION,
   'monday-for-real-estate': REAL_ESTATE,
   'monday-for-professional-services': PROFESSIONAL_SERVICES,
   'monday-for-manufacturing': MANUFACTURING,
+  'monday-for-retail': RETAIL,
+  'monday-for-marketing': MARKETING,
+  'monday-for-government': GOVERNMENT,
 }
 
 /** Empty object for pages with no long-form sections, so callers can destructure. */
