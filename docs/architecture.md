@@ -1,290 +1,224 @@
 # Architecture
 
-System architecture for the Fruition (Flourishion) website. This covers the repository layout, the
-front-end / back-end split, the content and auth models, and the key data flows. For hosting, build,
-and deploy specifics see [`cloud.md`](./cloud.md).
+System architecture for the Fruition Services website. Repository layout, the front-end /
+back-end split, the content and auth models, and the key data flows. For hosting, build and
+deploy specifics see [`cloud.md`](./cloud.md).
+
+> **Accuracy contract.** Every claim here was verified against the tree on the date in the
+> footer. If you find a statement that no longer matches the code, fix this file in the same
+> PR as the code change — a stale architecture doc is the single most expensive thing in this
+> repo, because every agent and every new engineer starts here.
 
 ---
 
 ## 1. System overview
 
-A single **Next.js 16 (App Router)** application, deployed as **one Cloudflare Worker** via OpenNext.
-The one app currently contains several logically distinct concerns:
+One **Next.js 16 (App Router)** application on **React 19**, deployed as a **single Cloudflare
+Worker** via OpenNext. Three logically distinct surfaces share the deployment:
 
-- **Public marketing site** — industry, partner, solution, and blog pages (many Sanity-driven via a
-  block-based page builder).
-- **Embedded Sanity Studio** at `/studio` (self-hosted editing UI).
-- **Internal portal** at `/internal` — auth-gated staff tooling (onboarding today; blog CMS planned).
-- **API + webhooks** — contact form, leads, Sanity ingest, and Monday/Slack/RB2B webhooks.
-- **Marketa** — the AI content-generation pipeline (two verified blog pipelines + a Supabase RAG
-  "brain"). **Currently runs in this app, slated to move to `marketa-monorepo` — see §8.**
+- **Public marketing site** — ~115 pages: industry, partner, solution, location and blog pages.
+  Copy is a mix of hand-authored React and Sanity-driven content.
+- **Embedded Sanity Studio** at `/studio` — self-hosted editing UI.
+- **Internal portal** at `/internal` — Google-SSO-gated staff tooling: blog CMS, social composer,
+  invoices, design docs, team/onboarding.
+- **API + webhooks** under `/api` — contact, leads, scheduling, and monday/Slack/RB2B/Calendly
+  webhooks.
 
-Content lives in the **remote Sanity content lake** (project `bt6nb58h`). Operational/editorial data
-lives in **Supabase**. Everything else (Monday, Slack, Google, Resend) is integrated via server-side
-clients in `src/lib/`.
+Published content lives in the **remote Sanity content lake** (project `bt6nb58h`, dataset
+`production`). Portal/operational data lives in **Supabase**. Everything else (monday.com, Slack,
+Resend, Calendly) is reached through server-side clients in `src/lib/`.
 
 ```
-                        ┌──────────────────────────────────────────┐
-   Visitors ───────────▶│   Cloudflare Worker (Next.js via OpenNext)│
-                        │                                            │
-                        │  (marketing) FE  ─── reads ──▶ Sanity CDN  │──▶ Sanity content lake (bt6nb58h)
-                        │  /studio (Studio) ── writes ─▶ Sanity API  │
-                        │  (portal) /internal ─ writes via ONE token │
-                        │  /api/* webhooks                           │
-                        └───────┬───────────────┬──────────┬────────┘
-                                │               │          │
-                          Supabase (portal)  Monday     Slack / Resend / Google
-                          Supabase (brain)   .com       / RB2B / n8n
+                        ┌───────────────────────────────────────────┐
+   Visitors ───────────▶│  Cloudflare Worker (Next.js via OpenNext)  │
+                        │                                           │
+                        │  marketing pages ── read ──▶ Sanity CDN   │──▶ Sanity lake (bt6nb58h)
+                        │  /studio         ── write ─▶ Sanity API   │
+                        │  /internal       ── write via one token   │
+                        │  /api/*  webhooks + scheduling            │
+                        └──────┬─────────────┬──────────┬───────────┘
+                               │             │          │
+                          Supabase       monday.com   Slack / Resend
+                          (portal)                    / RB2B / Calendly
 ```
+
+Caching: OpenNext's incremental (ISR) cache and tag cache are both backed by **Cloudflare KV**
+(`NEXT_INC_CACHE_KV`, `NEXT_TAG_CACHE_KV` in `wrangler.jsonc`). See §7.
 
 ---
 
-## 2. Front-end vs Back-end
+## 2. Front-end vs back-end
 
-The site is one deployable Worker, but the code separates cleanly into two surfaces:
+One deployable Worker, but the code separates cleanly:
 
-- **Front-end (FE)** — the public marketing site. Server components that **read** from Sanity (via the
-  CDN client, `useCdn: true`) and render pages. No privileged access.
-- **Back-end (BE)** — the internal portal (`/internal`) + API routes (`/api/*`) + the server-only
-  library clients (`src/lib/*`). These hold **privileged tokens** (Sanity write, Supabase service role,
-  Monday, Slack) and perform all mutations. They are never exposed to the browser.
+- **Front-end** — the public marketing site. Server components that **read** Sanity through the
+  CDN client (`useCdn: true`) and render. No privileged access.
+- **Back-end** — `/internal` + `/api/*` + the server-only clients in `src/lib/*`. These hold the
+  privileged tokens (Sanity write, Supabase service role, monday, Slack) and perform every
+  mutation. They are never exposed to the browser.
 
-The planned monorepo restructure (see §7) formalises this: FE = `(marketing)` route group, BE = the
-`(portal)` route group + `api/` + server-only workspace packages.
+`src/middleware.ts` runs at the edge and does two things: 301s the apex host to
+`www.fruitionservices.io` (the Worker serves both, and without this Google sees duplicates), and
+forwards an `x-pathname` header so server components can read the current route.
+
+> It stays a `middleware.ts` — deprecated in Next 16 in favour of `proxy.ts` — deliberately.
+> `proxy.ts` always compiles to the Node.js runtime, which `@opennextjs/cloudflare` rejects.
 
 ---
 
 ## 3. Content model & the CMS-portal write model
 
 ### Where content lives
-All published content lives in the **remote Sanity content lake** (`bt6nb58h`, dataset `production`).
-The live site reads it; it cannot be replaced by a "local copy".
+Published content lives in the remote Sanity lake (`bt6nb58h`, dataset `production`). Schemas are
+in `src/sanity/schemas/`; read queries in `src/sanity/queries.ts` and `src/features/content/loaders.ts`.
 
-### Sanity Studio is self-hosted (free)
-The Studio (editing UI) is open-source and **embedded in this app at `/studio`**
-(`src/app/studio/[[...tool]]/page.tsx`, config in `src/sanity/config.ts`). Hosting it costs nothing.
+### Sanity Studio is self-hosted
+The Studio is mounted at `/studio` inside this app rather than on sanity.io, which keeps it on the
+free tier and inside our own auth perimeter.
 
 ### The seat problem, and how the portal solves it
-Sanity bills **per project member (seat)**. To avoid paying a seat per blog writer / SEO specialist,
-the internal portal writes to Sanity through **one shared service token** (`SANITY_WRITE_TOKEN`):
+Sanity charges per editor seat. Rather than buying a seat per staff member, the internal portal
+writes to Sanity through **one shared service token** (`src/lib/sanityWriteClient.ts`), and staff
+authenticate against the portal instead. Staff never touch the Studio.
 
-```
-Writer ──login (Google SSO)──▶ Portal (/internal) ──server-side──▶ SANITY_WRITE_TOKEN ──▶ Content lake
-```
+### Blog authoring flow
+Markdown → Portable Text on the way in; the editor is TipTap-based
+(`src/components/internal/RichTextEditor.tsx`). Body images **must be Sanity-hosted** — a remote
+`![](url)` publishes as a plain link, so images are sideloaded into Sanity on publish.
 
-Sanity only ever sees that **one** token, regardless of how many writers use the portal. Only the owner
-+ boss keep real Sanity seats (for schema/structural work in `/studio`). This write path already exists
-in `src/lib/sanityWriteClient.ts` (`upsertBlogPost`, `uploadImageAsset`, `createTeamMember`).
-
-### Blog authoring flow (Markdown → Portable Text)
-The `blogPost` body is **Portable Text** (`src/sanity/schemas/blogPost.ts`). Writers author in
-**Markdown**; on publish it is converted to Portable Text via `bodyToPortableText()` in
-`sanityWriteClient.ts`, so portal-authored posts render identically to existing ones through
-`src/components/BlogPostTemplate.tsx` (`@portabletext/react`).
-
-```
-Markdown editor ─▶ bodyToPortableText() ─▶ upsertBlogPost() ─▶ Sanity ─▶ /post/[slug] (BlogPostTemplate)
-```
-
-### Author profiles
-`blogPost.author` is a free-text string; author pages (`/author/[slug]`) match that name to a Sanity
-`teamMember` document to show photo/role/bio (`src/components/AuthorProfileTemplate.tsx`). The portal's
-onboarding flow (`src/app/api/internal/onboarding/route.ts`) already creates `teamMember` docs +
-uploads photos, so it doubles as author-profile management.
-
-### Portal UI rule: shadcn/ui ONLY — never hand-rolled components
-
-**Every interactive element in `/internal` MUST be a shadcn/ui component from
-`src/components/ui/` (style `base-nova`, built on `@base-ui/react`). Never hand-roll a
-`<select>`, `<table>`, dropdown, dialog, checkbox, or styled `<button>`/`<input>` with bespoke
-Tailwind classes.** Hand-rolled controls have repeatedly shipped broken (the raw `<select>` on
-`/internal/team` being the canonical example) because they miss the theming, focus/keyboard
-handling, and portal/z-index behaviour the shadcn components already solve.
-
-Concretely:
-
-- **Lists of records** → `DataTable` (`src/components/internal/DataTable.tsx`): a shared
-  shadcn table with search, dropdown facet filters, sortable columns and pagination. All
-  `/internal` list views (blog posts, team, invoices) use it or the `ui/table` primitives.
-- **Dropdowns** → `ui/select` (single choice) or `ui/dropdown-menu` (actions).
-- **Confirmations** → `ui/alert-dialog`. Modals → `ui/dialog`.
-- **Forms** → `ui/input`, `ui/textarea`, `ui/label`, `ui/checkbox`, `ui/button`.
-- A missing component gets added via `npx shadcn@latest add <name>` (never written from
-  scratch). NOTE: the CLI may try to overwrite existing `ui/` files — review the diff and keep
-  local customisations (e.g. `button.tsx`'s `render`/`nativeButton` handling).
-- `Button` supports `render={<Link href=… />}` for link-styled buttons — use that instead of a
-  styled `<a>`/`<Link>`.
+### Portal UI rule: shadcn/ui ONLY
+Every portal surface uses shadcn/ui primitives from `src/components/ui/`. Never hand-roll a
+button, dialog, table or form control for `/internal`. The portal has its own self-contained
+neutral shadcn theme inside `src/app/globals.css`, isolated from the marketing palette.
 
 ---
 
 ## 4. Authentication
 
-**Current:** the portal is gated by a **shared password** — an HMAC-signed cookie
-(`src/lib/internalAuth.ts`, `INTERNAL_ONBOARDING_PASSWORD` + `INTERNAL_AUTH_SECRET`). Server components
-verify the token and `redirect('/internal/login')` when absent.
+The portal is gated by **Supabase Auth + Google SSO**, restricted to the
+`@fruitionservices.io` Google Workspace domain. Implementation is `src/lib/portalAuth.ts`:
 
-**Planned:** replace with **Supabase Auth + Google SSO**, locked to the **`@fruitionservices.io`**
-Google Workspace domain. Because Supabase's Google provider does not natively filter by domain, the
-domain is enforced **server-side** after sign-in (reject any email not on `@fruitionservices.io`;
-prefer verifying Google's `hd` hosted-domain claim). Auth + author-profile + editorial-draft data lives
-in a **new dedicated portal Supabase project** (separate from the Marketa "brain" project). The
-server-side redirect gate pattern stays the same — only the backing session changes.
+- `getPortalClient()` / `getPortalAdmin()` — SSR and service-role Supabase clients.
+- `isAllowedEmail()` / `allowedDomain()` — the domain gate. Supabase's Google provider cannot
+  filter by domain natively, so it is enforced **server-side after sign-in**.
+- `requirePortalUser()` — the guard server components call; redirects to `/internal/login`.
+- `getPortalApiUser()` — the equivalent for API route handlers.
+- `ensureAuthorProfile()` / `getAuthorProfile()` — links a Supabase user to their author profile.
+
+> The earlier shared-password gate (`internalAuth.ts`, `INTERNAL_ONBOARDING_PASSWORD`) is gone.
 
 ---
 
 ## 5. Data flows & integrations
 
-Server-side clients live in `src/lib/`:
+Server-side clients in `src/lib/`:
 
-- **`sanityWriteClient.ts`** — HTTP writes to Sanity (blog posts, team members, image assets).
-- **`mondayClient.ts` / `slackClient.ts` / `googleDocs.ts` / `claudeClient.ts` / `leadNotify.ts`** —
-  integration clients for the webhooks and the Marketa pipeline.
-- **`marketa/brain.ts`** — Gemini embeddings + Supabase pgvector (the RAG "brain").
+| Client | Purpose |
+|---|---|
+| `sanityWriteClient.ts` | All Sanity writes — posts, team members, image assets |
+| `mondayClient.ts` | monday.com GraphQL |
+| `slackClient.ts` | Slack notifications and admin actions |
+| `calendlyClient.ts`, `consultantAvailability.ts` | Scheduling and regional consultant calendars |
+| `leadClassify.ts`, `leadNotify.ts` | Inbound lead routing (CRM vs enquiries) |
+| `rb2bColumns.ts`, `rb2bMondayCompany.ts`, `rb2bSlackBlocks.ts` | RB2B de-anonymisation pipeline |
+| `social/zernio.ts` | Social scheduling + analytics |
+| `revalidateSite.ts` | On-demand ISR invalidation (see §7) |
+| `portalAuth.ts` | Portal auth (§4) |
 
 API routes (`src/app/api/`):
 
-- **`contact`** — contact form → Resend email.
-- **`leads`** / **`webhooks/rb2b`** — lead capture + de-anonymisation → Monday/Slack enrichment.
-- **`sanity-ingest`** — HMAC webhook feeding content into the Marketa brain.
-- **`webhooks/monday`** — native monday webhook for the Team Onboarding board (create_item →
-  teamMember doc in Sanity). No make.com relay any more.
-- **`internal/blog/generate`, `webhooks/monday-blog`, `webhooks/slack-blog`,
-  `internal/slack-admin`** — the Marketa blog pipeline routes (see §8 for the full flows and the
-  planned extraction). Long drafts are stored in `portal_drafts` (+ brain `blog_drafts`) to sidestep
-  Monday's ~2,000-char long-text cap.
+- **`contact`** — contact form → Resend.
+- **`leads`**, **`webhooks/rb2b`** — lead capture and de-anonymisation → monday + Slack.
+- **`webhooks/monday`** — Team Onboarding board: `create_item` → `teamMember` doc in Sanity.
+- **`webhooks/calendly`** — booking lifecycle events.
+- **`scheduling/*`** — availability, booking, and lead capture for the in-house scheduler.
+- **`internal/*`** — portal APIs: blog, social composer, invoices, design docs, team.
+
+> **The Marketa AI blog pipeline is no longer in this repo.** It runs from `marketa-monorepo`
+> on Vercel. `src/lib/marketa/`, `src/lib/googleDocs.ts`, `api/webhooks/monday-blog`,
+> `api/webhooks/slack-blog` and `api/sanity-ingest` were all removed. Older handover documents
+> that describe the pipeline as living here are historical.
 
 ---
 
-## 6. Block-Based Page Builder
+## 6. How pages are composed
 
-Marketing pages are composed from reusable content blocks managed in Sanity and rendered by a generic
-`BlockRenderer`.
+**Marketing pages are hand-authored React server components.** A page directory under
+`src/app/<route>/` holds a `page.tsx` (metadata + data loading) and usually a `<Name>Content.tsx`
+client component for the body. Shared building blocks live in `src/components/sections/`.
 
-### Document Types
-- **homePage** — singleton with a `contentBlocks` array.
-- **siteSettings** — global config (phone, calendly link, logo, etc.).
-- Existing document types (`blogPost`, `solutionPage`, `locationPage`, etc.) remain unchanged.
+Sanity supplies the *data* those components render — logos, testimonials, office details, FAQ
+tabs, blog posts — through `src/features/content/loaders.ts` and `src/sanity/queries.ts`.
 
-### Block Objects
-Each block is a Sanity object type with a `_type`, a hidden `blockType` string, and its own fields.
+> **There is no generic block renderer.** An earlier `src/features/page-builder/` composed pages
+> from Sanity `contentBlocks` via a `BlockRenderer`; it was removed in the repo audit
+> (2026-08-21) after going unrendered since July. Some documents (notably `homePage`) still store
+> `contentBlocks` in Sanity and the loaders read specific block types out of them — that is a
+> **data shape**, not a rendering system. Do not add a "block view" expecting it to render.
 
-| Block | Purpose |
-|-------|---------|
-| `heroBlock` | Page hero with heading, subheading, CTA |
-| `richTextBlock` | Portable text / rich content |
-| `ctaBlock` | Call-to-action with heading, body, link |
-| `featureListBlock` | List of features with icon/title/description |
-| `testimonialBlock` | Single testimonial quote |
-| `logoCloudBlock` | Grid of logos with images |
-| `postListBlock` | Auto-fetches recent blog posts |
-| `faqBlock` | Question/answer pairs |
-
-### Page composition & rendering
-A page document has a `contentBlocks` array that accepts any block type. Editors add/reorder/configure
-blocks in the Studio.
-
-1. **Studio** — editors compose `contentBlocks` on the document.
-2. **Loader** (`src/features/content/loaders.ts`) — `getHomePage()` fetches the doc with all blocks.
-3. **Page** (`src/app/page.tsx`) — server component passes blocks to `BlockRenderer`.
-4. **BlockRenderer** (`src/features/page-builder/BlockRenderer.tsx`) — maps `_type` → view component.
-5. **Block view** — renders the block's content.
-
-If no `homePage` document exists, the homepage falls back to site settings with a prompt to create it.
-
-### Adding a new block type
-1. Create the schema in `src/sanity/schemas/objects/myNewBlock.ts` (include a hidden `blockType`).
-2. Register it in `src/sanity/schemas/index.ts`.
-3. Add `defineArrayMember({ type: 'myNewBlock' })` to the document's `contentBlocks`.
-4. Create the view in `src/features/page-builder/blocks/MyNewBlockView.tsx`.
-5. Add a `case 'myNewBlock':` in `BlockRenderer.tsx`.
-
-### Adding a new page type
-1. Create a document schema in `src/sanity/schemas/documents/` with a `contentBlocks` field.
-2. Register it in the schemas index.
-3. Add a loader in `src/features/content/loaders.ts`.
-4. Create a route in `src/app/` that uses the loader + `BlockRenderer`.
-
-### Conventions
-- **Schemas**: camelCase names matching filenames (`heroBlock.ts` → `name: 'heroBlock'`).
-- **Views**: PascalCase with `View` suffix (`HeroBlockView.tsx`).
-- **Loaders**: `get` prefix (`getHomePage()`).
-- All files TypeScript.
+### Adding a page
+1. Create `src/app/<route>/page.tsx` exporting `metadata` and a default server component.
+2. Load content in the server component; keep interactivity in a `"use client"` child.
+3. Compose from `src/components/sections/`; follow `DESIGN.md` tokens and the three breakpoints.
+4. Add the route to `src/app/sitemap.ts`.
+5. If it replaces an old URL, add a redirect to `auditRedirects` in `next.config.ts`.
 
 ---
 
-## 7. Planned monorepo restructure (target)
+## 7. Caching and revalidation
 
-The repo is named a "monorepo" but is currently one flat package. The target is a real **pnpm +
-Turborepo workspace** that still deploys as **one Cloudflare Worker** (only `apps/web` is built):
+The Worker serves pages from OpenNext's KV-backed incremental cache. Publishing from `/internal`
+must explicitly invalidate:
 
-```
-apps/web/                    # the single deployable Next.js app → one Worker
-  src/app/(marketing)/       # PUBLIC FE
-  src/app/(portal)/internal/ # INTERNAL BE/CMS (auth-gated)
-  src/app/studio/            # embedded Studio
-  src/app/api/               # webhooks + internal API
-packages/
-  sanity/                    # schemas, client, queries, image, structure
-  cms/                       # write client + markdown→portable-text + ingest
-  auth/                      # supabase + Google Workspace SSO + session guard
-  integrations/              # monday / slack / google / resend / claude clients
-  ui/                        # shared components + design tokens (incremental)
-services/marketa/            # marketa-harness + n8n + brain (NOT in the web deploy)
-supabase/                    # migrations (portal + brain)
-tooling/scripts-archive/     # the ~90 one-off scripts, archived
-docs/                        # architecture.md, cloud.md
-```
-
-FE = `(marketing)`; BE/CMS = `(portal)` + `api/` + the server-only packages. One app / one Worker, with
-a clean seam to later promote `(portal)` into its own Worker (`portal.fruitionservices.io`) if desired.
-
-The full proposal, phasing, and verification steps live in the approved plan:
-`Internal CMS Portal + Monorepo Restructure`.
+- `revalidatePath` only works because **`NEXT_TAG_CACHE_KV` is bound** in `wrangler.jsonc`.
+  Without that binding the adapter silently falls back to a dummy tag cache and revalidation is a
+  no-op that looks successful.
+- Pass **concrete URLs untyped** — `revalidatePath("/post/my-slug")`. The `"page"` type argument
+  is for *route patterns* (`/post/[slug]`) and passing it with a concrete URL fails to match.
+- `src/lib/revalidateSite.ts` wraps this; use it rather than calling `revalidatePath` directly.
 
 ---
 
-## 8. Marketa blog pipeline — current state & planned extraction (2026-07-18)
+## 8. Testing and CI
 
-Two production pipelines, both verified end-to-end. **The code currently lives — and RUNS — in this
-repo** (deployed with the site on the `fruition-landing` Worker), but its long-term home is
-**[`marketa-monorepo`](https://github.com/Fruition-Service/marketa-monorepo)**, where every file is
-already mirrored byte-identically (see that repo's `docs/MIGRATION-STATUS.md` for the cutover
-checklist).
+- **`npm test`** — vitest, 96 tests across `src/lib/*.test.ts`, ~3 seconds.
+- **`npm run typecheck`** — `tsc --noEmit -p tsconfig.ci.json` (excludes `scripts/`, `supabase/`).
+- **`npm run lint`** — eslint; currently 0 errors and ~100 warnings.
 
-### Pipeline 1 — daily auto-blog (09:00 SGT)
+CI (`.github/workflows/ci.yml`) runs all three on every PR into `production`. Deploy
+(`.github/workflows/deploy.yml`) uploads a preview Worker version per PR and promotes to the live
+Worker on push to `production`.
+
+> `npm run build` fetches live Sanity data during static generation. An `ENOTFOUND
+> *.apicdn.sanity.io` failure is a network problem, not a code problem.
+
+---
+
+## 9. Repository layout
+
 ```
-make.com 6575457 (daily cron) ─▶ POST /api/internal/blog/generate  (Bearer INTERNAL_API_KEY)
-  └▶ generate (OpenRouter chain → Gemini fallback; voiceGuide + brain RAG + web search)
-     ─▶ portal_drafts ─▶ Google Docs (blog + LinkedIn) ─▶ monday item (Website Blogs, "Drafting")
-     ─▶ Zernio social draft (X + Google Business, isDraft) ─▶ Slack #website-blogs (5 buttons)
+src/
+  app/                 # App Router: ~115 marketing routes, /internal, /studio, /api
+  components/
+    sections/          # Shared marketing sections
+    internal/          # Portal components
+    ui/                # shadcn/ui primitives (portal)
+    home/              # Home page composition + copy
+  features/content/    # Sanity loaders (deduped per render pass)
+  lib/                 # Server-side integration clients + portal auth
+  sanity/              # Schemas, queries, image helpers, Studio config
+  data/                # Static content data (team roster, practice pages)
+  types/               # Shared TypeScript types
+  redirects.ts         # 892 generated Wix redirects — never hand-edit
+  middleware.ts        # Canonical host 301 + x-pathname
+scripts/               # One-off migrations, Sanity seeds, ops tooling
+docs/                  # This file and its siblings
+docs/archive/          # Historical handovers, kept for reference only
+.claude/               # Agent framework: skills, subagents, hooks, permissions
 ```
 
-### Pipeline 2 — Slack topic intake (Josh's flow)
-```
-Top-level message in #website-blogs ─▶ /api/webhooks/slack-blog ─▶ monday item + "Queued" reply
-  ─▶ make.com 6574831 webhook ─▶ POST generate {pulseId,…} (monday mode)
-  ─▶ portal_drafts + brain blog_drafts + monday patch "Draft ready"
-  ─▶ monday webhook ─▶ /api/webhooks/monday-blog ─▶ Google Docs + Zernio + threaded
-     "Draft ready" reply (portal / blog doc / LinkedIn doc / social / monday buttons)
-```
+---
 
-### Grounding
-Generation injects the Sanity `voiceGuide` document at run time (content team edits style in Sanity —
-no deploy), retrieves chunks from the brain (Supabase pgvector, project `wucrgqdfyaiccacvxvpq` —
-free tier, **re-pauses after ~7 idle days**; if RAG returns 0 chunks check the project is up), and
-uses provider web search so stats/links are verified live. Prompts encode the human editor's style
-rules (`docs/marketa-blog-style-spec.md`).
-
-### Marketa file inventory in this repo (everything mirrored to marketa-monorepo)
-- Routes: `api/internal/blog/generate`, `api/webhooks/slack-blog`, `api/webhooks/monday-blog`,
-  `api/internal/slack-admin`.
-- Libs: `lib/googleDocs.ts` (fetch + WebCrypto — google-auth-library breaks on Workers),
-  `lib/marketa/{brain,blogSlackBlocks,marketaLinkedIn,zernio,socialVariants}.ts`,
-  plus shared `mondayClient` / `slackClient` / `sanityWriteClient` / `claudeClient`.
-- Portal bridge: `/internal/blog/monday/[pulseId]/edit` resolves monday items to portal drafts.
-
-### Extraction rule (until the runtime cutover)
-**This repo is the runtime. Make pipeline changes HERE first (this is what deploys), then mirror the
-file(s) to marketa-monorepo.** The cutover itself (deploy marketa-monorepo, move ~15 secrets, repoint
-the Slack app Events URL, two monday webhooks, and two make.com scenario URLs) is documented in
-marketa-monorepo `docs/MIGRATION-STATUS.md`; the portal pages stay here either way.
+*Verified against the tree on 2026-08-21. Sections 4–8 were rewritten in that audit; the
+previous version described a shared-password login, a live Marketa pipeline and a block-based
+page builder, none of which still existed.*

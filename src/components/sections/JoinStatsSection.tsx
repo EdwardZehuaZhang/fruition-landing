@@ -1,4 +1,4 @@
-import StatsBlockView from "@/features/page-builder/blocks/StatsBlockView"
+import StatsBlockView from "@/components/sections/StatsBlockView"
 import type { StatItem, SiteSettingsData } from "./types"
 
 interface JoinStatsSectionProps {
