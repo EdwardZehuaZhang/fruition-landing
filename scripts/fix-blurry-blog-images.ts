@@ -11,12 +11,21 @@
  * A Wix placeholder URL still names the same media id, and stripping the
  * `/v1/<transform>/` segment makes Wix serve the full-resolution upload (see
  * src/lib/wixImage.ts). So the repair is: find the original URL, strip the
- * transform, re-upload, re-point the reference. Two ways to find that URL:
+ * transform, re-upload, re-point the reference. Three ways to find that URL,
+ * best first:
  *
- *   1. `coverImageUrl` — the migration kept the Wix URL on 214 posts. Covers only.
- *   2. An archived copy of the Wix post page. Defaults to the Wayback Machine,
- *      pinned to before the site moved off Wix; `--source-base` points at a
- *      still-live Wix host instead.
+ *   1. The old Wix site, which is STILL LIVE at www.fruition-services.io and
+ *      still serving originals. Pass it with `--source-base`. This is where
+ *      essentially every recovery comes from — 166 of them, including 89 of
+ *      the ~90 placeholders. Nothing else comes close, so use it.
+ *   2. `coverImageUrl` — the migration kept the Wix URL on 214 posts. Covers only.
+ *   3. An archived copy of the post page (Wayback, then Common Crawl). Neither
+ *      captured the affected posts: they were live on Wix about five weeks and
+ *      the crawlers did not visit them in that window. Kept as a fallback for
+ *      the day the origin goes away.
+ *
+ * That last point is the risk worth knowing: if www.fruition-services.io is
+ * ever taken down before this has run, those ~90 originals are gone for good.
  *
  * SAFETY
  * Read-only by default. A replacement is only written when the re-fetched image
@@ -25,18 +34,23 @@
  * preserved — only `asset._ref` moves.
  *
  * USAGE
- *   npx tsx scripts/fix-blurry-blog-images.ts                    # audit, no network beyond Sanity
- *   npx tsx scripts/fix-blurry-blog-images.ts --plan             # audit + resolve replacements, no writes
- *   npx tsx scripts/fix-blurry-blog-images.ts --apply            # resolve, upload, patch Sanity
- *   npx tsx scripts/fix-blurry-blog-images.ts --plan --only ai-call-recording-apps
- *   npx tsx scripts/fix-blurry-blog-images.ts --apply --target 1480 --report out.json
+ *   # audit only — no writes, no credentials
+ *   npx tsx scripts/fix-blurry-blog-images.ts
+ *
+ *   # the real repair, against the still-live Wix origin
+ *   npx tsx scripts/fix-blurry-blog-images.ts --apply \
+ *     --source-base https://www.fruition-services.io
+ *
+ *   # rehearse one post first
+ *   npx tsx scripts/fix-blurry-blog-images.ts --plan \
+ *     --source-base https://www.fruition-services.io --only ai-call-recording-apps
  *
  * FLAGS
  *   --plan | --apply     resolve replacements / also write them (default: audit only)
  *   --only <slug>        restrict to one post
  *   --target <px>        width a blog image needs to be sharp (default 1480 = 740 @2x)
  *   --limit <n>          stop after n posts that need work
- *   --source-base <url>  scrape this origin instead of the Wayback Machine
+ *   --source-base <url>  scrape this origin instead of the archives (see above)
  *   --before <YYYYMMDD>  newest archive snapshot to consider (default 20260520)
  *   --snapshots <n>      captures to try per host, newest first (default 6)
  *   --no-common-crawl    skip the Common Crawl fallback
