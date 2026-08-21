@@ -17,6 +17,18 @@ Project `bt6nb58h`, dataset `production`. Studio is self-hosted at `/studio`.
 Reads use the CDN client (`useCdn: true`). Writes go through `sanityWriteClient` only — staff
 never get Sanity seats, the portal writes on their behalf.
 
+## FAQ JSON-LD: emit it from the component that renders the questions
+
+`FaqAccordion` builds the FAQPage JSON-LD from the exact `tabs` it renders. Do not add a
+second, route-level emitter. Two rules, both learned the hard way (2026-08-21):
+
+1. **Structured data must match visible content.** A head-level emitter re-queried Sanity by
+   pathname and its `/faqs` fallback put 124 generic questions on 257 pages that show no FAQ —
+   a Google FAQPage policy violation. Use `getFaqItemsForPageStrict()` if you ever need the
+   no-fallback query.
+2. **Never call `headers()` or `cookies()` in the root layout.** It opts *every* route out of
+   static rendering. That one call held the whole site at `no-store` with 1.4–2.3s TTFB.
+
 ## The FAQ two-source trap
 
 FAQ content exists in **two places** and they do not agree:

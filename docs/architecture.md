@@ -43,7 +43,7 @@ Resend, Calendly) is reached through server-side clients in `src/lib/`.
 ```
 
 Caching: OpenNext's incremental (ISR) cache and tag cache are both backed by **Cloudflare KV**
-(`NEXT_INC_CACHE_KV`, `NEXT_TAG_CACHE_KV` in `wrangler.jsonc`). See §7.
+(`NEXT_INC_CACHE_KV`, `NEXT_TAG_CACHE_KV` in `wrangler.jsonc`). See §8.
 
 ---
 
@@ -165,7 +165,30 @@ tabs, blog posts — through `src/features/content/loaders.ts` and `src/sanity/q
 
 ---
 
-## 7. Caching and revalidation
+## 7. Static rendering and FAQ structured data
+
+Marketing routes are **statically rendered / ISR**, not server-rendered per request. That is
+easy to break: **a dynamic API (`headers()`, `cookies()`) used anywhere in the root layout opts
+every route in the app out of static rendering.**
+
+That is exactly what happened until 2026-08-21. `<FaqHeadJsonLd />` sat in `src/app/layout.tsx`
+and called `headers()` to read an `x-pathname` set by middleware, so it could re-query Sanity for
+the current route's FAQ. Consequences, all measured:
+
+- 163 of 165 routes built as dynamic (ƒ); only 2 were static.
+- Live responses carried `cache-control: private, no-cache, no-store` — nothing cached at the
+  edge or in the browser — and TTFB was 1.4–2.3s.
+- Its fallback to the curated `/faqs` set stamped the same **124 generic monday.com questions**
+  onto **257 pages that render no FAQ at all**, author bios and blog posts included.
+
+**FAQ JSON-LD is now emitted by `FaqAccordion` itself**, built from the exact `tabs` it renders.
+The markup therefore cannot advertise a question the page does not display — which is what
+Google's FAQPage policy requires — and no route-level request data is needed.
+
+If you add a new FAQ surface, emit its JSON-LD from the component that renders the questions.
+**Never reach for `headers()` in the root layout.**
+
+## 8. Caching and revalidation
 
 The Worker serves pages from OpenNext's KV-backed incremental cache. Publishing from `/internal`
 must explicitly invalidate:
@@ -179,7 +202,7 @@ must explicitly invalidate:
 
 ---
 
-## 8. Testing and CI
+## 9. Testing and CI
 
 - **`npm test`** — vitest, 96 tests across `src/lib/*.test.ts`, ~3 seconds.
 - **`npm run typecheck`** — `tsc --noEmit -p tsconfig.ci.json` (excludes `scripts/`, `supabase/`).
@@ -194,7 +217,7 @@ Worker on push to `production`.
 
 ---
 
-## 9. Repository layout
+## 10. Repository layout
 
 ```
 src/
@@ -219,6 +242,6 @@ docs/archive/          # Historical handovers, kept for reference only
 
 ---
 
-*Verified against the tree on 2026-08-21. Sections 4–8 were rewritten in that audit; the
+*Verified against the tree on 2026-08-21. Sections 4–9 were rewritten in that audit; the
 previous version described a shared-password login, a live Marketa pipeline and a block-based
 page builder, none of which still existed.*
