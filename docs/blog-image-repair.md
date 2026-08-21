@@ -37,29 +37,47 @@ clustered in 15 published posts.
 
 A full `--plan` pass ran on a GitHub Actions runner
 (`.github/workflows/blog-image-repair.yml`, run
-[32423257510](https://github.com/Fruition-Service/fruition-website-monorepo/actions/runs/32423257510)).
+[32431125290](https://github.com/Fruition-Service/fruition-website-monorepo/actions/runs/32431125290)).
 Of 625 images checked and 527 below the sharpness target:
 
 | outcome | images |
 | --- | --- |
-| a better source exists | **17** — *all covers* |
-| already the best source available | 155 |
-| no source found | 355 |
+| a better source exists | **20** — 17 covers, 3 body |
+| already the best source available | 156 |
+| no source found | 351 |
 | fetch failed | 0 |
 
-**The Wayback Machine never captured the Wix post pages.** 54 posts were probed
-and every one came back `no archived copy`. Body images kept no source URL of
-their own, so with no archived page there is nothing left to point at — the
-original pixels are gone.
+Only **2 of those 20 are images that were actually blurry** (covers at 739px and
+624px). The other 18 are already column-width or wider and would only gain
+retina sharpness.
+
+### Why the archive does not help
+
+The blog *is* archived — 850 URLs from the domain, 293 of them blog posts. But
+the posts that need rescuing are not among them, and the reason is timing:
+
+- they were published around **2026-04-11**;
+- the site was still on Wix as late as **2026-05-19** (the scraper that created
+  these placeholders ran against it that day);
+- the crawler did not visit them inside that roughly five-week window.
+
+So 53 posts report `no archived copy` against a cutoff that genuinely covers
+their whole life on Wix. Body images kept no source URL of their own, so with no
+archived page there is nothing left to point at.
+
+> Three earlier probes under-reported this, and each miss was self-inflicted:
+> the lookup asked for only the `www.` host (CDX keys captures by exact host);
+> it took only the newest capture; and `--before` defaulted to `20260301`, which
+> predates the affected posts entirely, so no capture could ever match. All
+> three are fixed. The conclusion survived, but the first two runs were not
+> evidence for it.
 
 Sources ruled out, so nobody repeats the search:
 
-- **Wayback Machine** — no captures of `/post/*`.
+- **Wayback Machine** — holds the blog, but not these posts; see above.
 - **A live Wix mirror** — none; the domain now serves the Next.js site, and its
   images are the blurred Sanity ones.
-- **`coverImageUrl`** — covers only. This is where all 17 recoveries come from,
-  and only 2 of those are images that were actually blurry; the rest are covers
-  going from 1000–1200px to 2×.
+- **`coverImageUrl`** — covers only. This is where nearly all recoveries come from.
 - **Repo artifacts** (`scripts/extracted-content.json` and friends) — no Wix
   media URLs survive anywhere in the repo.
 - **monday.com** — no `blogPost` carries a `mondayItemId`, so there is no item
@@ -86,7 +104,7 @@ the upgrade every blog image had been served at 75. `next.config.ts` now
 declares `qualities: [75, 90]`. This is independent of the scrape damage — it
 was making the good images soft too.
 
-**3. The 17 real recoveries** are one workflow run away — see below.
+**3. The 20 real recoveries** are one workflow run away — see below.
 
 **4. The rest need new screenshots.** The worklist is at the end of this file.
 
