@@ -16,12 +16,15 @@ import {
   TestimonialCtaBanner,
   JoinStatsSection,
   TextContentSection,
+  BenefitLedgerSection,
+  TemplateSpecSection,
 } from "@/components/sections"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 import CtaButton from "@/components/CtaButton"
 import { buildOgMetadata } from "@/lib/metadata"
 import { getIndustryLogos, resolveIndustryLogos } from "@/sanity/industryLogos"
 import AuditCtaBanner from "@/components/sections/AuditCtaBanner"
+import { getIndustrySections } from "@/data/industrySections"
 
 export async function generateMetadata() {
   const page = await getIndustryPageBySlug("monday-for-real-estate")
@@ -55,6 +58,8 @@ export default async function Page() {
   const calendlyUrl = bookingHref(rawCalendly)
 
   const faqTabs = resolveFaqTabs(page.faqTabs, centralFaqs)
+
+  const { benefitLedger, templateSpec } = getIndustrySections("monday-for-real-estate")
 
   const featuredTestimonial =
     caseStudies?.find(
@@ -93,6 +98,18 @@ export default async function Page() {
         layout="tabs"
         withPurpleCircle={false}
       />
+
+      {/* 3b. Why choose monday CRM for real estate */}
+      {benefitLedger && (
+        <BenefitLedgerSection
+          eyebrow={benefitLedger.eyebrow}
+          heading={benefitLedger.heading}
+          headingAccent={benefitLedger.headingAccent}
+          intro={benefitLedger.intro}
+          items={benefitLedger.items}
+          theme="tint"
+        />
+      )}
 
       {/* 4. Featured case study — video + stats + quote + CTA */}
       {(page.caseStudyVideoUrl || page.caseStudyQuote || (page.caseStudyStats?.length ?? 0) > 0) && (
@@ -165,6 +182,19 @@ export default async function Page() {
             </div>
           </div>
         </section>
+      )}
+
+      {/* 4b. What the real estate CRM template ships with */}
+      {templateSpec && (
+        <TemplateSpecSection
+          eyebrow={templateSpec.eyebrow}
+          heading={templateSpec.heading}
+          headingAccent={templateSpec.headingAccent}
+          lead={templateSpec.lead}
+          columns={templateSpec.columns}
+          panels={templateSpec.panels}
+          theme="tint"
+        />
       )}
 
       {/* Mid-page conversion banner — shared site-wide */}

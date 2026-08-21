@@ -24,12 +24,16 @@ import {
   RemoteTeamSection,
   ApplicationFormSection,
   TextContentSection,
+  CapabilityBlocksSection,
+  BenefitLedgerSection,
+  TemplateSpecSection,
 } from "@/components/sections"
 import type { CaseStudy, SiteSettingsData } from "@/components/sections/types"
 import YouTubeEmbed from "@/components/YouTubeEmbed"
 
 import type { FaqTab } from "@/components/sections/types"
 import { resolveIndustryLogos } from "@/sanity/industryLogos"
+import { getIndustrySections, type IndustrySections } from "@/data/industrySections"
 import type { CarouselLogo } from "@/components/sections/types"
 
 interface UniversalPageTemplateProps {
@@ -52,6 +56,12 @@ interface UniversalPageTemplateProps {
    * no industryLogoSet has been curated — see src/sanity/industryLogos.ts.
    */
   industryLogos?: CarouselLogo[] | null
+  /**
+   * Long-form sections for this page. Defaults to the registry entry for
+   * `page.slug`; pages whose copy lives outside Sanity (the /industries
+   * leaves) pass their own.
+   */
+  sections?: IndustrySections
 }
 
 function youtubeEmbedUrl(url?: string): string | null {
@@ -80,6 +90,7 @@ export default function UniversalPageTemplate({
   faqTabs,
   heroPartnerImageSrc,
   industryLogos,
+  sections,
 }: UniversalPageTemplateProps) {
   if (!page) return null
 
@@ -120,6 +131,14 @@ export default function UniversalPageTemplate({
         c.clientCompany?.toLowerCase().includes("windfall") ||
         c.clientName?.toLowerCase().includes("louis stenmark"),
     ) || caseStudies[0]
+
+  /* Long-form industry copy that has no Sanity home yet — see
+     src/data/industrySections.ts. Renders nothing for pages with no entry. */
+  const {
+    capabilityBlocks,
+    benefitLedger,
+    templateSpec,
+  } = sections ?? getIndustrySections(page.slug)
 
   const capabilitiesColumns =
     page.capabilitiesColumns === 2 || page.capabilitiesColumns === 3
@@ -264,6 +283,43 @@ export default function UniversalPageTemplate({
           theme={page.comparisonTheme || "light"}
           layout={page.comparisonLayout === "sideBySide" ? "sideBySide" : "tabs"}
           withPurpleCircle={page.comparisonWithPurpleCircle ?? true}
+        />
+      )}
+
+      {/* 3a. Long-form industry sections (src/data/industrySections.ts) */}
+      {capabilityBlocks && (
+        <CapabilityBlocksSection
+          eyebrow={capabilityBlocks.eyebrow}
+          heading={capabilityBlocks.heading}
+          headingAccent={capabilityBlocks.headingAccent}
+          lead={capabilityBlocks.lead}
+          columns={capabilityBlocks.columns}
+          blocks={capabilityBlocks.blocks}
+          theme="tint"
+        />
+      )}
+
+      {benefitLedger && (
+        <BenefitLedgerSection
+          eyebrow={benefitLedger.eyebrow}
+          heading={benefitLedger.heading}
+          headingAccent={benefitLedger.headingAccent}
+          intro={benefitLedger.intro}
+          items={benefitLedger.items}
+          footnote={benefitLedger.footnote}
+          theme={capabilityBlocks ? "light" : "tint"}
+        />
+      )}
+
+      {templateSpec && (
+        <TemplateSpecSection
+          eyebrow={templateSpec.eyebrow}
+          heading={templateSpec.heading}
+          headingAccent={templateSpec.headingAccent}
+          lead={templateSpec.lead}
+          columns={templateSpec.columns}
+          panels={templateSpec.panels}
+          theme={capabilityBlocks && !benefitLedger ? "light" : "tint"}
         />
       )}
 
