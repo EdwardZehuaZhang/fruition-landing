@@ -677,8 +677,39 @@ async function main() {
     }
 
     if (APPLY && Object.keys(patch).length > 0) {
-      await writeClient.patch(post._id).set(patch).commit()
-      console.log(`  → patched ${post._id} (${Object.keys(patch).length} image(s))`)
+      // `set` with a key-matched path (body[_key=="…"].asset._ref) silently
+      // does nothing if the path matches no node — the commit still succeeds.
+      // Read the references back off the returned document so a no-op cannot
+      // be reported as a repair.
+      const updated = (await writeClient
+        .patch(post._id)
+        .set(patch)
+        .commit({ returnDocuments: true })) as unknown as {
+        coverImage?: { asset?: { _ref?: string } }
+        body?: { _key?: string; asset?: { _ref?: string } }[]
+      }
+
+      const landed = (path: string, wanted: string): boolean => {
+        if (path.startsWith("coverImage")) return updated.coverImage?.asset?._ref === wanted
+        const key = /_key=="([^"]+)"/.exec(path)?.[1]
+        return (updated.body ?? []).find((b) => b?._key === key)?.asset?._ref === wanted
+      }
+
+      const missed = Object.entries(patch).filter(([path, id]) => !landed(path, id))
+      console.log(`  → patched ${post._id} (${Object.keys(patch).length - missed.length} image(s))`)
+      for (const [path] of missed) {
+        console.log(`  !! ${path} did not take — the reference is unchanged`)
+      }
+      if (missed.length) {
+        // Keep the run going, but do not let the summary claim these as fixed.
+        for (const f of findings) {
+          if (f.postId === post._id && missed.some(([p]) => p === f.path)) {
+            f.outcome = "fetch-failed"
+            f.note = "patch did not apply"
+            replaced--
+          }
+        }
+      }
     }
   }
 
