@@ -93,7 +93,9 @@ jobs:
           MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'plan' }}
           ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.only || '' }}
           TARGET: ${{ github.event_name == 'workflow_dispatch' && inputs.target || '1480' }}
-          SOURCE_BASE: ${{ github.event_name == 'workflow_dispatch' && inputs.source_base || '' }}
+          # A push-triggered probe can be pointed at a candidate mirror of the
+          # old Wix site by setting this. Empty means "use the archives".
+          SOURCE_BASE: ${{ github.event_name == 'workflow_dispatch' && inputs.source_base || 'https://www.fruition-services.io' }}
           BEFORE: ${{ github.event_name == 'workflow_dispatch' && inputs.before || '' }}
         run: |
           set -o pipefail
