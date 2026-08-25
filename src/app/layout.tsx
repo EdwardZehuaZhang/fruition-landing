@@ -29,10 +29,17 @@ import CalendlyBookingTracker from "@/components/CalendlyBookingTracker"
 const REB2B_LOADER = `(function(){try{if(window.localStorage.getItem("fruition-visitor-consent")==="declined")return;}catch(e){}!function(key){if(window.reb2b)return;window.reb2b={loaded:true};var s=document.createElement("script");s.async=true;s.src="https://ddwl4m2hdecbv.cloudfront.net/b/"+key+"/"+key+".js.gz";document.getElementsByTagName("script")[0].parentNode.insertBefore(s,document.getElementsByTagName("script")[0]);}("9NMMZHR9W0NW");})();`
 
 // Google tag (gtag.js) — Google Ads conversion tracking.
-// Base tag ID: AW-71752570 (Google Ads conversion account).
-// Calendly booking conversion event (AW-71752570/7093414457) is fired
-// by the CalendlyBookingTracker component on calendly.event_scheduled.
-const GTAG_ID = "AW-71752570"
+//
+// Base tag ID: AW-1003400430. This is the account's *conversion ID*, which is
+// the only number gtag accepts here — read it off any conversion action under
+// Goals → Summary → (action) → "Use Google Tag Manager". It is NOT the `ocid`
+// in the Google Ads URL and NOT the customer ID: this tag previously carried
+// `AW-71752570` (the ocid), for which googletagmanager.com serves an empty
+// stub container, so every conversion the site fired went nowhere.
+//
+// The Calendly booking conversion is fired by the CalendlyBookingTracker
+// component on calendly.event_scheduled.
+const GTAG_ID = "AW-1003400430"
 const GTAG_LOADER = `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
