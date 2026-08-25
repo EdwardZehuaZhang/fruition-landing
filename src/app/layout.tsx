@@ -15,7 +15,6 @@ import { bookingHref } from "@/lib/bookingLink"
 import { officeStrap } from "@/data/offices"
 import { urlFor } from "@/sanity/image"
 import { buildOgMetadata, defaultOgImage } from "@/lib/metadata"
-import CalendlyBookingTracker from "@/components/CalendlyBookingTracker"
 
 
 
@@ -28,22 +27,21 @@ import CalendlyBookingTracker from "@/components/CalendlyBookingTracker"
 // every later visit. Keep the key in sync with src/components/CookieNotice.tsx.
 const REB2B_LOADER = `(function(){try{if(window.localStorage.getItem("fruition-visitor-consent")==="declined")return;}catch(e){}!function(key){if(window.reb2b)return;window.reb2b={loaded:true};var s=document.createElement("script");s.async=true;s.src="https://ddwl4m2hdecbv.cloudfront.net/b/"+key+"/"+key+".js.gz";document.getElementsByTagName("script")[0].parentNode.insertBefore(s,document.getElementsByTagName("script")[0]);}("9NMMZHR9W0NW");})();`
 
-// Google tag (gtag.js) — Google Ads conversion tracking.
+// Google Tag Manager. Container GTM-PF6XWTL6 is the single tagging surface
+// for the site: it carries the two GA4 Google Tags, the Google Ads tag
+// (AW-1003400430), and the Calendly booking conversion — tag, trigger and the
+// postMessage listener that fires it. Nothing about measurement lives in this
+// repo any more, so Benjie can change what is tracked without a deploy.
 //
-// Base tag ID: AW-1003400430. This is the account's *conversion ID*, which is
-// the only number gtag accepts here — read it off any conversion action under
-// Goals → Summary → (action) → "Use Google Tag Manager". It is NOT the `ocid`
-// in the Google Ads URL and NOT the customer ID: this tag previously carried
-// `AW-71752570` (the ocid), for which googletagmanager.com serves an empty
-// stub container, so every conversion the site fired went nowhere.
-//
-// The Calendly booking conversion is fired by the CalendlyBookingTracker
-// component on calendly.event_scheduled.
-const GTAG_ID = "AW-1003400430"
-const GTAG_LOADER = `window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${GTAG_ID}');`
+// What used to be here: a hand-rolled `gtag.js` snippet plus a
+// <CalendlyBookingTracker /> React listener, both carrying hard-coded Google
+// Ads IDs. See the container for their replacements.
+const GTM_ID = "GTM-PF6XWTL6"
+const GTM_LOADER = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${GTM_ID}');`
 
 
 // OpenAI Ads conversion tracking (oaiq). Base loader sitewide — stubs the
@@ -237,20 +235,24 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
         <Script
-          id="gtag-base"
+          id="gtm-loader"
           strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`}
-        />
-        <Script
-          id="gtag-config"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: GTAG_LOADER }}
+          dangerouslySetInnerHTML={{ __html: GTM_LOADER }}
         />
         <script dangerouslySetInnerHTML={{ __html: REB2B_LOADER }} />
         <script dangerouslySetInnerHTML={{ __html: OAIQ_LOADER }} />
       </head>
       <body className={`${poppins.variable} ${jetbrainsMono.variable} antialiased`}>
-        <CalendlyBookingTracker />
+        {/* GTM's no-JS fallback. It records the pageview only; none of the
+            container's tags run without JavaScript. */}
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           <NavigationProgress />
           <OfficeStrapProvider value={officeStrap(siteSettings?.offices)}>
