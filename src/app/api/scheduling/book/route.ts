@@ -68,7 +68,6 @@ export async function POST(req: Request) {
   const sourcePage = raw.startsWith("/") && !raw.startsWith("//") && raw.length <= 200 ? raw : undefined
 
   const fields: Record<string, string> = {
-    "Meeting time": `${start} (${timezone})`,
   }
   if (p.phone?.trim()) fields["Phone"] = p.phone.trim()
   if (p.service?.trim()) fields["Service"] = p.service.trim()
@@ -99,6 +98,8 @@ export async function POST(req: Request) {
 
   // Best-effort lead record — the meeting exists in Calendly regardless.
   const mondayId = await pushMeetingToMonday({
+    meetingStart: start,
+    meetingTz: timezone,
     name,
     email,
     company: p.company?.trim() || undefined,

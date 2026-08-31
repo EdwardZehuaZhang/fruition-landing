@@ -1,5 +1,7 @@
 import { classifyLead, type EnquiryCategory } from "@/lib/leadClassify"
 import { changeColumnValues, createItem, createUpdate, findItemByColumnValue, moveItemToGroup, moveItemToGroupTop } from "@/lib/mondayClient"
+import { consultantByMondayUserId } from "@/lib/consultants"
+import { formatMeetingTime } from "@/lib/meetingTime"
 
 /**
  * Shared lead-notification sinks used by the intake forms.
@@ -55,11 +57,29 @@ export interface LeadPayload {
    * other than its first-choice consultant. Falls back to REGION_OWNER_IDS.
    */
   ownerId?: number
+  /**
+   * A booking's UTC instant, straight from Calendly. Pass this rather than a
+   * pre-formatted string: only this module knows which consultant ends up
+   * owning the lead, and the board renders the time in *their* zone.
+   */
+  meetingStart?: string
+  /** The invitee's IANA zone, shown as a second line when it differs. */
+  meetingTz?: string
   /** Free-form additional answers keyed by label */
   fields?: Record<string, string>
 }
 
 export type LeadRegion = "APAC" | "SEA" | "IND" | "NA" | "UK"
+
+/**
+ * A booking rendered for the board, in the timezone of the consultant who owns
+ * it. Falls back to any pre-formatted "Meeting time" a caller still supplies.
+ */
+function meetingTimeFor(p: LeadPayload, ownerId: number | undefined): string | undefined {
+  if (!p.meetingStart) return p.fields?.["Meeting time"]
+  const hostTz = consultantByMondayUserId(ownerId)?.availabilityTimezone
+  return formatMeetingTime(p.meetingStart, p.meetingTz ?? p.timezone, hostTz)
+}
 
 interface LeadBoard {
   boardId: number
@@ -449,12 +469,16 @@ async function pushToBoard(
   }
   const service = p.fields?.["Service"]?.trim()
   if (service && c.serviceInterest) cols[c.serviceInterest] = { labels: [service] }
+  // Now that the owner is known, the meeting can be written in their own
+  // wall-clock time — see meetingTime.ts for why a raw instant is never enough.
+  const meetingLine = meetingTimeFor(p, ownerId)
+  const fields = meetingLine ? { ...p.fields, "Meeting time": meetingLine } : p.fields
   // Meeting logistics belong with the next action, not in the visitor's message.
-  const logistics = [p.fields?.["Meeting time"], p.fields?.["Event"]]
+  const logistics = [meetingLine, fields?.["Event"]]
     .map((v) => v?.trim())
     .filter(Boolean)
   if (logistics.length > 0 && c.nextSteps) cols[c.nextSteps] = { text: logistics.join("\n") }
-  const detail = fmtDetails(p)
+  const detail = fmtDetails({ ...p, fields })
   // The notes column carries only the visitor's actual message plus any
   // unmapped extra fields — Phone/Service/Message are excluded because they
   // land in their own columns. The item update below keeps the full dump.
@@ -464,7 +488,7 @@ async function pushToBoard(
   // column (the Enquiries fallback), so the detail isn't silently lost.
   const reserved = ["Message", "Phone", "Service", "Company", "Title"]
   if (c.nextSteps) reserved.push("Meeting time", "Event")
-  const extras = Object.entries(p.fields ?? {})
+  const extras = Object.entries(fields ?? {})
     .filter(([k, v]) => !reserved.includes(k) && v && String(v).trim())
     .map(([k, v]) => `${k}: ${v}`)
   let notesValue = [message, extras.join("\n")].filter(Boolean).join("\n\n")
@@ -574,7 +598,8 @@ export async function promoteLeadToBooked(
   const cols: Record<string, unknown> = {}
   if (c.status) cols[c.status] = { label: "Meeting Booked" }
   // Meeting logistics arrive only now — the form had no slot to report.
-  const logistics = [p.fields?.["Meeting time"], p.fields?.["Event"]]
+  const promoteOwner = p.ownerId ?? REGION_OWNER_IDS[p.region ?? detectRegion(p)]
+  const logistics = [meetingTimeFor(p, promoteOwner), p.fields?.["Event"]]
     .map((v) => v?.trim())
     .filter(Boolean)
   if (logistics.length > 0 && c.nextSteps) cols[c.nextSteps] = { text: logistics.join("\n") }

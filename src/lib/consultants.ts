@@ -72,6 +72,22 @@ export interface Consultant {
  * list. So the first choice fills up before the next person is offered at all,
  * but the region never looks fully booked while someone is still free.
  */
+/**
+ * The consultant a monday user id belongs to, across every region.
+ *
+ * Used to render a booking in the timezone of the person actually taking the
+ * call: `availabilityTimezone` is the zone their Calendly offers slots in, so
+ * it is their working day by definition.
+ */
+export function consultantByMondayUserId(id: number | undefined): Consultant | undefined {
+  if (id === undefined) return undefined
+  for (const list of Object.values(REGION_CONSULTANTS)) {
+    const hit = list.find((c) => c.mondayUserId === id)
+    if (hit) return hit
+  }
+  return TEST_CONSULTANT.mondayUserId === id ? TEST_CONSULTANT : undefined
+}
+
 export const REGION_CONSULTANTS: Record<LeadRegion, Consultant[]> = {
   APAC: [
     {

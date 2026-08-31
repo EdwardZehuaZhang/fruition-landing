@@ -63,13 +63,12 @@ export async function POST(req: Request) {
 
   const fields: Record<string, string> = {}
   const startMs = p.start ? Date.parse(p.start) : NaN
-  if (!Number.isNaN(startMs)) {
-    fields["Meeting time"] = `${new Date(startMs).toISOString()} (${timezone})`
-  }
+  // Raw instant only — leadNotify renders it once it knows the owning desk.
+  const meetingStart = Number.isNaN(startMs) ? undefined : new Date(startMs).toISOString()
   fields["Event"] = `30 Minute Meeting with ${consultant.name}`
 
   const mondayId = await promoteLeadToBooked(
-    { email, timezone, region, ownerId: consultant.mondayUserId, fields },
+    { email, timezone, region, ownerId: consultant.mondayUserId, meetingStart, meetingTz: timezone, fields },
     { createIfMissing: false },
   )
 

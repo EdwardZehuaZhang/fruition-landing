@@ -107,7 +107,7 @@ export async function POST(req: Request) {
   if (p.service?.trim()) fields["Service"] = p.service.trim()
   if (p.notes?.trim()) fields["Message"] = p.notes.trim()
   if (p.teamSize?.trim()) fields["Team size"] = p.teamSize.trim()
-  if (startUtc) fields["Meeting time"] = `${startUtc} (${timezone})`
+
   fields["Booking with"] = consultant.name
 
   // Straight onto the CRM — the booking flow is not screened by the lead
@@ -132,6 +132,8 @@ export async function POST(req: Request) {
         // pooled region that is not always the region's first choice.
         region,
         ownerId: consultant.mondayUserId,
+        meetingStart: startUtc || undefined,
+        meetingTz: timezone,
         fields,
       })
     } catch (err) {
