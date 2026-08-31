@@ -58,6 +58,12 @@ export async function GET(req: Request) {
   )
 
   const payload = { region, consultants }
+  // The booking embed only needs to know whose calendar to show. Computing
+  // slots as well would mean five live Calendly round trips per page view for
+  // data nothing renders.
+  if (new URL(req.url).searchParams.get("host") === "1") {
+    return NextResponse.json(payload, { headers: { "Cache-Control": "private, max-age=300" } })
+  }
   try {
     const slots = await getConsultantSlots(region)
     return NextResponse.json(
