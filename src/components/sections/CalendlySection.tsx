@@ -1,9 +1,10 @@
 import BookingSection from "./BookingSection"
 
 /**
- * Thin wrapper over the single BookingSection so every existing placement
- * (~34 hardcoded pages plus the Sanity page-builder `calendlyBlock`) keeps its
- * own prop names. `calendlyUrl` overrides the calendar for that page.
+ * Thin wrapper over the unified BookingSection so every existing placement
+ * (~15 hardcoded pages plus the Sanity page-builder `calendlyBlock`) upgrades
+ * in place. The props interface is unchanged from the old scheduling section;
+ * `calendlyUrl` remains the last-resort link when availability fails.
  */
 
 interface CalendlySectionProps {
@@ -17,5 +18,12 @@ export default function CalendlySection({
   subheading,
   calendlyUrl,
 }: CalendlySectionProps) {
-  return <BookingSection heading={heading} sub={subheading} calendlyUrl={calendlyUrl} />
+  return (
+    <BookingSection
+      eyebrow="Book a consultation"
+      heading={heading}
+      sub={subheading}
+      calendlyUrl={calendlyUrl}
+    />
+  )
 }
