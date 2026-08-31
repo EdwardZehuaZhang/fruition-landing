@@ -72,9 +72,8 @@ export async function POST(req: Request) {
   if (!email && !name) return NextResponse.json({ ok: true, skipped: "no identity" })
 
   const fields: Record<string, string> = {}
-  if (p.scheduled_event?.start_time) {
-    fields["Meeting time"] = `${p.scheduled_event.start_time}${p.timezone ? ` (${p.timezone})` : ""}`
-  }
+  // Raw instant only — leadNotify renders it once it knows the owning desk.
+  const meetingStart = p.scheduled_event?.start_time
   if (p.scheduled_event?.name) fields["Event"] = p.scheduled_event.name
   if (p.text_reminder_number) fields["Phone"] = p.text_reminder_number
   // Calendly booking pages ask their own questions. Route the ones that map
@@ -107,6 +106,8 @@ export async function POST(req: Request) {
     email,
     source,
     timezone: p.timezone,
+    meetingStart,
+    meetingTz: p.timezone,
     fields,
   })
   return NextResponse.json({ ok: true, mondayId: mondayId ?? undefined, promoted: leadFirst })
