@@ -3,6 +3,7 @@ import { getPortalApiUser } from "@/lib/portalAuth"
 import {
   buildComposerState,
   constraintsOf,
+  draftImages,
   getComposition,
   knownKeys,
   statusFrom,
@@ -59,11 +60,11 @@ interface PublishResult {
 function attachments(
   spec: PlatformSpec,
   draft: CompositionPlatform,
-): { imageUrl?: string; documentUrl?: string } {
+): { imageUrls?: string[]; documentUrl?: string } {
   const documentUrl = spec.supportsDocument ? draft.documentUrl || undefined : undefined
   if (documentUrl) return { documentUrl }
   if (!spec.supportsMedia) return {}
-  return { imageUrl: draft.mediaUrl || undefined }
+  return { imageUrls: draftImages(draft) ?? [] }
 }
 
 export async function POST(req: Request) {
@@ -116,11 +117,11 @@ export async function POST(req: Request) {
   const problems = keys.flatMap((key) => {
     const draft = composition.platforms[key] as CompositionPlatform
     const spec = platformSpec(key)
-    const { imageUrl, documentUrl } = attachments(spec, draft)
+    const { imageUrls, documentUrl } = attachments(spec, draft)
     return problemsFor(constraintsOf(spec), {
       content: draft.content,
       title: draft.title,
-      mediaUrl: imageUrl,
+      mediaUrls: imageUrls,
       documentUrl,
       shortenLinks: composition.shortenLinks,
     })
@@ -132,7 +133,7 @@ export async function POST(req: Request) {
 
   for (const key of keys) {
     const draft = platforms[key] as CompositionPlatform
-    const { imageUrl, documentUrl } = attachments(platformSpec(key), draft)
+    const { imageUrls, documentUrl } = attachments(platformSpec(key), draft)
     const documentName = draft.documentName
     try {
       const { content, link } = await shortenForChannel({
@@ -151,7 +152,7 @@ export async function POST(req: Request) {
           name: composition.title,
           content,
           title: draft.title,
-          imageUrl,
+          imageUrls,
           documentUrl,
           documentName,
           link,
@@ -166,7 +167,7 @@ export async function POST(req: Request) {
         key,
         content,
         title: draft.title,
-        imageUrl,
+        imageUrls,
         documentUrl,
         documentName,
         subreddit: draft.subreddit,

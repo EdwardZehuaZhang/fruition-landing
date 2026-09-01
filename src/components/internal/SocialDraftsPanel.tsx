@@ -532,10 +532,19 @@ function PlatformCard({
         <>
           <PlatformEditor
             spec={p}
-            value={{ content, title, subreddit, mediaUrl: media }}
+            value={{ content, title, subreddit, mediaUrls: media ? [media] : [] }}
             images={imageChoices}
             disabled={published}
-            onChange={onPatch}
+            onChange={(patch) =>
+              onPatch({
+                ...(patch.content !== undefined ? { content: patch.content } : {}),
+                ...(patch.title !== undefined ? { title: patch.title } : {}),
+                ...(patch.subreddit !== undefined ? { subreddit: patch.subreddit } : {}),
+                // An article has a cover, not a carousel: this panel stays one
+                // image per channel, so only the first pick is kept.
+                ...(patch.mediaUrls !== undefined ? { mediaUrl: patch.mediaUrls[0] ?? "" } : {}),
+              })
+            }
           />
 
           <div className="mt-2 flex items-center justify-between gap-3">

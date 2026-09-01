@@ -38,6 +38,8 @@ export interface PlatformEditorSpec {
   titleRequired?: boolean
   needsMedia: boolean
   supportsMedia: boolean
+  /** How many images this channel publishes at once. Omitted means one. */
+  maxMedia?: number
   /** LinkedIn: a PDF posts as a swipeable carousel, in place of an image. */
   supportsDocument?: boolean
   notes: string[]
@@ -47,8 +49,8 @@ export interface PlatformEditorValue {
   content: string
   title?: string
   subreddit?: string
-  /** "" = deliberately no image. */
-  mediaUrl?: string
+  /** Images in publishing order. [] = deliberately none. */
+  mediaUrls?: string[]
   /** "" = deliberately no PDF. */
   documentUrl?: string
   documentName?: string
@@ -94,7 +96,10 @@ export default function PlatformEditor({
 
   const content = value.content ?? ""
   const title = value.title ?? ""
-  const media = value.mediaUrl ?? ""
+  const media = value.mediaUrls ?? []
+  // Instagram and X take several; every other channel takes exactly one.
+  const maxMedia = spec.maxMedia ?? 1
+  const carousel = maxMedia > 1
   const documentUrl = value.documentUrl ?? ""
   const titleOver = spec.titleLimit ? title.length - spec.titleLimit : 0
   const hasTitle = Boolean(spec.titleLimit)
@@ -118,7 +123,26 @@ export default function PlatformEditor({
   // A PDF displaces the image: LinkedIn posts one or the other, never both.
   const showImages = spec.supportsMedia && !documentUrl
   // Whatever is attached stays selectable even if it's no longer in the library.
-  const choices = media && !images.includes(media) ? [media, ...images] : images
+  const choices = [...media.filter((u) => !images.includes(u)), ...images]
+
+  /**
+   * Click to add, click again to drop. On a single-image channel the pick just
+   * replaces what was there, which is what it has always done. On a carousel
+   * channel the order of picking IS the order people swipe, so a new pick goes
+   * on the end, and the cap is refused rather than silently trimmed later.
+   */
+  function pick(url: string) {
+    if (!carousel) {
+      onChange({ mediaUrls: [url] })
+      return
+    }
+    if (media.includes(url)) {
+      onChange({ mediaUrls: media.filter((u) => u !== url) })
+      return
+    }
+    if (media.length >= maxMedia) return
+    onChange({ mediaUrls: [...media, url] })
+  }
 
   const caret = useCaretInsert(body, (next) => onChange({ content: next }))
   // The menu needs to know WHERE the cursor is, not just how to write to it.
@@ -362,7 +386,9 @@ export default function PlatformEditor({
         <div>
           <div className="mb-1.5 flex items-center justify-between gap-2">
             <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-              Image{spec.needsMedia ? " · required" : ""}
+              {carousel ? "Images" : "Image"}
+              {spec.needsMedia ? " · required" : ""}
+              {carousel && media.length > 1 ? ` · ${media.length} in a carousel` : ""}
             </span>
             {onUpload && (
               <>
@@ -393,21 +419,34 @@ export default function PlatformEditor({
           {choices.length === 0 && !spec.needsMedia && (
             <p className="text-xs text-muted-foreground">No image. Upload one for this channel.</p>
           )}
+          {carousel && choices.length > 0 && (
+            <p className="mb-1.5 text-xs text-muted-foreground">
+              Pick up to {maxMedia}. They publish as one carousel, in the order you pick them.
+            </p>
+          )}
           {choices.length === 0 && spec.needsMedia && (
             <p className="text-xs text-destructive">{spec.label} won&apos;t publish without an image — upload one.</p>
           )}
           {choices.length > 0 && (
             <div className="flex items-center gap-2 overflow-x-auto pb-1">
               {choices.map((url) => {
-                const active = media === url
+                const at = media.indexOf(url)
+                const active = at >= 0
+                const full = carousel && !active && media.length >= maxMedia
                 return (
                   <span key={url} className="relative shrink-0">
                     <button
                       type="button"
-                      onClick={() => onChange({ mediaUrl: url })}
-                      disabled={disabled}
+                      onClick={() => pick(url)}
+                      disabled={disabled || full}
                       aria-pressed={active}
-                      title="Use this image"
+                      title={
+                        full
+                          ? `${spec.label} takes ${maxMedia} images`
+                          : active && carousel
+                            ? "Remove from the carousel"
+                            : "Use this image"
+                      }
                       className={`block rounded-md border-2 transition disabled:opacity-60 ${
                         active ? "border-primary" : "border-border hover:border-primary/40"
                       }`}
@@ -415,6 +454,11 @@ export default function PlatformEditor({
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={url} alt="" className="h-14 w-14 rounded-[4px] object-cover" />
                     </button>
+                    {carousel && active && (
+                      <span className="pointer-events-none absolute -left-1.5 -top-1.5 flex size-5 items-center justify-center rounded-full bg-primary font-mono text-[11px] font-semibold text-primary-foreground">
+                        {at + 1}
+                      </span>
+                    )}
                     {onRemoveImage && !disabled && (
                       <button
                         type="button"
@@ -432,11 +476,11 @@ export default function PlatformEditor({
               {!spec.needsMedia && (
                 <button
                   type="button"
-                  onClick={() => onChange({ mediaUrl: "" })}
+                  onClick={() => onChange({ mediaUrls: [] })}
                   disabled={disabled}
-                  aria-pressed={media === ""}
+                  aria-pressed={media.length === 0}
                   className={`h-14 shrink-0 rounded-md border-2 px-3 text-xs font-medium transition disabled:opacity-60 ${
-                    media === "" ? "border-primary text-primary" : "border-border text-muted-foreground hover:border-primary/40"
+                    media.length === 0 ? "border-primary text-primary" : "border-border text-muted-foreground hover:border-primary/40"
                   }`}
                 >
                   No image

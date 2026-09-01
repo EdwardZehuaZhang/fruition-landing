@@ -7,6 +7,7 @@ import type { ComposerPlatform, ComposerState, CompositionPlatform } from "@/lib
 import type { ShortLink } from "@/lib/social/shortLinks"
 import type { PlatformKey } from "@/lib/social/zernio"
 import { problemsFor } from "@/lib/social/validate"
+import { withImage } from "@/lib/social/carousel"
 import { useCaretInsert } from "@/lib/social/caret"
 import PlatformIcon from "@/components/internal/SocialIcons"
 import PlatformEditor from "@/components/internal/social/PlatformEditor"
@@ -146,9 +147,9 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
         ...problemsFor(spec, {
           content: draft.content,
           title: draft.title,
-          // Only this channel's own image — the upload pool is a library, not
-          // a default (see effectiveMedia).
-          mediaUrl: spec.supportsMedia && !documentUrl ? draft.mediaUrl || undefined : undefined,
+          // Only this channel's own images: the upload pool is a library, not
+          // a default (see effectiveMediaUrls).
+          mediaUrls: spec.supportsMedia && !documentUrl ? (draft.mediaUrls ?? []) : [],
           documentUrl,
           shortenLinks: edit.shortenLinks,
         }),
@@ -332,6 +333,10 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
    * ever shared. It's written rather than inherited so each card shows what it
    * will actually publish.
    *
+   * On a channel that publishes carousels the image is APPENDED, so uploading
+   * three and sharing each one builds a three-slide post. On a single-image
+   * channel it replaces, because that channel can only ever send one.
+   *
    * Either way the URL joins the composition's pool, so any channel can pick
    * it later from its own picker.
    */
@@ -349,18 +354,12 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
       }
       patch((prev) => {
         const platforms: PlatformMap = { ...prev.platforms }
-        if (only) {
-          const draft = platforms[only]
-          if (draft) platforms[only] = { ...draft, mediaUrl: data.url }
-        } else {
-          // "to all" means all: a channel that already had one is overwritten,
-          // because that's what the button says and every image stays in the
-          // pool to re-pick from.
-          for (const spec of specs) {
-            const draft = platforms[spec.key]
-            if (!draft || !spec.supportsMedia) continue
-            platforms[spec.key] = { ...draft, mediaUrl: data.url }
-          }
+        const targets = only ? specs.filter((s) => s.key === only) : specs
+        // "to all" means all: every channel that can show an image gets it.
+        for (const spec of targets) {
+          const draft = platforms[spec.key]
+          if (!draft || !spec.supportsMedia) continue
+          platforms[spec.key] = { ...draft, mediaUrls: withImage(draft.mediaUrls ?? [], data.url!, spec.maxMedia) }
         }
         const pool = prev.mediaUrls.includes(data.url!) ? prev.mediaUrls : [...prev.mediaUrls, data.url!]
         return { mediaUrls: pool, platforms }
@@ -385,8 +384,8 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
       const platforms: PlatformMap = { ...prev.platforms }
       for (const key of Object.keys(platforms) as PlatformKey[]) {
         const draft = platforms[key]
-        if (!draft || draft.mediaUrl !== url) continue
-        platforms[key] = { ...draft, mediaUrl: "" }
+        if (!draft?.mediaUrls?.includes(url)) continue
+        platforms[key] = { ...draft, mediaUrls: draft.mediaUrls.filter((u) => u !== url) }
       }
       return { mediaUrls: prev.mediaUrls.filter((u) => u !== url), platforms }
     })
@@ -720,8 +719,8 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
                 </span>
               ))}
               <span className="text-xs text-muted-foreground">
-                Uploaded to this post — each channel picks its own from here. Delete one and it goes
-                from every channel.
+                Uploaded to this post. Each channel picks its own from here, and Instagram and X can
+                take several as a carousel. Delete one and it goes from every channel.
               </span>
             </div>
           )}

@@ -191,12 +191,13 @@ export const PLATFORMS: PlatformSpec[] = [
     needsMedia: true,
     supportsMedia: true,
     captionKey: "instagram",
-    maxMedia: 1,
+    maxMedia: 10,
     aspect: { min: 0.8, max: 1.91 },
     linkInBody: false,
     countsRawChars: true,
     notes: [
       "An image is required.",
+      "Pick up to 10 images and they publish as one swipeable carousel, in the order you pick them.",
       "Aspect must sit between 4:5 and 1.91:1 — wider images are cropped automatically.",
       "Links in captions aren't clickable.",
       "Once published it CANNOT be deleted through the API — only in the Instagram app.",
@@ -778,11 +779,44 @@ export interface SocialDraftResult {
 
 /** An image, a document, or nothing — what one post attaches. */
 export interface MediaChoice {
-  imageUrl?: string
+  /** Images in publishing order. More than one is a carousel where the platform takes one. */
+  imageUrls?: string[]
   /** Publicly reachable PDF/PPT/DOC. LinkedIn only; posts as a carousel. */
   documentUrl?: string
   /** Shown on the LinkedIn carousel; falls back to the post name. */
   documentName?: string
+}
+
+/**
+ * The images one platform actually receives: the chosen list in carousel
+ * order, de-duplicated, Instagram-cropped, and trimmed to the cap the platform
+ * declares. `maxMedia` was declared on every spec but never read, so every
+ * request carried exactly one picture no matter how many were attached.
+ */
+export function imagesForPlatform(spec: PlatformSpec, urls: string[] | undefined): string[] {
+  if (!spec.supportsMedia || !urls?.length) return []
+  const out: string[] = []
+  for (const url of urls) {
+    if (!url) continue
+    const ready = spec.key === "instagram" ? instagramSafeImageUrl(url) : url
+    if (out.includes(ready)) continue
+    out.push(ready)
+    if (out.length >= spec.maxMedia) break
+  }
+  return out
+}
+
+/**
+ * Normalise a caller's media arguments into one list.
+ *
+ * `imageUrls` wins when given. Otherwise the legacy single `imageUrl` keeps its
+ * three-way meaning: undefined = leave the post's media alone, "" = remove it,
+ * a url = that one image. The blog flow still speaks the single-image shape.
+ */
+function chosenImages(args: { imageUrl?: string; imageUrls?: string[] }): string[] | undefined {
+  if (args.imageUrls) return args.imageUrls
+  if (args.imageUrl === undefined) return undefined
+  return args.imageUrl ? [args.imageUrl] : []
 }
 
 /**
@@ -792,6 +826,9 @@ export interface MediaChoice {
  * document wins: someone who attached a PDF meant to post the PDF. Returns
  * undefined when there's nothing to attach, so callers can leave the field off
  * the request entirely rather than sending an empty array.
+ *
+ * The internal name goes on the first image only; Zernio reads it as the post
+ * name, and repeating it on every slide serves nothing.
  */
 function mediaItemsFor(
   spec: PlatformSpec,
@@ -807,9 +844,13 @@ function mediaItemsFor(
       },
     ]
   }
-  if (media.imageUrl && spec.supportsMedia) {
-    const url = spec.key === "instagram" ? instagramSafeImageUrl(media.imageUrl) : media.imageUrl
-    return [{ type: "image", url, ...(imageTitle ? { title: imageTitle } : {}) }]
+  const images = imagesForPlatform(spec, media.imageUrls)
+  if (images.length) {
+    return images.map((url, i) => ({
+      type: "image",
+      url,
+      ...(imageTitle && i === 0 ? { title: imageTitle } : {}),
+    }))
   }
   return undefined
 }
@@ -830,6 +871,8 @@ export async function createDraftPost(args: {
   /** Pinterest pin title / Reddit post title. */
   title?: string
   imageUrl?: string
+  /** Ordered carousel. Takes precedence over `imageUrl` when given. */
+  imageUrls?: string[]
   documentUrl?: string
   documentName?: string
   link?: string
@@ -855,7 +898,7 @@ export async function createDraftPost(args: {
   }
   const mediaItems = mediaItemsFor(
     spec,
-    { imageUrl: args.imageUrl, documentUrl: args.documentUrl, documentName },
+    { imageUrls: chosenImages(args), documentUrl: args.documentUrl, documentName },
     args.name.slice(0, 90),
   )
   if (mediaItems) body.mediaItems = mediaItems
@@ -936,6 +979,8 @@ export async function updateSocialDraft(args: {
   title?: string
   blogUrl?: string
   imageUrl?: string
+  /** Ordered carousel. Takes precedence over `imageUrl` when given. */
+  imageUrls?: string[]
   documentUrl?: string
   documentName?: string
   subreddit?: string
@@ -958,10 +1003,10 @@ export async function updateSocialDraft(args: {
   // imageUrl / documentUrl semantics: undefined = leave media as-is,
   // "" = remove, url = set. Either one being present rebuilds the whole list,
   // because a document and an image can't both be attached.
-  if (args.imageUrl !== undefined || args.documentUrl !== undefined) {
+  if (args.imageUrl !== undefined || args.imageUrls !== undefined || args.documentUrl !== undefined) {
     body.mediaItems =
       mediaItemsFor(spec, {
-        imageUrl: args.imageUrl || undefined,
+        imageUrls: chosenImages(args),
         documentUrl: args.documentUrl || undefined,
         documentName,
       }) ?? []
@@ -1006,13 +1051,16 @@ export async function publishSocialDraft(args: {
   title?: string
   blogUrl: string
   imageUrl?: string
+  /** Ordered carousel. Takes precedence over `imageUrl` when given. */
+  imageUrls?: string[]
   documentUrl?: string
   documentName?: string
   subreddit?: string
   boardId?: string
 }): Promise<{ status: string }> {
   const spec = platformSpec(args.key)
-  if (spec.needsMedia && !args.imageUrl) {
+  const images = chosenImages(args) ?? []
+  if (spec.needsMedia && !images.length) {
     throw new Error(`${spec.label} requires an image — publish the blog with a cover image first`)
   }
 
@@ -1039,7 +1087,7 @@ export async function publishSocialDraft(args: {
     publishNow: true,
   }
   const mediaItems = mediaItemsFor(spec, {
-    imageUrl: args.imageUrl,
+    imageUrls: images,
     documentUrl: args.documentUrl,
     documentName: args.documentName,
   })
@@ -1064,6 +1112,8 @@ export async function republishCancelledPost(args: {
   title?: string
   blogUrl: string
   imageUrl?: string
+  /** Ordered carousel. Takes precedence over `imageUrl` when given. */
+  imageUrls?: string[]
   documentUrl?: string
   documentName?: string
   subreddit?: string
@@ -1123,7 +1173,8 @@ export async function scheduleSocialPost(args: {
   timezone?: string
 }): Promise<{ status: string; scheduledFor?: string }> {
   const spec = platformSpec(args.key)
-  if (spec.needsMedia && !args.imageUrl) {
+  const images = chosenImages(args) ?? []
+  if (spec.needsMedia && !images.length) {
     throw new Error(`${spec.label} requires an image`)
   }
   const body: Record<string, unknown> = {
@@ -1142,7 +1193,7 @@ export async function scheduleSocialPost(args: {
     ...(args.timezone ? { timezone: args.timezone } : {}),
   }
   const mediaItems = mediaItemsFor(spec, {
-    imageUrl: args.imageUrl,
+    imageUrls: images,
     documentUrl: args.documentUrl,
     documentName: args.documentName,
   })

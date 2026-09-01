@@ -45,7 +45,12 @@ export interface CompositionPlatform {
   subreddit?: string
   /** Pinterest board id (defaults to the account's board). */
   boardId?: string
-  /** Chosen image; "" means deliberately no image. */
+  /** Chosen images in carousel order; [] means deliberately none. */
+  mediaUrls?: string[]
+  /**
+   * What a single chosen image used to be stored as. Rows written before
+   * carousels still carry it, so reads fold it in and the next save drops it.
+   */
   mediaUrl?: string
   /** Attached PDF (LinkedIn carousel); "" means deliberately none. */
   documentUrl?: string
@@ -135,13 +140,15 @@ function cleanPlatforms(
   const out: Record<string, CompositionPlatform> = {}
   for (const [key, value] of Object.entries(platforms ?? {})) {
     if (!PLATFORMS.some((p) => p.key === key) || !value) continue
+    const images = draftImages(value)
     out[key] = {
       ...(value.zernioPostId ? { zernioPostId: value.zernioPostId } : {}),
       content: typeof value.content === "string" ? value.content : "",
       ...(value.title ? { title: value.title } : {}),
       ...(value.subreddit ? { subreddit: value.subreddit } : {}),
       ...(value.boardId ? { boardId: value.boardId } : {}),
-      ...(value.mediaUrl !== undefined ? { mediaUrl: value.mediaUrl } : {}),
+      // Normalised on write: one list, never both shapes in the same row.
+      ...(images !== undefined ? { mediaUrls: images } : {}),
       ...(value.documentUrl !== undefined ? { documentUrl: value.documentUrl } : {}),
       ...(value.documentName ? { documentName: value.documentName } : {}),
       ...(value.customised ? { customised: true } : {}),
@@ -252,8 +259,8 @@ export interface ComposerLive {
   status: string
   platformUrl?: string
   error?: string
-  /** Image currently attached to the Zernio draft. */
-  mediaUrl?: string
+  /** Images currently attached to the Zernio draft, in carousel order. */
+  mediaUrls: string[]
   /** Document currently attached to the Zernio draft. */
   documentUrl?: string
   scheduledFor?: string
@@ -300,7 +307,7 @@ function liveOf(post: ZernioPost | undefined): ComposerLive | undefined {
     status: entry?.status === "failed" ? "failed" : post.status,
     platformUrl: entry?.platformPostUrl,
     error: entry?.error,
-    mediaUrl: post.mediaItems?.find((m) => m.type === "image")?.url,
+    mediaUrls: post.mediaItems?.filter((m) => m.type === "image").map((m) => m.url) ?? [],
     documentUrl: post.mediaItems?.find((m) => m.type === "document")?.url,
     scheduledFor: post.scheduledFor,
   }
@@ -315,6 +322,7 @@ export function constraintsOf(spec: PlatformSpec): PlatformConstraints {
     titleRequired: spec.titleRequired,
     needsMedia: spec.needsMedia,
     supportsMedia: spec.supportsMedia,
+    maxMedia: spec.maxMedia,
     supportsDocument: spec.supportsDocument,
   }
 }
@@ -331,29 +339,39 @@ export function effectiveDocument(
 }
 
 /**
- * The image a platform would publish with right now. "" = deliberately none.
- *
- * Each channel answers for itself. `mediaUrls` is a LIBRARY of everything
- * uploaded to this post, not a default — it used to be both, so an image
- * dropped on LinkedIn alone became the first entry and every other channel
- * quietly published it. Worse, those channels still showed "No image" as
- * selected, so the composer said one thing and the post did another. Sharing
- * an image across channels is now only what "Add image to all" does, and that
- * writes it onto each channel where you can see it.
- *
- * A PDF displaces the image rather than sitting beside it: LinkedIn allows a
- * post to carry one or the other.
+ * A channel's own images, folding the legacy single `mediaUrl` into a list.
+ * undefined = the channel has made no choice, so the Zernio draft still speaks
+ * for it; [] = deliberately none.
  */
-export function effectiveMedia(
+export function draftImages(draft: CompositionPlatform | undefined): string[] | undefined {
+  if (draft?.mediaUrls) return draft.mediaUrls
+  if (draft?.mediaUrl === undefined) return undefined
+  return draft.mediaUrl ? [draft.mediaUrl] : []
+}
+
+/**
+ * The images a platform would publish with right now, in carousel order.
+ *
+ * Each channel answers for itself. The composition's `mediaUrls` is a LIBRARY
+ * of everything uploaded to this post, not a default. It used to be both, so
+ * an image dropped on LinkedIn alone became the first entry and every other
+ * channel quietly published it. Worse, those channels still showed "No image"
+ * as selected, so the composer said one thing and the post did another.
+ * Sharing images across channels is only what "Add image to all" does, and
+ * that writes them onto each channel where you can see them.
+ *
+ * A PDF displaces images rather than sitting beside them (LinkedIn carries one
+ * or the other), but that is settled where the post is validated and sent, so
+ * removing the PDF leaves the pictures the channel already had.
+ */
+export function effectiveMediaUrls(
   draft: CompositionPlatform | undefined,
   live: ComposerLive | undefined,
   spec: PlatformSpec,
-): string {
-  if (!spec.supportsMedia) return ""
-  if (effectiveDocument(draft, live, spec)) return ""
-  if (draft?.mediaUrl !== undefined) return draft.mediaUrl
+): string[] {
+  if (!spec.supportsMedia) return []
   // No local choice: whatever is already on the Zernio draft is the truth.
-  return live?.mediaUrl ?? ""
+  return draftImages(draft) ?? live?.mediaUrls ?? []
 }
 
 /**
@@ -380,7 +398,7 @@ export async function buildComposerState(composition: Composition): Promise<Comp
     const draft = composition.platforms[spec.key]
     const live = liveOf(posts[spec.key])
     const selected = Boolean(draft)
-    const media = effectiveMedia(draft, live, spec)
+    const media = effectiveMediaUrls(draft, live, spec)
     const document = effectiveDocument(draft, live, spec)
     return {
       key: spec.key,
@@ -398,13 +416,15 @@ export async function buildComposerState(composition: Composition): Promise<Comp
       account: account?.username || account?.displayName || spec.label,
       connected: Boolean(account && account.isActive !== false && account.enabled !== false),
       selected,
-      draft: draft ?? { content: "" },
+      // Hand the composer one settled shape: a concrete list, legacy rows and
+      // Zernio-side images folded in, so the editor never has to guess.
+      draft: { ...(draft ?? { content: "" }), mediaUrls: media },
       live,
       problems: selected
         ? problemsFor(constraintsOf(spec), {
             content: draft?.content ?? "",
             title: draft?.title,
-            mediaUrl: media || undefined,
+            mediaUrls: document ? [] : media,
             documentUrl: document || undefined,
             shortenLinks: composition.shortenLinks,
           })

@@ -19,6 +19,8 @@ export interface PlatformConstraints {
   titleRequired?: boolean
   needsMedia: boolean
   supportsMedia: boolean
+  /** How many images one post may carry. 1 on every channel but Instagram and X. */
+  maxMedia: number
   /** Accepts a PDF/slide document in place of an image (LinkedIn only). */
   supportsDocument?: boolean
 }
@@ -26,8 +28,8 @@ export interface PlatformConstraints {
 export interface DraftValues {
   content: string
   title?: string
-  /** "" or undefined = no image attached. */
-  mediaUrl?: string
+  /** Images in carousel order. Empty or undefined = none attached. */
+  mediaUrls?: string[]
   /** "" or undefined = no document attached. */
   documentUrl?: string
   /**
@@ -72,11 +74,21 @@ export function problemsFor(spec: PlatformConstraints, values: DraftValues): str
     const over = title.length - spec.titleLimit
     problems.push(`${spec.label}: the title is ${over} character${over === 1 ? "" : "s"} over the ${spec.titleLimit} limit.`)
   }
-  if (spec.needsMedia && !values.mediaUrl) {
+  const images = values.mediaUrls?.filter(Boolean) ?? []
+  if (spec.needsMedia && !images.length) {
     problems.push(`${spec.label}: an image is required.`)
   }
-  if (values.mediaUrl && !spec.supportsMedia && !values.documentUrl) {
+  if (images.length && !spec.supportsMedia && !values.documentUrl) {
     problems.push(`${spec.label}: this channel is text-only.`)
+  }
+  // Say so here rather than trimming at publish time: silently dropping the
+  // extras is how a carousel goes out as a single picture.
+  if (spec.supportsMedia && images.length > spec.maxMedia) {
+    problems.push(
+      spec.maxMedia === 1
+        ? `${spec.label}: takes one image, and ${images.length} are attached.`
+        : `${spec.label}: takes ${spec.maxMedia} images, and ${images.length} are attached.`,
+    )
   }
   if (values.documentUrl && !spec.supportsDocument) {
     problems.push(`${spec.label}: this channel can't post a PDF — LinkedIn is the only one that can.`)

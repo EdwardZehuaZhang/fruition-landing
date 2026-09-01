@@ -4,6 +4,7 @@ import {
   buildComposerState,
   createComposition,
   deleteComposition,
+  draftImages,
   getComposition,
   knownKeys,
   listCompositions,
@@ -48,6 +49,9 @@ function platformsFrom(value: unknown): Partial<Record<PlatformKey, CompositionP
       title: typeof raw.title === "string" ? raw.title : undefined,
       subreddit: typeof raw.subreddit === "string" ? raw.subreddit : undefined,
       boardId: typeof raw.boardId === "string" ? raw.boardId : undefined,
+      mediaUrls: Array.isArray(raw.mediaUrls)
+        ? raw.mediaUrls.filter((v): v is string => typeof v === "string" && v.length > 0)
+        : undefined,
       mediaUrl: typeof raw.mediaUrl === "string" ? raw.mediaUrl : undefined,
       documentUrl: typeof raw.documentUrl === "string" ? raw.documentUrl : undefined,
       documentName: typeof raw.documentName === "string" ? raw.documentName : undefined,
@@ -191,7 +195,7 @@ export async function PUT(req: Request) {
               content: p.draft.content,
               title: p.draft.title,
               blogUrl: composition.link,
-              imageUrl: p.draft.mediaUrl,
+              imageUrls: draftImages(p.draft),
               documentUrl: p.supportsDocument ? p.draft.documentUrl : undefined,
               documentName: p.draft.documentName,
               subreddit: p.draft.subreddit,
