@@ -2,6 +2,7 @@ import Image from "next/image"
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
 import Reveal from "./Reveal"
+import ReviewBadges from "./ReviewBadges"
 
 export interface HomeTestimonial {
   _key?: string
@@ -62,6 +63,7 @@ export default function TestimonialsRoll({ testimonials, bookingHref }: Props) {
           <div className="mt-7">
             <CtaButton href={bookingHref} label="Book a call" variant="primary" />
           </div>
+          <ReviewBadges className="mt-7 max-w-[400px]" />
         </div>
 
         {/* Rolling columns (lg+) */}
