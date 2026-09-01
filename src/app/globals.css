@@ -22,6 +22,16 @@
   --text-dark: #242323;
   --blue-press: #4674fb;
 
+  /* Booking CTA blue: the nav "Book a Time" consult pill only. Anchored on
+     #1E40AF at the left stop, per Josh Jebathilak's 2026-08-29 brief (blue
+     CTAs convert better). Deliberately kept off the brand ramp so the rest of
+     the voltage-purple system is untouched. Both stops clear 4.5:1 against
+     white text (8.7:1 and 5.2:1), where the purple ramp it replaces fell to
+     2.8:1 at the lilac stop. */
+  --cta-blue: #1e40af;
+  --cta-blue-light: #2563eb;
+  --cta-blue-dark: #142b75;
+
   /* New primitives */
   --color-text-secondary: #686b82;
   --color-border: #dedee5;
@@ -74,6 +84,12 @@
   --color-brand-light: var(--purple-light);
   --color-brand-dark: var(--purple-dark);
   --color-brand-soft: var(--purple-soft);
+
+  /* Booking CTA blue → from-cta-blue, to-cta-blue-light, bg-cta-blue-dark */
+  --color-cta-blue: var(--cta-blue);
+  --color-cta-blue-light: var(--cta-blue-light);
+  --color-cta-blue-dark: var(--cta-blue-dark);
+
   --color-surface-dark: var(--dark-bg);
   --color-surface-dark-2: var(--dark-bg-secondary);
 
