@@ -45,7 +45,13 @@ export interface CompositionPlatform {
   subreddit?: string
   /** Pinterest board id (defaults to the account's board). */
   boardId?: string
-  /** Chosen image; "" means deliberately no image. */
+  /**
+   * Chosen images, in carousel order; [] means deliberately none.
+   * `mediaUrl` is the pre-carousel shape, still read off rows written before
+   * a channel could carry more than one.
+   */
+  mediaUrls?: string[]
+  /** @deprecated Legacy single image. Read on load, never written. */
   mediaUrl?: string
   /** Attached PDF (LinkedIn carousel); "" means deliberately none. */
   documentUrl?: string
@@ -117,7 +123,9 @@ function fromRow(row: CompositionRow): Composition {
     masterContent: row.master_content ?? undefined,
     mediaUrls: Array.isArray(row.media_urls) ? row.media_urls : [],
     shortenLinks: row.shorten_links !== false,
-    platforms: (row.platforms ?? {}) as Partial<Record<PlatformKey, CompositionPlatform>>,
+    // Normalised on the way out so nothing downstream has to know that rows
+    // written before carousels stored a single `mediaUrl`.
+    platforms: normalisePlatforms(row.platforms),
     postIds: Array.isArray(row.post_ids) ? row.post_ids : [],
     scheduledFor: row.scheduled_for ?? undefined,
     timezone: row.timezone ?? undefined,
@@ -126,6 +134,32 @@ function fromRow(row: CompositionRow): Composition {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   }
+}
+
+/** Read a stored platform map, folding the legacy single image into a list. */
+function normalisePlatforms(
+  stored: Record<string, CompositionPlatform> | null,
+): Partial<Record<PlatformKey, CompositionPlatform>> {
+  const out: Partial<Record<PlatformKey, CompositionPlatform>> = {}
+  for (const [key, value] of Object.entries(stored ?? {})) {
+    if (!value) continue
+    const urls = mediaUrlsOf(value)
+    const next: CompositionPlatform = { ...value, ...(urls !== undefined ? { mediaUrls: urls } : {}) }
+    delete next.mediaUrl
+    out[key as PlatformKey] = next
+  }
+  return out
+}
+
+/**
+ * A channel's images, in carousel order. Undefined means "no choice recorded",
+ * which is not the same as [] ("deliberately none") and must survive the round
+ * trip. Rows written before carousels stored one `mediaUrl`, so fold that in.
+ */
+export function mediaUrlsOf(value: CompositionPlatform): string[] | undefined {
+  if (Array.isArray(value.mediaUrls)) return value.mediaUrls.filter((u) => typeof u === "string" && u)
+  if (value.mediaUrl !== undefined) return value.mediaUrl ? [value.mediaUrl] : []
+  return undefined
 }
 
 /** Only keys we know about, so a stale client can't write junk platforms. */
@@ -141,13 +175,18 @@ function cleanPlatforms(
       ...(value.title ? { title: value.title } : {}),
       ...(value.subreddit ? { subreddit: value.subreddit } : {}),
       ...(value.boardId ? { boardId: value.boardId } : {}),
-      ...(value.mediaUrl !== undefined ? { mediaUrl: value.mediaUrl } : {}),
+      ...(mediaUrlsOf(value) !== undefined ? { mediaUrls: mediaUrlsOf(value) } : {}),
       ...(value.documentUrl !== undefined ? { documentUrl: value.documentUrl } : {}),
       ...(value.documentName ? { documentName: value.documentName } : {}),
       ...(value.customised ? { customised: true } : {}),
     }
   }
   return out
+}
+
+/** A channel's chosen images, in carousel order. [] when it has none. */
+export function channelImages(draft: CompositionPlatform): string[] {
+  return mediaUrlsOf(draft) ?? []
 }
 
 function postIdsOf(platforms: Record<string, CompositionPlatform>): string[] {
@@ -252,8 +291,8 @@ export interface ComposerLive {
   status: string
   platformUrl?: string
   error?: string
-  /** Image currently attached to the Zernio draft. */
-  mediaUrl?: string
+  /** Images currently attached to the Zernio draft, in order. */
+  mediaUrls: string[]
   /** Document currently attached to the Zernio draft. */
   documentUrl?: string
   scheduledFor?: string
@@ -300,7 +339,7 @@ function liveOf(post: ZernioPost | undefined): ComposerLive | undefined {
     status: entry?.status === "failed" ? "failed" : post.status,
     platformUrl: entry?.platformPostUrl,
     error: entry?.error,
-    mediaUrl: post.mediaItems?.find((m) => m.type === "image")?.url,
+    mediaUrls: (post.mediaItems ?? []).filter((m) => m.type === "image").map((m) => m.url),
     documentUrl: post.mediaItems?.find((m) => m.type === "document")?.url,
     scheduledFor: post.scheduledFor,
   }
@@ -316,6 +355,7 @@ export function constraintsOf(spec: PlatformSpec): PlatformConstraints {
     needsMedia: spec.needsMedia,
     supportsMedia: spec.supportsMedia,
     supportsDocument: spec.supportsDocument,
+    maxMedia: spec.maxMedia,
   }
 }
 
@@ -331,7 +371,7 @@ export function effectiveDocument(
 }
 
 /**
- * The image a platform would publish with right now. "" = deliberately none.
+ * The images a platform would publish with right now, in order. [] = none.
  *
  * Each channel answers for itself. `mediaUrls` is a LIBRARY of everything
  * uploaded to this post, not a default — it used to be both, so an image
@@ -348,12 +388,16 @@ export function effectiveMedia(
   draft: CompositionPlatform | undefined,
   live: ComposerLive | undefined,
   spec: PlatformSpec,
-): string {
-  if (!spec.supportsMedia) return ""
-  if (effectiveDocument(draft, live, spec)) return ""
-  if (draft?.mediaUrl !== undefined) return draft.mediaUrl
+): string[] {
+  if (!spec.supportsMedia) return []
+  if (effectiveDocument(draft, live, spec)) return []
+  const chosen = draft && mediaUrlsOf(draft)
+  // Not capped at `maxMedia` here: an over-full channel has to reach the
+  // validator as it stands, or the page would show no blocker for a carousel
+  // the publish route is going to refuse.
+  if (chosen !== undefined) return chosen
   // No local choice: whatever is already on the Zernio draft is the truth.
-  return live?.mediaUrl ?? ""
+  return live?.mediaUrls ?? []
 }
 
 /**
@@ -404,7 +448,7 @@ export async function buildComposerState(composition: Composition): Promise<Comp
         ? problemsFor(constraintsOf(spec), {
             content: draft?.content ?? "",
             title: draft?.title,
-            mediaUrl: media || undefined,
+            mediaUrls: media,
             documentUrl: document || undefined,
             shortenLinks: composition.shortenLinks,
           })

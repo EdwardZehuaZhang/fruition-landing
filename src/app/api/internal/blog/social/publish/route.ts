@@ -72,7 +72,7 @@ export async function POST(req: Request) {
         content: item.content!,
         title: item.title,
         blogUrl,
-        imageUrl,
+        imageUrls: imageUrl ? [imageUrl] : undefined,
         subreddit: item.subreddit,
       }
       const current = await getZernioPost(item.postId!)

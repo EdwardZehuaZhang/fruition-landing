@@ -143,7 +143,7 @@ export async function POST(req: Request) {
           blogTitle: title,
           captions,
           blogUrl,
-          imageUrl: defaultImage,
+          imageUrls: defaultImage ? [defaultImage] : undefined,
           keys: toCreate,
         })
         errors.push(...created.filter((r) => r.error).map((r) => `${r.key}: ${r.error}`))
@@ -154,7 +154,7 @@ export async function POST(req: Request) {
         blogTitle: title,
         captions,
         blogUrl,
-        imageUrl: defaultImage,
+        imageUrls: defaultImage ? [defaultImage] : undefined,
         existing,
       })
       errors.push(...created.filter((r) => r.error).map((r) => `${r.key}: ${r.error}`))
@@ -205,7 +205,7 @@ export async function PUT(req: Request) {
         content: item.content!,
         title: item.title,
         blogUrl,
-        imageUrl: item.mediaUrl,
+        imageUrls: item.mediaUrl === undefined ? undefined : item.mediaUrl ? [item.mediaUrl] : [],
         subreddit: item.subreddit,
       })
     } catch (err) {
