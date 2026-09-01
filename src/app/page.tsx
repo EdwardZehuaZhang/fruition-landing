@@ -67,8 +67,10 @@ export default async function Home() {
       <MethodTimeline />
       <WhereWeWork offices={offices} />
 
-      {/* Mid-page conversion banner — shared site-wide */}
-      <AuditCtaBanner />
+      {/* Mid-page conversion banner — shared site-wide. The home page's own
+          sections all sit in a 1348px container, so match it here; the
+          component's 1200px default suits the narrower inner pages. */}
+      <AuditCtaBanner containerClassName="max-w-[1348px] px-5 md:px-8" />
 
       <TestimonialsRoll testimonials={data.testimonials ?? []} bookingHref={bookingHref} />
       <IndustriesHub />
