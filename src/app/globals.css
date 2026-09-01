@@ -22,7 +22,7 @@
   --text-dark: #242323;
   --blue-press: #4674fb;
 
-  /* Booking CTA blue — the nav "Book a Time" consult pill only. Anchored on
+  /* Booking CTA blue: the nav "Book a Time" consult pill only. Anchored on
      #1E40AF at the left stop, per Josh Jebathilak's 2026-08-29 brief (blue
      CTAs convert better). Deliberately kept off the brand ramp so the rest of
      the voltage-purple system is untouched. Both stops clear 4.5:1 against
