@@ -146,9 +146,9 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
         ...problemsFor(spec, {
           content: draft.content,
           title: draft.title,
-          // Only this channel's own image — the upload pool is a library, not
+          // Only this channel's own images. The upload pool is a library, not
           // a default (see effectiveMedia).
-          mediaUrl: spec.supportsMedia && !documentUrl ? draft.mediaUrl || undefined : undefined,
+          mediaUrls: spec.supportsMedia && !documentUrl ? (draft.mediaUrls ?? []) : [],
           documentUrl,
           shortenLinks: edit.shortenLinks,
         }),
@@ -324,12 +324,26 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
   }
 
   /**
+   * Add one image to a channel, keeping carousel order.
+   *
+   * A channel that carries several appends, because the order you add them in
+   * is the order they are swiped. A single-image channel replaces, because
+   * there is no order to keep. A full carousel keeps what it has: the count
+   * next to the picker says why.
+   */
+  function withImage(list: string[], url: string, max: number): string[] {
+    if (list.includes(url)) return list
+    if (max <= 1) return [url]
+    return list.length >= max ? list : [...list, url]
+  }
+
+  /**
    * Upload an image.
    *
    * `only` is the normal case: the image belongs to that channel and nothing
-   * else. Without it — the "Add image to all" button — the image is written
-   * onto every channel that can show one, which is the only way an image is
-   * ever shared. It's written rather than inherited so each card shows what it
+   * else. Without it (the "Add image to all" button) the image is added to
+   * every channel that can show one, which is the only way an image is ever
+   * shared. It's written rather than inherited so each card shows what it
    * will actually publish.
    *
    * Either way the URL joins the composition's pool, so any channel can pick
@@ -351,15 +365,20 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
         const platforms: PlatformMap = { ...prev.platforms }
         if (only) {
           const draft = platforms[only]
-          if (draft) platforms[only] = { ...draft, mediaUrl: data.url }
+          const spec = specs.find((p) => p.key === only)
+          if (draft && spec) {
+            platforms[only] = { ...draft, mediaUrls: withImage(draft.mediaUrls ?? [], data.url!, spec.maxMedia) }
+          }
         } else {
-          // "to all" means all: a channel that already had one is overwritten,
-          // because that's what the button says and every image stays in the
-          // pool to re-pick from.
+          // "to all" means all: every channel that can show an image gets it,
+          // and every image stays in the pool to re-pick from.
           for (const spec of specs) {
             const draft = platforms[spec.key]
             if (!draft || !spec.supportsMedia) continue
-            platforms[spec.key] = { ...draft, mediaUrl: data.url }
+            platforms[spec.key] = {
+              ...draft,
+              mediaUrls: withImage(draft.mediaUrls ?? [], data.url!, spec.maxMedia),
+            }
           }
         }
         const pool = prev.mediaUrls.includes(data.url!) ? prev.mediaUrls : [...prev.mediaUrls, data.url!]
@@ -385,8 +404,8 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
       const platforms: PlatformMap = { ...prev.platforms }
       for (const key of Object.keys(platforms) as PlatformKey[]) {
         const draft = platforms[key]
-        if (!draft || draft.mediaUrl !== url) continue
-        platforms[key] = { ...draft, mediaUrl: "" }
+        if (!draft?.mediaUrls?.includes(url)) continue
+        platforms[key] = { ...draft, mediaUrls: draft.mediaUrls.filter((u) => u !== url) }
       }
       return { mediaUrls: prev.mediaUrls.filter((u) => u !== url), platforms }
     })

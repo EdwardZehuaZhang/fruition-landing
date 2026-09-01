@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import type { PanelPlatform, PanelState } from "@/lib/social/panelState"
 import type { PlatformKey } from "@/lib/social/zernio"
 import PlatformIcon from "@/components/internal/SocialIcons"
-import PlatformEditor from "@/components/internal/social/PlatformEditor"
+import PlatformEditor, { type PlatformEditorValue } from "@/components/internal/social/PlatformEditor"
 
 /**
  * Per-platform social drafts for a blog (the "Social media" tab). Each
@@ -65,6 +65,20 @@ function StatusChip({ post, connected }: { post?: PanelPlatform["post"]; connect
       {label}
     </span>
   )
+}
+
+/**
+ * The shared editor speaks in image lists so a channel can carry a carousel.
+ * A blog's social drafts still take one image (the article has a cover, not a
+ * carousel), so fold the list back to the single url this panel stores.
+ */
+function toPanelPatch(patch: Partial<PlatformEditorValue>): Partial<Omit<DraftEdit, "dirty">> {
+  const out: Partial<Omit<DraftEdit, "dirty">> = {}
+  if (patch.content !== undefined) out.content = patch.content
+  if (patch.title !== undefined) out.title = patch.title
+  if (patch.subreddit !== undefined) out.subreddit = patch.subreddit
+  if (patch.mediaUrls !== undefined) out.mediaUrl = patch.mediaUrls[0] ?? ""
+  return out
 }
 
 /** The image a card would publish with right now. "" = none. */
@@ -532,10 +546,10 @@ function PlatformCard({
         <>
           <PlatformEditor
             spec={p}
-            value={{ content, title, subreddit, mediaUrl: media }}
+            value={{ content, title, subreddit, mediaUrls: media ? [media] : [] }}
             images={imageChoices}
             disabled={published}
-            onChange={onPatch}
+            onChange={(patch) => onPatch(toPanelPatch(patch))}
           />
 
           <div className="mt-2 flex items-center justify-between gap-3">

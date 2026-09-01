@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { getPortalApiUser } from "@/lib/portalAuth"
 import {
   buildComposerState,
+  channelImages,
   constraintsOf,
   getComposition,
   knownKeys,
@@ -47,23 +48,23 @@ interface PublishResult {
 }
 
 /**
- * What one channel actually attaches. A channel publishes ONLY the image it
- * was given — the post's `mediaUrls` is a library of uploads, not a default,
- * or an image meant for one channel goes out on all of them. A PDF displaces
- * the image entirely, because LinkedIn carries one or the other.
+ * What one channel actually attaches. A channel publishes ONLY the images it
+ * was given: the post's `mediaUrls` is a library of uploads, not a default, or
+ * an image meant for one channel goes out on all of them. A PDF displaces them
+ * entirely, because LinkedIn carries one or the other.
  *
- * Deriving it once keeps validation and publishing looking at the same post —
- * they used to compute the image separately, which is how a rule can pass on
+ * Deriving it once keeps validation and publishing looking at the same post.
+ * They used to compute the image separately, which is how a rule can pass on
  * a picture that never gets sent.
  */
 function attachments(
   spec: PlatformSpec,
   draft: CompositionPlatform,
-): { imageUrl?: string; documentUrl?: string } {
+): { imageUrls?: string[]; documentUrl?: string } {
   const documentUrl = spec.supportsDocument ? draft.documentUrl || undefined : undefined
   if (documentUrl) return { documentUrl }
   if (!spec.supportsMedia) return {}
-  return { imageUrl: draft.mediaUrl || undefined }
+  return { imageUrls: channelImages(draft) }
 }
 
 export async function POST(req: Request) {
@@ -116,11 +117,11 @@ export async function POST(req: Request) {
   const problems = keys.flatMap((key) => {
     const draft = composition.platforms[key] as CompositionPlatform
     const spec = platformSpec(key)
-    const { imageUrl, documentUrl } = attachments(spec, draft)
+    const { imageUrls, documentUrl } = attachments(spec, draft)
     return problemsFor(constraintsOf(spec), {
       content: draft.content,
       title: draft.title,
-      mediaUrl: imageUrl,
+      mediaUrls: imageUrls,
       documentUrl,
       shortenLinks: composition.shortenLinks,
     })
@@ -132,7 +133,7 @@ export async function POST(req: Request) {
 
   for (const key of keys) {
     const draft = platforms[key] as CompositionPlatform
-    const { imageUrl, documentUrl } = attachments(platformSpec(key), draft)
+    const { imageUrls, documentUrl } = attachments(platformSpec(key), draft)
     const documentName = draft.documentName
     try {
       const { content, link } = await shortenForChannel({
@@ -151,7 +152,7 @@ export async function POST(req: Request) {
           name: composition.title,
           content,
           title: draft.title,
-          imageUrl,
+          imageUrls,
           documentUrl,
           documentName,
           link,
@@ -166,7 +167,7 @@ export async function POST(req: Request) {
         key,
         content,
         title: draft.title,
-        imageUrl,
+        imageUrls,
         documentUrl,
         documentName,
         subreddit: draft.subreddit,

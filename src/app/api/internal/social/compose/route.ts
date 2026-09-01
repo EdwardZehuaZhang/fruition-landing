@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { getPortalApiUser } from "@/lib/portalAuth"
 import {
   buildComposerState,
+  channelImages,
   createComposition,
   deleteComposition,
   getComposition,
@@ -191,7 +192,7 @@ export async function PUT(req: Request) {
               content: p.draft.content,
               title: p.draft.title,
               blogUrl: composition.link,
-              imageUrl: p.draft.mediaUrl,
+              imageUrls: channelImages(p.draft),
               documentUrl: p.supportsDocument ? p.draft.documentUrl : undefined,
               documentName: p.draft.documentName,
               subreddit: p.draft.subreddit,
