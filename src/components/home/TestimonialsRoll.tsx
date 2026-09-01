@@ -62,12 +62,6 @@ export default function TestimonialsRoll({ testimonials, bookingHref }: Props) {
           <div className="mt-7">
             <CtaButton href={bookingHref} label="Book a call" variant="primary" />
           </div>
-          <div className="mt-10 hidden items-center gap-2.5 text-[13.5px] text-faint lg:flex">
-            <span className="h-[7px] w-[7px] rounded-full bg-emerald" />
-            <span>
-              {usable.length} engagements · hover to pause
-            </span>
-          </div>
         </div>
 
         {/* Rolling columns (lg+) */}
