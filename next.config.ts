@@ -29,6 +29,25 @@ const auditRedirects: Redirect[] = [
   { source: "/monday-products/ai", destination: "/implementation-packages", permanent: true },
   { source: "/monday-products/enterprise", destination: "/implementation-packages", permanent: true },
 
+  // ── Orphaned Wix pages (September 2026, fruitionmonday.com cutover) ──
+  // Found by replaying the retired Wix site's sitemap against this one: of its
+  // 52 page paths these seven were the only ones with no live successor. All
+  // 241 /post/<slug> URLs already resolved and were checked for a real <h1>,
+  // not just a 200. Destinations come from each old page's own <title>.
+  { source: "/monday-com-training", destination: "/monday-training", permanent: true },
+  { source: "/monday-crm-demo", destination: "/monday-crm-consulting", permanent: true },
+  // Titled "Certified Monday.com Platinum Partner in the UK" — a Google Ads
+  // landing page, so it may still be taking paid traffic.
+  { source: "/google-ads-uk-landing", destination: "/monday-partner-uk", permanent: true },
+  { source: "/license-procurement-page", destination: "/pricing", permanent: true },
+  // Wix editor scaffolding with no real content — park on the homepage.
+  { source: "/button-redirect-page", destination: "/", permanent: true },
+  { source: "/new-menu", destination: "/", permanent: true },
+  // Titled "monday.com Consultants" on the old site. It has no route file here,
+  // so /partnerships/[slug] was serving it as a 200 with an empty shell — a
+  // soft 404 that a status-code sweep cannot see (see /page-authoring).
+  { source: "/partnerships/consultants", destination: "/monday-implementation-consultants", permanent: true },
+
   // ── Blog consolidation (August 2026 content audit, board item 2816307976) ──
   // Sixteen thin/overlapping consultant posts folded into the canonical piece
   // for each cluster. Source and destination are taken verbatim from the
