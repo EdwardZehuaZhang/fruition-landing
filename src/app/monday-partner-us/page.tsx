@@ -44,7 +44,12 @@ export default async function Page() {
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
       faqTabs={resolveFaqTabs(page?.faqTabs, centralFaqs)}
-      teamMembers={mergeTeamMembers(teamMembers || [], siteSettings?.excludedTeamMemberNames || [])}
+      teamMembers={mergeTeamMembers(teamMembers || [], [
+        ...(siteSettings?.excludedTeamMemberNames || []),
+        // Josh shows only on the Australia partner page; his Sanity regions
+        // can't express that (AU and SG share "APAC"), so exclude here.
+        "Josh Jebathilak",
+      ])}
       closingCta={closingCta}
     />
   )
