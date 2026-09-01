@@ -79,7 +79,7 @@ create table if not exists public.social_compositions (
   brief         text,                        -- the idea/prompt used for AI generation
   link          text,                        -- optional URL appended per platform rules
   media_urls    jsonb not null default '[]'::jsonb,   -- shared image library for this composition
-  platforms     jsonb not null default '{}'::jsonb,   -- key -> {zernioPostId, content, title, subreddit, mediaUrl, boardId}
+  platforms     jsonb not null default '{}'::jsonb,   -- key -> {zernioPostId, content, title, subreddit, mediaUrls, boardId}
   post_ids      text[] not null default '{}',         -- flat Zernio ids, for reverse lookup from the dashboard
   scheduled_for timestamptz,
   timezone      text,
@@ -109,7 +109,7 @@ interface PlatformSpec {
   // ...existing
   titleLimit?: number          // pinterest 100, reddit 300
   titleRequired?: boolean      // reddit
-  maxMedia: number             // 1 for now (carousel support unverified)
+  maxMedia: number             // instagram 10 (carousel), 1 elsewhere
   mediaMaxBytes?: number       // GBP 5 MB
   aspect?: { min: number; max: number }   // instagram 0.8 – 1.91
   linkInBody: boolean          // false for instagram + pinterest
@@ -284,8 +284,10 @@ Probed with drafts + a far-future scheduled post, all deleted afterwards.
 3. **Pagination** — `/posts` accepts `page` (works) but **ignores `offset`**. Response
    carries a `pagination` object. At current volume (63 records) `limit=500` returns
    everything, so the 200-scan isn't urgent, but paginate on `page`.
-4. **Multi-image** — two `mediaItems` round-trip and store correctly. Carousel
-   *publishing* still unproven per platform; ship single-image, keep the array.
+4. **Multi-image**: two `mediaItems` round-trip and store correctly. Shipped
+   single-image first; carousel publishing landed later, once a four-slide post
+   went out as one picture on Instagram. A channel now holds `mediaUrls` in
+   carousel order and every image is sent, capped at the channel's `maxMedia`.
 5. **Pinterest boards** — `GET /accounts/{id}/pinterest-boards` works but returns
    exactly one board today ("CRM", `1009369403924050337`). Dropdown still built, it
    just has one option.
