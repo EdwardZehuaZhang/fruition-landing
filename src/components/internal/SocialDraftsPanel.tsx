@@ -532,10 +532,14 @@ function PlatformCard({
         <>
           <PlatformEditor
             spec={p}
-            value={{ content, title, subreddit, mediaUrl: media }}
+            value={{ content, title, subreddit, mediaUrls: media ? [media] : [] }}
             images={imageChoices}
             disabled={published}
-            onChange={onPatch}
+            // A blog draft carries the article's one cover image, so the editor
+            // stays single-choice here and its list is only ever 0 or 1 long.
+            onChange={({ mediaUrls, ...rest }) =>
+              onPatch(mediaUrls === undefined ? rest : { ...rest, mediaUrl: mediaUrls[0] ?? "" })
+            }
           />
 
           <div className="mt-2 flex items-center justify-between gap-3">

@@ -53,6 +53,25 @@ function editableFrom(state: ComposerState | null): Editable {
   }
 }
 
+/**
+ * Where a freshly uploaded image lands on one channel.
+ *
+ * A channel that publishes a single image takes the new one in place of what it
+ * had. A channel that publishes a carousel appends, up to its limit, because
+ * the images ARE the carousel and replacing would keep it one frame long.
+ */
+function attach(
+  spec: { supportsMedia: boolean; maxMedia: number },
+  draft: CompositionPlatform,
+  url: string,
+): string[] {
+  const current = draft.mediaUrls ?? []
+  if (!spec.supportsMedia) return current
+  if (spec.maxMedia <= 1) return [url]
+  if (current.includes(url)) return current
+  return current.length >= spec.maxMedia ? current : [...current, url]
+}
+
 /** Status chip wording that matches what the channel is actually doing. */
 function statusBadge(status: string | undefined): { label: string; variant: "default" | "secondary" | "outline" | "destructive" } | null {
   switch (status) {
@@ -146,9 +165,9 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
         ...problemsFor(spec, {
           content: draft.content,
           title: draft.title,
-          // Only this channel's own image — the upload pool is a library, not
+          // Only this channel's own images. The upload pool is a library, not
           // a default (see effectiveMedia).
-          mediaUrl: spec.supportsMedia && !documentUrl ? draft.mediaUrl || undefined : undefined,
+          mediaUrls: spec.supportsMedia && !documentUrl ? (draft.mediaUrls ?? []) : [],
           documentUrl,
           shortenLinks: edit.shortenLinks,
         }),
@@ -332,6 +351,9 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
    * ever shared. It's written rather than inherited so each card shows what it
    * will actually publish.
    *
+   * Single-image channels take it in place of what they had; carousel channels
+   * append it (see `attach`).
+   *
    * Either way the URL joins the composition's pool, so any channel can pick
    * it later from its own picker.
    */
@@ -351,15 +373,19 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
         const platforms: PlatformMap = { ...prev.platforms }
         if (only) {
           const draft = platforms[only]
-          if (draft) platforms[only] = { ...draft, mediaUrl: data.url }
+          const spec = specs.find((p) => p.key === only)
+          if (draft && spec) platforms[only] = { ...draft, mediaUrls: attach(spec, draft, data.url!) }
         } else {
-          // "to all" means all: a channel that already had one is overwritten,
-          // because that's what the button says and every image stays in the
-          // pool to re-pick from.
+          // "to all" means all. A channel that publishes one image has it
+          // overwritten, because that's what the button says and every image
+          // stays in the pool to re-pick from. A channel that publishes a
+          // carousel gets it appended instead: uploading a set and adding each
+          // to all is how a carousel gets built here, and overwriting every
+          // time would leave that channel showing only the last upload.
           for (const spec of specs) {
             const draft = platforms[spec.key]
             if (!draft || !spec.supportsMedia) continue
-            platforms[spec.key] = { ...draft, mediaUrl: data.url }
+            platforms[spec.key] = { ...draft, mediaUrls: attach(spec, draft, data.url!) }
           }
         }
         const pool = prev.mediaUrls.includes(data.url!) ? prev.mediaUrls : [...prev.mediaUrls, data.url!]
@@ -385,8 +411,8 @@ export default function SocialComposer({ initial }: { initial: ComposerState | n
       const platforms: PlatformMap = { ...prev.platforms }
       for (const key of Object.keys(platforms) as PlatformKey[]) {
         const draft = platforms[key]
-        if (!draft || draft.mediaUrl !== url) continue
-        platforms[key] = { ...draft, mediaUrl: "" }
+        if (!draft?.mediaUrls?.includes(url)) continue
+        platforms[key] = { ...draft, mediaUrls: draft.mediaUrls.filter((u) => u !== url) }
       }
       return { mediaUrls: prev.mediaUrls.filter((u) => u !== url), platforms }
     })

@@ -40,6 +40,12 @@ export interface PlatformEditorSpec {
   supportsMedia: boolean
   /** LinkedIn: a PDF posts as a swipeable carousel, in place of an image. */
   supportsDocument?: boolean
+  /**
+   * How many images this channel publishes. Omitted or 1 keeps the picker
+   * single-choice, which is what the blog panel wants: an article has one cover
+   * image. Above 1 the picker turns multi-select and the order is the carousel.
+   */
+  maxMedia?: number
   notes: string[]
 }
 
@@ -47,8 +53,8 @@ export interface PlatformEditorValue {
   content: string
   title?: string
   subreddit?: string
-  /** "" = deliberately no image. */
-  mediaUrl?: string
+  /** Chosen images in publish order. [] = deliberately no image. */
+  mediaUrls?: string[]
   /** "" = deliberately no PDF. */
   documentUrl?: string
   documentName?: string
@@ -94,7 +100,10 @@ export default function PlatformEditor({
 
   const content = value.content ?? ""
   const title = value.title ?? ""
-  const media = value.mediaUrl ?? ""
+  const media = value.mediaUrls ?? []
+  // 1 and "unset" behave the same: one image, chosen by clicking another.
+  const maxMedia = Math.max(1, spec.maxMedia ?? 1)
+  const carousel = maxMedia > 1
   const documentUrl = value.documentUrl ?? ""
   const titleOver = spec.titleLimit ? title.length - spec.titleLimit : 0
   const hasTitle = Boolean(spec.titleLimit)
@@ -118,7 +127,26 @@ export default function PlatformEditor({
   // A PDF displaces the image: LinkedIn posts one or the other, never both.
   const showImages = spec.supportsMedia && !documentUrl
   // Whatever is attached stays selectable even if it's no longer in the library.
-  const choices = media && !images.includes(media) ? [media, ...images] : images
+  const choices = [...media.filter((u) => !images.includes(u)), ...images]
+
+  /**
+   * Clicking a thumbnail picks it on a single-image channel and toggles it on a
+   * carousel one. Toggling appends rather than inserting, so the numbers on the
+   * thumbnails are the order the carousel will publish in and clicking through
+   * them left to right gives you exactly what you see.
+   */
+  function toggleImage(url: string) {
+    if (!carousel) {
+      onChange({ mediaUrls: [url] })
+      return
+    }
+    if (media.includes(url)) {
+      onChange({ mediaUrls: media.filter((u) => u !== url) })
+      return
+    }
+    if (media.length >= maxMedia) return
+    onChange({ mediaUrls: [...media, url] })
+  }
 
   const caret = useCaretInsert(body, (next) => onChange({ content: next }))
   // The menu needs to know WHERE the cursor is, not just how to write to it.
@@ -362,7 +390,9 @@ export default function PlatformEditor({
         <div>
           <div className="mb-1.5 flex items-center justify-between gap-2">
             <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-              Image{spec.needsMedia ? " · required" : ""}
+              {carousel ? "Images" : "Image"}
+              {spec.needsMedia ? " · required" : ""}
+              {carousel ? ` · ${media.length}/${maxMedia}` : ""}
             </span>
             {onUpload && (
               <>
@@ -399,21 +429,36 @@ export default function PlatformEditor({
           {choices.length > 0 && (
             <div className="flex items-center gap-2 overflow-x-auto pb-1">
               {choices.map((url) => {
-                const active = media === url
+                const at = media.indexOf(url)
+                const active = at >= 0
+                const full = carousel && !active && media.length >= maxMedia
                 return (
                   <span key={url} className="relative shrink-0">
                     <button
                       type="button"
-                      onClick={() => onChange({ mediaUrl: url })}
-                      disabled={disabled}
+                      onClick={() => toggleImage(url)}
+                      disabled={disabled || full}
                       aria-pressed={active}
-                      title="Use this image"
+                      title={
+                        full
+                          ? `${spec.label} publishes at most ${maxMedia} images`
+                          : carousel
+                            ? active
+                              ? "Remove from the carousel"
+                              : "Add to the carousel"
+                            : "Use this image"
+                      }
                       className={`block rounded-md border-2 transition disabled:opacity-60 ${
                         active ? "border-primary" : "border-border hover:border-primary/40"
                       }`}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={url} alt="" className="h-14 w-14 rounded-[4px] object-cover" />
+                      {carousel && active && (
+                        <span className="absolute -left-1.5 -top-1.5 flex size-5 items-center justify-center rounded-full bg-primary font-mono text-[10px] font-semibold text-primary-foreground">
+                          {at + 1}
+                        </span>
+                      )}
                     </button>
                     {onRemoveImage && !disabled && (
                       <button
@@ -432,11 +477,13 @@ export default function PlatformEditor({
               {!spec.needsMedia && (
                 <button
                   type="button"
-                  onClick={() => onChange({ mediaUrl: "" })}
+                  onClick={() => onChange({ mediaUrls: [] })}
                   disabled={disabled}
-                  aria-pressed={media === ""}
+                  aria-pressed={media.length === 0}
                   className={`h-14 shrink-0 rounded-md border-2 px-3 text-xs font-medium transition disabled:opacity-60 ${
-                    media === "" ? "border-primary text-primary" : "border-border text-muted-foreground hover:border-primary/40"
+                    media.length === 0
+                      ? "border-primary text-primary"
+                      : "border-border text-muted-foreground hover:border-primary/40"
                   }`}
                 >
                   No image

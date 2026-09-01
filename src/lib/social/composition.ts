@@ -45,8 +45,14 @@ export interface CompositionPlatform {
   subreddit?: string
   /** Pinterest board id (defaults to the account's board). */
   boardId?: string
-  /** Chosen image; "" means deliberately no image. */
-  mediaUrl?: string
+  /**
+   * Chosen images, in publish order. Two or more publishes as a carousel on the
+   * channels that allow it. An empty array means deliberately no image.
+   *
+   * Legacy rows carry a single `mediaUrl` instead; `cleanPlatforms` folds that
+   * into this list on the way in, so everything downstream reads one shape.
+   */
+  mediaUrls?: string[]
   /** Attached PDF (LinkedIn carousel); "" means deliberately none. */
   documentUrl?: string
   /** Filename / carousel title for the attached PDF. */
@@ -135,13 +141,15 @@ function cleanPlatforms(
   const out: Record<string, CompositionPlatform> = {}
   for (const [key, value] of Object.entries(platforms ?? {})) {
     if (!PLATFORMS.some((p) => p.key === key) || !value) continue
+    // Normalised on the way in, so a legacy `mediaUrl` row is only read once.
+    const images = mediaUrlsOf(value)
     out[key] = {
       ...(value.zernioPostId ? { zernioPostId: value.zernioPostId } : {}),
       content: typeof value.content === "string" ? value.content : "",
       ...(value.title ? { title: value.title } : {}),
       ...(value.subreddit ? { subreddit: value.subreddit } : {}),
       ...(value.boardId ? { boardId: value.boardId } : {}),
-      ...(value.mediaUrl !== undefined ? { mediaUrl: value.mediaUrl } : {}),
+      ...(images !== undefined ? { mediaUrls: images } : {}),
       ...(value.documentUrl !== undefined ? { documentUrl: value.documentUrl } : {}),
       ...(value.documentName ? { documentName: value.documentName } : {}),
       ...(value.customised ? { customised: true } : {}),
@@ -252,8 +260,8 @@ export interface ComposerLive {
   status: string
   platformUrl?: string
   error?: string
-  /** Image currently attached to the Zernio draft. */
-  mediaUrl?: string
+  /** Images currently attached to the Zernio draft, in order. */
+  mediaUrls?: string[]
   /** Document currently attached to the Zernio draft. */
   documentUrl?: string
   scheduledFor?: string
@@ -300,7 +308,7 @@ function liveOf(post: ZernioPost | undefined): ComposerLive | undefined {
     status: entry?.status === "failed" ? "failed" : post.status,
     platformUrl: entry?.platformPostUrl,
     error: entry?.error,
-    mediaUrl: post.mediaItems?.find((m) => m.type === "image")?.url,
+    mediaUrls: post.mediaItems?.filter((m) => m.type === "image").map((m) => m.url) ?? [],
     documentUrl: post.mediaItems?.find((m) => m.type === "document")?.url,
     scheduledFor: post.scheduledFor,
   }
@@ -316,6 +324,7 @@ export function constraintsOf(spec: PlatformSpec): PlatformConstraints {
     needsMedia: spec.needsMedia,
     supportsMedia: spec.supportsMedia,
     supportsDocument: spec.supportsDocument,
+    maxMedia: spec.maxMedia,
   }
 }
 
@@ -331,29 +340,47 @@ export function effectiveDocument(
 }
 
 /**
- * The image a platform would publish with right now. "" = deliberately none.
+ * The images a platform would publish with right now, in order. Empty = none.
  *
- * Each channel answers for itself. `mediaUrls` is a LIBRARY of everything
- * uploaded to this post, not a default — it used to be both, so an image
- * dropped on LinkedIn alone became the first entry and every other channel
- * quietly published it. Worse, those channels still showed "No image" as
- * selected, so the composer said one thing and the post did another. Sharing
- * an image across channels is now only what "Add image to all" does, and that
- * writes it onto each channel where you can see it.
+ * Each channel answers for itself. The composition's `mediaUrls` is a LIBRARY
+ * of everything uploaded to this post, not a default. It used to be both, so
+ * an image dropped on LinkedIn alone became the first entry and every other
+ * channel quietly published it. Worse, those channels still showed "No image"
+ * as selected, so the composer said one thing and the post did another. Sharing
+ * images across channels is now only what "Add image to all" does, and that
+ * writes them onto each channel where you can see them.
  *
- * A PDF displaces the image rather than sitting beside it: LinkedIn allows a
+ * The whole list travels, not just the first: on Instagram two or more images
+ * ARE the carousel, and a list truncated anywhere between here and Zernio
+ * publishes as a single picture.
+ *
+ * A PDF displaces the images rather than sitting beside them: LinkedIn allows a
  * post to carry one or the other.
  */
 export function effectiveMedia(
   draft: CompositionPlatform | undefined,
   live: ComposerLive | undefined,
   spec: PlatformSpec,
-): string {
-  if (!spec.supportsMedia) return ""
-  if (effectiveDocument(draft, live, spec)) return ""
-  if (draft?.mediaUrl !== undefined) return draft.mediaUrl
+): string[] {
+  if (!spec.supportsMedia) return []
+  if (effectiveDocument(draft, live, spec)) return []
+  const chosen = mediaUrlsOf(draft)
+  if (chosen !== undefined) return chosen
   // No local choice: whatever is already on the Zernio draft is the truth.
-  return live?.mediaUrl ?? ""
+  return live?.mediaUrls ?? []
+}
+
+/**
+ * Read a draft's image list, accepting the legacy single-`mediaUrl` shape that
+ * rows written before carousels still carry. undefined means "no choice made",
+ * which is different from [] ("deliberately no image") and has to stay so.
+ */
+export function mediaUrlsOf(draft: Partial<CompositionPlatform> | undefined): string[] | undefined {
+  if (!draft) return undefined
+  if (Array.isArray(draft.mediaUrls)) return draft.mediaUrls.filter((u) => typeof u === "string" && u)
+  const legacy = (draft as { mediaUrl?: string }).mediaUrl
+  if (typeof legacy !== "string") return undefined
+  return legacy ? [legacy] : []
 }
 
 /**
@@ -380,6 +407,7 @@ export async function buildComposerState(composition: Composition): Promise<Comp
     const draft = composition.platforms[spec.key]
     const live = liveOf(posts[spec.key])
     const selected = Boolean(draft)
+    const chosen = mediaUrlsOf(draft)
     const media = effectiveMedia(draft, live, spec)
     const document = effectiveDocument(draft, live, spec)
     return {
@@ -398,13 +426,14 @@ export async function buildComposerState(composition: Composition): Promise<Comp
       account: account?.username || account?.displayName || spec.label,
       connected: Boolean(account && account.isActive !== false && account.enabled !== false),
       selected,
-      draft: draft ?? { content: "" },
+      // Legacy rows carry a single `mediaUrl`; the client only ever sees a list.
+      draft: draft ? { ...draft, ...(chosen !== undefined ? { mediaUrls: chosen } : {}) } : { content: "" },
       live,
       problems: selected
         ? problemsFor(constraintsOf(spec), {
             content: draft?.content ?? "",
             title: draft?.title,
-            mediaUrl: media || undefined,
+            mediaUrls: media,
             documentUrl: document || undefined,
             shortenLinks: composition.shortenLinks,
           })

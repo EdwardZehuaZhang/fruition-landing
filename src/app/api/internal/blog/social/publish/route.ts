@@ -72,7 +72,8 @@ export async function POST(req: Request) {
         content: item.content!,
         title: item.title,
         blogUrl,
-        imageUrl,
+        // A blog draft carries one cover image, so the list is always 0 or 1.
+        imageUrls: imageUrl ? [imageUrl] : [],
         subreddit: item.subreddit,
       }
       const current = await getZernioPost(item.postId!)

@@ -205,7 +205,9 @@ export async function PUT(req: Request) {
         content: item.content!,
         title: item.title,
         blogUrl,
-        imageUrl: item.mediaUrl,
+        // Same three-state contract as before, as a list: undefined leaves the
+        // draft's media alone, "" clears it, a URL replaces it.
+        imageUrls: item.mediaUrl === undefined ? undefined : item.mediaUrl ? [item.mediaUrl] : [],
         subreddit: item.subreddit,
       })
     } catch (err) {

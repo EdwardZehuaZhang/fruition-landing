@@ -70,7 +70,7 @@ export interface PlatformSpec {
   titleLimit?: number
   /** Platform refuses to publish without a title. */
   titleRequired?: boolean
-  /** How many images one post may carry (single-image is all that's proven). */
+  /** How many images one post may carry. More than one publishes as a carousel. */
   maxMedia: number
   /** Per-image byte cap, where the platform enforces one. */
   mediaMaxBytes?: number
@@ -191,12 +191,13 @@ export const PLATFORMS: PlatformSpec[] = [
     needsMedia: true,
     supportsMedia: true,
     captionKey: "instagram",
-    maxMedia: 1,
+    maxMedia: 10,
     aspect: { min: 0.8, max: 1.91 },
     linkInBody: false,
     countsRawChars: true,
     notes: [
       "An image is required.",
+      "Two to ten images publish as a swipeable carousel, in the order you pick them.",
       "Aspect must sit between 4:5 and 1.91:1 — wider images are cropped automatically.",
       "Links in captions aren't clickable.",
       "Once published it CANNOT be deleted through the API — only in the Instagram app.",
@@ -776,13 +777,32 @@ export interface SocialDraftResult {
   error?: string
 }
 
-/** An image, a document, or nothing — what one post attaches. */
+/** What one post attaches: images, a document, or nothing. */
 export interface MediaChoice {
-  imageUrl?: string
+  /**
+   * Images in publish order. More than one is a carousel on the platforms that
+   * allow it. Anything past `spec.maxMedia` is trimmed here as a backstop; the
+   * validator blocks an over-length set first, so it should never bite.
+   */
+  imageUrls?: string[]
   /** Publicly reachable PDF/PPT/DOC. LinkedIn only; posts as a carousel. */
   documentUrl?: string
   /** Shown on the LinkedIn carousel; falls back to the post name. */
   documentName?: string
+}
+
+/** The images a platform will actually publish: de-duplicated, capped, in order. */
+export function imagesFor(spec: PlatformSpec, imageUrls: string[] | undefined): string[] {
+  if (!spec.supportsMedia || !imageUrls?.length) return []
+  const seen = new Set<string>()
+  const out: string[] = []
+  for (const url of imageUrls) {
+    if (!url || seen.has(url)) continue
+    seen.add(url)
+    out.push(url)
+    if (out.length >= spec.maxMedia) break
+  }
+  return out
 }
 
 /**
@@ -792,8 +812,12 @@ export interface MediaChoice {
  * document wins: someone who attached a PDF meant to post the PDF. Returns
  * undefined when there's nothing to attach, so callers can leave the field off
  * the request entirely rather than sending an empty array.
+ *
+ * Images are sent as a LIST, in order: Instagram reads two or more as a
+ * carousel, and every image has to be in the request for it to be one. Sending
+ * only the first is how a carousel arrives as a single picture.
  */
-function mediaItemsFor(
+export function mediaItemsFor(
   spec: PlatformSpec,
   media: MediaChoice,
   imageTitle?: string,
@@ -807,11 +831,13 @@ function mediaItemsFor(
       },
     ]
   }
-  if (media.imageUrl && spec.supportsMedia) {
-    const url = spec.key === "instagram" ? instagramSafeImageUrl(media.imageUrl) : media.imageUrl
-    return [{ type: "image", url, ...(imageTitle ? { title: imageTitle } : {}) }]
-  }
-  return undefined
+  const images = imagesFor(spec, media.imageUrls)
+  if (!images.length) return undefined
+  return images.map((raw, i) => {
+    const url = spec.key === "instagram" ? instagramSafeImageUrl(raw) : raw
+    // Only the first item carries the title: it names the post, not the frame.
+    return { type: "image", url, ...(imageTitle && i === 0 ? { title: imageTitle } : {}) }
+  })
 }
 
 /**
@@ -829,7 +855,8 @@ export async function createDraftPost(args: {
   content: string
   /** Pinterest pin title / Reddit post title. */
   title?: string
-  imageUrl?: string
+  /** Images in publish order. Two or more is a carousel where the channel allows it. */
+  imageUrls?: string[]
   documentUrl?: string
   documentName?: string
   link?: string
@@ -855,7 +882,7 @@ export async function createDraftPost(args: {
   }
   const mediaItems = mediaItemsFor(
     spec,
-    { imageUrl: args.imageUrl, documentUrl: args.documentUrl, documentName },
+    { imageUrls: args.imageUrls, documentUrl: args.documentUrl, documentName },
     args.name.slice(0, 90),
   )
   if (mediaItems) body.mediaItems = mediaItems
@@ -899,7 +926,7 @@ export async function createSocialDrafts(args: {
         name: args.blogTitle,
         content,
         title,
-        imageUrl: args.imageUrl,
+        imageUrls: args.imageUrl ? [args.imageUrl] : undefined,
         link: args.blogUrl,
       })
       results.push({ key: spec.key, postId })
@@ -935,7 +962,8 @@ export async function updateSocialDraft(args: {
   content: string
   title?: string
   blogUrl?: string
-  imageUrl?: string
+  /** Images in publish order. undefined = leave the draft's media alone. */
+  imageUrls?: string[]
   documentUrl?: string
   documentName?: string
   subreddit?: string
@@ -955,13 +983,13 @@ export async function updateSocialDraft(args: {
       }),
     ],
   }
-  // imageUrl / documentUrl semantics: undefined = leave media as-is,
-  // "" = remove, url = set. Either one being present rebuilds the whole list,
-  // because a document and an image can't both be attached.
-  if (args.imageUrl !== undefined || args.documentUrl !== undefined) {
+  // imageUrls / documentUrl semantics: undefined = leave media as-is,
+  // [] or "" = remove, values = set. Either one being present rebuilds the whole
+  // list, because a document and images can't both be attached.
+  if (args.imageUrls !== undefined || args.documentUrl !== undefined) {
     body.mediaItems =
       mediaItemsFor(spec, {
-        imageUrl: args.imageUrl || undefined,
+        imageUrls: args.imageUrls,
         documentUrl: args.documentUrl || undefined,
         documentName,
       }) ?? []
@@ -1005,14 +1033,15 @@ export async function publishSocialDraft(args: {
   content: string
   title?: string
   blogUrl: string
-  imageUrl?: string
+  /** Images in publish order. Two or more is a carousel where the channel allows it. */
+  imageUrls?: string[]
   documentUrl?: string
   documentName?: string
   subreddit?: string
   boardId?: string
 }): Promise<{ status: string }> {
   const spec = platformSpec(args.key)
-  if (spec.needsMedia && !args.imageUrl) {
+  if (spec.needsMedia && !args.imageUrls?.length) {
     throw new Error(`${spec.label} requires an image — publish the blog with a cover image first`)
   }
 
@@ -1039,7 +1068,7 @@ export async function publishSocialDraft(args: {
     publishNow: true,
   }
   const mediaItems = mediaItemsFor(spec, {
-    imageUrl: args.imageUrl,
+    imageUrls: args.imageUrls,
     documentUrl: args.documentUrl,
     documentName: args.documentName,
   })
@@ -1063,7 +1092,8 @@ export async function republishCancelledPost(args: {
   content: string
   title?: string
   blogUrl: string
-  imageUrl?: string
+  /** Images in publish order. Two or more is a carousel where the channel allows it. */
+  imageUrls?: string[]
   documentUrl?: string
   documentName?: string
   subreddit?: string
@@ -1112,7 +1142,8 @@ export async function scheduleSocialPost(args: {
   content: string
   title?: string
   link?: string
-  imageUrl?: string
+  /** Images in publish order. Two or more is a carousel where the channel allows it. */
+  imageUrls?: string[]
   documentUrl?: string
   documentName?: string
   subreddit?: string
@@ -1123,7 +1154,7 @@ export async function scheduleSocialPost(args: {
   timezone?: string
 }): Promise<{ status: string; scheduledFor?: string }> {
   const spec = platformSpec(args.key)
-  if (spec.needsMedia && !args.imageUrl) {
+  if (spec.needsMedia && !args.imageUrls?.length) {
     throw new Error(`${spec.label} requires an image`)
   }
   const body: Record<string, unknown> = {
@@ -1142,7 +1173,7 @@ export async function scheduleSocialPost(args: {
     ...(args.timezone ? { timezone: args.timezone } : {}),
   }
   const mediaItems = mediaItemsFor(spec, {
-    imageUrl: args.imageUrl,
+    imageUrls: args.imageUrls,
     documentUrl: args.documentUrl,
     documentName: args.documentName,
   })

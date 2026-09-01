@@ -21,13 +21,15 @@ export interface PlatformConstraints {
   supportsMedia: boolean
   /** Accepts a PDF/slide document in place of an image (LinkedIn only). */
   supportsDocument?: boolean
+  /** How many images the channel publishes. More than one is a carousel. */
+  maxMedia?: number
 }
 
 export interface DraftValues {
   content: string
   title?: string
-  /** "" or undefined = no image attached. */
-  mediaUrl?: string
+  /** Images in publish order. Empty or undefined = no image attached. */
+  mediaUrls?: string[]
   /** "" or undefined = no document attached. */
   documentUrl?: string
   /**
@@ -72,11 +74,19 @@ export function problemsFor(spec: PlatformConstraints, values: DraftValues): str
     const over = title.length - spec.titleLimit
     problems.push(`${spec.label}: the title is ${over} character${over === 1 ? "" : "s"} over the ${spec.titleLimit} limit.`)
   }
-  if (spec.needsMedia && !values.mediaUrl) {
+  const images = values.mediaUrls?.filter(Boolean) ?? []
+  if (spec.needsMedia && !images.length) {
     problems.push(`${spec.label}: an image is required.`)
   }
-  if (values.mediaUrl && !spec.supportsMedia && !values.documentUrl) {
+  if (images.length && !spec.supportsMedia && !values.documentUrl) {
     problems.push(`${spec.label}: this channel is text-only.`)
+  }
+  // Caught here rather than silently trimmed at send time: dropping images the
+  // composer showed as attached is how a carousel loses frames without saying so.
+  if (spec.maxMedia !== undefined && spec.supportsMedia && images.length > spec.maxMedia) {
+    problems.push(
+      `${spec.label}: ${images.length} images is more than the ${spec.maxMedia} it can publish.`,
+    )
   }
   if (values.documentUrl && !spec.supportsDocument) {
     problems.push(`${spec.label}: this channel can't post a PDF — LinkedIn is the only one that can.`)
