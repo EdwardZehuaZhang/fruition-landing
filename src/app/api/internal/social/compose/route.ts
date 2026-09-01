@@ -2,13 +2,13 @@ import { NextResponse } from "next/server"
 import { getPortalApiUser } from "@/lib/portalAuth"
 import {
   buildComposerState,
-  channelImages,
   createComposition,
   deleteComposition,
   getComposition,
-  knownKeys,
   listCompositions,
   loadComposer,
+  mediaUrlsOf,
+  platformsFromInput,
   updateComposition,
   type CompositionPlatform,
 } from "@/lib/social/composition"
@@ -36,27 +36,6 @@ export const maxDuration = 120
  * scheduled (see ./publish). A post abandoned in the composer therefore never
  * litters the Zernio dashboard.
  */
-
-function platformsFrom(value: unknown): Partial<Record<PlatformKey, CompositionPlatform>> | undefined {
-  if (!value || typeof value !== "object") return undefined
-  const out: Partial<Record<PlatformKey, CompositionPlatform>> = {}
-  for (const key of knownKeys(Object.keys(value as Record<string, unknown>))) {
-    const raw = (value as Record<string, Partial<CompositionPlatform>>)[key]
-    if (!raw) continue
-    out[key] = {
-      zernioPostId: typeof raw.zernioPostId === "string" ? raw.zernioPostId : undefined,
-      content: typeof raw.content === "string" ? raw.content : "",
-      title: typeof raw.title === "string" ? raw.title : undefined,
-      subreddit: typeof raw.subreddit === "string" ? raw.subreddit : undefined,
-      boardId: typeof raw.boardId === "string" ? raw.boardId : undefined,
-      mediaUrl: typeof raw.mediaUrl === "string" ? raw.mediaUrl : undefined,
-      documentUrl: typeof raw.documentUrl === "string" ? raw.documentUrl : undefined,
-      documentName: typeof raw.documentName === "string" ? raw.documentName : undefined,
-      customised: Boolean(raw.customised),
-    }
-  }
-  return out
-}
 
 function strings(value: unknown): string[] | undefined {
   if (!Array.isArray(value)) return undefined
@@ -126,7 +105,7 @@ export async function POST(req: Request) {
       masterContent: typeof body.masterContent === "string" ? body.masterContent : undefined,
       mediaUrls: strings(body.mediaUrls) ?? [],
       shortenLinks: typeof body.shortenLinks === "boolean" ? body.shortenLinks : undefined,
-      platforms: platformsFrom(body.platforms),
+      platforms: platformsFromInput(body.platforms),
       createdBy: user.email ?? undefined,
     })
     return NextResponse.json(await buildComposerState(composition), { status: 201 })
@@ -157,7 +136,7 @@ export async function PUT(req: Request) {
     const existing = await getComposition(id)
     if (!existing) return NextResponse.json({ error: "Post not found." }, { status: 404 })
 
-    const platforms = platformsFrom(body.platforms)
+    const platforms = platformsFromInput(body.platforms)
     // Carry over the Zernio ids we already hold — the client never invents them.
     if (platforms) {
       for (const [key, value] of Object.entries(platforms)) {
@@ -192,7 +171,10 @@ export async function PUT(req: Request) {
               content: p.draft.content,
               title: p.draft.title,
               blogUrl: composition.link,
-              imageUrls: channelImages(p.draft),
+              // undefined leaves the draft's media alone, which is what a
+              // channel that has picked nothing has always meant. Sending []
+              // instead would strip the pictures off the live post.
+              imageUrls: mediaUrlsOf(p.draft),
               documentUrl: p.supportsDocument ? p.draft.documentUrl : undefined,
               documentName: p.draft.documentName,
               subreddit: p.draft.subreddit,

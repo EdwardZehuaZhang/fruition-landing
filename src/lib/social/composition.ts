@@ -189,6 +189,44 @@ export function channelImages(draft: CompositionPlatform): string[] {
   return mediaUrlsOf(draft) ?? []
 }
 
+/**
+ * Read the per-channel drafts off a request body.
+ *
+ * Every field the composer can write has to be listed here or it is dropped on
+ * save: this ran without `mediaUrls`, so a carousel arranged in the composer
+ * was thrown away the moment the post was saved and Instagram was left with
+ * whatever single picture the old `mediaUrl` still held.
+ *
+ * Unknown platform keys are ignored so a stale client can't write junk.
+ */
+export function platformsFromInput(
+  value: unknown,
+): Partial<Record<PlatformKey, CompositionPlatform>> | undefined {
+  if (!value || typeof value !== "object") return undefined
+  const out: Partial<Record<PlatformKey, CompositionPlatform>> = {}
+  for (const key of knownKeys(Object.keys(value as Record<string, unknown>))) {
+    const raw = (value as Record<string, Partial<CompositionPlatform>>)[key]
+    if (!raw) continue
+    out[key] = {
+      zernioPostId: typeof raw.zernioPostId === "string" ? raw.zernioPostId : undefined,
+      content: typeof raw.content === "string" ? raw.content : "",
+      title: typeof raw.title === "string" ? raw.title : undefined,
+      subreddit: typeof raw.subreddit === "string" ? raw.subreddit : undefined,
+      boardId: typeof raw.boardId === "string" ? raw.boardId : undefined,
+      // Both shapes are accepted: the composer sends a list, and a client that
+      // predates carousels still sends the single url.
+      mediaUrls: Array.isArray(raw.mediaUrls)
+        ? raw.mediaUrls.filter((u): u is string => typeof u === "string" && Boolean(u))
+        : undefined,
+      mediaUrl: typeof raw.mediaUrl === "string" ? raw.mediaUrl : undefined,
+      documentUrl: typeof raw.documentUrl === "string" ? raw.documentUrl : undefined,
+      documentName: typeof raw.documentName === "string" ? raw.documentName : undefined,
+      customised: Boolean(raw.customised),
+    }
+  }
+  return out
+}
+
 function postIdsOf(platforms: Record<string, CompositionPlatform>): string[] {
   return Object.values(platforms)
     .map((p) => p.zernioPostId)
