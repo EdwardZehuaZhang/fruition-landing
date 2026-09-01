@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
 import Reveal from "./Reveal"
@@ -31,6 +32,13 @@ function initials(name?: string) {
 interface Props {
   testimonials: HomeTestimonial[]
   bookingHref: string
+  eyebrow?: string
+  heading?: string
+  intro?: string
+  ctaLabel?: string
+  /** Optional text link under the CTA — used to keep the case-studies link that
+   *  the old grid carried on the pages that adopt this section. */
+  secondaryLink?: { label: string; href: string }
 }
 
 /**
@@ -41,8 +49,20 @@ interface Props {
  *
  * Hovering pauses both columns (`.home-quote-track` in globals). Below `lg` the
  * rolling is dropped for a plain stacked list.
+ *
+ * The homepage renders this with its defaults; `TestimonialsGrid` renders it as
+ * the shared testimonials section across the marketing pages, passing their own
+ * heading and CTA through.
  */
-export default function TestimonialsRoll({ testimonials, bookingHref }: Props) {
+export default function TestimonialsRoll({
+  testimonials,
+  bookingHref,
+  eyebrow = "Client proof",
+  heading = "What our customers say about us",
+  intro = "Operations and IT leaders on what changed after we mapped the process first.",
+  ctaLabel = "Book a call",
+  secondaryLink,
+}: Props) {
   const usable = testimonials.filter((t) => t.quote)
   if (usable.length === 0) return null
 
@@ -53,16 +73,28 @@ export default function TestimonialsRoll({ testimonials, bookingHref }: Props) {
     <section className="bg-surface py-16 md:py-20 lg:pt-25 lg:pb-26">
       <Reveal className="mx-auto grid max-w-[1348px] grid-cols-1 items-start gap-10 px-5 md:px-8 lg:grid-cols-[400px_1fr] lg:gap-20">
         <div className="flex flex-col lg:pt-2">
-          <p className="text-micro font-bold tracking-[0.12em] uppercase text-brand">Client proof</p>
+          {eyebrow && (
+            <p className="text-micro font-bold tracking-[0.12em] uppercase text-brand">{eyebrow}</p>
+          )}
           <h2 className="text-section-h2 mt-4 text-foreground" style={{ textWrap: "pretty" }}>
-            The rollout is judged on adoption.
+            {heading}
           </h2>
-          <p className="text-body mt-4.5 text-muted lg:text-[17px]" style={{ textWrap: "pretty" }}>
-            Operations and IT leaders on what changed after we mapped the process first.
-          </p>
+          {intro && (
+            <p className="text-body mt-4.5 text-muted lg:text-[17px]" style={{ textWrap: "pretty" }}>
+              {intro}
+            </p>
+          )}
           <div className="mt-7">
-            <CtaButton href={bookingHref} label="Book a call" variant="primary" />
+            <CtaButton href={bookingHref} label={ctaLabel} variant="primary" />
           </div>
+          {secondaryLink && (
+            <Link
+              href={secondaryLink.href}
+              className="mt-4 text-[14px] font-semibold text-brand underline underline-offset-4 hover:text-brand-dark"
+            >
+              {secondaryLink.label}
+            </Link>
+          )}
           <ReviewBadges className="mt-7 max-w-[400px]" />
         </div>
 
