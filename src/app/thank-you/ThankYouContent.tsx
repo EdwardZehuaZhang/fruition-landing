@@ -175,8 +175,7 @@ export default function ThankYouContent({ posts, nextPath }: ThankYouContentProp
   return (
     <div className="bg-surface">
       <section className="mx-auto w-full max-w-[720px] px-4 py-14 md:py-20">
-        <p className={`${MONO_LABEL} text-brand`}>{"// request received"}</p>
-        <h1 className="mt-4 text-section-h2 text-body">Thanks, we have your request.</h1>
+        <h1 className="text-section-h2 text-body">Thanks, we have your request.</h1>
 
         {/* Step selector: mono annotations on a hairline, not a progress widget.
             Picking one takes the sequence off the clock. */}
