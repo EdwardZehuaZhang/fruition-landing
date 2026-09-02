@@ -22,16 +22,13 @@ interface TestimonialsGridProps {
  * call sites and their Sanity-driven headings carry over untouched. It maps
  * `caseStudies` onto the roll's testimonial shape.
  *
- * `statCardValue` / `statCardSubtitle` are accepted but no longer rendered: the
- * Client proof layout has no stat card. The stat card's link is preserved as the
- * secondary link under the CTA so pages keep that internal link.
+ * The `statCard*` props are still accepted so call sites need no edit, but the
+ * Client proof layout has no stat card and none of them are rendered.
  */
 export default function TestimonialsGrid({
   heading = "What our customers say about us 🙌",
   ctaLabel = "Start Your Transformation",
   ctaUrl = BOOKING_ANCHOR,
-  statCardCtaLabel = "Read our case studies",
-  statCardCtaUrl = "/customer-testimonials",
   caseStudies = [],
 }: TestimonialsGridProps) {
   // Case studies without a quote (project write-ups) would render as blank
@@ -53,9 +50,6 @@ export default function TestimonialsGrid({
       bookingHref={bookingHref(ctaUrl)}
       heading={heading}
       ctaLabel={ctaLabel}
-      secondaryLink={
-        statCardCtaUrl ? { label: statCardCtaLabel, href: statCardCtaUrl } : undefined
-      }
     />
   )
 }

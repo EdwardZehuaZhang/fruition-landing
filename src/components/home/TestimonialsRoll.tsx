@@ -1,5 +1,4 @@
 import Image from "next/image"
-import Link from "next/link"
 import { urlFor } from "@/sanity/image"
 import CtaButton from "@/components/CtaButton"
 import Reveal from "./Reveal"
@@ -36,9 +35,6 @@ interface Props {
   heading?: string
   intro?: string
   ctaLabel?: string
-  /** Optional text link under the CTA — used to keep the case-studies link that
-   *  the old grid carried on the pages that adopt this section. */
-  secondaryLink?: { label: string; href: string }
 }
 
 /**
@@ -61,7 +57,6 @@ export default function TestimonialsRoll({
   heading = "What our customers say about us",
   intro = "Operations and IT leaders on what changed after we mapped the process first.",
   ctaLabel = "Book a call",
-  secondaryLink,
 }: Props) {
   const usable = testimonials.filter((t) => t.quote)
   if (usable.length === 0) return null
@@ -87,14 +82,6 @@ export default function TestimonialsRoll({
           <div className="mt-7">
             <CtaButton href={bookingHref} label={ctaLabel} variant="primary" />
           </div>
-          {secondaryLink && (
-            <Link
-              href={secondaryLink.href}
-              className="mt-4 text-[14px] font-semibold text-brand underline underline-offset-4 hover:text-brand-dark"
-            >
-              {secondaryLink.label}
-            </Link>
-          )}
           <ReviewBadges className="mt-7 max-w-[400px]" />
         </div>
 
