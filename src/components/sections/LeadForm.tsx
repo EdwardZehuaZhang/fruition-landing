@@ -1,6 +1,8 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { stashThankYouMessage, THANK_YOU_PATH } from "@/lib/thankYou"
 
 export interface LeadFormField {
   /** Stored/displayed label, e.g. "What is your primary bottleneck?" */
@@ -27,6 +29,12 @@ interface LeadFormProps {
  * Low-friction intake/discovery form. Posts to /api/leads (Slack + monday).
  * Name + email + company are always present; `fields` add page-specific
  * qualifying questions. Includes a hidden honeypot for spam.
+ *
+ * On success the visitor is sent to /thank-you — the conversion gets its own
+ * URL for analytics, and the confirmation gets somewhere to send them next.
+ * `successMessage` travels with them (see `@/lib/thankYou`), and the inline
+ * panel below still renders as the fallback for the moment before the route
+ * change, and for good if client-side navigation never happens.
  */
 export default function LeadForm({
   heading = "Tell us about your workflow",
@@ -36,6 +44,7 @@ export default function LeadForm({
   submitLabel = "Request a free workflow audit",
   successMessage = "Thanks, we'll be in touch within one business day.",
 }: LeadFormProps) {
+  const router = useRouter()
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle")
   const [error, setError] = useState<string>("")
 
@@ -67,6 +76,8 @@ export default function LeadForm({
       const body = (await r.json().catch(() => ({}))) as { ok?: boolean; error?: string }
       if (r.ok && body.ok) {
         setStatus("done")
+        stashThankYouMessage(successMessage)
+        router.push(THANK_YOU_PATH)
       } else {
         setStatus("error")
         setError(body.error || "Something went wrong. Please try again.")
