@@ -22,6 +22,42 @@ const CONTENT_SIGNAL = 'search=yes, ai-train=yes, ai-input=yes, use=reference'
 // them would only create duplicates of the destinations.
 const DISALLOW = ['/internal/', '/studio/', '/s/']
 
+// Answer-engine and model crawlers, named explicitly.
+//
+// The policy is permissive by design (Content-Signal ai-train=yes, approved in
+// the 2026-07 audit above), so these agents would already be covered by
+// `User-agent: *`. The group exists so each one gets an explicit Allow and
+// reads the content signals instead of falling through to the wildcard, which
+// agent-readiness scanners treat as "no stated AI policy".
+//
+// They share ONE group: a crawler that matches a named group ignores the
+// wildcard group entirely, so the Content-Signal and Disallow lines have to be
+// repeated here or /internal/, /studio/ and /s/ would silently open up.
+const AI_CRAWLERS = [
+  // OpenAI: training, live browsing, ChatGPT search.
+  'GPTBot',
+  'ChatGPT-User',
+  'OAI-SearchBot',
+  // Anthropic: training and live Claude fetches.
+  'ClaudeBot',
+  'Claude-User',
+  // Perplexity: index and live fetches.
+  'PerplexityBot',
+  'Perplexity-User',
+  // Google and Apple keep their AI opt-ins on separate agents.
+  'Googlebot',
+  'Google-Extended',
+  'Applebot',
+  'Applebot-Extended',
+  // Common Crawl, ByteDance, Amazon, Meta.
+  'CCBot',
+  'Bytespider',
+  'Amazonbot',
+  'Meta-ExternalAgent',
+  // Bing, which also feeds Copilot.
+  'Bingbot',
+]
+
 const POLICY_PREAMBLE = `# As a condition of accessing this website, you agree to abide by the following
 # content signals:
 
@@ -55,6 +91,14 @@ export function GET(): Response {
     POLICY_PREAMBLE,
     [
       'User-agent: *',
+      `Content-Signal: ${CONTENT_SIGNAL}`,
+      'Allow: /',
+      ...DISALLOW.map((path) => `Disallow: ${path}`),
+    ].join('\n'),
+    [
+      '# Explicit policy for AI answer engines and model crawlers. Same rules as',
+      '# the wildcard group above, restated so each agent sees its own Allow.',
+      ...AI_CRAWLERS.map((agent) => `User-agent: ${agent}`),
       `Content-Signal: ${CONTENT_SIGNAL}`,
       'Allow: /',
       ...DISALLOW.map((path) => `Disallow: ${path}`),

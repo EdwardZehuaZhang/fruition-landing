@@ -103,7 +103,14 @@ export default function LeadForm({
             {successMessage}
           </div>
         ) : (
-          <form onSubmit={onSubmit} className="flex flex-col gap-4">
+          <form
+            onSubmit={onSubmit}
+            className="flex flex-col gap-4"
+            // WebMCP tool attributes (see src/types/webmcp.d.ts): the site's
+            // general enquiry form, offered to browser agents as a tool.
+            toolname="contact_fruition"
+            tooldescription="Submit a consulting enquiry to Fruition Services about monday.com, monday CRM, AI and automation, Atlassian or HubSpot work. Requires the visitor's name and work email; company and any page-specific qualifying questions are optional. Fruition replies within one business day."
+          >
             <Field name="name" label="Full name" required />
             <Field name="email" label="Work email" type="email" required />
             <Field name="company" label="Company" />

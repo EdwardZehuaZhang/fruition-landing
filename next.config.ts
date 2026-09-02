@@ -213,6 +213,38 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [...auditRedirects, ...wixRedirects];
   },
+  // RFC 8288 Link headers. Agents that fetch a page can see the sitemap and the
+  // markdown twin of that page without parsing the HTML first. Only advertise
+  // an alternate that really serves markdown: the targets are the static files
+  // in public/ (llms.txt, index.md, pricing.md, about-us.md), which the Workers
+  // asset handler serves as text/markdown and text/plain.
+  async headers() {
+    const markdownAlternate = (path: string) =>
+      `<${path}>; rel="alternate"; type="text/markdown"`;
+    return [
+      {
+        source: "/",
+        headers: [
+          {
+            key: "Link",
+            value: [
+              '</sitemap.xml>; rel="sitemap"',
+              '</llms.txt>; rel="alternate"; type="text/plain"',
+              markdownAlternate("/index.md"),
+            ].join(", "),
+          },
+        ],
+      },
+      {
+        source: "/pricing",
+        headers: [{ key: "Link", value: markdownAlternate("/pricing.md") }],
+      },
+      {
+        source: "/about-us",
+        headers: [{ key: "Link", value: markdownAlternate("/about-us.md") }],
+      },
+    ];
+  },
   async rewrites() {
     return [
       // Old Wix WFO PDF URLs → deprecation pages
