@@ -39,15 +39,48 @@ export const CTA_SELECTOR = "a.cta-btn"
  * Build the event for a clicked CTA anchor. Pure, so the payload shape the GA4
  * report depends on can be tested without a DOM event.
  */
+/**
+ * An element is hidden if it has no layout boxes (the reliable browser signal)
+ * and its computed style says so. The second half matters for jsdom, which
+ * reports no client rects for anything.
+ */
+function isHidden(el: HTMLElement): boolean {
+  if (el.getClientRects().length > 0) return false
+  const style = el.ownerDocument.defaultView?.getComputedStyle(el)
+  if (!style) return false
+  return style.display === "none" || style.visibility === "hidden"
+}
+
+/**
+ * The visible text of a CTA.
+ *
+ * CtaButton renders a mobile and a desktop label side by side and hides one with
+ * a breakpoint class, so `textContent` yields both concatenated — GA4 was seeing
+ * labels like "Schedule a callBook a Free Consultation". Read only what is
+ * actually on screen at click time.
+ */
+function readLabel(anchor: HTMLAnchorElement): string {
+  const labelEl = anchor.querySelector(".cta-btn-label")
+  const clean = (text: string) => text.trim().replace(/\s+/g, " ")
+  if (!labelEl) return clean(anchor.textContent ?? "")
+
+  const spans = Array.from(labelEl.children).filter(
+    (c): c is HTMLElement => c instanceof HTMLElement,
+  )
+  if (spans.length === 0) return clean(labelEl.textContent ?? "")
+
+  const visible = spans.filter((s) => !isHidden(s))
+  const chosen = visible.length > 0 ? visible : spans
+  return clean(chosen.map((s) => s.textContent ?? "").join(" "))
+}
+
 export function ctaEventFromAnchor(anchor: HTMLAnchorElement): CtaClickEvent {
   const variant =
     Array.from(anchor.classList)
       .find((c) => c.startsWith("cta-btn-") && c !== "cta-btn-label" && c !== "cta-btn-icon")
       ?.replace("cta-btn-", "") ?? ""
 
-  // The label span exists on CtaButton output; raw anchors put text directly in.
-  const labelEl = anchor.querySelector(".cta-btn-label")
-  const label = (labelEl?.textContent ?? anchor.textContent ?? "").trim().replace(/\s+/g, " ")
+  const label = readLabel(anchor)
 
   return {
     label,
