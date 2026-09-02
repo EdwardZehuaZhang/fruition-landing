@@ -1,8 +1,9 @@
 /**
  * Footer office phone cleanup (siteSettings.offices):
  *   - Singapore: placeholder "+65 0000 0000" → real "+65 8410 6368"
- *   - India & Philippines: remove the all-zero placeholder numbers entirely
- *     (offices stay listed in Our Locations, just without a phone line)
+ *   - India: remove the all-zero placeholder number entirely
+ *     (the office stays listed in Our Locations, just without a phone line)
+ *   - Philippines: placeholder "+63 000 000 0000" → real "+63 947 230 4274"
  *
  * The Footer component also hides any number containing a 6+ zero run as a
  * code-level guard, so nothing fake renders even before this runs.
@@ -22,7 +23,7 @@ type Office = { _key: string; city?: string; phone?: string; phoneTel?: string }
 const CHANGES: Record<string, { phone?: string; phoneTel?: string } | 'remove-phone'> = {
   Singapore: { phone: '+65 8410 6368', phoneTel: '+6584106368' },
   India: 'remove-phone',
-  Philippines: 'remove-phone',
+  Philippines: { phone: '+63 947 230 4274', phoneTel: '+639472304274' },
 }
 
 async function restore(file: string) {

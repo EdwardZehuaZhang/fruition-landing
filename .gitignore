@@ -65,3 +65,6 @@ qa/darkmode/
 # Sanity Studio build output — was committed by mistake (62MB, removed 2026-08-21).
 # The Studio is served by Next at /studio; this directory is never deployed.
 /dist/
+
+# Local worktrees checked out inside the repo
+n8n-badge-wt/

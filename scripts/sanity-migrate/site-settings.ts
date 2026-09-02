@@ -278,8 +278,8 @@ async function main() {
       href: '#',
       address: 'Address coming soon, Philippines',
       addressUrl: '',
-      phone: '+63 000 000 0000',
-      phoneTel: '+630000000000',
+      phone: '+63 947 230 4274',
+      phoneTel: '+639472304274',
     },
   ])
 
