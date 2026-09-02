@@ -660,6 +660,9 @@ function BookingCard({ duration, askTeamSize, calendlyUrl }: {
         onSubmit={(e) => { e.preventDefault(); onContinue() }}
         noValidate
         className="fr-booking-pad"
+        // WebMCP tool attributes (see src/types/webmcp.d.ts).
+        toolname="book_fruition_consultation"
+        tooldescription="Book a free 30-minute consultation with a Fruition Services consultant at a chosen date and time. Requires the visitor's name, work email and, where asked, company and what they want to discuss. Confirmation lands on the consultant's calendar."
         style={{ fontFamily: "var(--font-sans)", color: "var(--text-dark)", display: "flex", flexDirection: "column", gap: 18, padding: 30 }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 13, padding: "13px 15px", borderRadius: 14, background: "var(--color-brand-soft)", border: "1px solid var(--border-ui)" }}>

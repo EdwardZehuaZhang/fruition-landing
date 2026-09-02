@@ -88,6 +88,47 @@ export default function NotFound() {
           ))}
         </nav>
       </div>
+
+      {/* Recovery links for machine readers. A 404 that only says "not found"
+          is a dead end for a crawler; naming the machine-readable indexes in
+          plain text gives it somewhere to go next (ora.ai check
+          agent-friendly-404). */}
+      <div
+        className="nf-rise mt-10 max-w-[62ch]"
+        style={{ animationDelay: "400ms" }}
+      >
+        <p className="text-body-sm text-muted">
+          Site index for AI agents:{" "}
+          <a
+            href="/llms.txt"
+            className="font-medium text-brand hover:underline"
+          >
+            /llms.txt
+          </a>
+          . Full page list:{" "}
+          <a
+            href="/sitemap.xml"
+            className="font-medium text-brand hover:underline"
+          >
+            /sitemap.xml
+          </a>
+          . Markdown copy of the homepage:{" "}
+          <a
+            href="/index.md"
+            className="font-medium text-brand hover:underline"
+          >
+            /index.md
+          </a>
+          . Capabilities:{" "}
+          <a
+            href="/.well-known/agent-skills/index.json"
+            className="font-medium text-brand hover:underline"
+          >
+            /.well-known/agent-skills/index.json
+          </a>
+          .
+        </p>
+      </div>
     </section>
   )
 }

@@ -99,9 +99,15 @@ export default function StickyCtaBar({
         {/* Heading row — carries the close button until lg, where it moves
             beside the CTA. */}
         <div className="relative flex items-start gap-2.5 md:gap-3 lg:min-w-0 lg:flex-1">
-          <h2 className="m-0 min-w-0 flex-1 pt-2 text-[19px] leading-[1.35] font-semibold tracking-[-0.01em] text-white md:pt-[5px] md:text-[23px] md:leading-[1.3] lg:pt-0 lg:text-[clamp(19px,1.6vw,23px)]" style={{ textWrap: "pretty" }}>
+          {/* A <p>, not an <h2>. This bar is rendered site-wide from
+              <SiteFrame>, and its markup streams ahead of the page's own
+              content, so an <h2> here became the first heading in the served
+              HTML on every route: agent crawlers read the document as starting
+              at level 2 with no H1 (ora.ai check content-no-js). Styling is
+              fully explicit, so the rendered bar is unchanged. */}
+          <p className="m-0 min-w-0 flex-1 pt-2 text-[19px] leading-[1.35] font-semibold tracking-[-0.01em] text-white md:pt-[5px] md:text-[23px] md:leading-[1.3] lg:pt-0 lg:text-[clamp(19px,1.6vw,23px)]" style={{ textWrap: "pretty" }}>
             {heading}
-          </h2>
+          </p>
           {closeButton("lg:hidden", 15)}
         </div>
 

@@ -149,6 +149,26 @@ export default async function RootLayout({
         .map((l) => l?.href)
         .filter((h): h is string => Boolean(h))
     : []
+  // Contact and address for the Organization block. The office list is owned by
+  // the CMS (see src/data/offices.ts), so read the head office out of it rather
+  // than restating the address in code. Head office is matched by label, with
+  // the first office as the fallback if the label is ever renamed.
+  const offices = (siteSettings?.offices ?? []) as Array<{
+    city?: string
+    label?: string
+    address?: string
+    phone?: string
+  }>
+  const headOffice = offices.find((o) => o?.label === "Head Office") ?? offices[0]
+  const addressParts = (headOffice?.address ?? "")
+    .split(",")
+    .map((p) => p.trim())
+    .filter(Boolean)
+  const contactEmail = siteSettings?.contactEmail || "contact@fruitionservices.io"
+  const contactPhone = siteSettings?.phone || headOffice?.phone
+  // Countries with an office, in the CMS order, for areaServed.
+  const areaServed = ["Australia", "United States", "United Kingdom", "Singapore", "India", "Philippines"]
+
   let logoUrl = `${BASE}/og-image.png`
   try {
     if (siteSettings?.logo) logoUrl = urlFor(siteSettings.logo).width(512).url()
@@ -214,6 +234,33 @@ export default async function RootLayout({
             },
           ],
         },
+        // Agent-readiness scanners look for a reachable contact route and a
+        // real postal address before they treat a site as a verifiable business.
+        contactPoint: [
+          {
+            "@type": "ContactPoint",
+            contactType: "sales",
+            email: contactEmail,
+            ...(contactPhone ? { telephone: contactPhone } : {}),
+            url: `${BASE}/contact-us`,
+            areaServed,
+            availableLanguage: "English",
+          },
+        ],
+        ...(headOffice?.address
+          ? {
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: headOffice.address,
+                ...(headOffice.city
+                  ? { addressLocality: headOffice.city.split(",")[0].trim() }
+                  : {}),
+                ...(addressParts.length > 1
+                  ? { addressCountry: addressParts[addressParts.length - 1] }
+                  : {}),
+              },
+            }
+          : {}),
         ...(socials.length ? { sameAs: socials } : {}),
       },
       {
@@ -222,6 +269,20 @@ export default async function RootLayout({
         name: "Fruition",
         url: BASE,
         publisher: { "@id": `${BASE}/#organization` },
+      },
+      // One named Service alongside the OfferCatalog above: the catalog lists
+      // what we sell, this gives the flagship practice its own typed node with
+      // a provider link and the markets it is actually delivered in.
+      {
+        "@type": "Service",
+        "@id": `${BASE}/#service-monday-consulting`,
+        name: "monday.com consulting and implementation",
+        serviceType: "monday.com consulting and implementation",
+        url: `${BASE}/monday-implementation-consultants`,
+        description:
+          "Discovery, solution design, build, data migration, go-live and enablement on monday.com and monday CRM, delivered as fixed-fee phases by a monday.com Platinum Partner.",
+        provider: { "@id": `${BASE}/#organization` },
+        areaServed,
       },
     ],
   }
