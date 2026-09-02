@@ -7,10 +7,12 @@ import {
 } from "@/sanity/queries"
 import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import { mergeTeamMembers } from "@/lib/mergeTeamMembers"
-import MondayPartnerUkContent from "./MondayPartnerUkContent"
+import RegionPageTemplate from "@/components/RegionPageTemplate"
+import { REGION_PAGES } from "@/data/regionPages"
 import { buildOgMetadata } from "@/lib/metadata"
 
 const SLUG = "monday-partner-uk"
+const CONTENT = REGION_PAGES[SLUG]
 
 export async function generateMetadata() {
   const page = await getLocationPageBySlug(SLUG)
@@ -37,17 +39,13 @@ export default async function Page() {
     getTeamMembers(),
   ])
   return (
-    <MondayPartnerUkContent
+    <RegionPageTemplate
+      content={CONTENT}
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
       faqTabs={resolveFaqTabs(page?.faqTabs, centralFaqs)}
-      teamMembers={mergeTeamMembers(teamMembers || [], [
-        ...(siteSettings?.excludedTeamMemberNames || []),
-        // Josh shows only on the Australia partner page; his Sanity regions
-        // can't express that (AU and SG share "APAC"), so exclude here.
-        "Josh Jebathilak",
-      ])}
+      teamMembers={mergeTeamMembers(teamMembers || [], siteSettings?.excludedTeamMemberNames || [])}
     />
   )
 }

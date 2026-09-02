@@ -4,14 +4,15 @@ import {
   getCaseStudies,
   getFaqItemsForPage,
   getTeamMembers,
-  getClosingCtaForPage,
 } from "@/sanity/queries"
 import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import { mergeTeamMembers } from "@/lib/mergeTeamMembers"
-import MondayPartnerUsContent from "./MondayPartnerUsContent"
+import RegionPageTemplate from "@/components/RegionPageTemplate"
+import { REGION_PAGES } from "@/data/regionPages"
 import { buildOgMetadata } from "@/lib/metadata"
 
 const SLUG = "monday-partner-us"
+const CONTENT = REGION_PAGES[SLUG]
 
 export async function generateMetadata() {
   const page = await getLocationPageBySlug(SLUG)
@@ -30,27 +31,21 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const [page, siteSettings, caseStudies, centralFaqs, teamMembers, closingCta] = await Promise.all([
+  const [page, siteSettings, caseStudies, centralFaqs, teamMembers] = await Promise.all([
     getLocationPageBySlug(SLUG),
     getSiteSettings(),
     getCaseStudies(),
     getFaqItemsForPage(SLUG),
     getTeamMembers(),
-    getClosingCtaForPage(SLUG),
   ])
   return (
-    <MondayPartnerUsContent
+    <RegionPageTemplate
+      content={CONTENT}
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
       faqTabs={resolveFaqTabs(page?.faqTabs, centralFaqs)}
-      teamMembers={mergeTeamMembers(teamMembers || [], [
-        ...(siteSettings?.excludedTeamMemberNames || []),
-        // Josh shows only on the Australia partner page; his Sanity regions
-        // can't express that (AU and SG share "APAC"), so exclude here.
-        "Josh Jebathilak",
-      ])}
-      closingCta={closingCta}
+      teamMembers={mergeTeamMembers(teamMembers || [], siteSettings?.excludedTeamMemberNames || [])}
     />
   )
 }
