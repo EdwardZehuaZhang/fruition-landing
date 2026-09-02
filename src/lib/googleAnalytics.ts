@@ -36,6 +36,39 @@ interface Ga4Row {
   metricValues: { value: string }[]
 }
 
+export async function ga4Report(
+  body: Record<string, unknown>,
+): Promise<{ rows?: Ga4Row[] }> {
+  const property = process.env.GA4_PROPERTY_ID
+  if (!property) throw new Error("GA4_PROPERTY_ID missing")
+  const token = await getGoogleAccessToken([SCOPE_GA4])
+  return ga4RunReport(property, token, body)
+}
+
+/** Runs a Search Analytics query against whichever GSC property we can read. */
+export async function gscQuery<T = { keys: string[]; clicks: number; impressions: number; ctr: number; position: number }>(
+  body: Record<string, unknown>,
+): Promise<T[]> {
+  const token = await getGoogleAccessToken([SCOPE_GSC])
+  const siteUrl = await resolveGscSite(token)
+  if (!siteUrl) return []
+  const res = await fetch(
+    `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query`,
+    {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    },
+  )
+  if (!res.ok) throw new Error(`GSC searchAnalytics ${res.status}: ${await res.text()}`)
+  const data = (await res.json()) as { rows?: T[] }
+  return data.rows ?? []
+}
+
+export function ga4Date(days: number): string {
+  return isoDaysAgo(days)
+}
+
 async function ga4RunReport(
   property: string,
   token: string,

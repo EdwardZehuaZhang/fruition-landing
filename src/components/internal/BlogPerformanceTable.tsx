@@ -63,19 +63,25 @@ export default function BlogPerformanceTable({
         <TableBody>
           {rows.map((post) => (
             <TableRow key={post.path}>
-              <TableCell className="max-w-[22rem]">
-                <Link
-                  href={post.path}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 font-medium text-ink-heading hover:underline"
-                >
-                  <span className="truncate">
-                    {titles?.get(post.slug) ?? titleFromSlug(post.slug)}
-                  </span>
-                  <ExternalLink className="size-3.5 shrink-0 text-muted-foreground" />
-                </Link>
-                <p className="truncate text-xs text-muted-foreground">{post.path}</p>
+              <TableCell>
+                {/* A max-width on the cell is only a hint in an auto-layout
+                    table, so long titles used to overrun the numeric columns.
+                    Constrain a block inside the cell instead, and give the
+                    truncating span min-w-0 so it can actually shrink. */}
+                <div className="w-[20rem] max-w-full">
+                  <Link
+                    href={post.path}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex max-w-full items-center gap-1.5 font-medium text-ink-heading hover:underline"
+                  >
+                    <span className="min-w-0 truncate">
+                      {titles?.get(post.slug) ?? titleFromSlug(post.slug)}
+                    </span>
+                    <ExternalLink className="size-3.5 shrink-0 text-muted-foreground" />
+                  </Link>
+                  <p className="truncate text-xs text-muted-foreground">{post.path}</p>
+                </div>
               </TableCell>
               <TableCell className="text-right tabular-nums">{nf.format(post.views)}</TableCell>
               <TableCell className="text-right tabular-nums">

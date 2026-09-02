@@ -22,9 +22,17 @@ export interface InvoiceDefaults {
 
 const STORAGE_KEY = 'fruition.invoice.defaults.v1'
 
-/** Used when there is nothing remembered and no previous invoice. */
+/**
+ * Used when there is nothing remembered and no previous invoice.
+ *
+ * `consultantName` is deliberately blank. It used to carry a real consultant's
+ * name, which meant anyone raising their first invoice started with someone
+ * else's name already filled in — an invoice is a financial document and must
+ * never default to the wrong payee. Empty lets the field's placeholder show and
+ * the form's own validation block the save until it is filled.
+ */
 export const FALLBACK_DEFAULTS: InvoiceDefaults = {
-  consultantName: 'Edward (Zehua) Zhang',
+  consultantName: '',
   wiseName: '',
   wiseTag: '',
   region: 'APAC',
