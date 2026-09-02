@@ -16,7 +16,7 @@ import PlatformEditor, { type PlatformEditorValue } from "@/components/internal/
  * The picker starts from the article's own pictures, but it is not limited to
  * them: an article still being written has none, which used to leave the card
  * saying "upload one" with nothing to upload with. Uploads go through the same
- * route the standalone composer uses, so they land in Sanity — the only host
+ * route the standalone composer uses, so they land in Sanity, the only host
  * Instagram's aspect-ratio cropping can work with.
  */
 
@@ -218,7 +218,7 @@ export default function SocialDraftsPanel({
    *
    * It joins the panel's library rather than staying on the card it came from,
    * so the other channels can pick the same picture without uploading it
-   * again. Nothing reaches Zernio until "Save changes" — the same rule the
+   * again. Nothing reaches Zernio until "Save changes", the same rule the
    * caption edits follow.
    */
   async function uploadImage(p: PanelPlatform, file: File) {
@@ -237,7 +237,7 @@ export default function SocialDraftsPanel({
       const url = data.url
       setUploads((prev) => (prev.includes(url) ? prev : [...prev, url]))
       patchEdit(p, { mediaUrl: url })
-      setNotice(`Image added to ${p.label} — hit Save changes to keep it.`)
+      setNotice(`Image added to ${p.label}: hit Save changes to keep it.`)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Image upload failed.")
     } finally {

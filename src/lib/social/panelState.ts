@@ -56,7 +56,7 @@ export interface PanelState {
   coverImageUrl?: string
   /**
    * Every image the picker offers: the blog's (cover first, then body images),
-   * then anything already attached to a draft — an upload from an earlier
+   * then anything already attached to a draft; an upload from an earlier
    * session is only recorded there.
    */
   availableImages: string[]
