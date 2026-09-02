@@ -87,6 +87,32 @@ describe("ctaEventFromAnchor", () => {
     expect(event.variant).toBe("on-dark-primary")
   })
 
+
+  // CtaButton renders both a mobile and a desktop label and hides one with a
+  // breakpoint class. Reading textContent gave GA4 "Schedule a callBook a Free
+  // Consultation" for every CTA that sets mobileLabel.
+  it("reads only the visible label when a mobile variant is present", () => {
+    const host = document.createElement("div")
+    host.innerHTML =
+      '<a href="/contact-us#book" class="cta-btn cta-btn-primary">' +
+      '<span class="cta-btn-icon">icon</span>' +
+      '<span class="cta-btn-label">' +
+      '<span style="display:none">Schedule a call</span>' +
+      '<span>Book a Free Consultation</span>' +
+      "</span></a>"
+    document.body.appendChild(host)
+    const el = host.querySelector("a") as HTMLAnchorElement
+    expect(ctaEventFromAnchor(el).label).toBe("Book a Free Consultation")
+    host.remove()
+  })
+
+  it("falls back to the full label when nothing reports as hidden", () => {
+    const el = anchor(
+      '<a href="/x" class="cta-btn cta-btn-primary"><span class="cta-btn-label">Just one label</span></a>',
+    )
+    expect(ctaEventFromAnchor(el).label).toBe("Just one label")
+  })
+
   it("keeps the authored href rather than resolving it to an absolute URL", () => {
     const el = anchor('<a href="#book" class="cta-btn cta-btn-primary">Book</a>')
     expect(ctaEventFromAnchor(el).href).toBe("#book")
