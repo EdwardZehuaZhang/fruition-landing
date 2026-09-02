@@ -284,7 +284,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                               >
                                 {sub.icon && (
                                   <div className={`shrink-0 mt-0.5 w-7 h-7 rounded-md ring-1 bg-surface-raised flex items-center justify-center ${isActive ? 'text-brand ring-ui' : sub.featured ? 'text-brand ring-brand/30' : 'text-body ring-ui'}`}>
-                                    <NavIcon iconKey={sub.icon} className="h-4 w-4" />
+                                    <NavIcon iconKey={sub.icon} href={sub.href} className="h-4 w-4" />
                                   </div>
                                 )}
                                 <div className="min-w-0">
@@ -395,7 +395,7 @@ export default function Navbar({ siteSettings }: { siteSettings?: SiteSettingsPr
                                 }`}
                               >
                                 {sub.icon ? (
-                                  <NavIcon iconKey={sub.icon} className="h-[18px] w-[18px]" />
+                                  <NavIcon iconKey={sub.icon} href={sub.href} className="h-[18px] w-[18px]" />
                                 ) : (
                                   <span className="block h-2 w-2 rounded-full bg-gray-300" />
                                 )}
