@@ -30,22 +30,16 @@ const TOTAL_SECONDS = THANK_YOU_REDIRECT_SECONDS
  */
 const STEP_STARTS = [0, 3, 6]
 
-const DEFAULT_MESSAGE = "Thanks — we'll be in touch within one business day."
+const DEFAULT_MESSAGE = "We'll be in touch within one business day."
 
-const NEXT_STEPS = [
-  {
-    title: "We route it to the right consultant",
-    body: "Your enquiry goes to the practice lead who covers your platform and region — not a shared inbox.",
-  },
-  {
-    title: "You get a reply within one business day",
-    body: "A real response from the person who would run the work, with a read on what you have described.",
-  },
-  {
-    title: "We come prepared",
-    body: "If we book a call, we arrive having already looked at your stack. No discovery theatre.",
-  },
+/** Step 2, as the dashed ledger rows used for data elsewhere on the site. */
+const HANDLING = [
+  { label: "Who", value: "The consultant who covers your platform and region." },
+  { label: "When", value: "Within one business day, Monday to Friday." },
+  { label: "First question", value: "What you run now, and what isn't working." },
 ]
+
+const MONO_LABEL = "font-mono text-micro uppercase tracking-[0.14em]"
 
 export default function ThankYouContent({ posts, nextPath }: ThankYouContentProps) {
   const router = useRouter()
@@ -114,62 +108,53 @@ export default function ThankYouContent({ posts, nextPath }: ThankYouContentProp
   const steps = [
     {
       label: "Received",
-      title: "Your request is in",
+      title: "What we have",
       body: (
-        <>
-          <p className="text-body-lead text-muted">{message}</p>
-          <p className="mt-4 text-body-sm text-muted">
-            Nothing else is needed from you right now. If it is urgent, reply to the
-            confirmation email and it will land straight with the consultant.
+        <div className="flex flex-col gap-4">
+          <p className="text-body text-muted">{message}</p>
+          <p className="text-body-sm text-muted">
+            There is nothing else to do right now. If it is urgent, reply to the confirmation
+            email and it goes straight to the consultant rather than back through the queue.
           </p>
-        </>
+        </div>
       ),
     },
     {
-      label: "What's next",
-      title: "What happens next",
+      label: "Who picks it up",
+      title: "How it gets handled",
       body: (
-        <ol className="flex flex-col gap-5">
-          {NEXT_STEPS.map((s, i) => (
-            <li key={s.title} className="flex gap-4">
-              <span
-                aria-hidden
-                className="flex size-7 flex-none items-center justify-center rounded-pill bg-brand-soft font-mono text-micro text-brand"
-              >
-                {i + 1}
-              </span>
-              <span className="flex flex-col gap-1">
-                <span className="text-caption text-body">{s.title}</span>
-                <span className="text-body-sm text-muted">{s.body}</span>
-              </span>
-            </li>
+        <dl className="flex flex-col">
+          {HANDLING.map((row) => (
+            <div
+              key={row.label}
+              className="flex flex-col gap-1 border-b border-dashed border-ui py-3 md:flex-row md:items-baseline md:gap-6"
+            >
+              <dt className={`${MONO_LABEL} text-faint md:w-[140px] md:flex-none`}>{row.label}</dt>
+              <dd className="text-body-sm text-body">{row.value}</dd>
+            </div>
           ))}
-        </ol>
+        </dl>
       ),
     },
     {
       label: "Read next",
-      title: "While you wait",
+      title: posts.length > 0 ? "Recent writing" : "Where we are sending you",
       body:
         posts.length > 0 ? (
-          <ul className="flex flex-col divide-y divide-ui border-y border-ui">
+          <ul className="flex flex-col">
             {posts.map((post) => {
               const readTime = post.charCount
                 ? Math.max(1, Math.round(post.charCount / 5 / 200))
                 : 5
               return (
-                <li key={post._id ?? post.slug}>
+                <li key={post._id ?? post.slug} className="border-b border-dashed border-ui">
                   <Link
                     href={`/post/${post.slug}`}
-                    className="group flex flex-col gap-1 py-4 transition-colors hover:bg-mist motion-reduce:transition-none"
+                    className="flex flex-col gap-1 py-3 md:flex-row md:items-baseline md:justify-between md:gap-6"
                   >
-                    <span className="text-caption text-body group-hover:text-brand">
-                      {post.title}
-                    </span>
-                    <span className="font-mono text-micro uppercase tracking-[0.08em] text-faint">
-                      {post.categories?.[0]?.title
-                        ? `${post.categories[0].title} · ${readTime} min read`
-                        : `${readTime} min read`}
+                    <span className="text-body-sm text-body hover:text-brand">{post.title}</span>
+                    <span className={`${MONO_LABEL} text-faint md:flex-none`}>
+                      {readTime} min
                     </span>
                   </Link>
                 </li>
@@ -177,9 +162,9 @@ export default function ThankYouContent({ posts, nextPath }: ThankYouContentProp
             })}
           </ul>
         ) : (
-          <p className="text-body-lead text-muted">
-            Our consultants write up the builds they ship — automations, migrations and the
-            things that went wrong on the way. Worth a read while you wait.
+          <p className="text-body text-muted">
+            Our consultants write up the builds they ship: the migrations, the automations, and
+            the parts that went wrong on the way.
           </p>
         ),
     },
@@ -189,52 +174,34 @@ export default function ThankYouContent({ posts, nextPath }: ThankYouContentProp
 
   return (
     <div className="bg-surface">
-      <section className="mx-auto w-full max-w-[760px] px-4 py-16 md:py-24">
-        <div className="flex flex-col items-center text-center">
-          <span
-            aria-hidden
-            className="flex size-14 items-center justify-center rounded-pill bg-emerald/10 text-emerald"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-7">
-              <path d="M20 6 9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-          <span className="mt-5 font-mono text-micro uppercase tracking-[0.12em] text-brand">
-            Request received
-          </span>
-          <h1 className="mt-3 text-display text-body">Thanks — we have it.</h1>
-        </div>
+      <section className="mx-auto w-full max-w-[720px] px-4 py-14 md:py-20">
+        <p className={`${MONO_LABEL} text-brand`}>{"// request received"}</p>
+        <h1 className="mt-4 text-section-h2 text-body">Thanks, we have your request.</h1>
 
-        {/* Step rail. Selecting one takes the sequence off the clock. */}
-        <nav aria-label="Confirmation steps" className="mt-10 flex gap-2 md:gap-3">
+        {/* Step selector: mono annotations on a hairline, not a progress widget.
+            Picking one takes the sequence off the clock. */}
+        <div className="mt-10 flex flex-wrap gap-x-7 gap-y-2 border-t border-ui pt-4">
           {steps.map((s, i) => (
             <button
               key={s.label}
               type="button"
               onClick={() => selectStep(i)}
               aria-current={i === step ? "step" : undefined}
-              className="group flex flex-1 flex-col gap-2 text-left"
+              className={`${MONO_LABEL} transition-colors motion-reduce:transition-none ${
+                i === step ? "text-body" : "text-faint hover:text-body"
+              }`}
             >
-              <span
-                aria-hidden
-                className={`h-[3px] rounded-pill transition-colors motion-reduce:transition-none ${
-                  i <= step ? "bg-brand" : "bg-mist group-hover:bg-lilac"
-                }`}
-              />
-              <span
-                className={`font-mono text-micro uppercase tracking-[0.08em] transition-colors motion-reduce:transition-none ${
-                  i === step ? "text-body" : "text-faint group-hover:text-body"
-                }`}
-              >
-                {s.label}
-              </span>
+              <span className={i === step ? "text-brand" : undefined}>
+                {String(i + 1).padStart(2, "0")}
+              </span>{" "}
+              {s.label}
             </button>
           ))}
-        </nav>
+        </div>
 
-        <div className="mt-6 rounded-card border border-ui bg-surface-raised p-6 shadow-micro md:p-8">
-          <h2 className="text-section-h3 text-body">{current.title}</h2>
-          <div className="mt-5">{current.body}</div>
+        <div className="mt-7">
+          <h2 className="text-card-title text-body">{current.title}</h2>
+          <div className="mt-4">{current.body}</div>
         </div>
 
         {/* Live region: the step, not the ticking number — a per-second
@@ -243,45 +210,40 @@ export default function ThankYouContent({ posts, nextPath }: ThankYouContentProp
           Step {step + 1} of {steps.length}: {current.title}
         </p>
 
-        <div className="mt-8 flex flex-col gap-4 rounded-card border border-ui bg-surface-subtle p-5 md:p-6">
-          <div className="h-[3px] w-full overflow-hidden rounded-pill bg-mist">
+        {/* The countdown reads as an annotation on a hairline: the rule itself
+            fills as the clock runs, so there is one progress signal, not three. */}
+        <div className="mt-12">
+          <div className="h-px w-full bg-ui">
             <div
               aria-hidden
-              className="h-full w-full origin-left rounded-pill bg-brand transition-transform duration-1000 ease-linear motion-reduce:transition-none"
+              className="h-px w-full origin-left bg-brand transition-transform duration-1000 ease-linear motion-reduce:transition-none"
               style={{ transform: `scaleX(${progress})` }}
             />
           </div>
-
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <p className="text-body-sm text-muted">
-              {paused ? (
-                "Auto-redirect off — take your time."
-              ) : (
-                <>
-                  Taking you to the consulting blog in{" "}
-                  <span className="font-mono text-body">{Math.max(0, remaining)}s</span>
-                </>
-              )}
+          <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <p className={`${MONO_LABEL} text-muted`}>
+              {paused
+                ? "countdown stopped"
+                : `opening the blog in ${String(Math.max(0, remaining)).padStart(2, "0")}s`}
             </p>
-            <div className="flex flex-col gap-3 md:flex-row md:items-center">
-              <Link href={nextPath} className="cta-btn cta-btn-primary">
+            <div className="flex items-center gap-5">
+              <Link href={nextPath} className="cta-btn cta-btn-outline">
                 Read the blog now
               </Link>
               {!paused && (
                 <button
                   type="button"
                   onClick={() => setPaused(true)}
-                  className="cta-btn cta-btn-outline"
+                  className="text-body-sm text-muted underline underline-offset-4 hover:text-body"
                 >
                   Stay on this page
                 </button>
               )}
             </div>
           </div>
-
           <p className="sr-only">
-            This page moves to the consulting blog automatically about ten seconds after it
-            loads. Choose &ldquo;Stay on this page&rdquo; to stop that.
+            This page opens the consulting blog automatically about ten seconds after it loads.
+            Choose &ldquo;Stay on this page&rdquo; to stop that.
           </p>
         </div>
       </section>
