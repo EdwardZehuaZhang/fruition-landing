@@ -4,7 +4,7 @@
  * Three sources, in the order they are shown: the published article's cover
  * and body images, images found in an unpublished draft's markdown, and
  * whatever the Zernio drafts already carry. That last group is what makes an
- * upload survive a reload — an image uploaded for one channel lives on its
+ * upload survive a reload; an image uploaded for one channel lives on its
  * draft, and without reading it back the other channels would never see it.
  *
  * Deduped, because the same picture appearing twice in the picker reads as two
