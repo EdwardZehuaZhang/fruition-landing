@@ -140,6 +140,61 @@ const auditRedirects: Redirect[] = [
     destination: "/monday-for-manufacturing",
     permanent: true,
   },
+
+  // ── Vadim's missing-redirect list (monday.com item 2816307976, update
+  // 132034937, posted 2026-09-01 by vadim@fruitionservices.io) ──
+  // Twenty-one old blog URLs folded into their canonical successors. Unlike
+  // the entries above these use an explicit `statusCode: 301` rather than
+  // `permanent: true`: `permanent` emits a 308, and the SEO reviews on that
+  // same item repeatedly failed this work for not returning a literal 301.
+  // Google treats the two identically, but the acceptance test here is the
+  // status code on the wire, so emit the code that was asked for.
+  //
+  // Nine of these sources ("Delete <url> and redirect to ...") also had their
+  // Sanity blogPost document unpublished; a full JSON backup of every removed
+  // document is committed at scripts/data/blog-archive/vadim-21-removed-posts.json.
+  // Item 16 was a slug change, not a deletion: the post itself was renamed in
+  // Sanity from monday-work-management-workcanvas-2026-roadmap to
+  // monday-work-management-updates and the old URL redirects to the new one.
+
+  // 1: partner-selection post → the canonical certified-partner guide.
+  { source: "/post/monday-com-partner-how-to-pick-the-right-partner-for-you-2024", destination: "/post/finding-monday-com-certified-partner", statusCode: 301 },
+  // 2-4: three implementation-pitfalls variants → the canonical piece.
+  // 3 previously 308'd to 4's slug; pointing both straight at the destination
+  // removes that hop (4 is itself this post's own retired slug).
+  { source: "/post/monday-com-experts", destination: "/post/mondaycom-implementation-challenges", statusCode: 301 },
+  { source: "/post/how-to-avoid-common-pitfalls-during-monday-com-implementation", destination: "/post/mondaycom-implementation-challenges", statusCode: 301 },
+  { source: "/post/pitfalls-monday-com-implementation", destination: "/post/mondaycom-implementation-challenges", statusCode: 301 },
+  // 5: monday Service explainer → the monday Service solution page.
+  { source: "/post/monday-service-everything-you-need-to-know-2024", destination: "/monday-consulting-solutions/monday-service", statusCode: 301 },
+  // 6: deleted; → the monday consulting partner page.
+  { source: "/post/monday-partner", destination: "/partnerships/monday-consulting-partner", statusCode: 301 },
+  // 7: marketing post → the monday-for-marketing solution page.
+  { source: "/post/monday-com-for-marketing", destination: "/monday-for-marketing", statusCode: 301 },
+  // 8-12: the construction cluster → the monday-for-construction page.
+  // 10 and 11 are deleted, 8/9/12 are redirects only.
+  { source: "/post/mondaycom-for-construction-site-to-office-gap", destination: "/monday-for-construction", statusCode: 301 },
+  { source: "/post/mondaycom-for-construction-australia", destination: "/monday-for-construction", statusCode: 301 },
+  // 10: Vadim wrote "Delete ... and redirect" with no destination given. Its
+  // near-duplicate slug at 11 (monday-crm-construction) and the rest of this
+  // cluster all route to /monday-for-construction, so it follows them rather
+  // than being left to 404 on deletion. Flagged for Vadim to confirm.
+  { source: "/post/monday-crm-for-construction", destination: "/monday-for-construction", statusCode: 301 },
+  { source: "/post/monday-crm-construction", destination: "/monday-for-construction", statusCode: 301 },
+  { source: "/post/benefits-of-monday-com-for-construction", destination: "/monday-for-construction", statusCode: 301 },
+  // 13-15: construction daily-reports cluster → the templates guide.
+  { source: "/post/daily-reports-templates-for-construction-businesses", destination: "/post/mondaycom-construction-daily-report-templates", statusCode: 301 },
+  { source: "/post/monday-com-for-construction-why-do-construction-businesses-need-daily-reports", destination: "/post/mondaycom-construction-daily-report-templates", statusCode: 301 },
+  { source: "/post/monday-com-for-construction", destination: "/post/mondaycom-construction-daily-report-templates", statusCode: 301 },
+  // 16: blog URL changed in Sanity; old slug → the renamed post.
+  { source: "/post/monday-work-management-workcanvas-2026-roadmap", destination: "/post/monday-work-management-updates", statusCode: 301 },
+  // 17-19: deleted vertical CRM posts → their solution pages.
+  { source: "/post/monday-crm-for-real-estate", destination: "/monday-for-real-estate", statusCode: 301 },
+  { source: "/post/monday-crm-for-professional-services", destination: "/monday-for-professional-services", statusCode: 301 },
+  { source: "/post/monday-crm-for-manufacturing", destination: "/monday-for-manufacturing", statusCode: 301 },
+  // 20-21: deleted automations posts → the canonical automations guide.
+  { source: "/post/monday-com-automations", destination: "/post/how-to-monday-com-automations", statusCode: 301 },
+  { source: "/post/monday-automation-secrets", destination: "/post/how-to-monday-com-automations", statusCode: 301 },
 ];
 
 const nextConfig: NextConfig = {
