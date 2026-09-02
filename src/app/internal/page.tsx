@@ -69,6 +69,13 @@ export default async function DashboardPage() {
     getAllBlogPostsForPortal().catch(() => [] as { slug?: string; title?: string }[]),
   ])
 
+  // Today is a partial day and would render as a cliff at the right edge of the
+  // chart, which reads as a traffic collapse rather than an incomplete day.
+  const todayIso = new Date().toISOString().slice(0, 10)
+  const trafficSeries = (ga4?.daily ?? [])
+    .filter((d) => d.date < todayIso)
+    .map((d) => ({ date: d.date, visitors: d.users }))
+
   const postTitles = new Map<string, string>()
   for (const p of (posts as { slug?: string; title?: string }[]) ?? []) {
     if (p.slug && p.title) postTitles.set(p.slug, p.title)
@@ -103,7 +110,7 @@ export default async function DashboardPage() {
       />
 
       <div className="px-1">
-        <ChartAreaInteractive />
+        <ChartAreaInteractive data={trafficSeries} />
       </div>
 
       {performance && performance.posts.length > 0 ? (

@@ -30,19 +30,16 @@ interface NavItem {
 const MODULES: { label: string; items: NavItem[] }[] = [
   {
     label: "Overview",
-    items: [{ title: "Dashboard", href: "/internal", icon: LayoutDashboard, match: "exact" }],
+    items: [
+      { title: "Dashboard", href: "/internal", icon: LayoutDashboard, match: "exact" },
+      { title: "Insights", href: "/internal/insights", icon: Radar, match: "prefix" },
+    ],
   },
   {
     label: "Blog Management",
     items: [
       { title: "Blog posts", href: "/internal/blog", icon: Newspaper, match: "exact" },
       { title: "New post", href: "/internal/blog/new", icon: PenSquare, match: "prefix" },
-    ],
-  },
-  {
-    label: "Performance",
-    items: [
-      { title: "Insights", href: "/internal/insights", icon: Radar, match: "prefix" },
     ],
   },
   {

@@ -231,7 +231,7 @@ export default function InvoiceForm({ profile, defaults, onSave }: Props) {
               Consultant Name
             </label>
             <Input
-              placeholder="Enter consultant name"
+              placeholder="e.g. Jane Doe"
               value={consultantName}
               onChange={(e) => setConsultantName(e.target.value)}
             />
