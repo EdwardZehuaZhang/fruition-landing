@@ -9,8 +9,15 @@
 //
 // Emitting VideoObject JSON-LD is Google's recommended way to declare a video
 // regardless of how it is loaded, and the only way to make a faceted/embedded
-// video discoverable. See:
-// node_modules/next/dist/docs (Metadata) + schema.org/VideoObject.
+// video discoverable. See schema.org/VideoObject and
+// developers.google.com/search/docs/appearance/structured-data/video.
+//
+// The video urls themselves come from Sanity (page docs and blog bodies),
+// which carries no upload date — so the dates live in
+// videoCatalog.generated.ts, refreshed from YouTube by
+// `node scripts/sync-video-catalog.mjs`.
+
+import { GENERATED_VIDEO_CATALOG } from "./videoCatalog.generated"
 
 export type VideoCatalogEntry = {
   /** Human title shown as the VideoObject `name`. Required by Google. */
@@ -18,45 +25,19 @@ export type VideoCatalogEntry = {
   /** One–two sentence summary. Required by Google; falls back to `name`. */
   description?: string
   /**
-   * Publish date in ISO 8601 (e.g. "2024-05-01"). Required by Google for a
-   * video to be eligible for video results. Left undefined until the real
-   * date is known — the builder omits the field rather than inventing one.
+   * Publish date in ISO 8601 (e.g. "2020-06-23T01:00:36-07:00"). Required by
+   * Google: without it Search Console reports `Missing field "uploadDate"`
+   * and the video is not eligible for video results.
    */
-  uploadDate?: string
+  uploadDate: string
   /** Runtime in ISO 8601 duration (e.g. "PT4M12S"). Recommended, optional. */
   duration?: string
 }
 
-// Known, hardcoded YouTube videos keyed by their video id. Titles mirror what
-// already ships in the UI; uploadDate is the real YouTube publish date
-// (confirmed against each video's YouTube Studio entry). Add `description`
-// per entry to further enrich the markup.
-export const VIDEO_CATALOG: Record<string, VideoCatalogEntry> = {
-  eoOCR6OjJhI: {
-    name: "Everything you need to know to get started with monday CRM",
-    uploadDate: "2025-04-02",
-  },
-  _0MhMjicbIM: {
-    name: "monday.com consulting partner overview",
-    uploadDate: "2023-08-06",
-  },
-  g83dt0bCG4I: {
-    name: "Improve your HR processes",
-    uploadDate: "2020-12-03",
-  },
-  "7vtrtlfC1Zg": {
-    name: "monday CRM Success Story - Star Aviation | Powered by Fruition",
-    uploadDate: "2025-11-17",
-  },
-}
-
-// Titles that call sites pass as a generic placeholder. We refuse to emit a
-// VideoObject named one of these — junk `name` values hurt more than they help.
-const GENERIC_TITLES = new Set([
-  "video",
-  "youtube video",
-  "case study video",
-])
+// Titles that call sites pass as a generic placeholder — UniversalPageTemplate
+// falls back to "Video" and BlogPostTemplate numbers them "Video 1", "Video 2".
+// We never name a VideoObject one of those; the catalog title is used instead.
+const GENERIC_TITLE = /^(youtube |case study )?video( \d+)?$/i
 
 export function youTubeThumbnails(id: string): string[] {
   // maxres first (sharpest), hq as the always-present fallback.
@@ -83,23 +64,27 @@ export type VideoObjectInput = {
 }
 
 /**
- * Build a schema.org VideoObject for a YouTube video, merging any catalog
- * entry with per-call overrides. Returns null when no meaningful name is
- * available (so we never emit placeholder-named markup). Undefined fields are
- * omitted so partial-but-valid markup ships today and completes once the
- * uploadDate/description are filled in.
+ * Build a schema.org VideoObject for a YouTube video, merging the generated
+ * catalog with any per-call overrides.
+ *
+ * Returns null unless we have both a real name and an uploadDate — a
+ * VideoObject missing either is invalid markup that Search Console reports as
+ * an error and that can never make the video eligible for video results, so
+ * emitting nothing is strictly better. A video that lands here without an
+ * entry just needs `node scripts/sync-video-catalog.mjs` re-run.
  */
 export function buildVideoObject(input: VideoObjectInput): Record<string, unknown> | null {
-  const catalog = VIDEO_CATALOG[input.id]
-  const rawName = input.title?.trim() || catalog?.name
-  if (!rawName) return null
-  // Prefer a catalog name over a generic placeholder passed by a call site.
-  const isGeneric = GENERIC_TITLES.has(rawName.toLowerCase())
-  const name = isGeneric ? catalog?.name : rawName
+  const catalog = GENERATED_VIDEO_CATALOG[input.id]
+
+  const uploadDate = input.uploadDate || catalog?.uploadDate
+  if (!uploadDate) return null
+
+  const passedName = input.title?.trim()
+  // Prefer the catalog title over a generic placeholder passed by a call site.
+  const name = passedName && !GENERIC_TITLE.test(passedName) ? passedName : catalog?.name
   if (!name) return null
 
   const description = input.description?.trim() || catalog?.description || name
-  const uploadDate = input.uploadDate || catalog?.uploadDate
   const duration = input.duration || catalog?.duration
 
   const obj: Record<string, unknown> = {
@@ -110,8 +95,8 @@ export function buildVideoObject(input: VideoObjectInput): Record<string, unknow
     thumbnailUrl: youTubeThumbnails(input.id),
     embedUrl: youTubeEmbedUrl(input.id),
     contentUrl: youTubeWatchUrl(input.id),
+    uploadDate,
   }
-  if (uploadDate) obj.uploadDate = uploadDate
   if (duration) obj.duration = duration
   return obj
 }
