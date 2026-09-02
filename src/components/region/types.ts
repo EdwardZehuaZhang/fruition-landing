@@ -12,12 +12,6 @@
  * per-region monday.com referral URL (partner UTM attribution stays editable).
  */
 
-export interface RegionCredential {
-  /** Icon key resolved against ICONS in RegionHero. */
-  icon: "award" | "badge" | "trend"
-  label: string
-}
-
 export interface RegionService {
   /** Icon key resolved against ICONS in RegionServicesSection. */
   icon: "layers" | "chart" | "zap" | "users" | "database" | "sparkles"
@@ -67,10 +61,8 @@ export interface RegionContent {
     /** Trailing half of the H1, rendered in voltage purple. */
     headingAccent: string
     subheading: string
+    /** Small credential line beside the partner badge. */
     badgeStrap: string
-    credentials: RegionCredential[]
-    /** Four short differentiators under the credential cards. */
-    chips: string[]
   }
 
   services: {

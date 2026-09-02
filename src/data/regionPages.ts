@@ -70,12 +70,6 @@ const ALSO_LINKS: RegionServiceLink[] = [
   { label: "Integrations", href: "/integrations" },
 ]
 
-const CREDENTIALS = [
-  { icon: "award", label: "monday.com Platinum Partner" },
-  { icon: "badge", label: "Advanced Delivery Partner" },
-  { icon: "trend", label: "500+ Implementations" },
-] as const
-
 /** Cards 1, 2, 5 and 6 are the same offer everywhere; 3 and 4 are localised. */
 function baseServiceCards(opts: {
   /** Named local systems for the integrations card. */
@@ -133,13 +127,6 @@ const australia: RegionContent = {
     subheading:
       "Work with a certified monday.com Platinum Partner and expert consultants who handle your entire monday CRM implementation and integration. Servicing clients across Sydney, Melbourne, Brisbane, Adelaide and Perth — get running in days, not months.",
     badgeStrap: "Advanced Delivery Partner · 500+ Implementations",
-    credentials: [...CREDENTIALS],
-    chips: [
-      "Founded by ex-monday.com staff",
-      "Fair Work-aware workflows",
-      "AEST/AEDT & AWST consultants",
-      "Government procurement experience",
-    ],
   },
   services: {
     eyebrow: "Services in Australia",
@@ -265,13 +252,6 @@ const unitedKingdom: RegionContent = {
     subheading:
       "Partner with certified monday.com consultants who build the infrastructure and architecture your business actually runs on. Our UK team gets you operational immediately, without the time and budget usually lost to trial-and-error setup.",
     badgeStrap: "Advanced Delivery Partner · 500+ Implementations",
-    credentials: [...CREDENTIALS],
-    chips: [
-      "Founded by ex-monday.com staff",
-      "UK GDPR-aware workflows",
-      "GMT/BST consultants",
-      "Public sector procurement experience",
-    ],
   },
   services: {
     eyebrow: "Services in the UK",
@@ -397,13 +377,6 @@ const unitedStates: RegionContent = {
     subheading:
       "Get certified monday.com consultants to build the infrastructure and architecture your business runs on. Our US team gets you up and running right away, without burning internal resources figuring it out yourselves.",
     badgeStrap: "Advanced Delivery Partner · 500+ Implementations",
-    credentials: [...CREDENTIALS],
-    chips: [
-      "Founded by ex-monday.com staff",
-      "Coverage across all four US time zones",
-      "Salesforce & HubSpot migrations",
-      "Enterprise security review support",
-    ],
   },
   services: {
     eyebrow: "Services in the US",
@@ -529,13 +502,6 @@ const singapore: RegionContent = {
     subheading:
       "Work with accredited monday.com consultants to develop the systems and operational blueprint your business runs on. Based in Singapore, our specialists serve companies across Southeast Asia — Singapore, Malaysia, Indonesia, Thailand, Vietnam and the Philippines.",
     badgeStrap: "Advanced Delivery Partner · 500+ Implementations",
-    credentials: [...CREDENTIALS],
-    chips: [
-      "Founded by ex-monday.com staff",
-      "PDPA-aware workflows",
-      "SGT-hours consultants",
-      "Multi-entity ASEAN rollouts",
-    ],
   },
   services: {
     eyebrow: "Services in Singapore & ASEAN",
@@ -662,13 +628,6 @@ const india: RegionContent = {
     subheading:
       "Get certified monday.com consultants and implementation experts to build the infrastructure and architecture your business runs on. Our India team gets you operational immediately, removing the time and budget usually lost to trial-and-error setup.",
     badgeStrap: "Advanced Delivery Partner · 500+ Implementations",
-    credentials: [...CREDENTIALS],
-    chips: [
-      "Founded by ex-monday.com staff",
-      "DPDP Act-aware workflows",
-      "IST-hours consultants",
-      "GCC and multi-site rollouts",
-    ],
   },
   services: {
     eyebrow: "Services in India",
@@ -794,13 +753,6 @@ const philippines: RegionContent = {
     subheading:
       "Get certified monday.com consultants and implementation experts to build the infrastructure your operation runs on. Our Philippines-based specialists serve teams across Metro Manila, Cebu and Davao — from fast-scaling startups to BPO and outsourcing operations — getting you operational in days, not months.",
     badgeStrap: "Advanced Delivery Partner · 500+ Implementations",
-    credentials: [...CREDENTIALS],
-    chips: [
-      "Founded by ex-monday.com staff",
-      "Data Privacy Act-aware workflows",
-      "PHT-hours consultants",
-      "Shift and BPO operations experience",
-    ],
   },
   services: {
     eyebrow: "Services in the Philippines",

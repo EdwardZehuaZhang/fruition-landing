@@ -1,5 +1,6 @@
 import { bookingHref } from "@/lib/bookingLink"
 import { faqTabsToPairs } from "@/lib/faqSchema"
+import { urlFor } from "@/sanity/image"
 import {
   CalendlySection,
   StickyCtaConfig,
@@ -8,6 +9,7 @@ import {
 import type {
   CaseStudy,
   FaqTab,
+  SanityImageRef,
   SiteSettingsData,
 } from "@/components/sections/types"
 import TeamGridSection, { type TeamMember } from "@/components/TeamGridSection"
@@ -26,6 +28,8 @@ import {
 interface RegionSanityPage {
   primaryCtaLabel?: string
   primaryCtaUrl?: string
+  /** The wide monday.com product banner shown under the hero copy. */
+  heroImage?: SanityImageRef
 }
 
 interface Props {
@@ -41,12 +45,22 @@ interface Props {
 /** The marketing video every region page shares. */
 const VIDEO_ID = "eoOCR6OjJhI"
 
+function heroImageUrl(ref?: SanityImageRef | null): string | null {
+  if (!ref?.asset?._ref) return null
+  try {
+    return urlFor(ref).width(2000).fit("max").auto("format").url()
+  } catch {
+    return null
+  }
+}
+
 /**
  * One template behind all six /monday-partner-* pages.
  *
  * Section copy comes from `src/data/regionPages.ts` (see region/types.ts for
  * why it isn't in Sanity). Sanity supplies SEO title/description, the primary
- * CTA label/URL, the case studies, the team roster and any extra FAQ entries.
+ * CTA label/URL, the hero banner image, the case studies, the team roster and
+ * any extra FAQ entries.
  *
  * The redesigned sections deliberately do NOT fall back to the pre-redesign
  * Sanity headings (`heroHeading`, `testimonialsGridHeading`, `calendlyHeading`
@@ -76,6 +90,7 @@ export default function RegionPageTemplate({
       <RegionHero
         hero={content.hero}
         flag={content.flag}
+        heroImageUrl={heroImageUrl(page?.heroImage)}
         primaryCtaLabel={page?.primaryCtaLabel || "Book a Free Consultation →"}
         primaryCtaUrl={bookingUrl}
       />
