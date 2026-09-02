@@ -7,10 +7,12 @@ import {
 } from "@/sanity/queries"
 import { resolveFaqTabs } from "@/sanity/groupFaqs"
 import { mergeTeamMembers } from "@/lib/mergeTeamMembers"
-import MondayPartnerAustraliaContent from "./MondayPartnerAustraliaContent"
+import RegionPageTemplate from "@/components/RegionPageTemplate"
+import { REGION_PAGES } from "@/data/regionPages"
 import { buildOgMetadata } from "@/lib/metadata"
 
 const SLUG = "monday-partner-australia"
+const CONTENT = REGION_PAGES[SLUG]
 
 export async function generateMetadata() {
   const page = await getLocationPageBySlug(SLUG)
@@ -37,7 +39,8 @@ export default async function Page() {
     getTeamMembers(),
   ])
   return (
-    <MondayPartnerAustraliaContent
+    <RegionPageTemplate
+      content={CONTENT}
       page={page}
       siteSettings={siteSettings}
       caseStudies={caseStudies || []}
