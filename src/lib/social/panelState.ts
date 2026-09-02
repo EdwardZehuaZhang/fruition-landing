@@ -17,6 +17,7 @@ import {
 import { getBlogPostBySlug } from "@/sanity/queries"
 import { urlFor } from "@/sanity/image"
 import { getPortalAdmin } from "@/lib/portalAuth"
+import { panelImageLibrary } from "@/lib/social/panelImages"
 
 export interface PanelPost {
   id: string
@@ -53,7 +54,11 @@ export interface PanelState {
   /** Live blog URL when the post is published in Sanity. */
   blogUrl?: string
   coverImageUrl?: string
-  /** Blog images (cover first, then body images) selectable as post media. */
+  /**
+   * Every image the picker offers: the blog's (cover first, then body images),
+   * then anything already attached to a draft — an upload from an earlier
+   * session is only recorded there.
+   */
   availableImages: string[]
   dashboardUrl: string
   platforms: PanelPlatform[]
@@ -149,7 +154,13 @@ export async function buildPanelState(source: SocialSource): Promise<PanelState>
     draftBodyImages(source.draftId),
   ])
   const accountById = new Map(accounts.map((a) => [a._id, a]))
-  const availableImages = [...blog.images, ...mdImages.filter((u) => !blog.images.includes(u))]
+  // Images already on the drafts are part of the library too: an image
+  // uploaded here is stored on the Zernio draft and nowhere else, so without
+  // reading it back it would vanish from the picker on the next load.
+  const attached = Object.values(posts).flatMap((post) =>
+    (post?.mediaItems ?? []).filter((m) => m.type === "image").map((m) => m.url),
+  )
+  const availableImages = panelImageLibrary(blog.images, mdImages, attached)
 
   return {
     blogUrl: blog.blogUrl,

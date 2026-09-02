@@ -8,10 +8,16 @@ import PlatformEditor, { type PlatformEditorValue } from "@/components/internal/
 
 /**
  * Per-platform social drafts for a blog (the "Social media" tab). Each
- * platform is one Zernio draft post: edit the caption, pick the image (taken
- * from the blog's cover/body images), tick the platforms to include, publish
- * one platform or everything selected. Publishing needs the blog live in
- * Sanity (captions link to it; Instagram/Pinterest require an image).
+ * platform is one Zernio draft post: edit the caption, pick or upload the
+ * image, tick the platforms to include, publish one platform or everything
+ * selected. Publishing needs the blog live in Sanity (captions link to it;
+ * Instagram/Pinterest require an image).
+ *
+ * The picker starts from the article's own pictures, but it is not limited to
+ * them: an article still being written has none, which used to leave the card
+ * saying "upload one" with nothing to upload with. Uploads go through the same
+ * route the standalone composer uses, so they land in Sanity — the only host
+ * Instagram's aspect-ratio cropping can work with.
  */
 
 export interface SocialPanelSource {
@@ -96,6 +102,12 @@ export default function SocialDraftsPanel({
 }) {
   const [state, setState] = useState<PanelState | null>(null)
   const [edits, setEdits] = useState<Partial<Record<PlatformKey, DraftEdit>>>({})
+  /**
+   * Images uploaded in this session, offered to every channel's picker. They
+   * are already saved to Sanity; a save writes the chosen one onto the draft,
+   * which is where the next page load reads it back from.
+   */
+  const [uploads, setUploads] = useState<string[]>([])
   const [selected, setSelected] = useState<Set<PlatformKey>>(new Set())
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState<string | null>(null) // "generate" | "generate:key" | "save" | "publish" | "publish:key"
@@ -199,6 +211,38 @@ export default function SocialDraftsPanel({
       }
       return { ...prev, [p.key]: { ...base, ...partial, dirty: true } }
     })
+  }
+
+  /**
+   * Upload an image for one channel and select it there.
+   *
+   * It joins the panel's library rather than staying on the card it came from,
+   * so the other channels can pick the same picture without uploading it
+   * again. Nothing reaches Zernio until "Save changes" — the same rule the
+   * caption edits follow.
+   */
+  async function uploadImage(p: PanelPlatform, file: File) {
+    setBusy(`upload:${p.key}`)
+    setError(null)
+    setNotice(null)
+    try {
+      const form = new FormData()
+      form.append("image", file)
+      const r = await fetch("/api/internal/social/image", { method: "POST", body: form })
+      const data = (await r.json().catch(() => ({}))) as { url?: string; error?: string }
+      if (!r.ok || !data.url) {
+        setError(data.error ?? "Image upload failed.")
+        return
+      }
+      const url = data.url
+      setUploads((prev) => (prev.includes(url) ? prev : [...prev, url]))
+      patchEdit(p, { mediaUrl: url })
+      setNotice(`Image added to ${p.label} — hit Save changes to keep it.`)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Image upload failed.")
+    } finally {
+      setBusy(null)
+    }
   }
 
   const itemFor = useCallback(
@@ -430,6 +474,7 @@ export default function SocialDraftsPanel({
               selected={selected.has(p.key)}
               blogLive={blogLive}
               availableImages={state.availableImages}
+              uploads={uploads}
               coverImageUrl={state.coverImageUrl}
               busy={busy}
               onToggle={() =>
@@ -441,6 +486,7 @@ export default function SocialDraftsPanel({
                 })
               }
               onPatch={(partial) => patchEdit(p, partial)}
+              onUpload={(file) => void uploadImage(p, file)}
               onRegenerate={() => generate([p.key])}
               onPublish={() => publish([p.key])}
               onUnpublish={() => unpublish(p)}
@@ -471,10 +517,12 @@ function PlatformCard({
   selected,
   blogLive,
   availableImages,
+  uploads,
   coverImageUrl,
   busy,
   onToggle,
   onPatch,
+  onUpload,
   onRegenerate,
   onPublish,
   onUnpublish,
@@ -484,10 +532,13 @@ function PlatformCard({
   selected: boolean
   blogLive: boolean
   availableImages: string[]
+  /** Uploaded this session, offered alongside the article's own images. */
+  uploads: string[]
   coverImageUrl?: string
   busy: string | null
   onToggle: () => void
   onPatch: (partial: Partial<Omit<DraftEdit, "dirty">>) => void
+  onUpload: (file: File) => void
   onRegenerate: () => void
   onPublish: () => void
   onUnpublish: () => void
@@ -503,9 +554,9 @@ function PlatformCard({
   const mediaBlocked = p.needsMedia && !media
   const canPublish = Boolean(p.post) && p.connected && blogLive && !over && !mediaBlocked && !published
 
-  // Every selectable image: the blog's images plus whatever is already
-  // attached (e.g. attached before the blog images changed).
-  const imageChoices = [...availableImages]
+  // Every selectable image: the blog's, this session's uploads, plus whatever
+  // is already attached (e.g. attached before the blog images changed).
+  const imageChoices = [...availableImages, ...uploads.filter((u) => !availableImages.includes(u))]
   if (media && !imageChoices.includes(media)) imageChoices.unshift(media)
 
   return (
@@ -549,13 +600,15 @@ function PlatformCard({
             value={{ content, title, subreddit, mediaUrls: media ? [media] : [] }}
             images={imageChoices}
             disabled={published}
+            uploading={busy === `upload:${p.key}`}
             onChange={(patch) => onPatch(toPanelPatch(patch))}
+            onUpload={onUpload}
           />
 
           <div className="mt-2 flex items-center justify-between gap-3">
             <span className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
               {edit?.dirty ? "unsaved" : ""}
-              {mediaBlocked ? " · needs an image (add a cover to the blog)" : ""}
+              {mediaBlocked ? " · needs an image (upload one, or add a cover to the blog)" : ""}
             </span>
             <div className="flex gap-2">
               {canUnpublish && (
