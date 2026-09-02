@@ -1,6 +1,5 @@
 import { after, NextResponse } from "next/server"
 import { buildBookingUrl, consultantFor } from "@/lib/consultants"
-import { REGION_BOOKING, SERVICE_CHOICES } from "@/lib/regionBooking"
 import { detectRegion, pushSchedulerLead, type LeadRegion } from "@/lib/leadNotify"
 
 export const runtime = "nodejs"
@@ -16,10 +15,8 @@ export const maxDuration = 30
  * invitee.created webhook later promotes the ones that convert to
  * "Meeting Booked" (see promoteLeadToBooked) rather than creating a duplicate.
  *
- * The booking itself goes to the shared account's regional event type, so it
- * lands on the calendar the whole team can see. Which consultant owns the lead
- * is still decided here, by region — they are on the call, they just aren't the
- * calendar it sits on.
+ * Routing to a real person's calendar is the other half: the shared
+ * global-calendar account showed availability that belonged to nobody.
  */
 
 interface LeadRequest {
@@ -88,14 +85,13 @@ export async function POST(req: Request) {
   const country = req.headers.get("cf-ipcountry") ?? undefined
   const region = p.region && REGIONS.includes(p.region) ? p.region : detectRegion({ country, timezone, email })
   const consultant = consultantFor(region, p.host)
-  const target = REGION_BOOKING[region]
   // Only a slot we could plausibly have offered — a stale or bogus value would
   // deep-link Calendly to a time that isn't bookable.
   const startMs = p.start ? Date.parse(p.start) : NaN
   const startUtc = !Number.isNaN(startMs) && startMs > Date.now() ? new Date(startMs).toISOString() : undefined
-  // Some event types reject a booking without a company name, so don't send
-  // anyone to them empty-handed — the form asks for it either way.
-  if (target.companyRequired && !company) {
+  // Josh's and Zach's pages reject a booking without a company name, so don't
+  // send anyone to them empty-handed — the form asks for it either way.
+  if (consultant.companyRequired && !company) {
     return NextResponse.json({ ok: false, error: "Company is required." }, { status: 400 })
   }
 
@@ -145,19 +141,13 @@ export async function POST(req: Request) {
     }
   })
 
-  // The regional event types have no "job title" question, so the title rides
-  // along in the free-text box rather than being dropped.
-  const service = p.service?.trim()
-  const bookingUrl = buildBookingUrl(target, {
+  const bookingUrl = buildBookingUrl(consultant, {
     name,
     email,
     company,
     title,
     phone: p.phone?.trim(),
-    message: [title ? `Title: ${title}` : "", service, p.notes?.trim()].filter(Boolean).join(" — "),
-    // Only an exact choice — Calendly rejects a multi-select answer that isn't
-    // one of its own options, and our picker also offers "Other".
-    service: service && SERVICE_CHOICES.has(service) ? service : undefined,
+    message: [p.service?.trim(), p.notes?.trim()].filter(Boolean).join(" — "),
     sourcePage,
     startUtc,
     // The visitor's timezone decides how the slot is written into the link.
