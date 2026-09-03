@@ -3,6 +3,7 @@ import { getAllBlogPostsForPortal } from "@/sanity/queries"
 import { getBlogPerformance } from "@/lib/googleAnalytics"
 import { getBlogInsights } from "@/lib/insights/blog"
 import { getSocialInsights } from "@/lib/insights/social"
+import { getUmamiInsights, isUmamiConfigured } from "@/lib/insights/umami"
 import { getAeoVisibility, getCompetitorActivity } from "@/lib/marketaInsights"
 import PortalShell from "@/components/internal/PortalShell"
 import PageHeader from "@/components/internal/PageHeader"
@@ -29,10 +30,8 @@ function parseParams(params: Record<string, string | string[] | undefined>): {
   const rawTab = Array.isArray(params.tab) ? params.tab[0] : params.tab
   const rawDays = Array.isArray(params.days) ? params.days[0] : params.days
   const days = Number(rawDays)
-  return {
-    tab: rawTab === "social" ? "social" : "blog",
-    days: ALLOWED_RANGES.includes(days) ? days : 28,
-  }
+  const tab: InsightsTab = rawTab === "social" || rawTab === "traffic" ? rawTab : "blog"
+  return { tab, days: ALLOWED_RANGES.includes(days) ? days : 28 }
 }
 
 /**
@@ -51,6 +50,21 @@ export default async function InsightsPage({
   const user = await requirePortalUser({ next: "/internal/insights" })
   const { tab, days } = parseParams(await searchParams)
   const rangeLabel = `last ${days} days`
+  const showTraffic = isUmamiConfigured()
+
+  if (tab === "traffic") {
+    const view = await getUmamiInsights(days)
+    return (
+      <PortalShell email={user.email} active="insights">
+        <PageHeader
+          title="Content performance"
+          description="Where visitors come from, and what they do on the site."
+        />
+        <InsightsToolbar tab={tab} days={days} showTraffic={showTraffic} />
+        <InsightsPanel view={view} rangeLabel={rangeLabel} />
+      </PortalShell>
+    )
+  }
 
   if (tab === "social") {
     const view = await getSocialInsights(days)
@@ -60,7 +74,7 @@ export default async function InsightsPage({
           title="Content performance"
           description="How published social posts are performing, by publish date."
         />
-        <InsightsToolbar tab={tab} days={days} />
+        <InsightsToolbar tab={tab} days={days} showTraffic={showTraffic} />
         <InsightsPanel view={view} rangeLabel={rangeLabel} />
       </PortalShell>
     )
@@ -85,7 +99,7 @@ export default async function InsightsPage({
         title="Content performance"
         description="Traffic, search and CTA clicks for the blog, plus AI visibility and competitor activity."
       />
-      <InsightsToolbar tab={tab} days={days} />
+      <InsightsToolbar tab={tab} days={days} showTraffic={showTraffic} />
 
       <InsightsPanel view={view} rangeLabel={rangeLabel}>
         {performance && performance.posts.length > 0 ? (

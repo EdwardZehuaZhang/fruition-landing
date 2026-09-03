@@ -29,6 +29,8 @@ export interface CtaClickEvent {
 declare global {
   interface Window {
     dataLayer?: Record<string, unknown>[]
+    /** Injected by the Umami script when NEXT_PUBLIC_UMAMI_WEBSITE_ID is set. */
+    umami?: { track: (event: string, data?: Record<string, unknown>) => void }
   }
 }
 
@@ -93,6 +95,22 @@ export function ctaEventFromAnchor(anchor: HTMLAnchorElement): CtaClickEvent {
 
 export function trackCtaClick(event: CtaClickEvent): void {
   if (typeof window === "undefined") return
+
+  // Umami records the same click as a custom event. Unlike GA4 this needs no
+  // container configuration, so CTA numbers appear as soon as the script is
+  // live rather than waiting on the GTM trigger.
+  try {
+    window.umami?.track("cta_click", {
+      label: event.label,
+      destination: event.href,
+      variant: event.variant,
+      location: event.location,
+      page_path: window.location.pathname,
+    })
+  } catch {
+    // Analytics must never break navigation.
+  }
+
   try {
     window.dataLayer = window.dataLayer ?? []
     window.dataLayer.push({

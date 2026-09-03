@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
-export type InsightsTab = "blog" | "social"
+export type InsightsTab = "blog" | "social" | "traffic"
 
 const RANGES = [7, 28, 90]
 
@@ -14,10 +14,20 @@ function href(tab: InsightsTab, days: number): string {
  * a view is linkable and the page can stay a server component that fetches only
  * what the current tab needs.
  */
-export default function InsightsToolbar({ tab, days }: { tab: InsightsTab; days: number }) {
+export default function InsightsToolbar({
+  tab,
+  days,
+  showTraffic = false,
+}: {
+  tab: InsightsTab
+  days: number
+  /** The traffic tab only exists once Umami is connected. */
+  showTraffic?: boolean
+}) {
   const tabs: { key: InsightsTab; label: string }[] = [
     { key: "blog", label: "Blog" },
     { key: "social", label: "Social posts" },
+    ...(showTraffic ? ([{ key: "traffic", label: "Traffic" }] as const) : []),
   ]
 
   return (
