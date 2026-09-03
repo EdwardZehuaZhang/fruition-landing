@@ -40,6 +40,34 @@ describe("trackCtaClick", () => {
     })
   })
 
+
+  // Umami needs no container configuration, so this is the path that produces
+  // CTA numbers before the GTM trigger exists.
+  it("also records the click as a Umami custom event when Umami is loaded", () => {
+    const track = vi.fn()
+    window.umami = { track }
+    trackCtaClick({ label: "Book a call", href: "/contact-us", variant: "primary", location: "sticky" })
+    expect(track).toHaveBeenCalledWith("cta_click", {
+      label: "Book a call",
+      destination: "/contact-us",
+      variant: "primary",
+      location: "sticky",
+      page_path: "/post/ai-adoption-framework",
+    })
+    delete window.umami
+  })
+
+  it("still reaches the data layer when Umami throws", () => {
+    window.umami = {
+      track: () => {
+        throw new Error("umami blocked")
+      },
+    }
+    trackCtaClick({ label: "Book", href: "/contact-us", variant: "", location: "inline" })
+    expect(window.dataLayer).toHaveLength(1)
+    delete window.umami
+  })
+
   it("creates the dataLayer when GTM has not loaded yet", () => {
     delete window.dataLayer
     trackCtaClick({ label: "Talk to us", href: "/contact-us", variant: "", location: "inline" })

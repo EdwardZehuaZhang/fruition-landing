@@ -38,6 +38,14 @@ const REB2B_LOADER = `(function(){try{if(window.localStorage.getItem("fruition-v
 // <CalendlyBookingTracker /> React listener, both carrying hard-coded Google
 // Ads IDs. See the container for their replacements.
 const GTM_ID = "GTM-PF6XWTL6"
+
+// Umami — cookieless, no personal data, so it needs no consent gate (it is less
+// invasive than the GA4 tag already running through GTM above). Inert until
+// NEXT_PUBLIC_UMAMI_WEBSITE_ID is set, so the script is simply absent until the
+// account exists. NEXT_PUBLIC_UMAMI_SCRIPT_URL points at a self-hosted instance.
+const UMAMI_WEBSITE_ID = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID
+const UMAMI_SCRIPT_URL =
+  process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL || "https://cloud.umami.is/script.js"
 const GTM_LOADER = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -301,6 +309,14 @@ export default async function RootLayout({
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{ __html: GTM_LOADER }}
         />
+        {UMAMI_WEBSITE_ID ? (
+          <Script
+            id="umami-loader"
+            strategy="afterInteractive"
+            src={UMAMI_SCRIPT_URL}
+            data-website-id={UMAMI_WEBSITE_ID}
+          />
+        ) : null}
         <script dangerouslySetInnerHTML={{ __html: REB2B_LOADER }} />
         <script dangerouslySetInnerHTML={{ __html: OAIQ_LOADER }} />
       </head>
